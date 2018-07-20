@@ -1,407 +1,119 @@
 <template>
-  <div id="addFollowUp">
-    <el-dialog :close-on-click-modal="false" title="员工档案" :visible.sync="staffRecordsDetailDialogVisible" width="60%">
+  <div id="staffRecordsDetail">
+    <el-dialog :close-on-click-modal="false" title="员工档案" :visible.sync="staffRecordsDetailDialogVisible" width="50%">
       <div class="scroll_bar">
-        <div class="title">事项详情</div>
+        <div class="title">基本信息</div>
         <div class="describe_border">
           <el-form size="small" label-width="100px">
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="创建时间">
+              <el-col :span="12">
+                <el-form-item label="员工姓名">
                   <div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>
                   <div class="content" v-if="!workOrderDetail.create_time">暂无</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="创建人">
+              <el-col :span="12">
+                <el-form-item label="入职时间">
                   <div class="content">
                     <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
                     <span v-if="!workOrderDetail.creators">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editOrder(workOrderDetail.id)">
-                  <i class="el-icon-edit"></i>修改跟进事项
-                </el-button>
-              </el-col>
             </el-row>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="工单编号">
+              <el-col :span="12">
+                <el-form-item label="部门">
                   <div class="content">
                     <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
                     <span v-if="!workOrderDetail.num">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="所属城市">
+              <el-col :span="12">
+                <el-form-item label="岗位">
                   <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
                   <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="工单类型">
-                  <div class="content">{{workOrderDetail.types}}</div>
-                </el-form-item>
-              </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="回复电话">
-                  <div class="content">
-                    <span v-if="workOrderDetail.mobile">{{workOrderDetail.mobile}}</span>
-                    <span v-if="!workOrderDetail.mobile">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进状态">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follow_statuss">{{workOrderDetail.follow_statuss}}</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进人">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="完成时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.finish_time">{{workOrderDetail.finish_time}}</span>
-                    <span v-if="!workOrderDetail.finish_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follow_time">{{workOrderDetail.follow_time}}</span>
-                    <span v-if="!workOrderDetail.follow_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follow_time">{{workOrderDetail.expected_finish_time}}</span>
-                    <span v-if="!workOrderDetail.follow_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="跟进事项">
-                  <div class="content">
-                    <span v-if="workOrderDetail.matters">{{workOrderDetail.matters}}</span>
-                    <span v-if="!workOrderDetail.matters">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24" v-if="workOrderDetail.album">
-                <el-form-item label="截图">
-                  <img v-if="workOrderDetail.album.image_pic!=[]" data-magnify
-                       v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri"
-                       alt="">
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <div class="follow_result">
-              <div class="title">跟进结果</div>
-              <el-button type="text" size="small" @click="addResult(workOrderDetail.id)">
-                <i class="el-icon-plus"></i>新增跟进结果
-              </el-button>
-            </div>
-            <div v-if="workOrderDetail.remarks&&workOrderDetail.remarks.length>0">
-              <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
-                <el-row v-for="item in workOrderDetail.remarks" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
-                  <el-col :span="12">
-                    <el-form-item label="跟进时间">
-                      <div class="content">
-                        <span v-if="item.create_time">{{item.create_time}}</span>
-                        <span v-if="!item.create_time">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="跟进人">
-                      <div class="content">
-                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
-                        <span v-if="!item.simple_staff">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="24">
-                    <el-form-item label="跟进结果">
-                      <div class="content">
-                        <span v-if="item.content">{{item.content}}</span>
-                        <span v-if="!item.content">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-
-                </el-row>
-              </el-form>
-            </div>
-            <div class="content" v-else="" style="text-align: center;line-height: 30px">
-              暂无数据
-            </div>
           </el-form>
         </div>
-        <div class="title">子工单项</div>
-        <div class="describe_border" v-for="item in workOrderDetail.child">
-          <el-form size="small" label-width="100px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="创建时间">
-                  <div class="content">
-                    <span v-if="item.create_time">{{item.create_time}}</span>
-                    <span v-if="!item.create_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="创建人">
-                  <div class="content">
-                    <span v-if="item.creators">{{item.creators.name}}</span>
-                    <span v-if="!item.creators">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editOrder(item.id)">
-                  <i class="el-icon-edit"></i>修改跟进事项
-                </el-button>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="工单编号">
-                  <div class="content">
-                    <span v-if="item.num">{{item.num}}</span>
-                    <span v-if="!item.num">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="所属城市">
-                  <div class="content">
-                    <span v-if="item.city_name">{{item.city_name}}</span>
-                    <span v-if="!item.city_name">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="工单类型">
-                  <div class="content">
-                    <span v-if="item.types">{{item.types}}</span>
-                    <span v-if="!item.types">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="回复电话">
-                  <div class="content">
-                    <span v-if="item.mobile">{{item.mobile}}</span>
-                    <span v-if="!item.mobile">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进状态">
-                  <div class="content">
-                    <span v-if="item.follow_statuss">{{item.follow_statuss}}</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进人">
-                  <div class="content">
-                    <span v-if="item.follows">{{item.follows && item.follows.name}}</span>
-                    <span v-if="!item.follows">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="完成时间">
-                  <div class="content">
-                    <span v-if="item.finish_time">{{item.finish_time}}</span>
-                    <span v-if="!item.finish_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进时间">
-                  <div class="content">
-                    <span v-if="item.follow_time">{{item.follow_time}}</span>
-                    <span v-if="!item.follow_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进时间">
-                  <div class="content">
-                    <span v-if="item.expected_finish_time">{{item.expected_finish_time}}</span>
-                    <span v-if="!item.expected_finish_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="跟进事项">
-                  <div class="content">
-                    <span v-if="item.matters">{{item.matters}}</span>
-                    <span v-if="!item.matters">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24" v-if="item.album">
-                <el-form-item label="截图">
-                  <img v-if="item.album.image_pic!=[]" data-magnify
-                       v-for="(val,key) in item.album.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt="">
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <div class="follow_result">
-              <div class="title">跟进结果</div>
-              <el-button type="text" size="small" @click="addResult(item.id)">
-                <i class="el-icon-plus"></i>新增跟进结果
-              </el-button>
-            </div>
-            <div v-if="item.remarks&&item.remarks.length>0">
-              <el-form size="small" label-width="100px" v-if="item.remarks">
-                <el-row v-for="item in item.remarks" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
-                  <el-col :span="12">
-                    <el-form-item label="跟进时间">
-                      <div class="content">
-                        <span v-if="item.create_time">{{item.create_time}}</span>
-                        <span v-if="!item.create_time">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="跟进人">
-                      <div class="content">
-                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
-                        <span v-if="!item.simple_staff">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="24">
-                    <el-form-item label="跟进结果">
-                      <div class="content">
-                        <span v-if="item.content">{{item.content}}</span>
-                        <span v-if="!item.content">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-form>
-            </div>
-            <div class="content" v-else="" style="text-align: center;line-height: 30px">
-              暂无数据
-            </div>
-          </el-form>
+        <div class="title">跟进记录</div>
+        <div class="describe_border">
+          <el-row>
+            <el-col :span="3">
+              <div style="text-align: center;">
+                <span>2018.07.30</span>
+                <br/>
+                <span>珠宝学</span>
+              </div>
+            </el-col>
+            <el-col :span="18">
+              <div class="circle praises"></div>
+              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;">
+                <div>的防护多数地方韩国房贷合同国家的发货给对方机会国家的宏观附近的返回广东客家大概几点发货高度分化格局的回复绝对符合国家地方韩国绝对符合国家地方看觉得刚觉得</div>
+                <div><img src="../../../../assets/images/news.png" alt=""></div>
+              </div>
+
+            </el-col>
+            <el-col :span="2" style="text-align: right;cursor: pointer;" @click="">
+              <i class="el-icon-edit"></i>编辑
+            </el-col>
+          </el-row>
+
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <!--<el-button size="small" @click="orderDetailDialogVisible = false">取 消</el-button>-->
-        <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
-      </span>
     </el-dialog>
-
+    <EditStaffRecord :editStaffRecordDialog="editStaffRecordDialog" @close="closeModal"></EditStaffRecord>
   </div>
 </template>
 
 <script>
-
-
+  import EditStaffRecord from './editStaffRecord.vue';
   export default {
-    name: 'addFollowUp',
-    props: ['staffRecordsDetailDialog', 'activeId', 'startDetail'],
-    components: {},
+    name: 'staffRecordsDetail',
+    props: ['staffRecordsDetailDialog', 'detailId'],
+    components: {EditStaffRecord},
     data() {
       return {
         staffRecordsDetailDialogVisible: false,
+        editStaffRecordDialog: false,
         workOrderDetail: {},
-        addResultId: '',
-        addResultDialog: false,
-        startAddResult: false,
-        editWorkDialog: false,
-        startEdit: false,
-        editId: '',
       };
     },
     watch: {
       staffRecordsDetailDialog(val) {
-        this.staffRecordsDetailDialogVisible = val
+        this.staffRecordsDetailDialogVisible = val;
       },
       staffRecordsDetailDialogVisible(val) {
         if (!val) {
           this.$emit('close');
         } else {
-          this.isClear = false
-        }
-      },
-      startDetail(val) {
-        if (val) {
+          this.isClear = false;
           this.getDetail();
         }
-      }
+      },
     },
     mounted() {
 
     },
     methods: {
+      closeModal(){
+        this.editStaffRecordDialog = false;
+      },
       getDetail() {
-        this.$http.get(globalConfig.server + 'customer/work_order/' + this.activeId).then((res) => {
-          if (res.data.code === "10020") {
-            this.workOrderDetail = res.data.data;
-          }
-        });
+        // this.$http.get(globalConfig.server + 'customer/work_order/' + this.activeId).then((res) => {
+        //   if (res.data.code === "10020") {
+        //     this.workOrderDetail = res.data.data;
+        //   }
+        // });
       },
-      addResult(id) {
-        this.addResultId = id;
-        this.addResultDialog = true;
-        this.startAddResult = true;
-
-      },
-      closeModal(val) {
-        this.addResultDialog = false;
-        this.editWorkDialog = false;
-        this.startEdit = false;
-        this.startAddResult = false;
-        if (val === 'success') {
-          this.getDetail();
-        }
-      },
-      editOrder(id) {
-        this.editId = id;
-        this.editWorkDialog = true;
-        this.startEdit = true;
-      }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #addFollowUp {
+  #staffRecordsDetail {
     .content {
       padding: 0 10px;
       min-height: 32px;
@@ -416,10 +128,28 @@
       border-radius: 6px;
       margin: 0 10px 10px 0;
     }
-    .follow_result {
-      display: flex;
-      justify-content: space-between;
+    .circle{
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+      float: left;
+      margin-left: -9px;
+      margin-top: 10px;
     }
+    .praises{
+      background: #58d788;
+    }
+    .criticisms{
+      background: #ff4545;
+    }
+    .doubts{
+      background: #FF9900;
+    }
+    .others{
+      background: #409EFF;
+    }
+
   }
 
 </style>

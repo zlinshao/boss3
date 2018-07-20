@@ -17,9 +17,9 @@
               新增记录
             </el-button>
           </el-form-item>
-          <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="staffRecordsDetailDialog=true;">点击详情</el-button>-->
-          <!--</el-form-item>-->
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="staffRecordsDetailDialog=true;">点击详情</el-button>
+          </el-form-item>
         </el-form>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -245,7 +245,7 @@
             this.tableData = [];
             this.totalNum = 0;
           }
-        })
+        });
       },
       // 高级
       highGrade() {

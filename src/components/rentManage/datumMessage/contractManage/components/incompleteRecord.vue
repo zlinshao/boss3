@@ -144,8 +144,8 @@
                     prop="update_time"
                     label="资料补齐时间">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.update_time">{{scope.row.update_time}}</span>
-                      <span v-if="!scope.row.update_time">暂无</span>
+                      <span v-if="scope.row.data_date">{{scope.row.data_date}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -246,8 +246,8 @@
                     prop="update_time"
                     label="资料补齐时间">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.update_time">{{scope.row.update_time}}</span>
-                      <span v-if="!scope.row.update_time">暂无</span>
+                      <span v-if="scope.row.data_date">{{scope.row.data_date}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column

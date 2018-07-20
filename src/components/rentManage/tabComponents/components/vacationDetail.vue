@@ -13,7 +13,7 @@
               <td>合同编号</td>
               <td>{{contractInfo.contract_number}}</td>
               <td>地址</td>
-              <td>{{contractInfo.community_name}}</td>
+              <td>{{contractInfo.community_name}}{{contractInfo.doorplate_str}}</td>
               <td>电话</td>
               <td>
                 <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
