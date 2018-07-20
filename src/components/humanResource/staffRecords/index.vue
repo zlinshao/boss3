@@ -33,7 +33,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-date-picker
-                      v-model="params.time"
+                      v-model="params.entry_time"
                       type="daterange"
                       align="right"
                       unlink-panels
@@ -170,8 +170,7 @@
           limit: 12,
           search: '',   //模糊搜索
           org_id: '',  //部门
-          entry_time: {}, //入职时间
-          time: [],
+          entry_time: [], //入职时间
         },
 
         org_name: '',
@@ -248,15 +247,7 @@
       getStaffTableData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
-        if (this.params.time && this.params.time.length > 0) {
-          this.params.entry_time.start = this.params.time[0];
-          this.params.entry_time.end = this.params.time[1];
-        } else {
-          this.params.entry_time = {};
-          this.params.time = [];
-        }
-        // JSON.stringify(this.params.entry_time);
-        this.$http.get(this.urls + 'credit/manage/employeelist', {params: JSON.stringify(this.params)}).then((res) => {
+        this.$http.get(this.urls + 'credit/manage/employeelist', {params: this.params}).then((res) => {
           this.isHigh = false;
           this.tableLoading = false;
           if (res.data.code === '10000') {
@@ -278,8 +269,7 @@
         this.params.search = '';
         this.params.org_id = '';
         this.params.org_name = '';
-        this.params.entry_time = {};
-        this.params.time = [];
+        this.params.entry_time = [];
         this.search();
       },
       handleSizeChange(val) {
