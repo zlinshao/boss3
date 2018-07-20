@@ -33,7 +33,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-date-picker
-                      v-model="params.entry_time"
+                      v-model="params.time"
                       type="daterange"
                       align="right"
                       unlink-panels
@@ -54,7 +54,13 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="params.org_name" placeholder="请输入部门名称" clearable></el-input>
+                    <el-input readonly v-model="params.org_name" @focus="organizationDialog=true;organizeType='depart'"
+                              placeholder="点击选择">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="params.org_name='';params.org_id=''">清空</div>
+                      </template>
+                    </el-input>
+                    <!--<el-input v-model="params.org_name" placeholder="请输入部门名称" clearable></el-input>-->
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -135,7 +141,7 @@
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @selectMember="selectMember"  @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
     <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :detailId="detailId"
                         @close="staffRecordsDetailDialog=false;detailId=''"></StaffRecordsDetail>
@@ -164,8 +170,10 @@
           limit: 12,
           search: '',   //模糊搜索
           org_id: '',  //部门
-          entry_time: [], //入职时间
+          entry_time: {}, //入职时间
+          time: [],
         },
+
         org_name: '',
         pickerOptions: {
           shortcuts: [{
@@ -203,7 +211,7 @@
 
         currentId: '',
         organizationDialog: false,
-        organizaType: '',
+        organizeType: '',
 
         addStaffRecordDialog: false,   //新增记录弹框
         staffRecordsDetailDialog: false,
@@ -228,14 +236,27 @@
         const property = column['property'];
         return row[property] === value;
       },
+      selectMember(val){
+        this.params.org_id = val[0].id;
+        this.params.org_name = val[0].name;
+        this.organizeType = '';
+      },
       search() {
         this.params.page = 1;
         this.getStaffTableData();
       },
       getStaffTableData() {
         this.tableLoading = true;
-        this.tableStatus = ' ';//http://192.168.20.24:8081/
-        this.$http.get(this.urls + 'credit/manage/employeelist', {params: this.params}).then((res) => {
+        this.tableStatus = ' ';
+        if (this.params.time && this.params.time.length > 0) {
+          this.params.entry_time.start = this.params.time[0];
+          this.params.entry_time.end = this.params.time[1];
+        } else {
+          this.params.entry_time = {};
+          this.params.time = [];
+        }
+        // JSON.stringify(this.params.entry_time);
+        this.$http.get(this.urls + 'credit/manage/employeelist', {params: JSON.stringify(this.params)}).then((res) => {
           this.isHigh = false;
           this.tableLoading = false;
           if (res.data.code === '10000') {
@@ -256,7 +277,9 @@
       resetting() {
         this.params.search = '';
         this.params.org_id = '';
-        this.params.entry_time = [];
+        this.params.org_name = '';
+        this.params.entry_time = {};
+        this.params.time = [];
         this.search();
       },
       handleSizeChange(val) {
