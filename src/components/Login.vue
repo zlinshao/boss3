@@ -47,20 +47,6 @@
           <div class="slogan">
             <img src="../assets/images/slogan.png" style="width: 100%" alt="">
           </div>
-          <!--<div class="loginType">-->
-          <!--<div id="ding"  @click="switchModel(1)">-->
-          <!--<img v-if="!dingColor" src="../assets/images/dd2.png" alt="">-->
-          <!--<img v-if="dingColor" src="../assets/images/dd1.png" alt="">-->
-          <!--</div>-->
-          <!--<div id="message" @click="switchModel(2)">-->
-          <!--<img v-if="sjColor" src="../assets/images/sj.png" alt="">-->
-          <!--<img v-if="!sjColor" src="../assets/images/sj_02.png" alt="">-->
-          <!--</div>-->
-          <!--<div id="weChart" @click="switchModel(3)">-->
-          <!--<img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">-->
-          <!--<img v-if="weiColor" src="../assets/images/weixin2.png" alt="">-->
-          <!--</div>-->
-          <!--</div>-->
         </div>
         <div class="formItem" v-if="loginModel==2">
           <el-input placeholder="请输入手机号" v-model="phone">
@@ -122,10 +108,7 @@
         loading: false,
         underWay: true,      //登录中
         loadingNum: 60,
-        // ruleForm2: {
-        //   account: 'admin',
-        //   checkPass: '123456'
-        // },
+
         checked: true,
         isMessage: false,
         dingColor: false,
