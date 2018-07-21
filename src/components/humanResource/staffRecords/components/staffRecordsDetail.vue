@@ -41,27 +41,27 @@
         <!--</div>-->
         <!--<div class="title">跟进记录</div>-->
         <div class="" v-for="item in detail">
-        <el-row>
-          <el-col :span="3">
-            <div style="text-align: center;">
-              <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
-              <br/>
-              <span>{{item.add_user}}</span>
-            </div>
-          </el-col>
-          <el-col :span="18">
-            <div class="circle praises"></div>
-            <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
-              <div>{{item.remark}}</div>
-              <div><img src="../../../../assets/images/news.png" alt=""></div>
-            </div>
-          </el-col>
-          <el-col :span="2" style="text-align: right;cursor: pointer;">
+          <el-row>
+            <el-col :span="3">
+              <div style="text-align: center;">
+                <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
+                <br/>
+                <span>{{item.add_user}}</span>
+              </div>
+            </el-col>
+            <el-col :span="18">
+              <div class="circle praises"></div>
+              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
+                <div>{{item.remark}}</div>
+                <div><img src="../../../../assets/images/news.png" alt=""></div>
+              </div>
+            </el-col>
+            <el-col :span="2" style="text-align: right;cursor: pointer;">
               <span @click="editStaffRecordDialog=true">
                 <i class="el-icon-edit"></i>编辑
               </span>
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
         </div>
       </div>
     </el-dialog>
@@ -103,7 +103,7 @@
         this.editStaffRecordDialog = false;
       },
       getDetail() {
-        this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
+        this.$http.get(globalConfig.server + 'credit/manage/employeedetail/' + this.detailId).then((res) => {
           if (res.data.code === "100100") {
             this.detail = res.data.data;
           }
