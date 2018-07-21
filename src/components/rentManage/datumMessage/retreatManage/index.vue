@@ -412,6 +412,7 @@
       },
       //切换标签页
       handleClick() {
+        this.params.page = 1;
         this.params.module = this.activeName === 'first' ? 1 : 2;
         this.isRent = this.activeName === 'first' ? 0 : 1;
         this.getData();

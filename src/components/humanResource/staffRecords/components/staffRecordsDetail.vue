@@ -117,7 +117,7 @@
         }
       },
       getDetail() {
-        this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
+        this.$http.get(globalConfig.server + 'credit/manage/employeedetail/' + this.detailId).then((res) => {
           if (res.data.code === "100100") {
             this.detail = res.data.data;
           } else {
