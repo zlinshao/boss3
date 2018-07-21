@@ -41,7 +41,7 @@
           remark: '',
           images: []
         },
-        editImage: '',
+        editImage: {},
         isClear: false,
       };
     },
@@ -89,6 +89,7 @@
           remark: '',
           images: []
         };
+        this.editImage = {};
       }
     }
   };

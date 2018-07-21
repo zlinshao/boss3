@@ -65,7 +65,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addStaffDialogVisible=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
@@ -108,6 +108,7 @@
           {id: 4, name: '其他'},
         ],
         isClear: false,
+        disabledBtn: false,
       };
     },
     watch: {
@@ -121,6 +122,7 @@
           this.isClear = true;
         } else {
           this.isClear = false;
+          this.disabledBtn = false;
         }
       },
 
@@ -204,6 +206,7 @@
         ];
       },
       confirmAdd() {
+        this.disabledBtn = true;
         //新增
         this.$http.post(globalConfig.server + 'credit/manage/addemployee', this.staffRecords).then((res) => {
           if (res.data.code === '10010') {
