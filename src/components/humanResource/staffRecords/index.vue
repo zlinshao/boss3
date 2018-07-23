@@ -224,27 +224,48 @@
     methods: {
       sortChange(val) {
         let prop = val.prop;
-        let sort = val.order;
-        if (sort === 'ascending') {
-          if (prop === 'praises') {
+        let order = val.order;
+        if (prop === 'praises') {
+          if (order === 'ascending') {
             this.params.order.p = 1;
-          } else if (prop === 'criticisms') {
-            this.params.order.c = 1;
-          } else if (prop === 'doubts') {
-            this.params.order.d = 1;
-          } else if (prop === 'others') {
-            this.params.order.o = 1;
-          }
-        } else if (sort === 'descending') {
-          if (prop === 'praises') {
+          } else if (order === 'descending') {
             this.params.order.p = 0;
-          } else if (prop === 'criticisms') {
+          }
+          this.params.order.c = '';
+          this.params.order.d = '';
+          this.params.order.o = '';
+        } else if (prop === 'criticisms') {
+          if (order === 'ascending') {
+            this.params.order.c = 1;
+          } else if (order === 'descending') {
             this.params.order.c = 0;
-          } else if (prop === 'doubts') {
+          }
+          this.params.order.p = '';
+          this.params.order.d = '';
+          this.params.order.o = '';
+        } else if (prop === 'doubts') {
+          if (order === 'ascending') {
+            this.params.order.d = 1;
+          } else if (order === 'descending') {
             this.params.order.d = 0;
-          } else if (prop === 'others') {
+          }
+          this.params.order.c = '';
+          this.params.order.p = '';
+          this.params.order.o = '';
+        } else if (prop === 'others') {
+          if (order === 'ascending') {
+            this.params.order.o = 1;
+          } else if (order === 'descending') {
             this.params.order.o = 0;
           }
+          this.params.order.c = '';
+          this.params.order.d = '';
+          this.params.order.p = '';
+        } else {
+          this.params.order.p = '';
+          this.params.order.c = '';
+          this.params.order.d = '';
+          this.params.order.o = '';
         }
         this.search();
       },
