@@ -4,7 +4,11 @@
       <div class="scroll_bar">
         <!--<div class="title">基本信息</div>-->
         <!--<div class="describe_border">-->
-        <el-form size="small" label-width="100px">
+        <el-form size="small" label-width="100px"
+                 v-loading="loading"
+                 element-loading-text="拼命加载中"
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(255, 255, 255, 0.7)">
           <el-row>
             <el-col :span="12">
               <el-form-item label="员工姓名">
@@ -56,7 +60,7 @@
             <el-col :span="18">
               <div class="circle"
                    :class="{'praises': item.type==1, 'criticisms':item.type==2, 'doubts':item.type==3, 'others':item.type==4}"></div>
-              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
+              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;min-height: 50px;">
                 <div>{{item.remark}}</div>
                 <div>
                   <img v-for="img in item.images" :src="img.url" :key="img.id" data-magnify="" :data-src="img.url">
@@ -90,6 +94,7 @@
         editStaffRecordDialog: false,
         detail: {},
         record: {},
+        loading: false,
       };
     },
     watch: {
@@ -120,7 +125,9 @@
         }
       },
       getDetail() {
+        this.loading = true;
         this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
+          this.loading = false;
           if (res.data.code === "100100") {
             this.detail = res.data.data;
           } else {

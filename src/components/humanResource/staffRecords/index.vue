@@ -167,7 +167,7 @@
         /***********/
         params: {
           page: 1,
-          limit: 12,
+          limit: 3,
           search: '',   //模糊搜索
           org_id: '',  //部门
           org_name: '',
