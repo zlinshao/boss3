@@ -144,7 +144,7 @@
                   @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
     <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :detailId="detailId"
-                        @close="staffRecordsDetailDialog=false;detailId=''"></StaffRecordsDetail>
+                        @close="closeModal"></StaffRecordsDetail>
   </div>
 </template>
 
@@ -167,7 +167,7 @@
         /***********/
         params: {
           page: 1,
-          limit: 3,
+          limit: 12,
           search: '',   //模糊搜索
           org_id: '',  //部门
           org_name: '',
@@ -275,6 +275,8 @@
       },
       closeModal() {
         this.addStaffRecordDialog = false;
+        this.staffRecordsDetailDialog = false;
+        this.detailId = '';
         this.search();
       },
       selectMember(val) {
