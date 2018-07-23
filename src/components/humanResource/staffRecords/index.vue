@@ -86,6 +86,7 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
           @cell-dblclick='dblClick'
+          @sort-change="sortChange"
           style="width: 100%"> <!--@row-contextmenu='openContextMenu'-->
           <el-table-column
             prop="name"
@@ -108,9 +109,6 @@
             label="表扬数"
             sortable>
           </el-table-column>
-          <!--
-            :filters="[{text: '正序', value: '1'}, {text: '倒序', value: '0'}]"
-            :filter-method="filterHandler"-->
           <el-table-column
             prop="criticisms"
             label="批评数"
@@ -224,6 +222,33 @@
     },
     watch: {},
     methods: {
+      sortChange(val) {
+        console.log(val);
+        let prop = val.prop;
+        let sort = val.order;
+        if (sort === 'ascending') {
+          if (prop === 'praises') {
+            this.params.order.p = 1;
+          } else if (prop === 'criticisms') {
+            this.params.order.c = 1;
+          } else if (prop === 'doubts') {
+            this.params.order.d = 1;
+          } else if (prop === 'others') {
+            this.params.order.o = 1;
+          }
+        } else if (sort === 'descending') {
+          if (prop === 'praises') {
+            this.params.order.p = 0;
+          } else if (prop === 'criticisms') {
+            this.params.order.c = 0;
+          } else if (prop === 'doubts') {
+            this.params.order.d = 0;
+          } else if (prop === 'others') {
+            this.params.order.o = 0;
+          }
+        }
+        this.search();
+      },
       dblClick(row) {
         this.detailId = row.id;
         this.staffRecordsDetailDialog = true;
@@ -231,11 +256,6 @@
       closeModal() {
         this.addStaffRecordDialog = false;
         this.search();
-      },
-      filterHandler(value) {
-        console.log(value);
-        // this.params.order.p = value;
-        // this.search();
       },
       selectMember(val) {
         this.params.org_id = val[0].id;
@@ -249,6 +269,7 @@
       getStaffTableData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
+        this.params.order.toString();
         this.$http.get(this.urls + 'credit/manage/employeelist', {params: this.params}).then((res) => {
           this.isHigh = false;
           this.tableLoading = false;
