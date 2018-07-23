@@ -167,7 +167,7 @@
         /***********/
         params: {
           page: 1,
-          limit: 6,
+          limit: 12,
           search: '',   //模糊搜索
           org_id: '',  //部门
           org_name: '',
@@ -223,7 +223,6 @@
     watch: {},
     methods: {
       sortChange(val) {
-        console.log(val);
         let prop = val.prop;
         let sort = val.order;
         if (sort === 'ascending') {
