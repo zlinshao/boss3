@@ -37,7 +37,7 @@
                 <el-row>
                   <el-col :span="16">
                     <el-form-item label="添加描述" required>
-                      <el-input v-model="value.remark" type="textarea" rows="2"></el-input>
+                      <el-input v-model="value.remark" type="textarea" rows="2" placeholder="请填写描述"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -50,7 +50,7 @@
                 </el-row>
                 <div style="text-align: center">
                   <el-button type="text" @click="subRemarks(key, index)" v-if="index!=0">
-                    <i class="el-icon-circle-plus"></i>删除此条描述
+                    <i class="el-icon-remove"></i>删除此条描述
                   </el-button>
                 </div>
               </div>
