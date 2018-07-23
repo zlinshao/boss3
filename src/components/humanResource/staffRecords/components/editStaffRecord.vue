@@ -53,11 +53,43 @@
         if (!val) {
           this.isClear = true;
           this.$emit('close');
+          this.params = {
+            detail_id: '',
+            remark: '',
+            images: []
+          };
+          this.editImage = {};
         } else {
           this.isClear = false;
+          // this.params.detail_id = this.record.detail_id;
+          // this.params.remark = this.record.remark;
+          // if (this.record.images && this.record.images.length > 0) {
+          //   let data = {};
+          //   this.record.images.forEach((item) => {
+          //     this.params.images.push(item.id);
+          //     data[item.id] = item.url;
+          //   });
+          //   this.editImage = data;
+          // }
           this.params.detail_id = this.record.detail_id;
-          this.params.remark = this.record.remark;
-          // this.params.images = this.record.images;
+          this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {detail_id: this.record.detail_id}).then((res) => {
+            if (res.data.code === '10000') {
+              this.params.remark = res.data.data.remark;
+              if (res.data.data && res.data.data.images.length > 0) {
+                let data = {};
+                res.data.data.images.forEach((item) => {
+                  this.params.images.push(item.id);
+                  data[item.id] = item.url;
+                });
+                this.editImage = data;
+              }
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg,
+              });
+            }
+          });
         }
       },
     },
@@ -82,15 +114,6 @@
           }
         });
       },
-      closeModal() {
-        this.editDepartDialogVisible = false;
-        this.params = {
-          detail_id: '',
-          remark: '',
-          images: []
-        };
-        this.editImage = {};
-      }
     }
   };
 </script>

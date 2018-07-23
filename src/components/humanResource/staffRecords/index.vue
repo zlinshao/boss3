@@ -223,7 +223,6 @@
     watch: {},
     methods: {
       dblClick(row) {
-        console.log(row);
         this.detailId = row.id;
         this.staffRecordsDetailDialog = true;
       },
