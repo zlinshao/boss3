@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
+            <el-input placeholder="请输入姓名" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
@@ -16,9 +16,6 @@
               <i class="el-icon-plus"></i>
               新增记录
             </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="staffRecordsDetailDialog=true;">点击详情</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -57,7 +54,14 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="params.org_name" placeholder="请输入部门名称" clearable></el-input>
+                    <el-input readonly v-model="params.org_name" @focus="organizationDialog=true;organizeType='depart'"
+                              placeholder="点击选择">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="params.org_name='';
+                        params.org_id=''">清空
+                        </div>
+                      </template>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -82,6 +86,7 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
           @cell-dblclick='dblClick'
+          @sort-change="sortChange"
           style="width: 100%"> <!--@row-contextmenu='openContextMenu'-->
           <el-table-column
             prop="name"
@@ -97,16 +102,13 @@
           </el-table-column>
           <el-table-column
             prop="start_time"
-            label="入职时间"
-            sortable>
+            label="入职时间">
           </el-table-column>
           <el-table-column
             prop="praises"
             label="表扬数"
             sortable>
           </el-table-column>
-          <!--:filters="[{text: '正序', value: '2016-05-01'}, {text: '倒序', value: '2016-05-02'}]"-->
-          <!--:filter-method="filterHandler"-->
           <el-table-column
             prop="criticisms"
             label="批评数"
@@ -138,9 +140,11 @@
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @selectMember="selectMember"
+                  @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
-    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" @close="staffRecordsDetailDialog=false"></StaffRecordsDetail>
+    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :detailId="detailId"
+                        @close="closeModal"></StaffRecordsDetail>
   </div>
 </template>
 
@@ -166,9 +170,10 @@
           limit: 12,
           search: '',   //模糊搜索
           org_id: '',  //部门
+          org_name: '',
           entry_time: [], //入职时间
+          order: {"p": '', "c": '', "d": '', "o": ''},
         },
-        org_name: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -205,10 +210,11 @@
 
         currentId: '',
         organizationDialog: false,
-        organizaType: '',
+        organizeType: '',
 
         addStaffRecordDialog: false,   //新增记录弹框
         staffRecordsDetailDialog: false,
+        detailId: '',
       }
     },
     mounted() {
@@ -216,16 +222,67 @@
     },
     watch: {},
     methods: {
+      sortChange(val) {
+        let prop = val.prop;
+        let order = val.order;
+        if (prop === 'praises') {
+          if (order === 'ascending') {
+            this.params.order.p = 1;
+          } else if (order === 'descending') {
+            this.params.order.p = 2;
+          }
+          this.params.order.c = '';
+          this.params.order.d = '';
+          this.params.order.o = '';
+        } else if (prop === 'criticisms') {
+          if (order === 'ascending') {
+            this.params.order.c = 1;
+          } else if (order === 'descending') {
+            this.params.order.c = 2;
+          }
+          this.params.order.p = '';
+          this.params.order.d = '';
+          this.params.order.o = '';
+        } else if (prop === 'doubts') {
+          if (order === 'ascending') {
+            this.params.order.d = 1;
+          } else if (order === 'descending') {
+            this.params.order.d = 2;
+          }
+          this.params.order.c = '';
+          this.params.order.p = '';
+          this.params.order.o = '';
+        } else if (prop === 'others') {
+          if (order === 'ascending') {
+            this.params.order.o = 1;
+          } else if (order === 'descending') {
+            this.params.order.o = 2;
+          }
+          this.params.order.c = '';
+          this.params.order.d = '';
+          this.params.order.p = '';
+        } else {
+          this.params.order.p = '';
+          this.params.order.c = '';
+          this.params.order.d = '';
+          this.params.order.o = '';
+        }
+        this.search();
+      },
       dblClick(row) {
+        this.detailId = row.id;
         this.staffRecordsDetailDialog = true;
       },
       closeModal() {
         this.addStaffRecordDialog = false;
+        this.staffRecordsDetailDialog = false;
+        this.detailId = '';
         this.search();
       },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
+      selectMember(val) {
+        this.params.org_id = val[0].id;
+        this.params.org_name = val[0].name;
+        this.organizeType = '';
       },
       search() {
         this.params.page = 1;
@@ -233,13 +290,19 @@
       },
       getStaffTableData() {
         this.tableLoading = true;
-        this.tableStatus = ' ';//http://192.168.20.24:8081/
+        this.tableStatus = ' ';
+        this.params.order.toString();
         this.$http.get(this.urls + 'credit/manage/employeelist', {params: this.params}).then((res) => {
           this.isHigh = false;
           this.tableLoading = false;
           if (res.data.code === '10000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+            if (res.data.data.data.length < 1) {
+              this.tableStatus = '暂无数据';
+              this.tableData = [];
+              this.totalNum = 0;
+            }
           } else {
             this.tableStatus = '暂无数据';
             this.tableData = [];
@@ -255,6 +318,7 @@
       resetting() {
         this.params.search = '';
         this.params.org_id = '';
+        this.params.org_name = '';
         this.params.entry_time = [];
         this.search();
       },

@@ -1,23 +1,30 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="修改部门" :visible.sync="editStaffRecordDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改记录" :visible.sync="editStaffRecordDialogVisible" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
-            <el-col :span="24">
-              <el-form-item label="上级部门">
-                <el-input placeholder="请输入内容" @focus="selectDepart" readonly="" v-model="department"></el-input>
+            <el-col :span="10">
+              <el-form-item label="类型选择" required>
+                <el-select v-model="params.type" placeholder="请选择" clearable>
+                  <el-option v-for="val in typeCategory" :key="val.id" :value="val.id" :label="val.name">
+                    {{val.name}}
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
-              <el-form-item label='部门名称'>
-                <el-input placeholder="请输入内容" v-model="params.name"></el-input>
+          </el-row>
+          <el-row>
+            <el-col :span="16">
+              <el-form-item label="描述" required>
+                <el-input v-model="params.remark" type="textarea" rows="2" placeholder="请填写描述"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="24">
-              <el-form-item label='排序'>
-                <el-input-number v-model="params.order"></el-input-number>
-                <span style="color: #fb435e;margin-left: 15px">注意：数值越大，排序越靠前！</span>
+              <el-form-item label="照片">
+                <UPLOAD ID="single_records" :isClear="isClear" :editImage="editImage" @getImg="getImg"></UPLOAD>
               </el-form-item>
             </el-col>
           </el-row>
@@ -25,71 +32,119 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="editStaffRecordDialogVisible=false">取 消</el-button>
-        <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
+        <el-button size="small" type="primary" @click.native="confirmEdit" :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
-  import Organization from '../../../common/organization.vue'
+  import UPLOAD from '../../../common/UPLOAD.vue';
+
   export default {
-    props:['editStaffRecordDialog','recordId'],
-    components:{Organization},
+    props: ['editStaffRecordDialog', 'record'],
+    components: {UPLOAD},
     data() {
       return {
-        editStaffRecordDialogVisible:false,
-        params:{
-          parent_id:'',
-          name:'',
-          order:''
+        editStaffRecordDialogVisible: false,
+        params: {
+          type: '',
+          detail_id: '',
+          remark: '',
+          images: []
         },
-        organizationDialog:false,
-        department:'',
+        editImage: {},
+        isClear: false,
+        typeCategory: [
+          {id: 1, name: '表扬'},
+          {id: 2, name: '批评'},
+          {id: 3, name: '疑惑'},
+          {id: 4, name: '其他'},
+        ],
+        disabledBtn: false,
       };
     },
-    watch:{
-      editStaffRecordDialog(val){
-        this.editStaffRecordDialogVisible = val
+    watch: {
+      editStaffRecordDialog(val) {
+        this.editStaffRecordDialogVisible = val;
       },
-      editStaffRecordDialogVisible(val){
-        if(!val){
+      editStaffRecordDialogVisible(val) {
+        if (!val) {
+          this.isClear = true;
           this.$emit('close');
+          this.params = {
+            type: '',
+            detail_id: '',
+            remark: '',
+            images: []
+          };
+          this.editImage = {};
+        } else {
+          this.isClear = false;
+          this.disabledBtn = false;
+          // this.params.detail_id = this.record.detail_id;
+          // this.params.remark = this.record.remark;
+          // if (this.record.images && this.record.images.length > 0) {
+          //   let data = {};
+          //   this.record.images.forEach((item) => {
+          //     this.params.images.push(item.id);
+          //     data[item.id] = item.url;
+          //   });
+          //   this.editImage = data;
+          // }
+          this.params.detail_id = this.record.detail_id;
+          // this.params.type = this.record.type;
+          this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {detail_id: this.record.detail_id}).then((res) => {
+            if (res.data.code === '10000') {
+              this.params.type = res.data.data.type;
+              this.params.remark = res.data.data.remark;
+              if (res.data.data && res.data.data.images.length > 0) {
+                let data = {};
+                res.data.data.images.forEach((item) => {
+                  this.params.images.push(item.id);
+                  data[item.id] = item.url;
+                });
+                this.editImage = data;
+              }
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg,
+              });
+            }
+          });
         }
       },
     },
-    methods:{
-
-      confirmEdit(){
-
+    methods: {
+      getImg(val) {
+        this.params.images = val[1];
       },
-      selectDepart(){
-        this.organizationDialog = true
+      confirmEdit() {
+        this.disabledBtn = true;
+        this.$http.post(globalConfig.server + 'credit/manage/employeeedit', this.params).then((res) => {
+          if (res.data.code === '100100') {
+            this.$emit('close', 'success');
+            this.editStaffRecordDialogVisible = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+          } else {
+            this.disabledBtn = false;
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        });
       },
-      //关闭选人框回调
-      closeOrganization(){
-        this.organizationDialog = false;
-      },
-      selectMember(val){
-        this.params.parent_id = val[0].id;
-        this.department = val[0].name;
-        this.organizationDialog = false;
-      },
-      closeModal(){
-        this.editDepartDialogVisible = false;
-        this.params = {
-          parent_id:'',
-          name:'',
-          order:''
-        };
-        this.department = '';
-      }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair{
+  #addRentRepair {
+
   }
 
 </style>

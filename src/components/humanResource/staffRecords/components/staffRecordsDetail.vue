@@ -2,75 +2,88 @@
   <div id="staffRecordsDetail">
     <el-dialog :close-on-click-modal="false" title="员工档案" :visible.sync="staffRecordsDetailDialogVisible" width="50%">
       <div class="scroll_bar">
-        <div class="title">基本信息</div>
-        <div class="describe_border">
-          <el-form size="small" label-width="100px">
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="员工姓名">
-                  <div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>
-                  <div class="content" v-if="!workOrderDetail.create_time">暂无</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="入职时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
-                    <span v-if="!workOrderDetail.creators">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="部门">
-                  <div class="content">
-                    <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
-                    <span v-if="!workOrderDetail.num">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="岗位">
-                  <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
-                  <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <div class="title">跟进记录</div>
-        <div class="describe_border">
+        <!--<div class="title">基本信息</div>-->
+        <!--<div class="describe_border">-->
+        <el-form size="small" label-width="100px"
+                 v-loading="loading"
+                 element-loading-text="拼命加载中"
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(255, 255, 255, 0.7)">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="员工姓名">
+                <div class="content">
+                  <span v-if="detail.name">{{detail.name}}</span>
+                  <span v-else>暂无</span>
+                </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="入职时间">
+                <div class="content">
+                  <span v-if="detail.start_time">{{detail.start_time}}</span>
+                  <span v-else>暂无</span>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="部门">
+                <div class="content">
+                  <span v-if="detail.org">{{detail.org}}</span>
+                  <span v-else>暂无</span>
+                </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="岗位">
+                <div class="content">
+                  <span v-if="detail.department">{{detail.department}}</span>
+                  <span v-else>暂无</span>
+                </div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <!--</div>-->
+        <!--<div class="title">跟进记录</div>-->
+        <div class="" v-for="item in detail.data">
           <el-row>
             <el-col :span="3">
               <div style="text-align: center;">
-                <span>2018.07.30</span>
+                <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
                 <br/>
-                <span>珠宝学</span>
+                <span>{{item.add_user}}</span>
               </div>
             </el-col>
             <el-col :span="18">
-              <div class="circle praises"></div>
-              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;">
-                <div>的防护多数地方韩国房贷合同国家的发货给对方机会国家的宏观附近的返回广东客家大概几点发货高度分化格局的回复绝对符合国家地方韩国绝对符合国家地方看觉得刚觉得</div>
-                <div><img src="../../../../assets/images/news.png" alt=""></div>
+              <div class="circle"
+                   :class="{'praises': item.type==1, 'criticisms':item.type==2, 'doubts':item.type==3, 'others':item.type==4}"></div>
+              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;min-height: 50px;">
+                <div>{{item.remark}}</div>
+                <div>
+                  <img v-for="img in item.images" :src="img.url" :key="img.id" data-magnify="" :data-src="img.url">
+                </div>
               </div>
-
             </el-col>
-            <el-col :span="2" style="text-align: right;cursor: pointer;" @click="">
-              <i class="el-icon-edit"></i>编辑
+            <el-col :span="2" style="text-align: right;cursor: pointer;padding-top: 8px;">
+              <span @click="editRecord(item)" style="color: #409eff;">
+                <i class="el-icon-edit"></i>编辑
+              </span>
             </el-col>
           </el-row>
-
         </div>
       </div>
     </el-dialog>
-    <EditStaffRecord :editStaffRecordDialog="editStaffRecordDialog" @close="closeModal"></EditStaffRecord>
+    <EditStaffRecord :editStaffRecordDialog="editStaffRecordDialog" :record="record"
+                     @close="closeModal"></EditStaffRecord>
   </div>
 </template>
 
 <script>
   import EditStaffRecord from './editStaffRecord.vue';
+
   export default {
     name: 'staffRecordsDetail',
     props: ['staffRecordsDetailDialog', 'detailId'],
@@ -79,7 +92,9 @@
       return {
         staffRecordsDetailDialogVisible: false,
         editStaffRecordDialog: false,
-        workOrderDetail: {},
+        detail: {},
+        record: {},
+        loading: false,
       };
     },
     watch: {
@@ -90,7 +105,6 @@
         if (!val) {
           this.$emit('close');
         } else {
-          this.isClear = false;
           this.getDetail();
         }
       },
@@ -99,15 +113,31 @@
 
     },
     methods: {
-      closeModal(){
+      editRecord(val) {
+        this.record = val;
+        this.editStaffRecordDialog = true;
+      },
+      closeModal(val) {
+        this.record = {};
         this.editStaffRecordDialog = false;
+        if (val == 'success') {
+          this.getDetail();
+        }
       },
       getDetail() {
-        // this.$http.get(globalConfig.server + 'customer/work_order/' + this.activeId).then((res) => {
-        //   if (res.data.code === "10020") {
-        //     this.workOrderDetail = res.data.data;
-        //   }
-        // });
+        this.loading = true;
+        this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
+          this.loading = false;
+          if (res.data.code === "100100") {
+            this.detail = res.data.data;
+          } else {
+            this.detail = {};
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        });
       },
     }
   };
@@ -128,7 +158,7 @@
       border-radius: 6px;
       margin: 0 10px 10px 0;
     }
-    .circle{
+    .circle {
       width: 18px;
       height: 18px;
       border-radius: 50%;
@@ -137,16 +167,16 @@
       margin-left: -9px;
       margin-top: 10px;
     }
-    .praises{
+    .praises {
       background: #58d788;
     }
-    .criticisms{
+    .criticisms {
       background: #ff4545;
     }
-    .doubts{
+    .doubts {
       background: #FF9900;
     }
-    .others{
+    .others {
       background: #409EFF;
     }
 
