@@ -100,8 +100,7 @@
           </el-table-column>
           <el-table-column
             prop="start_time"
-            label="入职时间"
-            sortable>
+            label="入职时间">
           </el-table-column>
           <el-table-column
             prop="praises"

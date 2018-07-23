@@ -217,6 +217,7 @@
               message: res.data.msg,
             });
           } else {
+            this.disabledBtn = false;
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
