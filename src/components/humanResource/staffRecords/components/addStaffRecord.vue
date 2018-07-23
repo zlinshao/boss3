@@ -209,7 +209,7 @@
         this.disabledBtn = true;
         //新增
         this.$http.post(globalConfig.server + 'credit/manage/addemployee', this.staffRecords).then((res) => {
-          if (res.data.code === '10010') {
+          if (res.data.code === '10000') {
             this.$emit('close', 'success');
             this.addStaffDialogVisible = false;
             this.$notify.success({
