@@ -57,10 +57,11 @@
                     <el-input readonly v-model="params.org_name" @focus="organizationDialog=true;organizeType='depart'"
                               placeholder="点击选择">
                       <template slot="append">
-                        <div style="cursor: pointer;" @click="params.org_name='';params.org_id=''">清空</div>
+                        <div style="cursor: pointer;" @click="params.org_name='';
+                        params.org_id=''">清空
+                        </div>
                       </template>
                     </el-input>
-                    <!--<el-input v-model="params.org_name" placeholder="请输入部门名称" clearable></el-input>-->
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -107,8 +108,9 @@
             label="表扬数"
             sortable>
           </el-table-column>
-          <!--:filters="[{text: '正序', value: '2016-05-01'}, {text: '倒序', value: '2016-05-02'}]"-->
-          <!--:filter-method="filterHandler"-->
+          <!--
+            :filters="[{text: '正序', value: '1'}, {text: '倒序', value: '0'}]"
+            :filter-method="filterHandler"-->
           <el-table-column
             prop="criticisms"
             label="批评数"
@@ -140,7 +142,8 @@
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" :type="organizeType" @selectMember="selectMember"  @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @selectMember="selectMember"
+                  @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
     <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :detailId="detailId"
                         @close="staffRecordsDetailDialog=false;detailId=''"></StaffRecordsDetail>
@@ -166,13 +169,13 @@
         /***********/
         params: {
           page: 1,
-          limit: 3,
+          limit: 6,
           search: '',   //模糊搜索
           org_id: '',  //部门
+          org_name: '',
           entry_time: [], //入职时间
+          order: {"p": '', "c": '', "d": '', "o": ''},
         },
-
-        org_name: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -229,11 +232,12 @@
         this.addStaffRecordDialog = false;
         this.search();
       },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
+      filterHandler(value) {
+        console.log(value);
+        // this.params.order.p = value;
+        // this.search();
       },
-      selectMember(val){
+      selectMember(val) {
         this.params.org_id = val[0].id;
         this.params.org_name = val[0].name;
         this.organizeType = '';
@@ -251,6 +255,11 @@
           if (res.data.code === '10000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+            if (res.data.data.data.length < 1) {
+              this.tableStatus = '暂无数据';
+              this.tableData = [];
+              this.totalNum = 0;
+            }
           } else {
             this.tableStatus = '暂无数据';
             this.tableData = [];
