@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
+            <el-input placeholder="请输入姓名" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
@@ -166,7 +166,7 @@
         /***********/
         params: {
           page: 1,
-          limit: 12,
+          limit: 3,
           search: '',   //模糊搜索
           org_id: '',  //部门
           entry_time: [], //入职时间

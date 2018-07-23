@@ -54,11 +54,12 @@
               </div>
             </el-col>
             <el-col :span="18">
-              <div class="circle praises"></div>
+              <div class="circle"
+                   :class="{'praises': item.type==1, 'criticisms':item.type==2, 'doubts':item.type==3, 'others':item.type==4}"></div>
               <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
                 <div>{{item.remark}}</div>
                 <div>
-                  <img  v-for="img in item.images" :src="img.url" :key="img.id"  data-magnify="" :data-src="img.url">
+                  <img v-for="img in item.images" :src="img.url" :key="img.id" data-magnify="" :data-src="img.url">
                 </div>
               </div>
             </el-col>

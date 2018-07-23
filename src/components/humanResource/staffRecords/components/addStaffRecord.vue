@@ -7,7 +7,7 @@
           <div v-for="(item,key) in staffRecords" class="describe_border">
             <el-row>
               <el-col :span="8">
-                <el-form-item label="员工姓名">
+                <el-form-item label="员工姓名" required>
                   <el-input readonly v-model="item.name" @focus="openOrganization('staff', key)"
                             placeholder="点击选择">
                     <template slot="append">
@@ -25,7 +25,7 @@
               <div class="describe_border">
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="类型选择">
+                    <el-form-item label="类型选择" required>
                       <el-select v-model="value.type" placeholder="请选择" clearable>
                         <el-option v-for="val in typeCategory" :key="val.id" :value="val.id" :label="val.name">
                           {{val.name}}
@@ -36,7 +36,7 @@
                 </el-row>
                 <el-row>
                   <el-col :span="16">
-                    <el-form-item label="添加描述">
+                    <el-form-item label="添加描述" required>
                       <el-input v-model="value.remark" type="textarea" rows="2"></el-input>
                     </el-form-item>
                   </el-col>
