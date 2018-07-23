@@ -67,8 +67,8 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="2" style="text-align: right;cursor: pointer;">
-              <span @click="editRecord(item)">
+            <el-col :span="2" style="text-align: right;cursor: pointer;padding-top: 8px;">
+              <span @click="editRecord(item)" style="color: #409eff;">
                 <i class="el-icon-edit"></i>编辑
               </span>
             </el-col>
