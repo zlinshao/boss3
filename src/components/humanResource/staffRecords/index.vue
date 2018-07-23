@@ -229,7 +229,7 @@
           if (order === 'ascending') {
             this.params.order.p = 1;
           } else if (order === 'descending') {
-            this.params.order.p = 0;
+            this.params.order.p = 2;
           }
           this.params.order.c = '';
           this.params.order.d = '';
@@ -238,7 +238,7 @@
           if (order === 'ascending') {
             this.params.order.c = 1;
           } else if (order === 'descending') {
-            this.params.order.c = 0;
+            this.params.order.c = 2;
           }
           this.params.order.p = '';
           this.params.order.d = '';
@@ -247,7 +247,7 @@
           if (order === 'ascending') {
             this.params.order.d = 1;
           } else if (order === 'descending') {
-            this.params.order.d = 0;
+            this.params.order.d = 2;
           }
           this.params.order.c = '';
           this.params.order.p = '';
@@ -256,7 +256,7 @@
           if (order === 'ascending') {
             this.params.order.o = 1;
           } else if (order === 'descending') {
-            this.params.order.o = 0;
+            this.params.order.o = 2;
           }
           this.params.order.c = '';
           this.params.order.d = '';
