@@ -4,7 +4,7 @@
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="10">
               <el-form-item label="类型选择" required>
                 <el-select v-model="params.type" placeholder="请选择" clearable>
                   <el-option v-for="val in typeCategory" :key="val.id" :value="val.id" :label="val.name">
@@ -93,10 +93,10 @@
           //   this.editImage = data;
           // }
           this.params.detail_id = this.record.detail_id;
-          this.params.type = this.record.type;
+          // this.params.type = this.record.type;
           this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {detail_id: this.record.detail_id}).then((res) => {
             if (res.data.code === '10000') {
-              // this.params.type = res.data.data.type;
+              this.params.type = res.data.data.type;
               this.params.remark = res.data.data.remark;
               if (res.data.data && res.data.data.images.length > 0) {
                 let data = {};
