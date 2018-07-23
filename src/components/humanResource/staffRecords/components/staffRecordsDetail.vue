@@ -62,7 +62,7 @@
                    :class="{'praises': item.type==1, 'criticisms':item.type==2, 'doubts':item.type==3, 'others':item.type==4}"></div>
               <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;min-height: 50px;">
                 <div>{{item.remark}}</div>
-                <div>
+                <div style="margin-top: 10px;" v-if="item.images && item.images.length>0">
                   <img v-for="img in item.images" :src="img.url" :key="img.id" data-magnify="" :data-src="img.url">
                 </div>
               </div>
