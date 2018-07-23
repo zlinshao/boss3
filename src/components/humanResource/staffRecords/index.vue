@@ -223,7 +223,6 @@
     watch: {},
     methods: {
       sortChange(val) {
-        console.log(val);
         let prop = val.prop;
         let sort = val.order;
         if (sort === 'ascending') {
