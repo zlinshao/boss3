@@ -222,7 +222,14 @@
                 if(data[i].content){
                   user.bulletin = data[i].content.staff_name+'的'+data[i].content.bulletin_name || '/';
                   user.name = data[i].content.staff_name || '';
-                  user.house_name = (data[i].content.house && data[i].content.house.name) || '/';
+                  // user.house_name = (data[i].content.house && data[i].content.house.name) || '/';
+                  if (data[i].content.house) {
+                    user.house_name = data[i].content.house.name;
+                  } else if (data[i].content.address) {
+                    user.house_name = data[i].content.address;
+                  } else {
+                    user.house_name = '/';
+                  }
                 }
                 user.id = data[i].id;
                 user.place = data[i].place.display_name;
