@@ -597,8 +597,8 @@
                 <span slot="title">已读</span>
               </el-menu-item>
               <!--<el-menu-item index="all">-->
-                <!--<i class="iconfont icon-jingjianmoshi"></i>-->
-                <!--<span slot="title">全部</span>-->
+              <!--<i class="iconfont icon-jingjianmoshi"></i>-->
+              <!--<span slot="title">全部</span>-->
               <!--</el-menu-item>-->
             </el-menu>
           </div>
@@ -975,6 +975,8 @@
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
                 if (data[i].content.house) {
                   user.house_name = data[i].content.house.name;
+                } else if (data[i].content.address) {
+                  user.house_name = data[i].content.address;
                 } else {
                   user.house_name = '/';
                 }
@@ -999,6 +1001,8 @@
                   user.finish_at = data[i].flow.finish_at !== null ? data[i].finish_at : '/';
                   if (user.house_name = data[i].flow.content.house) {
                     user.house_name = data[i].flow.content.house.name;
+                  }  else if (data[i].flow.content.address) {
+                    user.house_name = data[i].flow.content.address;
                   } else {
                     user.house_name = '/';
                   }
