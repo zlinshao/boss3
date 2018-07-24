@@ -87,6 +87,7 @@
           element-loading-background="rgba(255, 255, 255, 0)"
           @cell-dblclick='dblClick'
           @sort-change="sortChange"
+          ref="tableSort"
           style="width: 100%"> <!--@row-contextmenu='openContextMenu'-->
           <el-table-column
             prop="name"
@@ -332,6 +333,7 @@
         this.$refs.sortc.columnConfig.order = '';
         this.$refs.sortd.columnConfig.order = '';
         this.$refs.sorto.columnConfig.order = '';
+        this.$refs.tableSort.clearSort();
         this.search();
       },
       handleSizeChange(val) {
