@@ -107,22 +107,26 @@
           <el-table-column
             prop="praises"
             label="表扬数"
-            sortable>
+            sortable
+            ref="sortp">
           </el-table-column>
           <el-table-column
             prop="criticisms"
             label="批评数"
-            sortable>
+            sortable
+            ref="sortc">
           </el-table-column>
           <el-table-column
             prop="doubts"
             label="疑惑数"
-            sortable>
+            sortable
+            ref="sortd">
           </el-table-column>
           <el-table-column
             prop="others"
             label="其他"
-            sortable>
+            sortable
+            ref="sorto">
           </el-table-column>
         </el-table>
       </div>
@@ -320,6 +324,14 @@
         this.params.org_id = '';
         this.params.org_name = '';
         this.params.entry_time = [];
+        this.params.order.p = '';
+        this.params.order.c = '';
+        this.params.order.d = '';
+        this.params.order.o = '';
+        this.$refs.sortp.columnConfig.order = '';
+        this.$refs.sortc.columnConfig.order = '';
+        this.$refs.sortd.columnConfig.order = '';
+        this.$refs.sorto.columnConfig.order = '';
         this.search();
       },
       handleSizeChange(val) {

@@ -236,6 +236,7 @@
       font-size: 18px;
       vertical-align: middle;
       cursor: pointer;
+      line-height: 29px;
     }
     .sub_com {
       color: #409eff;
@@ -243,6 +244,7 @@
       vertical-align: middle;
       margin-left: 10px;
       cursor: pointer;
+      line-height: 29px;
     }
   }
 
