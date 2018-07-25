@@ -75,7 +75,7 @@
                   <!--<el-input @focus="organizationDialog = true" readonly=""></el-input>-->
                   <!--</el-form-item>-->
                   <!--<el-form-item style="float: right;" v-if="activeName==='first'">-->
-                    <!--<el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>-->
+                  <!--<el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>-->
                   <!--</el-form-item>-->
                   <el-form-item style="float: right">
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
@@ -420,221 +420,266 @@
     <el-dialog :close-on-click-modal="false" title="员工详情" :visible.sync="staffDetail" width="60%">
       <div class="scroll_bar">
         <el-form size="small" label-width="120px">
-          <div class="title">基础信息</div>
-          <div class="form_border">
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="真实姓名">
-                  <div class="content">
+          <el-tabs v-model="detailActiveName">
+            <el-tab-pane label="基础信息" name="first">
+              <div class="form_border">
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="真实姓名">
+                      <div class="content">
                     <span v-if="staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.real_name}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="性别">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="性别">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.genders">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.genders}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="手机号码">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="手机号码">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.phone">
                       {{staffDetailData && staffDetailData.phone}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="身份证号">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="身份证号">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.id_num">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.id_num}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="生日">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="生日">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.birthday">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.birthday}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="推荐人">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="16">
-                <el-form-item label="家庭住址">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr">
-                     {{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="生育状况">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="生育状况">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="银行卡号">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户行">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="紧急电话">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="16">
+                    <el-form-item label="家庭住址">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr">
+                     {{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="紧急电话">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.emergency_call">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.emergency_call}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="支行">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="银行卡号">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num">
+                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开户行">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank">
+                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="支行">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.branch_bank">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.branch_bank}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户名">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开户名">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="等级">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="部门">
+                      <div class="content">
+                        <span v-if="department">{{department}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="职位">
+                      <div class="content">
+                        <span v-if="currentPosition">{{currentPosition}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="岗位">
+                      <div class="content">
+                        <span v-if="currentPost">{{currentPost}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="账号状态">
+                      <div class="content">
+                        <span v-if="staffDetailData && staffDetailData.is_enable">禁用</span>
+                        <span v-if="staffDetailData && !staffDetailData.is_enable">启用</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="在职状态">
+                      <div class="content">
+                        <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
+                        <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="等级">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.levels">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="部门">
-                  <div class="content">
-                    <span v-if="department">{{department}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="职位">
-                  <div class="content">
-                    <span v-if="currentPosition">{{currentPosition}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="岗位">
-                  <div class="content">
-                    <span v-if="currentPost">{{currentPost}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="账号状态">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.is_enable">禁用</span>
-                    <span v-if="staffDetailData && !staffDetailData.is_enable">启用</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="在职状态">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
-                    <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="入职时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="入职时间">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="离职时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="离职时间">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_time}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="薪资">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="薪资">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.salary">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.salary}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="24">
-                <el-form-item label="入职材料">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="入职途径">
+                      <div class="content">
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type
+                      && staffDetailData.detail.entry_way.entry_type.length>0">
+                      <span
+                        v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
+                      </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="推荐人">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name">
+                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="备注">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
+                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="离职原因">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
+                      {{staffDetailData.detail.dismiss_reason.dismiss_type && DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="具体描述">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
+                      {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="24">
+                    <el-form-item label="入职材料">
+                      <div class="content">
                     <span>
                       <el-checkbox-group v-model="entry_materials" style="display: inline;">
                         <el-checkbox v-for="item in entryMaterialsCategory" :label="item.id" :key="item.id"
@@ -642,168 +687,172 @@
                                      disabled>{{item.dictionary_name}}</el-checkbox>
                       </el-checkbox-group>
                     </span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="title">辅助信息</div>
-          <div class="form_border">
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="籍贯">
-                  <div class="content">
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="辅助信息" name="second">
+              <div class="form_border">
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="籍贯">
+                      <div class="content">
                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.origin_addr">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.origin_addr}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="婚姻状况">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="婚姻状况">
+                      <div class="content">
                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="政治面貌">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="政治面貌">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="转正时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="转正时间">
+                      <div class="content">
                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.forward_time">
                     {{staffDetailData && staffDetailData.detail && staffDetailData.detail.forward_time}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="企业邮箱">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="企业邮箱">
+                      <div class="content">
                      <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.mail">
                        {{staffDetailData && staffDetailData.detail && staffDetailData.detail.mail}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="学历">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="学历">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.educations">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.educations}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="毕业院校">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="毕业院校">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.school">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.school}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="专业">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="专业">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.major">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.major}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="毕业时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="毕业时间">
+                      <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.graduation_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.graduation_time}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="第一次签合同时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :span="8">
+                    <el-form-item label="第一次签合同时间">
+                      <div class="content">
                     <span
                       v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="第一次合同到期时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="第一次合同到期时间">
+                      <div class="content">
                     <span
                       v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="第二次签合同时间">
-                  <div class="content">
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="第二次签合同时间">
+                      <div class="content">
                     <span
                       v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="20">
-              <el-col :span="24">
-                <el-form-item label="备注">
-                  <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.remark">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.remark}}</span>
-                    <span v-else>暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="title">成长轨迹</div>
-          <div class="form_border">
-            <div v-if="growthData.length>0">
-              <el-form size="small" v-if="growthData">
-                <el-row :gutter="20" v-for="item in growthData" :key="item.id" style="margin-bottom: 15px;">
-                  <el-col :span="4">
-                    <div class="content">
-                      <span v-if="item.create_time">{{item.create_time}}</span>
-                      <span v-if="!item.create_time">暂无</span>
-                    </div>
-                  </el-col>
-                  <el-col :span="20">
-                    <div class="content">
-                      <span v-if="item.content">{{item.content}}</span>
-                      <span v-if="!item.content">暂无</span>
-                    </div>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
                   </el-col>
                 </el-row>
-              </el-form>
-            </div>
-            <div class="content" v-else="" style="text-align: center;line-height: 30px;margin-bottom: 15px;">
-              暂无数据
-            </div>
-          </div>
+                <el-row :gutter="20">
+                  <el-col :span="24">
+                    <el-form-item label="备注">
+                      <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.remark">
+                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.remark}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="成长轨迹" name="third">
+              <div class="form_border">
+                <div v-if="growthData.length>0">
+                  <el-form size="small" v-if="growthData">
+                    <el-row :gutter="20" v-for="item in growthData" :key="item.id" style="margin-bottom: 15px;">
+                      <el-col :span="4">
+                        <div class="content">
+                          <span v-if="item.create_time">{{item.create_time}}</span>
+                          <span v-if="!item.create_time">暂无</span>
+                        </div>
+                      </el-col>
+                      <el-col :span="20">
+                        <div class="content">
+                          <span v-if="item.content">{{item.content}}</span>
+                          <span v-if="!item.content">暂无</span>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </div>
+                <div class="content" v-else="" style="text-align: center;line-height: 30px;margin-bottom: 15px;">
+                  暂无数据
+                </div>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -819,23 +868,23 @@
             </el-date-picker>
           </el-form-item>
           <!--<el-row>-->
-            <!--<el-col :span="8">-->
-              <el-form-item label="离职原因">
-                <el-select v-model="form.dismiss_reason.dismiss_type" clearable>
-                  <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
-                             :label="item.name">{{item.name}}
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            <!--</el-col>-->
+          <!--<el-col :span="8">-->
+          <el-form-item label="离职原因">
+            <el-select v-model="form.dismiss_reason.dismiss_type" clearable>
+              <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
+                         :label="item.name">{{item.name}}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!--</el-col>-->
           <!--</el-row>-->
           <!--<el-row>-->
-            <!--<el-col :span="8">-->
-              <el-form-item label="具体描述">
-                <el-input type="textarea" placeholder="请填写描述"
-                          v-model="form.dismiss_reason.dismiss_mess"></el-input>
-              </el-form-item>
-            <!--</el-col>-->
+          <!--<el-col :span="8">-->
+          <el-form-item label="具体描述">
+            <el-input type="textarea" placeholder="请填写描述"
+                      v-model="form.dismiss_reason.dismiss_mess"></el-input>
+          </el-form-item>
+          <!--</el-col>-->
           <!--</el-row>-->
         </el-form>
       </div>
@@ -926,12 +975,19 @@
     },
     data() {
       return {
+        detailActiveName: 'first',
         dismissReasonCategory: [
           {id: "1", name: '主动离职'},
           {id: "2", name: '旷工离职'},
           {id: "3", name: '劝退'},
           {id: "4", name: '开除'},
         ],
+        DRCategory: {"1": "主动离职", "2": "旷工离职", "3": "劝退", "4": "开除",},
+        EWCategory: {
+          "1": "智联招聘", "2": "前程无忧", "3": "58同城", "4": "BOSS直聘",
+          "5": "猎聘网", "6": "首席信才", "7": "德盛人才", "8": "校园招聘会",
+          "9": "社会招聘会", "10": "推荐", "11": "其他",
+        },
         sendLeaveMsgDialog: false, //发送离职短信模态框
         selectLeaveDateDialog: false,  //选择离职日期弹框
         selectLevelDialog: false,  //选择等级弹框
@@ -1135,7 +1191,7 @@
       // handleDragEnd(draggingNode, dropNode, dropType, ev) {
       //   console.log('tree drag end: ', dropNode, dropType);
       // },
-      goPersonnel(){
+      goPersonnel() {
         this.$router.push({path: '/personnelStatement'});
       },
       highGrade() {
@@ -1506,7 +1562,7 @@
         });
       },
       //理智并发送短信
-      leaveAndSendMsgConfirm(){
+      leaveAndSendMsgConfirm() {
         this.$confirm('员工在职状态将会改变并且向该员工所负责的客户发送短信, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
