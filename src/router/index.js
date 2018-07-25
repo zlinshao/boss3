@@ -58,6 +58,7 @@ const IntegralManage =()=> import  ('../components/humanResource/integralManage/
 const OrganizationNew =()=> import  ('../components/humanResource/organizationNew/index.vue')       // add by cj 组织架构
 const PersonalRecords =()=> import  ('../components/humanResource/personalRecords/index')
 const StaffRecords =()=> import  ('../components/humanResource/staffRecords/index')     // add by cj 员工档案
+const PersonnelStatement =()=> import  ('../components/humanResource/organizationNew/components/personnelStatement')     // add by cj 人事报表
 
 
 //OA办公
@@ -281,6 +282,8 @@ export default new Router({
       name: '',
       abnormal: true,
       children: [
+        {path: '/compony', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
+        {path: '/personnelStatement', component: PersonnelStatement, name: '人事报表'},
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},

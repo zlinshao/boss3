@@ -38,12 +38,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="推荐人">
-                    <el-input placeholder="请填写推荐人" readonly v-model="recommenderName" @focus="selectStaff">
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
-                      </template>
-                    </el-input>
+                  <el-form-item label="生育状况">
+                    <el-radio-group v-model="params.fertility_status">
+                      <el-radio v-for="item in fertilityStatusCategory" :label="item.id" name="gender" :key="item.id">
+                        {{item.dictionary_name}}
+                      </el-radio>
+                    </el-radio-group>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -54,12 +54,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="生育状况">
-                    <el-radio-group v-model="params.fertility_status">
-                      <el-radio v-for="item in fertilityStatusCategory" :label="item.id" name="gender" :key="item.id">
-                        {{item.dictionary_name}}
-                      </el-radio>
-                    </el-radio-group>
+                  <el-form-item label="紧急电话" required>
+                    <el-input placeholder="请输入紧急电话" v-model="params.emergency_call" clearable></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -75,11 +71,6 @@
                     <el-input placeholder="请输入开户行" v-model="params.account_bank" clearable></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="紧急电话" required>
-                    <el-input placeholder="请输入紧急电话" v-model="params.emergency_call" clearable></el-input>
-                  </el-form-item>
-                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
@@ -90,15 +81,6 @@
                 <el-col :span="8">
                   <el-form-item label="开户名">
                     <el-input placeholder="请输入开户名" v-model="params.account_name" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="等级" required>
-                    <el-select v-model="params.level" clearable>
-                      <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
-                                 :label="item.dictionary_name">{{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -143,7 +125,58 @@
                     <el-input placeholder="请输入薪资" v-model="params.salary" clearable></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8"></el-col>
+                <el-col :span="8">
+                  <el-form-item label="等级" required>
+                    <el-select v-model="params.level" clearable>
+                      <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
+                                 :label="item.dictionary_name">{{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="入职途径">
+                    <el-select v-model="params.entry_way.entry_type" multiple>
+                      <!--multiple-->
+                      <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
+                                 :label="item.name">{{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="推荐人">
+                    <el-input placeholder="请填写推荐人" readonly v-model="recommenderName" @focus="selectStaff">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" v-if="params.entry_way.entry_type.indexOf('11')>-1">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" placeholder="请填写备注" v-model="params.entry_way.entry_mess"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" v-if="editId">
+                <el-col :span="8">
+                  <el-form-item label="离职原因">
+                    <el-select v-model="params.dismiss_reason.dismiss_type" clearable>
+                      <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
+                                 :label="item.name">{{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="具体描述">
+                    <el-input type="textarea" placeholder="请填写描述"
+                              v-model="params.dismiss_reason.dismiss_mess"></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-form-item label="入职材料">
@@ -310,6 +343,17 @@
           agreement_first_end_time: '',
           agreement_second_time: '',
           remark: '',
+          //入职途径
+          entry_way: {
+            entry_type: [],
+            entry_mess: '',
+          },
+
+          //离职原因
+          dismiss_reason: {
+            dismiss_type: '',
+            dismiss_mess: '',
+          },
         },
         title: '新建用户',
         organizationDialog: false,
@@ -329,6 +373,25 @@
         branchBankCategory: [],
         jobStatusCategory: [],
         editPositionIds: [],
+        entryWayCategory: [
+          {id: "1", name: '智联招聘'},
+          {id: "2", name: '前程无忧'},
+          {id: "3", name: '58同城'},
+          {id: "4", name: 'BOSS直聘'},
+          {id: "5", name: '猎聘网'},
+          {id: "6", name: '首席信才'},
+          {id: "7", name: '德盛人才'},
+          {id: "8", name: '校园招聘会'},
+          {id: "9", name: '社会招聘会'},
+          {id: "10", name: '推荐'},
+          {id: "11", name: '其他'},
+        ],
+        dismissReasonCategory: [
+          {id: "1", name: '主动离职'},
+          {id: "2", name: '旷工离职'},
+          {id: "3", name: '劝退'},
+          {id: "4", name: '开除'},
+        ],
       };
     },
     watch: {
@@ -359,9 +422,17 @@
         for (var i = 0; i < this.editPositionIds.length; i++) {
           this.getPositions(this.editPositionIds[i]);
         }
+      },
+      "params.entry_way.entry_type": {
+        deep: true,
+        handler(val, oldVal) {
+          if (val.indexOf('11') < 0) {
+            this.params.entry_way.entry_mess = '';
+          }
+        }
       }
     },
-    mounted(){
+    mounted() {
       this.getDictionaries();
     },
     methods: {
@@ -377,6 +448,14 @@
         this.getOnJobStatus();
       },
       initial() {
+        this.params.entry_way = {
+          entry_type: [],
+          entry_mess: '',
+        };
+        this.params.dismiss_reason = {
+          dismiss_type: '',
+          dismiss_mess: '',
+        };
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -454,6 +533,13 @@
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
+              if (detail.entry_way && detail.entry_way.entry_type && detail.entry_way.entry_type.length >= 0) {
+                this.params.entry_way = detail.entry_way;
+              } else {
+                this.params.entry_way = {entry_type: [], entry_mess: '',};
+              }
+              // this.params.entry_way = detail.entry_way || {entry_type: [], entry_mess: '',};
+              this.params.dismiss_reason = detail.dismiss_reason || {dismiss_type: '', dismiss_mess: '',};
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
               this.params.fertility_status = Number(detail.fertility_status);
