@@ -1054,6 +1054,7 @@
       },
       //房屋右键
       houseMenu(row, event) {
+        console.log(row)
         this.collectInfo = row;
         this.ToActiveName = "first";
         this.addReturnInfo = row;

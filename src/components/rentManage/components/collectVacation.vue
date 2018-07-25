@@ -4,6 +4,7 @@
       <div class="scroll_bar">
         <div class="title">客户-信息</div>
         <div class="table_border">
+          {{collectContractInfo}}
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
@@ -31,72 +32,7 @@
             </tr>
           </table>
         </div>
-        <div class="title">退房信息</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="100px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="退房时间" required>
-                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
-                                  placeholder="选择日期" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="退房性质" required>
-                  <el-select v-model="params.check_type" @change="clearFee" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
-                               :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="params.check_type == 331">
-                <el-form-item label="违约盈利" required>
-                  <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
-                <el-form-item label="转租费" required>
-                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="8">
-                <el-form-item label="姓名" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="退款账号" required>
-                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="支行" required>
-                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <div class="title">退房原因</div>
-            <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <div class="title">维修赔偿详情</div>
-            <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 15px;">
+        <el-row>
           <div class="title">财务收款</div>
           <div class="describe_border">
             <el-form size="mini" :model="params" label-width="60px">
@@ -167,7 +103,73 @@
             </el-form>
           </div>
         </el-row>
-        <div class="title">上传照片</div>
+        <div class="title">退房信息</div>
+        <div class="form_border">
+          <el-form size="mini" :model="params" label-width="100px">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="退房时间" required>
+                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
+                                  placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="退房性质" required>
+                  <el-select v-model="params.check_type" @change="clearFee" clearable="" placeholder="请选择退房性质" value="">
+                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                               :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="params.check_type == 331">
+                <el-form-item label="违约盈利">
+                  <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
+                <el-form-item label="转租费">
+                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="8">
+                <el-form-item label="姓名">
+                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="退款账号">
+                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="开户行">
+                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="支行">
+                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <div class="title">退房原因</div>
+            <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
+          </el-col>
+          <el-col :span="12">
+            <div class="title">维修赔偿详情</div>
+            <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
+          </el-col>
+        </el-row>
+
+        <div class="title" style="margin-top: 15px;">上传照片</div>
         <div class="describe_border">
           <UpLoad :ID="'collectVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
