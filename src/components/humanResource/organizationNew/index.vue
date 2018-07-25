@@ -74,23 +74,23 @@
                   <!--<el-form-item label="选择部门">-->
                   <!--<el-input @focus="organizationDialog = true" readonly=""></el-input>-->
                   <!--</el-form-item>-->
+                  <el-form-item style="float: right;" v-if="activeName==='first'">
+                    <el-button type="primary" size="mini" @click="">人事报表</el-button>
+                  </el-form-item>
                   <el-form-item style="float: right">
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
                     <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位
                     </el-button>
                   </el-form-item>
-                  <el-form-item v-if="activeName==='first'" style="float: right">
+                  <el-form-item v-if="activeName==='first'" style="float: right;">
                     <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
                   </el-form-item>
-                  <el-form-item style="float: right" v-if="activeName==='first'">
+                  <el-form-item style="float: right;" v-if="activeName==='first'">
                     <el-input v-model="params.keywords" placeholder="请输入搜索内容" clearable
                               @keyup.enter.prevent.native="search">
                       <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                   </el-form-item>
-                  <!--<el-form-item>-->
-                    <!--<el-button type="primary" size="mini" @click="">人事报表</el-button>-->
-                  <!--</el-form-item>-->
 
                 </el-form>
               </div>
@@ -818,6 +818,25 @@
                             value-format="yyyy-MM-dd">
             </el-date-picker>
           </el-form-item>
+          <!--<el-row>-->
+            <!--<el-col :span="8">-->
+              <el-form-item label="离职原因">
+                <el-select v-model="form.dismiss_reason.dismiss_type" clearable>
+                  <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
+                             :label="item.name">{{item.name}}
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            <!--</el-col>-->
+          <!--</el-row>-->
+          <!--<el-row>-->
+            <!--<el-col :span="8">-->
+              <el-form-item label="具体描述">
+                <el-input type="textarea" placeholder="请填写描述"
+                          v-model="form.dismiss_reason.dismiss_mess"></el-input>
+              </el-form-item>
+            <!--</el-col>-->
+          <!--</el-row>-->
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -907,10 +926,22 @@
     },
     data() {
       return {
+        dismissReasonCategory: [
+          {id: "1", name: '主动离职'},
+          {id: "2", name: '矿工离职'},
+          {id: "3", name: '劝退'},
+          {id: "4", name: '开除'},
+        ],
         sendLeaveMsgDialog: false, //发送离职短信模态框
         selectLeaveDateDialog: false,  //选择离职日期弹框
         selectLevelDialog: false,  //选择等级弹框
-        form: {dismiss_time: ''}, //离职日期
+        form: {
+          dismiss_time: '',
+          dismiss_reason: {
+            dismiss_type: '',
+            dismiss_mess: '',
+          },
+        }, //离职日期
         levelForm: {level: ''},  //等级
         sendLeaveMsgForm: {date: ''},  //发送离职短信 离职日期
         branchBankCategory: [],
@@ -1417,7 +1448,7 @@
         }).then(() => {
           let id = [];
           id.push(this.editId);
-          if(this.selectLeaveDateDialog && !this.sendLeaveMsgDialog){
+          if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
             this.sendLeaveMsgForm.date = this.form.dismiss_time;
           }
           this.$http.post(globalConfig.server + 'core/customer/sms', {
@@ -1451,7 +1482,8 @@
         }).then(() => {
           this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.editId, {
             type: 'is_on_job',
-            dismiss_time: this.form.dismiss_time
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '10040') {
               this.$notify.success({
@@ -1516,6 +1548,10 @@
         } else if (val.clickIndex === 'on_job') {
           this.selectLeaveDateDialog = true;
           this.form.dismiss_time = '';
+          this.form.dismiss_reason = {
+            dismiss_type: '',
+            dismiss_mess: '',
+          };
         } else if (val.clickIndex === 'power') {
           this.powerModule = true;
           this.powerData = val.data;

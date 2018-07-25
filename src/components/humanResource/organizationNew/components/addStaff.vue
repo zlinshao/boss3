@@ -139,7 +139,7 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="入职途径">
-                    <el-select v-model="params.entry_way.entry_type" clearable>
+                    <el-select v-model="params.entry_way.entry_type" multiple>
                       <!--multiple-->
                       <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
                                  :label="item.name">{{item.name}}
@@ -156,7 +156,7 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8" v-if="params.entry_way.entry_type==11">
+                <el-col :span="8" v-if="params.entry_way.entry_type.indexOf('11')>-1">
                   <el-form-item label="备注">
                     <el-input type="textarea" placeholder="请填写备注" v-model="params.entry_way.entry_mess"></el-input>
                   </el-form-item>
@@ -346,7 +346,7 @@
           remark: '',
           //入职途径
           entry_way: {
-            entry_type: '',
+            entry_type: [],
             entry_mess: '',
           },
 
@@ -391,6 +391,7 @@
           {id: "1", name: '主动离职'},
           {id: "2", name: '矿工离职'},
           {id: "3", name: '劝退'},
+          {id: "4", name: '开除'},
         ],
       };
     },
@@ -441,7 +442,7 @@
       },
       initial() {
         this.params.entry_way = {
-          entry_type: '',
+          entry_type: [],
           entry_mess: '',
         };
         this.params.dismiss_reason = {
@@ -525,7 +526,12 @@
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
-              this.params.entry_way = detail.entry_way || {entry_type: '', entry_mess: '',};
+              if (detail.entry_way && detail.entry_way.length >= 0) {
+                this.params.entry_way = detail.entry_way;
+              } else {
+                this.params.entry_way = {entry_type: [], entry_mess: '',};
+              }
+              // this.params.entry_way = detail.entry_way || {entry_type: [], entry_mess: '',};
               this.params.dismiss_reason = detail.dismiss_reason || {dismiss_type: '', dismiss_mess: '',};
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
