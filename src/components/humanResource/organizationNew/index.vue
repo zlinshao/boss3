@@ -75,7 +75,7 @@
                   <!--<el-input @focus="organizationDialog = true" readonly=""></el-input>-->
                   <!--</el-form-item>-->
                   <el-form-item style="float: right;" v-if="activeName==='first'">
-                    <el-button type="primary" size="mini" @click="">人事报表</el-button>
+                    <el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>
                   </el-form-item>
                   <el-form-item style="float: right">
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
@@ -1135,7 +1135,9 @@
       // handleDragEnd(draggingNode, dropNode, dropType, ev) {
       //   console.log('tree drag end: ', dropNode, dropType);
       // },
-
+      goPersonnel(){
+        this.$router.push({path: '/personnelStatement'});
+      },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
@@ -1535,7 +1537,7 @@
                     title: '成功',
                     message: res.data.msg
                   });
-                  this.sendLeaveMsgDialog = false;
+                  // this.sendLeaveMsgDialog = false;
                   this.selectLeaveDateDialog = false;
                 } else {
                   this.$notify.warning({

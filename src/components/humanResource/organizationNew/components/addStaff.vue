@@ -423,6 +423,14 @@
         for (var i = 0; i < this.editPositionIds.length; i++) {
           this.getPositions(this.editPositionIds[i]);
         }
+      },
+      "params.entry_way.entry_type": {
+        deep: true,
+        handler(val, oldVal) {
+          if(val.indexOf('11')>-1){
+            this.params.entry_way.entry_mess = '';
+          }
+        }
       }
     },
     mounted() {
