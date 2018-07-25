@@ -14,98 +14,36 @@
               <td>{{contractInfo.contract_number}}</td>
               <td>地址</td>
               <td>{{contractInfo.community_name}}{{contractInfo.doorplate_str}}</td>
+              <td>签约人</td>
+              <td>{{contractInfo.staff_name}}</td>
+            </tr>
+            <tr>
+              <td>姓名</td>
+              <td>
+                <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
+                  {{contractInfo.customers[0].name}}
+                </span>
+              </td>
               <td>电话</td>
               <td>
                 <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
                   {{contractInfo.customers[0].phone}}
                 </span>
               </td>
-            </tr>
-            <tr>
               <td>中介费</td>
               <td>{{contractInfo.agency}}</td>
-              <td>押金</td>
-              <td>{{contractInfo.deposit}}</td>
-              <td>签约人</td>
-              <td>{{contractInfo.staff_name}}</td>
             </tr>
             <tr>
+              <td>押金</td>
+              <td>{{contractInfo.deposit}}</td>
               <td>合同开始时间</td>
               <td>{{contractInfo.begin_date}}</td>
               <td>合同结束时间</td>
               <td>{{contractInfo.end_date}}</td>
-              <td></td>
-              <td></td>
             </tr>
           </table>
         </div>
-        <div class="title">退房信息</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="100px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="退房时间" required>
-                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
-                                  placeholder="选择日期" style="width: 100%;" ></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="退房性质" required>
-                  <el-select v-model="params.check_type" @change="clearFee" clearable placeholder="请选择退房性质">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
-                               :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="params.check_type == 331">
-                <el-form-item label="违约盈利" required>
-                  <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
-                <el-form-item label="转租费" required>
-                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="姓名" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="退款账号" required>
-                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="支行" required>
-                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <div class="title">退房原因</div>
-            <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"
-                      :disabled="status==1"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <div class="title">维修赔偿详情</div>
-            <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"
-                      :disabled="status==1"></el-input>
-          </el-col>
-        </el-row>
-        <el-row style="margin-top: 15px;">
+        <el-row >
           <div class="title">财务收款</div>
           <div class="describe_border">
             <el-form size="mini" :model="params" label-width="60px">
@@ -176,7 +114,73 @@
             </el-form>
           </div>
         </el-row>
-        <div class="title">上传照片</div>
+        <div class="title">退房信息</div>
+        <div class="form_border">
+          <el-form size="mini" :model="params" label-width="100px">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="退房时间" required>
+                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
+                                  placeholder="选择日期" style="width: 100%;" ></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="退房性质" required>
+                  <el-select v-model="params.check_type" @change="clearFee" clearable placeholder="请选择退房性质">
+                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                               :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="params.check_type == 331">
+                <el-form-item label="违约盈利">
+                  <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
+                <el-form-item label="转租费">
+                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="姓名">
+                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="退款账号">
+                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="开户行">
+                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="支行">
+                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <div class="title">退房原因</div>
+            <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"
+                      :disabled="status==1"></el-input>
+          </el-col>
+          <el-col :span="12">
+            <div class="title">维修赔偿详情</div>
+            <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"
+                      :disabled="status==1"></el-input>
+          </el-col>
+        </el-row>
+        <div class="title" style="margin-top: 15px;">上传照片</div>
         <div class="describe_border">
           <UpLoad :ID="'editCollectVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
