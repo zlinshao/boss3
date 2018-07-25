@@ -1,8 +1,8 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
-      <div class="highRanking" style=" position: absolute;width: 100%; top: 122px; right: 20px;">
-        <div class="tabsSearch">
+      <div class="highRanking" >
+        <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
               <el-input v-model="params.q" placeholder="房屋地址/报备人" @keyup.enter.native="search" clearable>
@@ -14,9 +14,7 @@
             </el-form-item>
           </el-form>
         </div>
-      </div>
-      <div class="highRanking">
-        <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
