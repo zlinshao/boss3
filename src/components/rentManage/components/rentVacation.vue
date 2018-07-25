@@ -10,24 +10,24 @@
               <td>{{rentContractInfo.contract_number}}</td>
               <td>地址</td>
               <td>{{rentContractInfo.address}}</td>
-              <td>电话</td>
-              <td>{{rentContractInfo.phone}}</td>
+              <td>姓名</td>
+              <td>{{rentContractInfo.customer_name}}</td>
             </tr>
             <tr>
+              <td>电话</td>
+              <td>{{rentContractInfo.phone}}</td>
               <td>中介费</td>
               <td>{{rentContractInfo.agency}}</td>
               <td>押金</td>
               <td>{{rentContractInfo.deposit}}</td>
-              <td>合同期限</td>
-              <td>{{rentContractInfo.duration}}</td>
             </tr>
             <tr>
+              <td>合同期限</td>
+              <td>{{rentContractInfo.duration}}</td>
               <td>合同开始时间</td>
               <td>{{rentContractInfo.begin_date}}</td>
               <td>合同结束时间</td>
               <td>{{rentContractInfo.end_date}}</td>
-              <td></td>
-              <td></td>
             </tr>
           </table>
         </div>
@@ -165,7 +165,7 @@
             <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
-        <div class="title"  style="margin-top: 15px;">上传照片</div>
+        <div class="title" style="margin-top: 15px;">上传照片</div>
         <div class="describe_border">
           <UpLoad :ID="'rentingVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
