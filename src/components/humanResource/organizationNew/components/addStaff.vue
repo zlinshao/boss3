@@ -37,15 +37,6 @@
                     <el-input placeholder="请输入生日" v-model="params.birthday" clearable></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="推荐人">
-                    <el-input placeholder="请填写推荐人" readonly v-model="recommenderName" @focus="selectStaff">
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
-                      </template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="16">
@@ -144,6 +135,49 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8"></el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="入职途径">
+                    <el-select v-model="params.entry_way.entry_type" clearable>
+                      <!--multiple-->
+                      <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
+                                 :label="item.name">{{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="推荐人">
+                    <el-input placeholder="请填写推荐人" readonly v-model="recommenderName" @focus="selectStaff">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" v-if="params.entry_way.entry_type===11">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" placeholder="请填写备注" v-model="params.entry_way.entry_mess"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" v-if="editId">
+                <el-col :span="8">
+                  <el-form-item label="离职原因">
+                    <el-select v-model="params.dissmiss_reason.dismiss_type" clearable>
+                      <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
+                                 :label="item.name">{{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="具体描述">
+                    <el-input type="textarea" placeholder="请填写描述"
+                              v-model="params.dissmiss_reason.dismiss_mess"></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-form-item label="入职材料">
@@ -310,6 +344,17 @@
           agreement_first_end_time: '',
           agreement_second_time: '',
           remark: '',
+          //入职途径
+          entry_way: {
+            entry_type: '',
+            entry_mess: '',
+          },
+
+          //离职原因
+          dissmiss_reason: {
+            dismiss_type: '',
+            dismiss_mess: '',
+          },
         },
         title: '新建用户',
         organizationDialog: false,
@@ -329,6 +374,24 @@
         branchBankCategory: [],
         jobStatusCategory: [],
         editPositionIds: [],
+        entryWayCategory: [
+          {id: 1, name: '智联招聘'},
+          {id: 2, name: '前程无忧'},
+          {id: 3, name: '58同城'},
+          {id: 4, name: 'BOSS直聘'},
+          {id: 5, name: '猎聘网'},
+          {id: 6, name: '首席信才'},
+          {id: 7, name: '德盛人才'},
+          {id: 8, name: '校园招聘会'},
+          {id: 9, name: '社会招聘会'},
+          {id: 10, name: '推荐'},
+          {id: 11, name: '其他'},
+        ],
+        dismissReasonCategory: [
+          {id: 1, name: '主动离职'},
+          {id: 2, name: '矿工离职'},
+          {id: 3, name: '劝退'},
+        ],
       };
     },
     watch: {
@@ -361,7 +424,7 @@
         }
       }
     },
-    mounted(){
+    mounted() {
       this.getDictionaries();
     },
     methods: {
@@ -377,6 +440,14 @@
         this.getOnJobStatus();
       },
       initial() {
+        this.params.entry_way = {
+          entry_type: '',
+          entry_mess: '',
+        };
+        this.params.dissmiss_reason = {
+          dismiss_type: '',
+          dismiss_mess: '',
+        };
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';

@@ -281,6 +281,8 @@ export default new Router({
       name: '',
       abnormal: true,
       children: [
+        {path: '/compony', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
+
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
