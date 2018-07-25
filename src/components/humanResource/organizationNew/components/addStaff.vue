@@ -37,13 +37,6 @@
                     <el-input placeholder="请输入生日" v-model="params.birthday" clearable></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="16">
-                  <el-form-item label="家庭住址" required>
-                    <el-input placeholder="请输入家庭住址" v-model="params.home_addr" clearable></el-input>
-                  </el-form-item>
-                </el-col>
                 <el-col :span="8">
                   <el-form-item label="生育状况">
                     <el-radio-group v-model="params.fertility_status">
@@ -55,41 +48,14 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="8">
-                  <el-form-item label="银行卡号" required>
-                    <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData"
-                              clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="开户行" required>
-                    <el-input placeholder="请输入开户行" v-model="params.account_bank" clearable></el-input>
+                <el-col :span="16">
+                  <el-form-item label="家庭住址" required>
+                    <el-input placeholder="请输入家庭住址" v-model="params.home_addr" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="紧急电话" required>
                     <el-input placeholder="请输入紧急电话" v-model="params.emergency_call" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="8">
-                  <el-form-item label="支行">
-                    <el-input placeholder="请输入支行" v-model="params.branch_bank" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="开户名">
-                    <el-input placeholder="请输入开户名" v-model="params.account_name" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="等级" required>
-                    <el-select v-model="params.level" clearable>
-                      <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
-                                 :label="item.dictionary_name">{{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -124,6 +90,15 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
+                  <el-form-item label="等级" required>
+                    <el-select v-model="params.level" clearable>
+                      <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
+                                 :label="item.dictionary_name">{{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="入职时间" required>
                     <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
@@ -135,6 +110,31 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8"></el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="银行卡号" required>
+                    <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData"
+                              clearable></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="开户行" required>
+                    <el-input placeholder="请输入开户行" v-model="params.account_bank" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="支行">
+                    <el-input placeholder="请输入支行" v-model="params.branch_bank" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="开户名">
+                    <el-input placeholder="请输入开户名" v-model="params.account_name" clearable></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
