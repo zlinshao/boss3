@@ -386,8 +386,8 @@
         operation: {},
         commentList: [],
         paging: 0,
-        printScreen: ['押金收条', '款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
-          '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单','新凭证截图',
+        printScreen: ['押金收条','款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
+                      '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单','新凭证截图',
                       '旧凭证截图','新押金收条','旧押金收条'],
 
         routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
@@ -465,7 +465,11 @@
               }
             });
           }
+        } else {
+          this.leader_phone = '';
+          this.leader_name = '';
         }
+
       }
     },
     methods: {
@@ -620,8 +624,6 @@
         this.editReportData = [];
         this.show_content = {};
         this.defaultItem = '评论信息';
-        this.leader_phone = '';
-        this.leader_name = '';
       },
 
       // 获取相关修改记录

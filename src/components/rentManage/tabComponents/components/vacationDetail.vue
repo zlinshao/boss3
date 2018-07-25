@@ -800,7 +800,7 @@
             }
             this.editImage = picObject;
           }
-        })
+        });
       },
 
       getContractInfo(module, id) {
