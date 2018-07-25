@@ -165,7 +165,7 @@
               <el-row :gutter="20" v-if="editId">
                 <el-col :span="8">
                   <el-form-item label="离职原因">
-                    <el-select v-model="params.dissmiss_reason.dismiss_type" clearable>
+                    <el-select v-model="params.dismiss_reason.dismiss_type" clearable>
                       <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
                                  :label="item.name">{{item.name}}
                       </el-option>
@@ -175,7 +175,7 @@
                 <el-col :span="8">
                   <el-form-item label="具体描述">
                     <el-input type="textarea" placeholder="请填写描述"
-                              v-model="params.dissmiss_reason.dismiss_mess"></el-input>
+                              v-model="params.dismiss_reason.dismiss_mess"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -351,7 +351,7 @@
           },
 
           //离职原因
-          dissmiss_reason: {
+          dismiss_reason: {
             dismiss_type: '',
             dismiss_mess: '',
           },
@@ -444,7 +444,7 @@
           entry_type: '',
           entry_mess: '',
         };
-        this.params.dissmiss_reason = {
+        this.params.dismiss_reason = {
           dismiss_type: '',
           dismiss_mess: '',
         };
@@ -526,7 +526,7 @@
             let detail = res.data.data.detail;
             if (detail) {
               this.params.entry_way = detail.entry_way || {entry_type: '', entry_mess: '',};
-              this.params.dissmiss_reason = detail.dissmiss_reason || {dismiss_type: '', dismiss_mess: '',};
+              this.params.dismiss_reason = detail.dismiss_reason || {dismiss_type: '', dismiss_mess: '',};
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
               this.params.fertility_status = Number(detail.fertility_status);
