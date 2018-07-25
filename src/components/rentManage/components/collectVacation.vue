@@ -4,7 +4,6 @@
       <div class="scroll_bar">
         <div class="title">客户-信息</div>
         <div class="table_border">
-          {{collectContractInfo}}
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
