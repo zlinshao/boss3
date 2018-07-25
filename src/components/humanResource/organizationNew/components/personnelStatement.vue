@@ -2,13 +2,16 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
       <div class="highRanking" >
+        <div class="top_words" style="float: left;line-height: 38px;margin-left: 30px;">
+          <span>入职人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span>复职人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span>离职人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span>调岗人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span>转正人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span>共计人数： 人</span>&nbsp;&nbsp;&nbsp;
+        </div>
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
-            <el-form-item>
-              <el-input v-model="params.q" placeholder="房屋地址/报备人" @keyup.enter.native="search" clearable>
-                <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
