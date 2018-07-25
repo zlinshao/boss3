@@ -928,7 +928,7 @@
       return {
         dismissReasonCategory: [
           {id: "1", name: '主动离职'},
-          {id: "2", name: '矿工离职'},
+          {id: "2", name: '旷工离职'},
           {id: "3", name: '劝退'},
           {id: "4", name: '开除'},
         ],
