@@ -88,6 +88,9 @@
                       <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                   </el-form-item>
+                  <!--<el-form-item>-->
+                    <!--<el-button type="primary" size="mini" @click="">人事报表</el-button>-->
+                  <!--</el-form-item>-->
 
                 </el-form>
               </div>
@@ -884,12 +887,11 @@
   import RightMenu from '../../common/rightMenu.vue'    //右键
   import EditDepart from './components/editdepar.vue'
   import AddDepart from './components/addDepart.vue'
-
   import AddPosition from './components/addPostion.vue'
   import EditPosition from './components/editPostion.vue'
   import EditOnlyPosition from './components/editOnlyPostion.vue'
-
   import AddPower from './components/addPower.vue'   //权限
+
   export default {
     name: 'tree',
     components: {
@@ -901,7 +903,7 @@
       AddPosition,
       EditPosition,
       EditOnlyPosition,
-      AddPower
+      AddPower,
     },
     data() {
       return {
