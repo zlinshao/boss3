@@ -10,24 +10,24 @@
               <td>{{collectContractInfo.contract_number}}</td>
               <td>地址</td>
               <td>{{collectContractInfo.address}}</td>
-              <td>电话</td>
-              <td>{{collectContractInfo.phone}}</td>
+              <td>姓名</td>
+              <td>{{collectContractInfo.customer_name}}</td>
             </tr>
             <tr>
+              <td>电话</td>
+              <td>{{collectContractInfo.phone}}</td>
               <td>中介费</td>
               <td>{{collectContractInfo.agency}}</td>
               <td>押金</td>
               <td>{{collectContractInfo.deposit}}</td>
-              <td>合同期限</td>
-              <td>{{collectContractInfo.duration}}</td>
             </tr>
             <tr>
+              <td>合同期限</td>
+              <td>{{collectContractInfo.duration}}</td>
               <td>合同开始时间</td>
               <td>{{collectContractInfo.begin_date}}</td>
               <td>合同结束时间</td>
               <td>{{collectContractInfo.end_date}}</td>
-              <td></td>
-              <td></td>
             </tr>
           </table>
         </div>
