@@ -156,7 +156,7 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8" v-if="params.entry_way.entry_type===11">
+                <el-col :span="8" v-if="params.entry_way.entry_type==11">
                   <el-form-item label="备注">
                     <el-input type="textarea" placeholder="请填写备注" v-model="params.entry_way.entry_mess"></el-input>
                   </el-form-item>
@@ -375,22 +375,22 @@
         jobStatusCategory: [],
         editPositionIds: [],
         entryWayCategory: [
-          {id: 1, name: '智联招聘'},
-          {id: 2, name: '前程无忧'},
-          {id: 3, name: '58同城'},
-          {id: 4, name: 'BOSS直聘'},
-          {id: 5, name: '猎聘网'},
-          {id: 6, name: '首席信才'},
-          {id: 7, name: '德盛人才'},
-          {id: 8, name: '校园招聘会'},
-          {id: 9, name: '社会招聘会'},
-          {id: 10, name: '推荐'},
-          {id: 11, name: '其他'},
+          {id: "1", name: '智联招聘'},
+          {id: "2", name: '前程无忧'},
+          {id: "3", name: '58同城'},
+          {id: "4", name: 'BOSS直聘'},
+          {id: "5", name: '猎聘网'},
+          {id: "6", name: '首席信才'},
+          {id: "7", name: '德盛人才'},
+          {id: "8", name: '校园招聘会'},
+          {id: "9", name: '社会招聘会'},
+          {id: "10", name: '推荐'},
+          {id: "11", name: '其他'},
         ],
         dismissReasonCategory: [
-          {id: 1, name: '主动离职'},
-          {id: 2, name: '矿工离职'},
-          {id: 3, name: '劝退'},
+          {id: "1", name: '主动离职'},
+          {id: "2", name: '矿工离职'},
+          {id: "3", name: '劝退'},
         ],
       };
     },
@@ -525,6 +525,8 @@
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
+              this.params.entry_way = detail.entry_way || {entry_type: '', entry_mess: '',};
+              this.params.dissmiss_reason = detail.dissmiss_reason || {dismiss_type: '', dismiss_mess: '',};
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
               this.params.fertility_status = Number(detail.fertility_status);
