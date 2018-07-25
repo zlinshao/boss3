@@ -842,7 +842,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="selectLeaveDateDialog=false">取 消</el-button>
         <el-button size="small" type="primary" @click="leaveDateConfirm">只离职</el-button>
-        <el-button size="small" type="primary" @click="sendLeaveMsgConfirm">离职并发送短信</el-button>
+        <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
       </span>
     </el-dialog>
     <el-dialog :close-on-click-modal="false" title="发送离职短信" :visible.sync="sendLeaveMsgDialog" width="30%">
@@ -1492,6 +1492,58 @@
               });
               this.getStaffData();
               this.selectLeaveDateDialog = false;
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }).catch(() => {
+
+        });
+      },
+      //理智并发送短信
+      leaveAndSendMsgConfirm(){
+        this.$confirm('员工在职状态将会改变并且向该员工所负责的客户发送短信, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.editId, {
+            type: 'is_on_job',
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '10040') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getStaffData();
+              let id = [];
+              id.push(this.editId);
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.post(globalConfig.server + 'core/customer/sms', {
+                id: id,
+                date: this.sendLeaveMsgForm.date
+              }).then((res) => {
+                if (res.data.code === '10050') {
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.sendLeaveMsgDialog = false;
+                  this.selectLeaveDateDialog = false;
+                } else {
+                  this.$notify.warning({
+                    title: '警告',
+                    message: res.data.msg
+                  })
+                }
+              });
             } else {
               this.$notify.warning({
                 title: '警告',
