@@ -427,7 +427,7 @@
       "params.entry_way.entry_type": {
         deep: true,
         handler(val, oldVal) {
-          if(val.indexOf('11')>-1){
+          if (val.indexOf('11') < 0) {
             this.params.entry_way.entry_mess = '';
           }
         }
