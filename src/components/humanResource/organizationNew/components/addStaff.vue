@@ -526,7 +526,7 @@
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
-              if (detail.entry_way && detail.entry_way.length >= 0) {
+              if (detail.entry_way && detail.entry_way.entry_type && detail.entry_way.entry_type.length >= 0) {
                 this.params.entry_way = detail.entry_way;
               } else {
                 this.params.entry_way = {entry_type: [], entry_mess: '',};
