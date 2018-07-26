@@ -3,9 +3,9 @@
     <div>
       <div class="highRanking">
         <div class="top_words" style="float: left;line-height: 38px;margin-left: 30px;">
-          <span>入职人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span class="can_click" @click="showDetail('entry')">入职人数： 人</span>&nbsp;&nbsp;&nbsp;
           <span>复职人数： 人</span>&nbsp;&nbsp;&nbsp;
-          <span>离职人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span class="can_click" @click="showDetail('dismiss')">离职人数： 人</span>&nbsp;&nbsp;&nbsp;
           <span>调岗人数： 人</span>&nbsp;&nbsp;&nbsp;
           <span>转正人数： 人</span>&nbsp;&nbsp;&nbsp;
           <span>共计人数： 人</span>&nbsp;&nbsp;&nbsp;
@@ -32,7 +32,7 @@
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{params}}
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
             <el-row class="el_row_border">
               <el-col :span="12">
@@ -158,12 +158,45 @@
         </div>
       </div>
     </div>
+    <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="detailDialog" width="30%">
+      <div v-if="detailDialogType==='entry'">
+        <el-table
+          :data="entryTableData"
+          style="width: 100%">
+          <el-table-column
+            prop="name"
+            label="入职途径">
+          </el-table-column>
+          <el-table-column
+            prop="house_name"
+            label="对应人数">
+          </el-table-column>
+        </el-table>
+      </div>
+      <div v-if="detailDialogType==='dismiss'">
+        <el-table
+          :data="dismissTableData"
+          style="width: 100%">
+          <el-table-column
+            prop="name"
+            label="离职原因">
+          </el-table-column>
+          <el-table-column
+            prop="house_name"
+            label="对应人数">
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="detailDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="detailDialog=false">确 定</el-button>
+      </span>
+    </el-dialog>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" :type="organizeType"
                   @close='closeOrganize' @selectMember="selectMember"></Organization>
-
   </div>
 </template>
 
@@ -199,17 +232,20 @@
         organizeType: '',
         tableStatus: ' ',
         tableLoading: false,
-
         sign_date: [],
+        detailDialog: false,
+        detailDialogType: '',
+        entryTableData: [],
+        dismissTableData: [],
       }
     },
     watch: {
       "params.altogether": {
         deep: true,
         handler(val, oldVal) {
-          if(val){
+          if (val) {
             this.emptyOrganization('depart');
-          }else{
+          } else {
             this.emptyOrganization('staff');
           }
           this.params.page = 1;
@@ -223,7 +259,7 @@
       let month = new Date(Nowdate).getMonth();
       let month1 = new Date(Nowdate).getMonth() + 1;
       let date = new Date(Nowdate).getDate();
-      let date1 = new Date(Nowdate).getDate()+1;
+      let date1 = new Date(Nowdate).getDate() + 1;
       if (month < 10) month = "0" + month;
       if (month1 < 10) month1 = "0" + month1;
       if (date < 10) date = "0" + date;
@@ -235,6 +271,16 @@
       this.getTableData();
     },
     methods: {
+      showDetail(val) {
+        this.detailDialog=true;
+        if (val === 'entry') {
+          //todo show 入职途径的对应人数
+          this.detailDialogType = 'entry';
+        } else if (val === 'dismiss') {
+          //todo show 离职原因的对应人数
+          this.detailDialogType = 'dismiss';
+        }
+      },
       //获取列表数据
       getTableData() {
         // this.tableLoading = true;
@@ -263,7 +309,7 @@
         this.params.page = val;
         this.getTableData();
       },
-      dblClickTable(row, event) { },
+      dblClickTable(row, event) {},
       //调出选人组件
       openOrganizeModal(val) {
         this.organizationDialog = true;
@@ -334,5 +380,10 @@
 <style lang="scss" scoped="">
   .main {
     min-height: 200px;
+  }
+
+  .top_words .can_click {
+    cursor: pointer;
+    color: #409EFF;
   }
 </style>
