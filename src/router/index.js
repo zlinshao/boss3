@@ -562,6 +562,26 @@ export default new Router({
     {
       path: '/',
       component: Index,
+      name: '业绩工资',
+      icon: 'iconfont icon--',
+      children: [
+        {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
+        {path: '/achievement', component: Achievement, name: '业绩',},
+        {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: '数据中心',
+      icon: 'iconfont icon-shuju',
+      children: [
+        {path: '/achievementData', component: AchievementData, name: '业绩数据',},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
       name: '系统设置',
       icon: 'iconfont icon-shezhi1',
       children: [
@@ -580,26 +600,6 @@ export default new Router({
       ]
     },
 
-    {
-      path: '/',
-      component: Index,
-      name: '业绩工资',
-      icon: 'iconfont icon--',
-      children: [
-        {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
-        {path: '/achievement', component: Achievement, name: '业绩',},
-        {path: '/personalSalary', component: PersonalSalary, name: '工资',},
-      ]
-    },
-    {
-      path: '/',
-      component: Index,
-      name: '数据中心',
-      icon: 'iconfont icon-shuju',
-      children: [
-        {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-      ]
-    },
     //
     // {
     //   path: '/',
