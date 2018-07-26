@@ -207,6 +207,11 @@
       "params.altogether": {
         deep: true,
         handler(val, oldVal) {
+          if(val){
+            this.emptyOrganization('depart');
+          }else{
+            this.emptyOrganization('staff');
+          }
           this.params.page = 1;
           this.search();
         }
@@ -234,7 +239,7 @@
       getTableData() {
         // this.tableLoading = true;
         // this.tableStatus = ' ';
-        this.isHigh = false;
+        // this.isHigh = false;
         // this.$http.get(globalConfig.server_user + 'process', {params: this.params}).then((res) => {
         //   this.tableLoading = false;
         //   if (res.data.code === '10000') {
@@ -258,8 +263,7 @@
         this.params.page = val;
         this.getTableData();
       },
-      dblClickTable(row, event) {
-      },
+      dblClickTable(row, event) { },
       //调出选人组件
       openOrganizeModal(val) {
         this.organizationDialog = true;
