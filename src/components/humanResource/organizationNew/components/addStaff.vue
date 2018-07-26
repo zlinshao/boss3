@@ -1,5 +1,5 @@
 <template>
-  <div id="addRentRepair">
+  <div id="addStaff">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="120px" style="padding: 0 20px;">
@@ -287,8 +287,8 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addStaffDialogVisible=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmPress">确 定</el-button>
+        <el-button size="small" @click="addStaffDialogVisible=false" :disabled="disabledBtn">取 消</el-button>
+        <el-button size="small" type="primary" @click="confirmPress"  :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -305,6 +305,7 @@
     components: {Organization},
     data() {
       return {
+        disabledBtn: false,
         addStaffDialogVisible: false,
         activeName: 'first',
         recommenderName: '',
@@ -406,6 +407,7 @@
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
+          this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
           // this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
@@ -665,10 +667,13 @@
         });
       },
       confirmPress() {
-        if (this.params.level != 235 && this.params.level != 236 && this.params.level != 247 && this.params.level != 248 && this.params.level != 249) {
+        this.disabledBtn = true;
+        if (this.params.level != 235 && this.params.level != 236 && this.params.level != 247 && this.params.level != 248 && this.params.level != 249 && this.params.level!='') {
           this.$confirm('您想要发送转正祝贺吗?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
+            showClose: false,
+            closeOnClickModal: false,
             type: 'warning'
           }).then(() => {
             this.params.forward = 1;
@@ -695,6 +700,7 @@
                 message: res.data.msg,
               });
             } else {
+              this.disabledBtn = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg,
@@ -712,6 +718,7 @@
                 message: res.data.msg,
               });
             } else {
+              this.disabledBtn = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg,
@@ -899,8 +906,10 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair {
-
+  #addStaff {
+    .el-message-box__wrapper .el-message-box .el-message-box__btns button.el-button.el-button--default.el-button--small:first-child {
+      margin-right: 30px;
+    }
   }
 
 </style>
