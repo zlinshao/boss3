@@ -132,6 +132,12 @@
                                  :label="item.dictionary_name">{{item.dictionary_name}}
                       </el-option>
                     </el-select>
+                    <div style="color: #409EFF;font-size: 12px;text-align: right;"
+                         v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
+                      <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
+                      <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
+                      <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
+                    </div>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -288,7 +294,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addStaffDialogVisible=false" :disabled="disabledBtn">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmPress"  :disabled="disabledBtn">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -312,6 +318,7 @@
         currentPosition: [],
         positionDisabled: true,
         postDisabled: true,
+        detailData: {},
         params: {
           position_id: [],
           department_id: [],
@@ -355,7 +362,6 @@
             dismiss_type: '',
             dismiss_mess: '',
           },
-          forward: '',
         },
         title: '新建用户',
         organizationDialog: false,
@@ -459,7 +465,6 @@
           dismiss_type: '',
           dismiss_mess: '',
         };
-        this.params.forward = '';
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -533,6 +538,7 @@
       getStaffInfo() {
         this.$http.get(globalConfig.server + 'manager/staff/' + this.editId).then((res) => {
           if (res.data.code === '10020') {
+            this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
@@ -666,28 +672,32 @@
           }
         });
       },
-      confirmPress() {
-        this.disabledBtn = true;
-        if (this.params.level != 235 && this.params.level != 236 && this.params.level != 247 && this.params.level != 248 && this.params.level != 249 && this.params.level!='') {
-          this.$confirm('您想要发送转正祝贺吗?', '确认信息', {
-            distinguishCancelAndClose: true,
-            confirmButtonText: '确认发送',
-            cancelButtonText: '不发送',
-            showClose: false,
-            closeOnClickModal: false,
-          }).then(() => {
-            this.params.forward = 1;
-            this.confirmAdd();
-          }).catch(() => {
-            this.params.forward = '';
-            this.confirmAdd();
+      sendPositive() {
+        this.$confirm('您想要发送转正祝贺吗?', '确认信息', {
+          confirmButtonText: '确认发送',
+          cancelButtonText: '不发送',
+          closeOnClickModal: false,
+          type: 'warning',
+        }).then(() => {
+          this.$http.get(globalConfig.server + 'manager/staff/forward?id=' + this.editId).then((res) => {
+            if (res.data.code === '10000') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg,
+              });
+              this.detailData.send_info = 2;
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg,
+              });
+            }
           });
-        } else {
-          this.params.forward = '';
-          this.confirmAdd();
-        }
+        }).catch(() => {
+        });
       },
       confirmAdd() {
+        this.disabledBtn = true;
         if (this.isEdit) {
           //修改
           this.$http.put(globalConfig.server + 'manager/staff/' + this.editId, this.params).then((res) => {
