@@ -74,9 +74,9 @@
                   <!--<el-form-item label="选择部门">-->
                   <!--<el-input @focus="organizationDialog = true" readonly=""></el-input>-->
                   <!--</el-form-item>-->
-                  <!--<el-form-item style="float: right;" v-if="activeName==='first'">-->
-                  <!--<el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>-->
-                  <!--</el-form-item>-->
+                  <el-form-item style="float: right;" v-if="activeName==='first'">
+                    <el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>
+                  </el-form-item>
                   <el-form-item style="float: right">
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
                     <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位

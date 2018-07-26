@@ -1,7 +1,7 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
-      <div class="highRanking" >
+      <div class="highRanking">
         <div class="top_words" style="float: left;line-height: 38px;margin-left: 30px;">
           <span>入职人数： 人</span>&nbsp;&nbsp;&nbsp;
           <span>复职人数： 人</span>&nbsp;&nbsp;&nbsp;
@@ -13,6 +13,18 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
+              <el-button class="iconfont icon-zhengchangliebiao" @click="params.altogether=!params.altogether"
+                         :disabled="params.altogether"
+                         style="font-size: 12px;"
+                         size="mini" type="primary" plain>共计
+              </el-button>
+              <el-button class="iconfont icon-liebiaozhankai" @click="params.altogether=!params.altogether"
+                         :disabled="!params.altogether"
+                         style="font-size: 12px;"
+                         size="mini" type="primary" plain>部门
+              </el-button>
+            </el-form-item>
+            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
           </el-form>
@@ -20,62 +32,64 @@
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{params}}
             </div>
             <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">开始时间</div>
+                    <div class="el_col_label">时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="params.start_time"
-                        type="date"
+                        v-model="params.time"
+                        type="daterange"
                         value-format="yyyy-MM-dd"
-                        placeholder="开始日期">
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" v-if="params.altogether">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">结束时间</div>
+                    <div class="el_col_label">操作人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-date-picker
-                        v-model="params.end_time"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="结束日期">
-                      </el-date-picker>
+                      <el-input v-model="operator_name" @focus="openOrganizeModal('staff')" placeholder="请选择"
+                                readonly>
+                        <template slot="append">
+                          <div style="cursor: pointer;" @click="emptyOrganization('staff')">清空</div>
+                        </template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12" v-if="!params.altogether">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="org_name" @focus="openOrganizeModal('depart')" placeholder="请选择"
+                                readonly>
+                        <template slot="append">
+                          <div style="cursor: pointer;" @click="emptyOrganization('depart')">清空</div>
+                        </template>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">报备类型</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select clearable v-model="params.processable_type" placeholder="请选择报备类型" value="">
-                        <el-option v-for="item in processableType" :label="item.name" :value="item.key"
-                                   :key="item.key"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
 
-            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -97,27 +111,37 @@
             style="width: 100%">
             <el-table-column
               prop="created_at"
-              label="发起时间">
+              label="时间">
             </el-table-column>
             <el-table-column
               prop="bulletin"
-              label="报备类型">
+              label="入职人数">
             </el-table-column>
             <el-table-column
               prop="name"
-              label="报备人">
+              label="复职人数">
             </el-table-column>
             <el-table-column
               prop="house_name"
-              label="房屋地址">
+              label="离职人数">
             </el-table-column>
             <el-table-column
               prop="place"
-              label="状态">
+              label="调岗人数">
             </el-table-column>
             <el-table-column
               prop="finish_at"
-              label="完成时间">
+              label="转正人数">
+            </el-table-column>
+            <el-table-column
+              v-if="params.altogether"
+              prop="finish_at"
+              label="操作人">
+            </el-table-column>
+            <el-table-column
+              v-if="!params.altogether"
+              prop="finish_at"
+              label="部门">
             </el-table-column>
           </el-table>
           <div class="block pages">
@@ -137,7 +161,7 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" :type="organType"
+    <Organization :organizationDialog="organizationDialog" :type="organizeType"
                   @close='closeOrganize' @selectMember="selectMember"></Organization>
 
   </div>
@@ -161,120 +185,121 @@
         totalNum: 0,
         params: {
           page: 1,
-          is_page: 1,
-          search: 1,
-          q: '',
-          processable_type: '', //报备类型
-          start_time: '',
-          end_time: '',
+          limit: 12,
+          time: [],
+          operator_id: '',
+          org_id: '',
+          altogether: true,  //true为共计，false为部门
         },
-        processableType: [
-          {key: 'bulletin_quality', name: '质量报备'},
-          {key: 'bulletin_collect_basic', name: '普通收房报备'},
-          {key: 'bulletin_collect_continued', name: '续收报备'},
-          {key: 'bulletin_rent_basic', name: '租房报备'},
-          {key: 'bulletin_rent_trans', name: '转租报备'},
-          {key: 'bulletin_rent_continued', name: '续租报备'},
-          {key: 'bulletin_rent_RWC', name: '未收先租报备'},
-          {key: 'bulletin_RWC_confirm', name: '未收先租确定报备'},
-          {key: 'bulletin_agency', name: '中介费报备'},
-          {key: 'bulletin_banish', name: '清退报备'},
-          {key: 'bulletin_change', name: '调房报备'},
-          {key: 'bulletin_confiscate', name: '充公报备'},
-          {key: 'bulletin_lose', name: '炸单报备'},
-          {key: 'bulletin_refund', name: '退款报备'},
-          {key: 'bulletin_retainage', name: '尾款报备'},
-          {key: 'bulletin_special', name: '特殊报备'},
-          {key: 'bulletin_checkout', name: '退租报备'},
-        ],
+        operator_name: '',
+        org_name: '',
         tableData: [],
         //模态框
         organizationDialog: false,
-        organType: '',
+        organizeType: '',
         tableStatus: ' ',
         tableLoading: false,
-        reportModule: false,
-        reportID: '',
+
+        sign_date: [],
       }
     },
-    watch: {},
+    watch: {
+      "params.altogether": {
+        deep: true,
+        handler(val, oldVal) {
+          this.params.page = 1;
+          this.search();
+        }
+      },
+    },
     created() {
+      let Nowdate = new Date();
+      let year = new Date(Nowdate).getFullYear();
+      let month = new Date(Nowdate).getMonth();
+      let month1 = new Date(Nowdate).getMonth() + 1;
+      let date = new Date(Nowdate).getDate();
+      let date1 = new Date(Nowdate).getDate()+1;
+      if (month < 10) month = "0" + month;
+      if (month1 < 10) month1 = "0" + month1;
+      if (date < 10) date = "0" + date;
+      if (date1 < 10) date1 = "0" + date1;
+      // this.params.time = [new Date(year, month, date), new Date(year, month, date)];
+      this.sign_date[0] = year + "-" + month1 + "-" + date;
+      this.sign_date[1] = year + "-" + month1 + "-" + date1;
+      this.params.time = this.sign_date;
       this.getTableData();
     },
     methods: {
       //获取列表数据
       getTableData() {
-        this.tableLoading = true;
-        this.tableStatus = ' ';
-        this.$http.get(globalConfig.server_user + 'process', {params: this.params}).then((res) => {
-          this.tableLoading = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.totalNum = res.data.meta.total;
-            let dataList = [];
-            for (let i = 0; i < data.length; i++) {
-              let user = {};
-              if (data[i]) {
-                user.created_at = data[i].created_at;
-                user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
-                if(data[i].content){
-                  user.bulletin = data[i].content.staff_name+'的'+data[i].content.bulletin_name || '/';
-                  user.name = data[i].content.staff_name || '';
-                  // user.house_name = (data[i].content.house && data[i].content.house.name) || '/';
-                  if (data[i].content.house) {
-                    user.house_name = data[i].content.house.name;
-                  } else if (data[i].content.address) {
-                    user.house_name = data[i].content.address;
-                  } else {
-                    user.house_name = '/';
-                  }
-                }
-                user.id = data[i].id;
-                user.place = data[i].place.display_name;
-                user.status = data[i].place.status;
-              } else {
-                user.place = '/';
-                user.status = '/';
-              }
-              dataList.push(user);
-            }
-            this.tableData = dataList;
-          } else {
-            this.tableData = [];
-            this.totalNum = 0;
-            this.tableStatus = '暂无数据';
-          }
-        })
+        // this.tableLoading = true;
+        // this.tableStatus = ' ';
+        this.isHigh = false;
+        // this.$http.get(globalConfig.server_user + 'process', {params: this.params}).then((res) => {
+        //   this.tableLoading = false;
+        //   if (res.data.code === '10000') {
+        //     this.tableData = res.data.data.data;
+        //     this.totalNum = res.data.data.count;
+        //   } else {
+        //     this.tableData = [];
+        //     this.totalNum = 0;
+        //     this.tableStatus = '暂无数据';
+        //     this.$notify.warning({
+        //       title: '警告',
+        //       message: res.data.msg
+        //     });
+        //   }
+        // });
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         this.params.page = val;
-        this.params.is_page = val;
         this.getTableData();
       },
-      //房屋右键
-      houseMenu(row, event) {
-        this.activeId = row.id;
-        this.lists = [
-//          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
-        ];
-        this.contextMenuParam(event);
-      },
       dblClickTable(row, event) {
-        this.reportID = row.id;
-        this.reportModule = true;
+      },
+      //调出选人组件
+      openOrganizeModal(val) {
+        this.organizationDialog = true;
+        this.organizeType = val;
+      },
+      emptyOrganization(val) {
+        if (val === 'staff') {
+          this.params.operator_id = '';
+          this.operator_name = '';
+        } else {
+          this.params.org_id = '';
+          this.org_name = '';
+        }
+      },
+      selectMember(val) {
+        if (this.organizeType === 'staff') {
+          this.params.operator_id = val[0].id;
+          this.operator_name = val[0].name;
+        } else {
+          this.params.org_id = val[0].id;
+          this.org_name = val[0].name;
+        }
+        this.organizeType = '';
+      },
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      search() {
+        this.getTableData();
+      },
+      resetting() {
+        this.params.time = this.sign_date;
+        this.params.operator_id = '';
+        this.params.org_id = '';
+        this.operator_name = '';
+        this.org_name = '';
+        this.search();
       },
       //右键回调事件
       clickEvent(index) {
-        switch (index) {
-          case 'addChildren' :
-            this.addChildTaskDialog = true;
-            this.startEdit = true;
-            break;
-        }
       },
       //关闭右键菜单
       closeMenu() {
@@ -296,28 +321,7 @@
       closeOrganize() {
         this.organizationDialog = false;
       },
-      //调出选人组件
-      openOrganizeModal() {
-        this.organizationDialog = true;
-      },
-      selectMember(val) {
 
-      },
-      highGrade() {
-        this.isHigh = !this.isHigh;
-      },
-      search() {
-        this.isHigh = false;
-        this.getTableData();
-      },
-      resetting() {
-        this.params.processable_type = '';
-        this.params.start_time = [];
-        this.params.end_time = [];
-      },
-      closeFrame(val) {
-        this.reportModule = false;
-      },
     }
   }
 </script>
