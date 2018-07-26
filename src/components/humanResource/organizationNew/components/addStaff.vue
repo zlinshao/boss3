@@ -289,7 +289,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addStaffDialogVisible=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmPress">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -355,6 +355,7 @@
             dismiss_type: '',
             dismiss_mess: '',
           },
+          forward: '',
         },
         title: '新建用户',
         organizationDialog: false,
@@ -457,6 +458,7 @@
           dismiss_type: '',
           dismiss_mess: '',
         };
+        this.params.forward = '';
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -662,6 +664,24 @@
             });
           }
         });
+      },
+      confirmPress() {
+        if (this.params.level != 235 && this.params.level != 236 && this.params.level != 247 && this.params.level != 248 && this.params.level != 249) {
+          this.$confirm('您想要发送转正祝贺吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.params.forward = 1;
+            this.confirmAdd();
+          }).catch(() => {
+            this.params.forward = '';
+            this.confirmAdd();
+          });
+        } else {
+          this.params.forward = '';
+          this.confirmAdd();
+        }
       },
       confirmAdd() {
         if (this.isEdit) {
