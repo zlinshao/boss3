@@ -669,12 +669,12 @@
       confirmPress() {
         this.disabledBtn = true;
         if (this.params.level != 235 && this.params.level != 236 && this.params.level != 247 && this.params.level != 248 && this.params.level != 249 && this.params.level!='') {
-          this.$confirm('您想要发送转正祝贺吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+          this.$confirm('您想要发送转正祝贺吗?', '确认信息', {
+            distinguishCancelAndClose: true,
+            confirmButtonText: '确认发送',
+            cancelButtonText: '不发送',
             showClose: false,
             closeOnClickModal: false,
-            type: 'warning'
           }).then(() => {
             this.params.forward = 1;
             this.confirmAdd();
