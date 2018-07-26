@@ -3,12 +3,12 @@
     <div>
       <div class="highRanking">
         <div class="top_words" style="float: left;line-height: 38px;margin-left: 30px;">
-          <span class="can_click" @click="showDetail('entry')">入职人数： 人</span>&nbsp;&nbsp;&nbsp;
-          <span>复职人数： 人</span>&nbsp;&nbsp;&nbsp;
-          <span class="can_click" @click="showDetail('dismiss')">离职人数： 人</span>&nbsp;&nbsp;&nbsp;
-          <span>调岗人数： 人</span>&nbsp;&nbsp;&nbsp;
-          <span>转正人数： 人</span>&nbsp;&nbsp;&nbsp;
-          <span>共计人数： 人</span>&nbsp;&nbsp;&nbsp;
+          <span class="can_click" @click="showDetail('entry')">入职人数：{{totalData.ruzhi}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>复职人数：{{totalData.fuzhi}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span class="can_click" @click="showDetail('dismiss')">离职人数：{{totalData.lizhi}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>调岗人数：{{totalData.tiaogang}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>转正人数：{{totalData.zhuanzheng}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>共计人数：{{totalData.zongji}} 人</span>&nbsp;&nbsp;&nbsp;
         </div>
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
@@ -110,27 +110,27 @@
             @row-dblclick="dblClickTable"
             style="width: 100%">
             <el-table-column
-              prop="created_at"
+              prop="time"
               label="时间">
             </el-table-column>
             <el-table-column
-              prop="bulletin"
+              prop="ruzhi"
               label="入职人数">
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="fuzhi"
               label="复职人数">
             </el-table-column>
             <el-table-column
-              prop="house_name"
+              prop="lizhi"
               label="离职人数">
             </el-table-column>
             <el-table-column
-              prop="place"
+              prop="tiaogang"
               label="调岗人数">
             </el-table-column>
             <el-table-column
-              prop="finish_at"
+              prop="zhuanzheng"
               label="转正人数">
             </el-table-column>
             <el-table-column
@@ -144,17 +144,17 @@
               label="部门">
             </el-table-column>
           </el-table>
-          <div class="block pages">
-            <div class="left">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :page-size="15"
-                layout="total, prev, pager, next, jumper"
-                :total="totalNum">
-              </el-pagination>
-            </div>
-          </div>
+          <!--<div class="block pages">-->
+            <!--<div class="left">-->
+              <!--<el-pagination-->
+                <!--@size-change="handleSizeChange"-->
+                <!--@current-change="handleCurrentChange"-->
+                <!--:page-size="15"-->
+                <!--layout="total, prev, pager, next, jumper"-->
+                <!--:total="totalNum">-->
+              <!--</el-pagination>-->
+            <!--</div>-->
+          <!--</div>-->
         </div>
       </div>
     </div>
@@ -237,6 +237,7 @@
         detailDialogType: '',
         entryTableData: [],
         dismissTableData: [],
+        totalData: {},
       }
     },
     watch: {
@@ -283,24 +284,25 @@
       },
       //获取列表数据
       getTableData() {
-        // this.tableLoading = true;
-        // this.tableStatus = ' ';
-        // this.isHigh = false;
-        // this.$http.get(globalConfig.server_user + 'process', {params: this.params}).then((res) => {
-        //   this.tableLoading = false;
-        //   if (res.data.code === '10000') {
-        //     this.tableData = res.data.data.data;
-        //     this.totalNum = res.data.data.count;
-        //   } else {
-        //     this.tableData = [];
-        //     this.totalNum = 0;
-        //     this.tableStatus = '暂无数据';
-        //     this.$notify.warning({
-        //       title: '警告',
-        //       message: res.data.msg
-        //     });
-        //   }
-        // });
+        this.tableLoading = true;
+        this.tableStatus = ' ';
+        this.isHigh = false;
+        this.$http.get(globalConfig.server + 'manager/staff/personnel_report', {params: this.params}).then((res) => { //, {params: this.params}
+          this.tableLoading = false;
+          if (res.data.code === '10010') {
+            this.tableData = res.data.data.meitian;
+            // this.totalNum = res.data.data.count;
+            this.totalData = res.data.data.zongji;
+          } else {
+            this.tableData = [];
+            // this.totalNum = 0;
+            this.tableStatus = '暂无数据';
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
