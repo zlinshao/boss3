@@ -673,7 +673,13 @@
         });
       },
       sendPositive() {
-        this.$confirm('您想要发送转正祝贺吗?', '确认信息', {
+        let content;
+        if (this.detailData && this.detailData.send_info == 1) {
+          content = '您想要发送转正祝贺吗?';
+        } else if (this.detailData && this.detailData.send_info == 2) {
+          content = '该员工已发过转正祝贺，您想要重新发送转正祝贺吗?';
+        }
+        this.$confirm(content, '确认信息', {
           confirmButtonText: '确认发送',
           cancelButtonText: '不发送',
           closeOnClickModal: false,
