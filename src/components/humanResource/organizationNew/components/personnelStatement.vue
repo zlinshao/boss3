@@ -341,7 +341,7 @@
               let object = {};
               if (dismiss[key]) {
                 object.type = this.dismissReasonCategory[key];
-                object.num = entry[key];
+                object.num = dismiss[key];
                 this.dismissTableData.push(object)
               }
             }
