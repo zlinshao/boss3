@@ -3,11 +3,11 @@
     <div>
       <div class="highRanking">
         <div class="top_words" style="float: left;line-height: 38px;margin-left: 30px;">
-          <span class="can_click" @click="showDetail('entry')">入职人数：{{totalData.ruzhi}} 人</span>&nbsp;&nbsp;&nbsp;
-          <span>复职人数：{{totalData.fuzhi}} 人</span>&nbsp;&nbsp;&nbsp;
-          <span class="can_click" @click="showDetail('dismiss')">离职人数：{{totalData.lizhi}} 人</span>&nbsp;&nbsp;&nbsp;
-          <span>调岗人数：{{totalData.tiaogang}} 人</span>&nbsp;&nbsp;&nbsp;
-          <span>转正人数：{{totalData.zhuanzheng}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span class="can_click" @click="showDetail('entry')">入职人数：{{totalData.ruzhi || 0}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>复职人数：{{totalData.fuzhi || 0}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span class="can_click" @click="showDetail('dismiss')">离职人数：{{totalData.lizhi || 0}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>调岗人数：{{totalData.tiaogang || 0}} 人</span>&nbsp;&nbsp;&nbsp;
+          <span>转正人数：{{totalData.zhuanzheng || 0}} 人</span>&nbsp;&nbsp;&nbsp;
           <span>共计人数：{{Number(totalData.ruzhi) +Number(totalData.fuzhi) +Number(totalData.lizhi)
             +Number(totalData.tiaogang) + Number(totalData.zhuanzheng)}} 人</span>&nbsp;&nbsp;&nbsp;
         </div>
@@ -292,14 +292,14 @@
       let month = new Date(Nowdate).getMonth();
       let month1 = new Date(Nowdate).getMonth() + 1;
       let date = new Date(Nowdate).getDate();
-      let date1 = new Date(Nowdate).getDate() + 1;
+      let date1 = new Date(Nowdate).getDate() - 7;
       if (month < 10) month = "0" + month;
       if (month1 < 10) month1 = "0" + month1;
       if (date < 10) date = "0" + date;
       if (date1 < 10) date1 = "0" + date1;
       // this.params.time = [new Date(year, month, date), new Date(year, month, date)];
-      this.sign_date[0] = year + "-" + month1 + "-" + date;
-      this.sign_date[1] = year + "-" + month1 + "-" + date1;
+      this.sign_date[0] = year + "-" + month1 + "-" + date1;
+      this.sign_date[1] = year + "-" + month1 + "-" + date;
       this.params.time = this.sign_date;
       this.getTableData();
     },
