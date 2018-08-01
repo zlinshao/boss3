@@ -1041,28 +1041,28 @@
                 </el-form-item>
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_price}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_name}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_phone}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_username}}
                     </span>
                   </div>
