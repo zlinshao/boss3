@@ -111,7 +111,7 @@
           id :[],
           staff_id:this.editId
         };
-        this.depart_name = '';
+        this.depart_name = '';                            
       },
       clearData(){
         this.depart_name = '';

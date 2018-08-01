@@ -349,8 +349,11 @@
               <el-col :span="8">
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                      {{contractInfo.agency_info[0].agency_price}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_price}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                      {{contractInfo.agency_info.agency_price}}
                     </span>
                   </div>
                 </el-form-item>
@@ -358,8 +361,11 @@
               <el-col :span="8">
                 <el-form-item label="原中介费(元)">
                   <div class="content">
-                    <span  v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_before_price}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_before_price}}
+                    </span>
+                    <span  v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                       {{contractInfo.agency_info.agency_before_price}}
                     </span>
                   </div>
                 </el-form-item>
@@ -370,8 +376,11 @@
               <el-col :span="8">
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span  v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_name}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_name}}
+                    </span>
+                    <span  v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                       {{contractInfo.agency_info.agency_name}}
                     </span>
                   </div>
                 </el-form-item>
@@ -379,8 +388,11 @@
               <el-col :span="8">
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span  v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_phone}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_phone}}
+                    </span>
+                    <span  v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                       {{contractInfo.agency_info.agency_phone}}
                     </span>
                   </div>
                 </el-form-item>
@@ -388,8 +400,11 @@
               <el-col :span="8">
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span  v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_username}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_username}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                       {{contractInfo.agency_info.agency_username}}
                     </span>
                   </div>
                 </el-form-item>
@@ -1042,36 +1057,51 @@
                 </el-form-item>
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                      {{contractInfo.agency_info[0].agency_price}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_price}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                      {{contractInfo.agency_info.agency_price}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="原中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                        {{contractInfo.agency_info[0].agency_before_price}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_before_price}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                        {{contractInfo.agency_info.agency_before_price}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                        {{contractInfo.agency_info[0].agency_name}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_name}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                        {{contractInfo.agency_info.agency_name}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_phone}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_phone}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                       {{contractInfo.agency_info.agency_phone}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_username}}
+                    <span v-if="contractInfo.agency && Array.isArray(contractInfo.agency)&&contractInfo.agency.length>0">
+                      {{contractInfo.agency[0].agency_username}}
+                    </span>
+                    <span v-else-if="contractInfo.agency_info && contractInfo.agency_info.constructor === Object">
+                       {{contractInfo.agency_info.agency_username}}
                     </span>
                   </div>
                 </el-form-item>
