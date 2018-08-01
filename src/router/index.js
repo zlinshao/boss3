@@ -26,19 +26,14 @@ const WorkOrderManage =()=> import  ('../components/rentManage/datumMessage/work
 const RetreatManage =()=> import  ('../components/rentManage/datumMessage/retreatManage/index.vue') //退租管理
 
 // 财务账本
-// const AccountManage =()=> import  ('../comments/finance/accountManage/index')                      //账户管理
-// const SubjectManage =()=> import  ('../comments/finance/subjectManage/index')                      //科目管理
-const Foundation =()=> import  ('../components/finance/foundation/index')                               //基础管理
+// const Foundation =()=> import  ('../components/finance/foundation/index')                                //基础管理
+// const FundMessage =()=> import  ('../components/finance/fundMessage/index.vue')                          //款项管理
+const PendingItem =()=> import  ('../components/finance/pendingItem/index.vue')                           //待处理项
+const PendingSettle =()=> import  ('../components/finance/pendingItem/components/pendingSettle.vue')      //结算
 
-// const RoomCharge =()=> import  ('../comments/finance/roomCharge/index')                            //房租总汇
-// const OtherSum =()=> import  ('../comments/finance/otherSum/index')                                //剩余款项总汇
-const FundMessage =()=> import  ('../components/finance/fundMessage/index.vue')                       //款项管理
-
-// const BudgetManage =()=> import  ('../comments/finance/budgetManage/index')                        //预算管理
-// const EndPayment =()=> import  ('../comments/finance/endPayment/index')                            //尾款报备
-const StaticDetail =()=> import  ('../components/finance/statistics/components/staticDetail')         //统计详情
-const Statistics =()=> import  ('../components/finance/statistics/index.vue')                         //数据统计
-const IncomeFlow =()=> import  ('../components/finance/incomeFlow/index')                             //收支流水
+const StaticDetail =()=> import  ('../components/finance/statistics/components/staticDetail')            //统计详情
+// const Statistics =()=> import  ('../components/finance/statistics/index.vue')                            //数据统计
+// const IncomeFlow =()=> import  ('../components/finance/incomeFlow/index')                                //收支流水
 
 
 // 微信管理
@@ -196,7 +191,7 @@ const AchievementData =()=> import ('../components/dataCenter/index'); //业绩�
 const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
 
-const AutoForm = ()=> import ('../autoForm/index')
+// const AutoForm = ()=> import ('../autoForm/index')
 const Preview = ()=> import ('../autoForm/Preview/preview')
 
 Vue.use(Router);
@@ -334,6 +329,8 @@ export default new Router({
         {path: '/preview', component: Preview, name: "预览",meta: {keepAlive: true}},
 
         {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
+
+        {path: '/pendingSettle', component: PendingSettle, name: "结算"},
       ]
     },
     //快捷入口
@@ -428,26 +425,22 @@ export default new Router({
         {path: '/retreatManage', component: RetreatManage, name: '退租管理',},
       ]
     },
-    //
+
     // {
     //   path: '/',
     //   component: Index,
     //   name: '财务账本',
     //   icon: 'iconfont icon-caiwu1',
     //   children: [
-    //     // {path: '/accountManage', component: AccountManage, name: '账户管理',},
-    //     // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
-    //     {path: '/foundation', component: Foundation, name: '基础管理'},
-    //
-    //     // {path: '/roomCharge', component: RoomCharge, name: '房租款项总汇'},
-    //     // {path: '/otherSum', component: OtherSum, name: '其余款项总汇'},
-    //     {path: '/fundMessage', component: FundMessage, name: '款项管理'},
-    //
-    //     // {path: '/budgetManage', component: BudgetManage, name: '预算管理'},
-    //     // {path: '/endPayment', component: EndPayment, name: '尾款房租'},
-    //     {path: '/statistics', component: Statistics, name: '数据统计'},
-    //     {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
-    //   ]
+        // {path: '/accountManage', component: AccountManage, name: '账户管理',},
+        // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
+        // {path: '/foundation', component: Foundation, name: '基础管理'},
+        // {path: '/fundMessage', component: FundMessage, name: '款项管理'},
+
+        // {path: '/statistics', component: Statistics, name: '数据统计'},
+        // {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
+        // {path: '/pendingItem', component: PendingItem, name: '待处理项'},
+      // ]
     // },
 
     {

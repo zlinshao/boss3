@@ -121,6 +121,24 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">订单类型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
+                        <el-option key="0" label="全部" value="0">全部</el-option>
+                        <el-option key="1" label="是" value="1">是</el-option>
+                        <el-option key="2" label="否" value="2">否</el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -180,7 +198,8 @@
                 label="房屋类型"
                 prop="house.type">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.house && scope.row.house.type!=''">{{scope.row.house && scope.row.house.type}}</span>
+                  <span
+                    v-if="scope.row.house && scope.row.house.type!=''">{{scope.row.house && scope.row.house.type}}</span>
                   <span v-else>暂无</span>
                 </template>
               </el-table-column>
@@ -241,7 +260,6 @@
             </div>
           </div>
         </div>
-
         <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
@@ -251,7 +269,8 @@
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
               <div class="myHouse">
-                <div class="blueTable" v-if="item.data && item.data[cityForm.page-1] && item.data[cityForm.page-1].length>=0">
+                <div class="blueTable"
+                     v-if="item.data && item.data[cityForm.page-1] && item.data[cityForm.page-1].length>=0">
                   <el-table
                     :data="item.data[cityForm.page-1]"
                     :empty-text='cityTableStatus'
@@ -275,6 +294,12 @@
                     <el-table-column
                       label="租房业绩"
                       prop="sum">
+                    </el-table-column>
+                    <el-table-column
+                      label="待审核业绩">
+                      <template slot-scope="scope">
+                        <div>{{attch[scope.row.orgid]}}</div>
+                      </template>
                     </el-table-column>
                   </el-table>
                 </div>
@@ -348,6 +373,8 @@
           sign_date: [],
           aggr: 'third',
         },
+        orgids: [],
+        attch: {},
         totalCityNum: 0,
         dateShow: false,
       };
@@ -569,7 +596,7 @@
         this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
           this.tableLoading = false;
           if (res.data.code === '20000') {
-            res.data.data.data.forEach((item)=>{
+            res.data.data.data.forEach((item) => {
               item.created_at = item.created_at.substring(0, 10);
             });
             this.tableData = res.data.data.data;
@@ -596,11 +623,34 @@
           this.cityTableLoading = false;
           if (res.data.code === '20010') {
             this.cityTableData = res.data.data;
+            this.orgids = [];
+            this.traverse(res.data.data);
+            if (this.orgids.length !== 0) {
+              this.$http.post(globalConfig.server + 'performance/renter/attach', {
+                sign_date: this.cityForm.sign_date,
+                aggr: "leaf",
+                ids: this.orgids,
+              }).then((res) => {
+                this.attch = res.data;
+              })
+            }
           } else {
             this.cityTableStatus = '暂无数据';
             this.cityTableData = [];
           }
         });
+      },
+      traverse(obj) {
+        for (let key in obj) {
+          if (typeof(obj[key]) === "object") {
+            this.traverse(obj[key]); //递归遍历
+          } else {
+            if (key === 'orgid') {
+              this.orgids.push(obj[key]);
+              // console.log(obj[key]); //如果是值就显示
+            }
+          }
+        }
       },
       handleSizeChange(val) {
       },

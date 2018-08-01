@@ -6,7 +6,6 @@
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
-              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -279,6 +278,7 @@
     <!--应付-->
     <div class="border_table greenTable" v-show="lookType === 'all' || lookType === 'rent'">
       <el-table
+        class="scroll_bar"
         :data="payData"
         width="100%"
         @row-contextmenu="payMenu">
