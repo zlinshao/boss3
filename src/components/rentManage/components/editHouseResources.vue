@@ -1015,7 +1015,13 @@
             this.params.account = data.account;
             this.params.bank = data.bank;
             this.params.subbranch = data.subbranch;
-            this.params.agency = data.agency;
+
+            if(data.agency_info && Array.isArray(data.agency_info)&&data.agency_info.length>0){
+              this.params.agency = data.agency_info[0].agency_price;
+            }else {
+              this.params.agency = '';
+            }
+
             this.params.penalty = data.penalty;
             this.params.property = data.property;
             this.params.property_payer = data.property_payer ? Number(data.property_payer) : '';
