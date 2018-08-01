@@ -944,6 +944,8 @@
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
     <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
+
+    <ViewRange :viewRangeDialog="viewRangeDialog" :editId="editId" @close="closeViewRange"></ViewRange>
   </div>
 </template>
 
@@ -959,6 +961,7 @@
   import EditPosition from './components/editPostion.vue'
   import EditOnlyPosition from './components/editOnlyPostion.vue'
   import AddPower from './components/addPower.vue'   //权限
+  import ViewRange from './components/addViewRange'
 
   export default {
     name: 'tree',
@@ -972,6 +975,7 @@
       EditPosition,
       EditOnlyPosition,
       AddPower,
+      ViewRange
     },
     data() {
       return {
@@ -991,6 +995,7 @@
         sendLeaveMsgDialog: false, //发送离职短信模态框
         selectLeaveDateDialog: false,  //选择离职日期弹框
         selectLevelDialog: false,  //选择等级弹框
+        viewRangeDialog: false,  //选择可见范围
         form: {
           dismiss_time: '',
           dismiss_reason: {
@@ -1463,7 +1468,7 @@
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
-            // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+            {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         } else if (!row.is_enable && row.is_on_job) {
           this.lists = [
@@ -1472,6 +1477,7 @@
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
@@ -1480,6 +1486,7 @@
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
@@ -1488,6 +1495,7 @@
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         }
         // this.lists = [
@@ -1667,6 +1675,8 @@
           this.powerData = val.data;
         } else if (val.clickIndex === 'send_leave_msg') {
           this.sendLeaveMsgDialog = true;
+        }else if (val.clickIndex === 'view_range') {
+          this.viewRangeDialog = true;
         }
 
       },
@@ -1836,6 +1846,12 @@
           this.getOnlyPosition();
         }
       },
+
+      //关闭可见范围模态框
+      closeViewRange(){
+        this.viewRangeDialog = false;
+      },
+
       //删除职位
       deleteOnlyPosition() {
         this.$http.get(globalConfig.server + 'manager/position/delete/' + this.onlyPositionId).then((res) => {
