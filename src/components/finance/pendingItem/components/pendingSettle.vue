@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="dialogVisible" width="50%">
+  <div id="pendingSettle">
+    <el-dialog :close-on-click-modal="false" title="结算" :visible.sync="dialogVisible" width="40%">
       <div
         style="width: 90%;"
         v-loading="fullLoading"
@@ -10,92 +10,106 @@
       </div>
 
       <el-form :inline="true" size="mini" label-width="80px">
-        <el-form-item label="事件类型">
-          <el-select v-model="form.item_type" size="mini" clearable>
-            <el-option label="请选择" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="收退款类型">
-          <el-select v-model="form.receive_pay" size="mini" clearable>
-            <el-option label="请选择" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="客户姓名">
-          <el-input placeholder="请输入内容" v-model="customers_name" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="房屋地址">
-          <el-input placeholder="请输入内容" v-model="house_name" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="水费">
-          <el-input placeholder="请输入内容" v-model="form.water_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="差额">
-          <el-input placeholder="请输入内容" v-model="form.diff_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="电费">
-          <el-input placeholder="请输入内容" v-model="form.elec_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="燃气费">
-          <el-input placeholder="请输入内容" v-model="form.gas_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="物业费">
-          <el-input placeholder="请输入内容" v-model="form.property_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="网络费">
-          <el-input placeholder="请输入内容" v-model="form.net_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="转租费用">
-          <el-input placeholder="请输入内容" v-model="form.sublet_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="管理费">
-          <el-input placeholder="请输入内容" v-model="form.manage_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="物业校验">
-          <el-input placeholder="请输入内容" v-model="form.check_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="违约金">
-          <el-input placeholder="请输入内容" v-model="form.penalty_fee" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="应退">
-          <el-input placeholder="请输入内容" v-model="form.refund_should" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="实际扣款">
-          <el-input placeholder="请输入内容" v-model="form.refund_diff" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="实际退款">
-          <el-input placeholder="请输入内容" v-model="form.refund_real" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="结算方式">
-          <el-select v-model="form.receive_pay" size="mini" clearable>
-            <el-option label="请选择" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="结算账户">
-          <el-input placeholder="请输入内容" v-model="form.account_num" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="签约人">
-          <el-input placeholder="请输入内容" v-model="form.staff_id" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="所属部门">
-          <el-input placeholder="请输入内容" v-model="form.department_id" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="结算人">
-          <el-input placeholder="请输入内容" v-model="form.operator_id" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="付款时间">
-          <el-input placeholder="请输入内容" v-model="form.settle_date" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="科目">
-          <el-input placeholder="请输入内容" v-model="form.subject_id" clearable></el-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="事件类型">
+              <el-select v-model="form.item_type" size="mini" clearable>
+                <el-option label="请选择" value=""></el-option>
+                <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="收退款类型">
+              <el-select v-model="form.receive_pay" size="mini" clearable>
+                <el-option label="请选择" value=""></el-option>
+                <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="客户姓名">
+              <el-input placeholder="请输入内容" v-model="customers_name" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="房屋地址">
+              <el-input placeholder="请输入内容" v-model="house_name" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="水费">
+              <el-input placeholder="请输入内容" v-model="form.water_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="差额">
+              <el-input placeholder="请输入内容" v-model="form.diff_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="电费">
+              <el-input placeholder="请输入内容" v-model="form.elec_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="燃气费">
+              <el-input placeholder="请输入内容" v-model="form.gas_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="物业费">
+              <el-input placeholder="请输入内容" v-model="form.property_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="网络费">
+              <el-input placeholder="请输入内容" v-model="form.net_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="转租费用">
+              <el-input placeholder="请输入内容" v-model="form.sublet_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="管理费">
+              <el-input placeholder="请输入内容" v-model="form.manage_fee" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="物业校验">
+              <el-input placeholder="请输入内容" v-model="form.check_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="违约金">
+              <el-input placeholder="请输入内容" v-model="form.penalty_fee" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="应退">
+              <el-input placeholder="请输入内容" v-model="form.refund_should" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="实际扣款">
+              <el-input placeholder="请输入内容" v-model="form.refund_diff" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="实际退款">
+              <el-input placeholder="请输入内容" v-model="form.refund_real" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="结算方式">
+              <el-select v-model="form.receive_pay" size="mini" clearable>
+                <el-option label="请选择" value=""></el-option>
+                <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="结算账户">
+              <el-input placeholder="请输入内容" v-model="form.account_num" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="签约人">
+              <el-input placeholder="请输入内容" v-model="form.staff_id" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="所属部门">
+              <el-input placeholder="请输入内容" v-model="form.department_id" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="结算人">
+              <el-input placeholder="请输入内容" v-model="form.operator_id" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="付款时间">
+              <div class="block">
+                <el-date-picker
+                  v-model="form.settle_date"
+                  type="date"
+                  placeholder="选择日期时间"
+                  align="right"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+              </div>
+            </el-form-item>
+            <el-form-item label="科目">
+              <el-input placeholder="请输入内容" v-model="form.subject_id" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary">确&nbsp;定</el-button>
+        <el-button size="small" type="primary" @click="settleAccount">结&nbsp;算</el-button>
       </div>
     </el-dialog>
   </div>
@@ -109,7 +123,28 @@
       return {
         dialogVisible: false,
         fullLoading: false,
-
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
         form: {
           collect_rent: '',           //收 租
           item_type: '',              //事件类型
@@ -160,10 +195,21 @@
         }
       },
     },
-    methods: {},
+    methods: {
+      // 结算
+      settleAccount() {
+
+      },
+    },
   }
 </script>
 
 <style lang="scss">
+  #pendingSettle {
+    .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+      display: flex;
+      display: -webkit-flex;
+    }
+  }
 
 </style>

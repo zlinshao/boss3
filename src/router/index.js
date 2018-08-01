@@ -427,11 +427,11 @@ export default new Router({
     },
 
     // {
-    //   path: '/',
-    //   component: Index,
-    //   name: '财务账本',
-    //   icon: 'iconfont icon-caiwu1',
-    //   children: [
+      // path: '/',
+      // component: Index,
+      // name: '财务账本',
+      // icon: 'iconfont icon-caiwu1',
+      // children: [
         // {path: '/accountManage', component: AccountManage, name: '账户管理',},
         // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
         // {path: '/foundation', component: Foundation, name: '基础管理'},

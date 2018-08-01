@@ -430,7 +430,7 @@
         organizeType: '',
         currentStatus: '',
         cityCategory: [],
-        companyTotalData: [],  //公司总计
+        // companyTotalData: [],  //公司总计
         cityTableData: {},   //城市
         rentActiveName: '公司总计',
         cityTableStatus: ' ',
@@ -644,7 +644,7 @@
           if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.data && res.data.data.data.count;
-            this.companyTotalData = res.data.data.countA;
+            // this.companyTotalData = res.data.data.countA;
           } else {
             this.tableStatus = '暂无数据';
             this.totalNum = 0;
