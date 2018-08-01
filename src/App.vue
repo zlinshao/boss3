@@ -16,6 +16,7 @@
 <script>
   import LOADING from './components/common/loading.vue'
   import BackToTop from './components/common/backToTop.vue'
+
   export default {
     name: 'app',
     components: {LOADING, BackToTop},
@@ -35,7 +36,7 @@
         loginIndex: 0,
       }
     },
-    created(){
+    created() {
       if (localStorage.myData !== undefined) {
         let head = JSON.parse(localStorage.myData);
         globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
@@ -54,7 +55,7 @@
       };
     },
     computed: {
-      isLoading(){
+      isLoading() {
         return this.$store.state.app.isLoading;
       }
     },
@@ -97,9 +98,19 @@
 
 <style lang="scss">
 
-  html,body{ overflow-x: hidden;overflow-y:scroll;}
-  html,body{min-height:100%;}
-  html{ box-sizing: border-box;overflow:-moz-scrollbars-vertical;}
+  html, body {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  html, body {
+    min-height: 100%;
+  }
+
+  html {
+    box-sizing: border-box;
+    overflow: -moz-scrollbars-vertical;
+  }
 
   body {
     margin: 0;
@@ -180,7 +191,7 @@
     }
   }
 
-  .el-table__body-wrapper.is-scroll-right, .el-table__body-wrapper.is-scroll-left, .el-table__body-wrapper.is-scroll-middle,.el-table__body-wrapper.is-scrolling-none {
+  .el-table__body-wrapper.is-scroll-right, .el-table__body-wrapper.is-scroll-left, .el-table__body-wrapper.is-scroll-middle, .el-table__body-wrapper.is-scrolling-none, .el-table--scrollable-x .el-table__body-wrapper {
     &::-webkit-scrollbar {
       width: 4px;
       height: 5px;
