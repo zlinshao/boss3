@@ -139,22 +139,22 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">订单类型</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
-                        <el-option key="0" label="全部" value="0">全部</el-option>
-                        <el-option key="1" label="是" value="1">是</el-option>
-                        <el-option key="2" label="否" value="2">否</el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
+              <!--<el-col :span="12">-->
+                <!--<el-row>-->
+                  <!--<el-col :span="8">-->
+                    <!--<div class="el_col_label">订单类型</div>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="16" class="el_col_option">-->
+                    <!--<el-form-item>-->
+                      <!--<el-select v-model="form.is_agency" placeholder="请选择" clearable>-->
+                        <!--<el-option key="0" label="全部" value="0">全部</el-option>-->
+                        <!--<el-option key="1" label="是" value="1">是</el-option>-->
+                        <!--<el-option key="2" label="否" value="2">否</el-option>-->
+                      <!--</el-select>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-col>-->
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>

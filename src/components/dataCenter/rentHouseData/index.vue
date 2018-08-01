@@ -129,10 +129,8 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
-                        <el-option key="0" label="全部" value="0">全部</el-option>
-                        <el-option key="1" label="是" value="1">是</el-option>
-                        <el-option key="2" label="否" value="2">否</el-option>
+                      <el-select v-model="form.type" placeholder="请选择" clearable>
+                        <el-option v-for="(key,index) in types" :key="index" :label="key" :value="index + 1"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -345,7 +343,9 @@
         totalNum: 0,
         tableStatus: ' ',
         tableLoading: false,
+        types: ['租房','转租','续租','未收先租','调租'],
         form: {
+          type: '',
           page: 1,
           limit: 6,
           address: '',  //房屋地址
@@ -668,6 +668,7 @@
       },
       // 重置
       resetting() {
+        this.highGrade();
         let Nowdate = new Date();
         let year = new Date(Nowdate).getFullYear();
         let month = new Date(Nowdate).getMonth();
@@ -686,8 +687,10 @@
         this.form.org_id = [];
         // this.form.sign_date = [];
         this.form.is_agency = '';
+        this.form.type = '';
         this.sign_name = '';
         this.org_name = '';
+        this.search();
       },
     },
   };
