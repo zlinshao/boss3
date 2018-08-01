@@ -628,7 +628,7 @@
             if (this.orgids.length !== 0) {
               this.$http.post(globalConfig.server + 'performance/renter/attach', {
                 sign_date: this.cityForm.sign_date,
-                aggr: "leaf",
+                aggr: this.cityForm.aggr,
                 ids: this.orgids,
               }).then((res) => {
                 this.attch = res.data;
