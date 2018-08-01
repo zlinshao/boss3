@@ -6,7 +6,9 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="可见范围" required="">
-                <el-input placeholder="请选择部门" v-model="depart_name" readonly @focus="selectDepart"></el-input>
+                <el-input placeholder="请选择部门" v-model="depart_name" readonly @focus="selectDepart">
+                  <el-button slot="append" type="primary"  @click="clearData">清空</el-button>
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,10 +109,14 @@
         this.viewRangeDialogVisible = false;
         this.params = {
           id :[],
-          staff_id:''
+          staff_id:this.editId
         };
         this.depart_name = '';
-      }
+      },
+      clearData(){
+        this.depart_name = '';
+        this.params.id = [];
+      },
     }
   };
 </script>

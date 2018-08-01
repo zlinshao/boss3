@@ -77,6 +77,11 @@
         label="结束日期">
       </el-table-column>
       <el-table-column
+          prop="end_real_at"
+          width="120px"
+          label="提前结束日期">
+      </el-table-column>
+      <el-table-column
         label="所属部门">
         <template slot-scope="scope">
           <span v-if="scope.row.sign_org">{{scope.row.sign_org.name}}</span>
