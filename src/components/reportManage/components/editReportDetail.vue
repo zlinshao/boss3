@@ -19,7 +19,7 @@
                                                v-if="index === 0">-{{value.name}}</span></span>
                 </div>
                 <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i
-                  class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
+                    class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
                 </div>
                 <div class="auditStatus deal" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{deal}}
                 </div>
@@ -28,14 +28,15 @@
               </div>
               <div class="scroll_bar">
                 <el-row>
-                  <el-col :span="12" v-for="(value,index) in show_content" :key="index"
-                          v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!Array.isArray(value) && value.constructor !== Object" :label="index"
-                                  class="detailTitle">
+                  <el-col :span="12" v-for="(value,index) in show_content" :key="index" v-if="printScreen.indexOf(index) === -1">
+                    <el-form-item v-if="!value" :label="index" class="detailTitle">
+                      <div class="special">{{value}}</div>
+                    </el-form-item>
+                    <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index" class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="Array.isArray(value)" :label="index">
+                    <el-form-item v-if="value && Array.isArray(value)" :label="index">
                       <div class="special">
                         <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in value">{{item}}</div>
                         <div v-else>
@@ -44,12 +45,13 @@
                         </div>
                       </div>
                     </el-form-item>
-                    <el-form-item v-if="value.constructor === Object" :label="index" class="detailTitle">
+
+                    <el-form-item v-if="value && value.constructor === Object" :label="index" class="detailTitle">
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
-
                   </el-col>
+                  <!--图片-->
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
                       <div class="special imgs">
@@ -387,8 +389,8 @@
         commentList: [],
         paging: 0,
         printScreen: ['押金收条','款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
-                      '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单','新凭证截图',
-                      '旧凭证截图','新押金收条','旧押金收条'],
+          '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单','新凭证截图',
+          '旧凭证截图','新押金收条','旧押金收条'],
 
         routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
           'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],
