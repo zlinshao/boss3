@@ -28,14 +28,15 @@
               </div>
               <div class="scroll_bar">
                 <el-row>
-                  <el-col :span="12" v-for="(value,index) in show_content" :key="index"
-                          v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!Array.isArray(value) && value.constructor !== Object" :label="index"
-                                  class="detailTitle">
+                  <el-col :span="12" v-for="(value,index) in show_content" :key="index" v-if="printScreen.indexOf(index) === -1">
+                    <el-form-item v-if="!value" :label="index" class="detailTitle">
+                      <div class="special">{{value}}</div>
+                    </el-form-item>
+                    <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index" class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="Array.isArray(value)" :label="index">
+                    <el-form-item v-if="value && Array.isArray(value)" :label="index">
                       <div class="special">
                         <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in value">{{item}}</div>
                         <div v-else>
@@ -44,12 +45,13 @@
                         </div>
                       </div>
                     </el-form-item>
-                    <el-form-item v-if="value.constructor === Object" :label="index" class="detailTitle">
+
+                    <el-form-item v-if="value && value.constructor === Object" :label="index" class="detailTitle">
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
-
                   </el-col>
+                  <!--图片-->
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
                       <div class="special imgs">

@@ -1,6 +1,6 @@
 <template>
   <div id="">
-    <el-dialog :close-on-click-modal="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" :show-close="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" label-width="100px">
           <el-row>
@@ -15,13 +15,6 @@
           </el-row>
           <span style="color:#fdaece;margin-left:100px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
 
-          <!--<el-row>-->
-            <!--<el-col :span="12">-->
-              <!--<el-form-item label="手机号">-->
-                <!--<el-input disabled="" v-model="phone_number"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
           <el-row>
             <el-col :span="12">
               <el-form-item label="验证码">
