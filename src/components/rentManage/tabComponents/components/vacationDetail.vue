@@ -110,50 +110,43 @@
                                       placeholder="选择日期" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
+
                   <el-col :span="8">
                     <el-form-item label="退房性质" required>
-                      <el-select disabled v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
+                      <el-select v-model="params.check_type"  disabled placeholder="请选择退房性质" value="">
                         <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
                                    :value="item.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8" v-if="params.check_type == 331">
-                    <el-form-item label="违约盈利">
-                      <el-input disabled v-model="params.profit"></el-input>
-                    </el-form-item>
-                  </el-col>
+
                   <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
                     <el-form-item label="转租费">
-                      <el-input v-model="params.sublease_fee" disabled></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="姓名">
-                      <el-input disabled v-model="params.account_name"></el-input>
+                      <el-input disabled placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
+
                 <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="退款账号">
-                      <el-input disabled v-model="params.bank_num"></el-input>
+                  <el-col :span="8" v-if="params.check_type == 331">
+                    <el-form-item label="违约方">
+                      <el-select disabled v-model="params.profit_type" placeholder="请选择违约方" value="">
+                        <el-option label="公司" value="1"></el-option>
+                        <el-option label="客户" value="2"></el-option>
+                      </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="开户行">
-                      <el-input disabled v-model="params.account_bank"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="支行">
-                      <el-input disabled v-model="params.branch_bank"></el-input>
+                  <el-col :span="8" v-if="params.check_type == 331">
+                    <el-form-item label="违约金">
+                      <el-input disabled placeholder="请输入内容"  v-model="params.profit"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
             </div>
-            <el-row :gutter="20">
+
+
+            <el-row :gutter="20" style="margin-bottom: 15px">
               <el-col :span="12">
                 <div class="title">退房原因</div>
                 <el-input disabled type="textarea" resize="none" v-model="params.reason"></el-input>
@@ -162,6 +155,27 @@
                 <div class="title">维修赔偿详情</div>
                 <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
               </el-col>
+            </el-row>
+
+            <!--维修信息-->
+            <el-row>
+              <div class="title">维修信息</div>
+              <div class="describe_border">
+                <el-form size="mini" :model="params" label-width="80px">
+                  <el-row v-for="(item, index) in repairInfoLength" :key="index">
+                    <el-col :span="5">
+                      <el-form-item label="维修内容">
+                        <el-input disabled placeholder="请输入内容" v-model="params.repair_info[index].content"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="维修金额">
+                        <el-input disabled placeholder="请输入内容" v-model="params.repair_info[index].amount"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </div>
             </el-row>
             <div class="title" style="margin-top: 15px;">上传照片</div>
             <div class="describe_border">
@@ -427,7 +441,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
-                    <el-form-item label="维修赔偿">
+                    <el-form-item label="钥匙费用">
                       <el-input disabled v-model="params.repair_compensation_fees"></el-input>
                     </el-form-item>
                   </el-col>
@@ -460,9 +474,47 @@
                 </el-row>
               </el-form>
             </div>
-            <div class="title">实际退还</div>
-            <div class="describe_border">
-              实际退还：{{realTotal}}
+            <div class="title">退款信息</div>
+            <div class="form_border">
+              <el-form size="mini" :model="params" label-width="80px">
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="实际退款">
+                      <el-input v-model="realTotal" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="是否退款">
+                      <el-select disabled v-model="params.is_refund" clearable="" placeholder="请选择是否退款" value="">
+                        <el-option label="是" value="1"></el-option>
+                        <el-option label="否" value="2"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="姓名">
+                      <el-input disabled placeholder="请输入内容" v-model="params.account_name"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="退款账号">
+                      <el-input disabled placeholder="请输入内容" v-model="params.bank_num"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开户行">
+                      <el-input disabled placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="支行">
+                      <el-input disabled placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
             </div>
 
 
@@ -592,6 +644,7 @@
       return {
         financialReceiptsLength: 1, //财务收款
         contractCollectionLength: 1,  //合同收款
+        repairInfoLength : 1,
         vacationDetailVisible: false,
         params: {
           financial_info: [
@@ -608,12 +661,19 @@
               remark: '',
             },
           ],
+          repair_info:[
+            {
+              content : '',
+              amount : '',
+            }
+          ],
           contract_id: '',
           module: '',
           status_type: '',
           check_time: '',
           check_type: '',
           profit: '',
+          profit_type : '',   //违约方
           sublease_fee: '',
           bank_num: '',
           account_bank: '',
@@ -670,6 +730,8 @@
           overtime_rent: '',
           TV_fees: '',
           network_fees: '',
+
+          is_refund : '',
         },
         subjectId: '',
         subjectId2: '',
@@ -703,7 +765,7 @@
     computed: {
       reimbursementTotal() {
         return Number(this.params.refund_deposit) + Number(this.params.residual_rent) + Number(this.params.viewing_fee)
-          + Number(this.params.property_management_fee) +
+          + Number(this.params.property_management_fee) + (this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit))+
           Number(this.params.water_fee) + Number(this.params.electricity_fee) + Number(this.params.gas_fee);
       },
       waterTotal() {
@@ -734,7 +796,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
           Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee) - Number(this.params.profit);
+          - Number(this.params.sublease_fee) +(this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
       },
     },
     watch: {
@@ -746,7 +808,7 @@
           this.$emit('close');
           this.initData();
         } else {
-          this.isClear = true;
+          this.isClear = false;
           this.getData();
           this.getCommentData();
           if (!this.isDictionary) {
@@ -784,8 +846,10 @@
           this.isLoading = false;
           if (res.data.code === '20020') {
             let data = res.data.data;
+
             this.financialReceiptsLength = data.financial_info && data.financial_info.length || 1;
             this.contractCollectionLength = data.settled_info && data.settled_info.length || 1;
+            this.repairInfoLength = data.repair_info && data.repair_info.length || 1;
             this.params.financial_info = data.financial_info || [{
               receivable: '',
               actual_receipt: '',
@@ -793,6 +857,8 @@
               remark: '',
             }];   //财务收款
             this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];  //合同收款
+            this.params.repair_info = data.repair_info || [{content: '', amount: '',}];  //合同收款
+
             this.vacationData = res.data.data;
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;
@@ -862,6 +928,9 @@
 
             this.passParams.amount = data.details && data.details.total_fees;
 
+            this.params.profit_type = data.profit_type? String(data.profit_type) : '';
+            this.params.is_refund =  data.is_refund? String(data.is_refund) : '';
+
             let picObject = {};
             this.editImage = {};
             this.params.image_pic = [];
@@ -901,15 +970,36 @@
       },
 
       initData() {
+        this.contractInfo = {};
         this.params = {
-          financial_info: [],
-          settled_info: [],
-          contract_id: '',
-          module: '',
+          financial_info: [
+            {
+              receivable: '', //应收
+              actual_receipt: '', //实收
+              difference: '', //差额
+              remark: '',
+            },
+          ],
+          settled_info: [
+            {
+              receivable: '', //应收
+              remark: '',
+            },
+          ],
+          repair_info:[
+            {
+              content : '',
+              amount : '',
+            }
+          ],
+          contract_id: this.collectContractId,
+          module: '1',
           status_type: '',
+
           check_time: '',
           check_type: '',
           profit: '',
+          profit_type: '',
           sublease_fee: '',
           bank_num: '',
           account_bank: '',
@@ -966,24 +1056,15 @@
           overtime_rent: '',
           TV_fees: '',
           network_fees: '',
+
+          is_refund : '',
         };
-        for (let i = 0; i < this.financialReceiptsLength; i++) {
-          let data = {
-            receivable: '', //应收
-            actual_receipt: '', //实收
-            difference: '', //差额
-            remark: '',
-          };
-          this.params.financial_info.push(data);
-        }
-        for (let i = 0; i < this.contractCollectionLength; i++) {
-          let data1 = {
-            receivable: '', //应收
-            remark: '',
-          };
-          this.params.settled_info.push(data1);
-        }
-        this.isClear = false;
+
+        this.financialReceiptsLength = 1;
+        this.contractCollectionLength = 1;
+        this.repairInfoLength = 1;
+
+        this.isClear = true;
         this.commentVisible = false;
         this.commentList = [];
         this.commentParams = {
