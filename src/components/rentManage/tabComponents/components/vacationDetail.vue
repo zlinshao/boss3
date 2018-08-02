@@ -1,477 +1,511 @@
 <template>
   <div id="rentVacation">
-    <el-dialog :close-on-click-modal="false" title="退房详情" :visible.sync="vacationDetailVisible" width="65%">
-      <div class="scroll_bar"
-           v-loading="isLoading"
-           element-loading-text="拼命加载中"
-           element-loading-spinner="el-icon-loading"
-           element-loading-background="rgba(255, 255, 255, .7)">
-        <div class="title">客户-信息</div>
-        <div class="table_border">
-          <table class="tableDetail">
-            <tr>
-              <td>合同编号</td>
-              <td>{{contractInfo.contract_number}}</td>
-              <td>地址</td>
-              <td>{{contractInfo.community_name}}{{contractInfo.doorplate_str}}</td>
-              <td>签约人</td>
-              <td>{{contractInfo.staff_name}}</td>
-            </tr>
-            <tr>
-              <td>姓名</td>
-              <td>
+    <el-dialog :close-on-click-modal="false" title="退房详情" :visible.sync="vacationDetailVisible" width="80%">
+      <el-row>
+        <el-col :span="18">
+          <div class="scroll_bar"
+               v-loading="isLoading"
+               element-loading-text="拼命加载中"
+               element-loading-spinner="el-icon-loading"
+               element-loading-background="rgba(255, 255, 255, .7)">
+            <div class="title">客户-信息</div>
+            <div class="table_border">
+              <table class="tableDetail">
+                <tr>
+                  <td>合同编号</td>
+                  <td>{{contractInfo.contract_number}}</td>
+                  <td>地址</td>
+                  <td>{{contractInfo.community_name}}{{contractInfo.doorplate_str}}</td>
+                  <td>签约人</td>
+                  <td>{{contractInfo.staff_name}}</td>
+                </tr>
+                <tr>
+                  <td>姓名</td>
+                  <td>
                 <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
                   {{contractInfo.customers[0].name}}
                 </span>
-              </td>
-              <td>电话</td>
-              <td>
+                  </td>
+                  <td>电话</td>
+                  <td>
                 <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
                   {{contractInfo.customers[0].phone}}
                 </span>
-              </td>
-              <td>中介费</td>
-              <td>{{contractInfo.agency}}</td>
-            </tr>
-            <tr>
-              <td>押金</td>
-              <td>{{contractInfo.deposit}}</td>
-              <td>合同开始时间</td>
-              <td>{{contractInfo.begin_date}}</td>
-              <td>合同结束时间</td>
-              <td>{{contractInfo.end_date}}</td>
-            </tr>
-          </table>
-        </div>
-        <el-row>
-          <div class="title">财务收款</div>
-          <div class="describe_border">
-            <el-form size="mini" :model="params" label-width="60px">
-              <el-row v-for="(item,index) in params.financial_info.length" :key="index">
-                <el-col :span="5">
-                  <el-form-item label="应收">
-                    <el-input v-model="params.financial_info[index].receivable"
-                              @change="financialChange(index)" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label="实收">
-                    <el-input v-model="params.financial_info[index].actual_receipt"
-                              @change="financialChange(index)" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label="差额">
-                    <el-input v-model="params.financial_info[index].difference"
-                              disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="备注">
-                    <el-input type="textarea" :rows="1"
-                              v-model="params.financial_info[index].remark" disabled></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </div>
-        </el-row>
-        <el-row>
-          <div class="title">合同收款</div>
-          <div class="describe_border">
-            <el-form size="mini" :model="params" label-width="60px">
-              <el-row v-for="(item, index) in params.settled_info.length" :key="index">
-                <el-col :span="5">
-                  <el-form-item label="应收">
-                    <el-input v-model="params.settled_info[index].receivable"
-                              disabled></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="备注">
-                    <el-input type="textarea" :rows="1"
-                              v-model="params.settled_info[index].remark"
-                              disabled></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </div>
-        </el-row>
-        <div class="title">退房信息</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="100px">
+                  </td>
+                  <td>中介费</td>
+                  <td>{{contractInfo.agency}}</td>
+                </tr>
+                <tr>
+                  <td>押金</td>
+                  <td>{{contractInfo.deposit}}</td>
+                  <td>合同开始时间</td>
+                  <td>{{contractInfo.begin_date}}</td>
+                  <td>合同结束时间</td>
+                  <td>{{contractInfo.end_date}}</td>
+                </tr>
+              </table>
+            </div>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="退房时间" required>
-                  <el-date-picker disabled type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
-                                  placeholder="选择日期" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="退房性质" required>
-                  <el-select disabled v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
-                               :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="params.check_type == 331">
-                <el-form-item label="违约盈利">
-                  <el-input disabled v-model="params.profit"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
-                <el-form-item label="转租费">
-                  <el-input v-model="params.sublease_fee" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="姓名">
-                  <el-input disabled v-model="params.account_name"></el-input>
-                </el-form-item>
-              </el-col>
+              <div class="title">财务收款</div>
+              <div class="describe_border">
+                <el-form size="mini" :model="params" label-width="60px">
+                  <el-row v-for="(item,index) in params.financial_info.length" :key="index">
+                    <el-col :span="5">
+                      <el-form-item label="应收">
+                        <el-input v-model="params.financial_info[index].receivable"
+                                  @change="financialChange(index)" disabled></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item label="实收">
+                        <el-input v-model="params.financial_info[index].actual_receipt"
+                                  @change="financialChange(index)" disabled></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item label="差额">
+                        <el-input v-model="params.financial_info[index].difference"
+                                  disabled></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="备注">
+                        <el-input type="textarea" :rows="1"
+                                  v-model="params.financial_info[index].remark" disabled></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </div>
             </el-row>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="退款账号">
-                  <el-input disabled v-model="params.bank_num"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户行">
-                  <el-input disabled v-model="params.account_bank"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="支行">
-                  <el-input disabled v-model="params.branch_bank"></el-input>
-                </el-form-item>
-              </el-col>
+              <div class="title">合同收款</div>
+              <div class="describe_border">
+                <el-form size="mini" :model="params" label-width="60px">
+                  <el-row v-for="(item, index) in params.settled_info.length" :key="index">
+                    <el-col :span="5">
+                      <el-form-item label="应收">
+                        <el-input v-model="params.settled_info[index].receivable"
+                                  disabled></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="备注">
+                        <el-input type="textarea" :rows="1"
+                                  v-model="params.settled_info[index].remark"
+                                  disabled></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </div>
             </el-row>
-          </el-form>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <div class="title">退房原因</div>
-            <el-input disabled type="textarea" resize="none" v-model="params.reason"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <div class="title">维修赔偿详情</div>
-            <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
-          </el-col>
-        </el-row>
-        <div class="title" style="margin-top: 15px;">上传照片</div>
-        <div class="describe_border">
-          <div class="editImg" v-if="Object.keys(editImage).length>0">
-            <img v-for="(val,key) in editImage" :src="val" alt="" data-magnify="" :data-src="val"
-                 style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
-          </div>
-        </div>
-        <div class="title">应退还</div>
-        <div class="form_border">
-          <el-form size="mini" label-width="100px">
-            <el-row>
-              <el-col :span="6">
-                <el-form-item label="退还押金">
-                  <el-input disabled v-model="params.refund_deposit" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="剩余房租">
-                  <el-input disabled v-model="params.residual_rent" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="收视费">
-                  <el-input disabled v-model="params.viewing_fee" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存物管费">
-                  <el-input disabled v-model="params.property_management_fee" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存水费">
-                  <el-input disabled v-model="params.water_fee" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存电费">
-                  <el-input disabled v-model="params.electricity_fee" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存气费">
-                  <el-input disabled v-model="params.gas_fee" type="number"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="应退还">
-                  <el-input disabled :disabled="true" v-model="reimbursementTotal"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-
-        <div class="title">应扣除源能费</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="80px">
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="水费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.water_last"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.water_now"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input disabled v-model="params.water_unit_price"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.water_late_payment"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="其他">
-                  <el-input disabled v-model="params.water_other"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{waterTotal}}
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="电费（峰）：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.electricity_peak_last"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.electricity_peak_now"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="4">
-                <el-form-item label="其他">
-                  <el-input disabled v-model="params.electricity_peak_other"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{elePeakTotal}}
-                </div>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="电费（谷）：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.electricity_valley_last"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.electricity_valley_now"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input disabled v-model="params.electricity_valley_unit_price"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.electricity_valley_late_payment"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="其他">
-                  <el-input disabled v-model="params.electricity_valley_other"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{eleValTotal}}
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="燃气费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.gas_last"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.gas_now"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input disabled v-model="params.gas_unit_price"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.gas_late_payment"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="其他">
-                  <el-input disabled v-model="params.gas_other"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{gasTotal}}
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="物管费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="上次交到">
-                  <el-date-picker type="date" v-model="params.property_management_last" disabled></el-date-picker>
-                </el-form-item>
+            <div class="title">退房信息</div>
+            <div class="form_border">
+              <el-form size="mini" :model="params" label-width="100px">
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="退房时间" required>
+                      <el-date-picker disabled type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
+                                      placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="退房性质" required>
+                      <el-select disabled v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
+                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                                   :value="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8" v-if="params.check_type == 331">
+                    <el-form-item label="违约盈利">
+                      <el-input disabled v-model="params.profit"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
+                    <el-form-item label="转租费">
+                      <el-input v-model="params.sublease_fee" disabled></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="姓名">
+                      <el-input disabled v-model="params.account_name"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="退款账号">
+                      <el-input disabled v-model="params.bank_num"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开户行">
+                      <el-input disabled v-model="params.account_bank"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="支行">
+                      <el-input disabled v-model="params.branch_bank"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <div class="title">退房原因</div>
+                <el-input disabled type="textarea" resize="none" v-model="params.reason"></el-input>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="本次交到">
-                  <el-date-picker type="date" v-model="params.property_management_now" disabled></el-date-picker>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="5" :offset="2">
-                <el-form-item label="公摊水费">
-                  <el-input disabled v-model="params.property_management_electricity"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="公摊电费">
-                  <el-input disabled v-model="params.property_management_water"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="物业费">
-                  <el-input disabled v-model="params.property_management_total_fees"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="其他">
-                  <el-input disabled v-model="params.property_management_other"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{managementTotal}}
-                </div>
+                <div class="title">维修赔偿详情</div>
+                <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
               </el-col>
             </el-row>
-          </el-form>
-        </div>
+            <div class="title" style="margin-top: 15px;">上传照片</div>
+            <div class="describe_border">
+              <div class="editImg" v-if="Object.keys(editImage).length>0">
+                <img v-for="(val,key) in editImage" :src="val" alt="" data-magnify="" :data-src="val"
+                     style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
+              </div>
+            </div>
+            <div class="title">应退还</div>
+            <div class="form_border">
+              <el-form size="mini" label-width="100px">
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item label="退还押金">
+                      <el-input disabled v-model="params.refund_deposit" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="剩余房租">
+                      <el-input disabled v-model="params.residual_rent" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="收视费">
+                      <el-input disabled v-model="params.viewing_fee" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="预存物管费">
+                      <el-input disabled v-model="params.property_management_fee" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="预存水费">
+                      <el-input disabled v-model="params.water_fee" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="预存电费">
+                      <el-input disabled v-model="params.electricity_fee" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="预存气费">
+                      <el-input disabled v-model="params.gas_fee" type="number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="应退还">
+                      <el-input disabled :disabled="true" v-model="reimbursementTotal"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
 
-        <div class="title">应扣其他费用</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="80px">
-            <el-row>
-              <el-col :span="6">
-                <el-form-item label="垃圾费">
-                  <el-input disabled v-model="params.trash_fees"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="清洁费">
-                  <el-input disabled v-model="params.cleaning_fees"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="维修赔偿">
-                  <el-input disabled v-model="params.repair_compensation_fees"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="其他费用">
-                  <el-input disabled v-model="params.other_fees"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期房时">
-                  <el-input disabled v-model="params.overtime_rent"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期房费">
-                  <el-input disabled v-model="params.TV_fees"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期网费">
-                  <el-input disabled v-model="params.network_fees"></el-input>
-                </el-form-item>
-              </el-col>
+            <div class="title">应扣除源能费</div>
+            <div class="form_border">
+              <el-form size="mini" :model="params" label-width="80px">
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="水费：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="上次底数">
+                      <el-input disabled v-model="params.water_last"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="本次底数">
+                      <el-input disabled v-model="params.water_now"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="单价">
+                      <el-input disabled v-model="params.water_unit_price"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.water_late_payment"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.water_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{waterTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="电费（峰）：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="上次底数">
+                      <el-input disabled v-model="params.electricity_peak_last"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="本次底数">
+                      <el-input disabled v-model="params.electricity_peak_now"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="单价">
+                      <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
+                    </el-form-item>
+                  </el-col>
 
-              <el-col :span="6">
-                <el-form-item label="合计">
-                  <el-input disabled v-model="otherTotal" disabled=""></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <div class="title">实际退还</div>
-        <div class="describe_border">
-          实际退还：{{realTotal}}
-        </div>
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.electricity_peak_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{elePeakTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="电费（谷）：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="上次底数">
+                      <el-input disabled v-model="params.electricity_valley_last"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="本次底数">
+                      <el-input disabled v-model="params.electricity_valley_now"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="单价">
+                      <el-input disabled v-model="params.electricity_valley_unit_price"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.electricity_valley_late_payment"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.electricity_valley_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{eleValTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="燃气费：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="上次底数">
+                      <el-input disabled v-model="params.gas_last"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="本次底数">
+                      <el-input disabled v-model="params.gas_now"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="单价">
+                      <el-input disabled v-model="params.gas_unit_price"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.gas_late_payment"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.gas_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{gasTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="物管费：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="上次交到">
+                      <el-date-picker type="date" v-model="params.property_management_last" disabled></el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="本次交到">
+                      <el-date-picker type="date" v-model="params.property_management_now" disabled></el-date-picker>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="5" :offset="2">
+                    <el-form-item label="公摊水费">
+                      <el-input disabled v-model="params.property_management_electricity"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-form-item label="公摊电费">
+                      <el-input disabled v-model="params.property_management_water"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-form-item label="物业费">
+                      <el-input disabled v-model="params.property_management_total_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.property_management_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{managementTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+
+            <div class="title">应扣其他费用</div>
+            <div class="form_border">
+              <el-form size="mini" :model="params" label-width="80px">
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item label="垃圾费">
+                      <el-input disabled v-model="params.trash_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="清洁费">
+                      <el-input disabled v-model="params.cleaning_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="维修赔偿">
+                      <el-input disabled v-model="params.repair_compensation_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="其他费用">
+                      <el-input disabled v-model="params.other_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="超期房时">
+                      <el-input disabled v-model="params.overtime_rent"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="超期房费">
+                      <el-input disabled v-model="params.TV_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="超期网费">
+                      <el-input disabled v-model="params.network_fees"></el-input>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="6">
+                    <el-form-item label="合计">
+                      <el-input disabled v-model="otherTotal" disabled=""></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+            <div class="title">实际退还</div>
+            <div class="describe_border">
+              实际退还：{{realTotal}}
+            </div>
 
 
-        <div class="title">款项凭证</div>
-        <div class="describe_border">
-          <div class="editImg" v-if="vacationData.payment_pic&&vacationData.payment_pic.length>0">
-            <img v-for="img in vacationData.payment_pic" :src="img.uri" alt="" data-magnify="" :data-src="img.uri"
-                 style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
+            <div class="title">款项凭证</div>
+            <div class="describe_border">
+              <div class="editImg" v-if="vacationData.payment_pic&&vacationData.payment_pic.length>0">
+                <img v-for="img in vacationData.payment_pic" :src="img.uri" alt="" data-magnify="" :data-src="img.uri"
+                     style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </el-col>
+        <el-col :span="6" style="padding-left: 10px">
+          <div class="scroll_bar">
+            <div v-if="commentList.length<1" style="text-align: center;margin-top: 50px">暂无相关评论信息</div>
+            <div v-else v-for="(item,index) in commentList" class="reportItem" style="margin-bottom: 12px;">
+              <div class="commentContent">
+                <div class="commentA">
+                <span class="headSculpture">
+                  <img v-if="item.staffs && item.staffs.avatar" :src="item.staffs.avatar" alt="">
+                </span>
+                  {{item.staffs.name}}
+                  <span v-for="(org,index) in item.staffs.org" v-if="index === 0">-{{org.name}}</span>
+                </div>
+                <div class="commentB">
+                  {{item.create_time}}
+                </div>
+              </div>
+              <div class="commentC">
+                <p>{{item.content}}</p>
+                <div v-if="item.album&&item.album.image_pic.length>0">
+                  <img v-for="(p,index) in item.album.image_pic" data-magnify="" :data-src="p.uri" :src="p.uri">
+                </div>
+                <div v-if="item.album&&item.album.video_file.length>0">
+                  <video v-for="(v,index) in item.album.video_file" class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
+                    <source :src="v.uri" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
 
       <el-dialog
         width="30%"
@@ -517,10 +551,32 @@
         <el-button size="small" type="primary" @click="confirmPass">确 定</el-button>
       </span>
       </el-dialog>
+      <!--添加评论信息-->
+      <el-dialog append-to-body title="评论" :visible.sync="commentVisible" width="40%">
+        <div class="scroll_bar" style="padding: 0;">
+          <el-form size="mini" label-width="80px">
+            <el-form-item label="评论信息" required>
+              <el-input type="textarea" :rows="4" placeholder="说点什么吧！" v-model="commentParams.content"></el-input>
+            </el-form-item>
+            <el-form-item label="上传照片">
+              <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+            </el-form-item>
+            <el-form-item label="上传视频">
+              <UpLoad :ID="'comment_video'" :isClear="isClear" @getImg="getImg"></UpLoad>
+            </el-form-item>
+          </el-form>
+          <h5 style="color: #e45057;margin-left: 80px">注意：照片和视频请分开上传，否则将不能正常显示</h5>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
+          <el-button size="small" type="primary" @click="addComment">确定</el-button>
+        </div>
+      </el-dialog>
 
       <span slot="footer" class="dialog-footer">
         <el-button v-if="params.status_type == 1" size="small" type="warning" @click="reject">驳 回</el-button>
         <el-button v-if="params.status_type == 1" size="small" type="primary" @click="passed">通 过</el-button>
+        <el-button size="small" type="primary" @click="commentVisible = true">评 论</el-button>
       </span>
     </el-dialog>
   </div>
@@ -632,6 +688,16 @@
         subjectList: [],
         subjectList2: [],
         vacationData: [],
+
+        // 评论相关
+        commentVisible : false,
+        commentParams : {
+          content : '',
+          parent_id : 0,
+          image_pic :[],
+          video_file : [],
+        },
+        commentList : [],
       };
     },
     computed: {
@@ -682,6 +748,7 @@
         } else {
           this.isClear = true;
           this.getData();
+          this.getCommentData();
           if (!this.isDictionary) {
             this.getDictionary();
           }
@@ -702,7 +769,13 @@
       },
       //上传图片
       getImg(val) {
-        this.passParams.payment_pic = val[1];
+        if(val[0] === 'collectVacationId'){
+          this.params.image_pic = val[1];
+        }else if(val[0] === 'comment_pic'){
+          this.commentParams.image_pic = val[1];
+        }else if(val[0] === 'comment_video'){
+          this.commentParams.video_file = val[1];
+        }
       },
       //获取退房详情
       getData() {
@@ -801,6 +874,14 @@
             this.editImage = picObject;
           }
         });
+      },
+      //获取评论信息
+      getCommentData(){
+        this.$http.get(globalConfig.server + 'customer/check_out/comment/' + this.vacationId).then(res => {
+          if(res.data.code === '20000'){
+            this.commentList = res.data.data.data;
+          }
+        })
       },
 
       getContractInfo(module, id) {
@@ -903,6 +984,14 @@
           this.params.settled_info.push(data1);
         }
         this.isClear = false;
+        this.commentVisible = false;
+        this.commentList = [];
+        this.commentParams = {
+          content : '',
+          parent_id : 0,
+          image_pic :[],
+          video_file : [],
+        };
       },
 
       reject() {
@@ -983,6 +1072,31 @@
           }
         })
       },
+      // 添加评论信息
+      addComment(){
+        this.$http.post(globalConfig.server + 'customer/check_out/comment/'+ this.vacationId,
+          this.commentParams).then(res=>{
+          if(res.data.code === '20000'){
+            this.$notify.success({
+              title: '成功！',
+              message: res.data.msg,
+            });
+            this.commentVisible = false;
+            this.commentParams = {
+              content : '',
+              parent_id : 0,
+              image_pic :[],
+              video_file : [],
+            };
+            this.getCommentData();
+          } else {
+            this.$notify.warning({
+              title: '警告！',
+              message: res.data.msg,
+            })
+          }
+        })
+      },
     }
   };
 </script>
@@ -1051,4 +1165,63 @@
     }
   }
 
+  .reportItem {
+    overflow: hidden;
+    padding: 8px 16px;
+    background-color: #eef3fc;
+    border-radius: 4px;
+    border-left: 5px solid #409EFF;
+    margin-bottom: 10px;
+    cursor: pointer;
+    .itemLabel {
+      display: inline-block;
+      width: 70px;
+      text-align: right;
+      color: #6a8dfb;
+      margin-right: 10px;
+    }
+  }
+  .commentContent {
+    display: flex;
+    justify-content: space-between;
+
+    .commentA, .commentB {
+      height: 36px;
+    }
+    .commentA {
+      overflow: hidden;
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .headSculpture {
+        min-width: 36px;
+        max-width: 36px;
+        min-height: 36px;
+        max-height: 36px;
+        img {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+        }
+      }
+    }
+    .commentB {
+      text-align: right;
+    }
+  }
+  .commentC {
+    color: #000;
+    margin-left: 40px;
+    div {
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+    }
+  }
+  video{
+    background: #000;
+  }
 </style>
