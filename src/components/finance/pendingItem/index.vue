@@ -72,6 +72,7 @@
       <el-table
         :data="tableData"
         width="100%"
+        @row-dblclick="dblClickTable"
         @row-contextmenu="clickMenu">
         <el-table-column
           label="事项类型"
@@ -228,6 +229,10 @@
       // 高级筛选
       highGrade() {
         this.isHigh = !this.isHigh;
+      },
+      // 双击
+      dblClickTable(row, event) {
+
       },
       // 右键
       clickMenu(row, event) {

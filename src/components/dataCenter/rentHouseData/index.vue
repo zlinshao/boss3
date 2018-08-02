@@ -130,7 +130,8 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select v-model="form.type" placeholder="请选择" clearable>
-                        <el-option v-for="(key,index) in types" :key="index" :label="key" :value="index + 1"></el-option>
+                        <el-option v-for="(key,index) in types" :key="index" :label="key"
+                                   :value="index + 1"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -154,7 +155,7 @@
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
-              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置1111111</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
           </el-form>
@@ -358,7 +359,7 @@
         totalNum: 0,
         tableStatus: ' ',
         tableLoading: false,
-        types: ['租房','转租','续租','未收先租','调租'],
+        types: ['租房', '转租', '续租', '未收先租', '调租'],
         form: {
           type: '',
           lose: '',
@@ -706,7 +707,6 @@
         this.form.type = '';
         this.sign_name = '';
         this.org_name = '';
-        this.search();
       },
     },
   };
