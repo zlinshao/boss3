@@ -19,11 +19,12 @@
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
+
           <el-row class="el_row_border">
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">款项状态</div>
+                  <div class="el_col_label">事件类型</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -59,6 +60,24 @@
               </el-row>
             </el-col>
           </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">收租类型</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="form.status" clearable size="mini">
+                      <el-option label="请选择" value=""></el-option>
+                      <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="search()">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -165,6 +184,8 @@
           keywords: '',
         },
 
+        detailVisible: false,
+
         pendVisible: false,
         pickerOptions: {
           shortcuts: [{
@@ -224,13 +245,12 @@
         this.form.keywords = '';
         this.form.status = '';
         this.form.date = '';
-        this.highGrade();
       },
       // 高级筛选
       highGrade() {
         this.isHigh = !this.isHigh;
       },
-      // 双击
+      // 双击 详情
       dblClickTable(row, event) {
 
       },

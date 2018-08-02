@@ -155,7 +155,7 @@
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
-              <el-button size="mini" type="primary" @click="resetting">重置1111111</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
           </el-form>
