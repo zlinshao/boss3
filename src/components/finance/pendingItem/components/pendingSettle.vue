@@ -9,7 +9,7 @@
         element-loading-background="rgba(255, 255, 255, 0)">
       </div>
 
-      <el-form :inline="true" size="mini" label-width="80px">
+      <el-form :inline="true" size="mini" label-width="88px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="事件类型">
@@ -81,13 +81,13 @@
               <el-input placeholder="请输入内容" v-model="form.account_num" clearable></el-input>
             </el-form-item>
             <el-form-item label="签约人">
-              <el-input placeholder="请输入内容" v-model="form.staff_id" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="staff_name" disabled></el-input>
             </el-form-item>
             <el-form-item label="所属部门">
-              <el-input placeholder="请输入内容" v-model="form.department_id" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="department_name" disabled></el-input>
             </el-form-item>
             <el-form-item label="结算人">
-              <el-input placeholder="请输入内容" v-model="form.operator_id" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="operator_name" disabled></el-input>
             </el-form-item>
             <el-form-item label="付款时间">
               <div class="block">
@@ -112,15 +112,23 @@
         <el-button size="small" type="primary" @click="settleAccount">结&nbsp;算</el-button>
       </div>
     </el-dialog>
+
+    <!--<Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths" @close="closeOrganization" @selectMember="selectMember"></Organization>-->
+
   </div>
 </template>
 
 <script>
+  // import Organization from '../../../common/organization.vue';  //组织架构
   export default {
     name: "pending-settle",
+    // components: {Organization},
     props: ['module'],
     data() {
       return {
+        organizationDialog: false,
+        organizeType: '',
+        lengths: 0,
         dialogVisible: false,
         fullLoading: false,
         pickerOptions: {
@@ -178,6 +186,9 @@
         },
         customers_name: '上官海棠',
         house_name: '城市绿洲花园3期1-1-1001',
+        staff_name: '归海一刀',
+        department_name: '南京一区一组',
+        operator_name: '古三通',
         values: ['待入账', '待结清', '已结清', '已超额'],
       }
     },
@@ -200,6 +211,23 @@
       settleAccount() {
 
       },
+      // // 组织架构
+      // openOrganization() {
+      //   this.organizationDialog = true;
+      //   this.organizeType = 'staff';
+      //   this.lengths = 1;
+      // },
+      // closeOrganization() {
+      //   this.organizationDialog = false;
+      //   this.organizeType = '1';
+      //   this.lengths = 0;
+      // },
+      // selectMember(val) {
+      //   console.log(val);
+      // },
+      // emptyOrganization() {
+      //
+      // }
     },
   }
 </script>

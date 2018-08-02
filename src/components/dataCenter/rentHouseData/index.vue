@@ -684,7 +684,6 @@
       },
       // 重置
       resetting() {
-        this.highGrade();
         let Nowdate = new Date();
         let year = new Date(Nowdate).getFullYear();
         let month = new Date(Nowdate).getMonth();
@@ -698,6 +697,7 @@
         this.form.sign_date = this.sign_date;
 
         this.form.address = '';
+        this.form.lose = '';
         this.form.contract_number = '';
         this.form.sign_id = [];
         this.form.org_id = [];
