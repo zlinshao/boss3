@@ -107,30 +107,35 @@
                   <el-col :span="8">
                     <el-form-item label="退房时间" required>
                       <el-date-picker disabled type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
-                                      placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                                       style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
 
                   <el-col :span="8">
                     <el-form-item label="退房性质" required>
                       <el-select v-model="params.check_type"  disabled placeholder="请选择退房性质" value="">
-                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                        <el-option v-for="item in check_type_dic" :label="item.dictionary_name" :key="item.id"
                                    :value="item.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
-
-                  <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
-                    <el-form-item label="转租费">
-                      <el-input disabled placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
+                  <el-col :span="8">
+                    <el-form-item label="退款时间" required>
+                      <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.checkout_time"
+                                      style="width: 100%;" disabled></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
 
                 <el-row>
+                  <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
+                    <el-form-item label="转租费">
+                      <el-input disabled v-model="params.sublease_fee"></el-input>
+                    </el-form-item>
+                  </el-col>
                   <el-col :span="8" v-if="params.check_type == 331">
                     <el-form-item label="违约方">
-                      <el-select disabled v-model="params.profit_type" placeholder="请选择违约方" value="">
+                      <el-select disabled v-model="params.profit_type"  value="">
                         <el-option label="公司" value="1"></el-option>
                         <el-option label="客户" value="2"></el-option>
                       </el-select>
@@ -138,7 +143,25 @@
                   </el-col>
                   <el-col :span="8" v-if="params.check_type == 331">
                     <el-form-item label="违约金">
-                      <el-input disabled placeholder="请输入内容"  v-model="params.profit"></el-input>
+                      <el-input disabled  v-model="params.profit"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="结算人">
+                      <el-input disabled v-model="settlers"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="审核人">
+                      <el-input disabled v-model="auditors"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="退款人">
+                      <el-input disabled  v-model="payers"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -165,12 +188,12 @@
                   <el-row v-for="(item, index) in repairInfoLength" :key="index">
                     <el-col :span="5">
                       <el-form-item label="维修内容">
-                        <el-input disabled placeholder="请输入内容" v-model="params.repair_info[index].content"></el-input>
+                        <el-input disabled v-model="params.repair_info[index].content"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="维修金额">
-                        <el-input disabled placeholder="请输入内容" v-model="params.repair_info[index].amount"></el-input>
+                        <el-input disabled v-model="params.repair_info[index].amount"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -407,19 +430,54 @@
                       <el-input disabled v-model="params.property_management_water"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5">
+                  <el-col :span="6">
                     <el-form-item label="物业费">
                       <el-input disabled v-model="params.property_management_total_fees"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5">
+                  <el-col :span="6">
                     <el-form-item label="其他">
                       <el-input disabled v-model="params.property_management_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10" :offset="2">
+                    <el-form-item label="合同承担方">
+                      <el-select disabled v-model="params.contracting_party" value="">
+                        <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name"
+                                   :value="item.id" :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="10">
+                    <el-form-item label="实际承担方">
+                      <el-input disabled v-model="params.actual_party" ></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="2">
                     <div class="content">
                       合计：{{managementTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="其他：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="其他项">
+                      <el-input disabled v-model="params.other_content"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="10">
+                    <el-form-item label="其他金额">
+                      <el-input disabled v-model="params.energy_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{otherEnergyTotal}}
                     </div>
                   </el-col>
                 </el-row>
@@ -485,7 +543,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="是否退款">
-                      <el-select disabled v-model="params.is_refund" clearable="" placeholder="请选择是否退款" value="">
+                      <el-select disabled v-model="params.is_refund" value="">
                         <el-option label="是" value="1"></el-option>
                         <el-option label="否" value="2"></el-option>
                       </el-select>
@@ -493,24 +551,24 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="姓名">
-                      <el-input disabled placeholder="请输入内容" v-model="params.account_name"></el-input>
+                      <el-input disabled v-model="params.account_name"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="8">
                     <el-form-item label="退款账号">
-                      <el-input disabled placeholder="请输入内容" v-model="params.bank_num"></el-input>
+                      <el-input disabled v-model="params.bank_num"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="开户行">
-                      <el-input disabled placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                      <el-input disabled v-model="params.account_bank"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="支行">
-                      <el-input disabled placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                      <el-input disabled v-model="params.branch_bank"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -671,6 +729,7 @@
           module: '',
           status_type: '',
           check_time: '',
+          checkout_time: '',
           check_type: '',
           profit: '',
           profit_type : '',   //违约方
@@ -721,6 +780,11 @@
           property_management_water: '',
           property_management_total_fees: '',
           property_management_other: '',
+          contracting_party: '',
+          actual_party: '',
+
+          other_content : '',
+          energy_other : '',
 
           liquidated_damages: '',
           trash_fees: '',
@@ -733,6 +797,11 @@
 
           is_refund : '',
         },
+
+        settlers : '',      //结算人
+        auditors : '',      //审核人
+        payers : '',      //退款人
+
         subjectId: '',
         subjectId2: '',
         passParams: {
@@ -742,7 +811,8 @@
         },
         isClear: false,
         isDictionary: false,
-        dictionary: [],
+        check_type_dic: [],
+        contracting_party_dic: [],
         contractInfo: {},
         editImage: {},
         isLoading: false,
@@ -788,6 +858,9 @@
         return Number(this.params.property_management_electricity) + Number(this.params.property_management_water)
           + Number(this.params.property_management_total_fees) + Number(this.params.property_management_other);
       },
+      otherEnergyTotal(){
+        return Number(this.params.energy_other)
+      },
       otherTotal() {
         return Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
           + Number(this.params.other_fees) + Number(this.params.overtime_rent) +
@@ -824,10 +897,14 @@
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/328').then((res) => {
           if (res.data.code === '30010') {
-            this.dictionary = res.data.data;
+            this.check_type_dic = res.data.data;
             this.isDictionary = true;
           }
-        })
+        });
+        this.dictionary(449, 1).then((res) => {
+          this.contracting_party_dic = res.data;
+          this.isDictionary = true
+        });
       },
       //上传图片
       getImg(val) {
@@ -865,6 +942,7 @@
             this.getContractInfo(data.module, data.contract_id);
 
             this.params.check_time = data.check_time;
+            this.params.checkout_time = data.checkout_time;
             this.params.check_type = data.check_type;
             this.params.status_type = data.status;
 
@@ -916,6 +994,11 @@
             this.params.property_management_water = (data.details && data.details.property_management_water) || 0;
             this.params.property_management_total_fees = (data.details && data.details.property_management_total_fees) || 0;
             this.params.property_management_other = (data.details && data.details.property_management_other) || 0;
+            this.params.contracting_party = (data.details && data.details.contracting_party) || '';
+            this.params.actual_party = (data.details && data.details.actual_party) || '';
+
+            this.params.other_content = (data.details && data.details.other_content) || '';
+            this.params.energy_other = (data.details && data.details.energy_other) || 0;
 
             this.params.liquidated_damages = (data.details && data.details.liquidated_damages) || 0;
             this.params.trash_fees = (data.details && data.details.trash_fees) || 0;
@@ -931,6 +1014,10 @@
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
                                       String(data.extend_field.profit_type) : '';
             this.params.is_refund =  data.is_refund? String(data.is_refund) : '';
+
+            this.settlers = data.settlers && !Array.isArray(data.settlers)? data.settlers.name : '';
+            this.auditors = data.auditors && !Array.isArray(data.auditors)? data.auditors.name : '';
+            this.payers = data.payers && !Array.isArray(data.payers)? data.payers.name : '';
 
             let picObject = {};
             this.editImage = {};
@@ -998,6 +1085,7 @@
           status_type: '',
 
           check_time: '',
+          checkout_time: '',
           check_type: '',
           profit: '',
           profit_type: '',
@@ -1048,6 +1136,11 @@
           property_management_water: '',
           property_management_total_fees: '',
           property_management_other: '',
+          contracting_party: '',
+          actual_party: '',
+
+          other_content : '',
+          energy_other : '',
 
           liquidated_damages: '',
           trash_fees: '',
