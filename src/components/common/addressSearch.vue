@@ -46,7 +46,6 @@
             </el-table-column>
           </el-table>
         </div>
-
       </div>
 
       <div slot="footer" class="dialog-footer">
