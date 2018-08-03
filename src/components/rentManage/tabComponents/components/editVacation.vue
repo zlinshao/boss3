@@ -465,12 +465,12 @@
                   <el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="5">
                 <el-form-item label="物业费">
                   <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="5">
                 <el-form-item label="其他">
                   <el-input v-model="params.property_management_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
