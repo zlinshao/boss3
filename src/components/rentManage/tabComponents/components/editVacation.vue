@@ -1105,6 +1105,8 @@
           overtime_rent: '',
           TV_fees: '',
           network_fees: '',
+
+          is_refund : '',
         };
         this.financialReceiptsLength = 1;
         this.contractCollectionLength = 1;
