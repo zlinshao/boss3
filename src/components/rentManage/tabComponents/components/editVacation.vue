@@ -129,20 +129,26 @@
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
                   <el-select v-model="params.check_type" @change="clearFee" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                    <el-option v-for="item in check_type_dic" :label="item.dictionary_name" :key="item.id"
                                :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="退款时间" required>
+                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.checkout_time"
+                                  placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
 
+            </el-row>
+
+            <el-row>
               <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
                 <el-form-item label="转租费">
                   <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-
-            <el-row>
               <el-col :span="8" v-if="params.check_type == 331">
                 <el-form-item label="违约方">
                   <el-select v-model="params.profit_type" @clear="clearProfitType" clearable="" placeholder="请选择违约方" value="">
@@ -426,43 +432,75 @@
               <el-col :span="10">
                 <el-form-item label="上次交到">
                   <el-date-picker type="date" v-model="params.property_management_last"
-                                  placeholder="选择日期" :disabled="status==1"></el-date-picker>
+                                  placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="本次交到">
                   <el-date-picker type="date" v-model="params.property_management_now"
-                                  placeholder="选择日期" :disabled="status==1"></el-date-picker>
+                                  placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
 
               <el-col :span="5" :offset="2">
                 <el-form-item label="公摊水费">
-                  <el-input v-model="params.property_management_electricity" placeholder="请输入内容"
-                            :disabled="status==1"></el-input>
+                  <el-input v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="公摊电费">
-                  <el-input v-model="params.property_management_water" placeholder="请输入内容"
-                            :disabled="status==1"></el-input>
+                  <el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                 <el-form-item label="物业费">
-                  <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"
-                            :disabled="status==1"></el-input>
+                  <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                 <el-form-item label="其他">
-                  <el-input v-model="params.property_management_other" placeholder="请输入内容"
-                            :disabled="status==1"></el-input>
+                  <el-input v-model="params.property_management_other" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10" :offset="2">
+                <el-form-item label="合同承担方">
+                  <el-select clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
+                    <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
+                               :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="10">
+                <el-form-item label="实际承担方">
+                  <el-input v-model="params.actual_party" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="2">
+                <div class="content">
+                  合计：{{managementTotal}}
+                </div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="2" style="text-align: right">
+                <el-form-item label="其他：" label-width="100px">
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="其他项">
+                  <el-input v-model="params.other_content" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="其他金额">
+                  <el-input v-model="params.energy_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2">
                 <div class="content">
-                  合计：{{managementTotal}}
+                  合计：{{otherEnergyTotal}}
                 </div>
               </el-col>
             </el-row>
@@ -613,6 +651,7 @@
           contract_id: '',
           module: '1',
           check_time: '',
+          checkout_time: '',
           check_type: '',
           profit: '',
           profit_type : '',   //违约方
@@ -650,6 +689,8 @@
           electricity_valley_unit_price: '',
           electricity_valley_late_payment: '',
           electricity_valley_other: '',
+          contracting_party : '',
+          actual_party : '',
 
           gas_last: '',
           gas_now: '',
@@ -664,6 +705,9 @@
           property_management_total_fees: '',
           property_management_other: '',
 
+          other_content : '',
+          energy_other : '',
+
           liquidated_damages: '',
           trash_fees: '',
           cleaning_fees: '',
@@ -677,7 +721,8 @@
         },
         isClear: false,
         isDictionary: false,
-        dictionary: [],
+        check_type_dic: [],
+        contracting_party_dic: [],
         contractInfo: {},
         editImage: {},
         isLoading: false,
@@ -710,6 +755,9 @@
         return Number(this.params.property_management_electricity) + Number(this.params.property_management_water)
           + Number(this.params.property_management_total_fees) + Number(this.params.property_management_other);
       },
+      otherEnergyTotal(){
+        return Number(this.params.energy_other)
+      },
       otherTotal() {
         return Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
           + Number(this.params.other_fees) + Number(this.params.overtime_rent) +
@@ -718,7 +766,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
           Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee);
+          - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal);
       },
     },
     watch: {
@@ -795,10 +843,14 @@
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/328').then((res) => {
           if (res.data.code === '30010') {
-            this.dictionary = res.data.data;
+            this.check_type_dic = res.data.data;
             this.isDictionary = true;
           }
-        })
+        });
+        this.dictionary(449, 1).then((res) => {
+          this.contracting_party_dic = res.data;
+          this.isDictionary = true
+        });
       },
       //      退房性质变化
       clearFee() {
@@ -845,6 +897,7 @@
             this.getContractInfo(data.module, data.contract_id);
 
             this.params.check_time = data.check_time;
+            this.params.checkout_time = data.checkout_time;
             this.params.check_type = data.check_type;
             this.params.profit = data.extend_field && data.extend_field.profit ? data.extend_field.profit : 0;
             this.params.sublease_fee = data.details && data.details.sublease_fee ? data.details.sublease_fee : 0;
@@ -893,6 +946,11 @@
             this.params.property_management_water = (data.details && data.details.property_management_water) || 0;
             this.params.property_management_total_fees = (data.details && data.details.property_management_total_fees) || 0;
             this.params.property_management_other = (data.details && data.details.property_management_other) || 0;
+            this.params.contracting_party = (data.details && data.details.contracting_party) || '';
+            this.params.actual_party = (data.details && data.details.actual_party) || '';
+
+            this.params.other_content = (data.details && data.details.other_content) || '';
+            this.params.energy_other = (data.details && data.details.energy_other) || 0;
 
             this.params.liquidated_damages = (data.details && data.details.liquidated_damages) || 0;
             this.params.trash_fees = (data.details && data.details.trash_fees) || 0;
@@ -982,6 +1040,7 @@
           status_type: '',
 
           check_time: '',
+          checkout_time: '',
           check_type: '',
           profit: '',
           profit_type: '',
@@ -1032,6 +1091,11 @@
           property_management_water: '',
           property_management_total_fees: '',
           property_management_other: '',
+          contracting_party: '',
+          actual_party: '',
+
+          other_content : '',
+          energy_other : '',
 
           liquidated_damages: '',
           trash_fees: '',

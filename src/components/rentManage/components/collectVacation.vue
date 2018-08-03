@@ -7,27 +7,35 @@
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
-              <td>{{collectContractInfo.contract_number}}</td>
+              <td>{{contractInfo.contract_number}}</td>
               <td>地址</td>
-              <td>{{collectContractInfo.address}}</td>
+              <td>{{contractInfo.community_name}}{{contractInfo.doorplate_str}}</td>
+              <td>签约人</td>
+              <td>{{contractInfo.staff_name}}</td>
+            </tr>
+            <tr>
               <td>姓名</td>
-              <td>{{collectContractInfo.customer_name}}</td>
-            </tr>
-            <tr>
+              <td>
+                <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
+                  {{contractInfo.customers[0].name}}
+                </span>
+              </td>
               <td>电话</td>
-              <td>{{collectContractInfo.phone}}</td>
+              <td>
+                <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
+                  {{contractInfo.customers[0].phone}}
+                </span>
+              </td>
               <td>中介费</td>
-              <td>{{collectContractInfo.agency}}</td>
-              <td>押金</td>
-              <td>{{collectContractInfo.deposit}}</td>
+              <td>{{contractInfo.agency}}</td>
             </tr>
             <tr>
-              <td>合同期限</td>
-              <td>{{collectContractInfo.duration}}</td>
+              <td>押金</td>
+              <td>{{contractInfo.deposit}}</td>
               <td>合同开始时间</td>
-              <td>{{collectContractInfo.begin_date}}</td>
+              <td>{{contractInfo.begin_date}}</td>
               <td>合同结束时间</td>
-              <td>{{collectContractInfo.end_date}}</td>
+              <td>{{contractInfo.end_date}}</td>
             </tr>
           </table>
         </div>
@@ -103,7 +111,6 @@
             </el-form>
           </div>
         </el-row>
-
         <div class="title">退房信息</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="100px">
@@ -118,20 +125,26 @@
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
                   <el-select v-model="params.check_type" @change="clearFee" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                    <el-option v-for="item in check_type_dic" :label="item.dictionary_name" :key="item.id"
                                :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="退款时间" required>
+                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.checkout_time"
+                                  placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
 
+            </el-row>
+
+            <el-row>
               <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
                 <el-form-item label="转租费">
                   <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-
-            <el-row>
               <el-col :span="8" v-if="params.check_type == 331">
                 <el-form-item label="违约方">
                   <el-select v-model="params.profit_type" @clear="clearProfitType" clearable="" placeholder="请选择违约方" value="">
@@ -418,19 +431,55 @@
                   <el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                 <el-form-item label="物业费">
                   <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                 <el-form-item label="其他">
                   <el-input v-model="params.property_management_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :span="10" :offset="2">
+                <el-form-item label="合同承担方">
+                  <el-select clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
+                    <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
+                               :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="10">
+                <el-form-item label="实际承担方">
+                  <el-input v-model="params.actual_party" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+
               <el-col :span="2">
                 <div class="content">
                   合计：{{managementTotal}}
+                </div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="2" style="text-align: right">
+                <el-form-item label="其他：" label-width="100px">
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="其他项">
+                  <el-input v-model="params.other_content" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="其他金额">
+                  <el-input v-model="params.energy_other" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2">
+                <div class="content">
+                  合计：{{otherEnergyTotal}}
                 </div>
               </el-col>
             </el-row>
@@ -571,6 +620,7 @@
           contract_id: '',
           module: '1',
           check_time: '',
+          checkout_time: '',
           check_type: '',
           profit: '',
           profit_type : '',   //违约方
@@ -621,6 +671,11 @@
           property_management_water: '',
           property_management_total_fees: '',
           property_management_other: '',
+          contracting_party : '',
+          actual_party : '',
+
+          other_content : '',
+          energy_other : '',
 
           liquidated_damages: '',
           trash_fees: '',
@@ -635,8 +690,9 @@
         },
         isClear: false,
         isDictionary: false,
-        dictionary: [],
-        collectContractInfo: {},
+        check_type_dic: [],
+        contracting_party_dic: [],
+        contractInfo: {},
         editImage: {},
         financial: false,
       };
@@ -667,6 +723,9 @@
         return Number(this.params.property_management_electricity) + Number(this.params.property_management_water)
           + Number(this.params.property_management_total_fees) + Number(this.params.property_management_other);
       },
+      otherEnergyTotal(){
+        return Number(this.params.energy_other)
+      },
       otherTotal() {
         return Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
           + Number(this.params.other_fees) + Number(this.params.overtime_rent) +
@@ -675,7 +734,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
           Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee);
+          - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal);
       },
     },
     watch: {
@@ -688,8 +747,8 @@
           this.initData();
         } else {
           this.isClear = false;
-          this.getContractData();
           this.getCheckOutData();
+          this.getContractInfo();
           if (!this.isDictionary) {
             this.getDictionary();
           }
@@ -699,14 +758,21 @@
       collectContractId(val) {
         this.params.contract_id = val;
       },
-      collectInfo(val) {
-        this.collectContractInfo = val;
-      },
     },
     mounted() {
 
     },
     methods: {
+      //获取合同详情
+      getContractInfo() {
+        this.$http.get(globalConfig.server + 'lease/collect/' + this.collectContractId).then((res) => {
+          if (res.data.code === '61010') {
+            this.contractInfo = res.data.data;
+            this.params.contracting_party =  res.data.data.property_payer ? Number(res.data.data.property_payer) : '';
+          }
+        })
+      },
+
       getPowerData() {
         this.$http.get(globalConfig.server + 'special/special/auth?name=checkout_financial').then((res) => {
           if (res.data.code === '10090') {
@@ -760,10 +826,14 @@
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/328').then((res) => {
           if (res.data.code === '30010') {
-            this.dictionary = res.data.data;
+            this.check_type_dic = res.data.data;
             this.isDictionary = true;
           }
-        })
+        });
+        this.dictionary(449, 1).then((res) => {
+          this.contracting_party_dic = res.data;
+          this.isDictionary = true
+        });
       },
       getBank() {
         this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
@@ -810,9 +880,7 @@
       getImg(val) {
         this.params.image_pic = val[1];
       },
-      getContractData() {
 
-      },
       confirmAdd(flag) {
         this.params.status_type = flag ? '' : 'draft';
         this.$http.post(globalConfig.server + 'customer/check_out', this.params).then((res) => {
@@ -858,6 +926,7 @@
           status_type: '',
 
           check_time: '',
+          checkout_time: '',
           check_type: '',
           profit: '',
           profit_type: '',
@@ -908,6 +977,11 @@
           property_management_water: '',
           property_management_total_fees: '',
           property_management_other: '',
+          contracting_party : '',
+          actual_party : '',
+
+          other_content : '',
+          energy_other : '',
 
           liquidated_damages: '',
           trash_fees: '',
