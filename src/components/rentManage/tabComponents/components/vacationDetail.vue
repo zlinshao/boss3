@@ -443,12 +443,12 @@
                       <el-input disabled v-model="params.property_management_water"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="5">
                     <el-form-item label="物业费">
                       <el-input disabled v-model="params.property_management_total_fees"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="5">
                     <el-form-item label="其他">
                       <el-input disabled v-model="params.property_management_other"></el-input>
                     </el-form-item>
@@ -1020,7 +1020,7 @@
 
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
                                       String(data.extend_field.profit_type) : '';
-            this.params.is_refund =  data.is_refund? String(data.is_refund) : '';
+            this.params.is_refund = (data.details && data.details.is_refund)? String(data.details.is_refund):'';
 
             this.settlers = data.settlers && !Array.isArray(data.settlers)? data.settlers.name : '';
             this.auditors = data.auditors && !Array.isArray(data.auditors)? data.auditors.name : '';
