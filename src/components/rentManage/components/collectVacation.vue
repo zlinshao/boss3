@@ -168,7 +168,7 @@
             <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="12">
-            <div class="title">维修赔偿详情</div>
+            <div class="title">报备内容</div>
             <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
