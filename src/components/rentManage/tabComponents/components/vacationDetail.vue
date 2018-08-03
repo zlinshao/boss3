@@ -175,7 +175,7 @@
                 <el-input disabled type="textarea" resize="none" v-model="params.reason"></el-input>
               </el-col>
               <el-col :span="12">
-                <div class="title">维修赔偿详情</div>
+                <div class="title">报备内容</div>
                 <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
               </el-col>
             </el-row>
@@ -679,7 +679,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
-          <el-button size="small" type="primary" @click="addComment">确定</el-button>
+          <el-button size="small" :disable="isClick" type="primary" @click="addComment">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -830,6 +830,8 @@
           video_file : [],
         },
         commentList : [],
+
+        isClick : false,  //正在点击
       };
     },
     computed: {
@@ -1167,6 +1169,7 @@
           image_pic :[],
           video_file : [],
         };
+        this.isClick = false;
       },
 
       reject() {
@@ -1249,8 +1252,10 @@
       },
       // 添加评论信息
       addComment(){
+        this.isClick = true;
         this.$http.post(globalConfig.server + 'customer/check_out/comment/'+ this.vacationId,
           this.commentParams).then(res=>{
+          this.isClick = false;
           if(res.data.code === '20000'){
             this.$notify.success({
               title: '成功！',
