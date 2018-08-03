@@ -1,6 +1,6 @@
 <template>
   <div id="">
-    <el-dialog :close-on-click-modal="false" :show-close="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" label-width="100px">
           <el-row>
