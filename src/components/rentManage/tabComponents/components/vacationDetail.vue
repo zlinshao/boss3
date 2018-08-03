@@ -679,7 +679,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
           <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
-          <el-button size="small" :disable="isClick" type="primary" @click="addComment">确 定</el-button>
+          <el-button size="small" :disabled="isClick" type="primary" @click="addComment">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -891,6 +891,9 @@
           }
         }
       },
+      commentVisible(val){
+        this.isClear = !this.isClear;
+      }
     },
     mounted() {
 
@@ -1160,7 +1163,7 @@
         this.contractCollectionLength = 1;
         this.repairInfoLength = 1;
 
-        this.isClear = true;
+        this.isClear = !this.isClear;
         this.commentVisible = false;
         this.commentList = [];
         this.commentParams = {
@@ -1388,11 +1391,16 @@
     }
     .commentB {
       text-align: right;
+      line-height: 36px;
     }
   }
   .commentC {
     color: #000;
     margin-left: 40px;
+    p{
+      word-wrap: break-word;
+      word-break: normal;
+    }
     div {
       img {
         width: 50px;
