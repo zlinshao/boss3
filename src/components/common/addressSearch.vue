@@ -40,7 +40,10 @@
               prop="type"
               label="房屋性质">
             </el-table-column>
-
+            <el-table-column
+                prop="customer_name"
+                label="客户名">
+            </el-table-column>
           </el-table>
         </div>
 
