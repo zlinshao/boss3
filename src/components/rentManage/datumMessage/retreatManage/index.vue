@@ -388,6 +388,7 @@
         isRent: 0,
         address: '',
         status: '',
+        superAuthority : false,
       }
     },
     created() {
@@ -404,6 +405,7 @@
           if (res.data.code === '20000') {
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
+            this.superAuthority = res.data.data.can;
           } else {
             this.emptyStatus = '暂无数据';
             this.totalNumber = 0;
@@ -494,7 +496,7 @@
             clickIndex: 'edit',
             headIcon: 'el-icon-edit-outline',
             label: '修改',
-            'disabled': row.status == 3 || row.status == 4 || row.status == 1,
+            'disabled': (row.status == 3 || row.status == 4 || row.status == 1) && !this.superAuthority,
           },
           {
             clickIndex: 'upload',

@@ -1,5 +1,5 @@
 <template>
-  <div id="pendingDetail">
+  <div id="landLordDetail">
     <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="dialogVisible" width="40%">
       <div
         style="width: 90%;"
@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: "pending-detail",
+    name: "land-lord-detail",
     props: ['module'],
     data() {
       return {
@@ -64,7 +64,7 @@
 </script>
 
 <style lang="scss">
-  #pendingDetail {
+  #landLordDetail {
     @mixin border_($n) {
       -webkit-border-radius: $n;
       -moz-border-radius: $n;

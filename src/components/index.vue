@@ -611,27 +611,15 @@
 
     },
     mounted() {
-      //初始化个人信息
-      this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
-      $(document).mousemove(function () {
-        _this.clickScreen();
-      });
+
       this.$http.get(globalConfig.server + "oa/portal/last").then(res => {
         if (res.data.code === "800110") {
           this.institutionMore = res.data.data;
           this.institutionDialog = true;
         }
       });
-      //根据个人信息进行操作事项
-      this.initData();
-      //多页面锁屏
-      this.multiPageLock();
-      this.watchCount();
-      this.countTime();
-      //获取积分明细
-      this.getCredit();
       //定时器 轮巡获取最新消息
       this.getUnreadTermly();
       this.getUnReadMessage();
@@ -652,7 +640,9 @@
       $(document).mousemove(function () {
         _this.clickScreen();
       });
-
+      $(document).keydown(function () {
+        _this.clickScreen();
+      });
       //根据个人信息进行操作事项
       this.initData();
       //多页面锁屏

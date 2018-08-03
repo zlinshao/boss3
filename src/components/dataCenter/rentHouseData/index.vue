@@ -312,7 +312,8 @@
                     <el-table-column
                       label="待确认业绩">
                       <template slot-scope="scope">
-                        <div>{{attch[scope.row.orgid]}}</div>
+                        <div v-if="scope.row.orgid">{{attch[scope.row.orgid]}}</div>
+                        <div v-else>点击切换小组查看</div>
                       </template>
                     </el-table-column>
                   </el-table>

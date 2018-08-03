@@ -28,8 +28,9 @@ const RetreatManage =()=> import  ('../components/rentManage/datumMessage/retrea
 // 财务账本
 // const Foundation =()=> import  ('../components/finance/foundation/index')                                //基础管理
 // const FundMessage =()=> import  ('../components/finance/fundMessage/index.vue')                          //款项管理
-const PendingItem =()=> import  ('../components/finance/pendingItem/index.vue')                           //待处理项
-const PendingSettle =()=> import  ('../components/finance/pendingItem/components/pendingSettle.vue')      //结算
+const ClientMessage =()=> import  ('../components/finance/clientMessage/index.vue')                         //客户管理
+const PendingItem =()=> import  ('../components/finance/pendingItem/index.vue')                             //待处理项
+const PendingSettle =()=> import  ('../components/finance/pendingItem/components/pendingSettle.vue')        //结算
 
 const StaticDetail =()=> import  ('../components/finance/statistics/components/staticDetail')            //统计详情
 // const Statistics =()=> import  ('../components/finance/statistics/index.vue')                            //数据统计
@@ -439,6 +440,7 @@ export default new Router({
     //
     //     // {path: '/statistics', component: Statistics, name: '数据统计'},
     //     // {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
+    //     {path: '/clientMessage', component: ClientMessage, name: '客户管理'},
     //     {path: '/pendingItem', component: PendingItem, name: '待处理项'},
     //   ]
     // },

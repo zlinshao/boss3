@@ -16,6 +16,15 @@
       <el-tab-pane label="版本更新" name="five">
         <newVersionUpdate></newVersionUpdate>
       </el-tab-pane>
+      <el-tab-pane label="乐伽情报屋" name="six">
+        <Intelligence></Intelligence>
+      </el-tab-pane>
+      <el-tab-pane label="乐伽故事" name="seven">
+        <LejiaStory></LejiaStory>
+      </el-tab-pane>
+      <el-tab-pane label="业主故事" name="eight">
+        <OwnerStory></OwnerStory>
+      </el-tab-pane>
     </el-tabs>
     <!--<el-button type="success" size="mini" @click="openModalDialog('instructionDialog')" class="user_introction">-->
       <!--<i class="el-icon-tickets"></i>&nbsp;功能说明-->
@@ -30,6 +39,9 @@
   import StaffSquare from './staffSquare/index.vue';
   import SystemManageMent from './systemManageMent/index.vue';
   import NewVersionUpdate from './newVersionUpdate/index.vue';   //版本更新
+  import Intelligence from './intelligence/index.vue';    //情报屋
+  import LejiaStory from './lejiaStory/index.vue';        //乐伽故事
+  import OwnerStory from './ownerStory/index.vue';        //业主故事
   import Instruction from '../../rentManage/wholeRentManage/components/instruction.vue'            //使用说明
 
   export default {
@@ -40,7 +52,10 @@
       CompanyPortal,
       SystemManageMent,
       Instruction,
-      NewVersionUpdate
+      NewVersionUpdate,
+      Intelligence,
+      LejiaStory,
+      OwnerStory,
     },
     data() {
       return {

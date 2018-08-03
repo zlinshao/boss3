@@ -16,9 +16,6 @@
             <el-button type="primary" size="mini" @click="openModalDialog('addHouseResourcesDialog')">
               <i class="el-icon-document"></i>&nbsp;登记房源
             </el-button>
-            <!--<el-form-item>-->
-              <!--<el-button type="success">导出房源</el-button>-->
-            <!--</el-form-item>-->
           </el-form>
         </div>
 
@@ -1071,13 +1068,7 @@
             disabled: row.doc_status.id > 3
           },
           {clickIndex: 'addRentInfoDialog', headIcon: 'el-icons-fa-plus', label: '登记租客信息',},
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
-            children: [
-              {clickIndex: 'ownerRenewDialog', label: '续约',},
-//              {clickIndex: 'ownerDelayDialog', label: '延期',}
-            ]
-          },
+          {clickIndex: 'ownerRenewDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '房东续约',},
           {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
 //          {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
