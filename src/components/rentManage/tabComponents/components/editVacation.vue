@@ -441,7 +441,20 @@
                                   placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
+              <el-col :span="10" :offset="2">
+                <el-form-item label="合同承担方">
+                  <el-select clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
+                    <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
+                               :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
 
+              <el-col :span="12">
+                <el-form-item label="实际承担方">
+                  <el-input v-model="params.actual_party" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="5" :offset="2">
                 <el-form-item label="公摊水费">
                   <el-input v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
@@ -462,20 +475,7 @@
                   <el-input v-model="params.property_management_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10" :offset="2">
-                <el-form-item label="合同承担方">
-                  <el-select clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
-                    <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
-                               :key="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
 
-              <el-col :span="10">
-                <el-form-item label="实际承担方">
-                  <el-input v-model="params.actual_party" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
 
               <el-col :span="2">
                 <div class="content">
@@ -962,7 +962,7 @@
             this.params.network_fees = (data.details && data.details.network_fees) || 0;
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
                                       String(data.extend_field.profit_type) : '';
-            this.params.is_refund = String(data.is_refund) || '';
+            this.params.is_refund = data.is_refund?String(data.is_refund):'';
 
             let picObject = {};
             this.editImage = {};
