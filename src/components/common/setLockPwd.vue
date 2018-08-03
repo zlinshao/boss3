@@ -1,15 +1,14 @@
 <template>
   <div id="">
-    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"
+               title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
       <div class="">
-        <span style="color:#fdaece;margin-left:100px;">为了您账户资料的安全，请先设置锁屏密码，谢谢~</span>
         <el-form size="mini" onsubmit="return false;" label-width="100px">
           <el-row>
             <el-col :span="12">
               <el-form-item label="倒计时">
                 <el-select value="" v-model="basicSetting.id[0]">
-                  <el-option v-for="item in count_time_dic" :key="item.id"
-                             :label="item.dictionary_name" :value="item.id"></el-option>
+                  <el-option v-for="item in count_time_dic" :key="item.id" :label="item.dictionary_name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -47,11 +46,12 @@
           </el-row>
           <span style="color:#fdaece;margin-left:100px;">备注:密码长度4-6位，数字、字母和下划线</span>
         </el-form>
+
+          <p style="color: #e4393c;margin-left: 100px;font-size: 16px">为了您账户资料的安全，请先设置锁屏密码，谢谢~</p>
       </div>
       <span slot="footer" class="dialog-footer">
-        <!--<el-button size="small" @click="setLockPwdDialogVisible = false">取 消</el-button>-->
-        <el-button :disabled="!sms_lock_num || identify_pwd_lock !== set_pwd_lock || !identify_pwd_lock || !set_pwd_lock
-                   || !basicSetting.id[0] || basicSetting.id[0]==defaultCountdown"
+        <el-button :disabled="!sms_lock_num || identify_pwd_lock !== set_pwd_lock
+                              || !identify_pwd_lock || !set_pwd_lock || !basicSetting.id[0]"
                    size="small" type="primary" @click="saveVisitRecord">确 定</el-button>
       </span>
     </el-dialog>
@@ -89,11 +89,7 @@
       }
     },
     mounted(){
-      let personal = JSON.parse(localStorage.personal);
-      if (personal.data.setting && Array.isArray(personal.data.setting) && personal.data.setting.length > 0) {
-        this.basicSetting.id[0] = Number(personal.data.setting[0].dict_id);
-        this.defaultCountdown = Number(personal.data.setting[0].dict_id)
-      }
+
     },
     watch: {
       setLockPwdDialog(val) {
@@ -117,6 +113,11 @@
       getDictionary(){
         this.dictionary(203).then((res) => {
           this.count_time_dic = res.data;
+          let personal = JSON.parse(localStorage.personal);
+          if (personal.data.setting && Array.isArray(personal.data.setting) && personal.data.setting.length > 0) {
+            this.basicSetting.id[0] = Number(personal.data.setting[0].dict_id);
+            this.defaultCountdown = Number(personal.data.setting[0].dict_id)
+          }
         })
       },
       //发送验证码
