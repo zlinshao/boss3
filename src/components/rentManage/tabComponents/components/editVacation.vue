@@ -718,7 +718,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
           Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee) +(this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
+          - Number(this.params.sublease_fee);
       },
     },
     watch: {
@@ -902,8 +902,8 @@
             this.params.overtime_rent = (data.details && data.details.overtime_rent) || 0;
             this.params.TV_fees = (data.details && data.details.TV_fees) || 0;
             this.params.network_fees = (data.details && data.details.network_fees) || 0;
-
-            this.params.profit_type = String(data.profit_type) || '';
+            this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
+                                      String(data.extend_field.profit_type) : '';
             this.params.is_refund = String(data.is_refund) || '';
 
             let picObject = {};
