@@ -940,8 +940,8 @@
             this.params.gas_late_payment = (data.details && data.details.gas_late_payment) || 0;
             this.params.gas_other = (data.details && data.details.gas_other) || 0;
 
-            this.params.property_management_last = (data.details && data.details.property_management_last) || 0;
-            this.params.property_management_now = (data.details && data.details.property_management_now) || 0;
+            this.params.property_management_last = (data.details && data.details.property_management_last) || '';
+            this.params.property_management_now = (data.details && data.details.property_management_now) || '';
             this.params.property_management_electricity = (data.details && data.details.property_management_electricity) || 0;
             this.params.property_management_water = (data.details && data.details.property_management_water) || 0;
             this.params.property_management_total_fees = (data.details && data.details.property_management_total_fees) || 0;
