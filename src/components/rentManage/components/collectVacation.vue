@@ -675,7 +675,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
           Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee) +(this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
+          - Number(this.params.sublease_fee);
       },
     },
     watch: {

@@ -796,7 +796,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
           Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee) +(this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
+          - Number(this.params.sublease_fee);
       },
     },
     watch: {
@@ -928,7 +928,8 @@
 
             this.passParams.amount = data.details && data.details.total_fees;
 
-            this.params.profit_type = data.profit_type? String(data.profit_type) : '';
+            this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
+                                      String(data.extend_field.profit_type) : '';
             this.params.is_refund =  data.is_refund? String(data.is_refund) : '';
 
             let picObject = {};
