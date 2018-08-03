@@ -767,7 +767,7 @@
       //获取合同详情
       getContractInfo() {
         this.$http.get(globalConfig.server + 'lease/rent/' + this.rentContractId).then((res) => {
-          if (res.data.code === '61010') {
+          if (res.data.code === '61110') {
             this.contractInfo = res.data.data;
             this.params.contracting_party =  res.data.data.property_payer ? Number(res.data.data.property_payer) : '';
           }

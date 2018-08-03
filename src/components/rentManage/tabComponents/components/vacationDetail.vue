@@ -832,6 +832,7 @@
         commentList : [],
 
         isClick : false,  //正在点击
+        isUpload : false,  //正在点击
       };
     },
     computed: {
@@ -920,6 +921,7 @@
         }else if(val[0] === 'comment_video'){
           this.commentParams.video_file = val[1];
         }
+        this.isUpload = val[2];
       },
       //获取退房详情
       getData() {
@@ -1255,30 +1257,37 @@
       },
       // 添加评论信息
       addComment(){
-        this.isClick = true;
-        this.$http.post(globalConfig.server + 'customer/check_out/comment/'+ this.vacationId,
-          this.commentParams).then(res=>{
-          this.isClick = false;
-          if(res.data.code === '20000'){
-            this.$notify.success({
-              title: '成功！',
-              message: res.data.msg,
-            });
-            this.commentVisible = false;
-            this.commentParams = {
-              content : '',
-              parent_id : 0,
-              image_pic :[],
-              video_file : [],
-            };
-            this.getCommentData();
-          } else {
-            this.$notify.warning({
-              title: '警告！',
-              message: res.data.msg,
-            })
-          }
-        })
+        if(this.isUpload){
+          this.$notify.warning({
+            title: '警告！',
+            message: '文件正在上传',
+          })
+        }else {
+          this.isClick = true;
+          this.$http.post(globalConfig.server + 'customer/check_out/comment/'+ this.vacationId,
+            this.commentParams).then(res=>{
+            this.isClick = false;
+            if(res.data.code === '20000'){
+              this.$notify.success({
+                title: '成功！',
+                message: res.data.msg,
+              });
+              this.commentVisible = false;
+              this.commentParams = {
+                content : '',
+                parent_id : 0,
+                image_pic :[],
+                video_file : [],
+              };
+              this.getCommentData();
+            } else {
+              this.$notify.warning({
+                title: '警告！',
+                message: res.data.msg,
+              })
+            }
+          })
+        }
       },
     }
   };
