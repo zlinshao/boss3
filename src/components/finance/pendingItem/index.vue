@@ -158,15 +158,18 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <PendingSettle :module="pendVisible" @close="pendVisible = false"></PendingSettle>
+
+    <PendingDetail :module="detailVisible" @close="detailVisible = false"></PendingDetail>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'            //右键
   import PendingSettle from './components/pendingSettle.vue'    //结算
+  import PendingDetail from './components/pendingDetail.vue'    //详情
   export default {
     name: "index",
-    components: {RightMenu, PendingSettle},
+    components: {RightMenu, PendingSettle, PendingDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -252,7 +255,7 @@
       },
       // 双击 详情
       dblClickTable(row, event) {
-
+        this.detailVisible = true;
       },
       // 右键
       clickMenu(row, event) {
