@@ -2,6 +2,7 @@
   <div id="">
     <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
       <div class="">
+        <span style="color:#fdaece;margin-left:100px;">为了您账户资料的安全，请先设置锁屏密码，谢谢~</span>
         <el-form size="mini" onsubmit="return false;" label-width="100px">
           <el-row>
             <el-col :span="12">
