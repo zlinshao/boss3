@@ -421,6 +421,20 @@
                 </el-form-item>
               </el-col>
 
+              <el-col :span="10" :offset="2">
+                <el-form-item label="合同承担方">
+                  <el-select clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
+                    <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
+                               :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="12">
+                <el-form-item label="实际承担方">
+                  <el-input v-model="params.actual_party" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="5" :offset="2">
                 <el-form-item label="公摊水费">
                   <el-input v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
@@ -439,20 +453,6 @@
               <el-col :span="6">
                 <el-form-item label="其他">
                   <el-input v-model="params.property_management_other" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10" :offset="2">
-                <el-form-item label="合同承担方">
-                  <el-select clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
-                    <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
-                               :key="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="10">
-                <el-form-item label="实际承担方">
-                  <el-input v-model="params.actual_party" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
 

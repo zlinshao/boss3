@@ -419,7 +419,20 @@
                       <el-date-picker type="date" v-model="params.property_management_now" disabled></el-date-picker>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="10" :offset="2">
+                    <el-form-item label="合同承担方">
+                      <el-select disabled v-model="params.contracting_party" value="">
+                        <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name"
+                                   :value="item.id" :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
 
+                  <el-col :span="12">
+                    <el-form-item label="实际承担方">
+                      <el-input disabled v-model="params.actual_party" ></el-input>
+                    </el-form-item>
+                  </el-col>
                   <el-col :span="5" :offset="2">
                     <el-form-item label="公摊水费">
                       <el-input disabled v-model="params.property_management_electricity"></el-input>
@@ -440,20 +453,7 @@
                       <el-input disabled v-model="params.property_management_other"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="10" :offset="2">
-                    <el-form-item label="合同承担方">
-                      <el-select disabled v-model="params.contracting_party" value="">
-                        <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name"
-                                   :value="item.id" :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
 
-                  <el-col :span="10">
-                    <el-form-item label="实际承担方">
-                      <el-input disabled v-model="params.actual_party" ></el-input>
-                    </el-form-item>
-                  </el-col>
                   <el-col :span="2">
                     <div class="content">
                       合计：{{managementTotal}}
