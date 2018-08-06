@@ -153,6 +153,19 @@
                         </el-col>
                       </el-row>
                     </el-col>
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">是否转正</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-select v-model="params.forward" size="mini" clearable>
+                            <el-option key="0" label="已转正" value="1">已转正</el-option>
+                            <el-option key="1" label="未转正" value="2">未转正</el-option>
+                          </el-select>
+                        </el-col>
+                      </el-row>
+                    </el-col>
                   </el-row>
                   <div class="btnOperate">
                     <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -1042,6 +1055,7 @@
           page: 1,
           org_id: '',
           is_dimission: '',
+          forward: '',
           is_recursion: 1,
           entry_time: [],
           leave_time: [],
@@ -1204,6 +1218,7 @@
       },
       resetting() {
         this.params.is_dimission = '';
+        this.params.forward = '';
         this.params.entry_time = '';
         this.params.leave_time = '';
       },
