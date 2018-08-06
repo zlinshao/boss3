@@ -278,7 +278,9 @@
           <el-form-item label="合同照片">
             <UpLoad :ID="'rent_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
           </el-form-item>
-
+          <el-form-item label="押金收条">
+            <UpLoad :ID="'rent_report_deposit'" :isClear="isClear" :editImage="deposit_photo" @getImg="getImg"></UpLoad>
+          </el-form-item>
           <el-row>
             <el-col :span="12">
               <el-form-item label="备注" required="">
@@ -381,6 +383,7 @@
           name: '',                     //客户姓名
           phone: '',                    //电话号码
           screenshot_leader: [],        //领导截图 数组
+          deposit_photo: [],        //领导截图 数组
           screenshot: [],               //领导截图 数组
           photo: [],                    //合同照片 数组
           remark: '',                   //备注
@@ -390,6 +393,7 @@
           department_name: '',          //部门name
         },
         screenshot_leader : {},
+        deposit_photo : {},
         screenshot : {},
         photo : {},
 
@@ -494,6 +498,9 @@
 
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
+
+        this.deposit_photo = this.getImgObject(data.deposit_photo);
+        this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
 
         this.params.remark = data.remark;
 
@@ -654,6 +661,8 @@
           this.params.screenshot = val[1];
         } else if (val[0] === 'rent_report_contract') {
           this.params.photo = val[1];
+        } else if (val[0] === 'rent_report_deposit') {
+          this.params.deposit_photo = val[1];
         }
       },
       // 收据编号默认城市
@@ -740,6 +749,7 @@
           name: '',                     //客户姓名
           phone: '',                    //电话号码
           screenshot_leader: [],        //领导截图 数组
+          deposit_photo: [],        //领导截图 数组
           screenshot: [],               //领导截图 数组
           photo: [],                    //合同照片 数组
           remark: '',                   //备注
@@ -749,6 +759,7 @@
           department_name: '',          //部门name
         };
         this.screenshot_leader = {};
+        this.deposit_photo = {};
         this.screenshot = {};
         this.photo = {};
 
