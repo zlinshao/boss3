@@ -192,8 +192,9 @@ const AchievementData =()=> import ('../components/dataCenter/index'); //业绩�
 const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
 
-// const AutoForm = ()=> import ('../autoForm/index')
-const Preview = ()=> import ('../autoForm/Preview/preview')
+
+const Application = ()=> import ('../components/C-manage/applicationManage/index');
+const Houses = ()=> import ('../components/C-manage/houseManage/index');
 
 Vue.use(Router);
 
@@ -327,7 +328,6 @@ export default new Router({
         {path: '/beforeNaire', component: BeforeNaire, name: "我的问卷"},
         {path: '/myNaire', component: MyNaire, name: "问卷列表"},
         {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
-        {path: '/preview', component: Preview, name: "预览",meta: {keepAlive: true}},
 
         {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
 
@@ -594,17 +594,17 @@ export default new Router({
         // {path: '/exportManage', component: ExportManage, name: '导出管理',},
       ]
     },
-
-    //
     // {
     //   path: '/',
     //   component: Index,
-    //   hidden: true,
-    //   name: '',
+    //   name: 'C端管理',
+    //   icon: 'iconfont icon-shezhi1',
     //   children: [
-    //     {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
+    //     {path: '/application', component: Application, name: '申请管理'},
+    //     {path: '/houses', component: Houses, name: '房源管理'},
     //   ]
     // },
+
   ]
 })
 

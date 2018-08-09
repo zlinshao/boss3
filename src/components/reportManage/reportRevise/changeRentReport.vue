@@ -260,6 +260,9 @@
           <el-form-item label="合同照片">
             <UpLoad :ID="'rent_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
           </el-form-item>
+          <el-form-item label="押金收条">
+            <UpLoad :ID="'rent_report_deposit'" :isClear="isClear" :editImage="deposit_photo" @getImg="getImg"></UpLoad>
+          </el-form-item>
 
           <el-row>
             <el-col :span="12">
@@ -361,6 +364,7 @@
           screenshot_leader: [],        //领导截图 数组
           screenshot: [],               //领导截图 数组
           photo: [],                    //合同照片 数组
+          deposit_photo: [],        //领导截图 数组
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
@@ -370,6 +374,7 @@
         screenshot_leader: {},
         screenshot: {},
         photo: {},
+        deposit_photo : {},
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
@@ -468,6 +473,9 @@
 
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
+
+        this.deposit_photo = this.getImgObject(data.deposit_photo);
+        this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
 
         this.params.remark = data.remark;
 
@@ -628,6 +636,8 @@
           this.params.screenshot = val[1];
         } else if (val[0] === 'rent_report_contract') {
           this.params.photo = val[1];
+        } else if (val[0] === 'rent_report_deposit') {
+          this.params.deposit_photo = val[1];
         }
       },
       // 收据编号默认城市
@@ -712,6 +722,7 @@
           screenshot_leader: [],        //领导截图 数组
           screenshot: [],               //领导截图 数组
           photo: [],                    //合同照片 数组
+          deposit_photo: [],        //领导截图 数组
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
@@ -721,7 +732,7 @@
         this.screenshot_leader = {};
         this.screenshot = {};
         this.photo = {};
-
+        this.deposit_photo = {};
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
         this.moneyTableChangeAmount = 1;
