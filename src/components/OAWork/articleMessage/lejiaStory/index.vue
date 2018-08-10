@@ -149,7 +149,7 @@
         pitch: '',
         form: {
           list: 12,
-          dict_id: 703,
+          dict_id: 686,
           status: '',
           keywords: '',
           pages: 1,

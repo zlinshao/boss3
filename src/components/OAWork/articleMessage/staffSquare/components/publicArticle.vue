@@ -269,19 +269,19 @@
             break;
           case 'intelligence':      //乐伽情报屋
             this.tabIndex = 'six';
-            this.dictionary(700, 1).then((res) => {
+            this.dictionary(683, 1).then((res) => {
               this.dict.region = res.data;
             });
             break;
           case 'lejiaStory':      //乐伽情报屋
             this.tabIndex = 'seven';
-            this.dictionary(703, 1).then((res) => {
+            this.dictionary(686, 1).then((res) => {
               this.dict.region = res.data;
             });
             break;
             case 'ownerStory':      //乐伽情报屋
             this.tabIndex = 'eight';
-            this.dictionary(705, 1).then((res) => {
+            this.dictionary(688, 1).then((res) => {
               this.dict.region = res.data;
             });
             break;
