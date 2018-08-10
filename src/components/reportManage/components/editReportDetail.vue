@@ -19,7 +19,7 @@
                                                v-if="index === 0">-{{value.name}}</span></span>
                 </div>
                 <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i
-                  class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
+                    class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
                 </div>
                 <div class="auditStatus deal" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{deal}}
                 </div>
@@ -389,8 +389,8 @@
         commentList: [],
         paging: 0,
         printScreen: ['押金收条','款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
-                      '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单','新凭证截图',
-                      '旧凭证截图','新押金收条','旧押金收条'],
+          '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单','新凭证截图',
+          '旧凭证截图','新押金收条','旧押金收条'],
 
         routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
           'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],

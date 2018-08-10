@@ -427,23 +427,23 @@ export default new Router({
       ]
     },
 
-    {
-      path: '/',
-      component: Index,
-      name: '财务账本',
-      icon: 'iconfont icon-caiwu1',
-      children: [
-        // {path: '/accountManage', component: AccountManage, name: '账户管理',},
-        // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
-        // {path: '/foundation', component: Foundation, name: '基础管理'},
-        // {path: '/fundMessage', component: FundMessage, name: '款项管理'},
-
-        // {path: '/statistics', component: Statistics, name: '数据统计'},
-        // {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
-        {path: '/clientMessage', component: ClientMessage, name: '客户管理'},
-        {path: '/pendingItem', component: PendingItem, name: '待处理项'},
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '财务账本',
+    //   icon: 'iconfont icon-caiwu1',
+    //   children: [
+    //     // {path: '/accountManage', component: AccountManage, name: '账户管理',},
+    //     // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
+    //     // {path: '/foundation', component: Foundation, name: '基础管理'},
+    //     // {path: '/fundMessage', component: FundMessage, name: '款项管理'},
+    //
+    //     // {path: '/statistics', component: Statistics, name: '数据统计'},
+    //     // {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
+    //     {path: '/clientMessage', component: ClientMessage, name: '客户管理'},
+    //     {path: '/pendingItem', component: PendingItem, name: '待处理项'},
+    //   ]
+    // },
 
     {
       path: '/statistics/staticDetail',
