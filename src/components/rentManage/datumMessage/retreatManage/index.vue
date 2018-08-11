@@ -349,8 +349,8 @@
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue'
-  import EditCollectVacation from '../../tabComponents/components/editVacation.vue'
-  import VacationDetail from '../../tabComponents/components/vacationDetail.vue'
+  import EditCollectVacation from './components/editVacation.vue'
+  import VacationDetail from './components/vacationDetail.vue'
   import AddressSearch from '../../../common/addressSearch';
   import UploadPic from './components/upScreenshot'
 

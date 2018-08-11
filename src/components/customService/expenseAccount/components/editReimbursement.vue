@@ -17,10 +17,32 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="报销类型" required>
-                <el-select clearable v-model="form.type" placeholder="选择类型" value="">
+                <el-select clearable v-model="typeArray" multiple placeholder="选择类型" value="">
                   <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="报销人">
+                <el-select v-model="form.reimbursement.reimburtype_id" placeholder="请选择认责归属" clearable>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name"
+                             :key="item.id" :value="item.id">{{item.dictionary_name}}
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" v-if="form.reimbursement.reimburtype_id === 658">
+              <el-form-item label="报销人姓名">
+                <el-input v-model="form.reimbursement.reimburperson_id_name" @focus="chooseStaff"
+                          readonly placeholder="请选择">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" v-else-if="form.reimbursement.reimburtype_id === 657 ||
+                            form.reimbursement.reimburtype_id === 656 || form.reimbursement.reimburtype_id === 659">
+              <el-form-item label="报销人姓名">
+                <el-input v-model="form.reimbursement.reimburperson_id_name" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -78,8 +100,8 @@
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
-                  @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="length"
+                  @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -95,6 +117,7 @@
         editReimbursementDialogVisible: false,
         organizationDialog: false,
         organizeType: '',
+        length: '',
         address: '', //房屋地址
         isClear: false,
         uploadStatus: false,
@@ -110,10 +133,19 @@
           bank_num: '',  //银行卡号
           image_pic: '',  //截图
           remark: '',  //备注
+          reimbursement:{
+            reimburtype_id:'',
+            reimburtype:'',
+            reimburperson_id:'',
+            reimburperson_id_name:''
+          }
         },
+        typeArray : [],             //报销类型
         reimbursementTypeCategory: [],  //报销类型
         reimbursementSourceCategory: [],  //报销来源
         finishedStatusCategory: [],  //完成情况
+        responsiblePersonCategory: [],  //完成情况
+
         picImg: {},
       };
     },
@@ -146,6 +178,9 @@
         this.dictionary(642).then((res) => {  //完成情况
           this.finishedStatusCategory = res.data;
         });
+        this.dictionary(643, 1).then((res) => {  //认责人
+          this.responsiblePersonCategory = res.data;
+        });
       },
       getImage(val) {
         this.form.image_pic = val[1]; //选择的图片数组ids
@@ -166,7 +201,10 @@
             let detail = res.data.data;
             if (detail) {
               this.form.reimbursement_number = detail.reimbursement_number;
-              this.form.type = detail.type;
+
+              this.form.type = this.arrSplitToArray(detail.type).join(',');
+              this.typeArray= this.arrSplitToArray(detail.type);
+
               this.form.module = detail.module;
               this.form.contract_id = detail.contract_id && detail.contract_id.id;
               this.form.source = detail.source;
@@ -177,6 +215,12 @@
               this.form.bank_num = detail.bank_num;
               this.address = detail.contract_id && detail.contract_id.house && detail.contract_id.house.name;
               this.form.remark = detail.remark;
+
+              this.form.reimbursement.reimburtype_id = detail.reimbursement.reimburtype_id;
+              this.form.reimbursement.reimburtype = detail.reimbursement.reimburtype;
+              this.form.reimbursement.reimburperson_id = detail.reimbursement.reimburperson_id;
+              this.form.reimbursement.reimburperson_id_name = detail.reimbursement.reimburperson_id_name;
+
               let pic = detail.album.image_pic;
               this.form.image_pic = [];
               let picObject = {};
@@ -190,7 +234,17 @@
           }
         });
       },
+      arrSplitToArray(json){
+        let arr = [];
+        json.forEach(item=>{
+          arr.push(Number(item.id));
+        });
+        return arr;
+      },
+
       confirmAdd() {
+        this.form.type = this.typeArray.join(',');
+        this.getDicName(this.form.reimbursement.reimburtype_id,this.responsiblePersonCategory);
         this.form.module = this.module;
         this.$http.put(globalConfig.server + 'customer/reimbursement/'+ this.reimbursementId, this.form).then((res) => {
           if (res.data.code === '30030') {
@@ -198,6 +252,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.$emit('close','success')
             this.editReimbursementDialogVisible = false;
           } else {
             this.$notify.warning({
@@ -207,19 +262,35 @@
           }
         })
       },
+      getDicName(id,dic){
+        dic.forEach(item=>{
+          if(item.id === id){
+            this.form.reimbursement.reimburtype = item.dictionary_name;
+          }
+        })
+      },
       initial() {
-        this.form.reimbursement_number = '';
-        this.form.type = '';
-        this.form.source = '';
-        this.form.module = '';
-        this.form.amount = '';
-        this.form.account_name = '';
-        this.form.contract_id = '';
-        this.form.account_bank = '';
-        this.form.branch_bank = '';
-        this.form.bank_num = '';
-        this.form.image_pic = '';
-        this.form.remark = '';
+        this.form = {
+          module: 1, //收房
+          contract_id: '', //合同Id
+          reimbursement_number: '', //维修单编号
+          type: '', //报销类型
+          source: '', //来源
+          amount: '',  //报销金额
+          account_bank: '',  //开户行
+          branch_bank: '',  //支行
+          account_name: '',  //开户名
+          bank_num: '',  //银行卡号
+          image_pic: '',  //截图
+          remark: '',  //备注
+          reimbursement:{
+            reimburtype_id:'',
+            reimburtype:'',
+            reimburperson_id:'',
+            reimburperson_id_name:''
+          }
+        };
+        this.typeArray = [];
         this.isClear = true;
         this.picImg = {};
       },
@@ -228,16 +299,21 @@
         this.organizationDialog = false;
       },
       selectMember(val) {
-        this.follow_name = val[0].name;
-        this.form.follow_id = val[0].id;
+        this.form.reimbursement.reimburperson_id_name = val[0].name;
+        this.form.reimbursement.reimburperson_id = val[0].id;
       },
       chooseStaff() {
         this.organizationDialog = true;
         this.organizeType = 'staff';
+        this.length = 1;
       },
       emptyStaff() {
         this.follow_name = '';
         this.form.follow_id = '';
+      },
+
+      stringToArr(str){
+        return str.split(',')
       }
     },
   };

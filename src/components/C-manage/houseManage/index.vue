@@ -56,7 +56,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select v-model="params_first.status" clearable placeholder="请选择">
-                        <el-option value="1" label="未添加">审核中</el-option>
+                        <el-option value="1" label="未添加">未添加</el-option>
                         <el-option value="2" label="已上线">已上线</el-option>
                         <el-option value="3" label="已下架">已下架</el-option>
                       </el-select>

@@ -1,12 +1,11 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-      <div class="highRanking">
+     <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
               <el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">
-                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
                 <template slot="append">
                   <div style="cursor: pointer;" @click="emptySearch">清空</div>
                 </template>
@@ -16,16 +15,13 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="syncStatusDialog = true;">同步</el-button>
+              <el-button type="primary" size="mini" @click="syncStatusDialog = true">同步</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="search">
                 <i class="el-icon-refresh"></i>刷新
               </el-button>
             </el-form-item>
-            <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="exportData">导出</el-button>-->
-            <!--</el-form-item>-->
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -238,13 +234,30 @@
                 prop="status.dictionary_name"
                 label="报销状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
-                    {{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
-                             type="info" size="mini">{{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <span v-if="!scope.row.status.dictionary_name">暂无</span>
+                  <!--<el-button class="btnStatus" v-if="scope.row.status.id && scope.row.status.id == 654" type="primary" size="mini">-->
+                    <!--{{scope.row.status.dictionary_name}}-->
+                  <!--</el-button>-->
+                  <span v-if="scope.row.status && scope.row.status.dictionary_name">
+                    <span v-if="scope.row.status.dictionary_name === '待处理'" class="info_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '处理中'" class="yellow_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '待审核'" class="orange_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已拒绝'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已驳回'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else="scope.row.status.dictionary_name === '待结算'" class="success_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -352,16 +365,33 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="status.dictionary_name"
-                label="报销状态">
+                  prop="status.dictionary_name"
+                  label="报销状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
-                    {{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
-                             type="info" size="mini">{{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <span v-if="!scope.row.status.dictionary_name">暂无</span>
+                  <!--<el-button class="btnStatus" v-if="scope.row.status.id && scope.row.status.id == 654" type="primary" size="mini">-->
+                  <!--{{scope.row.status.dictionary_name}}-->
+                  <!--</el-button>-->
+                  <span v-if="scope.row.status && scope.row.status.dictionary_name">
+                    <span v-if="scope.row.status.dictionary_name === '待处理'" class="info_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '处理中'" class="yellow_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '待审核'" class="orange_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已拒绝'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已驳回'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else="scope.row.status.dictionary_name === '待结算'" class="success_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -381,6 +411,7 @@
         </div>
       </div>
     </div>
+    <!--模态框-->
     <div>
       <el-dialog :close-on-click-modal="false" title="审核报销" :visible.sync="examineStatusDialog" width="30%">
         <el-form size="small" label-width="100px">
@@ -419,7 +450,7 @@
       </el-dialog>
     </div>
     <div>
-      <el-dialog :close-on-click-modal="false" title="上传付款凭证" :visible.sync="uploadPayDialog" width="50%">
+      <el-dialog :close-on-click-modal="false" title="上传付款凭证" :visible.sync="uploadPayDialog" width="30%">
         <el-form size="small" label-width="100px">
           <el-row>
             <el-col :span="20">
@@ -435,14 +466,14 @@
       </span>
       </el-dialog>
     </div>
+
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
 
     <EditReimbursement :editReimbursementDialog="editReimbursementDialog" :reimbursementId="reimbursementId"
-                       :module="module"
-                       @close="closeModal"></EditReimbursement>
+                       :module="module" @close="closeModal"></EditReimbursement>
     <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :reimbursementId="reimbursementId"
                          @close="closeModal"></ReimbursementDetail>
     <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType"
@@ -520,9 +551,9 @@
       this.getCollectTableData();
       this.getDictionary();
     },
-    activated() {
-      this.search();
-    },
+    // activated() {
+    //   this.search();
+    // },
     watch: {
       address(val) {
         if (!val) {
@@ -542,11 +573,7 @@
         }
       },
       uploadPayDialog(val) {
-        if (val) {
-          this.isClear = false;
-        } else {
-          this.isClear = true;
-        }
+        this.isClear = !val;
       },
     },
     methods: {
@@ -718,13 +745,15 @@
         }
       },
       closeModal(val) {
-        this.editReimbursementDialog = false;
-        this.reimbursementDetailDialog = false;
-        this.reimResultDialog = false;
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
+        if(val === 'onlyRenovate'){
+          this.activeName === "first"?this.getCollectTableData():this.getRentTableData();
+        }else {
+          this.editReimbursementDialog = false;
+          this.reimbursementDetailDialog = false;
+          this.reimResultDialog = false;
+          if(val === 'success'){
+            this.activeName === "first"?this.getCollectTableData():this.getRentTableData();
+          }
         }
       },
       closeOrganize() {
@@ -732,11 +761,11 @@
       },
       // tabs标签页
       handleClick(tab, event) {
-        if (this.activeName == "first") {
+        if (this.activeName === "first") {
           this.module = 1;
           this.isRent = 0;
           this.getCollectTableData();
-        } else if (this.activeName == "second") {
+        } else if (this.activeName === "second") {
           this.module = 2;
           this.isRent = 1;
           this.getRentTableData();
@@ -782,19 +811,22 @@
       //右键
       houseMenu(row, event) {
         this.reimbursementId = row.id;
+        let status = row.status.dictionary_name;
         if (row.results && row.results.id) {
           this.lists = [
-            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo', label: '编辑报销结果',},
-            {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',disabled:status !=='已拒绝'},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo',
+              label: '编辑报销结果',disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'},
+            // {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',disabled:status !=='待审核'},
             {clickIndex: 'upload_pay', headIcon: 'el-icon-plus', label: '上传付款凭证',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
           this.lists = [
-            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
-            {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',disabled:status !=='已拒绝'},
+            {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1',
+              label: '编辑报销结果',disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'},
+            // {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',disabled:status !=='待审核'},
             {clickIndex: 'upload_pay', headIcon: 'el-icon-plus', label: '上传付款凭证',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
@@ -887,7 +919,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #clientContainer {
-
+  .info_label,.yellow_label,.orange_label,.red_label,.success_label{
+    min-width: 70px;
+    height: 28px;
+    line-height: 28px;
   }
 </style>

@@ -615,7 +615,7 @@
 </template>
 
 <script>
-  import UpLoad from '../../../common/UPLOAD.vue'
+  import UpLoad from '../../../../common/UPLOAD.vue'
 
   export default {
     props: ['editCollectVacation', 'vacationId', 'status'],
