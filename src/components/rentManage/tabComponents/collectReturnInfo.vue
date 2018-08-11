@@ -136,9 +136,9 @@
 </template>
 
 <script>
-  import EditCollectVacation from './components/editVacation.vue'
+  import EditCollectVacation from '../datumMessage/retreatManage/components/editVacation.vue'
   import RightMenu from '../../common/rightMenu.vue'
-  import VacationDetail from './components/vacationDetail.vue'
+  import VacationDetail from '../datumMessage/retreatManage/components/vacationDetail.vue'
   export default {
     props: ['collectContractId', 'activeName'],
     components: {EditCollectVacation, VacationDetail,RightMenu},

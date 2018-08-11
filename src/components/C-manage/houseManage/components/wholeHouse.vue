@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <el-table
         :data="tableData"
         :empty-text='tableStatus'
@@ -7,6 +7,7 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
+        @row-contextmenu='handlerContextmenu'
         style="width: 100%">
       <el-table-column
           prop="village_name"
@@ -53,10 +54,16 @@
         </el-pagination>
       </div>
     </div>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists"
+               :show="show" @clickOperate="clickEvent"></RightMenu>
+    <houseUpdate :addWebInfoDialog="addWebInfoDialog" :houseId="undercarriageParams.id"
+                 @close="closeModal"></houseUpdate>
   </div>
 </template>
 
 <script>
+  import RightMenu from '../../../common/rightMenu.vue'  //右键
+  import houseUpdate from './houseUpdate'
   export default {
     name: 'hello',
     props: {
@@ -69,12 +76,23 @@
         required: true,
       }
     },
+    components: {RightMenu,houseUpdate},
     data() {
       return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+
         tableStatus: ' ',
         tableLoading: false,
+        addWebInfoDialog: false,
         tableData: [],
         totalNum: 0,
+        undercarriageParams:{
+          id : '',
+          status : 3,
+        }
       }
     },
     mounted() {
@@ -113,6 +131,72 @@
       handleCurrentChange(val) {
         this.params.page = val;
         this.getTableData();
+      },
+      closeModal(){
+        this.addWebInfoDialog = false;
+      },
+      /*******************************************************************/
+      handlerContextmenu(row, event) {
+        this.undercarriageParams.id = row.id;
+        this.lists = [
+          {clickIndex: 'upload', headIcon: 'el-icon-upload2', label: '上线'},
+          {clickIndex: 'download', headIcon: 'el-icon-download', label: '下架'},
+        ];
+        this.contextMenuParam(event);
+      },
+      //右键回调时间
+      clickEvent(index) {
+        this.openModalDialog(index);
+      },
+      openModalDialog(index){
+        switch (index){
+          case 'download':
+            this.$confirm('您确定下架吗, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.undercarriage();
+            }).catch(() => {
+              this.$notify({
+                title:'提示',
+                type: 'info',
+                message: '已取消下架'
+              });
+            });
+            break;
+          case 'upload':
+            this.addWebInfoDialog = true;
+            break;
+        }
+      },
+      undercarriage(){
+        $.ajax({
+          url: 'http://192.168.20.106:80/api/v1/tranfer',
+          type: 'post',
+          data: this.undercarriageParams,
+          success: res => {
+
+          }
+        });
+      },
+
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
       },
     },
   }

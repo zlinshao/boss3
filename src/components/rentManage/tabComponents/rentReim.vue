@@ -7,6 +7,7 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0)"
+      @row-dblclick="dblClickTable"
       style="width: 100%">
       <el-table-column
         prop="create_time"
@@ -126,17 +127,23 @@
         </el-pagination>
       </div>
     </div>
+    <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :reimbursementId="reimbursementId"
+                         @close="closeModal"></ReimbursementDetail>
   </div>
 </template>
 
 <script>
+  import ReimbursementDetail from '../../customService/expenseAccount/components/reimbursementDetail';
   export default {
     name: 'hello',
     props: ['activeName', 'rentContractId', 'tabStatusChange'],
+    components:{ReimbursementDetail},
     data() {
       return {
         tableStatus: ' ',
         tableLoading: false,
+        reimbursementDetailDialog: false,
+        reimbursementId : '',
         tableData: [],
         totalNum: 0,
         params: {
@@ -175,6 +182,10 @@
       }
     },
     methods: {
+      dblClickTable(row, event) {
+        this.reimbursementId = row.id;
+        this.reimbursementDetailDialog = true;
+      },
       getTableData() {
         this.tableStatus = " ";
         this.tableLoading = true;
@@ -204,6 +215,9 @@
         console.log(`当前页: ${val}`);
         this.params.page = val;
         this.getTableData();
+      },
+      closeModal(){
+        this.reimbursementDetailDialog = false;
       },
     },
   }
