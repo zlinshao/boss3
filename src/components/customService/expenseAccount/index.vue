@@ -185,9 +185,8 @@
                 prop="type.dictionary_name"
                 label="报销类型">
                 <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
-                  <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+                  <span v-if="scope.row.type && arrSplitToArray(scope.row.type)">{{arrSplitToArray(scope.row.type).join(',')}}</span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -228,6 +227,13 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.account_name">{{scope.row.account_name}}</span>
                   <span v-if="!scope.row.account_name">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                  label="结算人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
+                  <span v-if="!scope.row.results">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -316,12 +322,11 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="type.dictionary_name"
-                label="报销类型">
+                  prop="type.dictionary_name"
+                  label="报销类型">
                 <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
-                  <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+                  <span v-if="scope.row.type && arrSplitToArray(scope.row.type)">{{arrSplitToArray(scope.row.type).join(',')}}</span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -362,6 +367,13 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.account_name">{{scope.row.account_name}}</span>
                   <span v-if="!scope.row.account_name">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                  label="结算人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
+                  <span v-if="!scope.row.results">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -857,6 +869,13 @@
             this.uploadPayDialog = true;
             break;
         }
+      },
+      arrSplitToArray(json){
+        let arr = [];
+        json.forEach(item=>{
+          arr.push(item.dictionary_name);
+        });
+        return arr;
       },
       deleteRepair() {
       },
