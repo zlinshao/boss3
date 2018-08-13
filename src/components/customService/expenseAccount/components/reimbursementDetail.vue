@@ -844,9 +844,9 @@
               title: '成功',
               message: res.data.msg
             });
-            if(val == 664){
-              this.commentVisible = true;
-            }
+            // if(val == 664){
+            //   this.commentVisible = true;
+            // }
             this.$emit('close','onlyRenovate')
           } else {
             this.$notify.warning({

@@ -1230,13 +1230,8 @@
                 title: '成功',
                 message: res.data.msg
               });
-              if(this.form.status == 0){
-                this.commentVisible = true;
-                this.$emit('close','onlyRenovate');
-              }else {
-                this.$emit('close','success');
-                this.reimResultDialogVisible = false;
-              }
+              this.$emit('close','success');
+              this.reimResultDialogVisible = false;
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -1252,13 +1247,15 @@
                 title: '成功',
                 message: res.data.msg
               });
-              if(this.form.status == 0){
-                this.commentVisible = true;
-                this.$emit('close','onlyRenovate');
-              }else {
-                this.$emit('close','success');
-                this.reimResultDialogVisible = false;
-              }
+              this.$emit('close','success');
+              this.reimResultDialogVisible = false;
+              // if(this.form.status == 0){
+              //   this.commentVisible = true;
+              //   this.$emit('close','onlyRenovate');
+              // }else {
+              //   this.$emit('close','success');
+              //   this.reimResultDialogVisible = false;
+              // }
             } else {
               this.$notify.warning({
                 title: '警告',
