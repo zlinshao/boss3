@@ -126,7 +126,7 @@
                   <div class="content" style="width:36%;float:left;">{{repairDetail.pay_type[0][index-1][1]}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="10" v-if=" activeName !='second'">
+              <el-col :span="10" v-if="activeName !='second'">
                 <el-form-item>
                   <div class="content" v-for="item in payTypeInfo" :key="item.id"
                        v-if="repairDetail.pay_type[1][index-1] == item.id">
@@ -134,7 +134,7 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="10" v-if=" activeName =='second'">
+              <el-col :span="10" v-if="activeName =='second'">
                 <el-form-item label="">
                   <span style="float:left">押</span>
                   <div class="content" style="width:40px;float:left">{{repairDetail.pay_type[1][index-1]}}</div>
@@ -322,7 +322,7 @@
               <el-col :span="22">
                 <el-form-item label="合同照片" style="max-height:160px;">
                   <img v-if="album!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify
-                       v-for="val in album" :data-src="val" :src="val" :key="val">
+                       v-for="(val,index) in album" :data-src="val" :src="val" :key="index">
                 </el-form-item>
               </el-col>
             </el-row>

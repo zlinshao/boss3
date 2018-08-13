@@ -75,21 +75,27 @@
               <el-col :span="6">
                 <el-form-item label="省" required>
                   <div class="content">
-                    <span v-if="detailData.community">{{detailData.community.province.province_name}}</span>
+                    <span v-if="detailData.community&&detailData.community.province">
+                      {{detailData.community.province.province_name}}
+                    </span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="市" required>
                   <div class="content">
-                    <span v-if="detailData.community">{{detailData.community.city.city_name}}</span>
+                    <span v-if="detailData.community&&detailData.community.city">
+                      {{detailData.community.city.city_name}}
+                    </span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="区/县" required>
                   <div class="content">
-                    <span v-if="detailData.community">{{detailData.community.area.area_name}}</span>
+                    <span v-if="detailData.community&&detailData.community.area">
+                      {{detailData.community.area.area_name}}
+                    </span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -372,9 +378,10 @@
             }
 
             //获取区域列表
-            this.chooseList(this.detailData.community.area.area_id)
-
-            this.params.area =  this.detailData.area.replace(/[^(0-9).]+/,'');
+            if(this.detailData.community && this.detailData.community.area){
+              this.chooseList(this.detailData.community.area.area_id)
+            }
+            this.params.area =  this.detailData.area && this.detailData.area.replace(/[^(0-9).]+/,'');
             this.params.decorate = this.detailData.decorate;
             this.params.direction = this.detailData.direction && this.detailData.direction.id;
 
@@ -474,14 +481,15 @@
       confirmAdd(){
         this.isUp = true;
         this.params.region = this.params.region || '0';
-        this.$http.post(globalConfig.server+'web/house/save',this.params).then((res)=>{
+        this.$http.post('http://192.168.20.106:80/api/v1/transfer',this.params).then((res)=>{
           this.isUp = false;
-          if(res.data.code === '90010'){
+          if(res.data.code === '90012'){
             this.$notify.success({
               title: "成功",
               message: res.data.msg,
             });
             this.addWebInfoDialogVisible = false;
+            this.$emit('close','success')
           }else {
             this.$notify.warning({
               title: "警告",
