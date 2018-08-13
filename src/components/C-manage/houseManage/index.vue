@@ -116,11 +116,13 @@
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="全部房源" name="first">
-            <WholeHouse :params="params_first" :search="search_first"></WholeHouse>
+            <WholeHouse v-if="activeName === 'first'" :params="params_first" :search="search_first"></WholeHouse>
           </el-tab-pane>
           <el-tab-pane label="线上房源" name="second">
+            <OnlineHouse v-if="activeName === 'second'" :params="params_second" :search="params_second"></OnlineHouse>
           </el-tab-pane>
           <el-tab-pane label="下架房源" name="third">
+            <UnderHouse v-if="activeName === 'third'" :params="params_third" :search="params_third"></UnderHouse>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -133,10 +135,12 @@
 <script>
   import Organization from '../../common/organization.vue';
   import WholeHouse from './components/wholeHouse'
+  import OnlineHouse from './components/onlineHouse'
+  import UnderHouse from './components/underHouse'
 
   export default {
     name: 'hello',
-    components: {Organization ,WholeHouse},
+    components: {Organization ,WholeHouse ,OnlineHouse,UnderHouse},
     data() {
       return {
         organizationDialog : false,
@@ -204,9 +208,7 @@
             break;
         }
       },
-      closeModal(){
-
-      },
+      closeModal(){},
       selectMember(){
 
       },

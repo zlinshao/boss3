@@ -1060,7 +1060,7 @@
         })
       },
       exportData() {
-        let exportForm = {}
+        let exportForm = {};
         if(this.activeName === 'first'){
           exportForm = {
             module: 1,

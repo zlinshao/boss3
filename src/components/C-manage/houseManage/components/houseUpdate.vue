@@ -481,7 +481,7 @@
       confirmAdd(){
         this.isUp = true;
         this.params.region = this.params.region || '0';
-        this.$http.post('http://192.168.20.106:80/api/v1/transfer',this.params).then((res)=>{
+        this.$http.post(globalConfig.server+'api/v1/transfer',this.params).then((res)=>{
           this.isUp = false;
           if(res.data.code === '90012'){
             this.$notify.success({

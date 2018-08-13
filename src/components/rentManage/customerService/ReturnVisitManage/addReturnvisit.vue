@@ -1,7 +1,7 @@
 <template>
   <div id="addCollectRepair">
     <el-dialog :close-on-click-modal="false" title="新建回访记录" :visible.sync="addReturnvisitDialogVisible" width="50%">
-      <div style="padding: 10px 20px;">
+      <div style="padding: 10px 20px;" class="scroll_bar">
         <el-form size="mini" :model="form" label-width="82px">
           <el-row>
             <el-col :span="12">
@@ -337,6 +337,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addReturnvisitDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="compareData">对 比</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">保 存</el-button>
       </span>
     </el-dialog>
@@ -737,6 +738,11 @@
             this.confirmAddConnect('');
           }
         }
+      },
+      compareData(){
+        // this.$http.put(globalConfig.server+'contract/feedback/compare/',this.form).then((res)=>{
+        //
+        // })
       },
       confirmAddConnect(val) {
         this.form.type = val;
