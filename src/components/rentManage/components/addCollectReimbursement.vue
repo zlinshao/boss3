@@ -24,7 +24,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="报销人">
+              <el-form-item label="报销人" required>
                 <el-select v-model="form.reimbursement.reimburtype_id" placeholder="请选择认责归属" clearable>
                   <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" 
                              :key="item.id" :value="item.id">{{item.dictionary_name}}
@@ -33,7 +33,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="form.reimbursement.reimburtype_id === 658">
-              <el-form-item label="报销人姓名">
+              <el-form-item label="报销人姓名" required>
                 <el-input v-model="form.reimbursement.reimburperson_id_name" @focus="chooseStaff"
                           readonly placeholder="请选择">
                 </el-input>
@@ -41,7 +41,7 @@
             </el-col>
             <el-col :span="8" v-else-if="form.reimbursement.reimburtype_id === 657 ||
                             form.reimbursement.reimburtype_id === 656 || form.reimbursement.reimburtype_id === 659">
-              <el-form-item label="报销人姓名">
+              <el-form-item label="报销人姓名" required>
                 <el-input v-model="form.reimbursement.reimburperson_id_name" placeholder="请输入"></el-input>
               </el-form-item>
             </el-col>

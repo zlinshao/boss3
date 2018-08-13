@@ -202,7 +202,7 @@
                     <el-col :span="7" v-else-if="form.water_data[key].accuser === 657 ||
                             form.water_data[key].accuser === 656 || form.water_data[key].accuser === 659">
                       <el-form-item label="认责人姓名">
-                        <el-input placeholder="请输入"></el-input>
+                        <el-input placeholder="请输入" v-model="form.water_data[key].accuser_id_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="7" v-else><span style="visibility: hidden">1</span></el-col>
@@ -308,7 +308,7 @@
                     <el-col :span="7" v-else-if="form.electricity_data[key].accuser === 657 ||
                             form.electricity_data[key].accuser === 656 || form.electricity_data[key].accuser === 659">
                       <el-form-item label="认责人姓名">
-                        <el-input placeholder="请输入"></el-input>
+                        <el-input placeholder="请输入" v-model="form.electricity_data[key].accuser_id_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="7" v-else><span style="visibility: hidden">1</span></el-col>
@@ -446,7 +446,7 @@
                     <el-col :span="7" v-else-if="form.gas_data[key].accuser === 657 ||
                             form.gas_data[key].accuser === 656 || form.gas_data[key].accuser === 659">
                       <el-form-item label="认责人姓名">
-                        <el-input placeholder="请输入"></el-input>
+                        <el-input placeholder="请输入" v-model="form.gas_data[key].accuser_id_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="7" v-else><span style="visibility: hidden">1</span></el-col>
@@ -552,7 +552,7 @@
                     <el-col :span="7" v-else-if="form.property_management_data[key].accuser === 657 ||
                             form.property_management_data[key].accuser === 656 || form.property_management_data[key].accuser === 659">
                       <el-form-item label="认责人姓名">
-                        <el-input placeholder="请输入"></el-input>
+                        <el-input placeholder="请输入" v-model="form.property_management_data[key].accuser_id_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="7" v-else><span style="visibility: hidden">1</span></el-col>

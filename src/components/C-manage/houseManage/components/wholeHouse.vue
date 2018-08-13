@@ -34,8 +34,12 @@
           label="装修">
       </el-table-column>
       <el-table-column
-          prop="visit_status"
           label="状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status == 1" class="info_label">未添加</span>
+          <span v-else-if="scope.row.status == 2"  class="success_label">已上线</span>
+          <span v-else class="orange_label">已下架</span>
+        </template>
       </el-table-column>
       <el-table-column
           prop="price"
@@ -109,12 +113,12 @@
         this.tableStatus = ' ';
         this.tableLoading = true;
         $.ajax({
-          url: 'http://192.168.20.106:80/api/v1/tranfer',
+          url: 'http://192.168.20.106:80/api/v1/transfer',
           type: 'post',
           data: this.params,
           success: res => {
             this.tableLoading = false;
-            if(res.code === 201){
+            if(res.code === '90012'){
               this.tableData = res.data.houses;
               this.totalNum = res.data.total;
               if(res.data.houses.length<1){
@@ -132,8 +136,11 @@
         this.params.page = val;
         this.getTableData();
       },
-      closeModal(){
+      closeModal(val){
         this.addWebInfoDialog = false;
+        if(val){
+          this.getTableData();
+        }
       },
       /*******************************************************************/
       handlerContextmenu(row, event) {
@@ -204,5 +211,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+  .info_label,.yellow_label,.orange_label,.red_label,.success_label{
+    min-width: 70px;
+    height: 28px;
+    line-height: 28px;
+  }
 </style>
