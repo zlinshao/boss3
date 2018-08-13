@@ -1234,6 +1234,7 @@
                 this.commentVisible = true;
                 this.$emit('close','onlyRenovate');
               }else {
+                this.$emit('close','success');
                 this.reimResultDialogVisible = false;
               }
             } else {
@@ -1253,7 +1254,9 @@
               });
               if(this.form.status == 0){
                 this.commentVisible = true;
+                this.$emit('close','onlyRenovate');
               }else {
+                this.$emit('close','success');
                 this.reimResultDialogVisible = false;
               }
             } else {

@@ -697,9 +697,10 @@
       </el-dialog>
 
       <span slot="footer" class="dialog-footer">
-        <el-button v-if="reimDetail.statuss === '待审核'" v-for="item in examineStatusCategory" :type="item.id==664?'warning':'success'"
+        <el-button v-if="reimDetail.statuss === '待审核'" v-for="item in examineStatusCategory"
+                   :type="item.id==664?'warning':'success'"
                    :key="item.id" size="small" @click="examineConfirm(item.id)">
-          {{item.id==664?'驳回':'结算'}}
+          {{item.dictionary_name}}
         </el-button>
         <el-button size="small" type="primary" @click="commentVisible = true">评 论</el-button>
       </span>
@@ -843,7 +844,9 @@
               title: '成功',
               message: res.data.msg
             });
-            this.commentVisible = true;
+            if(val == 664){
+              this.commentVisible = true;
+            }
             this.$emit('close','onlyRenovate')
           } else {
             this.$notify.warning({
