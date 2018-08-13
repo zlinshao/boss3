@@ -1232,6 +1232,7 @@
               });
               if(this.form.status == 0){
                 this.commentVisible = true;
+                this.$emit('close','onlyRenovate');
               }else {
                 this.reimResultDialogVisible = false;
               }
