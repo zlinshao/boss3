@@ -94,7 +94,7 @@
         tableData: [],
         totalNum: 0,
         undercarriageParams:{
-          id : '',
+          house_id : '',
           status : 3,
         }
       }
@@ -139,9 +139,9 @@
       },
       /*******************************************************************/
       handlerContextmenu(row, event) {
-        this.undercarriageParams.id = row.id;
+        this.undercarriageParams.house_id = row.id;
         this.lists = [
-          {clickIndex: 'upload', headIcon: 'el-icon-upload2', label: '上线'},
+          // {clickIndex: 'upload', headIcon: 'el-icon-upload2', label: '上线'},
           {clickIndex: 'download', headIcon: 'el-icon-download', label: '下架'},
         ];
         this.contextMenuParam(event);
