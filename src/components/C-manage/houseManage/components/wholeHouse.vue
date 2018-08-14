@@ -8,6 +8,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
         @row-contextmenu='handlerContextmenu'
+        @row-dblclick="dblClickTable"
         style="width: 100%">
       <el-table-column
           prop="village_name"
@@ -62,12 +63,16 @@
                :show="show" @clickOperate="clickEvent"></RightMenu>
     <houseUpdate :addWebInfoDialog="addWebInfoDialog" :houseId="undercarriageParams.id"
                  @close="closeModal"></houseUpdate>
+
+    <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
+                 :houseDetail="houseDetail" :houseId="house_id" @close="closeModal"></HouseDetail>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue'  //右键
   import houseUpdate from './houseUpdate'
+  import HouseDetail from '../../../../components/rentManage/housesManage/components/houseDetail'
   export default {
     name: 'hello',
     props: {
@@ -80,7 +85,7 @@
         required: true,
       }
     },
-    components: {RightMenu,houseUpdate},
+    components: {RightMenu,houseUpdate,HouseDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -91,16 +96,22 @@
         tableStatus: ' ',
         tableLoading: false,
         addWebInfoDialog: false,
+        houseDetailDialog: false,
         tableData: [],
         totalNum: 0,
         undercarriageParams:{
           house_id : '',
           status : 3,
-        }
+        },
+        all_dic : [],
+        isOnlyPic : false,
+        houseDetail: {},
+        house_id : '',
       }
     },
     mounted() {
       this.getTableData();
+      this.getDictionary();
     },
 
     watch: {
@@ -109,6 +120,11 @@
       }
     },
     methods: {
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
+          this.all_dic = res.data.data;
+        })
+      },
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
@@ -133,9 +149,15 @@
       },
       closeModal(val){
         this.addWebInfoDialog = false;
+        this.houseDetailDialog = false;
         if(val){
           this.getTableData();
         }
+      },
+      dblClickTable(row, event){
+        this.house_id = row.id;
+        this.houseDetail = row;
+        this.houseDetailDialog = true;
       },
       /*******************************************************************/
       handlerContextmenu(row, event) {

@@ -609,7 +609,7 @@
                   </el-row>
                   <el-form-item label="结算人">
                     <div class="content">
-                      <span v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
+                      <span v-if="reimDetail.results && reimDetail.results.staffs">{{reimDetail.results.staffs}}</span>
                       <span v-else>暂无</span>
                     </div>
                   </el-form-item>
