@@ -115,14 +115,6 @@
                       </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="结算人">
-                      <div class="content">
-                        <span v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
-                        <span v-else>暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="24" v-if="reimDetail.album">
@@ -615,6 +607,12 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
+                  <el-form-item label="结算人">
+                    <div class="content">
+                      <span v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
                   <el-row>
                     <el-col :span="24">
                       <el-form-item label="备注">
@@ -749,6 +747,7 @@
         if (!val) {
           this.$emit('close');
           this.reimDetail = {};
+          this.commentList = [];
         } else {
           this.getDetail();
           this.getCommentData();

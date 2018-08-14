@@ -832,6 +832,7 @@
           this.$emit('close');
           this.initData();
           this.reimDetail = {};
+          this.commentList = [];
         } else {
           this.getDetail();
           if (this.type === 'add') {
