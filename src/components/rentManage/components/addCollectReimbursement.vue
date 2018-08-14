@@ -24,7 +24,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="报销人" required>
+              <el-form-item label="报销人" required2>
                 <el-select v-model="form.reimbursement.reimburtype_id" placeholder="请选择认责归属" clearable>
                   <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" 
                              :key="item.id" :value="item.id">{{item.dictionary_name}}

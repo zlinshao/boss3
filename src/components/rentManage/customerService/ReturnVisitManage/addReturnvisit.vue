@@ -325,8 +325,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
-                  <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;"
-                       data-magnify :key="val"
+                  <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
                        v-for="val in contractInfo.photo" :data-src="val" :src="val" alt="">
                 </el-form-item>
               </el-col>
@@ -501,6 +500,8 @@
           remark_clause: "",  //备注条款
           is_connect: '',
           type: '',
+
+          cmp_content : '',
         },
         contractInfo: [],
         pickerOptions2: {
@@ -740,9 +741,11 @@
         }
       },
       compareData(){
-        // this.$http.put(globalConfig.server+'contract/feedback/compare/',this.form).then((res)=>{
-        //
-        // })
+        this.$http.put(globalConfig.server+'contract/feedback/compare',this.form).then((res)=>{
+          if(res.data.code === '1212200'){
+            this.form.cmp_content = res.data.data.cmp_content;
+          }
+        })
       },
       confirmAddConnect(val) {
         this.form.type = val;
