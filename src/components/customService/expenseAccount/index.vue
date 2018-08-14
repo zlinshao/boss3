@@ -989,7 +989,8 @@
         let status = row.status.dictionary_name;
         if (row.results && row.results.id) {
           this.lists = [
-            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单'},
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单'
+              ,disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'&&status !=='已拒绝'},
             {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo',
               label: '编辑报销结果',disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'},
             // {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',disabled:status !=='待审核'},
@@ -998,7 +999,8 @@
           ];
         } else {
           this.lists = [
-            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单'},
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单'
+              ,disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'&&status !=='已拒绝'},
             {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1',
               label: '编辑报销结果',disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'},
             // {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',disabled:status !=='待审核'},
