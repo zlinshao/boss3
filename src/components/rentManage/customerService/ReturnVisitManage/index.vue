@@ -610,10 +610,8 @@
         this.organizeVisible = false;
         if (this.activeName == "first") {
           this.form.module = 1;
-          this.getCollectTableData();
         } else if (this.activeName == "second") {
           this.form.module = 2;
-          this.getRentTableData();
         }
 
       },
