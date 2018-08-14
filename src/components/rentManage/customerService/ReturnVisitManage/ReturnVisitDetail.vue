@@ -427,7 +427,6 @@
         if (!val) {
           this.$emit("close");
           this.wholeFlag = false;
-          this.repairDetail = {};
         } else {
           (this.audited_fields = {
             address: "",

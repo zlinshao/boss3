@@ -7,9 +7,6 @@
             <div>
               组织架构
             </div>
-            <!--<div>-->
-            <!--<el-button size="mini">使用指南</el-button>-->
-            <!--</div>-->
           </div>
           <div id="dragTree">
             <el-tree ref="expandMenuList" class="expand-tree"
@@ -29,11 +26,7 @@
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
-                     :render-content="renderContent"
-            >
-              <!--@node-drag-start="handleDragStart"-->
-              <!--@node-drop="handleDrop"-->
-              <!--draggable-->
+                     :render-content="renderContent">
             </el-tree>
           </div>
         </div>
@@ -41,57 +34,37 @@
       <el-col :span="18">
         <div class="border right">
           <div class="top">
-            <div>{{department_name}}<span v-if="departManageName" style="color: #cc6262;font-size: 12px;"> ( <i
-              class="iconfont icon-fuzeren"></i> {{departManageName}} )</span></div>
-            <!--<div @click="sortDepartment">-->
-            <!--<el-button size="mini">部门排序</el-button>-->
-            <!--<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>-->
-            <!--</div>-->
-          </div>
-
-          <div id="sortTable" v-show="isDepartment">
-            <div class="ul_header">
-              <span style="margin-right: 15px">上下移动部门调整位置</span>
-              <el-button type="text" size="mini" @click="isDepartment = !isDepartment">取消</el-button>
-              <el-button type="text" size="mini" @click="confirmSave">保存</el-button>
-            </div>
-            <ul>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>研发部（18人）</li>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>客服部（10人）</li>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>市场部（230人）</li>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>财务部（9人）</li>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>人力资源部（12人）</li>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>人事部（5人）</li>
-              <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>行政部（8人）</li>
-            </ul>
-            <div style="margin: 10px;display: flex;justify-content: flex-end">
+            <div>
+              <span>{{department_name}}</span>
+              <span v-if="departManageName" style="color: #cc6262;font-size: 12px;">
+                ( <i class="iconfont icon-fuzeren"></i> {{departManageName}} )
+              </span>
             </div>
           </div>
-          <div v-show="!isDepartment" style="padding: 10px;">
+          <div style="padding: 10px;">
             <div class="highRanking">
               <div class="tabsSearch">
-                <el-form onsubmit="return false;" :inline="true" size="mini" class="demo-form-inline">
-                  <!--<el-form-item label="选择部门">-->
-                  <!--<el-input @focus="organizationDialog = true" readonly=""></el-input>-->
-                  <!--</el-form-item>-->
-                  <el-form-item style="float: right;" v-if="activeName==='first'">
-                    <el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>
-                  </el-form-item>
-                  <el-form-item style="float: right">
-                    <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
-                    <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位
-                    </el-button>
-                  </el-form-item>
-                  <el-form-item v-if="activeName==='first'" style="float: right;">
-                    <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-                  </el-form-item>
-                  <el-form-item style="float: right;" v-if="activeName==='first'">
-                    <el-input v-model="params.keywords" placeholder="请输入搜索内容" clearable
-                              @keyup.enter.prevent.native="search">
+                <el-form style="float: right;" onsubmit="return false;" :inline="true" size="mini" class="demo-form-inline">
+                  <el-form-item v-if="activeName==='first'">
+                    <el-input v-model="params.keywords" placeholder="请输入搜索内容"
+                              @keyup.enter.prevent.native="search" clearable>
                       <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                   </el-form-item>
 
+                  <el-form-item v-if="activeName==='first'">
+                    <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
+                    <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位
+                    </el-button>
+                  </el-form-item>
+
+                  <el-form-item v-if="activeName==='first'">
+                    <el-button type="primary" size="mini" @click="goPersonnel">人事报表</el-button>
+                  </el-form-item>
                 </el-form>
               </div>
               <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -108,12 +81,12 @@
                         <el-col :span="16" class="el_col_option">
                           <el-form-item>
                             <el-date-picker
-                              v-model="params.entry_time"
-                              type="daterange"
-                              value-format="yyyy-MM-dd"
-                              range-separator="至"
-                              start-placeholder="开始日期"
-                              end-placeholder="结束日期">
+                                v-model="params.entry_time"
+                                type="daterange"
+                                value-format="yyyy-MM-dd"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
                             </el-date-picker>
                           </el-form-item>
                         </el-col>
@@ -127,12 +100,12 @@
                         <el-col :span="16" class="el_col_option">
                           <el-form-item>
                             <el-date-picker
-                              v-model="params.leave_time"
-                              type="daterange"
-                              value-format="yyyy-MM-dd"
-                              range-separator="至"
-                              start-placeholder="开始日期"
-                              end-placeholder="结束日期">
+                                v-model="params.leave_time"
+                                type="daterange"
+                                value-format="yyyy-MM-dd"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
                             </el-date-picker>
                           </el-form-item>
                         </el-col>
@@ -174,20 +147,19 @@
                   </div>
                 </el-form>
               </div>
-
             </div>
             <el-tabs v-model="activeName">
               <el-tab-pane label="用户管理" name="first">
                 <el-table
-                  :data="staffTableData"
-                  :empty-text='userCollectStatus'
-                  v-loading="userCollectLoading"
-                  element-loading-text="拼命加载中"
-                  element-loading-spinner="el-icon-loading"
-                  element-loading-background="rgba(255, 255, 255, 0)"
-                  @row-contextmenu="openContextMenu"
-                  @cell-dblclick="openDetail"
-                  style="width: 100%">
+                    :data="staffTableData"
+                    :empty-text='userCollectStatus'
+                    v-loading="userCollectLoading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(255, 255, 255, 0)"
+                    @row-contextmenu="openContextMenu"
+                    @cell-dblclick="openDetail"
+                    style="width: 100%">
                   <el-table-column width="60px">
                     <template slot-scope="scope">
                       <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
@@ -198,34 +170,34 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    prop="name"
-                    label="员工姓名">
+                      prop="name"
+                      label="员工姓名">
                   </el-table-column>
                   <el-table-column
-                    label="部门">
+                      label="部门">
                     <template slot-scope="scope">
                       <span v-for="item in scope.row.org">{{item.name}}</span>
                       <span v-if="scope.row.org.length<1">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="岗位">
+                      label="岗位">
                     <template slot-scope="scope">
                       <span v-for="item in scope.row.role">{{item.display_name}}</span>
                       <span v-if="scope.row.role.length<1">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    prop="phone"
-                    label="手机号">
+                      prop="phone"
+                      label="手机号">
                   </el-table-column>
                   <el-table-column
-                    prop="detail.enroll"
-                    label="入职时间">
+                      prop="detail.enroll"
+                      label="入职时间">
                   </el-table-column>
                   <el-table-column
-                    prop="created_at"
-                    label="账号状态">
+                      prop="created_at"
+                      label="账号状态">
                     <template slot-scope="scope">
                       <div>
                         <span v-if="scope.row.is_enable"><el-tag type="danger">禁用</el-tag></span>
@@ -234,8 +206,8 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    prop="created_at"
-                    label="在职状态">
+                      prop="created_at"
+                      label="在职状态">
                     <template slot-scope="scope">
                       <div>
                         <span v-if="scope.row.is_on_job"><el-tag type="warning">离职</el-tag></span>
@@ -246,13 +218,13 @@
                 </el-table>
                 <div class="tableBottom">
                   <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="params.page"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size="10"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalStaffNum">
+                      @size-change="handleSizeChange"
+                      @current-change="handleCurrentChange"
+                      :current-page="params.page"
+                      :page-sizes="[10, 20, 30, 40]"
+                      :page-size="10"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      :total="totalStaffNum">
                   </el-pagination>
                 </div>
               </el-tab-pane>
@@ -261,35 +233,35 @@
                 <div class="tableBox">
                   <div class="blueTable">
                     <el-table
-                      :data="positionList"
-                      :empty-text='positionCollectStatus'
-                      v-loading="positionCollectLoading"
-                      element-loading-text="拼命加载中"
-                      element-loading-spinner="el-icon-loading"
-                      element-loading-background="rgba(255, 255, 255, 0)"
-                      :row-class-name="tableRowClassName"
-                      @row-contextmenu="openOnlyPositionMenu"
-                      @row-click="clickOnlyPositionMenu"
-                      style="width: 100%">
+                        :data="positionList"
+                        :empty-text='positionCollectStatus'
+                        v-loading="positionCollectLoading"
+                        element-loading-text="拼命加载中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(255, 255, 255, 0)"
+                        :row-class-name="tableRowClassName"
+                        @row-contextmenu="openOnlyPositionMenu"
+                        @row-click="clickOnlyPositionMenu"
+                        style="width: 100%">
                       <el-table-column
-                        prop="name"
-                        label="职位">
+                          prop="name"
+                          label="职位">
                       </el-table-column>
                       <el-table-column
-                        prop="org.name"
-                        label="部门">
+                          prop="org.name"
+                          label="部门">
                       </el-table-column>
                     </el-table>
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handlePositionSizeChange"
-                      @current-change="handlePositionCurrentChange"
-                      :current-page="positionParams.page"
-                      :page-sizes="[5, 10, 15, 20]"
-                      :page-size="5"
-                      layout="total, sizes, prev, pager, next, jumper"
-                      :total="totalOnlyPositionNum">
+                        @size-change="handlePositionSizeChange"
+                        @current-change="handlePositionCurrentChange"
+                        :current-page="positionParams.page"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="5"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalOnlyPositionNum">
                     </el-pagination>
                   </div>
                 </div>
@@ -297,50 +269,50 @@
                 <div class="tableBox">
                   <div class="greenTable">
                     <el-table
-                      :data="positionTableData"
-                      :empty-text='postCollectStatus'
-                      v-loading="postCollectLoading"
-                      element-loading-text="拼命加载中"
-                      element-loading-spinner="el-icon-loading"
-                      element-loading-background="rgba(255, 255, 255, 0)"
-                      @row-contextmenu="openPositionMenu"
-                      :row-class-name="tableRowPostClassName"
-                      @row-click="clickPostMenu"
-                      style="width: 100%">
+                        :data="positionTableData"
+                        :empty-text='postCollectStatus'
+                        v-loading="postCollectLoading"
+                        element-loading-text="拼命加载中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(255, 255, 255, 0)"
+                        @row-contextmenu="openPositionMenu"
+                        :row-class-name="tableRowPostClassName"
+                        @row-click="clickPostMenu"
+                        style="width: 100%">
                       <el-table-column
-                        prop="name"
-                        label="岗位">
+                          prop="name"
+                          label="岗位">
                       </el-table-column>
                       <el-table-column
-                        label="下级岗位">
+                          label="下级岗位">
                         <template slot-scope="scope">
                           <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
                           <span v-else=""> &nbsp;暂无&nbsp; </span>
                         </template>
                       </el-table-column>
                       <el-table-column
-                        prop="position_type.name"
-                        label="职位">
+                          prop="position_type.name"
+                          label="职位">
                       </el-table-column>
                       <el-table-column
-                        prop="role.name"
-                        label="岗位标识">
+                          prop="role.name"
+                          label="岗位标识">
                       </el-table-column>
                       <el-table-column
-                        prop="orgName"
-                        label="部门">
+                          prop="orgName"
+                          label="部门">
                       </el-table-column>
                     </el-table>
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handlePostSizeChange"
-                      @current-change="handlePostCurrentChange"
-                      :current-page="postParams.page"
-                      :page-sizes="[5, 10, 15, 20]"
-                      :page-size="5"
-                      layout="total, sizes, prev, pager, next, jumper"
-                      :total="totalPostNum">
+                        @size-change="handlePostSizeChange"
+                        @current-change="handlePostCurrentChange"
+                        :current-page="postParams.page"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="5"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalPostNum">
                     </el-pagination>
                   </div>
                 </div>
@@ -348,15 +320,15 @@
                 <div class="tableBox">
                   <div class="greenTable">
                     <el-table
-                      :data="postStaffData"
-                      :empty-text='postStaffStatus'
-                      v-loading="postStaffLoading"
-                      element-loading-text="拼命加载中"
-                      element-loading-spinner="el-icon-loading"
-                      element-loading-background="rgba(255, 255, 255, 0)"
-                      @row-contextmenu="openContextMenu"
-                      @cell-dblclick="openDetail"
-                      style="width: 100%">
+                        :data="postStaffData"
+                        :empty-text='postStaffStatus'
+                        v-loading="postStaffLoading"
+                        element-loading-text="拼命加载中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(255, 255, 255, 0)"
+                        @row-contextmenu="openContextMenu"
+                        @cell-dblclick="openDetail"
+                        style="width: 100%">
                       <el-table-column width="60px">
                         <template slot-scope="scope">
                           <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
@@ -367,32 +339,32 @@
                         </template>
                       </el-table-column>
                       <el-table-column
-                        prop="name"
-                        label="员工姓名">
+                          prop="name"
+                          label="员工姓名">
                       </el-table-column>
                       <el-table-column
-                        label="部门">
+                          label="部门">
                         <template slot-scope="scope">
                           <span v-for="item in scope.row.org">{{item.name}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column
-                        label="岗位">
+                          label="岗位">
                         <template slot-scope="scope">
                           <span v-for="item in scope.row.role">{{item.display_name}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column
-                        prop="phone"
-                        label="手机号">
+                          prop="phone"
+                          label="手机号">
                       </el-table-column>
                       <el-table-column
-                        prop="created_at"
-                        label="入职时间">
+                          prop="created_at"
+                          label="入职时间">
                       </el-table-column>
                       <el-table-column
-                        prop="created_at"
-                        label="账号状态">
+                          prop="created_at"
+                          label="账号状态">
                         <template slot-scope="scope">
                           <div>
                             <span v-if="scope.row.is_enable"><el-tag type="danger">禁用</el-tag></span>
@@ -401,8 +373,8 @@
                         </template>
                       </el-table-column>
                       <el-table-column
-                        prop="created_at"
-                        label="在职状态">
+                          prop="created_at"
+                          label="在职状态">
                         <template slot-scope="scope">
                           <div>
                             <span v-if="scope.row.is_on_job"><el-tag type="warning">离职</el-tag></span>
@@ -414,13 +386,13 @@
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handlePostStaffSizeChange"
-                      @current-change="handlePostStaffCurrentChange"
-                      :current-page="postStaffParams.page"
-                      :page-sizes="[5, 10, 15, 20]"
-                      :page-size="5"
-                      layout="total, sizes, prev, pager, next, jumper"
-                      :total="totalPostStaffNum">
+                        @size-change="handlePostStaffSizeChange"
+                        @current-change="handlePostStaffCurrentChange"
+                        :current-page="postStaffParams.page"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="5"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalPostStaffNum">
                     </el-pagination>
                   </div>
                 </div>
@@ -430,6 +402,7 @@
         </div>
       </el-col>
     </el-row>
+    <!--发送例子短信和复职等级 模态框-->
     <el-dialog :close-on-click-modal="false" title="员工详情" :visible.sync="staffDetail" width="60%">
       <div class="scroll_bar">
         <el-form size="small" label-width="120px">
@@ -641,10 +614,10 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                     <span
-                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type
+                        v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type
                       && staffDetailData.detail.entry_way.entry_type.length>0">
                       <span
-                        v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
+                          v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
                       </span>
                         <span v-else>暂无</span>
                       </div>
@@ -800,7 +773,7 @@
                     <el-form-item label="第一次签合同时间">
                       <div class="content">
                     <span
-                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time">
+                        v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -810,7 +783,7 @@
                     <el-form-item label="第一次合同到期时间">
                       <div class="content">
                     <span
-                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time">
+                        v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -820,7 +793,7 @@
                     <el-form-item label="第二次签合同时间">
                       <div class="content">
                     <span
-                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time">
+                        v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time">
                       {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -880,8 +853,6 @@
                             value-format="yyyy-MM-dd">
             </el-date-picker>
           </el-form-item>
-          <!--<el-row>-->
-          <!--<el-col :span="8">-->
           <el-form-item label="离职原因">
             <el-select v-model="form.dismiss_reason.dismiss_type" clearable>
               <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
@@ -889,16 +860,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!--</el-col>-->
-          <!--</el-row>-->
-          <!--<el-row>-->
-          <!--<el-col :span="8">-->
           <el-form-item label="具体描述">
             <el-input type="textarea" placeholder="请填写描述"
                       v-model="form.dismiss_reason.dismiss_mess"></el-input>
           </el-form-item>
-          <!--</el-col>-->
-          <!--</el-row>-->
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -965,7 +930,6 @@
 <script>
   import TreeRender from './components/treeRender.vue'
   import Organization from '../../common/organization.vue'
-  import Sortable from 'sortablejs'
   import AddStaff from './components/addStaff.vue'
   import RightMenu from '../../common/rightMenu.vue'    //右键
   import EditDepart from './components/editdepar.vue'
@@ -1081,8 +1045,6 @@
         positionList: [],      //职位列表
         postStaffData: [],  //岗位下的员工列表
         organizationDialog: false,
-        sortable: null,
-        isDepartment: false,
         //......................
         addStaffDialog: false, //新增用户模态框
         editDepartDialog: false, //编辑部门模态框
@@ -1195,21 +1157,6 @@
       },
     },
     methods: {
-      // allowDrop(draggingNode, dropNode) {
-      //   console.log(draggingNode, dropNode)
-      // },
-      // allowDrag(draggingNode) {
-      //   console.log(draggingNode)
-      // },
-      // handleDragStart(node, ev) {
-      //   console.log('drag start', node);
-      // },
-      // handleDrop(draggingNode, dropNode, dropType, ev) {
-      //   console.log('tree drop: ', dropNode, dropType);
-      // },
-      // handleDragEnd(draggingNode, dropNode, dropType, ev) {
-      //   console.log('tree drag end: ', dropNode, dropType);
-      // },
       goPersonnel() {
         this.$router.push({path: '/personnelStatement'});
       },
@@ -1344,9 +1291,6 @@
             })
           }
         })
-        // this.defaultExpandKeys.filter((x) => {
-        //   return x !== data.id;
-        // });
       },
       handleSet(s, d, n) { //设置负责人
         this.organizationDialog = true;
@@ -1513,11 +1457,6 @@
             {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         }
-        // this.lists = [
-        //   {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
-        //   {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-        //   // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
-        // ];
         this.contextParams(event);
       },
       //发送离职短信
@@ -1690,7 +1629,7 @@
           this.powerData = val.data;
         } else if (val.clickIndex === 'send_leave_msg') {
           this.sendLeaveMsgDialog = true;
-        }else if (val.clickIndex === 'view_range') {
+        } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
         }
 
@@ -1863,7 +1802,7 @@
       },
 
       //关闭可见范围模态框
-      closeViewRange(){
+      closeViewRange() {
         this.viewRangeDialog = false;
       },
 
@@ -2150,27 +2089,11 @@
         this.getPostStaffData();
       },
 
-      //---------------部门排序--------------------
-      sortDepartment() {
-        this.isDepartment = !this.isDepartment;
-      },
       initExpand() {
         this.setTree.map((a) => {
 //          this.defaultExpandKeys.push(a.id)
         });
         this.isLoadingTree = true;
-        this.$nextTick(() => {
-          this.setSort()
-        })
-      },
-      setSort() {
-        const el = document.querySelectorAll('#sortTable ul')[0];
-        this.sortable = Sortable.create(el, {
-          onEnd: evt => {
-//            const tempIndex = this.newList.splice(evt.oldIndex, 1)[0]
-//            this.newList.splice(evt.newIndex, 0, tempIndex)
-          }
-        })
       },
 
       //************列表变色************
