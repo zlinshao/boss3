@@ -1,6 +1,6 @@
 <template>
   <div id="addWebInfo">
-    <el-dialog :close-on-click-modal="false" title="新增官网房源" :visible.sync="addWebInfoDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="上线房源" :visible.sync="addWebInfoDialogVisible" width="60%">
       <div class="scroll_bar"
            v-loading="isLoading"
            element-loading-text="拼命加载中"
@@ -222,7 +222,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addWebInfoDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd" :disabled="isUp">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd" :disabled="isUp">上 线</el-button>
       </span>
     </el-dialog>
   </div>

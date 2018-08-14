@@ -65,6 +65,22 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">装修状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable placeholder="请选择" v-model="params_first.decoration" value="">
+                        <el-option v-for="item in decorate_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
           </div>
           <div v-if="activeName === 'second'">
             <el-row class="el_row_border">
@@ -83,6 +99,20 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">装修状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable placeholder="请选择" v-model="params_second.decoration" value="">
+                        <el-option v-for="item in decorate_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
           </div>
           <div v-if="activeName === 'third'">
@@ -94,9 +124,23 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="params_second.city" clearable placeholder="请选择">
+                      <el-select v-model="params_third.city" clearable placeholder="请选择">
                         <el-option v-for="(val,index) in city_dic" :label="val.dictionary_name"
                                    :value="val.variable.city_id" :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">装修状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable placeholder="请选择" v-model="params_third.decoration" value="">
+                        <el-option v-for="item in decorate_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -154,26 +198,30 @@
           limit:10,
           search :'',
           status :'',
-          city : ''
+          city : '',
+          decoration : '',
         },
         params_second:{
           page:1,
           limit:10,
           status :'2',
           city : '',
-          search : ''
+          search : '',
+          decoration : '',
         },
         params_third :{
           page:1,
           limit:10,
           search :'',
           status :'3',
-          city : ''
+          city : '',
+          decoration : '',
         },
         search_first : false,
         search_second : false,
         search_third : false,
         city_dic : [],
+        decorate_dic : [],
       }
     },
     mounted() {
@@ -188,6 +236,7 @@
         this.dictionary(306, 1).then((res) => {
           this.city_dic = res.data;
         });
+        this.dictionary(404,1).then((res) => {this.decorate_dic = res.data});
       },
       handleSizeChange(val){},
       handleCurrentChange(val){},

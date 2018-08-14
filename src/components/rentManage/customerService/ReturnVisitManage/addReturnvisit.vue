@@ -756,6 +756,11 @@
         }
       },
       compareData(){
+        if (this.activeName === 'first') {
+          this.form.module = 1;
+        } else {
+          this.form.module = 2;
+        }
         this.compareing = true;
         this.$http.put(globalConfig.server+'contract/feedback/compare',this.form).then((res)=>{
           this.compareing = false
