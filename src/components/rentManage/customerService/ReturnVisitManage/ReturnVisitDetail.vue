@@ -2,7 +2,6 @@
   <div id="addFollowUp">
     <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="50%">
       <div style="padding: 10px 20px;" class="scroll_bar">
-        {{activeName}}fdsfs
         <el-form size="mini" :model="form" label-width="86px">
           <el-row>
             <el-col :span="10">
