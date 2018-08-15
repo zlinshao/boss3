@@ -349,8 +349,10 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addReturnvisitDialogVisible = false">取 消</el-button>
-        <el-button v-if="!compareing" size="small" type="primary" @click="compareData">对 比</el-button>
-        <el-button v-else size="small"  type="primary" :loading="true">对比中</el-button>
+        <span v-if="form.is_connect === 1">
+          <el-button v-if="!compareing" size="small" type="primary" @click="compareData">对 比</el-button>
+          <el-button v-else size="small"  type="primary" :loading="true">对比中</el-button>
+        </span>
         <el-button size="small" type="primary" @click="confirmAdd">保 存</el-button>
       </span>
     </el-dialog>
