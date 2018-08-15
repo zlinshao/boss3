@@ -334,8 +334,8 @@
               <el-col :span="24">
                 <el-form-item label="对比详情">
                   <div class="content">
-                    <div style="color: #e4393c;font-size: 14px">{{form.cmp_content.split(':')[0]}}</div>
-                    <div v-for="item in form.cmp_content.split(':')[1].split(';')">
+                    <div style="color: #e4393c;font-size: 14px">{{form.cmp_content.split('#')[0]}}</div>
+                    <div v-for="item in form.cmp_content.split('#')[1].split(';')">
                       {{item}}
                     </div>
                   </div>

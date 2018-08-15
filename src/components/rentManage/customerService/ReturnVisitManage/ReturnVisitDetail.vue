@@ -326,14 +326,15 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row v-if="repairDetail.cmp_content">
+            <el-row v-if="repairDetail && repairDetail.cmp_content">
               <el-col :span="24">
                 <el-form-item label="对比详情">
                   <div class="content">
-                    <div style="color: #e4393c;font-size: 14px">{{repairDetail.cmp_content.split(':')[0]}}</div>
-                    <div v-for="item in repairDetail.cmp_content.split(':')[1].split(';')">
+                    <div style="color: #e4393c;font-size: 14px">{{repairDetail.cmp_content.split('#')[0]}}</div>
+                    <div v-for="item in repairDetail.cmp_content.split('#')[1].split(';')">
                       {{item}}
                     </div>
+                    {{repairDetail.cmp_content.split(':')[1]}}
                   </div>
                 </el-form-item>
               </el-col>

@@ -163,10 +163,10 @@
             <WholeHouse v-if="activeName === 'first'" :params="params_first" :search="search_first"></WholeHouse>
           </el-tab-pane>
           <el-tab-pane label="线上房源" name="second">
-            <OnlineHouse v-if="activeName === 'second'" :params="params_second" :search="params_second"></OnlineHouse>
+            <OnlineHouse v-if="activeName === 'second'" :params="params_second" :search="search_second"></OnlineHouse>
           </el-tab-pane>
           <el-tab-pane label="下架房源" name="third">
-            <UnderHouse v-if="activeName === 'third'" :params="params_third" :search="params_third"></UnderHouse>
+            <UnderHouse v-if="activeName === 'third'" :params="params_third" :search="search_third"></UnderHouse>
           </el-tab-pane>
         </el-tabs>
       </div>

@@ -160,25 +160,20 @@
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
-        $.ajax({
-          url: 'http://192.168.20.25:8086/index.php/api/client/houseowner-join-orders',
-          type: 'get',
-          data: this.params,
-          success: res => {
-            this.tableLoading = false;
-            if (res.code === '1100200') {
-              this.tableData = res.data.list;
-              this.totalNum = res.data.count;
-              if (res.data.list.length < 1) {
-                this.tableStatus = '暂无数据';
-              }
-            } else {
+        this.$http.get(globalConfig.server+'api/client/houseowner-join-orders',{params:this.params}).then((res)=>{
+          this.tableLoading = false;
+          if (res.data.code === '1100200') {
+            this.tableData = res.data.data.list;
+            this.totalNum = res.data.data.count;
+            if (res.data.data.list.length < 1) {
               this.tableStatus = '暂无数据';
-              this.tableData = [];
-              this.totalNum = 0;
             }
+          } else {
+            this.tableStatus = '暂无数据';
+            this.tableData = [];
+            this.totalNum = 0;
           }
-        });
+        })
       },
       handleCurrentChange(val) {
         this.params.page = val;
@@ -196,26 +191,21 @@
         this.editParams.bossUserName = val[0].name;
       },
       confirmEdit(){
-        $.ajax({
-          url: 'http://192.168.30.156:8081/api/client/houseowner-order-edit',
-          type: 'post',
-          data: this.editParams,
-          success: res => {
-            if(res.code === '1100200'){
-              this.$notify.success({
-                title:'成功',
-                msg:res.msg
-              });
-              this.dialogVisible = false;
-              this.getTableData();
-            }else {
-              this.$notify.warning({
-                title:'警告',
-                msg:res.msg
-              })
-            }
+        this.$http.post(globalConfig.server+'api/client/houseowner-order-edit',this.editParams).then((res)=>{
+          if(res.data.code === '1100200'){
+            this.$notify.success({
+              title:'成功',
+              msg:res.data.msg
+            });
+            this.dialogVisible = false;
+            this.getTableData();
+          }else {
+            this.$notify.warning({
+              title:'警告',
+              msg:res.data.msg
+            })
           }
-        });
+        })
       },
       /*******************************************************************/
       handlerContextmenu(row, event) {
