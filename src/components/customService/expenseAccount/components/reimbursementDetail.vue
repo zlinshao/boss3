@@ -178,7 +178,7 @@
                           </div>
                         </el-form-item>
                       </el-col>
-                      <el-col :span="8" v-if="item.accusers=='员工'">
+                      <el-col :span="8" v-if="item.accusers && item.accusers!=='公司'">
                         <el-form-item label="认责人姓名">
                           <div class="content">
                             <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>
@@ -278,7 +278,7 @@
                           </div>
                         </el-form-item>
                       </el-col>
-                      <el-col :span="8" v-if="item.accusers=='员工'">
+                      <el-col :span="8" v-if="item.accusers && item.accusers!=='公司'">
                         <el-form-item label="认责人姓名">
                           <div class="content">
                             <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>
@@ -426,7 +426,7 @@
                           </div>
                         </el-form-item>
                       </el-col>
-                      <el-col :span="8" v-if="item.accusers=='员工'">
+                      <el-col :span="8" v-if="item.accusers && item.accusers!=='公司'">
                         <el-form-item label="认责人姓名">
                           <div class="content">
                             <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>

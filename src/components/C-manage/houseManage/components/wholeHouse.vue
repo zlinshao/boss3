@@ -135,9 +135,9 @@
         this.$http.post(globalConfig.server+'api/v1/transfer',this.params).then((res)=>{
           this.tableLoading = false;
           if(res.data.code === '90012'){
-            this.tableData = res.data.data;
+            this.tableData = res.data.data.houses;
             this.totalNum = res.data.data.total;
-            if(res.data.data.length<1){
+            if(res.data.data.houses.length<1){
               this.tableStatus = '暂无数据';
             }
           }else {
