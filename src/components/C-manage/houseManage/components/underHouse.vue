@@ -66,7 +66,6 @@
 
     <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
                  :houseDetail="houseDetail" :houseId="house_id" @close="closeModal"></HouseDetail>
-    <Download :downloadPicDialog="downloadPicDialog" :houseId="house_id" @close="closeModal"></Download>
   </div>
 </template>
 
@@ -74,8 +73,6 @@
   import RightMenu from '../../../common/rightMenu.vue'  //右键
   import houseUpdate from './houseUpdate'
   import HouseDetail from '../../../../components/rentManage/housesManage/components/houseDetail'
-  import Download from '../../../../components/rentManage/housesManage/components/downloadPic.vue'
-
   export default {
     name: 'hello',
     props: {
@@ -88,7 +85,7 @@
         required: true,
       }
     },
-    components: {RightMenu,houseUpdate,HouseDetail,Download},
+    components: {RightMenu,houseUpdate,HouseDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -100,7 +97,6 @@
         tableLoading: false,
         addWebInfoDialog: false,
         houseDetailDialog: false,
-        downloadPicDialog: false,
         tableData: [],
         totalNum: 0,
         undercarriageParams:{
@@ -154,7 +150,6 @@
       closeModal(val){
         this.addWebInfoDialog = false;
         this.houseDetailDialog = false;
-        this.downloadPicDialog = false;
         if(val){
           this.getTableData();
         }
@@ -166,11 +161,10 @@
       },
       /*******************************************************************/
       handlerContextmenu(row, event) {
-        this.undercarriageParams.house_id = this.house_id = row.id;
+        this.undercarriageParams.house_id = row.id;
         this.lists = [
-          {clickIndex: 'upload', headIcon: 'el-icon-upload2', label: '上线' ,disabled:row.status === 2},
-          {clickIndex: 'download', headIcon: 'el-icon-download', label: '下架' ,disabled:row.status !== 2},
-          {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
+          {clickIndex: 'upload', headIcon: 'el-icon-upload2', label: '上线'},
+          // {clickIndex: 'download', headIcon: 'el-icon-download', label: '下架'},
         ];
         this.contextMenuParam(event);
       },
@@ -197,9 +191,6 @@
             break;
           case 'upload':
             this.addWebInfoDialog = true;
-            break;
-          case 'downloadPicDialog' :
-            this.downloadPicDialog = true;
             break;
         }
       },

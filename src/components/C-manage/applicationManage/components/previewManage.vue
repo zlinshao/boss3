@@ -7,6 +7,7 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0)"
+      @row-contextmenu='handlerContextmenu'
       style="width: 100%">
 
       <el-table-column label="提交时间">

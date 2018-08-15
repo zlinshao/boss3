@@ -1,7 +1,7 @@
 <template>
   <div id="addCollectRepair">
     <el-dialog :close-on-click-modal="false" title="新建回访记录" :visible.sync="addReturnvisitDialogVisible" width="50%">
-      <div style="padding: 10px 20px;">
+      <div style="padding: 10px 20px;" class="scroll_bar">
         <el-form size="mini" :model="form" label-width="82px">
           <el-row>
             <el-col :span="12">
@@ -325,9 +325,20 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
-                  <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;"
-                       data-magnify :key="val"
+                  <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
                        v-for="val in contractInfo.photo" :data-src="val" :src="val" alt="">
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row v-if="form.cmp_content">
+              <el-col :span="24">
+                <el-form-item label="对比详情">
+                  <div class="content">
+                    <div style="color: #e4393c;font-size: 14px">{{form.cmp_content.split('#')[0]}}</div>
+                    <div v-for="item in form.cmp_content.split('#')[1].split(';')">
+                      {{item}}
+                    </div>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -335,8 +346,13 @@
 
         </el-form>
       </div>
+
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addReturnvisitDialogVisible = false">取 消</el-button>
+        <span v-if="form.is_connect === 1">
+          <el-button v-if="!compareing" size="small" type="primary" @click="compareData">对 比</el-button>
+          <el-button v-else size="small"  type="primary" :loading="true">对比中</el-button>
+        </span>
         <el-button size="small" type="primary" @click="confirmAdd">保 存</el-button>
       </span>
     </el-dialog>
@@ -500,7 +516,10 @@
           remark_clause: "",  //备注条款
           is_connect: '',
           type: '',
+
+          cmp_content : '',
         },
+        compareing : false,
         contractInfo: [],
         pickerOptions2: {
           shortcuts: [{
@@ -698,12 +717,12 @@
       },
       confirmAdd() {
         this.validateFlag = true;
-        if (this.activeName == 'first') {
+        if (this.activeName === 'first') {
           this.form.module = 1;
-        }
-        else {
+        } else {
           this.form.module = 2;
         }
+
         if (this.form.is_connect === 1) {
           this.validate();
         }
@@ -737,6 +756,25 @@
             this.confirmAddConnect('');
           }
         }
+      },
+      compareData(){
+        if (this.activeName === 'first') {
+          this.form.module = 1;
+        } else {
+          this.form.module = 2;
+        }
+        this.compareing = true;
+        this.$http.put(globalConfig.server+'contract/feedback/compare',this.form).then((res)=>{
+          this.compareing = false
+          if(res.data.code === '1212200'){
+            this.form.cmp_content = res.data.data.cmp_content;
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        })
       },
       confirmAddConnect(val) {
         this.form.type = val;
@@ -772,99 +810,85 @@
             title: '警告',
             message: "合同周期不能为空"
           });
-        }
-        if ((this.form.originate == "") && this.validateFlag == true) {
+        } else if ((this.form.originate == "") && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "来源不能为空"
           });
-        }
-        if (this.form.agency == "" && this.form.originate === 623 && this.validateFlag == true) {
+        } else if (this.form.agency == "" && this.form.originate === 623 && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "中介名称不能为空"
           });
-        }
-        if (this.form.agency_price == "" && this.form.originate === 623 && this.validateFlag == true) {
+        } else if (this.form.agency_price == "" && this.form.originate === 623 && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "中介费用不能为空"
           });
-        }
-        if (this.form.agency_person == "" && this.form.originate === 623 && this.validateFlag == true) {
+        } else if (this.form.agency_person == "" && this.form.originate === 623 && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "中介人不能为空"
           });
-        }
-        if (this.form.agency_tel == "" && this.form.originate === 623 && this.validateFlag == true) {
+        } else if (this.form.agency_tel == "" && this.form.originate === 623 && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "中介电话不能为空"
           });
-        }
-        if ((this.form.unit_price[0].length == 0 || this.form.unit_price[1].length == 0) && this.validateFlag == true) {
+        } else if ((this.form.unit_price[0].length == 0 || this.form.unit_price[1].length == 0) && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "月单价不能为空"
           });
-        }
-        if ((this.form.pay_type[0].length == 0 || this.form.pay_type[1].length == 0 || this.form.pay_type[2].length == 0 && this.form.module == '2') && this.validateFlag == true) {
+        } else if ((this.form.pay_type[0].length == 0 || this.form.pay_type[1].length == 0 || this.form.pay_type[2].length == 0 && this.form.module == '2') && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "付款方式不能为空"
           });
-        }
-        if (this.form.has_extra == "" && this.validateFlag == true) {
+        } else if (this.form.has_extra == "" && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "其他费用不能为空"
           });
-        }
-        if ((this.form.pay_use[0].length == 0 || this.form.pay_use[1].length == 0) && this.form.has_extra == "1" && this.validateFlag == true) {
+        } else if ((this.form.pay_use[0].length == 0 || this.form.pay_use[1].length == 0) && this.form.has_extra == "1" && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "其他费用明细不能为空"
           });
-        }
-        if ((this.form.guarantee_month == "" && this.form.guarantee_day == "") && this.validateFlag == true) {
+        } else if ((this.form.guarantee_month == "" && this.form.guarantee_day == "") && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "保修期不能为空"
           });
-        }
-        if (!this.form.star && this.validateFlag == true) {
+        } else if (!this.form.star && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "业务员态度不能为空"
           });
-        }
-        if (this.form.has_pay == "" && this.form.module == '2' && this.validateFlag == true) {
+        } else if (this.form.has_pay == "" && this.form.module == '2' && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "已付金额不能为空"
           });
-        }
-        if ((this.form.pay_method[0].length == 0 || this.form.pay_method[1].length == 0) && this.form.module == '2' && this.validateFlag == true) {
+        } else if ((this.form.pay_method[0].length == 0 || this.form.pay_method[1].length == 0) && this.form.module == '2' && this.validateFlag == true) {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
             message: "支付方式不能为空"
           });
-        }
-        if (this.form.sale_remark == "") {
+        } else if (this.form.sale_remark == "") {
           this.validateFlag = false;
           this.$notify.warning({
             title: '警告',
@@ -918,6 +942,9 @@
           this.contractInfo = [],
           this.follow_name = '';
         this.form.is_connect = '';
+
+        this.form.cmp_content = '';
+        this.compareing = false;
       },
       closeOrganization() {
         this.organizeType = '';

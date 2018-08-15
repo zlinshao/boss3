@@ -52,12 +52,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="type.dictionary_name"
-        label="报销类型">
+          prop="type.dictionary_name"
+          label="报销类型">
         <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
-          <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+          <span v-if="scope.row.type && arrSplitToArray(scope.row.type)">{{arrSplitToArray(scope.row.type).join(',')}}</span>
+          <span v-else>暂无</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -101,16 +100,40 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="status.dictionary_name"
-        label="报销状态">
+          label="结算人">
         <template slot-scope="scope">
-          <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
-            {{scope.row.status.dictionary_name}}
-          </el-button>
-          <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
-                     type="info" size="mini">{{scope.row.status.dictionary_name}}
-          </el-button>
-          <span v-if="!scope.row.status.dictionary_name">暂无</span>
+          <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
+          <span v-if="!scope.row.results">暂无</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+          prop="status.dictionary_name"
+          label="报销状态">
+        <template slot-scope="scope">
+          <!--<el-button class="btnStatus" v-if="scope.row.status.id && scope.row.status.id == 654" type="primary" size="mini">-->
+          <!--{{scope.row.status.dictionary_name}}-->
+          <!--</el-button>-->
+          <span v-if="scope.row.status && scope.row.status.dictionary_name">
+            <span v-if="scope.row.status.dictionary_name === '待处理'" class="info_label">
+              {{scope.row.status.dictionary_name}}
+            </span>
+            <span v-else-if="scope.row.status.dictionary_name === '处理中'" class="yellow_label">
+              {{scope.row.status.dictionary_name}}
+            </span>
+            <span v-else-if="scope.row.status.dictionary_name === '待审核'" class="orange_label">
+              {{scope.row.status.dictionary_name}}
+            </span>
+            <span v-else-if="scope.row.status.dictionary_name === '已拒绝'" class="red_label">
+              {{scope.row.status.dictionary_name}}
+            </span>
+            <span v-else-if="scope.row.status.dictionary_name === '已驳回'" class="red_label">
+              {{scope.row.status.dictionary_name}}
+            </span>
+            <span v-else="" class="success_label">
+              {{scope.row.status.dictionary_name}}
+            </span>
+          </span>
+          <span v-else>暂无</span>
         </template>
       </el-table-column>
     </el-table>
@@ -209,6 +232,13 @@
       dblClickTable(row, event) {
         this.reimbursementId = row.id;
         this.reimbursementDetailDialog = true;
+      },
+      arrSplitToArray(json){
+        let arr = [];
+        json.forEach(item=>{
+          arr.push(item.dictionary_name);
+        });
+        return arr;
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

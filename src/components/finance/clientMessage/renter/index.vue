@@ -18,8 +18,9 @@
           </el-form-item>
         </el-form>
       </div>
-
-      <div class="filter high_grade" :class="isHigh ? 'highHide' : ''">
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
@@ -193,7 +194,7 @@
         this.lists = [
           {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
-          {clickIndex: 'pendTenant', headIcon: 'el-icon-circle-close-outline', label: '转为待处理项',},
+          {clickIndex: 'pendTenant', headIcon: 'iconfont icon-fangdongtuifang', label: '转为待处理项',},
         ];
         this.contextMenuParam(event);
       },
@@ -237,10 +238,7 @@
             message: '删除成功!'
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+
         });
       },
       // 转为待处理项
@@ -255,10 +253,7 @@
             message: '操作成功!'
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
-          });
+
         });
       },
       // 分页

@@ -239,32 +239,50 @@
         switch (this.moduleType) {
           case 'lejiaCollege':  //乐伽大学
             this.tabIndex = 'first';
-            this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
-              this.dict.region = res.data.data;
+            this.dictionary(361, 1).then((res) => {
+              this.dict.region = res.data;
             });
             break;
           case 'companyPortal':   //公司门户
             this.tabIndex = 'second';
-            this.$http.get(this.urls + 'setting/dictionary/377').then((res) => {
-              this.dict.region = res.data.data;
+            this.dictionary(377, 1).then((res) => {
+              this.dict.region = res.data;
             });
             break;
           case 'staffSquare':    //员工广场
             this.tabIndex = 'third';
-            this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
-              this.dict.region = res.data.data;
+            this.dictionary(137, 1).then((res) => {
+              this.dict.region = res.data;
             });
             break;
           case 'systemManageMent':   //制度管理
             this.tabIndex = 'fourth';
-            this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
-              this.dict.region = res.data.data;
+            this.dictionary(380, 1).then((res) => {
+              this.dict.region = res.data;
             });
             break;
           case 'newVersionUpdate':   //版本管理
             this.tabIndex = 'fifth';
-            this.$http.get(this.urls + 'setting/dictionary/672').then((res) => {
-              this.versionType = res.data.data;
+            this.dictionary(672, 1).then((res) => {
+              this.versionType = res.data;
+            });
+            break;
+          case 'intelligence':      //乐伽情报屋
+            this.tabIndex = 'six';
+            this.dictionary(683, 1).then((res) => {
+              this.dict.region = res.data;
+            });
+            break;
+          case 'lejiaStory':      //乐伽情报屋
+            this.tabIndex = 'seven';
+            this.dictionary(686, 1).then((res) => {
+              this.dict.region = res.data;
+            });
+            break;
+            case 'ownerStory':      //乐伽情报屋
+            this.tabIndex = 'eight';
+            this.dictionary(688, 1).then((res) => {
+              this.dict.region = res.data;
             });
             break;
         }

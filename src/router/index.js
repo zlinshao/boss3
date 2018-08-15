@@ -604,7 +604,6 @@ export default new Router({
     //     {path: '/houses', component: Houses, name: '房源管理'},
     //   ]
     // },
-
   ]
 })
 

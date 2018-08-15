@@ -1,12 +1,18 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-      <div class="highRanking">
+     <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
-            <el-form-item>
-              <el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">
-                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+            <el-form-item v-if="activeName === 'first'">
+              <el-input placeholder="请选择房屋地址" v-model="addressCollect" size="mini" readOnly @focus="openAddressDialog">
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item v-else>
+              <el-input placeholder="请选择房屋地址" v-model="addressRent" size="mini" readOnly @focus="openAddressDialog">
                 <template slot="append">
                   <div style="cursor: pointer;" @click="emptySearch">清空</div>
                 </template>
@@ -16,112 +22,202 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="syncStatusDialog = true;">同步</el-button>
+              <el-button type="primary" size="mini" @click="syncStatusDialog = true">同步</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="search">
                 <i class="el-icon-refresh"></i>刷新
               </el-button>
             </el-form-item>
-            <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="exportData">导出</el-button>-->
-            <!--</el-form-item>-->
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <el-form :inline="true" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">创建时间</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-date-picker
-                        v-model="form.time"
-                        type="daterange"
-                        value-format="yyyy-MM-dd"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">创建人</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择创建人"
-                                readonly>
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="closeStaff">清空</div>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">报销类型</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select clearable v-model="form.type" placeholder="请选择类型" value="">
-                        <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name"
-                                   :value="item.id"
-                                   :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">来源</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select clearable v-model="form.source" placeholder="请选择来源" value="">
-                        <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
-                                   :value="item.id"
-                                   :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">完成状态</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select clearable v-model="form.status" placeholder="请选择状态" value="">
-                        <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name" :value="item.id"
-                                   :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
+            <div v-if="activeName === 'first'">
+              <el-row class="el_row_border">
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">创建时间</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-date-picker
+                            v-model="paramsCollect.time"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">创建人</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-input v-model="staff_name_collect" @focus="chooseStaff" placeholder="请选择创建人"
+                                  readonly>
+                          <template slot="append">
+                            <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row class="el_row_border">
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">报销类型</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsCollect.type" placeholder="请选择类型" value="">
+                          <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name"
+                                     :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">来源</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsCollect.source" placeholder="请选择来源" value="">
+                          <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
+                                     :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row class="el_row_border">
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">完成状态</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsCollect.status" placeholder="请选择状态" value="">
+                          <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name" :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
+            <div v-else>
+              <el-row class="el_row_border">
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">创建时间</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-date-picker
+                            v-model="paramsRent.time"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">创建人</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-input v-model="staff_name_rent" @focus="chooseStaff" placeholder="请选择创建人"
+                                  readonly>
+                          <template slot="append">
+                            <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row class="el_row_border">
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">报销类型</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsRent.type" placeholder="请选择类型" value="">
+                          <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name"
+                                     :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">来源</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsRent.source" placeholder="请选择来源" value="">
+                          <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
+                                     :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+              <el-row class="el_row_border">
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">完成状态</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsRent.status" placeholder="请选择状态" value="">
+                          <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name" :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>
+            </div>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -189,9 +285,8 @@
                 prop="type.dictionary_name"
                 label="报销类型">
                 <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
-                  <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+                  <span v-if="scope.row.type && arrSplitToArray(scope.row.type)">{{arrSplitToArray(scope.row.type).join(',')}}</span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -235,19 +330,55 @@
                 </template>
               </el-table-column>
               <el-table-column
+                  label="结算人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
+                  <span v-if="!scope.row.results">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 prop="status.dictionary_name"
                 label="报销状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
-                    {{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
-                             type="info" size="mini">{{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <span v-if="!scope.row.status.dictionary_name">暂无</span>
+                  <!--<el-button class="btnStatus" v-if="scope.row.status.id && scope.row.status.id == 654" type="primary" size="mini">-->
+                    <!--{{scope.row.status.dictionary_name}}-->
+                  <!--</el-button>-->
+                  <span v-if="scope.row.status && scope.row.status.dictionary_name">
+                    <span v-if="scope.row.status.dictionary_name === '待处理'" class="info_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '处理中'" class="yellow_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '待审核'" class="orange_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已拒绝'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已驳回'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else="" class="success_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
             </el-table>
+            <div class="block pages">
+              <div class="left">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="paramsCollect.page"
+                    :page-size="12"
+                    layout="total, prev, pager, next, jumper"
+                    :total="totalNumCollect">
+                </el-pagination>
+              </div>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="租房报销记录" name="second">
             <el-table
@@ -303,12 +434,11 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="type.dictionary_name"
-                label="报销类型">
+                  prop="type.dictionary_name"
+                  label="报销类型">
                 <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
-                  <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+                  <span v-if="scope.row.type && arrSplitToArray(scope.row.type)">{{arrSplitToArray(scope.row.type).join(',')}}</span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -352,35 +482,60 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="status.dictionary_name"
-                label="报销状态">
+                  label="结算人">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
-                    {{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
-                             type="info" size="mini">{{scope.row.status.dictionary_name}}
-                  </el-button>
-                  <span v-if="!scope.row.status.dictionary_name">暂无</span>
+                  <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
+                  <span v-if="!scope.row.results">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                  prop="status.dictionary_name"
+                  label="报销状态">
+                <template slot-scope="scope">
+                  <!--<el-button class="btnStatus" v-if="scope.row.status.id && scope.row.status.id == 654" type="primary" size="mini">-->
+                  <!--{{scope.row.status.dictionary_name}}-->
+                  <!--</el-button>-->
+                  <span v-if="scope.row.status && scope.row.status.dictionary_name">
+                    <span v-if="scope.row.status.dictionary_name === '待处理'" class="info_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '处理中'" class="yellow_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '待审核'" class="orange_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已拒绝'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else-if="scope.row.status.dictionary_name === '已驳回'" class="red_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                    <span v-else="" class="success_label">
+                      {{scope.row.status.dictionary_name}}
+                    </span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
             </el-table>
+            <div class="block pages">
+              <div class="left">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="paramsRent.page"
+                    :page-size="12"
+                    layout="total, prev, pager, next, jumper"
+                    :total="totalNumRent">
+                </el-pagination>
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
-        <div class="block pages">
-          <div class="left">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="form.page"
-              :page-size="12"
-              layout="total, prev, pager, next, jumper"
-              :total="totalNum">
-            </el-pagination>
-          </div>
-        </div>
       </div>
     </div>
+    <!--模态框-->
     <div>
       <el-dialog :close-on-click-modal="false" title="审核报销" :visible.sync="examineStatusDialog" width="30%">
         <el-form size="small" label-width="100px">
@@ -419,7 +574,7 @@
       </el-dialog>
     </div>
     <div>
-      <el-dialog :close-on-click-modal="false" title="上传付款凭证" :visible.sync="uploadPayDialog" width="50%">
+      <el-dialog :close-on-click-modal="false" title="上传付款凭证" :visible.sync="uploadPayDialog" width="30%">
         <el-form size="small" label-width="100px">
           <el-row>
             <el-col :span="20">
@@ -435,14 +590,14 @@
       </span>
       </el-dialog>
     </div>
+
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
 
     <EditReimbursement :editReimbursementDialog="editReimbursementDialog" :reimbursementId="reimbursementId"
-                       :module="module"
-                       @close="closeModal"></EditReimbursement>
+                       :module="module" @close="closeModal"></EditReimbursement>
     <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :reimbursementId="reimbursementId"
                          @close="closeModal"></ReimbursementDetail>
     <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType"
@@ -469,11 +624,10 @@
         rightMenuY: 0,
         show: false,
         lists: [],
-        form: {
+        paramsCollect: {
           module: 1,
           page: 1,
           limit: 12,
-          // keyword: '',
           time: [],  //时间搜索
           status: '',  //完成状态
           source: '',  //来源
@@ -481,10 +635,23 @@
           staff_id: '',  //创建人
           contract_id: '',
         },
-        address: '',
+        paramsRent: {
+          module: 2,
+          page: 1,
+          limit: 12,
+          time: [],  //时间搜索
+          status: '',  //完成状态
+          source: '',  //来源
+          type: '',  //报销类型
+          staff_id: '',  //创建人
+          contract_id: '',
+        },
+        addressCollect: '',
+        addressRent: '',
         collectTableData: [],
         rentTableData: [],
-        totalNum: 0,
+        totalNumCollect: 0,
+        totalNumRent: 0,
         isHigh: false,
         collectStatus: ' ',
         collectLoading: false,
@@ -493,7 +660,8 @@
         activeName: 'first',
         organizeVisible: false,
         organizeType: '',
-        staff_name: '',
+        staff_name_collect: '',
+        staff_name_rent: '',
         reimbursementDetailDialog: false,
         reimbursementTypeCategory: [],  //报销类型
         reimbursementSourceCategory: [],  //报销来源
@@ -518,15 +686,22 @@
     },
     mounted() {
       this.getCollectTableData();
+      this.getRentTableData();
       this.getDictionary();
     },
-    activated() {
-      this.search();
-    },
+    // activated() {
+    //   this.search();
+    // },
     watch: {
-      address(val) {
+      addressCollect(val) {
         if (!val) {
-          this.form.contract_id = '';
+          this.paramsCollect.contract_id = '';
+        }
+        this.search();
+      },
+      addressRent(val) {
+        if (!val) {
+          this.paramsRent.contract_id = '';
         }
         this.search();
       },
@@ -542,11 +717,7 @@
         }
       },
       uploadPayDialog(val) {
-        if (val) {
-          this.isClear = false;
-        } else {
-          this.isClear = true;
-        }
+        this.isClear = !val;
       },
     },
     methods: {
@@ -615,8 +786,14 @@
         });
       },
       emptySearch() {
-        this.form.contract_id = '';
-        this.address = '';
+        if(this.activeName === 'first'){
+          this.paramsCollect.contract_id = '';
+          this.addressCollect = '';
+        }else {
+          this.paramsRent.contract_id = '';
+          this.addressRent = '';
+        }
+
       },
       openAddressDialog() {
         this.addressDialog = true;
@@ -624,8 +801,14 @@
       closeAddressDialog(val) {
         this.addressDialog = false;
         if (val) {
-          this.address = val.address;
-          this.form.contract_id = val.contract_id;
+          if(this.activeName === 'first'){
+            this.addressCollect = val.address;
+            this.paramsCollect.contract_id = val.contract_id;
+          }else {
+            this.addressRent = val.address;
+            this.paramsRent.contract_id = val.contract_id;
+          }
+
         }
       },
       getDictionary() {
@@ -654,24 +837,23 @@
       getCollectTableData() {
         this.collectStatus = ' ';
         this.collectLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
+        if (!this.paramsCollect.time) {
+          this.paramsCollect.time = [];
         }
-        this.form.module = 1;
-        this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.paramsCollect}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '30000') {
             this.collectTableData = res.data.data.data;
-            this.totalNum = res.data.data.count;
+            this.totalNumCollect = res.data.data.count;
             if (res.data.data.data.length < 1) {
               this.collectStatus = "暂无数据";
               this.collectTableData = [];
-              this.totalNum = 0;
+              this.totalNumCollect = 0;
             }
           } else {
             this.collectTableData = [];
-            this.totalNum = 0;
+            this.totalNumCollect = 0;
             this.collectStatus = '暂无数据';
           }
         });
@@ -679,24 +861,23 @@
       getRentTableData() {
         this.rentStatus = ' ';
         this.rentLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
+        if (!this.paramsRent.time) {
+          this.paramsRent.time = [];
         }
-        this.form.module = 2;
-        this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.paramsRent}).then((res) => {
           this.isHigh = false;
           this.rentLoading = false;
           if (res.data.code === '30000') {
             this.rentTableData = res.data.data.data;
-            this.totalNum = res.data.data.count;
+            this.totalNumRent = res.data.data.count;
             if (res.data.data.data.length < 1) {
               this.rentStatus = "暂无数据";
               this.rentTableData = [];
-              this.totalNum = 0;
+              this.totalNumRent = 0;
             }
           } else {
             this.rentTableData = [];
-            this.totalNum = 0;
+            this.totalNumRent = 0;
             this.rentStatus = '暂无数据';
           }
         });
@@ -708,23 +889,34 @@
       },
       // 清空员工
       closeStaff() {
-        this.form.staff_id = '';
-        this.staff_name = '';
+        if(this.activeName === 'first'){
+          this.paramsCollect.staff_id = '';
+          this.staff_name_collect = '';
+        }else {
+          this.paramsRent.staff_id = '';
+          this.staff_name_rent = '';
+        }
+
       },
       selectMember(val) {
-        if (this.organizeType === 'staff') {
-          this.form.staff_id = val[0].id;
-          this.staff_name = val[0].name;
+        if(this.activeName === 'first'){
+          this.paramsCollect.staff_id = val[0].id;
+          this.staff_name_collect = val[0].name;
+        }else {
+          this.paramsRent.staff_id = val[0].id;
+          this.staff_name_rent = val[0].name;
         }
       },
       closeModal(val) {
-        this.editReimbursementDialog = false;
-        this.reimbursementDetailDialog = false;
-        this.reimResultDialog = false;
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
+        if(val === 'onlyRenovate'){
+          this.activeName === "first"?this.getCollectTableData():this.getRentTableData();
+        }else {
+          this.editReimbursementDialog = false;
+          this.reimbursementDetailDialog = false;
+          this.reimResultDialog = false;
+          if(val === 'success'){
+            this.activeName === "first"?this.getCollectTableData():this.getRentTableData();
+          }
         }
       },
       closeOrganize() {
@@ -732,21 +924,22 @@
       },
       // tabs标签页
       handleClick(tab, event) {
-        if (this.activeName == "first") {
+        if (this.activeName === "first") {
           this.module = 1;
           this.isRent = 0;
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
+          // this.getCollectTableData();
+        } else {
           this.module = 2;
           this.isRent = 1;
-          this.getRentTableData();
+          // this.getRentTableData();
         }
       },
       search() {
-        this.form.page = 1;
         if (this.activeName === 'first') {
+          this.paramsCollect.page = 1;
           this.getCollectTableData();
         } else {
+          this.paramsRent.page = 1;
           this.getRentTableData();
         }
       },
@@ -756,22 +949,33 @@
       },
       // 重置
       resetting() {
-        this.form.time = [];
-        this.form.status = '';
-        this.form.source = '';
-        this.form.type = '';
-        this.form.staff_id = '';
-        this.staff_name = '';
+        if (this.activeName === 'first') {
+          this.paramsCollect.time = [];
+          this.paramsCollect.status = '';
+          this.paramsCollect.source = '';
+          this.paramsCollect.type = '';
+          this.paramsCollect.staff_id = '';
+          this.staff_name_collect = '';
+        }else {
+          this.paramsRent.time = [];
+          this.paramsRent.status = '';
+          this.paramsRent.source = '';
+          this.paramsRent.type = '';
+          this.paramsRent.staff_id = '';
+          this.staff_name_rent = '';
+        }
+
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.form.page = val;
-        console.log(`当前页: ${val}`);
+
         if (this.activeName === 'first') {
+          this.paramsCollect.page = val;
           this.getCollectTableData();
         } else {
+          this.paramsRent.page = val;
           this.getRentTableData();
         }
       },
@@ -782,19 +986,24 @@
       //右键
       houseMenu(row, event) {
         this.reimbursementId = row.id;
+        let status = row.status.dictionary_name;
         if (row.results && row.results.id) {
           this.lists = [
-            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo', label: '编辑报销结果',},
-            {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单'
+              ,disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'&&status !=='已拒绝'},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo',
+              label: '编辑报销结果',disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'},
+            // {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',disabled:status !=='待审核'},
             {clickIndex: 'upload_pay', headIcon: 'el-icon-plus', label: '上传付款凭证',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
           this.lists = [
-            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
-            {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单'
+              ,disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'&&status !=='已拒绝'},
+            {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1',
+              label: '编辑报销结果',disabled:status !=='待处理'&&status !=='处理中'&&status !=='已驳回'},
+            // {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',disabled:status !=='待审核'},
             {clickIndex: 'upload_pay', headIcon: 'el-icon-plus', label: '上传付款凭证',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
@@ -826,6 +1035,13 @@
             break;
         }
       },
+      arrSplitToArray(json){
+        let arr = [];
+        json.forEach(item=>{
+          arr.push(item.dictionary_name);
+        });
+        return arr;
+      },
       deleteRepair() {
       },
       //关闭右键菜单
@@ -846,21 +1062,32 @@
         })
       },
       exportData() {
-        let exportForm = {
-          module: 1,
-          time: this.form.time,
-          status: this.form.status,
-          source: this.form.source,
-          type: this.form.type,
-          staff_id: this.form.staff_id
-        };
+        let exportForm = {};
+        if(this.activeName === 'first'){
+          exportForm = {
+            module: 1,
+            time: this.paramsCollect.time,
+            status: this.paramsCollect.status,
+            source: this.paramsCollect.source,
+            type: this.paramsCollect.type,
+            staff_id: this.paramsCollect.staff_id
+          };
+        }else {
+          exportForm = {
+            module: 1,
+            time: this.paramsRent.time,
+            status: this.paramsRent.status,
+            source: this.paramsRent.source,
+            type: this.paramsRent.type,
+            staff_id: this.paramsRent.staff_id
+          };
+        }
         this.$http.get(globalConfig.server + 'repaire/download', {params: exportForm}).then((res) => {
-          if (res.data.code == '600201') {
+          if (res.data.code === '600201') {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
             });
-            return;
           } else {
             this.$http.get(globalConfig.server + 'repaire/export', {
               responseType: 'arraybuffer',
@@ -887,7 +1114,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #clientContainer {
-
+  .info_label,.yellow_label,.orange_label,.red_label,.success_label{
+    min-width: 70px;
+    height: 28px;
+    line-height: 28px;
   }
 </style>
