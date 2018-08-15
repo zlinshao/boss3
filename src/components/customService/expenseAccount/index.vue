@@ -137,7 +137,7 @@
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
                         <el-date-picker
-                            v-model="addressRent.time"
+                            v-model="paramsRent.time"
                             type="daterange"
                             value-format="yyyy-MM-dd"
                             range-separator="至"
@@ -174,7 +174,7 @@
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-select clearable v-model="addressRent.type" placeholder="请选择类型" value="">
+                        <el-select clearable v-model="paramsRent.type" placeholder="请选择类型" value="">
                           <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name"
                                      :value="item.id"
                                      :key="item.id"></el-option>
@@ -190,7 +190,7 @@
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-select clearable v-model="addressRent.source" placeholder="请选择来源" value="">
+                        <el-select clearable v-model="paramsRent.source" placeholder="请选择来源" value="">
                           <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
                                      :value="item.id"
                                      :key="item.id"></el-option>
@@ -208,7 +208,7 @@
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-select clearable v-model="addressRent.status" placeholder="请选择状态" value="">
+                        <el-select clearable v-model="paramsRent.status" placeholder="请选择状态" value="">
                           <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
                         </el-select>
