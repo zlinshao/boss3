@@ -2,6 +2,7 @@
   <div id="addFollowUp">
     <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="50%">
       <div style="padding: 10px 20px;" class="scroll_bar">
+        {{activeName}}fdsfs
         <el-form size="mini" :model="form" label-width="86px">
           <el-row>
             <el-col :span="10">
@@ -126,9 +127,10 @@
                   <div class="content" style="width:36%;float:left;">{{repairDetail.pay_type[0][index-1][1]}}</div>
                 </el-form-item>
               </el-col>
+
               <el-col :span="10" v-if="activeName !='second'">
                 <el-form-item>
-                  <div class="content" v-for="item in payTypeInfo" :key="item.id"
+                  <div class="content" v-for="item in pay_way_dic" :key="item.id"
                        v-if="repairDetail.pay_type[1][index-1] == item.id">
                     {{item.dictionary_name}}
                   </div>
@@ -158,6 +160,7 @@
                              style="margin-left: 20px;line-height: 28px;"></el-checkbox>
               </el-col>
             </el-row>
+
             <el-row v-for="index in payTypeLen" v-if="activeName == 'second' && index>0" :key="index+111">
               <el-col :span="10">
                 <el-form-item label="支付方式">
@@ -364,6 +367,7 @@
           id: ""
         },
         payTypeInfo: [],
+        pay_way_dic: [],
         activeName: "",
         wholeFlag: false,
         abc: 3,
@@ -491,6 +495,9 @@
         this.dictionary(629).then(res => {
           //支付方式
           this.payTypeInfo = res.data;
+        });
+        this.dictionary(443, 1).then((res) => {
+          this.pay_way_dic = res.data;
         });
         this.$http.get(globalConfig.server + "contract/feedback/info", { params: this.form}).then(res => {
             if (res.data.code === "1212200") {
