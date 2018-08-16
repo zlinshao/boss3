@@ -271,11 +271,9 @@
             this.params_first.city = '';
             break;
           case 'second':
-            this.params_second.status = '';
             this.params_second.city = '';
             break;
           case 'third':
-            this.params_third.status = '';
             this.params_third.city = '';
             break;
         }
