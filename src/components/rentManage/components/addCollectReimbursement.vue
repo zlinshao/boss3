@@ -230,7 +230,7 @@
       initial() {
         this.form = {
           module: 1, //收房
-          contract_id: '', //合同Id
+          contract_id: this.contract.contract_id, //合同Id
           reimbursement_number: '', //维修单编号
           type: '', //报销类型
           source: '', //来源
