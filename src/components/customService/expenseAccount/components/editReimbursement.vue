@@ -216,10 +216,10 @@
               this.address = detail.contract_id && detail.contract_id.house && detail.contract_id.house.name;
               this.form.remark = detail.remark;
 
-              this.form.reimbursement.reimburtype_id = detail.reimbursement.reimburtype_id;
-              this.form.reimbursement.reimburtype = detail.reimbursement.reimburtype;
-              this.form.reimbursement.reimburperson_id = detail.reimbursement.reimburperson_id;
-              this.form.reimbursement.reimburperson_id_name = detail.reimbursement.reimburperson_id_name;
+              this.form.reimbursement.reimburtype_id = detail.reimbursement && detail.reimbursement.reimburtype_id;
+              this.form.reimbursement.reimburtype = detail.reimbursement && detail.reimbursement.reimburtype;
+              this.form.reimbursement.reimburperson_id = detail.reimbursement && detail.reimbursement.reimburperson_id;
+              this.form.reimbursement.reimburperson_id_name = detail.reimbursement && detail.reimbursement.reimburperson_id_name;
 
               let pic = detail.album.image_pic;
               this.form.image_pic = [];
