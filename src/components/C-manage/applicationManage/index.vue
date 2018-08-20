@@ -463,7 +463,6 @@
       selectMember(){
 
       },
-
       resetAll(){
         switch (this.activeName){
           case 'first':
