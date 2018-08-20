@@ -736,6 +736,7 @@
               message: res.data.msg
             });
             this.uploadPayDialog = false;
+            this.activeName === "first"?this.getCollectTableData():this.getRentTableData();
           } else {
             this.$notify.warning({
               title: '警告',
