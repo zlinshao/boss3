@@ -69,7 +69,7 @@
                     <el-form-item>
                       <el-select v-model="params_first.city" clearable placeholder="请选择">
                         <el-option v-for="(val,index) in city_dic" :label="val.dictionary_name"
-                                   :value="val.variable.city_id" :key="index"></el-option>
+                                   :value="val.dictionary_name" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -142,7 +142,7 @@
                     <el-form-item>
                       <el-select v-model="params_second.city" clearable placeholder="请选择">
                         <el-option v-for="(val,index) in city_dic" :label="val.dictionary_name"
-                                   :value="val.variable.city_id" :key="index"></el-option>
+                                   :value="val.dictionary_name" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -215,7 +215,7 @@
                     <el-form-item>
                       <el-select v-model="params_third.city" clearable placeholder="请选择">
                         <el-option v-for="(val,index) in city_dic" :label="val.dictionary_name"
-                                   :value="val.variable.city_id" :key="index"></el-option>
+                                   :value="val.dictionary_name" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -288,7 +288,7 @@
                     <el-form-item>
                       <el-select v-model="params_fourth.city" clearable placeholder="请选择">
                         <el-option v-for="(val,index) in city_dic" :label="val.dictionary_name"
-                                   :value="val.variable.city_id" :key="index"></el-option>
+                                   :value="val.dictionary_name" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>

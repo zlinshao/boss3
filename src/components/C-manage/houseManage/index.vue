@@ -269,12 +269,15 @@
           case 'first':
             this.params_first.status = '';
             this.params_first.city = '';
+            this.params_first.decoration = '';
             break;
           case 'second':
             this.params_second.city = '';
+            this.params_second.status = '';
             break;
           case 'third':
             this.params_third.city = '';
+            this.params_third.status = '';
             break;
         }
       },

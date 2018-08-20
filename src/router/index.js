@@ -598,7 +598,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: 'C端管理',
-      icon: 'iconfont icon-shezhi1',
+      icon: 'el-icon-mobile-phone',
       children: [
         {path: '/application', component: Application, name: '申请管理'},
         {path: '/houses', component: Houses, name: '房源管理'},
