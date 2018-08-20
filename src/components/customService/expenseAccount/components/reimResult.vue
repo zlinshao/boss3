@@ -835,6 +835,8 @@
           this.commentList = [];
         } else {
           this.getDetail();
+          this.getCommentData();
+
           if (this.type === 'add') {
             this.resultTitle = '新增报销结果';
           } else if (this.type === 'edit') {

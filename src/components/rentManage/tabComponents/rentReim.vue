@@ -129,6 +129,9 @@
             <span v-else-if="scope.row.status.dictionary_name === '已驳回'" class="red_label">
               {{scope.row.status.dictionary_name}}
             </span>
+            <span v-else-if="scope.row.status.dictionary_name === '待结算'" class="red_label" style="background: #3bcec6">
+              {{scope.row.status.dictionary_name}}
+            </span>
             <span v-else="" class="success_label">
               {{scope.row.status.dictionary_name}}
             </span>

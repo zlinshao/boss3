@@ -341,7 +341,7 @@
           <div style="color: #a2b8fd;">BOSS 3.0</div>
         </div>
 
-        <el-main :class="isFull? 'mainHide':''">
+        <el-main class="" :class="isFull? 'mainHide':''">
           <div style="min-width: 1200px">
             <TagsView></TagsView>
           </div>
@@ -1225,9 +1225,10 @@
       z-index: 66;
       border-bottom: 1px solid #f4f3f6;
       display: flex;
+      justify-content: space-between;
       @include transition;
       .left {
-        width: 50%;
+        /*width: 50%;*/
         height: 100%;
         display: flex;
         align-items: center;
@@ -1267,7 +1268,7 @@
         }
       }
       .right {
-        width: 50%;
+        /*width: 50%;*/
         height: 100%;
         display: flex;
         align-items: center;
@@ -1486,7 +1487,7 @@
           min-height: 500px;
           padding: 10px 20px;
           margin-left: 210px;
-          overflow-x: hidden;
+          /*overflow-x: hidden;*/
         }
         .mainHide {
           margin-top: 0 !important;
