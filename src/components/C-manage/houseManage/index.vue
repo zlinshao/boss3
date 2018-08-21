@@ -274,12 +274,12 @@
           case 'second':
             this.params_second.city = '';
             this.params_second.status = '2';
-            this.params_first.decoration = '';
+            this.params_second.decoration = '';
             break;
           case 'third':
             this.params_third.city = '';
             this.params_third.status = '3';
-            this.params_first.decoration = '';
+            this.params_third.decoration = '';
             break;
         }
       },
