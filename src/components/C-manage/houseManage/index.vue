@@ -273,11 +273,11 @@
             break;
           case 'second':
             this.params_second.city = '';
-            this.params_second.status = '';
+            this.params_second.status = 2;
             break;
           case 'third':
             this.params_third.city = '';
-            this.params_third.status = '';
+            this.params_third.status = 3;
             break;
         }
       },
