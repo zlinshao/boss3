@@ -17,6 +17,9 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="importDialog = true">导 入</el-button>
             </el-form-item>
+            <el-form-item v-if="activeName ==='first'">
+              <el-button type="primary" size="mini" @click="remindDialog = true">尾款提醒</el-button>
+            </el-form-item>
           </el-form>
         </div>
       </div>
@@ -36,10 +39,7 @@
                   prop="create_time"
                   label="导入时间">
                 </el-table-column>
-                <!--<el-table-column-->
-                <!--prop="name"-->
-                <!--label="导入数量">-->
-                <!--</el-table-column>-->
+
                 <el-table-column
                   width="500"
                   label="账户及余额">
@@ -121,7 +121,7 @@
     </div>
     <ExportData :exportDialog="exportDialog" :activeName="activeName" @close="closeModal"></ExportData>
     <ImportData :importDialog="importDialog" :activeName="activeName" @close="closeModal"></ImportData>
-
+    <Remind :remindDialog="remindDialog" @close="closeModal"></Remind>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
   </div>
@@ -130,10 +130,11 @@
 <script>
   import ExportData from './components/exportData'
   import ImportData from './components/importData'
+  import Remind from './components/remind'
   import Organization from '../common/organization.vue'                          //选人组件
   export default {
     name: "index",
-    components: {ExportData, ImportData, Organization},
+    components: {ExportData, ImportData, Organization,Remind},
     data() {
       return {
         tableData: [],
@@ -150,6 +151,7 @@
         rentLoading: false,
         exportDialog: false,
         importDialog: false,
+        remindDialog: false,
         organizationDialog: false,
         activeName: 'first',
       };
@@ -196,6 +198,7 @@
       closeModal(val) {
         this.exportDialog = false;
         this.importDialog = false;
+        this.remindDialog = false;
         this.organizationDialog = false;
         if (val = 'success') {
           this.myData();
