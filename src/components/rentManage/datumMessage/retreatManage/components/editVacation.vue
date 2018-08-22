@@ -72,7 +72,7 @@
                               v-model="params.financial_info[index].remark" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="1" v-show="financialReceiptsLength>1">
+                <el-col :span="1" v-show="index!=0">
                   <i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>
                 </el-col>
               </el-row>
@@ -306,43 +306,6 @@
                 </div>
               </el-col>
             </el-row>
-
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="燃气费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="上次底数">
-                  <el-input v-model="params.gas_last" placeholder="请输入内容" :disabled="status==1"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="本次底数">
-                  <el-input v-model="params.gas_now" placeholder="请输入内容" :disabled="status==1"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input v-model="params.gas_unit_price" placeholder="请输入内容" :disabled="status==1"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input v-model="params.gas_late_payment" placeholder="请输入内容" :disabled="status==1"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="其他">
-                  <el-input v-model="params.gas_other" placeholder="请输入内容" :disabled="status==1"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{gasTotal}}
-                </div>
-              </el-col>
-            </el-row>
             <el-row>
               <el-col :span="2" style="text-align: right">
                 <el-form-item label="电费（峰）：" label-width="100px">
@@ -383,6 +346,7 @@
                 </div>
               </el-col>
             </el-row>
+
             <el-row>
               <el-col :span="2" style="text-align: right">
                 <el-form-item label="电费（谷）：" label-width="100px">
@@ -424,7 +388,42 @@
                 </div>
               </el-col>
             </el-row>
-
+            <el-row>
+              <el-col :span="2" style="text-align: right">
+                <el-form-item label="燃气费：" label-width="100px">
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="上次底数">
+                  <el-input v-model="params.gas_last" placeholder="请输入内容" :disabled="status==1"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="本次底数">
+                  <el-input v-model="params.gas_now" placeholder="请输入内容" :disabled="status==1"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="单价">
+                  <el-input v-model="params.gas_unit_price" placeholder="请输入内容" :disabled="status==1"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="滞纳金">
+                  <el-input v-model="params.gas_late_payment" placeholder="请输入内容" :disabled="status==1"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="其他">
+                  <el-input v-model="params.gas_other" placeholder="请输入内容" :disabled="status==1"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2">
+                <div class="content">
+                  合计：{{gasTotal}}
+                </div>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="2" style="text-align: right">
                 <el-form-item label="物管费：" label-width="100px">
@@ -881,44 +880,17 @@
           this.isLoading = false;
           if (res.data.code === '20020') {
             let data = res.data.data;
-            //财务收款
-            if (data.financial_info) {
-              if(Object.prototype.toString.call(data.financial_info) === '[object Array]'){
-                this.financialReceiptsLength = data.financial_info.length || 1;
-                this.params.financial_info = data.financial_info || [{
-                  receivable: '',
-                  actual_receipt: '',
-                  difference: '',
-                  remark: '',
-                }];
-              }else if(Object.prototype.toString.call(data.financial_info) === '[object Object]'){
-                this.financialReceiptsLength = Object.keys(data.financial_info).length || 1;
-                this.params.financial_info =  Object.values(data.financial_info) || [{
-                  receivable: '',
-                  actual_receipt: '',
-                  difference: '',
-                  remark: '',
-                }];
-              }
-            }
-            if (data.settled_info) {
-              if(Object.prototype.toString.call(data.settled_info) === '[object Array]'){
-                this.contractCollectionLength = data.settled_info.length || 1;
-                this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];
-              }else if(Object.prototype.toString.call(data.settled_info) === '[object Object]'){
-                this.contractCollectionLength = Object.keys(data.settled_info).length || 1;
-                this.params.settled_info = Object.values(data.settled_info) || [{receivable: '', remark: '',}];
-              }
-            }
-            if (data.repair_info) {
-              if(Object.prototype.toString.call(data.repair_info) === '[object Array]'){
-                this.repairInfoLength = data.repair_info.length || 1;
-                this.params.repair_info = data.repair_info || [{content: '', amount: '',}];
-              }else if(Object.prototype.toString.call(data.repair_info) === '[object Object]'){
-                this.repairInfoLength = Object.keys(data.repair_info).length || 1;
-                this.params.repair_info = Object.values(data.repair_info) || [{content: '', amount: '',}];
-              }
-            }
+            this.financialReceiptsLength = data.financial_info && data.financial_info.length || 1;
+            this.contractCollectionLength = data.settled_info && data.settled_info.length || 1;
+            this.repairInfoLength = data.repair_info && data.repair_info.length || 1;
+            this.params.financial_info = data.financial_info || [{
+              receivable: '',
+              actual_receipt: '',
+              difference: '',
+              remark: '',
+            }];   //财务收款
+            this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];  //合同收款
+            this.params.repair_info = data.repair_info || [{content: '', amount: '',}];  //合同收款
 
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;
@@ -989,7 +961,7 @@
             this.params.TV_fees = (data.details && data.details.TV_fees) || 0;
             this.params.network_fees = (data.details && data.details.network_fees) || 0;
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
-                                      String(data.extend_field.profit_type) : '';
+              String(data.extend_field.profit_type) : '';
             this.params.is_refund = (data.details && data.details.is_refund)? String(data.details.is_refund):'';
 
             let picObject = {};
