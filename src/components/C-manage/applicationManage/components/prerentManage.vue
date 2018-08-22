@@ -198,14 +198,14 @@
           if(res.data.code === '1100200'){
             this.$notify.success({
               title:'成功',
-              msg:res.data.msg
+              message:res.data.msg
             });
             this.dialogVisible = false;
             this.getTableData();
           }else {
             this.$notify.warning({
               title:'警告',
-              msg:res.data.msg
+              message:res.data.msg
             })
           }
         })
