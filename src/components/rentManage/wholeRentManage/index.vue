@@ -637,8 +637,11 @@
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" :collectContractId="collectContractId" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
                  :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
-    <CollectVacation :collectVacationDialog="collectVacationDialog" :collectInfo="collectInfo"
-                     :collectContractId="collectContractId" @close="closeModal"></CollectVacation>
+
+    <!--退房-->
+    <CollectVacation :vacationDialog="vacationDialog" :contractModule="contractModule"
+                     :collectContractId="contractOperateId" @close="closeModal"></CollectVacation>
+
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog"  :contract="collectContract" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog"  :contract="rentContract" @close="closeModal"></AddRentRepair>
 
@@ -664,10 +667,6 @@
     <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
 
-    <!--租客退房-->
-    <RentVacation :rentVacationDialog="rentVacationDialog" :rentContractId="rentContractId"
-                  :rentContractInfo="rentContractInfo" @close="closeModal"></RentVacation>
-
     <SendMessage :sendMessageDialog="sendMessageDialog" @close="closeModal"></SendMessage>
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeModal"></AddHouseResources>
     <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
@@ -690,7 +689,7 @@
   import Advanced from '../components/advancedSearch.vue'                           //高级搜索
   import OwnerDelay from '../components/ownerDelay.vue'                             //房东延期
   import OwnerRenew from '../components/ownerRenew.vue'                             //房东续约
-  import RentVacation from '../components/rentVacation.vue'                         //租客续约
+
   import IncreaseGoods from '../components/increaseGoods.vue'                       //物品增加
   import DecreaseGoods from '../components/decreaseGoods.vue'                       //物品减少
   import OwnerArrears from '../components/OwnerArrears.vue'                         //房东欠款
@@ -749,7 +748,6 @@
       Advanced,
       OwnerRenew,
       OwnerDelay,
-      RentVacation,
       IncreaseGoods,
       DecreaseGoods,
       OwnerArrears,
@@ -815,12 +813,11 @@
         advancedDialog: false,//高级搜索
         ownerRenewDialog: false,//房东续约
         ownerDelayDialog: false,//房东延期
-        rentVacationDialog: false, //租客退房
         decreaseGoodsDialog: false,  //物品搬出
         increaseGoodsDialog: false,  //物品增加
         ownerArrearsDialog: false,   //房东欠款
         addFollowUpDialog: false,     //添加工单
-        collectVacationDialog: false,     //房东退房
+        vacationDialog: false,     //房东退房
         addCollectRepairDialog: false,    //房东添加维修
         addRentRepairDialog: false,       //租客添加维修
         rentChangeRoomDialog: false,      //租客换房
@@ -1051,14 +1048,13 @@
       },
       //房屋右键
       houseMenu(row, event) {
-        console.log(row)
         this.collectInfo = row;
         this.ToActiveName = "first";
         this.addReturnInfo = row;
         this.collectHouseId = row.house_id;
         this.collectContractId = row.contract_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
-        this.contractModule = 1;
+        this.contractModule = '1';
         this.collectContract = row;
         this.lists = [
           {
@@ -1069,7 +1065,7 @@
           },
           {clickIndex: 'addRentInfoDialog', headIcon: 'el-icons-fa-plus', label: '登记租客信息',},
           {clickIndex: 'ownerRenewDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '房东续约',},
-          {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
+          {clickIndex: 'vacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
 //          {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
 //          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
@@ -1162,12 +1158,12 @@
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.collectHouseId = row.house_id;
         this.houseAddress = row.address;
-        this.contractModule = 2;
+        this.contractModule = '2';
         this.rentContract = row;
         this.lists = [
           {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
           {clickIndex: 'editAddressDialog',headIcon: 'el-icon-edit', label: '修改租房地址'},
-          {clickIndex: 'rentVacationDialog',headIcon: 'el-icons-fa-reply', label: '租客退房',},
+          {clickIndex: 'vacationDialog',headIcon: 'el-icons-fa-reply', label: '租客退房',},
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '房屋转租',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
           {clickIndex: 'rentChangeRoomDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客调房',},
@@ -1262,8 +1258,8 @@
           case 'ownerDelayDialog':    //房东延期
             this.ownerDelayDialog = true;
             break;
-          case 'rentVacationDialog':        //租客退房
-            this.rentVacationDialog = true;
+          case 'vacationDialog':        //租客退房
+            this.vacationDialog = true;
             break;
           case 'increaseGoodsDialog':     //物品增加
             this.increaseGoodsDialog = true;
@@ -1277,8 +1273,8 @@
           case 'addFollowUpDialog':     //增加跟进
             this.addFollowUpDialog = true;
             break;
-          case 'collectVacationDialog':     //房东退房
-            this.collectVacationDialog = true;
+          case 'vacationDialog':     //房东退房
+            this.vacationDialog = true;
             break;
           case 'addCollectRepairDialog':     //房东报修
             this.addCollectRepairDialog = true;
@@ -1428,13 +1424,12 @@
         this.backUpDialog = false;
         this.advancedDialog = false;
         this.ownerDelayDialog = false;
-        this.rentVacationDialog = false;
         this.increaseGoodsDialog = false;
         this.decreaseGoodsDialog = false;
         this.ownerArrearsDialog = false;
         this.ownerRenewDialog = false;
         this.addFollowUpDialog = false;
-        this.collectVacationDialog = false;
+        this.vacationDialog = false;
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.rentChangeRoomDialog = false;

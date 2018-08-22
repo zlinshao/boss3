@@ -11,7 +11,7 @@
         @row-dblclick="dblClickTable"
         style="width: 100%">
       <el-table-column
-          prop="village_name"
+          prop="name"
           label="小区名称">
       </el-table-column>
       <el-table-column

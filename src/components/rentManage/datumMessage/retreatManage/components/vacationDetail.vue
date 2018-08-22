@@ -49,7 +49,7 @@
               <div class="title">财务收款</div>
               <div class="describe_border">
                 <el-form size="mini" :model="params" label-width="60px">
-                  <el-row v-for="(item,index) in params.financial_info.length" :key="index">
+                  <el-row v-for="(item,index) in financialReceiptsLength" :key="index">
                     <el-col :span="5">
                       <el-form-item label="应收">
                         <el-input v-model="params.financial_info[index].receivable"
@@ -82,7 +82,7 @@
               <div class="title">合同收款</div>
               <div class="describe_border">
                 <el-form size="mini" :model="params" label-width="60px">
-                  <el-row v-for="(item, index) in params.settled_info.length" :key="index">
+                  <el-row v-for="(item, index) in contractCollectionLength" :key="index">
                     <el-col :span="5">
                       <el-form-item label="应收">
                         <el-input v-model="params.settled_info[index].receivable"
@@ -931,17 +931,43 @@
           if (res.data.code === '20020') {
             let data = res.data.data;
 
-            this.financialReceiptsLength = data.financial_info && data.financial_info.length || 1;
-            this.contractCollectionLength = data.settled_info && data.settled_info.length || 1;
-            this.repairInfoLength = data.repair_info && data.repair_info.length || 1;
-            this.params.financial_info = data.financial_info || [{
-              receivable: '',
-              actual_receipt: '',
-              difference: '',
-              remark: '',
-            }];   //财务收款
-            this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];  //合同收款
-            this.params.repair_info = data.repair_info || [{content: '', amount: '',}];  //合同收款
+            if (data.financial_info) {
+              if(Object.prototype.toString.call(data.financial_info) === '[object Array]'){
+                this.financialReceiptsLength = data.financial_info.length || 1;
+                this.params.financial_info = data.financial_info || [{
+                  receivable: '',
+                  actual_receipt: '',
+                  difference: '',
+                  remark: '',
+                }];
+              }else if(Object.prototype.toString.call(data.financial_info) === '[object Object]'){
+                this.financialReceiptsLength = Object.keys(data.financial_info).length || 1;
+                this.params.financial_info =  Object.values(data.financial_info) || [{
+                  receivable: '',
+                  actual_receipt: '',
+                  difference: '',
+                  remark: '',
+                }];
+              }
+            }
+            if (data.settled_info) {
+              if(Object.prototype.toString.call(data.settled_info) === '[object Array]'){
+                this.contractCollectionLength = data.settled_info.length || 1;
+                this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];
+              }else if(Object.prototype.toString.call(data.settled_info) === '[object Object]'){
+                this.contractCollectionLength = Object.keys(data.settled_info).length || 1;
+                this.params.settled_info = Object.values(data.settled_info) || [{receivable: '', remark: '',}];
+              }
+            }
+            if (data.repair_info) {
+              if(Object.prototype.toString.call(data.repair_info) === '[object Array]'){
+                this.repairInfoLength = data.repair_info.length || 1;
+                this.params.repair_info = data.repair_info || [{content: '', amount: '',}];
+              }else if(Object.prototype.toString.call(data.repair_info) === '[object Object]'){
+                this.repairInfoLength = Object.keys(data.repair_info).length || 1;
+                this.params.repair_info = Object.values(data.repair_info) || [{content: '', amount: '',}];
+              }
+            }
 
             this.vacationData = res.data.data;
             this.params.contract_id = data.contract_id;
