@@ -11,20 +11,19 @@
         @row-dblclick = 'dblClickTable'
         style="width: 100%">
         <el-table-column
-          label="合同编号">
+            label="合同编号">
           <template slot-scope="scope">
-                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
-                      {{scope.row.contract_id.contract_number}}
+                    <span v-if="scope.row.renter_contract_number">
+                      {{scope.row.renter_contract_number}}
                     </span>
             <span v-else="">/</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="房屋地址">
+            label="房屋地址">
           <template slot-scope="scope">
-                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
-                          &&scope.row.contract_id.house">
-                      {{scope.row.contract_id.house.name}}
+                    <span v-if="scope.row.renter_house_name">
+                      {{scope.row.renter_house_name}}
                     </span>
             <span v-else="">/</span>
           </template>
@@ -73,7 +72,10 @@
             <span v-else="">/</span>
           </template>
         </el-table-column>
-
+        <el-table-column
+            prop="checkout_time"
+            label="退款时间">
+        </el-table-column>
         <el-table-column
           label="创建人">
           <template slot-scope="scope">

@@ -50,28 +50,40 @@
               <div class="describe_border">
                 <el-form size="mini" :model="params" label-width="60px">
                   <el-row v-for="(item,index) in financialReceiptsLength" :key="index">
-                    <el-col :span="5">
+                    <el-col :span="6">
+                      <el-form-item label="收款周期">
+                        <el-date-picker disabled
+                            v-model="params.financial_info[index].payment_cycle"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
                       <el-form-item label="应收">
-                        <el-input v-model="params.financial_info[index].receivable"
-                                  @change="financialChange(index)" disabled></el-input>
+                        <el-input disabled placeholder="请输入内容" v-model="params.financial_info[index].receivable"
+                                  @change="financialChange(index)" clearable ></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="4">
                       <el-form-item label="实收">
-                        <el-input v-model="params.financial_info[index].actual_receipt"
-                                  @change="financialChange(index)" disabled></el-input>
+                        <el-input disabled placeholder="请输入内容" v-model="params.financial_info[index].actual_receipt"
+                                  @change="financialChange(index)" clearable></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-form-item label="差额">
+                        <el-input disabled placeholder="请输入内容" v-model="params.financial_info[index].difference"
+                                  clearable></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="5">
-                      <el-form-item label="差额">
-                        <el-input v-model="params.financial_info[index].difference"
-                                  disabled></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                       <el-form-item label="备注">
-                        <el-input type="textarea" :rows="1"
-                                  v-model="params.financial_info[index].remark" disabled></el-input>
+                        <el-input disabled type="textarea" autosize placeholder="请输入内容"
+                                  v-model="params.financial_info[index].remark"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -83,6 +95,19 @@
               <div class="describe_border">
                 <el-form size="mini" :model="params" label-width="60px">
                   <el-row v-for="(item, index) in contractCollectionLength" :key="index">
+                    <el-col :span="8">
+                      <el-form-item label="收款周期">
+                        <el-date-picker
+                            disabled
+                            v-model="params.settled_info[index].payment_cycle"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                      </el-form-item>
+                    </el-col>
                     <el-col :span="5">
                       <el-form-item label="应收">
                         <el-input v-model="params.settled_info[index].receivable"
@@ -186,14 +211,22 @@
               <div class="describe_border">
                 <el-form size="mini" :model="params" label-width="80px">
                   <el-row v-for="(item, index) in repairInfoLength" :key="index">
-                    <el-col :span="5">
-                      <el-form-item label="维修内容">
-                        <el-input disabled v-model="params.repair_info[index].content"></el-input>
+                    <el-col :span="6">
+                      <el-form-item label="维修金额">
+                        <el-input disabled v-model="params.repair_info[index].amount"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="维修金额">
-                        <el-input disabled v-model="params.repair_info[index].amount"></el-input>
+                      <el-form-item label="维修内容">
+                        <el-input disabled type="textarea" autosize v-model="params.repair_info[index].content"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="维修总金额">
+                        <el-input disabled v-model="repair_cost"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -296,42 +329,40 @@
                 </el-row>
                 <el-row>
                   <el-col :span="2" style="text-align: right">
-                    <el-form-item label="电费（峰）：" label-width="100px">
+                    <el-form-item label="燃气费：" label-width="100px">
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="上次底数">
-                      <el-input disabled v-model="params.electricity_peak_last"></el-input>
+                      <el-input disabled v-model="params.gas_last"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="本次底数">
-                      <el-input disabled v-model="params.electricity_peak_now"></el-input>
+                      <el-input disabled v-model="params.gas_now"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="单价">
-                      <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
+                      <el-input disabled v-model="params.gas_unit_price"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="滞纳金">
-                      <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
+                      <el-input disabled v-model="params.gas_late_payment"></el-input>
                     </el-form-item>
                   </el-col>
-
                   <el-col :span="4">
                     <el-form-item label="其他">
-                      <el-input disabled v-model="params.electricity_peak_other"></el-input>
+                      <el-input disabled v-model="params.gas_other"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="2">
                     <div class="content">
-                      合计：{{elePeakTotal}}
+                      合计：{{gasTotal}}
                     </div>
                   </el-col>
                 </el-row>
-
                 <el-row>
                   <el-col :span="2" style="text-align: right">
                     <el-form-item label="电费（谷）：" label-width="100px">
@@ -370,93 +401,76 @@
                 </el-row>
                 <el-row>
                   <el-col :span="2" style="text-align: right">
-                    <el-form-item label="燃气费：" label-width="100px">
+                    <el-form-item label="电费（峰）：" label-width="100px">
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="上次底数">
-                      <el-input disabled v-model="params.gas_last"></el-input>
+                      <el-input disabled v-model="params.electricity_peak_last"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="本次底数">
-                      <el-input disabled v-model="params.gas_now"></el-input>
+                      <el-input disabled v-model="params.electricity_peak_now"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="单价">
-                      <el-input disabled v-model="params.gas_unit_price"></el-input>
+                      <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="滞纳金">
-                      <el-input disabled v-model="params.gas_late_payment"></el-input>
+                      <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.electricity_peak_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{elePeakTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+
+
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="电费：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="上次底数">
+                      <el-input disabled v-model="params.electricity_total_last" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="本次底数">
+                      <el-input disabled v-model="params.electricity_total_now" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="单价">
+                      <el-input disabled v-model="params.electricity_total_unit_price" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.electricity_total_late_payment" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="其他">
-                      <el-input disabled v-model="params.gas_other"></el-input>
+                      <el-input disabled v-model="params.electricity_total_other" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="2">
                     <div class="content">
-                      合计：{{gasTotal}}
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="2" style="text-align: right">
-                    <el-form-item label="物管费：" label-width="100px">
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="10">
-                    <el-form-item label="上次交到">
-                      <el-date-picker type="date" v-model="params.property_management_last" disabled></el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="本次交到">
-                      <el-date-picker type="date" v-model="params.property_management_now" disabled></el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="10" :offset="2">
-                    <el-form-item label="合同承担方">
-                      <el-select disabled v-model="params.contracting_party" value="">
-                        <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name"
-                                   :value="item.id" :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :span="12">
-                    <el-form-item label="实际承担方">
-                      <el-input disabled v-model="params.actual_party" ></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="5" :offset="2">
-                    <el-form-item label="公摊水费">
-                      <el-input disabled v-model="params.property_management_electricity"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="5">
-                    <el-form-item label="公摊电费">
-                      <el-input disabled v-model="params.property_management_water"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="5">
-                    <el-form-item label="物业费">
-                      <el-input disabled v-model="params.property_management_total_fees"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="5">
-                    <el-form-item label="其他">
-                      <el-input disabled v-model="params.property_management_other"></el-input>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :span="2">
-                    <div class="content">
-                      合计：{{managementTotal}}
+                      合计：{{eleTotalTotal}}
                     </div>
                   </el-col>
                 </el-row>
@@ -479,6 +493,74 @@
                     <div class="content">
                       合计：{{otherEnergyTotal}}
                     </div>
+                  </el-col>
+                </el-row>
+
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="物管费：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <!--<el-col :span="10">-->
+                  <!--<el-form-item label="上次交到">-->
+                  <!--<el-date-picker type="date" v-model="params.property_management_last"-->
+                  <!--placeholder="选择日期"></el-date-picker>-->
+                  <!--</el-form-item>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="12">-->
+                  <!--<el-form-item label="本次交到">-->
+                  <!--<el-date-picker type="date" v-model="params.property_management_now"-->
+                  <!--placeholder="选择日期"></el-date-picker>-->
+                  <!--</el-form-item>-->
+                  <!--</el-col>-->
+                  <el-col :span="4">
+                    <el-form-item label="物业费">
+                      <el-input disabled v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="合同承担方">
+                      <el-select disabled clearable v-model="params.contracting_party" placeholder="请选择承担方" value="">
+                        <el-option v-for="item in contracting_party_dic" :label="item.dictionary_name" :value="item.id"
+                                   :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="4">
+                    <el-form-item label="实际承担方">
+                      <el-input disabled v-model="params.actual_party" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="公摊费">
+                      <el-input disabled v-model="params.property_management_water_electricity" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <!--<el-col :span="5">-->
+                  <!--<el-form-item label="公摊电费">-->
+                  <!--<el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>-->
+                  <!--</el-form-item>-->
+                  <!--</el-col>-->
+
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.property_management_other" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{managementTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24">
+                    <el-form-item label="备注">
+                      <el-input type="textarea" autosize placeholder="请输入内容"
+                                v-model="params.remark" clearable disabled></el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
@@ -509,15 +591,20 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
-                    <el-form-item label="超期房时">
-                      <el-input disabled v-model="params.overtime_rent"></el-input>
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.TV_fees" placeholder="请输入内容"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
-                    <el-form-item label="超期房费">
-                      <el-input disabled v-model="params.TV_fees"></el-input>
-                    </el-form-item>
-                  </el-col>
+                  <!--<el-col :span="6">-->
+                    <!--<el-form-item label="超期房时">-->
+                      <!--<el-input disabled v-model="params.overtime_rent"></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="6">-->
+                    <!--<el-form-item label="超期房费">-->
+                      <!--<el-input disabled v-model="params.TV_fees"></el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
                   <el-col :span="6">
                     <el-form-item label="超期网费">
                       <el-input disabled v-model="params.network_fees"></el-input>
@@ -616,7 +703,7 @@
           </div>
         </el-col>
       </el-row>
-
+      <!--款项-->
       <el-dialog
         width="30%"
         title="款项"
@@ -651,10 +738,6 @@
             <el-form-item label="结算金额" required>
               <el-input v-model="passParams.amount"></el-input>
             </el-form-item>
-
-            <!--<el-form-item label="款项凭证">-->
-            <!--<UpLoad :ID="'fundVoucher'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>-->
-            <!--</el-form-item>-->
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -707,6 +790,7 @@
         params: {
           financial_info: [
             {
+              payment_cycle : [],
               receivable: '', //应收
               actual_receipt: '', //实收
               difference: '', //差额
@@ -715,6 +799,7 @@
           ],
           settled_info: [
             {
+              payment_cycle : [],
               receivable: '', //应收
               remark: '',
             },
@@ -725,9 +810,9 @@
               amount : '',
             }
           ],
-          contract_id: '',
-          module: '',
           status_type: '',
+          contract_id: '',
+          module: '1',
           check_time: '',
           checkout_time: '',
           check_type: '',
@@ -768,35 +853,44 @@
           electricity_valley_late_payment: '',
           electricity_valley_other: '',
 
+          electricity_total_last: '',
+          electricity_total_now: '',
+          electricity_total_unit_price: '',
+          electricity_total_late_payment: '',
+          electricity_total_other:'',
+
           gas_last: '',
           gas_now: '',
           gas_unit_price: '',
           gas_late_payment: '',
           gas_other: '',
 
-          property_management_last: '',
-          property_management_now: '',
-          property_management_electricity: '',
-          property_management_water: '',
+          // property_management_last: '',
+          // property_management_now: '',
+          // property_management_electricity: '',
+          // property_management_water: '',
+          property_management_water_electricity: '',
           property_management_total_fees: '',
           property_management_other: '',
-          contracting_party: '',
-          actual_party: '',
+          contracting_party : '',
+          actual_party : '',
 
           other_content : '',
           energy_other : '',
+          remark : '',
 
           liquidated_damages: '',
           trash_fees: '',
           cleaning_fees: '',
           repair_compensation_fees: '',
           other_fees: '',
-          overtime_rent: '',
+          // overtime_rent: '',
           TV_fees: '',
           network_fees: '',
 
           is_refund : '',
         },
+        repair_cost : 0,
 
         settlers : '',      //结算人
         auditors : '',      //审核人
@@ -833,48 +927,19 @@
 
         isClick : false,  //正在点击
         isUpload : false,  //正在点击
+        reimbursementTotal : '',    //应退还
+        waterTotal : '',    //应退还
+        elePeakTotal : '',    //应退还
+        eleValTotal : '',    //应退还
+        eleTotalTotal : '',    //应退还
+        gasTotal : '',    //应退还
+        managementTotal : '',    //应退还
+        otherEnergyTotal : '',    //应退还
+        otherTotal : '',    //应退还
+        realTotal : '',    //应退还
       };
     },
-    computed: {
-      reimbursementTotal() {
-        return Number(this.params.refund_deposit) + Number(this.params.residual_rent) + Number(this.params.viewing_fee)
-          + Number(this.params.property_management_fee) + (this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit))+
-          Number(this.params.water_fee) + Number(this.params.electricity_fee) + Number(this.params.gas_fee);
-      },
-      waterTotal() {
-        return (Number(this.params.water_now) - Number(this.params.water_last)) * Number(this.params.water_unit_price)
-          + Number(this.params.water_late_payment) + Number(this.params.water_other);
-      },
-      elePeakTotal() {
-        return (Number(this.params.electricity_peak_now) - Number(this.params.electricity_peak_last)) * Number(this.params.electricity_peak_unit_price)
-          + Number(this.params.electricity_peak_late_payment) + Number(this.params.electricity_peak_other);
-      },
-      eleValTotal() {
-        return (Number(this.params.electricity_valley_now) - Number(this.params.electricity_valley_last)) * Number(this.params.electricity_valley_unit_price)
-          + Number(this.params.electricity_valley_late_payment) + Number(this.params.electricity_valley_other);
-      },
-      gasTotal() {
-        return (Number(this.params.gas_now) - Number(this.params.gas_last)) * Number(this.params.gas_unit_price)
-          + Number(this.params.gas_late_payment) + Number(this.params.gas_other);
-      },
-      managementTotal() {
-        return Number(this.params.property_management_electricity) + Number(this.params.property_management_water)
-          + Number(this.params.property_management_total_fees) + Number(this.params.property_management_other);
-      },
-      otherEnergyTotal(){
-        return Number(this.params.energy_other)
-      },
-      otherTotal() {
-        return Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
-          + Number(this.params.other_fees) + Number(this.params.overtime_rent) +
-          Number(this.params.TV_fees) + Number(this.params.network_fees);
-      },
-      realTotal() {
-        return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
-          Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee);
-      },
-    },
+
     watch: {
       vacationDetail(val) {
         this.vacationDetailVisible = val
@@ -930,11 +995,11 @@
           this.isLoading = false;
           if (res.data.code === '20020') {
             let data = res.data.data;
-
             if (data.financial_info) {
               if(Object.prototype.toString.call(data.financial_info) === '[object Array]'){
                 this.financialReceiptsLength = data.financial_info.length || 1;
-                this.params.financial_info = data.financial_info || [{
+                this.params.financial_info =data.financial_info.length>0? data.financial_info : [{
+                  payment_cycle : [],
                   receivable: '',
                   actual_receipt: '',
                   difference: '',
@@ -943,6 +1008,7 @@
               }else if(Object.prototype.toString.call(data.financial_info) === '[object Object]'){
                 this.financialReceiptsLength = Object.keys(data.financial_info).length || 1;
                 this.params.financial_info =  Object.values(data.financial_info) || [{
+                  payment_cycle : [],
                   receivable: '',
                   actual_receipt: '',
                   difference: '',
@@ -953,21 +1019,22 @@
             if (data.settled_info) {
               if(Object.prototype.toString.call(data.settled_info) === '[object Array]'){
                 this.contractCollectionLength = data.settled_info.length || 1;
-                this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];
+                this.params.settled_info = data.settled_info.length>0? data.settled_info : [{ payment_cycle : [],receivable: '', remark: '',}];
               }else if(Object.prototype.toString.call(data.settled_info) === '[object Object]'){
                 this.contractCollectionLength = Object.keys(data.settled_info).length || 1;
-                this.params.settled_info = Object.values(data.settled_info) || [{receivable: '', remark: '',}];
+                this.params.settled_info = Object.values(data.settled_info) || [{ payment_cycle : [],receivable: '', remark: '',}];
               }
             }
             if (data.repair_info) {
               if(Object.prototype.toString.call(data.repair_info) === '[object Array]'){
                 this.repairInfoLength = data.repair_info.length || 1;
-                this.params.repair_info = data.repair_info || [{content: '', amount: '',}];
+                this.params.repair_info = data.repair_info.length>0? data.repair_info : [{content: '', amount: '',}];
               }else if(Object.prototype.toString.call(data.repair_info) === '[object Object]'){
                 this.repairInfoLength = Object.keys(data.repair_info).length || 1;
                 this.params.repair_info = Object.values(data.repair_info) || [{content: '', amount: '',}];
               }
             }
+            this.repair_cost = data.repair_cost;
 
             this.vacationData = res.data.data;
             this.params.contract_id = data.contract_id;
@@ -981,7 +1048,6 @@
 
             this.params.profit = data.extend_field && data.extend_field.profit ? data.extend_field.profit : 0;
             this.params.sublease_fee = data.details && data.details.sublease_fee ? data.details.sublease_fee : 0;
-
             this.params.bank_num = data.bank_num;
             this.params.account_bank = data.account_bank;
             this.params.branch_bank = data.branch_bank;
@@ -1015,16 +1081,23 @@
             this.params.electricity_valley_late_payment = (data.details && data.details.electricity_valley_late_payment) || 0;
             this.params.electricity_valley_other = (data.details && data.details.electricity_valley_other) || 0;
 
+            this.params.electricity_total_last = (data.details && data.details.electricity_total_last) || 0;
+            this.params.electricity_total_now = (data.details && data.details.electricity_total_now) || 0;
+            this.params.electricity_total_unit_price = (data.details && data.details.electricity_total_unit_price) || 0;
+            this.params.electricity_total_late_payment = (data.details && data.details.electricity_total_late_payment) || 0;
+            this.params.electricity_total_other = (data.details && data.details.electricity_total_other) || 0;
+
             this.params.gas_last = (data.details && data.details.gas_last) || 0;
             this.params.gas_now = (data.details && data.details.gas_now) || 0;
             this.params.gas_unit_price = (data.details && data.details.gas_unit_price) || 0;
             this.params.gas_late_payment = (data.details && data.details.gas_late_payment) || 0;
             this.params.gas_other = (data.details && data.details.gas_other) || 0;
 
-            this.params.property_management_last = (data.details && data.details.property_management_last) || '';
-            this.params.property_management_now = (data.details && data.details.property_management_now) || '';
-            this.params.property_management_electricity = (data.details && data.details.property_management_electricity) || 0;
-            this.params.property_management_water = (data.details && data.details.property_management_water) || 0;
+            // this.params.property_management_last = (data.details && data.details.property_management_last) || '';
+            // this.params.property_management_now = (data.details && data.details.property_management_now) || '';
+            // this.params.property_management_electricity = (data.details && data.details.property_management_electricity) || 0;
+            // this.params.property_management_water = (data.details && data.details.property_management_water) || 0;
+            this.params.property_management_water_electricity = (data.details && data.details.property_management_water_electricity) || 0;
             this.params.property_management_total_fees = (data.details && data.details.property_management_total_fees) || 0;
             this.params.property_management_other = (data.details && data.details.property_management_other) || 0;
             this.params.contracting_party = (data.details && data.details.contracting_party) || '';
@@ -1033,20 +1106,31 @@
             this.params.other_content = (data.details && data.details.other_content) || '';
             this.params.energy_other = (data.details && data.details.energy_other) || 0;
 
+            this.params.remark = (data.details && data.details.remark) || '';
+
             this.params.liquidated_damages = (data.details && data.details.liquidated_damages) || 0;
             this.params.trash_fees = (data.details && data.details.trash_fees) || 0;
             this.params.cleaning_fees = (data.details && data.details.cleaning_fees) || 0;
             this.params.repair_compensation_fees = (data.details && data.details.repair_compensation_fees) || 0;
             this.params.other_fees = (data.details && data.details.other_fees) || 0;
-            this.params.overtime_rent = (data.details && data.details.overtime_rent) || 0;
+            // this.params.overtime_rent = (data.details && data.details.overtime_rent) || 0;
             this.params.TV_fees = (data.details && data.details.TV_fees) || 0;
             this.params.network_fees = (data.details && data.details.network_fees) || 0;
-
-            this.passParams.amount = data.details && data.details.total_fees;
-
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
-                                      String(data.extend_field.profit_type) : '';
-            this.params.is_refund = (data.details && data.details.is_refund)? String(data.details.is_refund):'';
+              String(data.extend_field.profit_type) : '';
+            this.params.is_refund =data.is_refund ? String(data.is_refund):'';
+
+            //已计算费用
+            this.reimbursementTotal = (data.details && data.details.should_be_returned_fees) || 0;
+            this.waterTotal = (data.details && data.details.water) || 0;
+            this.elePeakTotal = (data.details && data.details.electricity_peak) || 0;
+            this.eleValTotal = (data.details && data.details.electricity_valley) || 0;
+            this.eleTotalTotal = (data.details && data.details.electricity_total) || 0;
+            this.gasTotal = (data.details && data.details.gas) || 0;
+            this.managementTotal = (data.details && data.details.property_management) || 0;
+            this.otherEnergyTotal = (data.details && data.details.energy_other) || 0;
+            this.otherTotal = (data.details && data.details.others_fees) || 0;
+            this.realTotal = (data.details && data.details.total_fees) || 0;
 
             this.settlers = data.settlers && !Array.isArray(data.settlers)? data.settlers.name : '';
             this.auditors = data.auditors && !Array.isArray(data.auditors)? data.auditors.name : '';
@@ -1065,14 +1149,7 @@
           }
         });
       },
-      //获取评论信息
-      getCommentData(){
-        this.$http.get(globalConfig.server + 'customer/check_out/comment/' + this.vacationId).then(res => {
-          if(res.data.code === '20000'){
-            this.commentList = res.data.data.data;
-          }
-        })
-      },
+
 
       getContractInfo(module, id) {
         if (module == 1) {
@@ -1095,6 +1172,7 @@
         this.params = {
           financial_info: [
             {
+              payment_cycle : [],
               receivable: '', //应收
               actual_receipt: '', //实收
               difference: '', //差额
@@ -1103,6 +1181,7 @@
           ],
           settled_info: [
             {
+              payment_cycle : [],
               receivable: '', //应收
               remark: '',
             },
@@ -1157,35 +1236,44 @@
           electricity_valley_late_payment: '',
           electricity_valley_other: '',
 
+          electricity_total_last: '',
+          electricity_total_now: '',
+          electricity_total_unit_price: '',
+          electricity_total_late_payment: '',
+          electricity_total_other:'',
+
           gas_last: '',
           gas_now: '',
           gas_unit_price: '',
           gas_late_payment: '',
           gas_other: '',
 
-          property_management_last: '',
-          property_management_now: '',
-          property_management_electricity: '',
-          property_management_water: '',
+          // property_management_last: '',
+          // property_management_now: '',
+          // property_management_electricity: '',
+          // property_management_water: '',
+          property_management_water_electricity: '',
           property_management_total_fees: '',
           property_management_other: '',
-          contracting_party: '',
-          actual_party: '',
+          contracting_party : '',
+          actual_party : '',
 
           other_content : '',
           energy_other : '',
+          remark : '',
 
           liquidated_damages: '',
           trash_fees: '',
           cleaning_fees: '',
           repair_compensation_fees: '',
           other_fees: '',
-          overtime_rent: '',
+          // overtime_rent: '',
           TV_fees: '',
           network_fees: '',
 
           is_refund : '',
         };
+        this.repair_cost = 0;
 
         this.financialReceiptsLength = 1;
         this.contractCollectionLength = 1;
@@ -1200,9 +1288,27 @@
           image_pic :[],
           video_file : [],
         };
+        this.reimbursementTotal  = '';    //应退还
+        this.waterTotal  = '';    //应退还
+        this.elePeakTotal  = '';    //应退还
+        this.eleValTotal  = '';    //应退还
+        this.eleTotalTotal  = '';    //应退还
+        this.gasTotal  = '';    //应退还
+        this.managementTotal  = '';    //应退还
+        this.otherEnergyTotal  = '';    //应退还
+        this.otherTotal  = '';    //应退还
+        this.realTotal  = '';    //应退还
         this.isClick = false;
       },
-
+      /*****************************************************************************************/
+      //获取评论信息
+      getCommentData(){
+        this.$http.get(globalConfig.server + 'customer/check_out/comment/' + this.vacationId).then(res => {
+          if(res.data.code === '20000'){
+            this.commentList = res.data.data.data;
+          }
+        })
+      },
       reject() {
         this.$confirm('您确定要撤回吗?', '提示', {
           confirmButtonText: '确定',
