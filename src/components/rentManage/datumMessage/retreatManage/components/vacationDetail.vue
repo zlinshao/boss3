@@ -212,16 +212,17 @@
                 <el-form size="mini" :model="params" label-width="80px">
                   <el-row v-for="(item, index) in repairInfoLength" :key="index">
                     <el-col :span="6">
-                      <el-form-item label="维修内容">
-                        <el-input disabled v-model="params.repair_info[index].content"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                       <el-form-item label="维修金额">
                         <el-input disabled v-model="params.repair_info[index].amount"></el-input>
                       </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="维修内容">
+                        <el-input disabled type="textarea" autosize v-model="params.repair_info[index].content"></el-input>
+                      </el-form-item>
+                    </el-col>
                   </el-row>
+
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="维修总金额">
@@ -1034,6 +1035,7 @@
             }
             this.repair_cost = data.repair_cost;
 
+            this.vacationData = res.data.data;
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;
             this.getContractInfo(data.module, data.contract_id);
@@ -1041,6 +1043,8 @@
             this.params.check_time = data.check_time;
             this.params.checkout_time = data.checkout_time;
             this.params.check_type = data.check_type;
+            this.params.status_type = data.status;
+
             this.params.profit = data.extend_field && data.extend_field.profit ? data.extend_field.profit : 0;
             this.params.sublease_fee = data.details && data.details.sublease_fee ? data.details.sublease_fee : 0;
             this.params.bank_num = data.bank_num;
