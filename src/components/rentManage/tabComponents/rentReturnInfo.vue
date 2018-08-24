@@ -110,10 +110,13 @@
                       <span class="orange_label">已驳回</span>
                     </span>
             <span v-if="scope.row.status==3">
-                      <span class="yellow_label">待结清</span>
+                      <span class="yellow_label">待付款</span>
                     </span>
             <span v-if="scope.row.status==4">
                       <span class="success_label">已完成</span>
+                    </span>
+            <span v-if="scope.row.status==5">
+                      <span class="success_label" style="background: #e8a136;">待结算</span>
                     </span>
           </template>
         </el-table-column>
