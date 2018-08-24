@@ -1089,7 +1089,7 @@
             this.params.network_fees = (data.details && data.details.network_fees) || 0;
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
               String(data.extend_field.profit_type) : '';
-            this.params.is_refund = (data.details && data.details.is_refund)? String(data.details.is_refund):'';
+            this.params.is_refund =data.is_refund ? String(data.is_refund):'';
 
             let picObject = {};
             this.editImage = {};
