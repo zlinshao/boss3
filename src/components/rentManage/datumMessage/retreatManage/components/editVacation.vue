@@ -604,11 +604,11 @@
                   <el-input v-model="params.other_fees" placeholder="请输入内容" :disabled="status==1"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期房时">
-                  <el-input v-model="params.overtime_rent" placeholder="请输入内容" :disabled="status==1"></el-input>
-                </el-form-item>
-              </el-col>
+              <!--<el-col :span="6">-->
+                <!--<el-form-item label="超期房时">-->
+                  <!--<el-input v-model="params.overtime_rent" placeholder="请输入内容" :disabled="status==1"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
               <el-col :span="6">
                 <el-form-item label="滞纳金">
                   <el-input v-model="params.TV_fees" placeholder="请输入内容"></el-input>
@@ -619,11 +619,11 @@
                   <!--<el-input v-model="params.TV_fees" placeholder="请输入内容" :disabled="status==1"></el-input>-->
                 <!--</el-form-item>-->
               <!--</el-col>-->
-              <!--<el-col :span="6">-->
-                <!--<el-form-item label="超期网费">-->
-                  <!--<el-input v-model="params.network_fees" placeholder="请输入内容" :disabled="status==1"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
+              <el-col :span="6">
+                <el-form-item label="超期网费">
+                  <el-input v-model="params.network_fees" placeholder="请输入内容" :disabled="status==1"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="6">
                 <el-form-item label="合计">
                   <el-input disabled v-model="otherTotal" disabled="" placeholder="请输入内容"></el-input>
@@ -851,7 +851,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) - Number(this.eleTotalTotal)
           - Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal)+
+          - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal)- Number(this.repair_cost) +
           (this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
       },
     },
