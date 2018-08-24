@@ -104,6 +104,7 @@
                 <el-col :span="8">
                   <el-form-item label="收款周期">
                     <el-date-picker
+                        :disabled="status==1"
                         v-model="params.settled_info[index].payment_cycle"
                         type="daterange"
                         value-format="yyyy-MM-dd"
