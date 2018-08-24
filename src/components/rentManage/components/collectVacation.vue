@@ -610,7 +610,6 @@
           </el-form>
         </div>
 
-
         <div class="title">退款信息</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="80px">
@@ -827,7 +826,7 @@
       realTotal() {
         return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) - Number(this.eleTotalTotal)
           - Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
-          - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal)+
+          - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal) - Number(this.repair_cost) +
           (this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
       },
     },
@@ -862,7 +861,7 @@
       getContractInfo() {
         let lease_what = this.params.module === '1'?'lease/collect/':'lease/rent/';
         this.$http.get(globalConfig.server + lease_what + this.collectContractId).then((res) => {
-          if (res.data.code === '61010') {
+          if (res.data.code === '61010' || res.data.code === '61110') {
             this.contractInfo = res.data.data;
             this.params.contracting_party =  res.data.data.property_payer ? Number(res.data.data.property_payer) : '';
           }

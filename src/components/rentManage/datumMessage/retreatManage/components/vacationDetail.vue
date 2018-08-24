@@ -1123,7 +1123,7 @@
             this.eleTotalTotal = (data.details && data.details.electricity_total) || 0;
             this.gasTotal = (data.details && data.details.gas) || 0;
             this.managementTotal = (data.details && data.details.property_management) || 0;
-            this.otherEnergyTotal = (data.details && data.details.deduct_energy_fees) || 0;
+            this.otherEnergyTotal = (data.details && data.details.energy_other) || 0;
             this.otherTotal = (data.details && data.details.others_fees) || 0;
             this.realTotal = (data.details && data.details.total_fees) || 0;
 
