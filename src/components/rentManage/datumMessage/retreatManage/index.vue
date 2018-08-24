@@ -473,8 +473,8 @@
         this.isLoading = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
           this.isLoading = false;
-          this.superAuthority = res.data.data.can;
           if (res.data.code === '20000') {
+            this.superAuthority = res.data.data.can;
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
           } else {
@@ -490,8 +490,8 @@
         this.isLoading_second = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params_second}).then((res) => {
           this.isLoading_second = false;
-          this.superAuthority = res.data.data.can;
           if (res.data.code === '20000') {
+            this.superAuthority = res.data.data.can;
             this.tableData_second = res.data.data.data;
             this.totalNumber_second = res.data.data.count;
           } else {
