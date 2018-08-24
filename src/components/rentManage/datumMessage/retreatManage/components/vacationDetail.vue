@@ -365,44 +365,6 @@
                 </el-row>
                 <el-row>
                   <el-col :span="2" style="text-align: right">
-                    <el-form-item label="电费（峰）：" label-width="100px">
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-form-item label="上次底数">
-                      <el-input disabled v-model="params.electricity_peak_last"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-form-item label="本次底数">
-                      <el-input disabled v-model="params.electricity_peak_now"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-form-item label="单价">
-                      <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-form-item label="滞纳金">
-                      <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
-                    </el-form-item>
-                  </el-col>
-
-                  <el-col :span="4">
-                    <el-form-item label="其他">
-                      <el-input disabled v-model="params.electricity_peak_other"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="2">
-                    <div class="content">
-                      合计：{{elePeakTotal}}
-                    </div>
-                  </el-col>
-                </el-row>
-
-                <el-row>
-                  <el-col :span="2" style="text-align: right">
                     <el-form-item label="电费（谷）：" label-width="100px">
                     </el-form-item>
                   </el-col>
@@ -439,7 +401,46 @@
                 </el-row>
                 <el-row>
                   <el-col :span="2" style="text-align: right">
-                    <el-form-item label="电费（总）：" label-width="100px">
+                    <el-form-item label="电费（峰）：" label-width="100px">
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="上次底数">
+                      <el-input disabled v-model="params.electricity_peak_last"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="本次底数">
+                      <el-input disabled v-model="params.electricity_peak_now"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="单价">
+                      <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-form-item label="滞纳金">
+                      <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
+                    </el-form-item>
+                  </el-col>
+
+                  <el-col :span="4">
+                    <el-form-item label="其他">
+                      <el-input disabled v-model="params.electricity_peak_other"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="2">
+                    <div class="content">
+                      合计：{{elePeakTotal}}
+                    </div>
+                  </el-col>
+                </el-row>
+
+
+                <el-row>
+                  <el-col :span="2" style="text-align: right">
+                    <el-form-item label="电费：" label-width="100px">
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">

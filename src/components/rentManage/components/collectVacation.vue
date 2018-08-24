@@ -324,6 +324,7 @@
                 </div>
               </el-col>
             </el-row>
+
             <el-row>
               <el-col :span="2" style="text-align: right">
                 <el-form-item label="燃气费：" label-width="100px">
@@ -357,6 +358,43 @@
               <el-col :span="2">
                 <div class="content">
                   合计：{{gasTotal}}
+                </div>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="2" style="text-align: right">
+                <el-form-item label="电费（谷）：" label-width="100px">
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="上次底数">
+                  <el-input v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="本次底数">
+                  <el-input v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="单价">
+                  <el-input v-model="params.electricity_valley_unit_price" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="滞纳金">
+                  <el-input v-model="params.electricity_valley_late_payment" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="其他">
+                  <el-input v-model="params.electricity_valley_other" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2">
+                <div class="content">
+                  合计：{{eleValTotal}}
                 </div>
               </el-col>
             </el-row>
@@ -399,43 +437,7 @@
             </el-row>
             <el-row>
               <el-col :span="2" style="text-align: right">
-                <el-form-item label="电费（谷）：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="上次底数">
-                  <el-input v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="本次底数">
-                  <el-input v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input v-model="params.electricity_valley_unit_price" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input v-model="params.electricity_valley_late_payment" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="其他">
-                  <el-input v-model="params.electricity_valley_other" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <div class="content">
-                  合计：{{eleValTotal}}
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="电费（总）：" label-width="100px">
+                <el-form-item label="电费：" label-width="100px">
                 </el-form-item>
               </el-col>
               <el-col :span="4">
