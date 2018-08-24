@@ -28,7 +28,7 @@
               </template>
             </el-table-column>
             <el-table-column label="小区名称">
-              <template slot-scope="scope">{{ scope.row.village_name }}</template>
+              <template slot-scope="scope">{{ scope.row.village_name}}</template>
             </el-table-column>
             <el-table-column
               prop="address"
