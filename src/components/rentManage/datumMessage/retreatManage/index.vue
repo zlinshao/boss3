@@ -11,8 +11,14 @@
                 <!--</template>-->
               <!--</el-input>-->
             <!--</el-form-item>-->
-            <el-form-item>
+            <el-form-item v-if="activeName === 'first'">
               <el-input placeholder="地址/合同编号" clearable v-model="params.search"
+                        @keyup.enter.native="search"  size="mini">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item v-else>
+              <el-input placeholder="地址/合同编号" clearable v-model="params_second.search"
                         @keyup.enter.native="search"  size="mini">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
@@ -27,7 +33,7 @@
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
-            <el-row class="el_row_border">
+            <el-row class="el_row_border" v-if="activeName === 'first'">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -67,7 +73,46 @@
                 </el-row>
               </el-col>
             </el-row>
-
+            <el-row class="el_row_border" v-else>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">退租时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                          v-model="params_second.check_time"
+                          type="daterange"
+                          value-format="yyyy-MM-dd"
+                          range-separator="至"
+                          start-placeholder="开始日期"
+                          end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">退房状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable v-model="params_second.status" placeholder="请选择退房状态" value="">
+                        <el-option label="草稿" value="0"></el-option>
+                        <el-option label="待结算" value="5"></el-option>
+                        <el-option label="待审核" value="1"></el-option>
+                        <el-option label="已驳回" value="2"></el-option>
+                        <el-option label="待付款" value="3"></el-option>
+                        <el-option label="已完成" value="4"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -87,7 +132,6 @@
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 0)"
-                @row-click="clickTable"
                 @row-dblclick="dblClickTable"
                 @row-contextmenu='houseMenu'
                 style="width: 100%">
@@ -199,16 +243,27 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <div class="tableBottom" v-if="activeName === 'first'">
+                <div class="left">
+                  <el-pagination
+                      @current-change="handleCurrentChange"
+                      :current-page="params.page"
+                      :page-sizes="[12, 20, 30, 40]"
+                      :page-size="params.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="totalNumber">
+                  </el-pagination>
+                </div>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="租客退房" name="second">
               <el-table
-                :data="tableData"
-                :empty-text='emptyStatus'
-                v-loading="isLoading"
+                :data="tableData_second"
+                :empty-text='emptyStatus_second'
+                v-loading="isLoading_second"
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 0)"
-                @row-click="clickTable"
                 @row-dblclick="dblClickTable"
                 @row-contextmenu='houseMenu'
                 style="width: 100%">
@@ -320,21 +375,21 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <div class="tableBottom" v-if="activeName === 'second'">
+                <div class="left">
+                  <el-pagination
+                      @current-change="handleCurrentChange"
+                      :current-page="params_second.page"
+                      :page-sizes="[12, 20, 30, 40]"
+                      :page-size="params_second.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="totalNumber_second">
+                  </el-pagination>
+                </div>
+              </div>
             </el-tab-pane>
           </el-tabs>
-          <div class="tableBottom">
-            <div class="left">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="params.page"
-                :page-sizes="[12, 20, 30, 40]"
-                :page-size="params.limit"
-                layout="total, prev, pager, next, jumper"
-                :total="totalNumber">
-              </el-pagination>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -345,7 +400,6 @@
                          @close="closeModal"></EditCollectVacation>
     <VacationDetail :vacationDetail="vacationDetail" :vacationId="operateId" @close="closeModal"></VacationDetail>
 
-    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" :isRent="isRent"></AddressSearch>
 
     <UploadPic :upLoadDialog="upLoadDialog" :status="status" :vacationId="operateId" @close="closeModal"></UploadPic>
   </div>
@@ -355,12 +409,11 @@
   import RightMenu from '../../../common/rightMenu.vue'
   import EditCollectVacation from './components/editVacation.vue'
   import VacationDetail from './components/vacationDetail.vue'
-  import AddressSearch from '../../../common/addressSearch';
   import UploadPic from './components/upScreenshot'
 
   export default {
     name: 'hello',
-    components: {RightMenu, EditCollectVacation, VacationDetail, AddressSearch, UploadPic},
+    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic},
     data() {
       return {
         rightMenuX: 0,
@@ -370,6 +423,9 @@
         /***********/
         activeName: 'first',
         totalNumber: 0,
+        tableData: [],
+        totalNumber_second : 0,
+        tableData_second : [],
         params: {
           page: 1,
           limit: 12,
@@ -379,13 +435,23 @@
           check_time: [],
           status: '',
         },
+        params_second: {
+          page: 1,
+          limit: 12,
+          module: 2,
+          contract_id: '',
+          search: '',
+          check_time: [],
+          status: '',
+        },
 
-        tableData: [],
+
         operateId: '',
-
         isHigh: false,
         emptyStatus: ' ',
+        emptyStatus_second: ' ',
         isLoading: false,
+        isLoading_second: false,
         editCollectVacation: false,
         vacationDetail: false,
         addressDialog: false,
@@ -397,46 +463,69 @@
       }
     },
     created() {
-      this.getData();
+      this.getData_collect();
+      this.getData_rent();
     },
     methods: {
       //获取退租列表
-      getData() {
+      getData_collect() {
         this.emptyStatus = ' ';
         this.isLoading = true;
-        this.tableData = [];
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
           this.isLoading = false;
+          this.superAuthority = res.data.data.can;
           if (res.data.code === '20000') {
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
-            this.superAuthority = res.data.data.can;
           } else {
-            this.emptyStatus = '暂无数据';
+            this.superAuthority = false;
+            this.tableData = [];
             this.totalNumber = 0;
+            this.emptyStatus = '暂无数据';
+          }
+        })
+      },
+      getData_rent() {
+        this.emptyStatus_second = ' ';
+        this.isLoading_second = true;
+        this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params_second}).then((res) => {
+          this.isLoading_second = false;
+          this.superAuthority = res.data.data.can;
+          if (res.data.code === '20000') {
+            this.tableData_second = res.data.data.data;
+            this.totalNumber_second = res.data.data.count;
+          } else {
+            this.superAuthority = false;
+            this.tableData_second = [];
+            this.totalNumber_second = 0;
+            this.emptyStatus_second = '暂无数据';
           }
         })
       },
       //切换标签页
       handleClick() {
-        this.params.page = 1;
-        this.params.module = this.activeName === 'first' ? 1 : 2;
         this.isRent = this.activeName === 'first' ? 0 : 1;
-        this.getData();
       },
-      handleSizeChange(val) {
-      },
+      //分页
       handleCurrentChange(val) {
-        this.params.page = val;
-        this.getData();
-      },
-      clickTable(row, event, column) {
+        if(this.activeName === 'first'){
+          this.params.page = val;
+          this.getData_collect();
+        }else {
+          this.params_second.page = val;
+          this.getData_rent();
+        }
+
       },
 
       deleteColumn() {
         this.$http.get(globalConfig.server + 'customer/check_out/delete/' + this.operateId).then((res) => {
           if (res.data.code === '20040') {
-            this.getData();
+            if(this.activeName === 'first'){
+              this.getData_collect();
+            }else {
+              this.getData_rent();
+            }
             this.$notify.success({
               title: '成功',
               message: res.data.msg
@@ -456,7 +545,11 @@
         this.vacationDetail = false;
         if (val === 'success') {
           this.isRent = this.activeName === 'first' ? 0 : 1;
-          this.getData();
+          if(this.activeName === 'first'){
+            this.getData_collect();
+          }else {
+            this.getData_rent();
+          }
         }
       },
 
@@ -469,29 +562,25 @@
       },
       search() {
         this.isHigh = false;
-        this.params.page = 1;
-        this.getData();
-      },
-      resetting() {
-        this.params.check_time = [];
-        this.params.status = '';
-      },
-      openAddressDialog() {
-        this.addressDialog = true;
-      },
-      emptySearch() {
-        this.params.contract_id = '';
-        this.address = '';
-        this.search();
-      },
-      closeAddressDialog(val) {
-        this.addressDialog = false;
-        if (val) {
-          this.address = val.address;
-          this.params.contract_id = val.contract_id;
-          this.search();
+        if(this.activeName === 'first'){
+          this.params.page = 1;
+          this.getData_collect();
+        }else {
+          this.params_second.page = 1;
+          this.getData_rent();
         }
       },
+      resetting() {
+        if(this.activeName === 'first'){
+          this.params.check_time = [];
+          this.params.status = '';
+        }else {
+          this.params_second.check_time = [];
+          this.params_second.status = '';
+        }
+
+      },
+
       //-------------------房屋右键------------------------------------//
       houseMenu(row, event) {
         this.operateId = row.id;
