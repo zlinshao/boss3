@@ -611,7 +611,7 @@
               <!--</el-col>-->
               <el-col :span="6">
                 <el-form-item label="滞纳金">
-                  <el-input v-model="params.TV_fees" placeholder="请输入内容"></el-input>
+                  <el-input v-model="params.TV_fees" :disabled="status==1" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="6">-->

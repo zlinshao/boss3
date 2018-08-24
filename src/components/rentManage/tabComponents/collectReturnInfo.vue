@@ -74,7 +74,10 @@
           <span v-else="">/</span>
         </template>
       </el-table-column>
-
+      <el-table-column
+          prop="checkout_time"
+          label="退款时间">
+      </el-table-column>
       <el-table-column
         label="创建人">
         <template slot-scope="scope">
