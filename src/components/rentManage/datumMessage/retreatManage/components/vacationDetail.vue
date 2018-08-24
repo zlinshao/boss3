@@ -1117,7 +1117,7 @@
             this.params.network_fees = (data.details && data.details.network_fees) || 0;
             this.params.profit_type = data.extend_field && data.extend_field.profit_type ?
               String(data.extend_field.profit_type) : '';
-            this.params.is_refund = (data.details && data.details.is_refund)? String(data.details.is_refund):'';
+            this.params.is_refund =data.is_refund ? String(data.is_refund):'';
 
             //已计算费用
             this.reimbursementTotal = (data.details && data.details.should_be_returned_fees) || 0;
@@ -1130,6 +1130,10 @@
             this.otherEnergyTotal = (data.details && data.details.energy_other) || 0;
             this.otherTotal = (data.details && data.details.others_fees) || 0;
             this.realTotal = (data.details && data.details.total_fees) || 0;
+
+            this.settlers = data.settlers && !Array.isArray(data.settlers)? data.settlers.name : '';
+            this.auditors = data.auditors && !Array.isArray(data.auditors)? data.auditors.name : '';
+            this.payers = data.payers && !Array.isArray(data.payers)? data.payers.name : '';
 
             let picObject = {};
             this.editImage = {};
