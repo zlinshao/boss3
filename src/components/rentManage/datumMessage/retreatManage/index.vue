@@ -4,11 +4,17 @@
       <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
+            <!--<el-form-item>-->
+              <!--<el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">-->
+                <!--<template slot="append">-->
+                  <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
+                <!--</template>-->
+              <!--</el-input>-->
+            <!--</el-form-item>-->
             <el-form-item>
-              <el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
-                </template>
+              <el-input placeholder="地址/合同编号" clearable v-model="params.search"
+                        @keyup.enter.native="search"  size="mini">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -88,8 +94,8 @@
                 <el-table-column
                   label="合同编号">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
-                      {{scope.row.contract_id.contract_number}}
+                    <span v-if="scope.row.lord_contract_number">
+                      {{scope.row.lord_contract_number}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -97,9 +103,8 @@
                 <el-table-column
                   label="房屋地址">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
-                          &&scope.row.contract_id.house">
-                      {{scope.row.contract_id.house.name}}
+                    <span v-if="scope.row.lord_house_name">
+                      {{scope.row.lord_house_name}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -208,20 +213,19 @@
                 @row-contextmenu='houseMenu'
                 style="width: 100%">
                 <el-table-column
-                  label="合同编号">
+                    label="合同编号">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
-                      {{scope.row.contract_id.contract_number}}
+                    <span v-if="scope.row.renter_contract_number">
+                      {{scope.row.renter_contract_number}}
                     </span>
                     <span v-else="">/</span>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="房屋地址">
+                    label="房屋地址">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
-                          &&scope.row.contract_id.house">
-                      {{scope.row.contract_id.house.name}}
+                    <span v-if="scope.row.renter_house_name">
+                      {{scope.row.renter_house_name}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -371,6 +375,7 @@
           limit: 12,
           module: 1,
           contract_id: '',
+          search: '',
           check_time: [],
           status: '',
         },
