@@ -100,7 +100,7 @@
         <el-table-column
             label="退租状态">
           <template slot-scope="scope">
-                     <span v-if="scope.row.status==0">
+                    <span v-if="scope.row.status==0">
                       <span class="info_label">草稿</span>
                     </span>
             <span v-if="scope.row.status==1">
