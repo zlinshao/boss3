@@ -195,6 +195,8 @@ const ReportingData =()=> import ('../components/reportManage/reportingData/inde
 
 const Application = ()=> import ('../components/C-manage/applicationManage/index');
 const Houses = ()=> import ('../components/C-manage/houseManage/index');
+const DormManage = ()=> import ('../components/dormManage/index');
+const OfficeManage = ()=> import ('../components/officeManage/index');
 
 Vue.use(Router);
 
@@ -386,7 +388,8 @@ export default new Router({
       children: [
         {path: '/housesManage', component: HousesManage, name: '产品管控中心',},
         {path: '/villageManage', component: VillageManage, name: '小区管理',},
-
+        {path: '/dormManage', component: DormManage, name: '宿舍管理',},
+        {path: '/officeManage', component: OfficeManage, name: '办公室管理',},
       ]
     },
 
