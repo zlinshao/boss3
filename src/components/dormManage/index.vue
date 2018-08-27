@@ -58,32 +58,75 @@
             @cell-dblclick='dblClick'
             style="width: 100%">
           <el-table-column
-              prop="name"
               label="房屋地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.house&&scope.row.house.name">{{scope.row.house.name}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="小区地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.house&&scope.row.house.village_name">{{scope.row.house.village_name}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="房型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.house&&scope.row.house.room">{{scope.row.house.room}}室</span>
+              <span v-else>0室</span>
+              <span>-</span>
+              <span v-if="scope.row.house&&scope.row.house.hall">{{scope.row.house.hall}}厅</span>
+              <span v-else>0厅</span>
+              <span>-</span>
+              <span v-if="scope.row.house&&scope.row.house.toilet">{{scope.row.house.toilet}}卫</span>
+              <span v-else>0卫</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
+              label="面积">
+             <template slot-scope="scope">
+              <span v-if="scope.row.house&&scope.row.house.area">{{scope.row.house.area}}m²</span>
+              <span v-else>/</span>
+            </template>
+          </el-table-column>
+          <el-table-column
               label="装修">
+             <template slot-scope="scope">
+              <span v-if="scope.row.house&&scope.row.house.decoration">{{scope.row.house.decoration}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="房屋类型">
+             <template slot-scope="scope">
+              <span v-if="scope.row.house_type">{{scope.row.house_type}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="收房价格">
+             <template slot-scope="scope">
+              <span v-if="scope.row.house&&scope.row.house.suggest_price">{{scope.row.house.suggest_price}}</span>
+              <span v-else>/</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              prop="average_price"
+              label="人均价格">
           </el-table-column>
           <el-table-column
               prop="name"
               label="开始时间">
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="当前入住人数">
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="剩余床位">
           </el-table-column>
           <el-table-column
               prop="name"
@@ -99,7 +142,7 @@
           </el-table-column>
           <el-table-column
               prop="name"
-              label="片区经理">
+              label="部门">
           </el-table-column>
         </el-table>
       </div>
@@ -135,7 +178,8 @@
         /***********/
         params: {
           page: 1,
-          limit: 12,
+          limit: 10,
+          house_type : 2,
         },
         isHigh: false,
         totalNum: 0,
@@ -165,6 +209,15 @@
       getData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
+        this.$http.get(globalConfig.server+'api/v1/house-list',{params:this.params}).then(res=>{
+          this.tableLoading = false;
+          if(res.data.code === '60012'){
+            this.tableData = res.data.info.data;
+          }else {
+            this.tableStatus = '暂无数据';
+            this.tableData = [];
+          }
+        })
       },
       // 高级
       highGrade() {

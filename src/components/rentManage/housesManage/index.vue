@@ -319,6 +319,20 @@
         </div>
       </div>
     </div>
+
+    <!--模态框-->
+    <el-dialog title="合并房屋" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
+      <el-form size="mini" label-width="80px">
+        <el-form-item label="房屋地址" required>
+          <el-input v-model="mergeName" @focus="houseDialog = true" placeholder="请选择小区" readonly></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="mergeDialog = false">取 消</el-button>
+        <el-button type="primary" @click="isConfirmMerge">确 定</el-button>
+      </span>
+    </el-dialog>
+    
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
@@ -339,6 +353,8 @@
                 :houseDetail="houseDetail" @close="closeModal"></AddWebInfo>
 
     <Download :downloadPicDialog="downloadPicDialog" :houseId="houseId" @close="closeModal"></Download>
+
+    <HouseSearch :houseDialog="houseDialog" @close="getHouseAddress"></HouseSearch>
   </div>
 </template>
 
@@ -361,11 +377,13 @@
   import Download from './components/downloadPic.vue'
 
   import AddWebInfo from './components/addWebsiteInfo'
+  import HouseSearch from '../../common/houseSearch'
   export default {
     name: 'hello',
     components: {
       RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail,Download,
-      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab,ReportRecord,AddWebInfo
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab,ReportRecord,AddWebInfo,
+      HouseSearch
     },
     data () {
       return {
@@ -401,6 +419,8 @@
         houseDetailDialog: false,
         addWebInfoDialog: false,
         downloadPicDialog: false,
+        mergeDialog: false,
+        houseDialog: false,
 
         isHigh: false,
         activeName: 'first',
@@ -425,6 +445,10 @@
         operateArray: [],    //选中数组
         organizationType: '',
         changeHouseStatus: false,
+
+        mergeParams:{id:''},
+        mergeName : '',
+        oldHouseName : '',
       }
     },
     mounted(){
@@ -611,6 +635,7 @@
         this.houseId = row.id;
         this.houseDetail = row;
         this.collectData = row.lords;
+        this.oldHouseName = row.name;
         if (this.collectData.length > 0) {
           this.collectId = this.collectData[0].id;
         }
@@ -628,6 +653,7 @@
           },
           {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
           {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
+          {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
         ];
         this.contextMenuParam(event);
       },
@@ -656,6 +682,9 @@
             break;
           case 'downloadPicDialog' :
             this.downloadPicDialog = true;
+            break;
+          case 'merge' :
+            this.mergeDialog = true;
             break;
         }
       },
@@ -718,6 +747,51 @@
         this.department_name = '';
         this.getData();
         this.getCharts();
+      },
+
+      //*************************合并房屋**************************
+      getHouseAddress(val){
+        this.houseDialog = false;
+        if(val){
+          this.mergeName = val.name;
+          this.mergeParams.id = val.id;
+        }
+      },
+      isConfirmMerge(){
+        let msg = `<div>
+                      此操作将会将<b style="color: #e4393c">${this.oldHouseName}</b>合并到<b style="color: #e4393c">${this.mergeName}</b>,
+                      <b style="color: #e4393c">${this.oldHouseName}</b>下的所有合同将会转移到<b style="color: #e4393c">${this.mergeName}</b>下,是否继续?
+                  </div>`;
+        this.$confirm( msg, '提示', {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.confirmMerge()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消合并'
+          });
+        });
+      },
+      confirmMerge(){
+        this.$http.put(globalConfig.server+'coreproject/houses/merge/'+this.houseId,this.mergeParams).then(res=>{
+          if(res.data.code === '20000'){
+            this.$notify.success({
+              title:'成功',
+              message : res.data.msg,
+            });
+            this.getData();
+            this.mergeDialog = false;
+          }else {
+            this.$notify.warning({
+              title:'警告',
+              message : res.data.msg,
+            })
+          }
+        })
       },
     }
   }
