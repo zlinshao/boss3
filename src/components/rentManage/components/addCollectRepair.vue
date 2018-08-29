@@ -104,7 +104,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="form.status===600">
-              <el-form-item label="最终认责人">
+              <el-form-item label="addEnterDialog">
                 <el-select v-model="form.final_liable" placeholder="请选择认责归属" clearable>
                   <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
                              :value="item.id">{{item.dictionary_name}}

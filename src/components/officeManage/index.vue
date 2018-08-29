@@ -4,17 +4,17 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入姓名" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
+            <el-input placeholder="请输入姓名" v-model="params.where" size="mini" clearable @keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
+          <!--<el-form-item>-->
+            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
+          <!--</el-form-item>-->
           <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini">
+            <el-button type="primary" size="mini" @click="addDormDialog = true">
               <i class="el-icon-plus"></i>
-              新增记录
+              新增
             </el-button>
           </el-form-item>
         </el-form>
@@ -55,51 +55,92 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
-            @cell-dblclick='dblClick'
+            @row-dblclick="dblClick"
+            @row-contextmenu='openContextMenu'
             style="width: 100%">
           <el-table-column
-              prop="name"
               label="房屋地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.house_name">{{scope.row.house_name}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="小区地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.village_name">{{scope.row.village_name}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="房型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.house_feature">{{scope.row.house_feature}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
+              label="面积">
+            <template slot-scope="scope">
+              <span v-if="scope.row.area">{{scope.row.area}}m²</span>
+              <span v-else>/</span>
+            </template>
+          </el-table-column>
+          <el-table-column
               label="装修">
+            <template slot-scope="scope">
+              <span v-if="scope.row.decoration">{{scope.row.decoration}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="房屋类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.house_identity">{{scope.row.house_identity}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="收房价格">
+            <template slot-scope="scope">
+              <span v-if="scope.row.suggest_price">{{scope.row.suggest_price}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
+              prop="average_price"
+              label="人均价格">
+          </el-table-column>
+          <el-table-column
+              prop="start_at"
               label="开始时间">
           </el-table-column>
+
           <el-table-column
-              prop="name"
+              prop="end_at"
               label="结束时间">
           </el-table-column>
           <el-table-column
-              prop="name"
               label="照片">
+            <template slot-scope="scope">
+              <a href="javascript:;" @click.stop="searchPic(scope.row.house_id)">
+                <i style="font-size: 16px" class="el-icon-picture"></i>
+              </a>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
               label="片区经理">
+            <template slot-scope="scope">
+              <span v-if="scope.row.leader">{{scope.row.leader[0].leader_name}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
           <el-table-column
-              prop="name"
-              label="片区经理">
+              label="部门">
+            <template slot-scope="scope">
+              <span v-if="scope.row.leader">{{scope.row.leader[0].leader_depart_name}}</span>
+              <span v-else>/</span>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -116,16 +157,26 @@
     </div>
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperateMore="clickEvent"></RightMenu>
+               @clickOperate="clickEvent"></RightMenu>
+    <AddDorm :addDormDialog="addDormDialog" @close="closeModal"></AddDorm>
+    <CancelDorm :cancelDormDialog="cancelDormDialog" :currentRow="currentRow" @close="closeModal"></CancelDorm>
+    <UpdateDorm :updateDormDialog="updateDormDialog" :currentRow="currentRow" @close="closeModal"></UpdateDorm>
+    <DormDetail :dormDetailDialog="dormDetailDialog" :house_id="house_id" @close="closeModal"></DormDetail>
+    <HouseDetail :houseDetailDialog="houseDetailDialog" :isOnlyPic="isOnlyPic"
+                 :houseId="house_id" @close="closeModal"></HouseDetail>
   </div>
 </template>
 
 <script>
   import RightMenu from '../common/rightMenu.vue';    //右键
-
+  import AddDorm from './components/addOffice'
+  import CancelDorm from './components/cancelOffice'
+  import UpdateDorm from './components/updateOffice'
+  import DormDetail from './components/officeDetail'
+  import HouseDetail from '../rentManage/housesManage/components/houseDetail'
   export default {
     name: 'staff-records',
-    components: {RightMenu},
+    components: {RightMenu,AddDorm,CancelDorm,UpdateDorm,DormDetail,HouseDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -135,7 +186,9 @@
         /***********/
         params: {
           page: 1,
-          limit: 12,
+          limit: 10,
+          house_type : 1,
+          where : '',
         },
         isHigh: false,
         totalNum: 0,
@@ -143,7 +196,15 @@
         tableStatus: ' ',
         tableLoading: false,
 
-
+        addDormDialog : false,
+        cancelDormDialog : false,
+        updateDormDialog : false,
+        dormDetailDialog : false,
+        houseDetailDialog : false,
+        isOnlyPic : false,
+        currentId :'',
+        currentRow :{},
+        house_id : '',
       }
     },
     mounted() {
@@ -151,11 +212,10 @@
     },
     watch: {},
     methods: {
-
+      //双击表格
       dblClick(row) {
-      },
-      closeModal() {
-        this.search();
+        this.house_id = row.house_id;
+        this.dormDetailDialog = true;
       },
 
       search() {
@@ -165,6 +225,22 @@
       getData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
+        this.$http.get(globalConfig.server+'api/v1/house-list',{params:this.params}).then(res=>{
+          this.tableLoading = false;
+          if(res.data.code === '60012'){
+            this.tableData = res.data.info.data;
+            this.totalNum = res.data.info.total;
+          }else {
+            this.tableStatus = '暂无数据';
+            this.tableData = [];
+            this.totalNum = 0;
+          }
+        })
+      },
+      searchPic(id){
+        this.isOnlyPic = true;
+        this.house_id = id;
+        this.houseDetailDialog = true;
       },
       // 高级
       highGrade() {
@@ -181,14 +257,21 @@
         this.params.page = val;
       },
 
+      /***************************************************************************/
       // 右键
       openContextMenu(row, event) {
         this.currentId = row.id;
+        this.currentRow = row;
         this.contextMenuParam(event);
+        this.lists = [
+          {clickIndex: 'cancelDormDialog', headIcon: 'el-icon-delete', label: '取消办公室',},
+          {clickIndex: 'updateDormDialog', headIcon: 'el-icon-refresh', label: '变更信息',},
+        ];
+        this.contextMenuParam(event)
       },
       // 右键回调
       clickEvent(val) {
-
+        this.openModalDialog(val);
       },
       //关闭右键菜单
       closeMenu() {
@@ -206,6 +289,28 @@
           this.show = true
         })
       },
+      /****************************************************************/
+      openModalDialog(val){
+        switch (val){
+          case 'cancelDormDialog':
+            this.cancelDormDialog = true;
+            break;
+          case 'updateDormDialog':
+            this.updateDormDialog = true;
+            break;
+        }
+      },
+      closeModal(val) {
+        this.addDormDialog = false;
+        this.cancelDormDialog = false;
+        this.updateDormDialog = false;
+        this.dormDetailDialog = false;
+        this.houseDetailDialog = false;
+        if(val === 'success'){
+          this.getData();
+        }
+      },
+
     },
   }
 </script>
