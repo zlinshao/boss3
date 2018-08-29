@@ -80,7 +80,7 @@
           this.$emit('close');
         }else {
           this.house_name = this.currentRow.house_name;
-          this.live_num = this.currentRow.live_num;
+          this.live_num = this.currentRow.live_num || 0;
           this.remain_num = this.currentRow.bed_num - this.currentRow.live_num;
           this.params.house_id = this.currentRow.house_id;
         }
