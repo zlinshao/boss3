@@ -118,10 +118,14 @@
           <el-table-column
               prop="live_num"
               label="当前入住人数">
+            <template slot-scope="scope">
+              <span v-if="scope.row.live_num">{{scope.row.live_num}}</span>
+              <span v-else>0</span>
+            </template>
           </el-table-column>
           <el-table-column
               prop="bed_num"
-              label="剩余床位">
+              label="总床位">
           </el-table-column>
           <el-table-column
               prop="end_at"
