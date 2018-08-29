@@ -65,7 +65,7 @@
         }else {
           this.house_name = this.currentRow.house_name;
           this.params.house_id = this.currentRow.house_id;
-          this.live_num = this.currentRow.live_num;
+          this.live_num = this.currentRow.live_num || 0;
         }
       },
     },
