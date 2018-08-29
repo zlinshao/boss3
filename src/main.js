@@ -31,6 +31,7 @@ import VueLoading from './plugin/loading/loading.js'
 import 'vue2-editor/node_modules/quill/dist/quill.bubble.css'
 import './assets/css/reset.css'
 import './assets/font/iconfont.css'
+import './assets/fontawesome/fontawesome/font-awesome.min.css'
 
 // import './directives.js';  //弹框拖拽
 
