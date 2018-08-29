@@ -124,8 +124,11 @@
             </template>
           </el-table-column>
           <el-table-column
-              prop="bed_num"
-              label="总床位">
+              label="剩余床位">
+            <template slot-scope="scope">
+              <span v-if="scope.row.last_bed">{{scope.row.last_bed}}</span>
+              <span v-else>0</span>
+            </template>
           </el-table-column>
           <el-table-column
               prop="end_at"

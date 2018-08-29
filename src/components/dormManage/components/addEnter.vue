@@ -81,7 +81,7 @@
         }else {
           this.house_name = this.currentRow.house_name;
           this.live_num = this.currentRow.live_num || 0;
-          this.remain_num = this.currentRow.bed_num - this.currentRow.live_num;
+          this.remain_num = this.currentRow.last_bed || 0;
           this.params.house_id = this.currentRow.house_id;
         }
       },
