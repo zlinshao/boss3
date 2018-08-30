@@ -79,13 +79,7 @@
               <span v-else>/</span>
             </template>
           </el-table-column>
-          <el-table-column
-              label="面积">
-            <template slot-scope="scope">
-              <span v-if="scope.row.area">{{scope.row.area}}m²</span>
-              <span v-else>/</span>
-            </template>
-          </el-table-column>
+
           <el-table-column
               label="装修">
             <template slot-scope="scope">
@@ -104,6 +98,13 @@
               label="收房价格">
             <template slot-scope="scope">
               <span v-if="scope.row.suggest_price">{{scope.row.suggest_price}}</span>
+              <span v-else>/</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              label="人均价格">
+            <template slot-scope="scope">
+              <span v-if="scope.row.average_price">{{scope.row.average_price}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
@@ -134,14 +135,14 @@
           <el-table-column
               label="片区经理">
             <template slot-scope="scope">
-              <span v-if="scope.row.leader">{{scope.row.leader[0].leader_name}}</span>
+              <span v-if="scope.row.leader">{{scope.row.leader.leader_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
               label="部门">
             <template slot-scope="scope">
-              <span v-if="scope.row.leader">{{scope.row.leader[0].leader_depart_name}}</span>
+              <span v-if="scope.row.leader">{{scope.row.leader.leader_depart_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>

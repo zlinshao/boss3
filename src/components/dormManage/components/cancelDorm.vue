@@ -49,7 +49,7 @@
           end_at: '',
           remarks: '',
           house_type : 2,
-          operate_type: 3,
+          operate_type: 4,
         },
         house_name:'',
         live_num : '',
@@ -105,7 +105,7 @@
           end_at: '',
           remarks: '',
           house_type : 2,
-          operate_type: 3,
+          operate_type: 4,
         };
         this.house_name = '';
         this.live_num = '';

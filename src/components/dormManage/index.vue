@@ -145,14 +145,14 @@
           <el-table-column
               label="片区经理">
             <template slot-scope="scope">
-              <span v-if="scope.row.leader">{{scope.row.leader[0].leader_name}}</span>
+              <span v-if="scope.row.leader">{{scope.row.leader.leader_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
               label="部门">
             <template slot-scope="scope">
-              <span v-if="scope.row.leader">{{scope.row.leader[0].leader_depart_name}}</span>
+              <span v-if="scope.row.leader">{{scope.row.leader.leader_depart_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>

@@ -34,7 +34,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="片区经理">
-                  <div class="content"><span v-if="leader.length>0">{{leader[0].leader_name}}</span></div>
+                  <div class="content">{{leader.leader_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -49,17 +49,18 @@
             <div class="itemLIne">
               <div class="line"></div>
               <div class="circle" :class="{ 'circle_green': item.operate_type==1, 'circle_yellow': item.operate_type==2,
-                                            'circle_orange': item.operate_type==3, 'circle_blue': item.operate_type==4}"></div>
+                                            'circle_orange': item.operate_type==3, 'circle_blue': item.operate_type==4,
+                                            'circle_red': item.operate_type==5}"></div>
               <div class="stretchLine"></div>
             </div>
             <div class="itemContent">
               <div v-if="item.operate_type==1">
-                <span><b>开始时间：</b>{{item.operate_time}}；</span>
+                <span><b>开始时间：</b>{{item.start_time}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-else-if="item.operate_type==2">
-                <span><b>入住时间</b>：{{item.operate_time}}；</span>
+                <span><b>入住时间</b>：{{item.operate_content.guests&&item.operate_content.guests[0].live_time}}；</span>
                 <span>
                   <span>入住{{item.operate_content.total}}人，入住人员是</span>
                   <span v-for="number in item.operate_content.guests">
@@ -69,7 +70,7 @@
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-else-if="item.operate_type==3">
-                <span><b>离宿时间</b>：{{item.operate_time}}；</span>
+                <span><b>离宿时间</b>：{{item.operate_content.guests&&item.operate_content.guests[0].out_time}}；</span>
                 <span>
                   <span>离宿{{item.operate_content.total}}人，离宿人员是</span>
                   <span v-for="number in item.operate_content.guests">
@@ -79,15 +80,18 @@
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-if="item.operate_type==4">
-                <span><b>结束时间：</b>{{item.operate_time}}；</span>
+                <span><b>结束时间：</b>{{item.end_at}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-if="item.operate_type==5">
-                <span><b>开始时间：</b>{{item.operate_time}}；</span>
+                <span><b>更新时间：</b>{{item.operate_time}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
+            </div>
+            <div class="itemOperate">
+              <i class="el-icon-edit-outline" @click="editItem(item)"></i>
             </div>
           </div>
         </div>
@@ -97,22 +101,27 @@
         <!--<el-button size="small" type="primary">确 定</el-button>-->
       </span>
     </el-dialog>
+    <UpdateRecord :updateRecordDialog="updateRecordDialog" :currentRow="currentRow" @close="closeModal"></UpdateRecord>
   </div>
 </template>
 
 <script>
-
+  import UpdateRecord from './updateRecord'
   export default {
     props: ['dormDetailDialog','house_id'],
+    components:{UpdateRecord},
     data() {
       return {
         dormDetailDialogVisible: false,
         operateArray : [],
         houseArray : {},
         guest : {},
-        leader : [],
+        leader : {},
         live_num : '',
         last_bed : '',
+        updateRecordDialog : false,
+
+        currentRow :{},
       }
     },
     watch: {
@@ -125,7 +134,7 @@
           this.operateArray = [];
           this.houseArray = {};
           this.guest = {};
-          this.leader = [];
+          this.leader = {};
           this.live_num = '';
           this.last_bed = '';
         }else {
@@ -148,8 +157,15 @@
         })
       },
 
-      initData(){
-
+      editItem(data){
+        this.currentRow = data;
+        this.updateRecordDialog = true
+      },
+      closeModal(val) {
+        this.updateRecordDialog = false;
+        if(val=== 'success'){
+          this.getData();
+        }
       },
     },
   }
@@ -199,7 +215,13 @@
       flex-grow: 1;
       padding: 10px 20px;
     }
-
+    .itemOperate{
+      min-width: 50px;
+      line-height: 50px;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+    }
     .circle_green{
       background: #5cff6f;
     }
@@ -211,6 +233,9 @@
     }
     .circle_orange{
       background: #fba547;
+    }
+    .circle_red{
+      background: #fb5247;
     }
   }
 </style>
