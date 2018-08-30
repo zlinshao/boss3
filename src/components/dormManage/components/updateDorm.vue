@@ -71,12 +71,10 @@
           this.$emit('close');
         }else {
           this.house_name = this.currentRow.house_name;
-          this.params.remarks = this.currentRow.remarks;
           this.params.house_id = this.currentRow.house_id;
           this.params.bed_num = this.currentRow.bed_num;
-          this.params.leader_id = this.currentRow.leader[0].leader_id;
-          this.leader_name = this.currentRow.leader[0].leader_name;
-          this.params.remarks = this.currentRow.remarks[this.currentRow.remarks.length-1].remarks;
+          this.params.leader_id = this.currentRow.leader.leader_id;
+          this.leader_name = this.currentRow.leader.leader_name;
         }
       },
 
