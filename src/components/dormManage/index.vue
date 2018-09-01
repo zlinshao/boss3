@@ -404,6 +404,7 @@
       search() {
         this.params.page = 1;
         this.getData();
+        this.isHigh = false;
       },
       getData() {
         this.tableLoading = true;
@@ -426,7 +427,23 @@
       },
       // 重置
       resetting() {
-
+        this.params = {
+          page: 1,
+          limit: 10,
+          house_type: 2,
+          where: '',
+          leader_id: '',//负责人姓名
+          depart_id: '',//部门名称
+          guest_name: '',//住宿人员姓名
+          priceMin: '',//最低人均价格
+          priceMax: '',//最高人均价格
+          bed_num: '',//剩余床位数
+          start_time: '',//开始时间
+          end_time: '',//结束时间
+        };
+        this.leaderName = '';
+        this.departName = '';
+        this.getData();
       },
       searchPic(id) {
         this.isOnlyPic = true;

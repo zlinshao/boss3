@@ -19,7 +19,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+      <div class="filter high_grade" :class="isHigh ? 'highHide':''">
         <el-form :inline="true" :model="params" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
@@ -337,6 +337,7 @@
       search() {
         this.params.page = 1;
         this.getData();
+        this.isHigh = false;
       },
       getData() {
         this.tableLoading = true;
@@ -364,7 +365,19 @@
       },
       // 重置
       resetting() {
-
+        this.params = {
+          page: 1,
+          limit: 10,
+          house_type: 1,
+          where: '',
+          leader_id: '',//负责人姓名
+          depart_id: '',//部门名称
+          start_time: '',//开始时间
+          end_time: '',//结束时间
+        };
+        this.leaderName = '';
+        this.departName = '';
+        this.getData();
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
