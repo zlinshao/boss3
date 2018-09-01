@@ -8,9 +8,9 @@
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
-          <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
-          <!--</el-form-item>-->
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="addDormDialog = true">
               <i class="el-icon-plus"></i>
@@ -49,31 +49,31 @@
     <div class="main">
       <div class="blueTable">
         <el-table
-            :data="tableData"
-            :empty-text='tableStatus'
-            v-loading="tableLoading"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0)"
-            @row-dblclick="dblClick"
-            @row-contextmenu='openContextMenu'
-            style="width: 100%">
+          :data="tableData"
+          :empty-text='tableStatus'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
+          @row-dblclick="dblClick"
+          @row-contextmenu='openContextMenu'
+          style="width: 100%">
           <el-table-column
-              label="房屋地址">
+            label="房屋地址">
             <template slot-scope="scope">
               <span v-if="scope.row.house_name">{{scope.row.house_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="小区地址">
+            label="小区地址">
             <template slot-scope="scope">
               <span v-if="scope.row.village_name">{{scope.row.village_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="房型">
+            label="房型">
             <template slot-scope="scope">
               <span v-if="scope.row.house_feature">{{scope.row.house_feature}}</span>
               <span v-else>/</span>
@@ -81,51 +81,51 @@
           </el-table-column>
 
           <el-table-column
-              label="装修">
+            label="装修">
             <template slot-scope="scope">
               <span v-if="scope.row.decoration">{{scope.row.decoration}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="房屋类型">
+            label="房屋类型">
             <template slot-scope="scope">
               <span v-if="scope.row.house_identity">{{scope.row.house_identity}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="收房价格">
+            label="收房价格">
             <template slot-scope="scope">
               <span v-if="scope.row.suggest_price">{{scope.row.suggest_price}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="人均价格">
+            label="人均价格">
             <template slot-scope="scope">
               <span v-if="scope.row.average_price">{{scope.row.average_price}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="部门人数">
+            label="部门人数">
             <template slot-scope="scope">
               <span v-if="scope.row.depart">{{scope.row.depart.users}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              prop="start_at"
-              label="开始时间">
+            prop="start_at"
+            label="开始时间">
           </el-table-column>
 
           <el-table-column
-              prop="end_at"
-              label="结束时间">
+            prop="end_at"
+            label="结束时间">
           </el-table-column>
           <el-table-column
-              label="照片">
+            label="照片">
             <template slot-scope="scope">
               <a href="javascript:;" @click.stop="searchPic(scope.row.house_id)">
                 <i style="font-size: 16px" class="el-icon-picture"></i>
@@ -133,14 +133,14 @@
             </template>
           </el-table-column>
           <el-table-column
-              label="片区经理">
+            label="片区经理">
             <template slot-scope="scope">
               <span v-if="scope.row.leader">{{scope.row.leader.leader_name}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
           <el-table-column
-              label="部门">
+            label="部门">
             <template slot-scope="scope">
               <span v-if="scope.row.leader">{{scope.row.leader.leader_depart_name}}</span>
               <span v-else>/</span>
@@ -150,12 +150,12 @@
       </div>
       <div class="block pages">
         <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="params.page"
-            :page-size="params.limit"
-            layout="total, prev, pager, next, jumper"
-            :total="totalNum">
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="params.page"
+          :page-size="params.limit"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNum">
         </el-pagination>
       </div>
     </div>
@@ -178,9 +178,10 @@
   import UpdateDorm from './components/updateOffice'
   import DormDetail from './components/officeDetail'
   import HouseDetail from '../rentManage/housesManage/components/houseDetail'
+
   export default {
     name: 'staff-records',
-    components: {RightMenu,AddDorm,CancelDorm,UpdateDorm,DormDetail,HouseDetail},
+    components: {RightMenu, AddDorm, CancelDorm, UpdateDorm, DormDetail, HouseDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -191,8 +192,8 @@
         params: {
           page: 1,
           limit: 10,
-          house_type : 1,
-          where : '',
+          house_type: 1,
+          where: '',
         },
         isHigh: false,
         totalNum: 0,
@@ -200,15 +201,15 @@
         tableStatus: ' ',
         tableLoading: false,
 
-        addDormDialog : false,
-        cancelDormDialog : false,
-        updateDormDialog : false,
-        dormDetailDialog : false,
-        houseDetailDialog : false,
-        isOnlyPic : false,
-        currentId :'',
-        currentRow :{},
-        house_id : '',
+        addDormDialog: false,
+        cancelDormDialog: false,
+        updateDormDialog: false,
+        dormDetailDialog: false,
+        houseDetailDialog: false,
+        isOnlyPic: false,
+        currentId: '',
+        currentRow: {},
+        house_id: '',
       }
     },
     mounted() {
@@ -229,19 +230,19 @@
       getData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
-        this.$http.get(globalConfig.server+'api/v1/house-list',{params:this.params}).then(res=>{
+        this.$http.get(globalConfig.server + 'api/v1/house-list', {params: this.params}).then(res => {
           this.tableLoading = false;
-          if(res.data.code === '60012'){
+          if (res.data.code === '60012') {
             this.tableData = res.data.info.data;
             this.totalNum = res.data.info.total;
-          }else {
+          } else {
             this.tableStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
           }
         })
       },
-      searchPic(id){
+      searchPic(id) {
         this.isOnlyPic = true;
         this.house_id = id;
         this.houseDetailDialog = true;
@@ -294,8 +295,8 @@
         })
       },
       /****************************************************************/
-      openModalDialog(val){
-        switch (val){
+      openModalDialog(val) {
+        switch (val) {
           case 'cancelDormDialog':
             this.cancelDormDialog = true;
             break;
@@ -310,7 +311,7 @@
         this.updateDormDialog = false;
         this.dormDetailDialog = false;
         this.houseDetailDialog = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getData();
         }
       },

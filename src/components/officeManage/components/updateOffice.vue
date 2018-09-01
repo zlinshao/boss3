@@ -75,7 +75,7 @@
         if (!val) {
           this.$emit('close');
         }else {
-          console.log(this.currentRow)
+          console.log(this.currentRow);
           this.house_name = this.currentRow.house_name;
           this.params.house_id = this.currentRow.house_id;
           this.depart_name = this.currentRow.depart.name;

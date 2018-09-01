@@ -55,7 +55,7 @@
             </div>
             <div class="itemContent">
               <div v-if="item.operate_type==1">
-                <span><b>开始时间：</b>{{item.start_time}}；</span>
+                <span><b>开始时间：</b>{{item.operate_content.start_time}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
@@ -80,7 +80,7 @@
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-if="item.operate_type==4">
-                <span><b>结束时间：</b>{{item.end_at}}；</span>
+                <span><b>结束时间：</b>{{item.operate_content.end_at}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
@@ -107,21 +107,21 @@
 
 <script>
   import UpdateRecord from './updateRecord'
+
   export default {
-    props: ['dormDetailDialog','house_id'],
-    components:{UpdateRecord},
+    props: ['dormDetailDialog', 'house_id'],
+    components: {UpdateRecord},
     data() {
       return {
         dormDetailDialogVisible: false,
-        operateArray : [],
-        houseArray : {},
-        guest : {},
-        leader : {},
-        live_num : '',
-        last_bed : '',
-        updateRecordDialog : false,
-
-        currentRow :{},
+        operateArray: [],
+        houseArray: {},
+        guest: {},
+        leader: {},
+        live_num: '',
+        last_bed: '',
+        updateRecordDialog: false,
+        currentRow: {},
       }
     },
     watch: {
@@ -137,16 +137,16 @@
           this.leader = {};
           this.live_num = '';
           this.last_bed = '';
-        }else {
+        } else {
           this.getData();
         }
       },
 
     },
     methods: {
-      getData(){
-        this.$http.get(globalConfig.server+'api/v1/house-detail?house_id='+this.house_id).then(res => {
-          if(res.data.code === '60014'){
+      getData() {
+        this.$http.get(globalConfig.server + 'api/v1/house-detail?house_id=' + this.house_id).then(res => {
+          if (res.data.code === '60014') {
             this.live_num = res.data.info.live_num;
             this.last_bed = res.data.info.last_bed;
             this.operateArray = res.data.info.operator;
@@ -157,13 +157,14 @@
         })
       },
 
-      editItem(data){
+      editItem(data) {
         this.currentRow = data;
+        this.currentRow.house_type = 2;
         this.updateRecordDialog = true
       },
       closeModal(val) {
         this.updateRecordDialog = false;
-        if(val=== 'success'){
+        if (val === 'success') {
           this.getData();
         }
       },
@@ -172,7 +173,7 @@
 </script>
 
 <style scoped lang="scss">
-  .content{
+  .content {
     height: 28px;
     line-height: 28px;
     background-color: #f5f7fa;
@@ -181,12 +182,13 @@
     border: 1px solid #dcdfe6;
     padding: 0 15px;
   }
-  .operateItem{
+
+  .operateItem {
     display: flex;
     min-height: 70px;
     color: #333;
 
-    .itemTitle{
+    .itemTitle {
       min-width: 150px;
       text-align: center;
       padding: 10px 0;
@@ -206,35 +208,35 @@
         height: 15px;
         border-radius: 50%;
       }
-      .stretchLine{
+      .stretchLine {
         border-right: 1px solid #d6d6d6;
-        flex-grow:1;
+        flex-grow: 1;
       }
     }
-    .itemContent{
+    .itemContent {
       flex-grow: 1;
       padding: 10px 20px;
     }
-    .itemOperate{
+    .itemOperate {
       min-width: 50px;
       line-height: 50px;
       font-size: 16px;
       text-align: center;
       cursor: pointer;
     }
-    .circle_green{
+    .circle_green {
       background: #5cff6f;
     }
-    .circle_blue{
+    .circle_blue {
       background: #6a8dfb;
     }
-    .circle_yellow{
+    .circle_yellow {
       background: #fbf378;
     }
-    .circle_orange{
+    .circle_orange {
       background: #fba547;
     }
-    .circle_red{
+    .circle_red {
       background: #fb5247;
     }
   }

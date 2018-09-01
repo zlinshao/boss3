@@ -49,20 +49,23 @@
             </div>
             <div class="itemContent">
               <div v-if="item.operate_type==1">
-                <span><b>开始时间：</b>{{item.operate_time}}；</span>
+                <span><b>开始时间：</b>{{item.operate_content.start_time}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-if="item.operate_type==4">
-                <span><b>结束时间：</b>{{item.operate_time}}；</span>
+                <span><b>结束时间：</b>{{item.operate_content.end_at}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-if="item.operate_type==5">
-                <span><b>开始时间：</b>{{item.operate_time}}；</span>
+                <span><b>操作时间：</b>{{item.operate_time}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
+            </div>
+            <div class="itemOperate">
+              <i class="el-icon-edit-outline" @click="editItem(item)"></i>
             </div>
           </div>
         </div>
@@ -72,22 +75,27 @@
         <!--<el-button size="small" type="primary">确 定</el-button>-->
       </span>
     </el-dialog>
+    <UpdateRecord :updateRecordDialog="updateRecordDialog" :currentRow="currentRow" @close="closeModal"></UpdateRecord>
   </div>
 </template>
 
 <script>
+  import UpdateRecord from '../../dormManage/components/updateRecord.vue'
 
   export default {
-    props: ['dormDetailDialog','house_id'],
+    props: ['dormDetailDialog', 'house_id'],
+    components: {UpdateRecord},
     data() {
       return {
         dormDetailDialogVisible: false,
-        operateArray : [],
-        houseArray : {},
-        guest : {},
-        leader : [],
-        live_num : '',
-        last_bed : '',
+        updateRecordDialog: false,
+        operateArray: [],
+        houseArray: {},
+        guest: {},
+        leader: [],
+        live_num: '',
+        last_bed: '',
+        currentRow: {},
       }
     },
     watch: {
@@ -97,16 +105,16 @@
       dormDetailDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-        }else {
+        } else {
           this.getData();
         }
       },
 
     },
     methods: {
-      getData(){
-        this.$http.get(globalConfig.server+'api/v1/house-detail?house_id='+this.house_id).then(res => {
-          if(res.data.code === '60014'){
+      getData() {
+        this.$http.get(globalConfig.server + 'api/v1/house-detail?house_id=' + this.house_id).then(res => {
+          if (res.data.code === '60014') {
             this.live_num = res.data.info.live_num;
             this.last_bed = res.data.info.last_bed;
             this.operateArray = res.data.info.operator;
@@ -116,16 +124,23 @@
           }
         })
       },
-
-      initData(){
-
+      editItem(data) {
+        this.currentRow = data;
+        this.currentRow.house_type = 1;
+        this.updateRecordDialog = true
+      },
+      closeModal(val) {
+        this.updateRecordDialog = false;
+        if (val === 'success') {
+          this.getData();
+        }
       },
     },
   }
 </script>
 
 <style scoped lang="scss">
-  .content{
+  .content {
     height: 28px;
     line-height: 28px;
     background-color: #f5f7fa;
@@ -134,12 +149,13 @@
     border: 1px solid #dcdfe6;
     padding: 0 15px;
   }
-  .operateItem{
+
+  .operateItem {
     display: flex;
     min-height: 70px;
     color: #333;
 
-    .itemTitle{
+    .itemTitle {
       min-width: 150px;
       text-align: center;
       padding: 10px 0;
@@ -159,26 +175,26 @@
         height: 15px;
         border-radius: 50%;
       }
-      .stretchLine{
+      .stretchLine {
         border-right: 1px solid #d6d6d6;
-        flex-grow:1;
+        flex-grow: 1;
       }
     }
-    .itemContent{
+    .itemContent {
       flex-grow: 1;
       padding: 10px 20px;
     }
 
-    .circle_green{
+    .circle_green {
       background: #5cff6f;
     }
-    .circle_blue{
+    .circle_blue {
       background: #6a8dfb;
     }
-    .circle_yellow{
+    .circle_yellow {
       background: #fbf378;
     }
-    .circle_orange{
+    .circle_orange {
       background: #fba547;
     }
   }

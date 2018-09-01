@@ -80,7 +80,7 @@
         params:{
           id:'',
           remarks: '',
-          house_type: 2,
+          house_type: '',
           operate_type: 5,
           live_time : '',
           out_time : '',
@@ -107,8 +107,8 @@
           this.params.start_time = this.currentRow.start_time;
           this.params.end_at = this.currentRow.end_at;
           if(this.currentRow.operate_content.guests && this.currentRow.operate_content.guests.length>0){
-            this.params.live_time = this.currentRow.operate_content.guests[0].live_time
-            this.params.out_time = this.currentRow.operate_content.guests[0].out_time
+            this.params.live_time = this.currentRow.operate_content.guests[0].live_time;
+            this.params.out_time = this.currentRow.operate_content.guests[0].out_time;
           }
         }
       },
