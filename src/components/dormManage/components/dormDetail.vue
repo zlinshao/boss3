@@ -91,7 +91,7 @@
               </div>
             </div>
             <div class="itemOperate">
-              <i class="el-icon-edit-outline" @click="editItem(item)"></i>
+              <i style="font-size: 24px;"  class="el-icon-edit-outline" @click="editItem(item)"></i>
             </div>
           </div>
         </div>

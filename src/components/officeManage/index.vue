@@ -89,6 +89,24 @@
                 </el-col>
               </el-row>
             </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">人均价格</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="flex-items">
+                      <el-input placeholder="请输入最低价格" v-model="params.priceMin" size="mini" clearable>
+                      </el-input>
+                      <span style="padding: 0 12px;">至</span>
+                      <el-input placeholder="请输入最高价格" v-model="params.priceMax" size="mini" clearable>
+                      </el-input>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -252,6 +270,8 @@
           where: '',
           leader_id: '',//负责人姓名
           depart_id: '',//部门名称
+          priceMin: '',//最低人均价格
+          priceMax: '',//最高人均价格
           start_time: '',//开始时间
           end_time: '',//结束时间
         },
@@ -372,6 +392,8 @@
           where: '',
           leader_id: '',//负责人姓名
           depart_id: '',//部门名称
+          priceMin: '',//最低人均价格
+          priceMax: '',//最高人均价格
           start_time: '',//开始时间
           end_time: '',//结束时间
         };
@@ -436,6 +458,7 @@
         this.updateDormDialog = false;
         this.dormDetailDialog = false;
         this.houseDetailDialog = false;
+        this.organizationDialog = false;
         if (val === 'success') {
           this.getData();
         }

@@ -1,6 +1,6 @@
 <template>
   <div id="visitRecord">
-    <el-dialog :close-on-click-modal="false" title="宿舍记录" :visible.sync="dormDetailDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="办公室记录" :visible.sync="dormDetailDialogVisible">
       <div class="scroll_bar">
         <div>
           <el-form size="mini" label-width="100px">
@@ -44,7 +44,7 @@
             <div class="itemLIne">
               <div class="line"></div>
               <div class="circle" :class="{ 'circle_green': item.operate_type==1, 'circle_yellow': item.operate_type==2,
-                                            'circle_orange': item.operate_type==3, 'circle_blue': item.operate_type==4}"></div>
+                                            'circle_orange': item.operate_type==3, 'circle_blue': item.operate_type==4, 'circle_red': item.operate_type==5}"></div>
               <div class="stretchLine"></div>
             </div>
             <div class="itemContent">
@@ -59,13 +59,13 @@
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-if="item.operate_type==5">
-                <span><b>操作时间：</b>{{item.operate_time}}；</span>
+                <span><b>更新时间：</b>{{item.operate_time}}；</span>
                 <span>{{item.operate_content.content}}；</span>
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
             </div>
             <div class="itemOperate">
-              <i class="el-icon-edit-outline" @click="editItem(item)"></i>
+              <i style="font-size: 24px;" class="el-icon-edit-outline" @click="editItem(item)"></i>
             </div>
           </div>
         </div>
@@ -196,6 +196,9 @@
     }
     .circle_orange {
       background: #fba547;
+    }
+    .circle_red {
+      background: #fb5247;
     }
   }
 </style>
