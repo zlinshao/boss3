@@ -22,17 +22,115 @@
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" :model="params" size="mini" label-width="100px">
           <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索111111111
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
           <el-row class="el_row_border">
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">入职时间</div>
+                  <div class="el_col_label">负责人</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-
+                    <el-input readonly="" @focus="openOrganizationModal('staff')" v-model="leaderName"
+                              placeholder="点击选择负责人">
+                      <el-button slot="append" type="primary" @click="emptyDepart('staff')">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">日期</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="params.start_time"
+                        type="date"
+                        placeholder="选择开始日期"
+                        align="right"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                      <span style="padding: 0 6px;">至</span>
+                      <el-date-picker
+                        v-model="params.end_time"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        placeholder="选择结束日期"
+                        align="right"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input readonly="" @focus="openOrganizationModal('depart')" v-model="departName"
+                              placeholder="点击选择部门">
+                      <el-button slot="append" type="primary" @click="emptyDepart('depart')">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">住宿人员姓名</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input placeholder="请输入姓名" v-model="params.guest_name" size="mini" clearable>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">人均价格</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="flex-items">
+                      <el-input placeholder="请输入最低价格" v-model="params.priceMin" size="mini" clearable>
+                      </el-input>
+                      <span style="padding: 0 12px;">至</span>
+                      <el-input placeholder="请输入最高价格" v-model="params.priceMax" size="mini" clearable>
+                      </el-input>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">剩余床位数</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input placeholder="请输入剩余床位数" v-model="params.bed_num" size="mini" clearable>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -181,6 +279,9 @@
 
     <HouseDetail :houseDetailDialog="houseDetailDialog" :isOnlyPic="isOnlyPic"
                  :houseId="house_id" @close="closeModal"></HouseDetail>
+
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @selectMember="selectMember" @close="closeModal"></Organization>
   </div>
 </template>
 
@@ -193,10 +294,11 @@
   import UpdateDorm from './components/updateDorm'
   import DormDetail from './components/dormDetail'
   import HouseDetail from '../rentManage/housesManage/components/houseDetail'
+  import Organization from '../common/organization.vue'
 
   export default {
     name: 'staff-records',
-    components: {RightMenu, AddDorm, AddEnter, AddLeave, CancelDorm, UpdateDorm, DormDetail, HouseDetail},
+    components: {RightMenu, AddDorm, AddEnter, AddLeave, CancelDorm, UpdateDorm, DormDetail, HouseDetail, Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -209,6 +311,36 @@
           limit: 10,
           house_type: 2,
           where: '',
+          leader_id: '',//负责人姓名
+          depart_id: '',//部门名称
+          guest_name: '',//住宿人员姓名
+          priceMin: '',//最低人均价格
+          priceMax: '',//最高人均价格
+          bed_num: '',//剩余床位数
+          start_time: '',//开始时间
+          end_time: '',//结束时间
+        },
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
         },
         isHigh: false,
         totalNum: 0,
@@ -223,10 +355,15 @@
         updateDormDialog: false,
         dormDetailDialog: false,
         houseDetailDialog: false,
+        organizationDialog: false,
         isOnlyPic: false,
         currentId: '',
         currentRow: {},
         house_id: '',
+        leaderName: '',
+        departName: '',
+        length: '',
+        type: '',
       }
     },
     mounted() {
@@ -234,6 +371,30 @@
     },
     watch: {},
     methods: {
+      // 组织架构
+      openOrganizationModal(val) {
+        this.organizationDialog = true;
+        this.length = 1;
+        this.type = val;
+      },
+      selectMember(val) {
+        if (this.type === 'staff') {
+          this.params.leader_id = val[0].id;
+          this.leaderName = val[0].name;
+        } else {
+          this.params.depart_id = val[0].id;
+          this.departName = val[0].name;
+        }
+      },
+      emptyDepart(val) {
+        if (val === 'staff') {
+          this.params.leader_id = '';
+          this.leaderName = '';
+        } else {
+          this.params.depart_id = '';
+          this.departName = '';
+        }
+      },
       //双击表格
       dblClick(row) {
         this.house_id = row.house_id;
@@ -277,6 +438,7 @@
       },
       handleCurrentChange(val) {
         this.params.page = val;
+        this.getData();
       },
 
       /***************************************************************************/
@@ -338,16 +500,28 @@
         this.updateDormDialog = false;
         this.dormDetailDialog = false;
         this.houseDetailDialog = false;
+        this.organizationDialog = false;
         if (val === 'success') {
           this.getData();
         }
       },
-
     },
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+  .flex-items {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+  }
 
+  .block {
+    display: flex;
+    display: -webkit-flex;
+    .el-date-editor.el-input {
+      width: 180px;
+    }
+  }
 </style>

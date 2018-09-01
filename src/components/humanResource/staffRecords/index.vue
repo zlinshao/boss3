@@ -148,7 +148,7 @@
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @selectMember="selectMember"
                   @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
-    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :detailId="detailId"
+    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :record_id="record_id"
                         @close="closeModal"></StaffRecordsDetail>
   </div>
 </template>
@@ -219,7 +219,7 @@
 
         addStaffRecordDialog: false,   //新增记录弹框
         staffRecordsDetailDialog: false,
-        detailId: '',
+        record_id: '',
       }
     },
     mounted() {
@@ -275,14 +275,14 @@
         this.search();
       },
       dblClick(row) {
-        this.detailId = row.id;
+        this.record_id = row.id;
         this.staffRecordsDetailDialog = true;
       },
       closeModal() {
         this.addStaffRecordDialog = false;
         this.staffRecordsDetailDialog = false;
-        this.detailId = '';
-        this.search();
+        this.record_id = '';
+        // this.search();
       },
       selectMember(val) {
         this.params.org_id = val[0].id;

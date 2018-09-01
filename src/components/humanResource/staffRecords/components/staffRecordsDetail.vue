@@ -67,9 +67,12 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="2" style="text-align: right;cursor: pointer;padding-top: 8px;">
+            <el-col :span="3" style="text-align: right;cursor: pointer;padding-top: 8px;">
               <span @click="editRecord(item)" style="color: #409eff;">
                 <i class="el-icon-edit"></i>编辑
+              </span>
+              <span @click="removeRecord(item.detail_id)" style="color: #409eff;margin-left: 6px;">
+                <i class="el-icon-close"></i>删除
               </span>
             </el-col>
           </el-row>
@@ -86,7 +89,7 @@
 
   export default {
     name: 'staffRecordsDetail',
-    props: ['staffRecordsDetailDialog', 'detailId'],
+    props: ['staffRecordsDetailDialog', 'record_id'],
     components: {EditStaffRecord},
     data() {
       return {
@@ -113,6 +116,30 @@
 
     },
     methods: {
+      // 删除
+      removeRecord(id) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'credit/manage/record-delete', {detail_id: id}).then((res) => {
+            if (res.data.code === '100100') {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              this.getDetail();
+            }
+          });
+        }).catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // });
+        });
+
+      },
       editRecord(val) {
         this.record = val;
         this.editStaffRecordDialog = true;
@@ -126,7 +153,7 @@
       },
       getDetail() {
         this.loading = true;
-        this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
+        this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.record_id}).then((res) => {
           this.loading = false;
           if (res.data.code === "100100") {
             this.detail = res.data.data;

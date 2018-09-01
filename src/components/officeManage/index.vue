@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入姓名" v-model="params.where" size="mini" clearable @keyup.enter.native="search">
+            <el-input placeholder="请输入房屋地址" v-model="params.where" size="mini" clearable @keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
@@ -28,11 +28,63 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">入职时间</div>
+                  <div class="el_col_label">负责人</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-
+                    <el-input readonly="" @focus="openOrganizationModal('staff')" v-model="leaderName"
+                              placeholder="点击选择负责人">
+                      <el-button slot="append" type="primary" @click="emptyDepart('staff')">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">日期</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="params.start_time"
+                        type="date"
+                        placeholder="选择开始日期"
+                        align="right"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                      <span style="padding: 0 6px;">至</span>
+                      <el-date-picker
+                        v-model="params.end_time"
+                        type="date"
+                        placeholder="选择结束日期"
+                        align="right"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input readonly="" @focus="openOrganizationModal('depart')" v-model="departName"
+                              placeholder="点击选择部门">
+                      <el-button slot="append" type="primary" @click="emptyDepart('depart')">清空</el-button>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -168,6 +220,9 @@
     <DormDetail :dormDetailDialog="dormDetailDialog" :house_id="house_id" @close="closeModal"></DormDetail>
     <HouseDetail :houseDetailDialog="houseDetailDialog" :isOnlyPic="isOnlyPic"
                  :houseId="house_id" @close="closeModal"></HouseDetail>
+
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @selectMember="selectMember" @close="closeModal"></Organization>
   </div>
 </template>
 
@@ -178,10 +233,11 @@
   import UpdateDorm from './components/updateOffice'
   import DormDetail from './components/officeDetail'
   import HouseDetail from '../rentManage/housesManage/components/houseDetail'
+  import Organization from '../common/organization.vue'
 
   export default {
     name: 'staff-records',
-    components: {RightMenu, AddDorm, CancelDorm, UpdateDorm, DormDetail, HouseDetail},
+    components: {RightMenu, AddDorm, CancelDorm, UpdateDorm, DormDetail, HouseDetail, Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -194,6 +250,32 @@
           limit: 10,
           house_type: 1,
           where: '',
+          leader_id: '',//负责人姓名
+          depart_id: '',//部门名称
+          start_time: '',//开始时间
+          end_time: '',//结束时间
+        },
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
         },
         isHigh: false,
         totalNum: 0,
@@ -206,10 +288,15 @@
         updateDormDialog: false,
         dormDetailDialog: false,
         houseDetailDialog: false,
+        organizationDialog: false,
         isOnlyPic: false,
         currentId: '',
         currentRow: {},
         house_id: '',
+        leaderName: '',
+        departName: '',
+        length: '',
+        type: '',
       }
     },
     mounted() {
@@ -217,6 +304,30 @@
     },
     watch: {},
     methods: {
+      // 组织架构
+      openOrganizationModal(val) {
+        this.organizationDialog = true;
+        this.length = 1;
+        this.type = val;
+      },
+      selectMember(val) {
+        if (this.type === 'staff') {
+          this.params.leader_id = val[0].id;
+          this.leaderName = val[0].name;
+        } else {
+          this.params.depart_id = val[0].id;
+          this.departName = val[0].name;
+        }
+      },
+      emptyDepart(val) {
+        if (val === 'staff') {
+          this.params.leader_id = '';
+          this.leaderName = '';
+        } else {
+          this.params.depart_id = '';
+          this.departName = '';
+        }
+      },
       //双击表格
       dblClick(row) {
         this.house_id = row.house_id;
@@ -260,6 +371,7 @@
       },
       handleCurrentChange(val) {
         this.params.page = val;
+        this.getData();
       },
 
       /***************************************************************************/
@@ -322,5 +434,17 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+  .flex-items {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+  }
 
+  .block {
+    display: flex;
+    display: -webkit-flex;
+    .el-date-editor.el-input {
+      width: 180px;
+    }
+  }
 </style>

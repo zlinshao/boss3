@@ -61,6 +61,8 @@
                         <el-option label="未出租" value="0"></el-option>
                         <el-option label="已出租" value="1"></el-option>
                         <el-option label="待收房" value="2"></el-option>
+                        <el-option label="宿舍" value="3"></el-option>
+                        <el-option label="办公室" value="4"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -195,9 +197,11 @@
               <el-table-column
                 label="房屋状态">
                 <template slot-scope="scope">
-                  <span style="color: #1ecb4e" v-if="scope.row.status==1">已出租</span>
+                  <span style="color: #ef4292" v-if="scope.row.status==0">未出租</span>
+                  <span style="color: #1ecb4e" v-else-if="scope.row.status==1">已出租</span>
+                  <span style="color: #FF6A3F" v-else-if="scope.row.status==3">宿舍</span>
+                  <span style="color: #45A1FF" v-else-if="scope.row.status==4">办公室</span>
                   <span v-else-if="scope.row.status == 2">待收房</span>
-                  <span style="color: #ef4292" v-else="">未出租</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -332,7 +336,7 @@
         <el-button type="primary" @click="isConfirmMerge">确 定</el-button>
       </span>
     </el-dialog>
-    
+
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
