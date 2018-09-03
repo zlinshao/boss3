@@ -2,7 +2,7 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" size="mini">
+        <el-form :inline="true" size="mini" onsubmit="return false">
           <el-form-item>
             <el-input placeholder="请输入房屋地址" v-model="params.where" size="mini" clearable @keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
