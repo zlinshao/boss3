@@ -50,6 +50,7 @@ const WechatMessage =()=> import  ('../components/wechatMessage/index.vue')     
 // const StaffManage =()=> import  ('../comments/humanResource/staffManage/index1.vue')
 // const Organization =()=> import  ('../components/humanResource/organization/index1.vue')
 // const Achievement =()=> import  ('../comments/humanResource/achievement/index1.vue')
+const LeaveOffice =()=> import  ('../components/humanResource/leaveOffice/index.vue')
 const IntegralManage =()=> import  ('../components/humanResource/integralManage/index.vue')
 const OrganizationNew =()=> import  ('../components/humanResource/organizationNew/index.vue')       // add by cj 组织架构
 const PersonalRecords =()=> import  ('../components/humanResource/personalRecords/index')
@@ -487,6 +488,7 @@ export default new Router({
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         // {path: '/organization', component: Organization, name: '组织架构',},
+        {path: '/leaveOffice', component: LeaveOffice, name: '离职短息',},
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案',},

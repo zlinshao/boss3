@@ -3,7 +3,7 @@
     <div id="clientContainer">
      <div class="highRanking">
         <div class="tabsSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item v-if="activeName === 'first'">
               <el-input placeholder="请选择房屋地址" v-model="addressCollect" size="mini" readOnly @focus="openAddressDialog">
                 <template slot="append">
