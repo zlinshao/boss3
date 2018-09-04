@@ -335,6 +335,7 @@ export default new Router({
         {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
 
         {path: '/pendingSettle', component: PendingSettle, name: "结算"},
+        {path: '/leaveOffice', component: LeaveOffice, name: '离职短信',},
       ]
     },
     //快捷入口
@@ -488,7 +489,6 @@ export default new Router({
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         // {path: '/organization', component: Organization, name: '组织架构',},
-        {path: '/leaveOffice', component: LeaveOffice, name: '离职短息',},
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案',},
