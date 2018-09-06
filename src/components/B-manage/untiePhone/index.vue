@@ -1,0 +1,124 @@
+<template>
+  <div>
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :inline="true" onsubmit="return false" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入姓名" v-model="params.keywords" @keyup.enter.native="search(1)" size="mini"
+                      clearable>
+              <el-button slot="append" icon="el-icon-search" @click="search(1)"></el-button>
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <el-table
+      :empty-text='emptyContent'
+      v-loading="examineLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0)"
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="created_at"
+        label="时间">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="申请人">
+      </el-table-column>
+      <el-table-column
+        prop="account"
+        label="申请账号">
+      </el-table-column>
+      <el-table-column
+        prop="contact"
+        label="联系方式">
+      </el-table-column>
+      <el-table-column
+        prop="description"
+        label="原因">
+      </el-table-column>
+      <el-table-column
+        prop="type"
+        label="操作">
+        <template slot-scope="scope">
+          <div v-if="scope.row.type === 2">
+            <el-button @click="operations(scope.row, 1)" type="primary" size="mini">解绑</el-button>
+            <el-button @click="operations(scope.row, 2)" type="danger" size="mini">拒绝</el-button>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "index",
+    data() {
+      return {
+        url: globalConfig.server,
+        emptyContent: ' ',
+        examineLoading: false,
+        tableData: [],
+        params: {
+          keywords: '',
+        },
+      }
+    },
+    mounted() {
+      this.phoneList();
+    },
+    activated() {
+    },
+    watch: {},
+    methods: {
+      search(page) {
+
+      },
+      phoneList() {
+        this.emptyContent = ' ';
+        this.examineLoading = true;
+        this.$http.get(this.url + 'bapi/plant/geterrornum').then((res) => {
+          this.examineLoading = false;
+          if (res.data.code === '20020') {
+            this.tableData = res.data.data;
+          } else {
+            this.tableData = [];
+            this.paging = 0;
+            this.emptyContent = '暂无数据';
+          }
+        })
+      },
+      operations(data, val) {
+        let params = {
+          plant_id: data.plant_id,
+          phone: data.phone,
+          description: data.description,
+          name: data.name,
+          contact: data.contact,
+          type: val,
+        };
+        this.$http.post(this.url + 'bapi/plant/decrypt', params).then((res) => {
+          if (res.data.code === '20020') {
+            this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        })
+      }
+    },
+  }
+</script>
+
+<style lang="scss">
+
+</style>
