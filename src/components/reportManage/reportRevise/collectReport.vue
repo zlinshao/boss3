@@ -273,6 +273,14 @@
             <UpLoad :ID="'collect_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
           </el-form-item>
 
+          <el-form-item label="房产证照片" required="">
+            <UpLoad :ID="'property_photo'" :isClear="isClear" :editImage="property_photos" @getImg="getImg"></UpLoad>
+          </el-form-item>
+
+          <el-form-item label="证件照片" required="">
+            <UpLoad :ID="'identify_photo'" :isClear="isClear" :editImage="identify_photos" @getImg="getImg"></UpLoad>
+          </el-form-item>
+
           <el-row>
             <el-col :span="12">
               <el-form-item label="备注" required="">
@@ -359,7 +367,7 @@
           vacancy_other: '',            //空置期安排方式 随便填
           warranty: '',                 //保修期月
           warranty_day: '',             //保修期天
-          is_corp: '1',                   //是否公司单  0个人1公司
+          is_corp: '1',                 //是否公司单  0个人1公司
           deposit: '',                  //押金
           property_payer: '',           //物业费付款人
           name: '',                     //房东姓名
@@ -374,14 +382,18 @@
           contract_number: 'LJSF',      //合同编号
           screenshot_leader: [],        //领导截图 数组
           photo: [],                    //合同照片 数组
+          property_photo: [],           //房产证照片
+          identify_photo: [],           //证件照片
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
-          staff_name: '',                 //开单人name
-          department_name: '',            //部门name
+          staff_name: '',               //开单人name
+          department_name: '',          //部门name
         },
         screenshot_leader : {},
         photo : {},
+        property_photos: {},            //房产证照片
+        identify_photos: {},            //证件照片
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
@@ -500,6 +512,12 @@
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
 
+        this.identify_photos = this.getImgObject(data.identify_photo);
+        this.params.identify_photo = this.getImgIdArray(data.identify_photo);
+
+        this.property_photos = this.getImgObject(data.property_photo);
+        this.params.property_photo = this.getImgIdArray(data.property_photo);
+
         this.params.staff_id = data.staff_id;
         this.params.staff_name = data.staff_name;
         this.params.department_id = data.department_id;
@@ -617,6 +635,10 @@
           this.params.screenshot_leader = val[1];
         } else if (val[0] === 'collect_report_contract') {
           this.params.photo = val[1];
+        } else if (val[0] === 'property_photo') {
+          this.params.property_photo = val[1];
+        } else if (val[0] === 'identify_photo') {
+          this.params.identify_photo = val[1];
         }
       },
 
@@ -693,14 +715,18 @@
           contract_number: 'LJSF',      //合同编号
           screenshot_leader: [],        //领导截图 数组
           photo: [],                    //合同照片 数组
+          property_photo: [],           //房产证照片
+          identify_photo: [],           //证件照片
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
-          staff_name: '',                 //开单人name
-          department_name: '',            //部门name
+          staff_name: '',               //开单人name
+          department_name: '',          //部门name
         };
         this.screenshot_leader = {};
         this.photo = {};
+        this.property_photos ={};         //房产证照片
+        this.identify_photos ={};         //证件照片
 
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;

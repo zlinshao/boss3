@@ -192,12 +192,13 @@ const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
 const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
-
-
 const Application = ()=> import ('../components/C-manage/applicationManage/index');
 const Houses = ()=> import ('../components/C-manage/houseManage/index');
 const DormManage = ()=> import ('../components/dormManage/index');
 const OfficeManage = ()=> import ('../components/officeManage/index');
+
+// B端管理
+const UntiePhone = ()=> import ('../components/B-manage/untiePhone/index');
 
 Vue.use(Router);
 
@@ -607,6 +608,15 @@ export default new Router({
       children: [
         {path: '/application', component: Application, name: '申请管理'},
         {path: '/houses', component: Houses, name: '房源管理'},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: 'B端管理',
+      icon: 'iconfont icon-c-',
+      children: [
+        {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
       ]
     },
   ]
