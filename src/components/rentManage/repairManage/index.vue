@@ -118,8 +118,8 @@
                 prop="emergency"
                 label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1" class="colors" :class="istrue?orange:blue">{{'一般'}}</span>
-                  <span v-if="scope.row.emergency === 2" style="color:red">{{'紧急'}}</span>
+                  <span v-if="scope.row.emergency === 1" :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                  <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
                   <span v-if="!scope.row.emergency">暂无</span>
                 </template>
               </el-table-column>
@@ -127,7 +127,7 @@
                 prop="contract_type"
                 label="创建时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.create_time" class="getTime">{{scope.row.create_time}}</span>
+                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                   <span v-if="!scope.row.create_time">暂无</span>
                 </template>
               </el-table-column>
@@ -199,20 +199,20 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="" v-if="scope.row.status === 600" type="success" size="mini">
-                    {{scope.row.statu}}
+                  <el-button class="width" v-if="scope.row.status === 600" type="success" size="mini">
+                      {{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 596 && scope.row.status "
-                             type="primary" size="mini">{{scope.row.statu}}
+                  <el-button class="width" v-if="scope.row.status === 596 && scope.row.status "
+                             type="primary" size="mini"> {{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 598 && scope.row.status "
-                             type="warning" size="mini">{{scope.row.statu}}
+                  <el-button class="width" v-if="scope.row.status === 598 && scope.row.status "
+                             type="warning" size="mini"> {{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 599 && scope.row.status "
-                             type="danger" size="mini">{{scope.row.statu}}
+                  <el-button class="width" v-if="scope.row.status === 599 && scope.row.status "
+                             type="danger" size="mini"> {{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 601 && scope.row.status "
-                             type="info" size="mini">{{scope.row.statu}}
+                  <el-button class="width" v-if="scope.row.status === 601 && scope.row.status "
+                             type="info" size="mini"> {{scope.row.statu}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
                 </template>
@@ -234,8 +234,8 @@
                 prop="emergency"
                 label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1" class="colors" :class="istrue?orange:blue">{{'一般'}}</span>
-                  <span v-if="scope.row.emergency === 2" style="color:red">{{'紧急'}}</span>
+                  <span v-if="scope.row.emergency === 1" :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                  <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
                   <span v-if="!scope.row.emergency">暂无</span>
                 </template>
               </el-table-column>
@@ -243,7 +243,7 @@
                 prop="contract_type"
                 label="创建时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.create_time" class="getTime">{{scope.row.create_time}}</span>
+                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                   <span v-if="!scope.row.create_time">暂无</span>
                 </template>
               </el-table-column>
@@ -255,14 +255,6 @@
                   <span v-if="!scope.row.contract.house">暂无</span>
                 </template>
               </el-table-column>
-              <!-- <el-table-column
-                prop="repaire_num"
-                label="维修编号">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
-                  <span v-if="!scope.row.repaire_num">暂无</span>
-                </template>
-              </el-table-column> -->
               <el-table-column
                 prop="customer_name"
                 label="客户姓名">
@@ -323,19 +315,19 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === 600" type="success" size="mini">
+                  <el-button class="btnStatus width" v-if="scope.row.status === 600" type="success" size="mini">
                     {{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 596 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 596 && scope.row.status "
                              type="primary" size="mini">{{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 598 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 598 && scope.row.status "
                              type="warning" size="mini">{{scope.row.statu}}
                   </el-button>
-                  <el-button class="" v-if="scope.row.status === 599 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 599 && scope.row.status "
                              type="danger" size="mini">{{scope.row.statu}}
                   </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status === 601 && scope.row.status"
+                  <el-button class="btnStatus width" v-if="scope.row.status === 601 && scope.row.status"
                              type="info" size="mini">{{scope.row.statu}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
@@ -424,15 +416,8 @@ export default {
       organizeVisible: false,
       organizeType: "",
       operator_name: "",
-      foundTime: "",
-      currentTime: "",
-      blue: "blue",
-      orange: "orange",
-      istrue: true
+      currentTime: 48,
     };
-  },
-  created() {
-    this.gettime();
   },
   mounted() {
     this.getCollectTableData();
@@ -440,18 +425,15 @@ export default {
   },
 
   methods: {
-    gettime() {
-      let times = $(".getTime");
-      let colors = $(".colors");
-      for (let i = 0; i < times.length; i++) {
-        let dateTime = times[i].innerHTML;
-        this.foundTime = parseInt(Date.parse(dateTime) / 1000 / 3600); //创建时间 的小时
-        this.currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
-        let obtainTime = this.currentTime - this.foundTime; //得到  创建的时间  距离现在 有多少小时
+    gettime(val) {
+      let data = [];
+      val === 1 ? (data = this.collectTableData) : (data = this.rentTableData);
+      for (let i = 0; i < data.length; i++) {
+        let foundTime = parseInt(Date.parse(data[i].create_time) / 1000 / 3600); //创建时间 的小时
+        let currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
+        let obtainTime = currentTime - foundTime; //得到  创建的时间  距离现在 有多少小时
         //  判断 创建时间  到当前的时间 有没有 超过 48小时
-        if (obtainTime < 48) {
-          this.istrue = false;
-        }
+        data[i].overdueTime = obtainTime;
       }
     },
     getDictionary() {
@@ -485,6 +467,7 @@ export default {
           this.collectLoading = false;
           if (res.data.code === "600200") {
             this.collectTableData = res.data.data.data;
+            this.gettime(1);
             this.totalNum = res.data.data.count;
           } else if (res.data.code === "600202") {
             this.collectTableData = [];
@@ -516,6 +499,7 @@ export default {
           this.rentLoading = false;
           if (res.data.code === "600200") {
             this.rentTableData = res.data.data.data;
+            this.gettime(2);
             this.totalNum = res.data.data.count;
           } else if (res.data.code === "600202") {
             this.$notify.warning({
@@ -732,6 +716,9 @@ export default {
   }
   .orange {
     color: orange;
+  }
+  .width {
+    width: 90px;
   }
 }
 </style>

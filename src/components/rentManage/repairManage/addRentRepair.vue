@@ -102,6 +102,13 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+                <el-form-item label="紧急程度" required>
+                  <el-select clearable placeholder="请选择紧急程度" value="" v-model="form._emergency">
+                    <el-option v-for="item in emergencys" :value="item.value" :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="16">
@@ -153,17 +160,24 @@
           remark: '',  //备注
           status: '',  //维修状态
           person_liable: '', //认责人
-          module: 2, //租房
+          contract_type: 2, //租房
           follow_id: '',  //跟进人id
           final_liable: '', //最终认责人
           real_money: '',  //实际维修金额
           estimated_time: '',
+          emergency: "", // 紧急程度
+         _emergency: "" // 紧急程度编号
         },
         follow_name: '',
         repairStatusCategory: [],
         responsiblePersonCategory: [],
         sexCategory: [],
         cityCategory: [],
+         emergencys: [
+        // 紧急程度
+        { id: 1, value: "一般" },
+        { id: 2, value: "紧急" }
+      ]
       };
     },
     watch: {
@@ -179,7 +193,9 @@
           this.getDetail();
         }
       },
-
+      _emergency(val) {
+      this.slist = this.emergencys[val];
+    }
     },
     methods: {
       getDictionary() {
@@ -256,6 +272,7 @@
           final_liable: '', //最终认责人
           real_money: '',  //实际维修金额
           estimated_time: '', //下次跟进时间
+           _emergency: "" // 紧急程度
         };
         this.follow_name = '';
       },

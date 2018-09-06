@@ -18,7 +18,6 @@
                     <span v-if="repairDetail.operator">{{repairDetail.operator}}</span>
                     <span v-if="!repairDetail.operator">暂无</span>
                   </div>
-
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align: right">
@@ -61,14 +60,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="客户性别">
-                  <div class="content">
-                    <span v-if="repairDetail.sexuality">{{repairDetail.sexuality}}</span>
-                    <span v-if="!repairDetail.sexuality">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
                 <el-form-item label="回复电话">
                   <div class="content">
                     <span v-if="repairDetail.customer_mobile">{{repairDetail.customer_mobile}}</span>
@@ -76,66 +67,21 @@
                   </div>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="8">
-                <el-form-item label="跟进人">
+                <el-form-item label="下次跟进人">
                   <div class="content">
                     <span v-if="repairDetail.followor">{{repairDetail.followor.name}}</span>
                     <span v-if="!repairDetail.followor">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进时间">
-                  <div class="content">
-                    <span v-if="repairDetail.estimated_time">{{repairDetail.estimated_time}}</span>
-                    <span v-if="!repairDetail.estimated_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="初步认责人">
-                  <div class="content">
-                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
-                    <span v-if="!repairDetail.liable">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
             </el-row>
-
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="维修时间">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_time">{{repairDetail.repair_time}}</span>
-                    <span v-if="!repairDetail.repair_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
               <el-col :span="8">
                 <el-form-item label="预计维修金额">
                   <div class="content">
                     <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
                     <span v-if="!repairDetail.repair_money">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="维修师傅">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_master">{{repairDetail.repair_master}}</span>
-                    <span v-if="!repairDetail.repair_master">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="维修状态">
-                  <div class="content">
-                    <span v-if="repairDetail.statu">{{repairDetail.statu}}</span>
-                    <span v-if="!repairDetail.statu">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -152,6 +98,16 @@
                   <div class="content">
                     <span v-if="repairDetail.final_liabler">{{repairDetail.final_liabler}}</span>
                     <span v-if="!repairDetail.final_liabler">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="初步认责人">
+                  <div class="content">
+                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
+                    <span v-if="!repairDetail.liable">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -187,73 +143,81 @@
                 <el-row v-for="item in repairDetail.follow" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
-                      <div class="content">
-                        <span v-if="item.create_time">{{item.create_time}}</span>
-                        <span v-if="!item.create_time">暂无</span>
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="item.create_time" v-model="item.create_time" disabled></el-input>
+                        <el-input v-if="!item.create_time" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="跟进人">
-                      <div class="content">
-                        <span v-if="item.followor">{{item.followor.name}}</span>
-                        <span v-if="!item.followor">暂无</span>
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="item.followor" v-model="item.followor.name" disabled></el-input>
+                        <el-input v-if="!item.followor" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
                    <el-col :span="12">
                     <el-form-item label="下次跟进人">
-                      <div class="content">
-                        <span v-if="item.next_follows">{{item.next_follows.name}}</span>
-                        <span v-if="!item.next_follows">暂无</span>
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="item.next_follows" v-model="item.next_follows.name" disabled></el-input>
+                        <el-input v-if="!item.next_follows" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
                    <el-col :span="12">
                     <el-form-item label="维修时间">
-                      <div class="content">
-                        <span v-if="repairDetail.follow">{{item.repair_time}}</span>
-                        <span v-if="!repairDetail.follow">暂无</span>
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="repairDetail.follow" v-model="item.repair_time" disabled></el-input>
+                        <el-input v-if="!repairDetail.follow" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
                    <el-col :span="12">
                     <el-form-item label="下次跟进时间">
-                      <div class="content">
-                        <span v-if="repairDetail.estimated_time">{{item.estimated_time}}</span>
-                        <span v-if="!repairDetail.estimated_time">暂无</span>
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="repairDetail.estimated_time" v-model="item.estimated_time" disabled></el-input>
+                        <el-input v-if="!repairDetail.estimated_time" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                 <el-form-item label="维修状态">
-                  <div class="content">
-                    <span v-if="repairDetail.statu">{{repairDetail.statu}}</span>
-                    <span v-if="!repairDetail.statu">暂无</span>
+                  <div class="content" style="background-color:#fff">
+                    <el-input v-if="repairDetail.statu" v-model="repairDetail.statu" disabled></el-input>
+                    <el-input v-if="!repairDetail.statu" disabled value="暂无"></el-input>
                   </div>
                 </el-form-item>
               </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="已完成时间" v-if="!isfinish_time">
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="finish_time" v-model="item.finish_time" disabled></el-input>
+                        <el-input v-if="!finish_time" disabled value="暂无"></el-input>
+                      </div>
+                    </el-form-item>
+                  </el-col>
               <el-col :span="12">
                 <el-form-item label="维修金额">
-                  <div class="content">
-                    <span v-if="repairDetail.follow">{{item.repair_money}}</span>
-                    <span v-if="!repairDetail.follow">暂无</span>
+                  <div class="content" style="background-color:#fff">
+                    <el-input v-if="repairDetail.follow" v-model="item.repair_money" disabled></el-input>
+                    <el-input v-if="!repairDetail.follow" disabled value="暂无"></el-input>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="维修师傅">
-                  <div class="content">
-                    <span v-if="repairDetail.follow">{{item.repair_master}}</span>
-                    <span v-if="!repairDetail.follow">暂无</span>
+                  <div class="content" style="background-color:#fff">
+                    <el-input v-if="repairDetail.follow" v-model="item.repair_master" disabled></el-input>
+                    <el-input v-if="!repairDetail.follow" disabled value="暂无"></el-input>
                   </div>
                 </el-form-item>
               </el-col>
                   <el-col :span="24">
                     <el-form-item label="跟进结果">
-                      <div class="content">
-                        <span v-if="item.content">{{item.content}}</span>
-                        <span v-if="!item.content">暂无</span>
+                      <div class="content" style="background-color:#fff">
+                        <el-input v-if="item.content" v-model="item.content" type="textarea" disabled></el-input>
+                        <el-input v-if="!item.content" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -401,6 +365,7 @@ export default {
     return {
       _thisId: "", //当前的ID 需要传递给后台
       organizationDialog: false,
+      isfinish_time : false,
       follow_name: "", //跟进人名字
       repairDetailDialogVisible: false,
       repairDetail: {},
@@ -413,6 +378,7 @@ export default {
       isflag: false, // 用来判断是否可以修改维修单
       isappend: false,
       append_time: "", // 下次跟进时间
+      finish_time: "", // 已完成時間
       state_repair: [],
       city: "",
       organizeType: "",
@@ -470,6 +436,10 @@ export default {
             this._repairDetail = res.data.data.follow;
             this.isflag = res.data.data.update;
             this._thisId = res.data.data.id;
+            this.finish_time = res.data.data.finish_time;
+            if(this.finish_time){
+              this.isfinish_time == true;
+            }
           if(res.data.data.followor){
               this._follow_name = res.data.data.followor.name;
             }
@@ -624,6 +594,9 @@ export default {
     background: #fff;
     color: #eef3fc;
     min-height: 33px;
+  }
+  .content_color {
+    color: #fff;
   }
   img {
     width: 80px;

@@ -9,10 +9,6 @@
                 <el-input v-model="form.contract_number" disabled></el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="8">
-              <el-form-item label="合同类型">
-                <el-input v-model="form.contract_type" disabled></el-input>
-              </el-form-item> -->
               <el-col :span="8">
               <el-form-item label="房屋地址">
                 <el-input v-model="form.address" disabled></el-input>
@@ -21,10 +17,6 @@
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
                 <el-input v-model='form.city_name' disabled></el-input>
-                <!-- <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -34,15 +26,6 @@
                 <el-input v-model="form.customer_name"></el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="8">
-              <el-form-item label="客户性别" required>
-                <el-radio-group v-model="form.sex">
-                  <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">
-                    {{item.dictionary_name}}
-                  </el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col> -->
             <el-col :span="8">
               <el-form-item label="回复电话" required>
                 <el-input v-model="form.customer_mobile"></el-input>
