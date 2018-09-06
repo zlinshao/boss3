@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="编号/姓名/电话" v-model="form.keyword" size="mini" clearable
+              <el-input placeholder="地址/下次跟进人/电话" v-model="form.keyword" size="mini" clearable
                         @keyup.enter.native="search">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
@@ -115,19 +115,28 @@
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
+                prop="emergency"
+                label="紧急程度">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.emergency === 1" class="colors" :class="istrue?orange:blue">{{'一般'}}</span>
+                  <span v-if="scope.row.emergency === 2" style="color:red">{{'紧急'}}</span>
+                  <span v-if="!scope.row.emergency">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 prop="contract_type"
                 label="创建时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                  <span v-if="scope.row.create_time" class="getTime">{{scope.row.create_time}}</span>
                   <span v-if="!scope.row.create_time">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="repaire_num"
-                label="维修编号">
+                prop="contract"
+                label="房屋地址">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
-                  <span v-if="!scope.row.repaire_num">暂无</span>
+                  <span v-if="scope.row.contract.house">{{scope.row.contract.house.name}}</span>
+                  <span v-if="!scope.row.contract.house">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -180,9 +189,9 @@
               </el-table-column>
               <el-table-column
                 prop="repair_money"
-                label="跟进人">
+                label="下次跟进人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+                  <span v-if="scope.row.followor">{{scope.row.followor.name}}</span>
                   <span v-if="!scope.row.followor">暂无</span>
                 </template>
               </el-table-column>
@@ -190,11 +199,20 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
-                    {{scope.row.status}}
+                  <el-button class="" v-if="scope.row.status === 600" type="success" size="mini">
+                    {{scope.row.statu}}
                   </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status "
-                             type="info" size="mini">{{scope.row.status}}
+                  <el-button class="" v-if="scope.row.status === 596 && scope.row.status "
+                             type="primary" size="mini">{{scope.row.statu}}
+                  </el-button>
+                  <el-button class="" v-if="scope.row.status === 598 && scope.row.status "
+                             type="warning" size="mini">{{scope.row.statu}}
+                  </el-button>
+                  <el-button class="" v-if="scope.row.status === 599 && scope.row.status "
+                             type="danger" size="mini">{{scope.row.statu}}
+                  </el-button>
+                  <el-button class="" v-if="scope.row.status === 601 && scope.row.status "
+                             type="info" size="mini">{{scope.row.statu}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
                 </template>
@@ -213,21 +231,38 @@
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
-                prop="contract_type"
-                label="创建时间">
+                prop="emergency"
+                label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
-                  <span v-if="!scope.row.create_time">暂无</span>
+                  <span v-if="scope.row.emergency === 1" class="colors" :class="istrue?orange:blue">{{'一般'}}</span>
+                  <span v-if="scope.row.emergency === 2" style="color:red">{{'紧急'}}</span>
+                  <span v-if="!scope.row.emergency">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
+                prop="contract_type"
+                label="创建时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.create_time" class="getTime">{{scope.row.create_time}}</span>
+                  <span v-if="!scope.row.create_time">暂无</span>
+                </template>
+              </el-table-column>
+               <el-table-column
+                prop="contract"
+                label="房屋地址">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract.house">{{scope.row.contract.house.name}}</span>
+                  <span v-if="!scope.row.contract.house">暂无</span>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column
                 prop="repaire_num"
                 label="维修编号">
                 <template slot-scope="scope">
                   <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
                   <span v-if="!scope.row.repaire_num">暂无</span>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 prop="customer_name"
                 label="客户姓名">
@@ -278,9 +313,9 @@
               </el-table-column>
               <el-table-column
                 prop="repair_money"
-                label="跟进人">
+                label="下次跟进人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+                  <span v-if="scope.row.followor">{{scope.row.followor.name}}</span>
                   <span v-if="!scope.row.followor">暂无</span>
                 </template>
               </el-table-column>
@@ -288,11 +323,20 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
-                    {{scope.row.status}}
+                  <el-button class="btnStatus" v-if="scope.row.status === 600" type="success" size="mini">
+                    {{scope.row.statu}}
                   </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status"
-                             type="info" size="mini">{{scope.row.status}}
+                  <el-button class="" v-if="scope.row.status === 596 && scope.row.status "
+                             type="primary" size="mini">{{scope.row.statu}}
+                  </el-button>
+                  <el-button class="" v-if="scope.row.status === 598 && scope.row.status "
+                             type="warning" size="mini">{{scope.row.statu}}
+                  </el-button>
+                  <el-button class="" v-if="scope.row.status === 599 && scope.row.status "
+                             type="danger" size="mini">{{scope.row.statu}}
+                  </el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status === 601 && scope.row.status"
+                             type="info" size="mini">{{scope.row.statu}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
                 </template>
@@ -350,7 +394,8 @@
           time: '',
           status: '',
           city: '',
-          operator_id: ''
+          operator_id: '',
+          next_follow_id:'',
         },
         collectTableData: [],
         rentTableData: [],
@@ -373,18 +418,41 @@
         organizeVisible: false,
         organizeType: '',
         operator_name: '',
+        foundTime:'',
+        currentTime:'',
+        blue:'blue',
+        orange:'orange',
+        istrue:true,
       }
+    },
+    created() {
+      this.gettime();
     },
     mounted() {
       this.getCollectTableData();
       this.getDictionary();
+      
     },
 
     methods: {
+      gettime(){
+        let times = $(".getTime");
+        let colors = $(".colors");
+        for(let i = 0; i < times.length; i++){
+          let dateTime = times[i].innerHTML;
+          this.foundTime = parseInt(Date.parse(dateTime)/1000/3600);  //创建时间 的小时
+          this.currentTime =  parseInt(Date.parse(new Date())/1000/3600);   //现在的时间 的小时
+          let obtainTime = this.currentTime - this.foundTime;   //得到  创建的时间  距离现在 有多少小时
+              //  判断 创建时间  到当前的时间 有没有 超过 48小时  
+              if(obtainTime<48){
+                this.istrue = false;
+              }         
+        }   
+      },
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/595').then((res) => {
           if (res.data.code === "30010") {
-            this.dictionary = res.data.data;
+            this.dictionary = res.data.data;    
           }
         });
         this.$http.get(globalConfig.server + 'setting/dictionary/306').then((res) => {
@@ -504,11 +572,11 @@
         this.closeStaff();
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        // console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         this.form.page = val;
-        console.log(`当前页: ${val}`);
+        // console.log(`当前页: ${val}`);
         if (this.activeName === 'first') {
           this.getCollectTableData();
         } else {
@@ -618,7 +686,7 @@
           }
         });
 
-      },
+      }
     }
   }
 </script>
@@ -626,6 +694,11 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   #clientContainer {
-
+    .blue{
+      color:blue;
+    }
+    .orange{
+      color: orange;
+    }
   }
 </style>

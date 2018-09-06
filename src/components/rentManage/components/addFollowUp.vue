@@ -6,16 +6,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="params.city" placeholder="选择城市" value="">
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
-                </el-select>
+                <el-input v-model='params.city' disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="工单类型" required="">
-                <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
-                  <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
-                </el-select>
+              <el-form-item label="房屋地址">
+                <el-input></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -26,7 +22,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="跟进人" required="">
+              <el-form-item label="下次跟进人" required="">
                 <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
@@ -48,6 +44,13 @@
 
           </el-row>
           <el-row>
+             <el-col :span="12">
+              <el-form-item label="工单类型" required="">
+                <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
+                  <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="下次跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
@@ -56,8 +59,15 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="12">
+                <el-form-item label="紧急程度" required="">
+                  <el-cascader :options="optionsWithDisabled" placeholder='请选择紧急程度' :span="12"></el-cascader>
+                </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="24">
-              <el-form-item label="跟进事项" required="">
+              <el-form-item label="工单内容" required="">
                 <el-input type="textarea" v-model="params.matters"></el-input>
               </el-form-item>
             </el-col>
@@ -90,8 +100,13 @@
     data() {
       return {
         addFollowUpDialogVisible:false,
+        optionsWithDisabled: [
+        { value: "yiban", label: "一般" },
+        { value: "jinji", label: "紧急" }
+      ],
         params:{
-          city: '',
+          city_name:"",  //所属城市
+          city: '',  //城市ID
           contract_id : '',                 //'合同id',
           module: '',                        //'关联模型', 1-收房  2-租房
           matters:'',                        //跟进事项
@@ -118,12 +133,12 @@
     },
     watch:{
       addFollowUpDialog(val){
-        this.addFollowUpDialogVisible = val
+        this.addFollowUpDialogVisible = val;
       },
       addFollowUpDialogVisible(val){
         if(!val){
           this.$emit('close');
-          this.isClear = true;
+          this.isClear = true;  
         }else {
           this.init();
           this.isClear = false;
@@ -134,9 +149,10 @@
       },
       contractOperateId(val){
         this.params.contract_id = val;
+        
       },
       contractModule(val){
-        this.params.module = val
+        this.params.module = val;   
       }
     },
     mounted(){
@@ -146,19 +162,20 @@
         this.$http.get(globalConfig.server+'setting/dictionary/255').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
-            this.isDictionary = true
+            this.isDictionary = true; 
           }
         });
         this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary_follow = res.data.data;
-            this.isDictionary = true;
+            this.isDictionary = true;  
           }
         });
         this.$http.get(globalConfig.server+'setting/dictionary/306',{params:{status:1}}).then((res) => {
           if(res.data.code === "30010"){
             this.cityCategory = res.data.data;
-            this.isDictionary = true;
+            this.isDictionary = true;  
+            //  遍历城市  匹配与合同ID相同的城市名     
           }
         });
 
@@ -175,7 +192,6 @@
         this.length = '';
         this.params.follow_id = val[0].id;
         this.follow_name = val[0].name;
-
       },
       closeModal(){
         this.organizationDialog = false

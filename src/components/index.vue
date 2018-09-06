@@ -301,7 +301,7 @@
               <!--一级菜单-->
               <el-menu-item v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
                 <i :class="child.icon" style="font-size: 26px"></i>
-                <span slot="title"> {{child.name}}</span>
+                <span slot="title">{{ child.name }}</span>
               </el-menu-item>
 
               <el-submenu :index="item.name+''" :disabled="chinese.indexOf(item.name)>-1"
