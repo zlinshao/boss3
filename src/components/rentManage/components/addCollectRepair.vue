@@ -16,11 +16,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='form.city_name' disabled></el-input>
-                <!-- <el-select clearable v-model="form.city" placeholder="请选择城市" value="" disabled>
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select> -->
+                <el-input v-model='cities[form.city]'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -188,21 +184,21 @@ export default {
         remark: "", //备注
         status: "", //维修状态
         person_liable: "", //初步认责人
-        module: 1, //收房
+        contract_type: 1, //收房
         follow_id: "", //跟进人id
         final_liable: "", //最终认责人
         real_money: "", //实际维修金额
         estimated_time: "", //下次跟进时间
         landlord_mobile: "", //房东电话
         next_follow_id: "", //下次跟进人
-        city_name: "", //  所属城市
         emergency: "", // 紧急程度
         _emergency: "" // 紧急程度编号
       },
+      cities:{},
       follow_name: "", //跟进人
       repairStatusCategory: [],
       responsiblePersonCategory: [],
-      sexCategory: [],
+      // sexCategory: [],
       cityCategory: [],
       renter: "",
       emergencys: [
@@ -236,7 +232,6 @@ export default {
       this.form.address = val.address;
       this.form.city = val.city;
       this.form.landlord_mobile = val.phone;
-      console.log(val);
     },
     _emergency(val) {
       this.slist = this.emergencys[val];
@@ -260,18 +255,12 @@ export default {
         //认责人
         this.responsiblePersonCategory = res.data;
       });
-      this.dictionary(228).then(res => {
-        //性别
-        this.sexCategory = res.data;
-      });
       this.dictionary(306, 1).then(res => {
         //城市
         this.cityCategory = res.data;
         //  遍历城市  匹配与合同ID相同的城市名
         for (let i = 0; i < res.data.length; i++) {
-          if (this.form.city === res.data[i].variable.city_id) {
-            this.form.city_name = res.data[i].dictionary_name;
-          }
+          this.cities[res.data[i].variable.city_id] = res.data[i].dictionary_name;
         }
       });
     },
@@ -303,7 +292,7 @@ export default {
     initial() {
       this.isflag = false;
       this.form = {
-        module: 1, //收房
+        contract_type: 1, //收房
         contract_id: this.contract.contract_id, //合同Id
         contract_number: this.contract.contract_number, //合同编号
         // contract_type: this.contract.type, //合同类型
