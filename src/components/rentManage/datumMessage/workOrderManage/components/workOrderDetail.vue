@@ -22,7 +22,7 @@
               </el-col>
               <el-col :span="8" style="text-align: right">
                 <el-button type="text" size="small" @click="editOrder(workOrderDetail.id)">
-                  <i class="el-icon-edit"></i>修改跟进事项
+                  <i class="el-icon-edit"></i>修改工单内容
                 </el-button>
               </el-col>
             </el-row>
@@ -57,22 +57,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="跟进状态">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follow_statuss">{{workOrderDetail.follow_statuss}}</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进人">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
                 <el-form-item label="完成时间">
                   <div class="content">
                     <span v-if="workOrderDetail.finish_time">{{workOrderDetail.finish_time}}</span>
@@ -88,31 +72,14 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follow_time">{{workOrderDetail.expected_finish_time}}</span>
-                    <span v-if="!workOrderDetail.follow_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="跟进事项">
+                <el-form-item label="工单内容">
                   <div class="content">
                     <span v-if="workOrderDetail.matters">{{workOrderDetail.matters}}</span>
                     <span v-if="!workOrderDetail.matters">暂无</span>
                   </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24" v-if="workOrderDetail.album">
-                <el-form-item label="截图">
-                  <img v-if="workOrderDetail.album.image_pic!=[]" data-magnify
-                       v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri"
-                       alt="">
                 </el-form-item>
               </el-col>
             </el-row>
@@ -124,7 +91,8 @@
             </div>
             <div v-if="workOrderDetail.remarks&&workOrderDetail.remarks.length>0">
               <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
-                <el-row v-for="item in workOrderDetail.remarks" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+                <el-row v-for="item in workOrderDetail.remarks" :key="item.id"
+                        style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
                       <div class="content">
@@ -141,6 +109,22 @@
                       </div>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="下次跟进时间">
+                      <div class="content">
+                        <span v-if="item.expected_finish_time">{{item.expected_finish_time}}</span>
+                        <span v-if="!item.expected_finish_time">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进状态">
+                      <div class="content">
+                        <span v-if="item.follow_statuss">{{item.follow_statuss}}</span>
+                        <span v-if="!item.follow_statuss">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
                   <el-col :span="24">
                     <el-form-item label="跟进结果">
                       <div class="content">
@@ -149,7 +133,12 @@
                       </div>
                     </el-form-item>
                   </el-col>
-
+                  <el-col :span="24" v-if="item.album">
+                    <el-form-item label="截图">
+                      <img v-if="item.album.image_pic!=[]" data-magnify
+                           v-for="(val,key) in item.album.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt="">
+                    </el-form-item>
+                  </el-col>
                 </el-row>
               </el-form>
             </div>
@@ -180,7 +169,7 @@
               </el-col>
               <el-col :span="8" style="text-align: right">
                 <el-button type="text" size="small" @click="editOrder(item.id)">
-                  <i class="el-icon-edit"></i>修改跟进事项
+                  <i class="el-icon-edit"></i>修改工单内容
                 </el-button>
               </el-col>
             </el-row>
@@ -227,16 +216,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="跟进人">
-                  <div class="content">
-                    <span v-if="item.follows">{{item.follows && item.follows.name}}</span>
-                    <span v-if="!item.follows">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
                 <el-form-item label="完成时间">
                   <div class="content">
                     <span v-if="item.finish_time">{{item.finish_time}}</span>
@@ -244,38 +223,14 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="跟进时间">
-                  <div class="content">
-                    <span v-if="item.follow_time">{{item.follow_time}}</span>
-                    <span v-if="!item.follow_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进时间">
-                  <div class="content">
-                    <span v-if="item.expected_finish_time">{{item.expected_finish_time}}</span>
-                    <span v-if="!item.expected_finish_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="跟进事项">
+                <el-form-item label="工单内容">
                   <div class="content">
                     <span v-if="item.matters">{{item.matters}}</span>
                     <span v-if="!item.matters">暂无</span>
                   </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24" v-if="item.album">
-                <el-form-item label="截图">
-                  <img v-if="item.album.image_pic!=[]" data-magnify
-                       v-for="(val,key) in item.album.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt="">
                 </el-form-item>
               </el-col>
             </el-row>
@@ -287,7 +242,8 @@
             </div>
             <div v-if="item.remarks&&item.remarks.length>0">
               <el-form size="small" label-width="100px" v-if="item.remarks">
-                <el-row v-for="item in item.remarks" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+                <el-row v-for="item in item.remarks" :key="item.id"
+                        style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
                       <div class="content">
@@ -304,12 +260,26 @@
                       </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="24">
-                    <el-form-item label="跟进结果">
+                  <el-col :span="12">
+                    <el-form-item label="下次跟进时间">
                       <div class="content">
-                        <span v-if="item.content">{{item.content}}</span>
-                        <span v-if="!item.content">暂无</span>
+                        <span v-if="item.expected_finish_time">{{item.expected_finish_time}}</span>
+                        <span v-if="!item.expected_finish_time">暂无</span>
                       </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进状态">
+                      <div class="content">
+                        <span v-if="item.follow_statuss">{{item.follow_statuss}}</span>
+                        <span v-if="!item.follow_statuss">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="24" v-if="item.album">
+                    <el-form-item label="截图">
+                      <img v-if="item.album.image_pic!=[]" data-magnify
+                           v-for="(val,key) in item.album.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt="">
                     </el-form-item>
                   </el-col>
                 </el-row>
