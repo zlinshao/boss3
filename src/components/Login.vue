@@ -125,6 +125,7 @@
         this.sureLogin(phone, code);
         this.underWay = false;
       }
+      document.getElementById('login').style.height = window.innerHeight + 'px';
     },
     methods: {
       phoneLogin() {

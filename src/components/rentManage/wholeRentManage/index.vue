@@ -1273,9 +1273,6 @@
           case 'addFollowUpDialog':     //增加跟进
             this.addFollowUpDialog = true;
             break;
-          case 'vacationDialog':     //房东退房
-            this.vacationDialog = true;
-            break;
           case 'addCollectRepairDialog':     //房东报修
             this.addCollectRepairDialog = true;
             break;

@@ -50,6 +50,7 @@ const WechatMessage =()=> import  ('../components/wechatMessage/index.vue')     
 // const StaffManage =()=> import  ('../comments/humanResource/staffManage/index1.vue')
 // const Organization =()=> import  ('../components/humanResource/organization/index1.vue')
 // const Achievement =()=> import  ('../comments/humanResource/achievement/index1.vue')
+const LeaveOffice =()=> import  ('../components/humanResource/leaveOffice/index.vue')
 const IntegralManage =()=> import  ('../components/humanResource/integralManage/index.vue')
 const OrganizationNew =()=> import  ('../components/humanResource/organizationNew/index.vue')       // add by cj 组织架构
 const PersonalRecords =()=> import  ('../components/humanResource/personalRecords/index')
@@ -334,6 +335,7 @@ export default new Router({
         {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
 
         {path: '/pendingSettle', component: PendingSettle, name: "结算"},
+        {path: '/leaveOffice', component: LeaveOffice, name: '离职短信',},
       ]
     },
     //快捷入口
@@ -388,8 +390,8 @@ export default new Router({
       children: [
         {path: '/housesManage', component: HousesManage, name: '产品管控中心',},
         {path: '/villageManage', component: VillageManage, name: '小区管理',},
-        // {path: '/dormManage', component: DormManage, name: '宿舍管理',},
-        // {path: '/officeManage', component: OfficeManage, name: '办公室管理',},
+        {path: '/dormManage', component: DormManage, name: '宿舍管理',},
+        {path: '/officeManage', component: OfficeManage, name: '办公室管理',},
       ]
     },
 

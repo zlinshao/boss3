@@ -109,7 +109,7 @@
         this.minutes = this.minutes < 10 ? '0' + this.minutes : this.minutes + "";
         this.seconds = date.getSeconds();
         this.seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds + "";
-        let weekArray = new Array("日", "一", "二", "三", "四", "五", "六");
+        let weekArray = ["日", "一", "二", "三", "四", "五", "六"];
         let week = new Date().getDay();
         this.week = "星期"+ weekArray[week];
       },
