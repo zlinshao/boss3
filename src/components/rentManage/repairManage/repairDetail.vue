@@ -573,9 +573,9 @@ export default {
         let estimated_time_1 = this.$refs.estimated_time.displayValue;
         this.repaires.estimated_time = estimated_time_1.substring(0,10);
         this.repaires.status = this.city;
-      // setTimeout(() => {
-      //   this.$emit("close");
-      // }, 1500);
+      setTimeout(() => {
+        this.$emit("close");
+      }, 1500);
     },
     close() {
       //  点击取消  关闭窗口
