@@ -169,184 +169,192 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization';
-  export default {
-    props: ['addRentRepairDialog', 'contract'],
-    components: {Organization},
-    data() {
-      return {
-        addRentRepairDialogVisible: false,
-        organizationDialog: false,
-        organizeType: '',
-        isflag:false,
-        optionsWithDisabled: [
-        {value: 'yiban',label: '一般'},
-        {value: 'jinji',label: '紧急'}
-          ],
-        form: {
-          city: '',
-          contract_id: '', //合同Id
-          contract_number: '', //合同编号
-          // contract_type: '', //合同类型
-          address: "", //房屋地址
-          customer_name: '',  //客户姓名
-          sex: null,     //性别
-          customer_mobile: '',  //客户电话
-          content: '',  //维修内容
-          repair_time: '',  //维修时间
-          repair_master: '',  //维修师傅
-          repair_money: '',   //维修金额
-          remark: '',  //备注
-          status: '',  //维修状态
-          person_liable: '', //认责人
-          module: 2, //租房
-          follow_id: '',  //跟进人id
-          final_liable: '', //最终认责人
-          real_money: '',  //实际维修金额
-          estimated_time: '',  //下次跟进时间
-          landlord_mobile:"",//房东电话
-          next_follow_id:'',// 下次跟进人
-          city_name:"", //  所属城市
-          emergency:"",// 紧急程度
-          _emergency : "", // 紧急程度编号
-        },
-        follow_name: '', //跟进人名字   
-        repairStatusCategory: [],
-        responsiblePersonCategory: [],
-        sexCategory: [],
-        cityCategory: [],
-        emergencys:[   // 紧急程度
+import Organization from "../../common/organization";
+export default {
+  props: ["addRentRepairDialog", "contract"],
+  components: { Organization },
+  data() {
+    return {
+      addRentRepairDialogVisible: false,
+      organizationDialog: false,
+      organizeType: "",
+      isflag: false,
+      optionsWithDisabled: [
+        { value: "yiban", label: "一般" },
+        { value: "jinji", label: "紧急" }
+      ],
+      form: {
+        city: "",
+        contract_id: "", //合同Id
+        contract_number: "", //合同编号
+        // contract_type: '', //合同类型
+        address: "", //房屋地址
+        customer_name: "", //客户姓名
+        sex: null, //性别
+        customer_mobile: "", //客户电话
+        content: "", //维修内容
+        repair_time: "", //维修时间
+        repair_master: "", //维修师傅
+        repair_money: "", //维修金额
+        remark: "", //备注
+        status: "", //维修状态
+        person_liable: "", //认责人
+        module: 2, //租房
+        follow_id: "", //跟进人id
+        final_liable: "", //最终认责人
+        real_money: "", //实际维修金额
+        estimated_time: "", //下次跟进时间
+        landlord_mobile: "", //房东电话
+        next_follow_id: "", // 下次跟进人
+        city_name: "", //  所属城市
+        emergency: "", // 紧急程度
+        _emergency: "" // 紧急程度编号
+      },
+      follow_name: "", //跟进人名字
+      repairStatusCategory: [],
+      responsiblePersonCategory: [],
+      sexCategory: [],
+      cityCategory: [],
+      emergencys: [
+        // 紧急程度
         { id: 1, value: "一般" },
         { id: 2, value: "紧急" }
-      ],
-      };
+      ]
+    };
+  },
+  watch: {
+    addRentRepairDialog(val) {
+      this.addRentRepairDialogVisible = val;
     },
-    watch: {
-      addRentRepairDialog(val) {
-        this.addRentRepairDialogVisible = val
-      },
-      addRentRepairDialogVisible(val) {
-        if (!val) {   //模态框关闭时
-          this.$emit('close');
-          this.initial();
-        } else { //模态框打开     
-          this.getDictionary();
-          this.setchange();
-        }
-      },
-      contract(val) {
-        this.form.contract_id = val.contract_id;
-        this.form.contract_number = val.contract_number;
-        this.form.contract_type = val.type;
-        this.form.address = val.address;
-        this.form.city = val.city;
-        this.form.landlord_mobile = val.phone; 
-      },
-      emergency(val){
-      this.slist = this.emergencys[val];
+    addRentRepairDialogVisible(val) {
+      if (!val) {
+        //模态框关闭时
+        this.$emit("close");
+        this.initial();
+      } else {
+        //模态框打开
+        this.getDictionary();
+        this.setchange();
       }
     },
-    methods: {
-      setchange(){   //  判断  如果初步责任人  选择的是 前租客  显示 前租客姓名的文本框 否则隐藏
-      if(this.form.person_liable === 692){
+    contract(val) {
+      this.form.contract_id = val.contract_id;
+      this.form.contract_number = val.contract_number;
+      this.form.contract_type = val.type;
+      this.form.address = val.address;
+      this.form.city = val.city;
+      this.form.landlord_mobile = val.phone;
+    },
+    emergency(val) {
+      this.slist = this.emergencys[val];
+    }
+  },
+  methods: {
+    setchange() {
+      //  判断  如果初步责任人  选择的是 前租客  显示 前租客姓名的文本框 否则隐藏
+      if (this.form.person_liable === 692) {
         this.isflag = true;
-      }else{
+      } else {
         this.isflag = false;
       }
     },
-      getDictionary() {
-        this.dictionary(595).then((res) => {  //维修状态
-          this.repairStatusCategory = res.data;
-        });
-        this.dictionary(604).then((res) => {  //认责人
-          this.responsiblePersonCategory = res.data;
-        });
-        this.dictionary(228).then((res) => { //性别
-          this.sexCategory = res.data;
-        });
-        this.dictionary(306,1).then((res) => { //城市
-          this.cityCategory = res.data;
-          for (let i = 0; i < res.data.length; i++) {
-          if(this.form.city === res.data[i].variable.city_id) {
+    getDictionary() {
+      this.dictionary(595).then(res => {
+        //维修状态
+        this.repairStatusCategory = res.data;
+      });
+      this.dictionary(604).then(res => {
+        //认责人
+        this.responsiblePersonCategory = res.data;
+      });
+      this.dictionary(228).then(res => {
+        //性别
+        this.sexCategory = res.data;
+      });
+      this.dictionary(306, 1).then(res => {
+        //城市
+        this.cityCategory = res.data;
+        for (let i = 0; i < res.data.length; i++) {
+          if (this.form.city === res.data[i].variable.city_id) {
             this.form.city_name = res.data[i].dictionary_name;
           }
         }
-        });
-      },
-      confirmAdd() {
-         if(this.form._emergency === '一般'){
+      });
+    },
+    confirmAdd() {
+      if (this.form._emergency === "一般") {
         this.form.emergency = 1;
-        }
-        if(this.form._emergency === '紧急'){
-          this.form.emergency = 2;
-        }  
-        this.$http.post(globalConfig.server + 'repaire/insert', this.form).then((res) => {
-          if (res.data.code === '600200') {
+      }
+      if (this.form._emergency === "紧急") {
+        this.form.emergency = 2;
+      }
+      this.$http
+        .post(globalConfig.server + "repaire/insert", this.form)
+        .then(res => {
+          if (res.data.code === "600200") {
             this.$notify.success({
-              title: '成功',
+              title: "成功",
               message: res.data.msg
             });
-            this.$emit('close','repair');
+            this.$emit("close", "repair");
             this.addRentRepairDialogVisible = false;
           } else {
             this.$notify.warning({
-              title: '警告',
+              title: "警告",
               message: res.data.msg
             });
           }
-        })
-      },
-      initial() {
-        this.isflag = false;
-        this.form = {
-          city:"",
-          module: 2, //租房
-          contract_id: this.contract.contract_id, //合同Id
-          contract_number: this.contract.contract_number, //合同编号
-          // contract_type: this.contract.type, //合同类型
-          address: this.form.address, //房屋地址
-          customer_name: '',  //客户姓名
-          sex: null,     //性别
-          customer_mobile: '',  //客户电话
-          content: '',  //维修内容
-          repair_time: '',  //维修时间
-          repair_master: '',  //维修师傅
-          repair_money: '',   //维修金额
-          remark: '',  //备注
-          status: '',  //维修状态
-          person_liable: '', //认责人
-          follow_id: '',  //跟进人id
-          final_liable: '', //最终认责人
-          real_money: '',  //实际维修金额
-          estimated_time: '',
-          landlord_mobile:'', //房东电话
-          emergency : "",//紧急程度
-        };
-        this.follow_name = '';
-        
-      },
-      closeOrganization(){
-        this.organizeType = '';
-        this.organizationDialog = false;
-      },
-      selectMember(val){
-        this.follow_name = val[0].name;
-        this.form.follow_id = val[0].id;
-        this.form.next_follow_id = val[0].name;
-      },
-      chooseStaff(){
-        this.organizeType = 'staff';
-        this.organizationDialog = true;
-      },
-      emptyStaff(){
-        this.follow_name = '';
-        this.form.follow_id = '';
-      }
+        });
     },
-  };
+    initial() {
+      this.isflag = false;
+      this.form = {
+        city: "",
+        module: 2, //租房
+        contract_id: this.contract.contract_id, //合同Id
+        contract_number: this.contract.contract_number, //合同编号
+        // contract_type: this.contract.type, //合同类型
+        address: this.form.address, //房屋地址
+        customer_name: "", //客户姓名
+        sex: null, //性别
+        customer_mobile: "", //客户电话
+        content: "", //维修内容
+        repair_time: "", //维修时间
+        repair_master: "", //维修师傅
+        repair_money: "", //维修金额
+        remark: "", //备注
+        status: "", //维修状态
+        person_liable: "", //认责人
+        follow_id: "", //跟进人id
+        final_liable: "", //最终认责人
+        real_money: "", //实际维修金额
+        estimated_time: "",
+        landlord_mobile: "", //房东电话
+        emergency: "" //紧急程度
+      };
+      this.follow_name = "";
+    },
+    closeOrganization() {
+      this.organizeType = "";
+      this.organizationDialog = false;
+    },
+    selectMember(val) {
+      this.follow_name = val[0].name;
+      this.form.follow_id = val[0].id;
+      this.form.next_follow_id = val[0].name;
+    },
+    chooseStaff() {
+      this.organizeType = "staff";
+      this.organizationDialog = true;
+    },
+    emptyStaff() {
+      this.follow_name = "";
+      this.form.follow_id = "";
+    }
+  }
+};
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair {
-
-  }
+#addRentRepair {
+}
 </style>

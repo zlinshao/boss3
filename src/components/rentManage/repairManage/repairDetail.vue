@@ -22,7 +22,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editRepair(repairDetail.id)" :disabled="isflag">
+                <el-button type="text" size="small" @click="editRepair(repairDetail.id)" :disabled="!isflag">
                   <i class="el-icon-edit"></i>修改维修单
                 </el-button>
               </el-col>
@@ -341,13 +341,22 @@
               </el-col>
                <el-col :span="12">
                     <el-form-item label="最终认责人">
-                      <el-select v-model="repaires.final_liable" placeholder="请选择认责归属" clearable>
+                      <div class="content-append">
+                      <el-select v-model="repaires.final_liable" placeholder="请选择最终认责归属" clearable @change="setchange">
                         <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
                                   :value="item.id" size="small">{{item.dictionary_name}}
                         </el-option>
                       </el-select>
+                      </div>
                       </el-form-item> 
                   </el-col>
+                  <el-col :span="12" v-if="flag">
+                  <el-form-item label="前租客姓名" required>
+                    <div class="content-append">
+                    <el-input></el-input>
+                    </div>
+                  </el-form-item>
+                </el-col>
                   <el-col :span="24">
                     <el-form-item label="跟进结果">
                       <div class="content-append">
@@ -390,39 +399,41 @@ export default {
   components: { AddResult, EditCollectRepair, EditRentRepair, Organization },
   data() {
     return {
-      _thisId :"", //当前的ID 需要传递给后台
+      _thisId: "", //当前的ID 需要传递给后台
       organizationDialog: false,
       follow_name: "", //跟进人名字
       repairDetailDialogVisible: false,
       repairDetail: {},
-      _repairDetail:[],
+      _repairDetail: [],
       addResultId: "",
       addResultDialog: false,
       editId: "",
       collectRepairDialog: false,
       rentRepairDialog: false,
-      isflag: true,
+      isflag: false, // 用来判断是否可以修改维修单
       isappend: false,
-      append_time: "",// 下次跟进时间
+      append_time: "", // 下次跟进时间
       state_repair: [],
       city: "",
       organizeType: "",
       follow_id: "",
       setTime: "",
-      _follow_name:"",
+      _follow_name: "",
       next_follow_id: "",
       responsiblePersonCategory: [],
-      repaires:{  // 新增跟进结果数据
+      flag : "", // 用来判断前租客是否显示
+      repaires: {
+        // 新增跟进结果数据
         content: "", // 维修结果
-        repair_time: "",//维修时间
+        repair_time: "", //维修时间
         // estimated_time: this.estimated_time,
-        repair_money: "",// 维修金额
-        repair_master: "",// 维修师傅
+        repair_money: "", // 维修金额
+        repair_master: "", // 维修师傅
         status: "", //维修状态
-        final_liable: "",// 最终认责人
-        next_follow_id: "",   // 下次跟进人      
-      } 
-    }
+        final_liable: "", // 最终认责人
+        next_follow_id: "" // 下次跟进人
+      }
+    };
   },
   watch: {
     repairDetailDialog(val) {
@@ -434,6 +445,7 @@ export default {
         this.init();
       } else {
         this.getDetail();
+        this.setchange();
       }
     }
   },
@@ -441,6 +453,14 @@ export default {
     this.init();
   },
   methods: {
+    setchange() {
+      //  判断  如果初步责任人  选择的是 前租客  显示 前租客姓名的文本框 否则隐藏
+      if (this.repaires.final_liable === 692) {
+        this.flag = true;
+      } else {
+        this.flag = false;
+      }
+    },
     getDetail() {
       this.$http
         .get(globalConfig.server + "repaire/info/" + this.repairId)
@@ -450,7 +470,9 @@ export default {
             this._repairDetail = res.data.data.follow;
             this.isflag = res.data.data.update;
             this._thisId = res.data.data.id;
-            this._follow_name = res.data.data.followor.name;   
+          if(res.data.data.followor){
+              this._follow_name = res.data.data.followor.name;
+            }
           } else {
             this.$notify.warning({
               title: "警告",
@@ -468,7 +490,7 @@ export default {
         });
       this.dictionary(604).then(res => {
         //认责人
-        this.responsiblePersonCategory = res.data;      
+        this.responsiblePersonCategory = res.data;
       });
     },
     addResult(id) {
@@ -479,7 +501,7 @@ export default {
     closeModal(val) {
       this.addResultDialog = false;
       this.collectRepairDialog = false;
-      this.rentRepairDialog = false;  
+      this.rentRepairDialog = false;
       if (val === "success") {
         this.getDetail();
       }
@@ -487,7 +509,7 @@ export default {
     editRepair(id) {
       this.editId = id;
       console.log(this.editId);
-      
+
       if (this.activeName === "first") {
         this.collectRepairDialog = true;
       } else {
@@ -499,7 +521,7 @@ export default {
       this.city = "";
       this.setTime = "";
       this.follow_name = "";
-      this.repaires.next_follow_id ="";
+      this.repaires.next_follow_id = "";
       this.repaires.final_liable = "";
       this.append_time = "";
       this.repaires.repair_time = "";
@@ -513,13 +535,13 @@ export default {
       this.organizeType = "";
       this.organizationDialog = false;
     },
-    selectMember(val) {   
+    selectMember(val) {
       this.next_follow_id = val[0].name;
-      this.repaires.next_follow_id  = val[0].id;    
+      this.repaires.next_follow_id = val[0].id;
     },
     chooseStaff(id) {
       this.organizationDialog = true;
-      this.organizeType = "staff"; 
+      this.organizeType = "staff";
       this.tlos = id;
     },
     emptyStaff() {
@@ -554,25 +576,28 @@ export default {
       this.setTime = y + "-" + m + "-" + d + " " + hh + ":" + mm + ":" + ss;
       this.follow_name = this._follow_name;
       this.$http
-        .post(globalConfig.server + "repaire/follow/"+this._thisId,this.repaires)
-        .then(res =>{
-          if(res.data.code === '600200'){
+        .post(
+          globalConfig.server + "repaire/follow/" + this._thisId,
+          this.repaires
+        )
+        .then(res => {
+          if (res.data.code === "600200") {
             this.$notify.success({
-              title:'成功',
-              message:res.data.msg  
+              title: "成功",
+              message: res.data.msg
             });
-          }else {
+          } else {
             this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
-          }       
-        })     
-        let repair_time_1 = this.$refs.repair_time.displayValue;
-        this.repaires.repair_time = repair_time_1.substring(0,10);
-        let estimated_time_1 = this.$refs.estimated_time.displayValue;
-        this.repaires.estimated_time = estimated_time_1.substring(0,10);
-        this.repaires.status = this.city;
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        });
+      let repair_time_1 = this.$refs.repair_time.displayValue;
+      this.repaires.repair_time = repair_time_1.substring(0, 10);
+      let estimated_time_1 = this.$refs.estimated_time.displayValue;
+      this.repaires.estimated_time = estimated_time_1.substring(0, 10);
+      this.repaires.status = this.city;
       setTimeout(() => {
         this.$emit("close");
       }, 1500);

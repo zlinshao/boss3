@@ -171,7 +171,7 @@ export default {
       addCollectRepairDialogVisible: false,
       organizationDialog: false,
       organizeType: "",
-      isflag:false,
+      isflag: false,
       form: {
         city: "", //所属城市ID
         contract_id: "", //合同Id
@@ -193,39 +193,38 @@ export default {
         final_liable: "", //最终认责人
         real_money: "", //实际维修金额
         estimated_time: "", //下次跟进时间
-        landlord_mobile:"",//房东电话
-        next_follow_id :"", //下次跟进人
-        city_name: '', //  所属城市
-        emergency:"", // 紧急程度 
-        _emergency : "", // 紧急程度编号
+        landlord_mobile: "", //房东电话
+        next_follow_id: "", //下次跟进人
+        city_name: "", //  所属城市
+        emergency: "", // 紧急程度
+        _emergency: "" // 紧急程度编号
       },
       follow_name: "", //跟进人
       repairStatusCategory: [],
       responsiblePersonCategory: [],
       sexCategory: [],
       cityCategory: [],
-      renter:'',
-      emergencys:[   // 紧急程度
+      renter: "",
+      emergencys: [
+        // 紧急程度
         { id: 1, value: "一般" },
         { id: 2, value: "紧急" }
-      ],
+      ]
     };
   },
-  created () {
-    
-  },
-  mounted() {
-    
-  },
+  created() {},
+  mounted() {},
   watch: {
     addCollectRepairDialog(val) {
       this.addCollectRepairDialogVisible = val;
     },
     addCollectRepairDialogVisible(val) {
-      if (!val) { // 关闭模态框时
+      if (!val) {
+        // 关闭模态框时
         this.$emit("close");
-        this.initial();// 清空文本框
-      } else {  // 打开模态框时
+        this.initial(); // 清空文本框
+      } else {
+        // 打开模态框时
         this.getDictionary();
         this.setchange();
       }
@@ -236,29 +235,30 @@ export default {
       this.form.contract_type = val.type;
       this.form.address = val.address;
       this.form.city = val.city;
-      this.form.landlord_mobile = val.phone;  
-      console.log(val);   
+      this.form.landlord_mobile = val.phone;
+      console.log(val);
     },
-    _emergency(val){ 
+    _emergency(val) {
       this.slist = this.emergencys[val];
     }
   },
   methods: {
-    setchange(){   //  判断  如果初步责任人  选择的是 前租客  显示 前租客姓名的文本框 否则隐藏
-      if(this.form.person_liable === 692){
+    setchange() {
+      //  判断  如果初步责任人  选择的是 前租客  显示 前租客姓名的文本框 否则隐藏
+      if (this.form.person_liable === 692) {
         this.isflag = true;
-      }else{
+      } else {
         this.isflag = false;
       }
     },
     getDictionary() {
       this.dictionary(595).then(res => {
         //维修状态
-        this.repairStatusCategory = res.data;      
+        this.repairStatusCategory = res.data;
       });
       this.dictionary(604).then(res => {
         //认责人
-        this.responsiblePersonCategory = res.data;      
+        this.responsiblePersonCategory = res.data;
       });
       this.dictionary(228).then(res => {
         //性别
@@ -269,19 +269,19 @@ export default {
         this.cityCategory = res.data;
         //  遍历城市  匹配与合同ID相同的城市名
         for (let i = 0; i < res.data.length; i++) {
-          if(this.form.city === res.data[i].variable.city_id) {
+          if (this.form.city === res.data[i].variable.city_id) {
             this.form.city_name = res.data[i].dictionary_name;
           }
         }
       });
     },
     confirmAdd() {
-      if(this.form._emergency === '一般'){
+      if (this.form._emergency === "一般") {
         this.form.emergency = 1;
       }
-      if(this.form._emergency === '紧急'){
+      if (this.form._emergency === "紧急") {
         this.form.emergency = 2;
-      }  
+      }
       this.$http
         .post(globalConfig.server + "repaire/insert", this.form)
         .then(res => {
@@ -309,7 +309,7 @@ export default {
         // contract_type: this.contract.type, //合同类型
         address: this.form.address, //房屋地址
         city: "",
-        landlord_mobile:"",//房东电话
+        landlord_mobile: "", //房东电话
         customer_name: "", //客户姓名
         sex: null, //性别
         customer_mobile: "", //客户电话
@@ -324,10 +324,10 @@ export default {
         final_liable: "", //最终认责人
         real_money: "", //实际维修金额
         estimated_time: "",
-        landlord_mobile:"",//房东电话
-        _emergency :"",// 紧急程度
+        landlord_mobile: "", //房东电话
+        _emergency: "" // 紧急程度
       };
-      this.follow_name = "";     
+      this.follow_name = "";
     },
     closeOrganization() {
       this.organizeType = "";
@@ -351,6 +351,5 @@ export default {
 </script>
 <style lang="scss" scoped="">
 #addCollectRepair {
-
 }
 </style>

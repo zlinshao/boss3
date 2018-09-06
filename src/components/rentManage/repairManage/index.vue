@@ -372,244 +372,267 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue';
-  import AddCollectRepair from '../components/addCollectRepair';
-  import AddRentRepair from '../components/addRentRepair';
-  import RepairDetail from './repairDetail';
-  import Organization from '../../common/organization.vue';
+import RightMenu from "../../common/rightMenu.vue";
+import AddCollectRepair from "../components/addCollectRepair";
+import AddRentRepair from "../components/addRentRepair";
+import RepairDetail from "./repairDetail";
+import Organization from "../../common/organization.vue";
 
-  export default {
-    name: 'repair-manage',
-    components: {RightMenu, AddCollectRepair, AddRentRepair, RepairDetail, Organization},
-    data() {
-      return {
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
-        form: {
-          page: 1,
-          limit: 12,
-          keyword: '',
-          time: '',
-          status: '',
-          city: '',
-          operator_id: '',
-          next_follow_id:'',
-        },
-        collectTableData: [],
-        rentTableData: [],
-        totalNum: 0,
-        isHigh: false,
-        collectStatus: ' ',
-        collectLoading: false,
-        rentStatus: ' ',
-        rentLoading: false,
-        activeName: 'first',
-        addCollectRepairDialog: false,
-        addRentRepairDialog: false,
-        collectRepairId: '',
-        rentRepairId: '',
-        repairDetailDialog: false,
-        repairId: '',
-        deleteId: '',
-        dictionary: [],
-        cityCategory: [],
-        organizeVisible: false,
-        organizeType: '',
-        operator_name: '',
-        foundTime:'',
-        currentTime:'',
-        blue:'blue',
-        orange:'orange',
-        istrue:true,
+export default {
+  name: "repair-manage",
+  components: {
+    RightMenu,
+    AddCollectRepair,
+    AddRentRepair,
+    RepairDetail,
+    Organization
+  },
+  data() {
+    return {
+      rightMenuX: 0,
+      rightMenuY: 0,
+      show: false,
+      lists: [],
+      form: {
+        page: 1,
+        limit: 12,
+        keyword: "",
+        time: "",
+        status: "",
+        city: "",
+        operator_id: "",
+        next_follow_id: ""
+      },
+      collectTableData: [],
+      rentTableData: [],
+      totalNum: 0,
+      isHigh: false,
+      collectStatus: " ",
+      collectLoading: false,
+      rentStatus: " ",
+      rentLoading: false,
+      activeName: "first",
+      addCollectRepairDialog: false,
+      addRentRepairDialog: false,
+      collectRepairId: "",
+      rentRepairId: "",
+      repairDetailDialog: false,
+      repairId: "",
+      deleteId: "",
+      dictionary: [],
+      cityCategory: [],
+      organizeVisible: false,
+      organizeType: "",
+      operator_name: "",
+      foundTime: "",
+      currentTime: "",
+      blue: "blue",
+      orange: "orange",
+      istrue: true
+    };
+  },
+  created() {
+    this.gettime();
+  },
+  mounted() {
+    this.getCollectTableData();
+    this.getDictionary();
+  },
+
+  methods: {
+    gettime() {
+      let times = $(".getTime");
+      let colors = $(".colors");
+      for (let i = 0; i < times.length; i++) {
+        let dateTime = times[i].innerHTML;
+        this.foundTime = parseInt(Date.parse(dateTime) / 1000 / 3600); //创建时间 的小时
+        this.currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
+        let obtainTime = this.currentTime - this.foundTime; //得到  创建的时间  距离现在 有多少小时
+        //  判断 创建时间  到当前的时间 有没有 超过 48小时
+        if (obtainTime < 48) {
+          this.istrue = false;
+        }
       }
     },
-    created() {
-      this.gettime();
-    },
-    mounted() {
-      this.getCollectTableData();
-      this.getDictionary();
-      
-    },
-
-    methods: {
-      gettime(){
-        let times = $(".getTime");
-        let colors = $(".colors");
-        for(let i = 0; i < times.length; i++){
-          let dateTime = times[i].innerHTML;
-          this.foundTime = parseInt(Date.parse(dateTime)/1000/3600);  //创建时间 的小时
-          this.currentTime =  parseInt(Date.parse(new Date())/1000/3600);   //现在的时间 的小时
-          let obtainTime = this.currentTime - this.foundTime;   //得到  创建的时间  距离现在 有多少小时
-              //  判断 创建时间  到当前的时间 有没有 超过 48小时  
-              if(obtainTime<48){
-                this.istrue = false;
-              }         
-        }   
-      },
-      getDictionary() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/595').then((res) => {
+    getDictionary() {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/595")
+        .then(res => {
           if (res.data.code === "30010") {
-            this.dictionary = res.data.data;    
+            this.dictionary = res.data.data;
           }
         });
-        this.$http.get(globalConfig.server + 'setting/dictionary/306').then((res) => {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/306")
+        .then(res => {
           if (res.data.code === "30010") {
             this.cityCategory = res.data.data;
           }
         });
-      },
-      getCollectTableData() {
-        this.collectStatus = ' ';
-        this.collectLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
-        }
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1', {params: this.form}).then((res) => {
+    },
+    getCollectTableData() {
+      this.collectStatus = " ";
+      this.collectLoading = true;
+      if (!this.form.time) {
+        this.form.time = [];
+      }
+      this.$http
+        .get(globalConfig.server + "repaire/list?limit=12&module=1", {
+          params: this.form
+        })
+        .then(res => {
           this.isHigh = false;
           this.collectLoading = false;
-          if (res.data.code === '600200') {
+          if (res.data.code === "600200") {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else if (res.data.code === '600202') {
+          } else if (res.data.code === "600202") {
             this.collectTableData = [];
             this.totalNum = 0;
-            this.collectStatus = '暂无数据';
+            this.collectStatus = "暂无数据";
             this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
+              title: "警告",
+              message: res.data.msg
             });
           } else {
             this.collectTableData = [];
             this.totalNum = 0;
-            this.collectStatus = '暂无数据';
+            this.collectStatus = "暂无数据";
           }
         });
-      },
-      getRentTableData() {
-        this.rentStatus = ' ';
-        this.rentLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
-        }
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2', {params: this.form}).then((res) => {
+    },
+    getRentTableData() {
+      this.rentStatus = " ";
+      this.rentLoading = true;
+      if (!this.form.time) {
+        this.form.time = [];
+      }
+      this.$http
+        .get(globalConfig.server + "repaire/list?limit=12&module=2", {
+          params: this.form
+        })
+        .then(res => {
           this.isHigh = false;
           this.rentLoading = false;
-          if (res.data.code === '600200') {
+          if (res.data.code === "600200") {
             this.rentTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else if (res.data.code === '600202') {
+          } else if (res.data.code === "600202") {
             this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
+              title: "警告",
+              message: res.data.msg
             });
             this.rentTableData = [];
             this.totalNum = 0;
-            this.rentStatus = '暂无数据';
+            this.rentStatus = "暂无数据";
           } else {
             this.rentTableData = [];
             this.totalNum = 0;
-            this.rentStatus = '暂无数据';
+            this.rentStatus = "暂无数据";
           }
         });
-      },
-      // 员工筛选
-      chooseStaff() {
-        this.organizeVisible = true;
-        this.organizeType = 'staff';
-      },
-      // 清空员工
-      closeStaff() {
-        this.form.operator_id = [];
-        this.operator_name = '';
-      },
-      selectMember(val) {
-        if (this.organizeType === 'staff') {
-          this.form.operator_id = val[0].id;
-          this.operator_name = val[0].name;
+    },
+    // 员工筛选
+    chooseStaff() {
+      this.organizeVisible = true;
+      this.organizeType = "staff";
+    },
+    // 清空员工
+    closeStaff() {
+      this.form.operator_id = [];
+      this.operator_name = "";
+    },
+    selectMember(val) {
+      if (this.organizeType === "staff") {
+        this.form.operator_id = val[0].id;
+        this.operator_name = val[0].name;
+      }
+    },
+    closeModal(val) {
+      this.addCollectRepairDialog = false;
+      this.addRentRepairDialog = false;
+      this.repairDetailDialog = false;
+      this.collectRepairId = "";
+      this.rentRepairId = "";
+      this.organizeVisible = false;
+      if (this.activeName == "first") {
+        this.getCollectTableData();
+      } else if (this.activeName == "second") {
+        this.getRentTableData();
+      }
+    },
+    // tabs标签页
+    handleClick(tab, event) {
+      if (this.activeName == "first") {
+        this.getCollectTableData();
+      } else if (this.activeName == "second") {
+        this.getRentTableData();
+      }
+    },
+    search() {
+      this.form.page = 1;
+      if (this.activeName === "first") {
+        this.getCollectTableData();
+      } else {
+        this.getRentTableData();
+      }
+    },
+    // 高级
+    highGrade() {
+      this.isHigh = !this.isHigh;
+    },
+    // 重置
+    resetting() {
+      this.form.time = "";
+      this.form.status = "";
+      this.form.city = "";
+      this.closeStaff();
+    },
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.form.page = val;
+      // console.log(`当前页: ${val}`);
+      if (this.activeName === "first") {
+        this.getCollectTableData();
+      } else {
+        this.getRentTableData();
+      }
+    },
+    dblClickTable(row, event) {
+      this.repairId = row.id;
+      this.repairDetailDialog = true;
+    },
+    //右键
+    houseMenu(row, event) {
+      this.deleteId = row.id;
+      this.lists = [
+        {
+          clickIndex: "delete_repair",
+          headIcon: "el-icon-delete",
+          label: "删除"
         }
-      },
-      closeModal(val) {
-        this.addCollectRepairDialog = false;
-        this.addRentRepairDialog = false;
-        this.repairDetailDialog = false;
-        this.collectRepairId = '';
-        this.rentRepairId = '';
-        this.organizeVisible = false;
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
-        }
-      },
-      // tabs标签页
-      handleClick(tab, event) {
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
-        }
-      },
-      search() {
-        this.form.page = 1;
-        if (this.activeName === 'first') {
-          this.getCollectTableData();
-        } else {
-          this.getRentTableData();
-        }
-      },
-      // 高级
-      highGrade() {
-        this.isHigh = !this.isHigh;
-      },
-      // 重置
-      resetting() {
-        this.form.time = '';
-        this.form.status = '';
-        this.form.city = '';
-        this.closeStaff();
-      },
-      handleSizeChange(val) {
-        // console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        this.form.page = val;
-        // console.log(`当前页: ${val}`);
-        if (this.activeName === 'first') {
-          this.getCollectTableData();
-        } else {
-          this.getRentTableData();
-        }
-      },
-      dblClickTable(row, event) {
-        this.repairId = row.id;
-        this.repairDetailDialog = true;
-      },
-      //右键
-      houseMenu(row, event) {
-        this.deleteId = row.id;
-        this.lists = [
-          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
-        ];
-        this.contextMenuParam(event);
-      },
-      //右键回调
-      clickEvent(val) {
-        switch (val.clickIndex) {
-          case 'delete_repair':
-            this.deleteRepair();
-            break;
-        }
-      },
-      deleteRepair() {
-        this.$confirm('此操作将删除维修单，您确定删除吗？', '删除维修单', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(globalConfig.server + 'repaire/del/' + this.deleteId).then((res) => {
+      ];
+      this.contextMenuParam(event);
+    },
+    //右键回调
+    clickEvent(val) {
+      switch (val.clickIndex) {
+        case "delete_repair":
+          this.deleteRepair();
+          break;
+      }
+    },
+    deleteRepair() {
+      this.$confirm("此操作将删除维修单，您确定删除吗？", "删除维修单", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$http
+          .get(globalConfig.server + "repaire/del/" + this.deleteId)
+          .then(res => {
             if (res.data.code === "600200") {
               if (this.activeName == "first") {
                 this.getCollectTableData();
@@ -627,78 +650,88 @@
               });
             }
           });
-        })
-      },
-      //关闭右键菜单
-      closeMenu() {
-        this.show = false;
-      },
-      //右键参数
-      contextMenuParam(event) {
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
-        })
-      },
-      exportData() {
-        if (this.activeName === 'first') {
-          this.form.module = 1;
-        } else {
-          this.form.module = 2;
-        }
-        let exportForm = {
-          keyword: this.form.keyword,
-          time: this.form.time,
-          status: this.form.status,
-          city: this.form.city,
-          operator_id: this.form.operator_id,
-          module: this.form.module
-        };
-        this.$http.get(globalConfig.server + 'repaire/download', {params: exportForm}).then((res) => {
-          if (res.data.code == '600201') {
+      });
+    },
+    //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
+    //右键参数
+    contextMenuParam(event) {
+      //param: user right param
+      let e = event || window.event; //support firefox contextmenu
+      this.show = false;
+      this.rightMenuX =
+        e.clientX +
+        document.documentElement.scrollLeft -
+        document.documentElement.clientLeft;
+      this.rightMenuY =
+        e.clientY +
+        document.documentElement.scrollTop -
+        document.documentElement.clientTop;
+      event.preventDefault();
+      event.stopPropagation();
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+    exportData() {
+      if (this.activeName === "first") {
+        this.form.module = 1;
+      } else {
+        this.form.module = 2;
+      }
+      let exportForm = {
+        keyword: this.form.keyword,
+        time: this.form.time,
+        status: this.form.status,
+        city: this.form.city,
+        operator_id: this.form.operator_id,
+        module: this.form.module
+      };
+      this.$http
+        .get(globalConfig.server + "repaire/download", { params: exportForm })
+        .then(res => {
+          if (res.data.code == "600201") {
             this.$notify.warning({
-              title: '警告',
+              title: "警告",
               message: res.data.msg
             });
             return;
           } else {
-            this.$http.get(globalConfig.server + 'repaire/export', {
-              responseType: 'arraybuffer',
-              params: exportForm
-            }).then((res) => { // 处理返回的文件流
-              if (!res.data) {
-                return;
-              }
-              let url = window.URL.createObjectURL(new Blob([res.data]));
-              let link = document.createElement('a');
-              link.style.display = 'a';
-              link.href = url;
-              link.setAttribute('download', 'excel.xls');
-              document.body.appendChild(link);
-              link.click();
-            });
+            this.$http
+              .get(globalConfig.server + "repaire/export", {
+                responseType: "arraybuffer",
+                params: exportForm
+              })
+              .then(res => {
+                // 处理返回的文件流
+                if (!res.data) {
+                  return;
+                }
+                let url = window.URL.createObjectURL(new Blob([res.data]));
+                let link = document.createElement("a");
+                link.style.display = "a";
+                link.href = url;
+                link.setAttribute("download", "excel.xls");
+                document.body.appendChild(link);
+                link.click();
+              });
           }
         });
-
-      }
     }
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #clientContainer {
-    .blue{
-      color:blue;
-    }
-    .orange{
-      color: orange;
-    }
+#clientContainer {
+  .blue {
+    color: blue;
   }
+  .orange {
+    color: orange;
+  }
+}
 </style>
