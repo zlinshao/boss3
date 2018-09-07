@@ -21,7 +21,7 @@
       :data="tableData"
       style="width: 100%">
       <el-table-column
-        prop="created_at"
+        prop="create_time"
         label="时间">
       </el-table-column>
       <el-table-column
@@ -29,7 +29,7 @@
         label="申请人">
       </el-table-column>
       <el-table-column
-        prop="account"
+        prop="contact"
         label="申请账号">
       </el-table-column>
       <el-table-column
@@ -118,9 +118,8 @@
         let params = {
           plant_id: data.plant_id,
           phone: data.phone,
-          description: data.description,
-          name: data.name,
           type: val,
+          id: data.id,
         };
         let text = '';
         if (val === 1) {
@@ -133,7 +132,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(this.url + 'bapi/plant/decrypt', params).then((res) => {
+          this.$http.post(this.url + 'bapi/plant/edit', params).then((res) => {
             if (res.data.code === '20020') {
               this.phoneList();
               this.$notify.success({
