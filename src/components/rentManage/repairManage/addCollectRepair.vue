@@ -3,10 +3,10 @@
     <el-dialog :close-on-click-modal="false" title="修改维修单" :visible.sync="addCollectRepairDialogVisible" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
-          <el-row>
+          <el-row>    
             <el-col :span="8">
-              <el-form-item label="客户姓名" required>
-                <el-input v-model="form.customer_name"></el-input>
+              <el-form-item label="合同编号">
+                <el-input v-model="form.repaire_num" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -24,9 +24,9 @@
             </el-col>
             </el-row>
             <el-row>
-             <el-col :span="8">
-              <el-form-item label="合同编号">
-                <el-input v-model="form.repaire_num" disabled></el-input>
+              <el-col :span="8">
+              <el-form-item label="客户姓名" required>
+                <el-input v-model="form.customer_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -67,16 +67,17 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <el-form-item label="完成时间">
                 <el-date-picker
-                  v-model="form.repair_time"
                   type="datetime"
-                  placeholder="选择日期时间"
-                  value-format="yyyy-MM-dd hh:mm:ss">
+                  v-model="form.repair_time"
+                  placeholder="请选择日期"
+                  value-format="yyyy-MM-dd hh:mm:ss"
+                  default-time="12:00:00">
                 </el-date-picker>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="8">
                 <el-form-item label="紧急程度" required>
                   <el-select clearable placeholder="请选择紧急程度" value="" v-model="form._emergency">
@@ -125,6 +126,7 @@
         form: {
           id: '',  //维修单id
           city: '',
+          repair_time: "",
           customer_name: '',  //客户姓名
           sex: null,     //性别
           customer_mobile: '',  //客户电话
@@ -159,6 +161,9 @@
         { id: 2, value: "紧急" }
       ]
       };
+    },
+    mounted() {
+      // this.getDetail();
     },
     watch: {
       addCollectRepairDialog(val) {
@@ -225,13 +230,17 @@
               this.form.repaire_num = repairDetail.repaire_num;
               this.form.liable_name = repairDetail.liable_name
               this.form.id = repairDetail.id;
-              // this.form.contract_id = repairDetail.contract_id;
-            }
-            
+            }           
           }
         });
       },
       confirmAdd() {
+        if(this.form._emergency ==="一般"){
+                this.form.emergency = 1;              
+        }
+        if(this.form._emergency === "紧急"){
+            this.form.emergency = 2;
+        }
         this.$http.put(globalConfig.server + 'repaire/update/'+this.form.id, this.form).then((res) => {
           if (res.data.code === '600200') {
             this.$notify.success({

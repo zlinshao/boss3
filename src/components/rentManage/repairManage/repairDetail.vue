@@ -42,7 +42,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="已完成时间">
+                <el-form-item label="完成时间" v-if="repaires.status === 600 ? isfinish_time : !isfinish_time">
                   <div class="content">
                     <span v-if="repairDetail.finish_time">{{repairDetail.finish_time}}</span>
                     <span v-if="!repairDetail.finish_time">暂无</span>
@@ -94,7 +94,17 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="房东电话">
+                <el-form-item label="前租客姓名" v-if="repairDetail.liable ==='前租客'">
+                  <div class="content">
+                    <span v-if="repairDetail.liable_name">{{repairDetail.liable_name}}</span>
+                    <span v-if="!repairDetail.liable_name">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+              <el-form-item label="房东电话">
                   <div class="content">
                     <span v-if="repairDetail.landlord_mobile">{{repairDetail.landlord_mobile}}</span>
                     <span v-if="!repairDetail.landlord_mobile">暂无</span>

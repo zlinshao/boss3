@@ -352,7 +352,7 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId"
+    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :contract="houseData"
                       @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"
                    @close="closeModal"></AddRentRepair>
@@ -406,7 +406,7 @@ export default {
       activeName: "first",
       addCollectRepairDialog: false,
       addRentRepairDialog: false,
-      collectRepairId: "",
+      houseData: {},
       rentRepairId: "",
       repairDetailDialog: false,
       repairId: "",
@@ -536,7 +536,6 @@ export default {
       this.addCollectRepairDialog = false;
       this.addRentRepairDialog = false;
       this.repairDetailDialog = false;
-      this.collectRepairId = "";
       this.rentRepairId = "";
       this.organizeVisible = false;
       if (this.activeName == "first") {
@@ -586,6 +585,7 @@ export default {
     },
     dblClickTable(row, event) {
       this.repairId = row.id;
+      this.houseData = row;
       this.repairDetailDialog = true;
     },
     //右键

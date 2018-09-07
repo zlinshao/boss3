@@ -4,9 +4,9 @@
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="客户姓名" required>
-                <el-input v-model="form.customer_name"></el-input>
+              <el-col :span="8">
+              <el-form-item label="合同编号">
+                <el-input v-model="form.repaire_num" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -24,9 +24,9 @@
             </el-col>
             </el-row>
             <el-row>
-             <el-col :span="8">
-              <el-form-item label="合同编号">
-                <el-input v-model="form.repaire_num" disabled></el-input>
+              <el-col :span="8">
+              <el-form-item label="客户姓名" required>
+                <el-input v-model="form.customer_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -68,7 +68,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
+          <!-- <el-col :span="8">
               <el-form-item label="完成时间">
                 <el-date-picker
                   v-model="form.repair_time"
@@ -77,7 +77,7 @@
                   value-format="yyyy-MM-dd hh:mm:ss">
                 </el-date-picker>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="8">
                 <el-form-item label="紧急程度" required>
                   <el-select clearable placeholder="请选择紧急程度" value="" v-model="form._emergency">
@@ -116,7 +116,7 @@
   import Organization from '../../common/organization';
 
   export default {
-    props: ['addRentRepairDialog', 'editId'],
+    props: ['addRentRepairDialog','editId'],
     components: {Organization},
     data() {
       return {
@@ -126,6 +126,7 @@
         form: {
           id: '',
           customer_name: '',  //客户姓名
+          repair_time : '',
           // contract_id: "",// 合同id
           city: '',
           liable_name:"", // 前租客姓名
@@ -160,6 +161,9 @@
         { id: 2, value: "紧急" }
       ]
       };
+    },
+    mounted() {
+      // this.getDetail();
     },
     watch: {
       addRentRepairDialog(val) {
@@ -197,12 +201,10 @@
         this.$http.get(globalConfig.server + 'repaire/info/' + this.editId).then((res) => {
           if (res.data.code === "600200") {
             let repairDetail = res.data.data;
-            console.log(repairDetail.followor);
-            
             if (repairDetail) {
               this.form.customer_name = repairDetail.customer_name;
               this.form.sex = repairDetail.sex;
-              this.form.city = repairDetail.city_name;
+              this.form.city = repairDetail.city;
               this.form.customer_mobile = repairDetail.customer_mobile;
               this.form.content = repairDetail.content;
               this.form.repair_time = repairDetail.repair_time;
@@ -221,12 +223,17 @@
               this.form.house_name = repairDetail.contract.house.name; 
               this.form.liable_name = repairDetail.liable_name; 
               this.form.id = repairDetail.id;
-              // this.form.contract_id = repairDetail.contract_id;
             }
           }
         });
       },
       confirmAdd() {
+        if(this.form._emergency ==="一般"){
+                this.form.emergency = 1;   
+        }
+        if(this.form._emergency === "紧急"){
+            this.form.emergency = 2;
+        }
         this.$http.put(globalConfig.server + 'repaire/update/'+this.form.id, this.form).then((res) => {
           if (res.data.code === '600200') {
             this.$notify.success({

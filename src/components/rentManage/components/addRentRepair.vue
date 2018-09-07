@@ -16,7 +16,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='cities[contract.city]' disabled></el-input>
+                <el-input v-model='cities[form.city]' disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -49,7 +49,7 @@
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <el-form-item label="下次跟进时间">
                 <el-date-picker type="datetime"
                                 v-model="form.estimated_time"
@@ -57,14 +57,12 @@
                                 value-format="yyyy-MM-dd hh:mm:ss"
                                 default-time="12:00:00"></el-date-picker>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="8">
               <el-form-item label="房东电话">
                 <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="初步认责人">
                 <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable @change="setchange">
@@ -72,9 +70,11 @@
                 </el-select>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8" v-if="isflag">
               <el-form-item label="前租客姓名" required>
-                <el-input></el-input>
+                <el-input v-model="form.liable_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="form.status===600">
@@ -153,7 +153,8 @@ export default {
         repair_money: "", //维修金额
         remark: "", //备注
         status: "", //维修状态
-        person_liable: "", //认责人
+        liable_name : "",// 前租客姓名
+        person_liable: "", //初步认责人
         module: 2, //租房
         follow_id: "", //跟进人id
         final_liable: "", //最终认责人
@@ -197,10 +198,11 @@ export default {
     contract(val) {
       this.form.contract_id = val.contract_id;
       this.form.contract_number = val.contract_number;
-      this.form.contract_type = val.type;
+      // this.form.contract_type = val.type;
       this.form.address = val.address;
       this.form.city = val.city;
       this.form.landlord_mobile = val.phone;
+      this.form.liable_name = this.form.person_liable;
     },
     emergency(val) {
       this.slist = this.emergencys[val];
@@ -233,10 +235,12 @@ export default {
         //  遍历城市  匹配与合同ID相同的城市名
         for (let i = 0; i < res.data.length; i++) {
           this.cities[res.data[i].variable.city_id] = res.data[i].dictionary_name;
+          this.form.city = res.data[i].id;
         }  
       });
     },
     confirmAdd() {
+      this.form.city_name = cities[form.city];
       if (this.form._emergency === "一般") {
         this.form.emergency = 1;
       }
@@ -268,7 +272,7 @@ export default {
         module: 2, //租房
         contract_id: this.contract.contract_id, //合同Id
         contract_number: this.contract.contract_number, //合同编号
-        // contract_type: this.contract.type, //合同类型
+        contract_type: this.contract.type, //合同类型
         address: this.form.address, //房屋地址
         customer_name: "", //客户姓名
         sex: null, //性别
