@@ -278,7 +278,7 @@
           </el-form-item>
 
           <el-form-item label="证件照片" required="">
-            <UpLoad :ID="'identify_photo'" :isClear="isClear" :editImage="identify_photos" @getImg="getImg"></UpLoad>
+            <UpLoad :ID="'identity_photo'" :isClear="isClear" :editImage="identity_photos" @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-row>
@@ -383,7 +383,7 @@
           screenshot_leader: [],        //领导截图 数组
           photo: [],                    //合同照片 数组
           property_photo: [],           //房产证照片
-          identify_photo: [],           //证件照片
+          identity_photo: [],           //证件照片
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
@@ -393,7 +393,7 @@
         screenshot_leader : {},
         photo : {},
         property_photos: {},            //房产证照片
-        identify_photos: {},            //证件照片
+        identity_photos: {},            //证件照片
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
@@ -512,8 +512,8 @@
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
 
-        this.identify_photos = this.getImgObject(data.identify_photo);
-        this.params.identify_photo = this.getImgIdArray(data.identify_photo);
+        this.identity_photos = this.getImgObject(data.identity_photo);
+        this.params.identity_photo = this.getImgIdArray(data.identity_photo);
 
         this.property_photos = this.getImgObject(data.property_photo);
         this.params.property_photo = this.getImgIdArray(data.property_photo);
@@ -637,8 +637,8 @@
           this.params.photo = val[1];
         } else if (val[0] === 'property_photo') {
           this.params.property_photo = val[1];
-        } else if (val[0] === 'identify_photo') {
-          this.params.identify_photo = val[1];
+        } else if (val[0] === 'identity_photo') {
+          this.params.identity_photo = val[1];
         }
       },
 
@@ -716,7 +716,7 @@
           screenshot_leader: [],        //领导截图 数组
           photo: [],                    //合同照片 数组
           property_photo: [],           //房产证照片
-          identify_photo: [],           //证件照片
+          identity_photo: [],           //证件照片
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
@@ -726,7 +726,7 @@
         this.screenshot_leader = {};
         this.photo = {};
         this.property_photos ={};         //房产证照片
-        this.identify_photos ={};         //证件照片
+        this.identity_photos ={};         //证件照片
 
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
