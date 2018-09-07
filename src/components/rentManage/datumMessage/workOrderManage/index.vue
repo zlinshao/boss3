@@ -478,7 +478,7 @@
         }
       },
       getDictionary() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/255').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/695').then((res) => {
           if (res.data.code === "30010") {
             this.dictionary = res.data.data;
             this.isDictionary = true;

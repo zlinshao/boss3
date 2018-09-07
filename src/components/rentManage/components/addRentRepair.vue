@@ -41,8 +41,8 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="跟进人" required>
-                <el-input v-model="follow_name" readonly  @focus="chooseStaff" placeholder="请选择跟进人">
+              <el-form-item label="下次跟进人" required>
+                <el-input v-model="follow_name" readonly  @focus="chooseStaff" placeholder="请选择下次跟进人">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="emptyStaff">清空</div>
                   </template>
@@ -59,28 +59,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-               <el-form-item label="维修状态">
-                <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="预计维修时间">
-                <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
-                                value-format="yyyy-MM-dd hh:mm:ss" default-time="12:00:00"></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="预计维修金额">
-                <el-input  v-model="form.repair_money" ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="维修师傅">
-                <el-input v-model="form.repair_master"></el-input>
+              <el-form-item label="房东电话">
+                <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -97,11 +77,6 @@
                 <el-input></el-input>
               </el-form-item>
             </el-col>
-             <el-col :span="8">
-              <el-form-item label="房东电话">
-                <el-input v-model="form.landlord_mobile"></el-input>
-              </el-form-item>
-            </el-col>
             <el-col :span="8" v-if="form.status===600">
               <el-form-item label="实际维修金额">
                 <el-input  v-model="form.real_money" ></el-input>
@@ -115,17 +90,14 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <!-- <el-row>
              <el-col :span="8">
               <el-form-item label="下次跟进人" required>
                 <el-input v-model="form.next_follow_id" readonly disabled>
-                  <!-- <template slot="append">
-                    <div style="cursor: pointer;" @click="emptyStaff">清空</div>
-                  </template> -->
                 </el-input>
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="16">
               <el-form-item label="维修内容">

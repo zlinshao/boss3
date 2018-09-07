@@ -28,7 +28,7 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="维修单编号">
+                <el-form-item label="合同编号">
                   <div class="content">
                     <span v-if="repairDetail.repaire_num">{{repairDetail.repaire_num}}</span>
                     <span v-if="!repairDetail.repaire_num">暂无</span>
@@ -78,36 +78,26 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="预计维修金额">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
-                    <span v-if="!repairDetail.repair_money">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="实际维修金额">
-                  <div class="content">
-                    <span v-if="repairDetail.real_money">{{repairDetail.real_money}}</span>
-                    <span v-if="!repairDetail.real_money">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="最终认责人">
-                  <div class="content">
-                    <span v-if="repairDetail.final_liabler">{{repairDetail.final_liabler}}</span>
-                    <span v-if="!repairDetail.final_liabler">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
                 <el-form-item label="初步认责人">
                   <div class="content">
                     <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
                     <span v-if="!repairDetail.liable">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="房屋地址">
+                  <div class="content">
+                    <span v-if="repairDetail.contract">{{repairDetail.contract.house.name}}</span>
+                    <span v-if="!repairDetail.contract">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="房东电话">
+                  <div class="content">
+                    <span v-if="repairDetail.landlord_mobile">{{repairDetail.landlord_mobile}}</span>
+                    <span v-if="!repairDetail.landlord_mobile">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -189,11 +179,11 @@
                   </div>
                 </el-form-item>
               </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="已完成时间" v-if="!isfinish_time">
+                  <el-col :span="12" v-if="repaires.status === 600 ? isfinish_time : !isfinish_time">
+                    <el-form-item label="已完成时间">
                       <div class="content" style="background-color:#fff">
-                        <el-input v-if="finish_time" v-model="item.finish_time" disabled></el-input>
-                        <el-input v-if="!finish_time" disabled value="暂无"></el-input>
+                        <el-input v-if="repairDetail.finish_time" v-model="repairDetail.finish_time" disabled></el-input>
+                        <el-input v-if="!repairDetail.finish_time" disabled value="暂无"></el-input>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -214,7 +204,7 @@
                 </el-form-item>
               </el-col>
                   <el-col :span="24">
-                    <el-form-item label="跟进结果">
+                    <el-form-item label="跟进结果" required>
                       <div class="content" style="background-color:#fff">
                         <el-input v-if="item.content" v-model="item.content" type="textarea" disabled></el-input>
                         <el-input v-if="!item.content" disabled value="暂无"></el-input>
@@ -280,7 +270,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="维修状态">
+                    <el-form-item label="维修状态" required>
                       <div class="content-append">
                            <el-select clearable placeholder="请选择维修状态" value="" v-model="city">
                             <el-option v-for="item in state_repair" :label="item.dictionary_name" :value="item.id"
@@ -365,7 +355,7 @@ export default {
     return {
       _thisId: "", //当前的ID 需要传递给后台
       organizationDialog: false,
-      isfinish_time : false,
+      isfinish_time : true,
       follow_name: "", //跟进人名字
       repairDetailDialogVisible: false,
       repairDetail: {},
@@ -437,9 +427,10 @@ export default {
             this.isflag = res.data.data.update;
             this._thisId = res.data.data.id;
             this.finish_time = res.data.data.finish_time;
-            if(this.finish_time){
+            this.repaires.status = res.data.data.status;
+            if(this.repaires.status !== 600){
               this.isfinish_time == true;
-            }
+            }        
           if(res.data.data.followor){
               this._follow_name = res.data.data.followor.name;
             }
@@ -478,8 +469,6 @@ export default {
     },
     editRepair(id) {
       this.editId = id;
-      console.log(this.editId);
-
       if (this.activeName === "first") {
         this.collectRepairDialog = true;
       } else {
@@ -545,6 +534,7 @@ export default {
       }
       this.setTime = y + "-" + m + "-" + d + " " + hh + ":" + mm + ":" + ss;
       this.follow_name = this._follow_name;
+      
       this.$http
         .post(
           globalConfig.server + "repaire/follow/" + this._thisId,
@@ -568,9 +558,11 @@ export default {
       let estimated_time_1 = this.$refs.estimated_time.displayValue;
       this.repaires.estimated_time = estimated_time_1.substring(0, 10);
       this.repaires.status = this.city;
-      setTimeout(() => {
-        this.$emit("close");
-      }, 1500);
+      if(this.repaires.content !== ""){   
+          setTimeout(() => {
+          this.$emit("close");
+        }, 1500);
+      }
     },
     close() {
       //  点击取消  关闭窗口
