@@ -636,7 +636,7 @@
     <!--收房续约-->
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" :collectContractId="collectContractId" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
-                 :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
+                 :houseData="houseData" @close="closeModal"></AddFollowUp>
 
     <!--退房-->
     <CollectVacation :vacationDialog="vacationDialog" :contractModule="contractModule"
@@ -900,8 +900,9 @@
         rentContractInfo: {},
         contractModule: '',
         contractOperateId: '',
+        contractCity: '',
         houseAddress: '',
-
+        houseData: {},
         activeName: 'OwnerInfoTab',    //tab name
         pay_way_dic: [],
         tabStatusChange: '',
@@ -1054,6 +1055,11 @@
         this.collectHouseId = row.house_id;
         this.collectContractId = row.contract_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
+        this.houseData = {
+          contract_id: row.contract_id,
+          houseName: row.address,
+          city: row.city,
+        };
         this.contractModule = '1';
         this.collectContract = row;
         this.lists = [
@@ -1155,7 +1161,7 @@
         this.ToActiveName = "second";
         this.addReturnInfo = row;
         this.rentContractId = row.contract_id;
-        this.contractOperateId = row.contract_id;   //通用合同ID
+        this.contractOperateId = row.contract_id;
         this.collectHouseId = row.house_id;
         this.houseAddress = row.address;
         this.contractModule = '2';
@@ -1461,7 +1467,7 @@
           this.tabStatusChange = 'repair';
         }else if (val === 'reimbursement') {
           this.tabStatusChange = 'reimbursement';
-        }   
+        }
       },
 
 
