@@ -312,7 +312,7 @@
                   </el-form-item>
                 </el-col>
                   <el-col :span="24">
-                    <el-form-item label="跟进结果">
+                    <el-form-item label="跟进结果" required>
                       <div class="content-append">
                         <el-input type="textarea" v-model="repaires.content"></el-input>
                       </div>

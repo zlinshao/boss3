@@ -14,9 +14,29 @@
                 <el-input v-model="form.house_name"></el-input>
               </el-form-item>
             </el-col>
+             <el-col :span="8">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            </el-row>
+            <el-row>
+             <el-col :span="8">
+              <el-form-item label="合同编号">
+                <el-input v-model="form.repaire_num" disabled></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="8">
               <el-form-item label="回复电话" required>
                 <el-input v-model="form.customer_mobile"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="房东电话">
+                <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -30,16 +50,6 @@
                 </el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="8">
-              <el-form-item label="下次跟进时间">
-                <el-date-picker
-                  v-model="form.estimated_time"
-                  type="datetime"
-                  placeholder="选择日期时间"
-                  value-format="yyyy-MM-dd hh:mm:ss">
-                </el-date-picker>
-              </el-form-item>
-            </el-col> -->
             <el-col :span="8">
               <el-form-item label="初步认责人">
                 <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
@@ -50,11 +60,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
+              <el-form-item label="前租客姓名" v-if="form.person_liable === 692">
+                <el-input v-if="form.liable_name" v-model="form.liable_name"></el-input>
+                <el-input v-if="!form.liable_name" value="暂无"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -76,42 +84,7 @@
                   </el-select>
                 </el-form-item>
             </el-col>
-            <!-- <el-col :span="8">
-              <el-form-item label="维修金额">
-                <el-input v-model="form.repair_money"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="维修师傅">
-                <el-input v-model="form.repair_master"></el-input>
-              </el-form-item>
-            </el-col> -->
           </el-row>
-          <!-- <el-row>
-            <el-col :span="8">
-              <el-form-item label="维修状态">
-                <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id"
-                             :value="item.id">{{item.dictionary_name}}
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" v-if="form.status===600">
-              <el-form-item label="实际维修金额">
-                <el-input v-model="form.real_money"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" v-if="form.status===600">
-              <el-form-item label="最终认责人">
-                <el-select v-model="form.final_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
-                             :value="item.id">{{item.dictionary_name}}
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row> -->
           <el-row>
             <el-col :span="16">
               <el-form-item label="维修内容">
@@ -156,12 +129,14 @@
           sex: null,     //性别
           customer_mobile: '',  //客户电话
           content: '',  //维修内容
-          repair_time: '',  //维修时间
-          repair_master: '',  //维修师傅
-          repair_money: '',   //维修金额
+          // repair_time: '',  //维修时间
+          // repair_master: '',  //维修师傅
+          // repair_money: '',   //维修金额
           remark: '',  //备注
           status: '',  //维修状态
+          liable_name : '',//前租客姓名
           person_liable: '', //认责人
+          landlord_mobile:"",//房东电话
           module: 1, //收房
           follow_id: '',  //跟进人id
           final_liable: '', //最终认责人
@@ -170,6 +145,8 @@
           emergency: "", // 紧急程度
          _emergency: "", // 紧急程度编号
           house_name:"",//房屋地址
+          repaire_num:"",//合同编号
+          // contract_id: "",// 合同id
         },
         follow_name: '',
         repairStatusCategory: [],
@@ -243,14 +220,19 @@
               this.form.final_liable = Number(repairDetail.final_liable);
               this.form.real_money = repairDetail.real_money;
               this.form.estimated_time = repairDetail.estimated_time;
-              this.form.house_name = repairDetail.contract.house.name;    
+              this.form.house_name = repairDetail.contract.house.name;  
+              this.form.landlord_mobile = repairDetail.landlord_mobile;
+              this.form.repaire_num = repairDetail.repaire_num;
+              this.form.liable_name = repairDetail.liable_name
+              this.form.id = repairDetail.id;
+              // this.form.contract_id = repairDetail.contract_id;
             }
             
           }
         });
       },
       confirmAdd() {
-        this.$http.put(globalConfig.server + 'repaire/update', this.form).then((res) => {
+        this.$http.put(globalConfig.server + 'repaire/update/'+this.form.id, this.form).then((res) => {
           if (res.data.code === '600200') {
             this.$notify.success({
               title: '成功',
