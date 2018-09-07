@@ -110,16 +110,14 @@
           {id: 2, label: "紧急"}
         ],
         params: {
-          city_name: "",  //所属城市
-          city: '',  //城市ID
+          city: '',                        //城市ID
           contract_id: '',                 //'合同id',
           module: '',                      //'关联模型', 1-收房  2-租房
           matters: '',                     // 跟进事项
           type: '',                        //'事件类型',
           follow_id: '',                   //'跟进人',
           follow_status: '',
-          expect_time: '',                 //'期待维修时间',
-          // expected_finish_time: '',        //'下次跟进时间',
+          expected_finish_time: '',        //'下次跟进时间',
           follow_time: '',                 //'跟进时间',
           image_pic: [],
           mobile: '',
@@ -246,8 +244,7 @@
           type: '',                        //'事件类型',
           follow_id: '',                   //'跟进人',
           follow_status: '',
-          expect_time: '',                 //'期待维修时间',
-          // expected_finish_time: '',        //'下次跟进时间',
+          expected_finish_time: '',        //'下次跟进时间',
           follow_time: '',                 //'跟进时间',
           image_pic: [],
           mobile: '',
