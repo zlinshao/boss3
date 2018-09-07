@@ -132,7 +132,6 @@
         type: '',
         upStatus: false,
         isDictionary: false,
-        cityCategory: [],
         cities: {},
       };
     },
@@ -154,41 +153,35 @@
       },
       houseData(val) {
         this.params.contract_id = val.contract_id;
-        this.params.city = val.city;
+        this.cityCategory.forEach((res) => {
+          if (res.variable.city_id === val.city) {
+            this.params.city = res.id;
+          }
+        })
       },
       contractModule(val) {
         this.params.module = val;
       }
     },
     mounted() {
-      this.dictionary(306, 1).then((res) => {
-        res.data.forEach((item) => {
-          this.cities[item.variable.city_id] = item.dictionary_name;
-        });
-      });
+      this.getDictionary();
     },
     methods: {
       getDictionary() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/695').then((res) => {
-          if (res.data.code === "30010") {
-            this.dictionaries = res.data.data;
-            this.isDictionary = true;
-          }
+        this.dictionary(306, 1).then((res) => {
+          res.data.forEach((item) => {
+            this.cityCategory = res.data;
+            this.cities[item.id] = item.dictionary_name;
+          });
         });
-        this.$http.get(globalConfig.server + 'setting/dictionary/335').then((res) => {
-          if (res.data.code === "30010") {
-            this.dictionary_follow = res.data.data;
-            this.isDictionary = true;
-          }
+        this.dictionary(695, 1).then((res) => {
+          this.dictionaries = res.data;
+          this.isDictionary = true;
         });
-        this.$http.get(globalConfig.server + 'setting/dictionary/306', {params: {status: 1}}).then((res) => {
-          if (res.data.code === "30010") {
-            this.cityCategory = res.data.data;
-            this.isDictionary = true;
-            //  遍历城市  匹配与合同ID相同的城市名
-          }
+        this.dictionary(335, 1).then((res) => {
+          this.dictionary_follow = res.data;
+          this.isDictionary = true;
         });
-
       },
       //调出选人组件
       openOrganizeModal() {

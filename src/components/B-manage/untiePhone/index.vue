@@ -48,9 +48,24 @@
             <el-button @click="operations(scope.row, 1)" type="primary" size="mini">解绑</el-button>
             <el-button @click="operations(scope.row, 2)" type="danger" size="mini">拒绝</el-button>
           </div>
+          <div v-if="scope.row.type === 1" style="color: #409EFF;">
+            已解绑
+          </div>
+          <div v-if="scope.row.type === 3" style="color: red;">
+            已拒绝
+          </div>
         </template>
       </el-table-column>
     </el-table>
+    <div class="block pages">
+      <el-pagination
+        @current-change="search"
+        :current-page="params.page"
+        :page-size="params.limit"
+        layout="total, prev, pager, next, jumper"
+        :total="paging">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -63,8 +78,11 @@
         emptyContent: ' ',
         examineLoading: false,
         tableData: [],
+        paging: 20,
         params: {
           keywords: '',
+          page: 1,
+          limit: 8,
         },
       }
     },
@@ -75,16 +93,20 @@
     },
     watch: {},
     methods: {
-      search(page) {
-
+      search(val) {
+        this.params.page = val;
+        this.phoneList();
       },
       phoneList() {
         this.emptyContent = ' ';
         this.examineLoading = true;
-        this.$http.get(this.url + 'bapi/plant/geterrornum').then((res) => {
+        this.$http.get(this.url + 'bapi/plant/geterrornum', {
+          params: this.params,
+        }).then((res) => {
           this.examineLoading = false;
           if (res.data.code === '20020') {
-            this.tableData = res.data.data;
+            this.paging = res.data.data.total;
+            this.tableData = res.data.data.data;
           } else {
             this.tableData = [];
             this.paging = 0;
@@ -98,22 +120,36 @@
           phone: data.phone,
           description: data.description,
           name: data.name,
-          contact: data.contact,
           type: val,
         };
-        this.$http.post(this.url + 'bapi/plant/decrypt', params).then((res) => {
-          if (res.data.code === '20020') {
-            this.$notify.success({
-              title: "成功",
-              message: res.data.msg
-            });
-          } else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            });
-          }
-        })
+        let text = '';
+        if (val === 1) {
+          text = '同意'
+        } else {
+          text = '拒绝'
+        }
+        this.$confirm('此操作将' + text + '解绑手机, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.url + 'bapi/plant/decrypt', params).then((res) => {
+            if (res.data.code === '20020') {
+              this.phoneList();
+              this.$notify.success({
+                title: "成功",
+                message: res.data.msg,
+              });
+            } else {
+              this.$notify.warning({
+                title: "警告",
+                message: res.data.msg,
+              });
+            }
+          })
+        }).catch(() => {
+
+        });
       }
     },
   }
