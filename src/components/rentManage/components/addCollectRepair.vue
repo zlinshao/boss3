@@ -16,7 +16,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='cities[form.city]'></el-input>
+                <el-input v-model='cities[contract.city]' disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -41,8 +41,8 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="跟进人" required>
-                <el-input v-model="follow_name" readonly @focus="chooseStaff" placeholder="请选择跟进人">
+              <el-form-item label="下次跟进人" required>
+                <el-input v-model="follow_name" readonly @focus="chooseStaff" placeholder="请选择下次跟进人">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="emptyStaff">清空</div>
                   </template>
@@ -55,35 +55,13 @@
                                 value-format="yyyy-MM-dd hh:mm:ss" default-time="12:00:00"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="维修状态">
-                <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id"
-                             :value="item.id">{{item.dictionary_name}}
-                  </el-option>
-                </el-select>
+             <el-col :span="8">
+              <el-form-item label="房东电话">
+                <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="预计维修时间">
-                <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
-                                value-format="yyyy-MM-dd hh:mm:ss" default-time="12:00:00"></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="预计维修金额">
-                <el-input v-model="form.repair_money"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="维修师傅">
-                <el-input v-model="form.repair_master"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
+          <el-row>   
             <el-col :span="8">    
               <el-form-item label="初步认责人">
                 <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable @change="setchange">
@@ -97,12 +75,7 @@
               <el-form-item label="前租客姓名" required>
                 <el-input></el-input>
               </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="房东电话">
-                <el-input v-model="form.landlord_mobile"></el-input>
-              </el-form-item>
-            </el-col>
+            </el-col>         
             <el-col :span="8" v-if="form.status===600">
               <el-form-item label="实际维修金额">
                 <el-input v-model="form.real_money"></el-input>
@@ -118,17 +91,14 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <!-- <el-row>
                <el-col :span="8">
               <el-form-item label="下次跟进人" required>
                 <el-input v-model="form.next_follow_id" readonly disabled>
-                  <!-- <template slot="append">
-                    <div style="cursor: pointer;" @click="emptyStaff">清空</div>
-                  </template> -->
                 </el-input>
               </el-form-item>
-            </el-col>
-          </el-row>
+            </el-col>          
+          </el-row> -->
           <el-row>
             <el-col :span="16">
               <el-form-item label="维修内容">
@@ -199,7 +169,6 @@ export default {
       repairStatusCategory: [],
       responsiblePersonCategory: [],
       // sexCategory: [],
-      cityCategory: [],
       renter: "",
       emergencys: [
         // 紧急程度
@@ -209,7 +178,9 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+     this.getDictionary();
+  },
   watch: {
     addCollectRepairDialog(val) {
       this.addCollectRepairDialogVisible = val;
@@ -221,7 +192,6 @@ export default {
         this.initial(); // 清空文本框
       } else {
         // 打开模态框时
-        this.getDictionary();
         this.setchange();
       }
     },
@@ -256,8 +226,6 @@ export default {
         this.responsiblePersonCategory = res.data;
       });
       this.dictionary(306, 1).then(res => {
-        //城市
-        this.cityCategory = res.data;
         //  遍历城市  匹配与合同ID相同的城市名
         for (let i = 0; i < res.data.length; i++) {
           this.cities[res.data[i].variable.city_id] = res.data[i].dictionary_name;

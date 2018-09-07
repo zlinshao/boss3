@@ -10,12 +10,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="客户性别" required>
-                <el-radio-group v-model="form.sex">
-                  <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">
-                    {{item.dictionary_name}}
-                  </el-radio>
-                </el-radio-group>
+              <el-form-item label="房屋地址" required>
+                <el-input v-model="form.house_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -26,15 +22,15 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="跟进人" required>
-                <el-input v-model="follow_name" readonly @focus="chooseStaff" placeholder="请选择跟进人">
+              <el-form-item label="下次跟进人" required>
+                <el-input v-model="follow_name" readonly @focus="chooseStaff" placeholder="请选择下次跟进人">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="emptyStaff">清空</div>
                   </template>
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <el-form-item label="下次跟进时间">
                 <el-date-picker
                   v-model="form.estimated_time"
@@ -43,7 +39,7 @@
                   value-format="yyyy-MM-dd hh:mm:ss">
                 </el-date-picker>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="8">
               <el-form-item label="初步认责人">
                 <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
@@ -53,10 +49,18 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="维修时间">
+              <el-form-item label="完成时间">
                 <el-date-picker
                   v-model="form.repair_time"
                   type="datetime"
@@ -66,6 +70,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
+                <el-form-item label="紧急程度" required>
+                  <el-select clearable placeholder="请选择紧急程度" value="" v-model="form._emergency">
+                    <el-option v-for="item in emergencys" :value="item.value" :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+            </el-col>
+            <!-- <el-col :span="8">
               <el-form-item label="维修金额">
                 <el-input v-model="form.repair_money"></el-input>
               </el-form-item>
@@ -74,9 +85,9 @@
               <el-form-item label="维修师傅">
                 <el-input v-model="form.repair_master"></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
-          <el-row>
+          <!-- <el-row>
             <el-col :span="8">
               <el-form-item label="维修状态">
                 <el-select v-model="form.status" placeholder="请选择维修状态">
@@ -100,24 +111,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-                <el-form-item label="紧急程度" required>
-                  <el-select clearable placeholder="请选择紧急程度" value="" v-model="form._emergency">
-                    <el-option v-for="item in emergencys" :value="item.value" :key="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-            </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="16">
               <el-form-item label="维修内容">
@@ -174,7 +168,8 @@
           real_money: '',  //实际维修金额
           estimated_time: '', //下次跟进时间
           emergency: "", // 紧急程度
-         _emergency: "" // 紧急程度编号
+         _emergency: "", // 紧急程度编号
+          house_name:"",//房屋地址
         },
         follow_name: '',
         repairStatusCategory: [],
@@ -243,12 +238,14 @@
               this.form.status = repairDetail.status;
               this.form.remark = repairDetail.remark;
               this.form.person_liable = repairDetail.person_liable;
-              this.follow_name = repairDetail.followor;
+              this.follow_name = repairDetail.followor.name;
               this.form.follow_id = repairDetail.follow_id;
               this.form.final_liable = Number(repairDetail.final_liable);
               this.form.real_money = repairDetail.real_money;
               this.form.estimated_time = repairDetail.estimated_time;
+              this.form.house_name = repairDetail.contract.house.name;    
             }
+            
           }
         });
       },
