@@ -6,24 +6,24 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='params.city' disabled></el-input>
+                <el-input v-model='cities[params.city]' disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="房屋地址">
-                <el-input></el-input>
+                <el-input v-model="houseData.houseName" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="回复电话">
-                <el-input  v-model="params.mobile" ></el-input>
+                <el-input v-model="params.mobile"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="下次跟进人" required="">
-                <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
+                <el-input v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -31,7 +31,8 @@
             <el-col :span="12">
               <el-form-item label="跟进状态">
                 <el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">
-                  <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -44,26 +45,29 @@
 
           </el-row>
           <el-row>
-             <el-col :span="12">
+            <el-col :span="12">
               <el-form-item label="工单类型" required="">
                 <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
-                  <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="下次跟进时间">
-                <el-date-picker type="datetime" placeholder="选择日期时间"
-                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
+              <el-form-item label="紧急程度" required="">
+                <el-select clearable v-model="params.emergency" placeholder="请选择" value="">
+                  <el-option v-for="item in optionsWithDisabled" :label="item.label" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-                <el-form-item label="紧急程度" required="">
-                  <el-cascader :options="optionsWithDisabled" placeholder='请选择紧急程度' :span="12"></el-cascader>
-                </el-form-item>
-            </el-col>
+            <!--<el-col :span="12">-->
+            <!--<el-form-item label="下次跟进时间">-->
+            <!--<el-date-picker type="datetime" placeholder="选择日期时间"-->
+            <!--value-format="yyyy-MM-dd HH:mm:ss"-->
+            <!--v-model="params.expected_finish_time"></el-date-picker>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
           </el-row>
           <el-row>
             <el-col :span="24">
@@ -93,151 +97,161 @@
 <script>
   import Organization from '../../common/organization.vue'
   import UPLOAD from '../../common/UPLOAD.vue'
+
   export default {
-    name:'addFollowUp',
-    props:['addFollowUpDialog','contractOperateId','contractModule'],
-    components:{Organization,UPLOAD},
+    name: 'addFollowUp',
+    props: ['addFollowUpDialog', 'houseData', 'contractModule'],
+    components: {Organization, UPLOAD},
     data() {
       return {
-        addFollowUpDialogVisible:false,
+        addFollowUpDialogVisible: false,
         optionsWithDisabled: [
-        { value: "yiban", label: "一般" },
-        { value: "jinji", label: "紧急" }
-      ],
-        params:{
-          city_name:"",  //所属城市
+          {id: 1, label: "一般"},
+          {id: 2, label: "紧急"}
+        ],
+        params: {
+          city_name: "",  //所属城市
           city: '',  //城市ID
-          contract_id : '',                 //'合同id',
-          module: '',                        //'关联模型', 1-收房  2-租房
-          matters:'',                        //跟进事项
-          type : '',                         //'事件类型',
-          follow_id : '',                    // '跟进人',
+          contract_id: '',                 //'合同id',
+          module: '',                      //'关联模型', 1-收房  2-租房
+          matters: '',                     // 跟进事项
+          type: '',                        //'事件类型',
+          follow_id: '',                   //'跟进人',
           follow_status: '',
-          expect_time  : '',                 //'期待维修时间',
-          expected_finish_time : '',         //'预计完成时间',
-          follow_time : '',                  //'跟进时间',
-          image_pic:[],
+          expect_time: '',                 //'期待维修时间',
+          // expected_finish_time: '',        //'下次跟进时间',
+          follow_time: '',                 //'跟进时间',
+          image_pic: [],
           mobile: '',
+          emergency: '',                   //紧急程度
         },
         organizationDialog: false,
         isClear: false,
-        dictionary:[],
-        dictionary_follow:[],
-        follow_name:'',
-        length:0,
-        type:'',
-        upStatus:false,
-        isDictionary:false,
+        dictionaries: [],
+        dictionary_follow: [],
+        follow_name: '',
+        length: 0,
+        type: '',
+        upStatus: false,
+        isDictionary: false,
         cityCategory: [],
+        cities: {},
       };
     },
-    watch:{
-      addFollowUpDialog(val){
+    watch: {
+      addFollowUpDialog(val) {
         this.addFollowUpDialogVisible = val;
       },
-      addFollowUpDialogVisible(val){
-        if(!val){
+      addFollowUpDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
-          this.isClear = true;  
-        }else {
+          this.isClear = true;
           this.init();
+        } else {
           this.isClear = false;
-          if(!this.isDictionary){
+          if (!this.isDictionary) {
             this.getDictionary();
           }
         }
       },
-      contractOperateId(val){
-        this.params.contract_id = val;
-        
+      houseData(val) {
+        this.params.contract_id = val.contract_id;
+        this.params.city = val.city;
       },
-      contractModule(val){
-        this.params.module = val;   
+      contractModule(val) {
+        this.params.module = val;
       }
     },
-    mounted(){
+    mounted() {
+      this.dictionary(306, 1).then((res) => {
+        res.data.forEach((item) => {
+          this.cities[item.variable.city_id] = item.dictionary_name;
+        });
+      });
     },
-    methods:{
-      getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/255').then((res) => {
-          if(res.data.code === "30010"){
-            this.dictionary = res.data.data;
-            this.isDictionary = true; 
+    methods: {
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/695').then((res) => {
+          if (res.data.code === "30010") {
+            this.dictionaries = res.data.data;
+            this.isDictionary = true;
           }
         });
-        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
-          if(res.data.code === "30010"){
+        this.$http.get(globalConfig.server + 'setting/dictionary/335').then((res) => {
+          if (res.data.code === "30010") {
             this.dictionary_follow = res.data.data;
-            this.isDictionary = true;  
+            this.isDictionary = true;
           }
         });
-        this.$http.get(globalConfig.server+'setting/dictionary/306',{params:{status:1}}).then((res) => {
-          if(res.data.code === "30010"){
+        this.$http.get(globalConfig.server + 'setting/dictionary/306', {params: {status: 1}}).then((res) => {
+          if (res.data.code === "30010") {
             this.cityCategory = res.data.data;
-            this.isDictionary = true;  
-            //  遍历城市  匹配与合同ID相同的城市名     
+            this.isDictionary = true;
+            //  遍历城市  匹配与合同ID相同的城市名
           }
         });
 
       },
       //调出选人组件
-      openOrganizeModal(){
+      openOrganizeModal() {
         this.organizationDialog = true;
         this.type = 'staff';
         this.length = 1;
       },
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         this.type = '';
         this.length = '';
         this.params.follow_id = val[0].id;
         this.follow_name = val[0].name;
       },
-      closeModal(){
+      closeModal() {
         this.organizationDialog = false
       },
-      getImgData(val){
+      getImgData(val) {
         this.params.image_pic = val[1];
         this.upStatus = val[2];
       },
       //确认提交
-      confirmAdd(){
-        if(this.upStatus){
+      confirmAdd() {
+        if (this.upStatus) {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传'
+            title: '警告',
+            message: '图片正在上传'
           })
-        }else {
-          this.$http.post(globalConfig.server+'customer/work_order',this.params).then((res) => {
-            if(res.data.code === '10010'){
+        } else {
+          this.$http.post(globalConfig.server + 'customer/work_order', this.params).then((res) => {
+            if (res.data.code === '10010') {
               this.$notify.success({
-                title:'成功',
-                message:res.data.msg
+                title: '成功',
+                message: res.data.msg
               });
-              this.$emit('close','workOrder')
+              this.$emit('close', 'workOrder');
               this.addFollowUpDialogVisible = false;
-            }else {
+            } else {
               this.$notify.warning({
-                title:'警告',
-                message:res.data.msg
+                title: '警告',
+                message: res.data.msg
               })
             }
           })
         }
       },
-      init(){
+      init() {
         this.params = {
-          contract_id : this.contractOperateId,
-          module : this.contractModule,
-          matters:'',                     //跟进事项
-          type : '',                      //'事件类型',
-          follow_id : '',                 // '跟进人',
-          expect_time  : '',              //'预计完成时间',
-          expected_finish_time : '',      //'预计完成时间',
-          follow_time : '',               //'跟进时间',
-//          follow_content : '',           //'跟进内容',
-          image_pic:[],
+          contract_id: this.houseData.contract_id,
+          module: this.contractModule,
+          city: '',
+          matters: '',                     // 跟进事项
+          type: '',                        //'事件类型',
+          follow_id: '',                   //'跟进人',
+          follow_status: '',
+          expect_time: '',                 //'期待维修时间',
+          // expected_finish_time: '',        //'下次跟进时间',
+          follow_time: '',                 //'跟进时间',
+          image_pic: [],
           mobile: '',
+          emergency: '',                   //紧急程度
         };
         this.follow_name = '';
         this.isClear = true;
@@ -247,7 +261,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #addFollowUp{
+  #addFollowUp {
 
   }
 

@@ -614,7 +614,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: 'B端管理',
-      icon: 'iconfont icon-c-',
+      icon: 'iconfont icon-b',
       children: [
         {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
       ]
