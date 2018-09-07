@@ -16,7 +16,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='form.city_name' disabled></el-input>
+                <el-input v-model='cities[contract.city]' disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -165,17 +165,20 @@ export default {
         emergency: "", // 紧急程度
         _emergency: "" // 紧急程度编号
       },
+      cities:{},
       follow_name: "", //跟进人名字
       repairStatusCategory: [],
       responsiblePersonCategory: [],
       sexCategory: [],
-      cityCategory: [],
       emergencys: [
         // 紧急程度
         { id: 1, value: "一般" },
         { id: 2, value: "紧急" }
       ]
     };
+  },
+  mounted() {
+    this.getDictionary();
   },
   watch: {
     addRentRepairDialog(val) {
@@ -188,7 +191,6 @@ export default {
         this.initial();
       } else {
         //模态框打开
-        this.getDictionary();
         this.setchange();
       }
     },
@@ -228,12 +230,10 @@ export default {
       });
       this.dictionary(306, 1).then(res => {
         //城市
-        this.cityCategory = res.data;
+        //  遍历城市  匹配与合同ID相同的城市名
         for (let i = 0; i < res.data.length; i++) {
-          if (this.form.city === res.data[i].variable.city_id) {
-            this.form.city_name = res.data[i].dictionary_name;
-          }
-        }
+          this.cities[res.data[i].variable.city_id] = res.data[i].dictionary_name;
+        }  
       });
     },
     confirmAdd() {
