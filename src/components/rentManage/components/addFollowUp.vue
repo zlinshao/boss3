@@ -47,7 +47,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="工单类型" required="">
-                <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
+                <el-select clearable v-model="params.type" placeholder="请选择" value="">
                   <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
@@ -114,7 +114,7 @@
           contract_id: '',                 //'合同id',
           module: '',                      //'关联模型', 1-收房  2-租房
           matters: '',                     // 跟进事项
-          type: '',                        //'事件类型',
+          type: '',                        //'工单类型',
           follow_id: '',                   //'跟进人',
           follow_status: '',
           expected_finish_time: '',        //'下次跟进时间',
@@ -240,15 +240,15 @@
           contract_id: this.houseData.contract_id,
           module: this.contractModule,
           city: '',
-          matters: '',                     // 跟进事项
-          type: '',                        //'事件类型',
+          matters: '',                     // 跟进事项,
+          type: '',                        //'工单类型',
           follow_id: '',                   //'跟进人',
           follow_status: '',
           expected_finish_time: '',        //'下次跟进时间',
           follow_time: '',                 //'跟进时间',
           image_pic: [],
           mobile: '',
-          emergency: '',                   //紧急程度
+          emergency: '',                   //'紧急程度',
         };
         this.follow_name = '';
         this.isClear = true;
