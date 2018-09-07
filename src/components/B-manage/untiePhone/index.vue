@@ -41,12 +41,13 @@
         label="原因">
       </el-table-column>
       <el-table-column
+      <el-table-column
         prop="type"
         label="操作">
         <template slot-scope="scope">
           <div v-if="scope.row.type === 2">
             <el-button @click="operations(scope.row, 1)" type="primary" size="mini">解绑</el-button>
-            <el-button @click="operations(scope.row, 2)" type="danger" size="mini">拒绝</el-button>
+            <el-button @click="operations(scope.row, 3)" type="danger" size="mini">拒绝</el-button>
           </div>
           <div v-if="scope.row.type === 1" style="color: #409EFF;">
             已解绑
