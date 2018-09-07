@@ -461,6 +461,9 @@
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
 
+        this.property_photos = this.getImgObject(data.property_photo);
+        this.params.property_photo = this.getImgIdArray(data.identity_photo);
+
         this.identity_photos = this.getImgObject(data.identity_photo);
         this.params.identity_photo = this.getImgIdArray(data.identity_photo);
 
