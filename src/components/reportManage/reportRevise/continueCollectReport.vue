@@ -416,6 +416,7 @@
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;
         this.params.house = data.house;
+        this.params.is_corp = String(data.is_corp.id);
 
         this.params.month = data.month;
         this.params.day = data.day === '0' ? '' : data.day;
