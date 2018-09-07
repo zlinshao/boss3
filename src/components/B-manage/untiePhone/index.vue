@@ -105,7 +105,7 @@
           params: this.params,
         }).then((res) => {
           this.examineLoading = false;
-          if (res.data.code === '20020') {
+          if (res.data.code === '20020' && res.data.data.data.length > 0) {
             this.paging = res.data.data.total;
             this.tableData = res.data.data.data;
           } else {
