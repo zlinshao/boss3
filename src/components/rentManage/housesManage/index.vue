@@ -75,17 +75,30 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-
                       <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name"
                                 placeholder="点击选择部门">
-
                       </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
-
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">预警状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.warning_status" clearable placeholder="请选择预警状态" value="">
+                        <el-option v-for="key in warning_status" :label="key.name" :value="key.id" :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -247,10 +260,10 @@
               <el-table-column
                 label="预警状态">
                 <template slot-scope="scope">
-                  <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
-                  <div v-else-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
-                  <div v-else-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
-                  <div v-else-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+                  <div v-if="scope.row.warning_status === 1" class="label success">正常</div>
+                  <div v-else-if="scope.row.warning_status === 2" class="label yellow">黄色预警</div>
+                  <div v-else-if="scope.row.warning_status === 3" class="label orange">橙色预警</div>
+                  <div v-else-if="scope.row.warning_status === 4" class="label red">红色预警</div>
                   <div v-else="">/</div>
                 </template>
               </el-table-column>
@@ -404,7 +417,22 @@
           org_id: '',
           is_nrcy: 0,
           is_lord: 1,
+          warning_status: '',
         },
+        warning_status:[
+          {
+            id: 2,
+            name: '黄色预警',
+          },
+          {
+            id: 3,
+            name: '橙色预警',
+          },
+          {
+            id: 4,
+            name: '红色预警',
+          }
+        ],
         department_name: '',
         length: '',
         type: '',
@@ -537,6 +565,7 @@
         this.formInline.org_id = '';
         this.department_name = '';
         this.formInline.status = '';
+        this.formInline.warning_status = '';
       },
       search(){
         this.isHigh = false;
@@ -747,6 +776,7 @@
           org_id: '',
           is_nrcy: 0,
           is_lord: 1,
+          warning_status: '',
         };
         this.department_name = '';
         this.getData();
