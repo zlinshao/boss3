@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.keywords" placeholder="跟进事项" @keyup.enter.native="search" clearable>
+              <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.native="search" clearable>
                 <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -30,7 +30,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="params.follow_status" placeholder="请选择跟进状态" value="">
+                      <el-select clearable v-model="params.follow_status" placeholder="请选择跟进状态">
                         <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -142,7 +142,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select clearable v-model="params.type" placeholder="请选择工单类型" value="">
-                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                        <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>
@@ -169,10 +169,18 @@
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 0)"
-                @row-click="clickTable"
                 @row-dblclick="dblClickTable"
-                @row-contextmenu='houseMenu'
                 style="width: 100%">
+                <el-table-column
+                  prop="emergency"
+                  label="紧急程度">
+                  <template slot-scope="scope">
+                  <span v-if="scope.row.emergency === 1"
+                        :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                    <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
+                    <span v-if="!scope.row.emergency">暂无</span>
+                  </template>
+                </el-table-column>
                 <el-table-column
                   prop="create_time"
                   label="创建时间">
@@ -238,11 +246,11 @@
                 </el-table-column>
                 <el-table-column
                   prop="follow"
-                  label="跟进人">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.follow">{{scope.row.follow}}</span>
-                      <span v-if="!scope.row.follow">暂无</span>
-                    </template>
+                  label="下次跟进人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.follow">{{scope.row.follow}}</span>
+                    <span v-if="!scope.row.follow">暂无</span>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   prop="follow_statuss"
@@ -270,9 +278,7 @@
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 0)"
-                @row-click="clickTable"
                 @row-dblclick="dblClickTable"
-                @row-contextmenu='houseMenu'
                 style="width: 100%">
                 <el-table-column
                   prop="create_time"
@@ -339,7 +345,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="follow"
-                  label="跟进人">
+                  label="下次跟进人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.follow">{{scope.row.follow}}</span>
                     <span v-if="!scope.row.follow">暂无</span>
@@ -384,11 +390,12 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
-                  @close='closeOrganize' @selectMember="selectMember"></Organization>
-    <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit"
-                  @close="closeModal"></AddChildTask>
-    <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail"
-                 @close="closeModal"></OrderDetail>
+                  @close='closeModal' @selectMember="selectMember"></Organization>
+
+    <!--<AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :module="params.module" :startAddResult="startEdit"-->
+    <!--@close="closeModal"></AddChildTask>-->
+
+    <OrderDetail :orderDetailDialog="orderDetailDialog" :wordData="wordData" @close="closeModal"></OrderDetail>
   </div>
 </template>
 
@@ -412,6 +419,7 @@
         statisticDate: '',
         activeName: 'first',
         totalNumber: 0,
+        currentTime: 48,
         params: {
           pages: 1,
           limit: 12,
@@ -433,15 +441,11 @@
         options: [],
         //模态框
         organizationDialog: false,
-        editWorkDialog: false,     //编辑
-        addChildTaskDialog: false,     //添加子任务框
         orderDetailDialog: false,
         isHigh: false,
-        activeId: '',
-        startEdit: false,
-        startAddResult: false,
-        startDetail: false,
-        dictionary: [],
+        wordData: {},
+
+        dictionaries: [],
         dictionary_follow: [],//  跟进状态字典
         workOrderStatus: ' ',
         workOrderLoading: false,
@@ -460,37 +464,34 @@
       }
       this.collectDatafunc();
     },
-    watch: {
-      activeName(val) {
-        if (val === 'first') {
-          this.module = 1;
-        } else {
-          this.module = 2;
+    watch: {},
+    methods: {
+      getTime(val) {
+        let data = [];
+        val === 1 ? (data = this.collectTableData) : (data = this.rentTableData);
+        for (let i = 0; i < data.length; i++) {
+          let foundTime = parseInt(Date.parse(data[i].create_time) / 1000 / 3600); //创建时间 的小时
+          let currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
+          //  判断 创建时间  到当前的时间 有没有 超过 48小时
+          data[i].overdueTime = currentTime - foundTime; //得到  创建的时间  距离现在 有多少小时
         }
       },
-    },
-    methods: {
       handleClick() {
-        if (this.activeName == "first") {
+        if (this.activeName === "first") {
           this.collectDatafunc();
-        }else if (this.activeName == "second") {
+        } else {
           this.rentDatafunc();
         }
       },
       getDictionary() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/695').then((res) => {
-          if (res.data.code === "30010") {
-            this.dictionary = res.data.data;
-            this.isDictionary = true;
-          }
+        this.dictionary(696, 1).then((res) => {
+          this.dictionaries = res.data;
+          this.isDictionary = true;
         });
-        this.$http.get(globalConfig.server + 'setting/dictionary/335').then((res) => {
-          if (res.data.code === "30010") {
-            this.dictionary_follow = res.data.data;
-            this.isDictionary = true;
-          }
+        this.dictionary(335, 1).then((res) => {
+          this.dictionary_follow = res.data;
+          this.isDictionary = true;
         });
-
       },
       //获取列表数据
       collectDatafunc() {
@@ -502,6 +503,7 @@
           if (res.data.code === '100200') {
             this.collectTableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
+            this.getTime(1);
           } else {
             this.workOrderStatus = '暂无数据';
             this.collectTableData = [];
@@ -518,6 +520,7 @@
           if (res.data.code === '100200') {
             this.rentTableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
+            this.getTime(2);
           } else {
             this.rentStatus = '暂无数据';
             this.rentTableData = [];
@@ -527,45 +530,38 @@
       },
 
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
         this.$store.dispatch('workOrderFilter', this.params);
       },
       handleCurrentChange(val) {
         this.params.pages = val;
-        if (this.activeName == "first") {
-          this.collectDatafunc();
-        } else if (this.activeName == "second") {
-          this.rentDatafunc();
-        }
+        this.handleClick();
         this.$store.dispatch('workOrderFilter', this.params);
-      },
-      clickTable(row, event, column) {
-        console.log(row, event, column)
       },
       //房屋右键
       houseMenu(row, event) {
-        this.activeId = row.id;
-        this.lists = [
-//          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
-        ];
+        // this.wordData.id = row.id;
+        // this.lists = [
+        //  {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+        //   {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
+        // ];
         this.contextMenuParam(event);
       },
-      dblClickTable(row, event) {
-        this.activeId = row.id;
-        this.startDetail = true;
+      dblClickTable(row) {
+        this.wordData.name = row.address ? row.address : '暂无';
+        this.wordData.id = row.id;
+        this.wordData.module = this.params.module;
         this.orderDetailDialog = true;
       },
       //右键回调事件
       clickEvent(index) {
         switch (index) {
-//          case 'edit' :
+          case 'edit' :
 //            this.editWorkDialog = true;
 //            this.startEdit = true;
-//            break;
+            break;
           case 'addChildren' :
-            this.addChildTaskDialog = true;
-            this.startEdit = true;
+            // this.addChildTaskDialog = true;
+            // this.startEdit = true;
             break;
         }
       },
@@ -575,32 +571,22 @@
       },
       //右键参数
       contextMenuParam(event) {
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
+        let e = event || window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
         event.preventDefault();
         event.stopPropagation();
         this.$nextTick(() => {
-          this.show = true
+          this.show = true;
         })
       },
-
-      closeModal(val) {
-//        this.editWorkDialog = false;
-        this.addChildTaskDialog = false;
+      // 关闭模态框
+      closeModal() {
         this.orderDetailDialog = false;
-        //操作状态
-//        this.startEdit = false;
-        this.startAddResult = false;
-        this.startDetail = false;
-        this.search();
-      },
-      closeOrganize() {
         this.organizationDialog = false;
       },
-      //调出选人组件
+      //选人组件
       openOrganizeModal() {
         this.organizationDialog = true;
         this.type = 'staff';
@@ -621,13 +607,8 @@
       },
       search() {
         this.isHigh = false;
-        if (this.activeName == "first") {
-          this.params.pages = 1;
-          this.collectDatafunc();
-        } else if (this.activeName == "second") {
-          this.params.pages = 1;
-          this.rentDatafunc();
-        }
+        this.params.pages = 1;
+        this.handleClick();
       },
       resetting() {
         this.params.follow_id = '';
@@ -642,7 +623,7 @@
       exportData() {
         this.$http.get(globalConfig.server + 'customer/work_order/export', {
           responseType: 'arraybuffer',
-          params: this.params
+          params: this.params,
         }).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
@@ -689,6 +670,15 @@
           }
         }
       }
+    }
+    .blue {
+      color: blue;
+    }
+    .orange {
+      color: orange;
+    }
+    .width {
+      width: 90px;
     }
   }
 </style>

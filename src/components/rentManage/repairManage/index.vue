@@ -51,7 +51,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select clearable v-model="form.status" placeholder="请选择维修状态" value="">
-                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                        <el-option v-for="item in serviceStatus" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>
@@ -102,7 +102,7 @@
         </div>
       </div>
       <div class="main">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName">
           <el-tab-pane label="收房维修记录" name="first">
             <el-table
               :data="collectTableData"
@@ -118,7 +118,8 @@
                 prop="emergency"
                 label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1" :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                  <span v-if="scope.row.emergency === 1"
+                        :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
                   <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
                   <span v-if="!scope.row.emergency">暂无</span>
                 </template>
@@ -135,8 +136,8 @@
                 prop="contract"
                 label="房屋地址">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.contract.house">{{scope.row.contract.house.name}}</span>
-                  <span v-if="!scope.row.contract.house">暂无</span>
+                  <span v-if="scope.row.contract && scope.row.contract.house">{{scope.row.contract.house.name}}</span>
+                  <span v-if="!scope.row.contract && scope.row.contract.house">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -200,18 +201,18 @@
                 label="维修状态">
                 <template slot-scope="scope">
                   <el-button class="width" v-if="scope.row.status === 600" type="success" size="mini">
-                      {{scope.row.statu}}
+                    {{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 596 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 596 && scope.row.status"
                              type="primary" size="mini"> {{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 598 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 598 && scope.row.status"
                              type="warning" size="mini"> {{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 599 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 599 && scope.row.status"
                              type="danger" size="mini"> {{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 601 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 601 && scope.row.status"
                              type="info" size="mini"> {{scope.row.statu}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
@@ -234,7 +235,8 @@
                 prop="emergency"
                 label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1" :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                  <span v-if="scope.row.emergency === 1"
+                        :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
                   <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
                   <span v-if="!scope.row.emergency">暂无</span>
                 </template>
@@ -247,12 +249,12 @@
                   <span v-if="!scope.row.create_time">暂无</span>
                 </template>
               </el-table-column>
-               <el-table-column
+              <el-table-column
                 prop="contract"
                 label="房屋地址">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.contract.house">{{scope.row.contract.house.name}}</span>
-                  <span v-if="!scope.row.contract.house">暂无</span>
+                  <span v-if="scope.row.contract && scope.row.contract.house">{{scope.row.contract.house.name}}</span>
+                  <span v-if="!scope.row.contract && scope.row.contract.house">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -315,19 +317,19 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus width" v-if="scope.row.status === 600" type="success" size="mini">
+                  <el-button class="width" v-if="scope.row.status === 600" type="success" size="mini">
                     {{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 596 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 596 && scope.row.status"
                              type="primary" size="mini">{{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 598 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 598 && scope.row.status"
                              type="warning" size="mini">{{scope.row.statu}}
                   </el-button>
-                  <el-button class="width" v-if="scope.row.status === 599 && scope.row.status "
+                  <el-button class="width" v-if="scope.row.status === 599 && scope.row.status"
                              type="danger" size="mini">{{scope.row.statu}}
                   </el-button>
-                  <el-button class="btnStatus width" v-if="scope.row.status === 601 && scope.row.status"
+                  <el-button class="width" v-if="scope.row.status === 601 && scope.row.status"
                              type="info" size="mini">{{scope.row.statu}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
@@ -337,388 +339,397 @@
           </el-tab-pane>
         </el-tabs>
         <div class="block pages">
-          <div class="left">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="form.page"
-              :page-size="12"
-              layout="total, prev, pager, next, jumper"
-              :total="totalNum">
-            </el-pagination>
-          </div>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="form.page"
+            :page-size="12"
+            layout="total, prev, pager, next, jumper"
+            :total="totalNum">
+          </el-pagination>
         </div>
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :contract="houseData"
-                      @close="closeModal"></AddCollectRepair>
-    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"
-                   @close="closeModal"></AddRentRepair>
-    <RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName"
-                  @close="closeModal"></RepairDetail>
+
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
                   @selectMember="selectMember"></organization>
+    <!--增加收房维修单-->
+    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :contract="houseData"
+                      @close="closeModal"></AddCollectRepair>
+    <!--增加租房维修单-->
+    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"
+                   @close="closeModal"></AddRentRepair>
+    <!--维修单详情-->
+    <RepairDetail :module="repairDetailDialog" :houseData="houseData" @close="closeModal"></RepairDetail>
   </div>
 </template>
 
 <script>
-import RightMenu from "../../common/rightMenu.vue";
-import AddCollectRepair from "../components/addCollectRepair";
-import AddRentRepair from "../components/addRentRepair";
-import RepairDetail from "./repairDetail";
-import Organization from "../../common/organization.vue";
+  import RightMenu from "../../common/rightMenu.vue";
+  import AddCollectRepair from "../components/addCollectRepair";
+  import AddRentRepair from "../components/addRentRepair";
+  import RepairDetail from "./repairDetail";
+  import Organization from "../../common/organization.vue";
 
-export default {
-  name: "repair-manage",
-  components: {
-    RightMenu,
-    AddCollectRepair,
-    AddRentRepair,
-    RepairDetail,
-    Organization
-  },
-  data() {
-    return {
-      rightMenuX: 0,
-      rightMenuY: 0,
-      show: false,
-      lists: [],
-      form: {
-        page: 1,
-        limit: 12,
-        keyword: "",
-        time: "",
-        status: "",
-        city: "",
-        operator_id: "",
-        next_follow_id: ""
+  export default {
+    name: "repair-manage",
+    components: {
+      RightMenu,
+      AddCollectRepair,
+      AddRentRepair,
+      RepairDetail,
+      Organization
+    },
+    data() {
+      return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+        form: {
+          page: 1,
+          limit: 12,
+          keyword: '',
+          time: '',
+          status: '',
+          city: '',
+          operator_id: '',
+          next_follow_id: '',
+        },
+        collectTableData: [],
+        collectStatus: " ",
+        collectLoading: false,
+        rentTableData: [],
+        rentStatus: " ",
+        rentLoading: false,
+        totalNum: 0,
+        isHigh: false,
+        activeName: "first",
+        currentTime: 48,
+
+        organizeVisible: false,
+        organizeType: "",
+        operator_name: "",
+
+        serviceStatus: [],//维修状态
+        cityCategory: [],//城市
+
+        repairDetailDialog: false,//详情
+        houseData: {},
+
+        addCollectRepairDialog: false,
+        addRentRepairDialog: false,
+        rentRepairId: "",
+
+        repairId: "",
+        deleteId: "",
+      };
+    },
+    mounted() {
+      this.getCollectTableData();
+      this.getDictionary();
+    },
+    watch: {
+      activeName(val) {
+        if (val === "first") {
+          this.getCollectTableData();
+        } else {
+          this.getRentTableData();
+        }
+      }
+    },
+    methods: {
+      // 计算时间
+      getTime(val) {
+        let data = [];
+        val === 1 ? (data = this.collectTableData) : (data = this.rentTableData);
+        for (let i = 0; i < data.length; i++) {
+          let foundTime = parseInt(Date.parse(data[i].create_time) / 1000 / 3600); //创建时间 的小时
+          let currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
+          //  判断 创建时间  到当前的时间 有没有 超过 48小时
+          data[i].overdueTime = currentTime - foundTime; //得到  创建的时间  距离现在 有多少小时
+        }
       },
-      collectTableData: [],
-      rentTableData: [],
-      totalNum: 0,
-      isHigh: false,
-      collectStatus: " ",
-      collectLoading: false,
-      rentStatus: " ",
-      rentLoading: false,
-      activeName: "first",
-      addCollectRepairDialog: false,
-      addRentRepairDialog: false,
-      houseData: {},
-      rentRepairId: "",
-      repairDetailDialog: false,
-      repairId: "",
-      deleteId: "",
-      dictionary: [],
-      cityCategory: [],
-      organizeVisible: false,
-      organizeType: "",
-      operator_name: "",
-      currentTime: 48,
-    };
-  },
-  mounted() {
-    this.getCollectTableData();
-    this.getDictionary();
-  },
-
-  methods: {
-    gettime(val) {
-      let data = [];
-      val === 1 ? (data = this.collectTableData) : (data = this.rentTableData);
-      for (let i = 0; i < data.length; i++) {
-        let foundTime = parseInt(Date.parse(data[i].create_time) / 1000 / 3600); //创建时间 的小时
-        let currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
-        let obtainTime = currentTime - foundTime; //得到  创建的时间  距离现在 有多少小时
-        //  判断 创建时间  到当前的时间 有没有 超过 48小时
-        data[i].overdueTime = obtainTime;
-      }
-    },
-    getDictionary() {
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/595")
-        .then(res => {
-          if (res.data.code === "30010") {
-            this.dictionary = res.data.data;
-          }
+      // 字典
+      getDictionary() {
+        // 城市
+        this.dictionary(306, 1).then((res) => {
+          this.cityCategory = res.data;
         });
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/306")
-        .then(res => {
-          if (res.data.code === "30010") {
-            this.cityCategory = res.data.data;
-          }
+        // 维修状态
+        this.dictionary(595, 1).then((res) => {
+          this.serviceStatus = res.data;
         });
-    },
-    getCollectTableData() {
-      this.collectStatus = " ";
-      this.collectLoading = true;
-      if (!this.form.time) {
-        this.form.time = [];
-      }
-      this.$http
-        .get(globalConfig.server + "repaire/list?limit=12&module=1", {
+      },
+      // 收房
+      getCollectTableData() {
+        this.collectStatus = " ";
+        this.collectLoading = true;
+        if (!this.form.time) {
+          this.form.time = [];
+        }
+        this.$http.get(globalConfig.server + "repaire/list", {
           params: this.form
-        })
-        .then(res => {
+        }).then(res => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === "600200") {
             this.collectTableData = res.data.data.data;
-            this.gettime(1);
+            this.getTime(1);
             this.totalNum = res.data.data.count;
-          } else if (res.data.code === "600202") {
-            this.collectTableData = [];
-            this.totalNum = 0;
-            this.collectStatus = "暂无数据";
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            });
           } else {
             this.collectTableData = [];
             this.totalNum = 0;
             this.collectStatus = "暂无数据";
+            this.prompt(2, res.data.msg);
           }
         });
-    },
-    getRentTableData() {
-      this.rentStatus = " ";
-      this.rentLoading = true;
-      if (!this.form.time) {
-        this.form.time = [];
-      }
-      this.$http
-        .get(globalConfig.server + "repaire/list?limit=12&module=2", {
+      },
+      // 租房
+      getRentTableData() {
+        this.rentStatus = " ";
+        this.rentLoading = true;
+        if (!this.form.time) {
+          this.form.time = [];
+        }
+        this.$http.get(globalConfig.server + "repaire/list", {
           params: this.form
-        })
-        .then(res => {
+        }).then(res => {
           this.isHigh = false;
           this.rentLoading = false;
           if (res.data.code === "600200") {
             this.rentTableData = res.data.data.data;
-            this.gettime(2);
+            this.getTime(2);
             this.totalNum = res.data.data.count;
-          } else if (res.data.code === "600202") {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            });
-            this.rentTableData = [];
-            this.totalNum = 0;
-            this.rentStatus = "暂无数据";
           } else {
             this.rentTableData = [];
             this.totalNum = 0;
             this.rentStatus = "暂无数据";
+            this.prompt(2, res.data.msg);
           }
         });
-    },
-    // 员工筛选
-    chooseStaff() {
-      this.organizeVisible = true;
-      this.organizeType = "staff";
-    },
-    // 清空员工
-    closeStaff() {
-      this.form.operator_id = [];
-      this.operator_name = "";
-    },
-    selectMember(val) {
-      if (this.organizeType === "staff") {
-        this.form.operator_id = val[0].id;
-        this.operator_name = val[0].name;
-      }
-    },
-    closeModal(val) {
-      this.addCollectRepairDialog = false;
-      this.addRentRepairDialog = false;
-      this.repairDetailDialog = false;
-      this.rentRepairId = "";
-      this.organizeVisible = false;
-      if (this.activeName == "first") {
-        this.getCollectTableData();
-      } else if (this.activeName == "second") {
-        this.getRentTableData();
-      }
-    },
-    // tabs标签页
-    handleClick(tab, event) {
-      if (this.activeName == "first") {
-        this.getCollectTableData();
-      } else if (this.activeName == "second") {
-        this.getRentTableData();
-      }
-    },
-    search() {
-      this.form.page = 1;
-      if (this.activeName === "first") {
-        this.getCollectTableData();
-      } else {
-        this.getRentTableData();
-      }
-    },
-    // 高级
-    highGrade() {
-      this.isHigh = !this.isHigh;
-    },
-    // 重置
-    resetting() {
-      this.form.time = "";
-      this.form.status = "";
-      this.form.city = "";
-      this.closeStaff();
-    },
-    handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      this.form.page = val;
-      // console.log(`当前页: ${val}`);
-      if (this.activeName === "first") {
-        this.getCollectTableData();
-      } else {
-        this.getRentTableData();
-      }
-    },
-    dblClickTable(row, event) {
-      this.repairId = row.id;
-      this.houseData = row;
-      this.repairDetailDialog = true;
-    },
-    //右键
-    houseMenu(row, event) {
-      this.deleteId = row.id;
-      this.lists = [
-        {
-          clickIndex: "delete_repair",
-          headIcon: "el-icon-delete",
-          label: "删除"
+      },
+      // 提示
+      prompt(val, msg) {
+        if (val === 1) {
+          this.$notify.success({
+            title: "成功",
+            message: res.data.msg
+          });
+        } else {
+          this.$notify.warning({
+            title: "警告",
+            message: msg,
+          });
         }
-      ];
-      this.contextMenuParam(event);
-    },
-    //右键回调
-    clickEvent(val) {
-      switch (val.clickIndex) {
-        case "delete_repair":
-          this.deleteRepair();
-          break;
-      }
-    },
-    deleteRepair() {
-      this.$confirm("此操作将删除维修单，您确定删除吗？", "删除维修单", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.$http
-          .get(globalConfig.server + "repaire/del/" + this.deleteId)
-          .then(res => {
+      },
+      // 员工筛选
+      chooseStaff() {
+        this.organizeVisible = true;
+        this.organizeType = "staff";
+      },
+      // 清空员工
+      closeStaff() {
+        this.form.operator_id = [];
+        this.operator_name = "";
+      },
+      // 选择员工
+      selectMember(val) {
+        if (this.organizeType === "staff") {
+          this.form.operator_id = val[0].id;
+          this.operator_name = val[0].name;
+        }
+      },
+      // 关闭模态框
+      closeModal() {
+        this.addCollectRepairDialog = false;
+        this.addRentRepairDialog = false;
+        this.repairDetailDialog = false;
+        this.rentRepairId = "";
+        this.organizeVisible = false;
+      },
+      // 搜索
+      search() {
+        this.form.page = 1;
+        if (this.activeName === "first") {
+          this.getCollectTableData();
+        } else {
+          this.getRentTableData();
+        }
+      },
+      // 高级
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      // 重置
+      resetting() {
+        this.form.time = "";
+        this.form.status = "";
+        this.form.city = "";
+        this.closeStaff();
+      },
+      // 分页
+      handleCurrentChange(val) {
+        this.form.page = val;
+        if (this.activeName === "first") {
+          this.getCollectTableData();
+        } else {
+          this.getRentTableData();
+        }
+      },
+      // 详情
+      dblClickTable(row) {
+        this.houseData = row;
+        if (row.contract.house) {
+          this.houseData.house_name = row.contract.house.name;
+        } else {
+          this.houseData.house_name = '';
+        }
+        this.houseData.activeName = this.activeName;
+        this.repairDetailDialog = true;
+      },
+      //右键
+      houseMenu(row, event) {
+        this.deleteId = row.id;
+        this.lists = [
+          {clickIndex: "delete_repair", headIcon: "el-icon-delete", label: "删除"}
+        ];
+        this.contextMenuParam(event);
+      },
+      //右键回调
+      clickEvent(val) {
+        switch (val.clickIndex) {
+          case "delete_repair":
+            this.deleteRepair();
+            break;
+        }
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX =
+          e.clientX +
+          document.documentElement.scrollLeft -
+          document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY +
+          document.documentElement.scrollTop -
+          document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true;
+        });
+      },
+      // 删除
+      deleteRepair() {
+        this.$confirm("此操作将删除维修单，您确定删除吗？", "删除维修单", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$http.get(globalConfig.server + "repaire/del/" + this.deleteId).then(res => {
             if (res.data.code === "600200") {
-              if (this.activeName == "first") {
+              if (this.activeName === "first") {
                 this.getCollectTableData();
-              } else if (this.activeName == "second") {
+              } else {
                 this.getRentTableData();
               }
-              this.$notify.success({
-                title: "成功",
-                message: res.data.msg
-              });
+              this.prompt(1, res.data.msg);
             } else {
-              this.$notify.warning({
-                title: "警告",
-                message: res.data.msg
-              });
+              this.prompt(2, res.data.msg);
             }
           });
-      });
-    },
-    //关闭右键菜单
-    closeMenu() {
-      this.show = false;
-    },
-    //右键参数
-    contextMenuParam(event) {
-      //param: user right param
-      let e = event || window.event; //support firefox contextmenu
-      this.show = false;
-      this.rightMenuX =
-        e.clientX +
-        document.documentElement.scrollLeft -
-        document.documentElement.clientLeft;
-      this.rightMenuY =
-        e.clientY +
-        document.documentElement.scrollTop -
-        document.documentElement.clientTop;
-      event.preventDefault();
-      event.stopPropagation();
-      this.$nextTick(() => {
-        this.show = true;
-      });
-    },
-    exportData() {
-      if (this.activeName === "first") {
-        this.form.module = 1;
-      } else {
-        this.form.module = 2;
-      }
-      let exportForm = {
-        keyword: this.form.keyword,
-        time: this.form.time,
-        status: this.form.status,
-        city: this.form.city,
-        operator_id: this.form.operator_id,
-        module: this.form.module
-      };
-      this.$http
-        .get(globalConfig.server + "repaire/download", { params: exportForm })
-        .then(res => {
-          if (res.data.code == "600201") {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            });
+        });
+      },
+      // 导出
+      exportData() {
+        if (this.activeName === "first") {
+          this.form.module = 1;
+        } else {
+          this.form.module = 2;
+        }
+        let exportForm = {
+          keyword: this.form.keyword,
+          time: this.form.time,
+          status: this.form.status,
+          city: this.form.city,
+          operator_id: this.form.operator_id,
+          module: this.form.module
+        };
+        this.$http.get(globalConfig.server + "repaire/download", {params: exportForm}).then(res => {
+          if (res.data.code === "600201") {
+            this.prompt(2, res.data.msg);
             return;
           } else {
-            this.$http
-              .get(globalConfig.server + "repaire/export", {
-                responseType: "arraybuffer",
-                params: exportForm
-              })
-              .then(res => {
-                // 处理返回的文件流
-                if (!res.data) {
-                  return;
-                }
-                let url = window.URL.createObjectURL(new Blob([res.data]));
-                let link = document.createElement("a");
-                link.style.display = "a";
-                link.href = url;
-                link.setAttribute("download", "excel.xls");
-                document.body.appendChild(link);
-                link.click();
-              });
+            this.$http.get(globalConfig.server + "repaire/export", {
+              responseType: "arraybuffer",
+              params: exportForm,
+            }).then(res => {
+              // 处理返回的文件流
+              if (!res.data) {
+                return;
+              }
+              let url = window.URL.createObjectURL(new Blob([res.data]));
+              let link = document.createElement("a");
+              link.style.display = "a";
+              link.href = url;
+              link.setAttribute("download", "excel.xls");
+              document.body.appendChild(link);
+              link.click();
+            });
           }
         });
+      }
     }
-  }
-};
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-#clientContainer {
-  .blue {
-    color: blue;
+  #clientContainer {
+    .flex-end {
+      display: flex;
+      display: -webkit-flex;
+      justify-content: flex-end;
+    }
+    .content {
+      padding: 0 10px;
+      min-height: 32px;
+      background: #eef3fc;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #727479;
+      word-break: break-all;
+    }
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 6px;
+      margin: 0 10px 10px 0;
+    }
+    .follow_result {
+      display: flex;
+      justify-content: space-between;
+    }
+    .addWorkOrder {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgb(238, 243, 252);
+    }
+    .blue {
+      color: blue;
+    }
+    .orange {
+      color: orange;
+    }
+    .width {
+      width: 90px;
+    }
   }
-  .orange {
-    color: orange;
-  }
-  .width {
-    width: 90px;
-  }
-}
 </style>
