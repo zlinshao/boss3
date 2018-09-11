@@ -421,6 +421,10 @@
         },
         warning_status:[
           {
+            id: 1,
+            name: '正常',
+          },
+          {
             id: 2,
             name: '黄色预警',
           },
