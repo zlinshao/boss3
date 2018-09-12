@@ -6,12 +6,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='cities[params.city]' disabled></el-input>
+                <el-input v-model='city_name' disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="房屋地址">
-                <el-input v-model="houseData.houseName" disabled></el-input>
+                <el-input v-model="house_name" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -131,8 +131,8 @@
         length: 0,
         type: '',
         upStatus: false,
-        isDictionary: false,
-        cities: {},
+        city_name: '',
+        house_name: '',
       };
     },
     watch: {
@@ -142,22 +142,16 @@
       addFollowUpDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-          this.isClear = true;
           this.init();
         } else {
           this.isClear = false;
-          if (!this.isDictionary) {
-            this.getDictionary();
-          }
         }
       },
       houseData(val) {
         this.params.contract_id = val.contract_id;
-        this.cityCategory.forEach((res) => {
-          if (res.variable.city_id === val.city) {
-            this.params.city = res.id;
-          }
-        })
+        this.params.city = val.city_id;
+        this.city_name = val.city_name;
+        this.house_name = val.house_name;
       },
       contractModule(val) {
         this.params.module = val;
@@ -168,19 +162,13 @@
     },
     methods: {
       getDictionary() {
-        this.dictionary(306, 1).then((res) => {
-          res.data.forEach((item) => {
-            this.cityCategory = res.data;
-            this.cities[item.id] = item.dictionary_name;
-          });
-        });
-        this.dictionary(695, 1).then((res) => {
+        // 工单类型
+        this.dictionary(696, 1).then((res) => {
           this.dictionaries = res.data;
-          this.isDictionary = true;
         });
+        // 工单状态
         this.dictionary(335, 1).then((res) => {
           this.dictionary_follow = res.data;
-          this.isDictionary = true;
         });
       },
       //调出选人组件

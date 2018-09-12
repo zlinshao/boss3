@@ -138,9 +138,7 @@
       editWorkModule(val) {
         if (!val) {
           this.$emit('close');
-        } else {
-          this.isClear = false;
-          this.getDictionary();
+          this.isClear = true;
         }
       },
       editWord(detail) {
@@ -156,12 +154,11 @@
           this.params.mobile = detail.mobile;
           //照片修改
           let picObject = {};
-          this.editImage = {};
           this.params.image_pic = [];
           if (detail.album) {
             for (let key in detail.album.image_pic) {
               picObject[key] = detail.album.image_pic[key][0].uri;
-              this.params.image_pic.push(key)
+              this.params.image_pic.push(key);
             }
           }
           this.editImage = picObject;

@@ -281,6 +281,16 @@
                 @row-dblclick="dblClickTable"
                 style="width: 100%">
                 <el-table-column
+                  prop="emergency"
+                  label="紧急程度">
+                  <template slot-scope="scope">
+                  <span v-if="scope.row.emergency === 1"
+                        :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                    <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
+                    <span v-if="!scope.row.emergency">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="create_time"
                   label="创建时间">
                   <template slot-scope="scope">
@@ -395,7 +405,7 @@
     <!--<AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :module="params.module" :startAddResult="startEdit"-->
     <!--@close="closeModal"></AddChildTask>-->
 
-    <OrderDetail :orderDetailDialog="orderDetailDialog" :wordData="wordData" @close="closeModal"></OrderDetail>
+    <OrderDetail :orderDetailDialog="orderDetailDialog" :wordData="wordData" @close="closeOrder"></OrderDetail>
   </div>
 </template>
 
@@ -403,12 +413,11 @@
   import RightMenu from '../../../common/rightMenu.vue'
   import Organization from '../../../common/organization.vue'
 
-  import AddChildTask from './components/addChildTask.vue'
   import OrderDetail from './components/workOrderDetail.vue'
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, AddChildTask, OrderDetail},
+    components: {RightMenu, Organization, OrderDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -449,15 +458,12 @@
         dictionary_follow: [],//  跟进状态字典
         workOrderStatus: ' ',
         workOrderLoading: false,
-        isDictionary: false,
         rentStatus: ' ',
         rentLoading: false,
       }
     },
     created() {
-      if (!this.isDictionary) {
-        this.getDictionary();
-      }
+      this.getDictionary();
       if (this.$store.state.datum.work_order_filter.pages) {
         this.params.pages = this.$store.state.datum.work_order_filter.pages;
         this.params.limit = this.$store.state.datum.work_order_filter.limit;
@@ -486,11 +492,9 @@
       getDictionary() {
         this.dictionary(696, 1).then((res) => {
           this.dictionaries = res.data;
-          this.isDictionary = true;
         });
         this.dictionary(335, 1).then((res) => {
           this.dictionary_follow = res.data;
-          this.isDictionary = true;
         });
       },
       //获取列表数据
@@ -583,8 +587,11 @@
       },
       // 关闭模态框
       closeModal() {
-        this.orderDetailDialog = false;
         this.organizationDialog = false;
+      },
+      closeOrder() {
+        this.orderDetailDialog = false;
+        this.handleClick();
       },
       //选人组件
       openOrganizeModal() {

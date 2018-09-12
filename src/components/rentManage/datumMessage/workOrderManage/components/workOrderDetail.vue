@@ -2,7 +2,12 @@
   <div id="addFollowUp">
     <el-dialog :close-on-click-modal="false" title="工单详情" :visible.sync="orderDetailModule" width="60%">
       <div class="scroll_bar">
-        <div class="title">事项详情</div>
+        <div class="workOrderDetail">
+          <div class="title">事项详情</div>
+          <el-button type="text" size="small" @click="editWorkOrder">
+            <i class="el-icon-edit"></i>修改工单内容
+          </el-button>
+        </div>
         <div class="describe_border">
           <el-form size="small" label-width="100px"
                    v-loading="workOrderLoading"
@@ -26,10 +31,11 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editWorkOrder">
-                  <i class="el-icon-edit"></i>修改工单内容
-                </el-button>
+              <el-col :span="8">
+                <el-form-item label="所属城市">
+                  <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
+                  <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
+                </el-form-item>
               </el-col>
             </el-row>
             <el-row>
@@ -42,9 +48,11 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="所属城市">
-                  <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
-                  <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
+                <el-form-item label="下次跟进人">
+                  <div class="content">
+                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
+                    <span v-if="!workOrderDetail.follows">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -85,14 +93,6 @@
                   <div class="content">
                     <span v-if="workOrderDetail.emergency === 1">一般</span>
                     <span v-if="workOrderDetail.emergency === 2">紧急</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进人">
-                  <div class="content">
-                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
-                    <span v-if="!workOrderDetail.follows">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -362,7 +362,9 @@
       getImgData(val) {
         this.params.album = val[1];
       },
+      // 增进跟进结果
       addResult(id) {
+        this.init();
         this.params.id = id;
         this.showAddWork = true;
       },
@@ -382,6 +384,11 @@
 </script>
 <style lang="scss" scoped="">
   #addFollowUp {
+    .workOrderDetail {
+      display: flex;
+      display: -webkit-flex;
+      justify-content: space-between;
+    }
     .flex-end {
       display: flex;
       display: -webkit-flex;

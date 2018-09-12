@@ -355,13 +355,11 @@
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
                   @selectMember="selectMember"></organization>
     <!--增加收房维修单-->
-    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :contract="houseData"
-                      @close="closeModal"></AddCollectRepair>
+    <!--<AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :contract="houseData" @close="closeModal"></AddCollectRepair>-->
     <!--增加租房维修单-->
-    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"
-                   @close="closeModal"></AddRentRepair>
+    <!--<AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId" @close="closeModal"></AddRentRepair>-->
     <!--维修单详情-->
-    <RepairDetail :module="repairDetailDialog" :houseData="houseData" @close="closeModal"></RepairDetail>
+    <RepairDetail :module="repairDetailDialog" :houseData="houseData" @close="closeRepair"></RepairDetail>
   </div>
 </template>
 
@@ -418,9 +416,9 @@
         repairDetailDialog: false,//详情
         houseData: {},
 
-        addCollectRepairDialog: false,
-        addRentRepairDialog: false,
-        rentRepairId: "",
+        // addCollectRepairDialog: false,
+        // addRentRepairDialog: false,
+        // rentRepairId: "",
 
         repairId: "",
         deleteId: "",
@@ -440,6 +438,13 @@
       }
     },
     methods: {
+      handClick() {
+        if (this.activeName === "first") {
+          this.getCollectTableData();
+        } else {
+          this.getRentTableData();
+        }
+      },
       // 计算时间
       getTime(val) {
         let data = [];
@@ -543,20 +548,19 @@
       },
       // 关闭模态框
       closeModal() {
-        this.addCollectRepairDialog = false;
-        this.addRentRepairDialog = false;
-        this.repairDetailDialog = false;
-        this.rentRepairId = "";
+        // this.addCollectRepairDialog = false;
+        // this.addRentRepairDialog = false;
+        // this.rentRepairId = "";
         this.organizeVisible = false;
+      },
+      closeRepair() {
+        this.repairDetailDialog = false;
+        this.handClick();
       },
       // 搜索
       search() {
         this.form.page = 1;
-        if (this.activeName === "first") {
-          this.getCollectTableData();
-        } else {
-          this.getRentTableData();
-        }
+        this.handClick();
       },
       // 高级
       highGrade() {
@@ -572,11 +576,7 @@
       // 分页
       handleCurrentChange(val) {
         this.form.page = val;
-        if (this.activeName === "first") {
-          this.getCollectTableData();
-        } else {
-          this.getRentTableData();
-        }
+        this.handClick();
       },
       // 详情
       dblClickTable(row) {
@@ -635,11 +635,7 @@
         }).then(() => {
           this.$http.get(globalConfig.server + "repaire/del/" + this.deleteId).then(res => {
             if (res.data.code === "600200") {
-              if (this.activeName === "first") {
-                this.getCollectTableData();
-              } else {
-                this.getRentTableData();
-              }
+              this.handClick();
               this.prompt(1, res.data.msg);
             } else {
               this.prompt(2, res.data.msg);
