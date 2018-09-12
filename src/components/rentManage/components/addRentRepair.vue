@@ -65,7 +65,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="form.person_liable === 692">
-              <el-form-item label="前租客姓名" required>
+              <el-form-item label="前租客姓名">
                 <el-input v-model="form.liable_name"></el-input>
               </el-form-item>
             </el-col>

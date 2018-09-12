@@ -33,8 +33,8 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房屋地址">
-                  <div class="content" v-if="wordData.name">{{wordData.name}}</div>
-                  <div class="content" v-if="!wordData.name">暂无</div>
+                  <div class="content" v-if="house_name">{{house_name}}</div>
+                  <div class="content" v-if="!house_name">暂无</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -142,7 +142,7 @@
                   <el-form-item label="下次跟进时间">
                     <el-date-picker type="datetime" placeholder="选择日期时间"
                                     value-format="yyyy-MM-dd HH:mm:ss"
-                                    v-model="params.expected_finish_time"></el-date-picker>
+                                    v-model="params.next_follow_time"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -178,8 +178,9 @@
             </div>
             <div v-if="workOrderDetail.remarks && workOrderDetail.remarks.length > 0">
               <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
-                <el-row v-for="item in workOrderDetail.remarks" :key="item.id"
-                        style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+                <el-row v-for="(item,index) in workOrderDetail.remarks" :key="item.id"
+                        v-if="index !== workOrderDetail.remarks.length - 1"
+                        class="remarks">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
                       <div class="content">
@@ -199,8 +200,8 @@
                   <el-col :span="12">
                     <el-form-item label="下次跟进时间">
                       <div class="content">
-                        <span v-if="item.expected_finish_time">{{item.expected_finish_time}}</span>
-                        <span v-if="!item.expected_finish_time">暂无</span>
+                        <span v-if="item.next_follow_time">{{item.next_follow_time}}</span>
+                        <span v-if="!item.next_follow_time">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -271,7 +272,7 @@
         params: {
           id: '',
           follow_status: '',//跟进状态
-          expected_finish_time: '',//下次跟进时间
+          next_follow_time: '',//下次跟进时间
           next_follow_name: '',//下次跟进人
           next_follow_id: '',//下次跟进人
           content: '',//跟进结果
@@ -281,6 +282,7 @@
         length: 0,
         type: '',
         workOrderLoading: false,
+        house_name: '',
       };
     },
     watch: {
@@ -296,6 +298,9 @@
           this.isClear = false;
           this.getDetail();
         }
+      },
+      wordData(val) {
+        this.house_name = val.name;
       },
     },
     mounted() {
@@ -359,7 +364,7 @@
         this.params = {
           id: '',
           follow_status: '',//跟进状态
-          expected_finish_time: '',//下次跟进时间
+          next_follow_time: '',//下次跟进时间
           next_follow_name: '',//下次跟进人
           content: '',//跟进结果
           album: '',//图片
@@ -433,6 +438,10 @@
       margin-bottom: 15px;
       padding-bottom: 15px;
       border-bottom: 1px solid rgb(238, 243, 252);
+    }
+    .remarks {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eef3fc;
     }
   }
 </style>

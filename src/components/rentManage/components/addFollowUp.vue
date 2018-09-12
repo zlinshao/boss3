@@ -17,7 +17,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="回复电话">
+              <el-form-item label="回复电话" required="">
                 <el-input v-model="params.mobile"></el-input>
               </el-form-item>
             </el-col>
