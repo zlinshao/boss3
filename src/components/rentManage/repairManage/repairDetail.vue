@@ -26,16 +26,16 @@
               <el-col :span="8">
                 <el-form-item label="创建人">
                   <div class="content">
-                    <span v-if="repairDetail.operator">{{repairDetail.operator}}</span>
-                    <span v-if="!repairDetail.operator">暂无</span>
+                    <span v-if="repairDetail.operators">{{repairDetail.operators.name}}</span>
+                    <span v-if="!repairDetail.operators">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同编号">
                   <div class="content">
-                    <span v-if="repairDetail.repaire_num">{{repairDetail.repaire_num}}</span>
-                    <span v-if="!repairDetail.repaire_num">暂无</span>
+                    <span v-if="repairDetail.contract">{{repairDetail.contract.contract_number}}</span>
+                    <span v-if="!repairDetail.contract">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -167,7 +167,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="维修状态">
-                    <el-select v-model="params.status" placeholder="请选择最终认责归属" clearable>
+                    <el-select v-model="params.status" placeholder="请选择维修状态" clearable>
                       <el-option v-for="item in state_repair" :label="item.dictionary_name" :key="item.id"
                                  :value="item.id" size="small">
                       </el-option>
@@ -282,7 +282,7 @@
                   <el-col :span="12">
                     <el-form-item label="维修状态">
                       <div class="content">
-                        <span v-if="item.status">{{item.status}}</span>
+                        <span v-if="item.status">{{states[item.status]}}</span>
                         <span v-if="!item.status">暂无</span>
                       </div>
                     </el-form-item>
@@ -388,6 +388,7 @@
         },
         next_follow_name: '',   //下次跟进人
         state_repair: [],       //维修状态
+        states: {},             //维修状态
       };
     },
     watch: {
@@ -408,6 +409,9 @@
       // 维修状态
       this.dictionary(595, 1).then((res) => {
         this.state_repair = res.data;
+        res.data.forEach(res => {
+          this.states[res.id] = res.dictionary_name;
+        })
       });
       // 认责人
       this.dictionary(604, 1).then((res) => {
@@ -461,6 +465,7 @@
           content: '',            //跟进结果
           final_liable_name: '',  //前租客姓名
         };
+        this.addResult = false;
         this.next_follow_name = '';
       },
       closeOrganization() {
