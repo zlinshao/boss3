@@ -33,8 +33,8 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房屋地址">
-                  <div class="content" v-if="house_name">{{house_name}}</div>
-                  <div class="content" v-if="!house_name">暂无</div>
+                  <div class="content" v-if="wordData.name">{{wordData.name}}</div>
+                  <div class="content" v-if="!wordData.name">暂无</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -282,7 +282,6 @@
         length: 0,
         type: '',
         workOrderLoading: false,
-        house_name: '',
       };
     },
     watch: {
@@ -298,9 +297,6 @@
           this.isClear = false;
           this.getDetail();
         }
-      },
-      wordData(val) {
-        this.house_name = val.name;
       },
     },
     mounted() {
