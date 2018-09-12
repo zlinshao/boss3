@@ -28,10 +28,18 @@
             </el-col>
           </el-row>
           <el-row>
+            <!--<el-col :span="12">-->
+              <!--<el-form-item label="跟进状态">-->
+                <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
+                  <!--<el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"-->
+                             <!--:key="item.id"></el-option>-->
+                <!--</el-select>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
             <el-col :span="12">
-              <el-form-item label="跟进状态">
-                <el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">
-                  <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"
+              <el-form-item label="紧急程度" required="">
+                <el-select clearable v-model="params.emergency" placeholder="请选择" value="">
+                  <el-option v-for="item in optionsWithDisabled" :label="item.label" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
@@ -42,21 +50,12 @@
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
               </el-form-item>
             </el-col>
-
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="工单类型" required="">
                 <el-select clearable v-model="params.type" placeholder="请选择" value="">
                   <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="紧急程度" required="">
-                <el-select clearable v-model="params.emergency" placeholder="请选择" value="">
-                  <el-option v-for="item in optionsWithDisabled" :label="item.label" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
@@ -116,8 +115,8 @@
           matters: '',                     // 跟进事项
           type: '',                        //'工单类型',
           follow_id: '',                   //'跟进人',
-          follow_status: '',
-          expected_finish_time: '',        //'下次跟进时间',
+          // follow_status: '',
+          // expected_finish_time: '',        //'下次跟进时间',
           follow_time: '',                 //'跟进时间',
           image_pic: [],
           mobile: '',
@@ -224,8 +223,8 @@
           matters: '',                     // 跟进事项,
           type: '',                        //'工单类型',
           follow_id: '',                   //'跟进人',
-          follow_status: '',
-          expected_finish_time: '',        //'下次跟进时间',
+          // follow_status: '',
+          // expected_finish_time: '',        //'下次跟进时间',
           follow_time: '',                 //'跟进时间',
           image_pic: [],
           mobile: '',

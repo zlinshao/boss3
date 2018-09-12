@@ -21,7 +21,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="params.city" placeholder="选择城市" value="">
+                <el-select clearable v-model="params.city" disabled>
                   <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
@@ -34,10 +34,18 @@
             </el-col>
           </el-row>
           <el-row>
+            <!--<el-col :span="12">-->
+              <!--<el-form-item label="跟进状态">-->
+                <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
+                  <!--<el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"-->
+                             <!--:key="item.id"></el-option>-->
+                <!--</el-select>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
             <el-col :span="12">
-              <el-form-item label="跟进状态">
-                <el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">
-                  <el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"
+              <el-form-item label="紧急程度">
+                <el-select clearable v-model="params.emergency" placeholder="紧急程度" value="">
+                  <el-option v-for="item in emergency" :label="item.name" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
@@ -49,14 +57,6 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
-              <el-form-item label="紧急程度">
-                <el-select clearable v-model="params.emergency" placeholder="紧急程度" value="">
-                  <el-option v-for="item in emergency" :label="item.name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
             <el-col :span="12">
               <el-form-item label="跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
@@ -105,7 +105,7 @@
           type: '',                         //事件类型
           follow_id: '',                    //跟进人
           follow_time: '',                  //跟进时间
-          follow_status: '',                //跟进状态
+          // follow_status: '',                //跟进状态
           image_pic: [],
           mobile: '',
           emergency: '',
@@ -151,7 +151,7 @@
           this.params.emergency = detail.emergency;
           this.params.matters = detail.matters;
           this.params.follow_id = detail.follow_id;
-          this.params.follow_status = detail.follow_status;
+          // this.params.follow_status = detail.follow_status;
           this.params.follow_time = detail.follow_time;
           this.params.mobile = detail.mobile;
           //照片修改
@@ -243,7 +243,7 @@
           follow_id: '',                    //跟进人
           expected_finish_time: '',         //预计完成时间
           follow_time: '',                  //跟进时间
-          follow_status: '',                //跟进时间
+          // follow_status: '',                //跟进时间
           image_pic: [],
           mobile: '',
         };
