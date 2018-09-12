@@ -1420,6 +1420,7 @@
         }
       },
       closeModal(val) {
+        this.addReturnInfo = {};
         this.tabStatusChange = '';
         this.instructionDialog = false;
         this.organizationDialog = false;
