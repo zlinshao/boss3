@@ -140,7 +140,7 @@
           emergency: "",            //紧急程度
           liable_name: "",          //前租客姓名
           estimated_time: "",       //下次跟进时间
-          module: 2,                //租房
+          module: 1,                //租房
         },
         follow_name: "",                //跟进人名字
         personCategory: [],
@@ -201,7 +201,7 @@
         this.form = {
           city: "",
           contract_id: "",          //合同Id
-          contract_type: "2",       //合同类型
+          contract_type: "1",       //合同类型
           contract_number: "",      //合同编号
           customer_name: "",        //客户姓名
           customer_mobile: "",      //客户电话

@@ -316,10 +316,10 @@
         this.params.module = this.wordData.module;
         this.$http.post(globalConfig.server + 'customer/work_order/matters', this.params).then((res) => {
           if (res.data.code === '10050') {
+            this.init();
             this.getDetail();
             this.showAddWork = false;
             this.prompt(1, res.data.msg);
-            this.init();
           } else {
             this.prompt(2, res.data.msg);
           }
@@ -329,7 +329,7 @@
         if (val === 1) {
           this.$notify.success({
             title: '成功',
-            message: res.data.msg
+            message: msg
           });
         } else {
           this.$notify.warning({

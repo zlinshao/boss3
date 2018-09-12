@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="房屋地址">
-                  <el-input v-model="editWord.address" disabled></el-input>
+                <el-input v-model="editWord.address" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -110,10 +110,10 @@
           mobile: '',
           emergency: '',
         },
-        emergency:[{
+        emergency: [{
           id: 1,
           name: '一般',
-        },{
+        }, {
           id: 2,
           name: '紧急',
         }],
@@ -139,6 +139,8 @@
         if (!val) {
           this.$emit('close');
           this.isClear = true;
+        } else {
+          this.isClear = false;
         }
       },
       editWord(detail) {
