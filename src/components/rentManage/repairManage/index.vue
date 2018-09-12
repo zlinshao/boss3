@@ -393,7 +393,7 @@
           status: '',
           city: '',
           operator_id: '',
-          next_follow_id: '',
+          contract_type: '1',
         },
         collectTableData: [],
         collectStatus: " ",
@@ -471,9 +471,7 @@
       getCollectTableData() {
         this.collectStatus = " ";
         this.collectLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
-        }
+        this.form.contract_type = '1';
         this.$http.get(globalConfig.server + "repaire/list", {
           params: this.form
         }).then(res => {
@@ -495,9 +493,7 @@
       getRentTableData() {
         this.rentStatus = " ";
         this.rentLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
-        }
+        this.form.contract_type = '2';
         this.$http.get(globalConfig.server + "repaire/list", {
           params: this.form
         }).then(res => {
