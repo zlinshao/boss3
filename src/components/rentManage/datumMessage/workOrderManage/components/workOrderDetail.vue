@@ -32,13 +32,19 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
+                <el-form-item label="房屋地址">
+                  <div class="content" v-if="wordData.name">{{wordData.name}}</div>
+                  <div class="content" v-if="!wordData.name">暂无</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="所属城市">
                   <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
                   <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="8">
                 <el-form-item label="工单编号">
                   <div class="content">
@@ -55,11 +61,6 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="工单类型">
-                  <div class="content">{{workOrderDetail.types}}</div>
-                </el-form-item>
-              </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
@@ -71,11 +72,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="完成时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.finish_time">{{workOrderDetail.finish_time}}</span>
-                    <span v-if="!workOrderDetail.finish_time">暂无</span>
-                  </div>
+                <el-form-item label="工单类型">
+                  <div class="content">{{workOrderDetail.types}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -96,6 +94,14 @@
                   </div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="完成时间">
+                  <div class="content">
+                    <span v-if="workOrderDetail.finish_time">{{workOrderDetail.finish_time}}</span>
+                    <span v-if="!workOrderDetail.finish_time">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
@@ -104,6 +110,15 @@
                     <span v-if="workOrderDetail.matters">{{workOrderDetail.matters}}</span>
                     <span v-if="!workOrderDetail.matters">暂无</span>
                   </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24" v-if="workOrderDetail.album">
+                <el-form-item label="截图">
+                  <img v-if="workOrderDetail.album.image_pic !== []" data-magnify
+                       v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri"
+                       alt="">
                 </el-form-item>
               </el-col>
             </el-row>
@@ -127,7 +142,7 @@
                   <el-form-item label="下次跟进时间">
                     <el-date-picker type="datetime" placeholder="选择日期时间"
                                     value-format="yyyy-MM-dd HH:mm:ss"
-                                    v-model="params.next_follow_time"></el-date-picker>
+                                    v-model="params.expected_finish_time"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -256,7 +271,7 @@
         params: {
           id: '',
           follow_status: '',//跟进状态
-          next_follow_time: '',//下次跟进时间
+          expected_finish_time: '',//下次跟进时间
           next_follow_name: '',//下次跟进人
           next_follow_id: '',//下次跟进人
           content: '',//跟进结果
@@ -344,7 +359,7 @@
         this.params = {
           id: '',
           follow_status: '',//跟进状态
-          next_follow_time: '',//下次跟进时间
+          expected_finish_time: '',//下次跟进时间
           next_follow_name: '',//下次跟进人
           content: '',//跟进结果
           album: '',//图片
