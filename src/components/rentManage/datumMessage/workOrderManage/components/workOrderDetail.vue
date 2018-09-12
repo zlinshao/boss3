@@ -258,6 +258,7 @@
           follow_status: '',//跟进状态
           next_follow_time: '',//下次跟进时间
           next_follow_name: '',//下次跟进人
+          next_follow_id: '',//下次跟进人
           content: '',//跟进结果
           album: '',//图片
         },
@@ -303,12 +304,12 @@
       selectMember(val) {
         this.type = '';
         this.length = '';
-        // this.params.follow_id = val[0].id;
+        this.params.next_follow_id = val[0].id;
         this.params.next_follow_name = val[0].name;
       },
       // 清空组织架构
       emptyFollowPeople() {
-        // this.params.follow_id = '';
+        this.params.next_follow_id = '';
         this.params.next_follow_name = '';
       },
       // 新增跟进结果
