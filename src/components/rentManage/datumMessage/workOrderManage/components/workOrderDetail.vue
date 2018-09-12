@@ -33,8 +33,8 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房屋地址">
-                  <div class="content" v-if="wordData.name">{{wordData.name}}</div>
-                  <div class="content" v-if="!wordData.name">暂无</div>
+                  <div class="content" v-if="house_name">{{house_name}}</div>
+                  <div class="content" v-if="!house_name">暂无</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -140,8 +140,8 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="下次跟进时间">
-                    <el-date-picker type="datetime" placeholder="选择日期时间"
-                                    value-format="yyyy-MM-dd HH:mm:ss"
+                    <el-date-picker type="date" placeholder="选择日期时间"
+                                    value-format="yyyy-MM-dd"
                                     v-model="params.next_follow_time"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -282,6 +282,7 @@
         length: 0,
         type: '',
         workOrderLoading: false,
+        house_name: '',
       };
     },
     watch: {
@@ -294,6 +295,7 @@
           this.workOrderDetail = {};
           this.$emit('close');
         } else {
+          this.house_name = this.wordData.name;
           this.isClear = false;
           this.getDetail();
         }
@@ -342,18 +344,14 @@
           }
         })
       },
-      prompt(val, msg) {
-        if (val === 1) {
-          this.$notify.success({
-            title: '成功',
-            message: msg
-          });
-        } else {
-          this.$notify.warning({
-            title: '警告',
-            message: msg
-          })
-        }
+      getDetail() {
+        this.workOrderLoading = true;
+        this.$http.get(globalConfig.server + 'customer/work_order/' + this.wordData.id).then((res) => {
+          this.workOrderLoading = false;
+          if (res.data.code === "10020") {
+            this.workOrderDetail = res.data.data;
+          }
+        });
       },
       init() {
         this.showAddWork = false;
@@ -366,14 +364,18 @@
           album: '',//图片
         }
       },
-      getDetail() {
-        this.workOrderLoading = true;
-        this.$http.get(globalConfig.server + 'customer/work_order/' + this.wordData.id).then((res) => {
-          this.workOrderLoading = false;
-          if (res.data.code === "10020") {
-            this.workOrderDetail = res.data.data;
-          }
-        });
+      prompt(val, msg) {
+        if (val === 1) {
+          this.$notify.success({
+            title: '成功',
+            message: msg
+          });
+        } else {
+          this.$notify.warning({
+            title: '警告',
+            message: msg
+          })
+        }
       },
       // 上传图片
       getImgData(val) {

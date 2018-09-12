@@ -68,7 +68,6 @@
       editImage: {
         deep: true,
         handler(val, old) {
-          console.log(val);
           this.editImg = val;
           this.imgId = [];
           for (let key in val) {

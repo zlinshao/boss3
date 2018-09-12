@@ -159,9 +159,8 @@
                   <el-form-item label="维修时间">
                     <el-date-picker
                       v-model="params.repair_time"
-                      type="datetime"
-                      placeholder="选择日期时间"
-                      default-time="12:00:00">
+                      type="date" placeholder="选择日期时间"
+                      value-format="yyyy-MM-dd">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -201,9 +200,9 @@
                   <el-form-item label="下次跟进时间">
                     <el-date-picker
                       v-model="params.estimated_time"
-                      type="datetime"
+                      type="date"
                       placeholder="选择日期时间"
-                      default-time="12:00:00">
+                      value-format="yyyy-MM-dd">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>

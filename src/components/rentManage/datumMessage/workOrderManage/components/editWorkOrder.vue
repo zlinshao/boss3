@@ -35,12 +35,12 @@
           </el-row>
           <el-row>
             <!--<el-col :span="12">-->
-              <!--<el-form-item label="跟进状态">-->
-                <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
-                  <!--<el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"-->
-                             <!--:key="item.id"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
+            <!--<el-form-item label="跟进状态">-->
+            <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
+            <!--<el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"-->
+            <!--:key="item.id"></el-option>-->
+            <!--</el-select>-->
+            <!--</el-form-item>-->
             <!--</el-col>-->
             <el-col :span="12">
               <el-form-item label="紧急程度">
@@ -59,8 +59,8 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="跟进时间">
-                <el-date-picker type="datetime" placeholder="选择日期时间"
-                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期时间"
+                                value-format="yyyy-MM-dd" v-model="params.follow_time"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -123,12 +123,13 @@
         workStatus: [],
         workFollow: [],
         follow_name: '',
-        length: 0,
+        length: '',
         type: '',
         detailInfo: {},
         editImage: {},
         upStatus: false,
         cityCategory: [],
+        addNum: 0,
       };
     },
     watch: {
@@ -138,9 +139,9 @@
       editWorkModule(val) {
         if (!val) {
           this.$emit('close');
-          this.isClear = true;
         } else {
           this.isClear = false;
+          this.getDetail();
         }
       },
       editWord(detail) {
@@ -185,6 +186,24 @@
           this.cityCategory = res.data;
         });
       },
+      getDetail() {
+        if (this.addNum !== 0) return;
+        this.addNum++;
+        this.$http.get(globalConfig.server + 'customer/work_order/' + this.editWord.id).then((res) => {
+          if (res.data.code === "10020") {
+            let detail = res.data.data;
+            let picObject = {};
+            this.params.image_pic = [];
+            if (detail.album) {
+              for (let key in detail.album.image_pic) {
+                picObject[key] = detail.album.image_pic[key][0].uri;
+                this.params.image_pic.push(key);
+              }
+            }
+            this.editImage = picObject;
+          }
+        });
+      },
       //调出选人组件
       openOrganizeModal() {
         this.organizationDialog = true;
@@ -215,6 +234,7 @@
             if (res.data.code === '10030') {
               this.prompt(1, res.data.msg);
               this.init();
+              this.isClear = true;
               this.$emit('close', 'success');
               this.editWorkModule = false;
             } else {
@@ -243,12 +263,11 @@
           follow_id: '',                    //跟进人
           expected_finish_time: '',         //预计完成时间
           follow_time: '',                  //跟进时间
-          // follow_status: '',                //跟进时间
+          // follow_status: '',             //跟进时间
           image_pic: [],
           mobile: '',
         };
         this.follow_name = '';
-        this.isClear = true;
         this.detailInfo = {};
         this.editImage = {};
         this.upStatus = false;
