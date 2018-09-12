@@ -118,6 +118,7 @@
       operations(data, val) {
         let params = {
           plant_id: data.plant_id,
+          name: data.name,
           phone: data.phone,
           type: val,
           id: data.id,
