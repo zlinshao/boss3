@@ -84,7 +84,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addFollowUpDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" :disabled="forbidden" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
@@ -132,6 +132,7 @@
         upStatus: false,
         city_name: '',
         house_name: '',
+        forbidden: false,
       };
     },
     watch: {
@@ -198,7 +199,9 @@
             message: '图片正在上传'
           })
         } else {
+          this.forbidden = true;
           this.$http.post(globalConfig.server + 'customer/work_order', this.params).then((res) => {
+            this.forbidden = false;
             if (res.data.code === '10010') {
               this.$notify.success({
                 title: '成功',

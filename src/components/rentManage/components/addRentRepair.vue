@@ -101,7 +101,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addRentRepairDialog = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" :disabled="forbidden" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -120,6 +120,7 @@
       return {
         addRentRepairDialog: false,
         organizationDialog: false,
+        forbidden: false,
         organizeType: "",
         length: "",
         address: "",
@@ -180,7 +181,9 @@
         });
       },
       confirmAdd() {
+        this.forbidden = true;
         this.$http.post(globalConfig.server + "repaire/insert", this.form).then(res => {
+          this.forbidden = false;
           if (res.data.code === "600200") {
             this.$notify.success({
               title: "成功",
