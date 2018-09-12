@@ -175,10 +175,11 @@
                   prop="emergency"
                   label="紧急程度">
                   <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1"
-                        :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
-                    <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
-                    <span v-if="!scope.row.emergency">暂无</span>
+                    <span v-if="scope.row.emergency === 1 && scope.row.follow_status !== 338"
+                          :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                    <span v-if="scope.row.emergency === 2 && scope.row.follow_status !== 338"
+                          style="color:red">紧急</span>
+                    <span v-if="!scope.row.emergency"></span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -204,14 +205,14 @@
                     <span v-if="!scope.row.address">暂无</span>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="events"
-                  label="事件数">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.events">{{scope.row.events}}</span>
-                    <span v-if="!scope.row.events">暂无</span>
-                  </template>
-                </el-table-column>
+                <!--<el-table-column-->
+                  <!--prop="events"-->
+                  <!--label="事件数">-->
+                  <!--<template slot-scope="scope">-->
+                    <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
+                    <!--<span v-if="!scope.row.events">暂无</span>-->
+                  <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column
                   prop="types"
                   label="工单类型">
@@ -222,7 +223,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="matters"
-                  label="跟进事项">
+                  label="工单内容">
                   <template slot-scope="scope">
                     <span v-if="scope.row.matters">{{scope.row.matters}}</span>
                     <span v-if="!scope.row.matters">暂无</span>
@@ -313,14 +314,14 @@
                     <span v-if="!scope.row.address">暂无</span>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="events"
-                  label="事件数">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.events">{{scope.row.events}}</span>
-                    <span v-if="!scope.row.events">暂无</span>
-                  </template>
-                </el-table-column>
+                <!--<el-table-column-->
+                  <!--prop="events"-->
+                  <!--label="事件数">-->
+                  <!--<template slot-scope="scope">-->
+                    <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
+                    <!--<span v-if="!scope.row.events">暂无</span>-->
+                  <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column
                   prop="types"
                   label="工单类型">
@@ -331,7 +332,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="matters"
-                  label="跟进事项">
+                  label="工单内容">
                   <template slot-scope="scope">
                     <span v-if="scope.row.matters">{{scope.row.matters}}</span>
                     <span v-if="!scope.row.matters">暂无</span>

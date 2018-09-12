@@ -118,10 +118,10 @@
                 prop="emergency"
                 label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1"
+                  <span v-if="scope.row.emergency === 1 && scope.row.status !== 600"
                         :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
-                  <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
-                  <span v-if="!scope.row.emergency">暂无</span>
+                  <span v-if="scope.row.emergency === 2 && scope.row.status !== 600" style="color:red">紧急</span>
+                  <span v-if="!scope.row.emergency"></span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -165,19 +165,25 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="repair_time"
-                label="预计维修时间">
+                prop="follow"
+                label="维修时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-                  <span v-if="!scope.row.repair_time">暂无</span>
+                  <span v-if="scope.row.follow.length > 0">
+                    <span v-if="scope.row.follow[0].repair_time">{{scope.row.follow[0].repair_time}}</span>
+                    <span v-else>暂无</span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="repair_master"
+                prop="follow"
                 label="维修师傅">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-                  <span v-if="!scope.row.repair_master">暂无</span>
+                  <span v-if="scope.row.follow.length > 0">
+                    <span v-if="scope.row.follow[0].repair_master">{{scope.row.follow[0].repair_master}}</span>
+                    <span v-else>暂无</span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -282,19 +288,25 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="repair_time"
-                label="预计维修时间">
+                prop="follow"
+                label="维修时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-                  <span v-if="!scope.row.repair_time">暂无</span>
+                  <span v-if="scope.row.follow.length > 0">
+                    <span v-if="scope.row.follow[0].repair_time">{{scope.row.follow[0].repair_time}}</span>
+                    <span v-else>暂无</span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="repair_master"
+                prop="follow"
                 label="维修师傅">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-                  <span v-if="!scope.row.repair_master">暂无</span>
+                  <span v-if="scope.row.follow.length > 0">
+                    <span v-if="scope.row.follow[0].repair_master">{{scope.row.follow[0].repair_master}}</span>
+                    <span v-else>暂无</span>
+                  </span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column

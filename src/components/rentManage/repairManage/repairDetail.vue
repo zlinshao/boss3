@@ -148,7 +148,7 @@
             </el-row>
             <div class="follow_result">
               <div class="title">跟进结果</div>
-              <el-button type="text" size="small" @click="showAddResult()">
+              <el-button type="text" size="small" @click="showAddResult()" :disabled="repairDetail.status === 600">
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>

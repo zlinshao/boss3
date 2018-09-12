@@ -94,7 +94,7 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" v-if="workOrderDetail.follow_status === 338">
                 <el-form-item label="完成时间">
                   <div class="content">
                     <span v-if="workOrderDetail.finish_time">{{workOrderDetail.finish_time}}</span>
@@ -124,7 +124,7 @@
             </el-row>
             <div class="follow_result">
               <div class="title">跟进结果</div>
-              <el-button type="text" size="small" @click="addResult(workOrderDetail.id)">
+              <el-button type="text" size="small" @click="addResult(workOrderDetail.id)" :disabled="workOrderDetail.follow_status === 338">
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>
@@ -267,6 +267,7 @@
         workOrderDetail: {},
         editWorkDialog: false,
         workFollow: [],
+        workFollows: {},
         isClear: false,
         showAddWork: false,
         params: {
@@ -305,6 +306,10 @@
       // 跟进状态
       this.dictionary(335, 1).then((res) => {
         this.workFollow = res.data;
+        res.data.forEach((item) => {
+          this.workFollows[item.id] = item.dictionary_name;
+        })
+
       })
     },
     methods: {
