@@ -165,7 +165,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="维修状态">
+                  <el-form-item label="维修状态" required>
                     <el-select v-model="params.status" placeholder="请选择维修状态" clearable>
                       <el-option v-for="item in state_repair" :label="item.dictionary_name" :key="item.id"
                                  :value="item.id" size="small">
