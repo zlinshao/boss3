@@ -208,8 +208,8 @@
                   <el-col :span="12">
                     <el-form-item label="跟进状态">
                       <div class="content">
-                        <span v-if="item.follow_statuss">{{item.follow_statuss}}</span>
-                        <span v-if="!item.follow_statuss">暂无</span>
+                        <span v-if="item.follow_status">{{item.follow_status}}</span>
+                        <span v-if="!item.follow_status">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
