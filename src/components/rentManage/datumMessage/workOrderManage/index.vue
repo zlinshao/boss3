@@ -233,8 +233,8 @@
                   prop="expected_finish_time"
                   label="下次跟进时间">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
-                    <span v-if="!scope.row.expected_finish_time">暂无</span>
+                    <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
+                    <span v-if="!scope.row.follow_time">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -285,10 +285,11 @@
                   prop="emergency"
                   label="紧急程度">
                   <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1"
+                  <span v-if="scope.row.emergency === 1 && scope.row.follow_status !== 338"
                         :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
-                    <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
-                    <span v-if="!scope.row.emergency">暂无</span>
+                    <span v-if="scope.row.emergency === 2 && scope.row.follow_status !== 338"
+                          style="color:red">紧急</span>
+                    <span v-if="!scope.row.emergency"></span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -340,10 +341,10 @@
                 </el-table-column>
                 <el-table-column
                   prop="expected_finish_time"
-                  label="预计完成时间">
+                  label="下次跟进时间">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
-                    <span v-if="!scope.row.expected_finish_time">暂无</span>
+                    <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
+                    <span v-if="!scope.row.follow_time">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column

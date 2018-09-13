@@ -241,10 +241,10 @@
                 prop="emergency"
                 label="紧急程度">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.emergency === 1"
+                  <span v-if="scope.row.emergency === 1 && scope.row.status !== 600"
                         :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
-                  <span v-if="scope.row.emergency === 2" style="color:red">紧急</span>
-                  <span v-if="!scope.row.emergency">暂无</span>
+                  <span v-if="scope.row.emergency === 2 && scope.row.status !== 600" style="color:red">紧急</span>
+                  <span v-if="!scope.row.emergency"></span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -310,7 +310,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="repair_result"
+                prop="estimated_time"
                 label="下次跟进时间">
                 <template slot-scope="scope">
                   <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
