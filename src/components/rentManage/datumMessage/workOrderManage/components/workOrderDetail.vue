@@ -131,7 +131,7 @@
             <div class="addWorkOrder" v-if="showAddWork">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="跟进状态">
+                  <el-form-item label="跟进状态" required="">
                     <el-select clearable v-model="params.follow_status" placeholder="选择跟进状态" value="">
                       <el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"
                                  :key="item.id"></el-option>
@@ -231,8 +231,8 @@
                   </el-col>
                   <el-col :span="24" v-if="item.img">
                     <el-form-item label="截图">
-                      <img v-if="item.img.image_pic !== []" data-magnify
-                           v-for="(val,key) in item.img.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt="">
+                      <img v-if="val.length > 0" data-magnify
+                           v-for="val in item.img.image_pic" :data-src="val[0].uri" :src="val[0].uri">
                     </el-form-item>
                   </el-col>
                 </el-row>
