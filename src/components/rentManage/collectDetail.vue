@@ -35,8 +35,8 @@
               <el-dropdown-menu slot="dropdown">
                 <div>
                   <el-dropdown-item
-                      v-for="item in contractInfo.operation.visit" :key="item"
-                      @click.native="confirmPress(item)">
+                    v-for="item in contractInfo.operation.visit" :key="item"
+                    @click.native="confirmPress(item)">
                     <span v-if="item === 'to_customer_service_publish'">回访提交</span>
                   </el-dropdown-item>
                 </div>
@@ -63,8 +63,8 @@
               <el-dropdown-menu slot="dropdown">
                 <div>
                   <el-dropdown-item
-                      v-for="item in contractInfo.operation.doc" :key="item"
-                      @click.native="confirmPress(item)">
+                    v-for="item in contractInfo.operation.doc" :key="item"
+                    @click.native="confirmPress(item)">
                     <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
                     <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
                     <span v-if="item === 'to_cancelled'">撤销审核</span>
@@ -346,7 +346,7 @@
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.pay_way">
                       {{matchDictionary(item.pay_way)}}，{{item.period}}个月 <span
-                        v-show="index<contractInfo.pay_way-1">;</span>
+                      v-show="index<contractInfo.pay_way-1">;</span>
                     </span>
                   </div>
                 </el-form-item>
@@ -428,7 +428,8 @@
               <el-col :span="8">
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_price}}
                     </span>
                   </div>
@@ -440,7 +441,8 @@
               <el-col :span="8">
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_name}}
                     </span>
                   </div>
@@ -449,7 +451,8 @@
               <el-col :span="8">
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_phone}}
                     </span>
                   </div>
@@ -458,7 +461,8 @@
               <el-col :span="8">
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_username}}
                     </span>
                   </div>
@@ -1166,7 +1170,7 @@
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.pay_way">
                       {{matchDictionary(item.pay_way)}}，{{item.period}}个月 <span
-                        v-show="index<contractInfo.pay_way-1">;</span>
+                      v-show="index<contractInfo.pay_way-1">;</span>
                     </span>
                   </div>
                 </el-form-item>
@@ -1211,28 +1215,32 @@
                 </el-form-item>
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_price}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_name}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_phone}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_username}}
                     </span>
                   </div>
@@ -1549,10 +1557,10 @@
         <div class="title">请输入缺失项目名，并使用 “,”隔开</div>
         <div class="textBox">
           <el-input
-              type="textarea"
-              :autosize="{ minRows: 6, maxRows: 6}"
-              v-model="params.content"
-              placeholder="请输入内容">
+            type="textarea"
+            :autosize="{ minRows: 6, maxRows: 6}"
+            v-model="params.content"
+            placeholder="请输入内容">
           </el-input>
         </div>
         <div style="margin-bottom: 30px">
@@ -1606,7 +1614,9 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="证件类型">
-                  <div class="content" v-if="item.old && item.old.idtype && item.old.idtype.dictionary_name">{{item.old && item.old.idtype && item.old.idtype.dictionary_name}}</div>
+                  <div class="content" v-if="item.old && item.old.idtype && item.old.idtype.dictionary_name">{{item.old
+                    && item.old.idtype && item.old.idtype.dictionary_name}}
+                  </div>
                   <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
@@ -1644,7 +1654,9 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="证件类型">
-                  <div class="content" v-if="item.new && item.new.idtype && item.new.idtype.dictionary_name">{{item.new && item.new.idtype && item.new.idtype.dictionary_name}}</div>
+                  <div class="content" v-if="item.new && item.new.idtype && item.new.idtype.dictionary_name">{{item.new
+                    && item.new.idtype && item.new.idtype.dictionary_name}}
+                  </div>
                   <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>

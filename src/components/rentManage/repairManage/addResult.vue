@@ -55,7 +55,7 @@
           if(res.data.code === '600200'){
             this.$notify.success({
               title:'成功',
-              message:res.data.msg
+              message:res.data.msg  
             });
             this.init();
             this.$emit('close','success');

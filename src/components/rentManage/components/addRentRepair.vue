@@ -1,6 +1,6 @@
 <template>
   <div id="addRentRepair">
-    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addRentRepairDialogVisible" width="50%">
+    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addRentRepairDialog" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -10,32 +10,25 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="合同类型">
-                <el-input v-model="form.contract_type" disabled></el-input>
+              <el-form-item label="房屋地址">
+                <el-input v-model="address" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
+                <el-input v-model='city_name' disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="客户姓名" required>
-                <el-input v-model="form.customer_name"></el-input>
+              <el-form-item label="房东电话">
+                <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="客户性别" required>
-                <el-radio-group v-model="form.sex">
-                  <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">
-                    {{item.dictionary_name}}
-                  </el-radio>
-                </el-radio-group>
+              <el-form-item label="客户姓名" required>
+                <el-input v-model="form.customer_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -46,81 +39,59 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="跟进人" required>
-                <el-input v-model="follow_name" readonly  @focus="chooseStaff" placeholder="请选择跟进人">
+              <el-form-item label="紧急程度" required="">
+                <el-select clearable placeholder="请选择紧急程度" value="" v-model="form.emergency">
+                  <el-option v-for="item in emergencies" :value="item.id" :label="item.value" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="初步认责人">
+                <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
+                  <el-option v-for="item in personCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="下次跟进人" required>
+                <el-input v-model="follow_name" readonly @focus="chooseStaff" placeholder="请选择下次跟进人">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="emptyStaff">清空</div>
                   </template>
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="下次跟进时间">
-                <el-date-picker type="datetime"
-                                v-model="form.estimated_time"
-                                placeholder="请选择日期"
-                                value-format="yyyy-MM-dd hh:mm:ss"
-                                default-time="12:00:00"></el-date-picker>
+            <el-col :span="8" v-if="form.person_liable === 692">
+              <el-form-item label="前租客姓名">
+                <el-input v-model="form.liable_name"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="初步认责人">
-                <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="预计维修时间">
-                <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
-                                value-format="yyyy-MM-dd hh:mm:ss" default-time="12:00:00"></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="预计维修金额">
-                <el-input  v-model="form.repair_money" ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="维修师傅">
-                <el-input v-model="form.repair_master"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="维修状态">
-                <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" v-if="form.status===600">
+            <el-col :span="8" v-if="form.status === 600">
               <el-form-item label="实际维修金额">
-                <el-input  v-model="form.real_money" ></el-input>
+                <el-input v-model="form.real_money"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8" v-if="form.status===600">
+            <el-col :span="8" v-if="form.status === 600">
               <el-form-item label="最终认责人">
                 <el-select v-model="form.final_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                  <el-option v-for="item in personCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-          </el-row>
-          <el-row>
-            <el-col :span="16">
+            <el-col :span="24">
               <el-form-item label="维修内容">
                 <el-input type="textarea" v-model="form.content"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="16">
+            <el-col :span="24">
               <el-form-item label="备注">
                 <el-input type="textarea" v-model="form.remark"></el-input>
               </el-form-item>
@@ -129,146 +100,147 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addRentRepairDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" @click="addRentRepairDialog = false">取 消</el-button>
+        <el-button size="small" :disabled="forbidden" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization" @selectMember="selectMember"></Organization>
+
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
-  import Organization from '../../common/organization';
+  import Organization from "../../common/organization";
+
   export default {
-    props: ['addRentRepairDialog', 'contract'],
+    props: ["module", "contract"],
     components: {Organization},
     data() {
       return {
-        addRentRepairDialogVisible: false,
+        addRentRepairDialog: false,
         organizationDialog: false,
-        organizeType: '',
+        forbidden: false,
+        organizeType: "",
+        length: "",
+        address: "",
+        city_name: "",
         form: {
-          city: '',
-          contract_id: '', //合同Id
-          contract_number: '', //合同编号
-          contract_type: '', //合同类型
-          customer_name: '',  //客户姓名
-          sex: null,     //性别
-          customer_mobile: '',  //客户电话
-          content: '',  //维修内容
-          repair_time: '',  //维修时间
-          repair_master: '',  //维修师傅
-          repair_money: '',   //维修金额
-          remark: '',  //备注
-          status: '',  //维修状态
-          person_liable: '', //认责人
-          module: 2, //租房
-          follow_id: '',  //跟进人id
-          final_liable: '', //最终认责人
-          real_money: '',  //实际维修金额
-          estimated_time: '',  //下次跟进时间
+          city: "",
+          contract_id: "",          //合同Id
+          contract_type: "2",       //合同类型
+          contract_number: "",      //合同编号
+          customer_name: "",        //客户姓名
+          customer_mobile: "",      //客户电话
+          landlord_mobile: "",      //房东电话
+          content: "",              //维修内容
+          remark: "",               //备注
+          person_liable: "",        //初步认责人
+          follow_id: "",            //下次跟进人id
+          final_liable: "",         //最终认责人
+          emergency: "",            //紧急程度
+          liable_name: "",          //前租客姓名
+          module: 2,                //租房
         },
-        follow_name: '', //跟进人名字
-        repairStatusCategory: [],
-        responsiblePersonCategory: [],
-        sexCategory: [],
-        cityCategory: [],
+        follow_name: "",                //跟进人名字
+        personCategory: [],
+        emergencies: [                  // 紧急程度
+          {id: 1, value: "一般"},
+          {id: 2, value: "紧急"}
+        ]
       };
     },
+    mounted() {
+      this.getDictionary();
+    },
     watch: {
-      addRentRepairDialog(val) {
-        this.addRentRepairDialogVisible = val
+      module(val) {
+        this.addRentRepairDialog = val;
       },
-      addRentRepairDialogVisible(val) {
+      addRentRepairDialog(val) {
         if (!val) {
-          this.$emit('close');
-        } else {
+          //模态框关闭时
+          this.$emit("close");
           this.initial();
-          this.getDictionary();
         }
       },
       contract(val) {
+        this.form.city = val.city_id;
+        this.city_name = val.city_name;
+        this.address = val.address;
         this.form.contract_id = val.contract_id;
         this.form.contract_number = val.contract_number;
-        this.form.contract_type = val.type;
+        this.form.landlord_mobile = val.phone;
       },
     },
     methods: {
       getDictionary() {
-        this.dictionary(595).then((res) => {  //维修状态
-          this.repairStatusCategory = res.data;
-        });
-        this.dictionary(604).then((res) => {  //认责人
-          this.responsiblePersonCategory = res.data;
-        });
-        this.dictionary(228).then((res) => { //性别
-          this.sexCategory = res.data;
-        });
-        this.dictionary(306,1).then((res) => { //城市
-          this.cityCategory = res.data;
+        //认责人
+        this.dictionary(604).then(res => {
+          this.personCategory = res.data;
         });
       },
       confirmAdd() {
-        this.$http.post(globalConfig.server + 'repaire/insert', this.form).then((res) => {
-          if (res.data.code === '600200') {
+        this.forbidden = true;
+        this.$http.post(globalConfig.server + "repaire/insert", this.form).then(res => {
+          this.forbidden = false;
+          if (res.data.code === "600200") {
             this.$notify.success({
-              title: '成功',
+              title: "成功",
               message: res.data.msg
             });
-            this.$emit('close','repair');
-            this.addRentRepairDialogVisible = false;
+            this.$emit("close", "repair");
+            this.addRentRepairDialog = false;
           } else {
             this.$notify.warning({
-              title: '警告',
+              title: "警告",
               message: res.data.msg
             });
           }
-        })
+        });
       },
       initial() {
         this.form = {
-          module: 2, //租房
-          contract_id: this.contract.contract_id, //合同Id
-          contract_number: this.contract.contract_number, //合同编号
-          contract_type: this.contract.type, //合同类型
-          customer_name: '',  //客户姓名
-          sex: null,     //性别
-          customer_mobile: '',  //客户电话
-          content: '',  //维修内容
-          repair_time: '',  //维修时间
-          repair_master: '',  //维修师傅
-          repair_money: '',   //维修金额
-          remark: '',  //备注
-          status: '',  //维修状态
-          person_liable: '', //认责人
-          follow_id: '',  //跟进人id
-          final_liable: '', //最终认责人
-          real_money: '',  //实际维修金额
-          estimated_time: '',
+          city: "",
+          contract_id: "",          //合同Id
+          contract_type: "2",       //合同类型
+          contract_number: "",      //合同编号
+          customer_name: "",        //客户姓名
+          customer_mobile: "",      //客户电话
+          content: "",              //维修内容
+          remark: "",               //备注
+          person_liable: "",        //初步认责人
+          follow_id: "",            //下次跟进人id
+          final_liable: "",         //最终认责人
+          emergency: "",            //紧急程度
+          liable_name: "",          //前租客姓名
+          module: 2,                //租房
         };
-        this.follow_name = '';
+        this.address = "";
+        this.follow_name = "";
       },
-      closeOrganization(){
-        this.organizeType = '';
+      closeOrganization() {
         this.organizationDialog = false;
+        this.organizeType = "";
+        this.length = "";
       },
-      selectMember(val){
+      selectMember(val) {
         this.follow_name = val[0].name;
         this.form.follow_id = val[0].id;
       },
-      chooseStaff(){
-        this.organizeType = 'staff';
+      chooseStaff() {
+        this.length = 1;
+        this.organizeType = "staff";
         this.organizationDialog = true;
       },
-      emptyStaff(){
-        this.follow_name = '';
-        this.form.follow_id = '';
+      emptyStaff() {
+        this.follow_name = "";
+        this.form.follow_id = "";
       }
-    },
+    }
   };
 </script>
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
   #addRentRepair {
   }
-
 </style>

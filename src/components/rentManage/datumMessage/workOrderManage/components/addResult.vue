@@ -3,26 +3,6 @@
     <el-dialog :close-on-click-modal="false" title="添加跟进记录" :visible.sync="addResultDialogVisible" width="40%">
       <div>
         <el-form size="small" :model="params" label-width="100px">
-          <!--<el-row>-->
-
-            <!--&lt;!&ndash;<el-col :span="12">&ndash;&gt;-->
-              <!--&lt;!&ndash;<el-form-item label="填写时间">&ndash;&gt;-->
-                <!--&lt;!&ndash;<el-date-picker type="datetime" placeholder="选择日期时间"&ndash;&gt;-->
-                                <!--&lt;!&ndash;value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expect_time"></el-date-picker>&ndash;&gt;-->
-              <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-            <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
-
-            <!--<el-col :span="12">-->
-              <!--<el-form-item label="工单进度">-->
-                <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
-                  <!--<el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-
-          <!--</el-row>-->
-
-
           <el-row>
             <el-col :span="24">
               <el-form-item label="跟进结果" required="">

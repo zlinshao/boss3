@@ -75,17 +75,44 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-
                       <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name"
                                 placeholder="点击选择部门">
-
                       </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
-
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">预警状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.warning_status" clearable placeholder="请选择预警状态" value="">
+                        <el-option v-for="key in warning_status" :label="key.name" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <!--<el-col :span="12">-->
+                <!--<el-row>-->
+                  <!--<el-col :span="8">-->
+                    <!--<div class="el_col_label">当前控制时长</div>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="16" class="el_col_option">-->
+                    <!--<el-form-item>-->
+                      <!--<el-input v-model="formInline.current_ready_days" placeholder="请输入天数">-->
+                      <!--</el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -220,12 +247,12 @@
                 </template>
               </el-table-column>
               <!--<el-table-column-->
-                <!--label="是否为二次出租">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.is_again_rent>0">是</span>-->
-                  <!--<span v-else-if="scope.row.is_again_rent===0">否</span>-->
-                  <!--<span v-else="">/</span>-->
-                <!--</template>-->
+              <!--label="是否为二次出租">-->
+              <!--<template slot-scope="scope">-->
+              <!--<span v-if="scope.row.is_again_rent>0">是</span>-->
+              <!--<span v-else-if="scope.row.is_again_rent===0">否</span>-->
+              <!--<span v-else="">/</span>-->
+              <!--</template>-->
               <!--</el-table-column>-->
               <el-table-column
                 label="租房结束是否晚于收房">
@@ -247,10 +274,10 @@
               <el-table-column
                 label="预警状态">
                 <template slot-scope="scope">
-                  <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
-                  <div v-else-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
-                  <div v-else-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
-                  <div v-else-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+                  <div v-if="scope.row.warning_status === 1" class="label success">正常</div>
+                  <div v-else-if="scope.row.warning_status === 2" class="label yellow">黄色预警</div>
+                  <div v-else-if="scope.row.warning_status === 3" class="label orange">橙色预警</div>
+                  <div v-else-if="scope.row.warning_status === 4" class="label red">红色预警</div>
                   <div v-else="">/</div>
                 </template>
               </el-table-column>
@@ -353,7 +380,7 @@
     <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
                  :houseDetail="houseDetail" :houseId="houseId" @close="closeModal"></HouseDetail>
 
-    <AddWebInfo :addWebInfoDialog="addWebInfoDialog"  :all_dic="all_dic" :houseId="houseId"
+    <AddWebInfo :addWebInfoDialog="addWebInfoDialog" :all_dic="all_dic" :houseId="houseId"
                 :houseDetail="houseDetail" @close="closeModal"></AddWebInfo>
 
     <Download :downloadPicDialog="downloadPicDialog" :houseId="houseId" @close="closeModal"></Download>
@@ -382,14 +409,15 @@
 
   import AddWebInfo from './components/addWebsiteInfo'
   import HouseSearch from '../../common/houseSearch'
+
   export default {
     name: 'hello',
     components: {
-      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail,Download,
-      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab,ReportRecord,AddWebInfo,
+      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail, Download,
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab, ReportRecord, AddWebInfo,
       HouseSearch
     },
-    data () {
+    data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
@@ -404,7 +432,27 @@
           org_id: '',
           is_nrcy: 0,
           is_lord: 1,
+          warning_status: '',
+          // current_ready_days: '',
         },
+        warning_status: [
+          {
+            id: 1,
+            name: '正常',
+          },
+          {
+            id: 2,
+            name: '黄色预警',
+          },
+          {
+            id: 3,
+            name: '橙色预警',
+          },
+          {
+            id: 4,
+            name: '红色预警',
+          }
+        ],
         department_name: '',
         length: '',
         type: '',
@@ -450,12 +498,12 @@
         organizationType: '',
         changeHouseStatus: false,
 
-        mergeParams:{id:''},
-        mergeName : '',
-        oldHouseName : '',
+        mergeParams: {id: ''},
+        mergeName: '',
+        oldHouseName: '',
       }
     },
-    mounted(){
+    mounted() {
       this.getData();
       this.getDictionary();
       this.getCharts();
@@ -479,7 +527,7 @@
         });
         return dictionary_name;
       },
-      getData(){
+      getData() {
         this.emptyContent = ' ';
         this.tableLoading = true;
         this.$http.get(globalConfig.server_user1 + 'houses', {params: this.formInline}).then((res) => {
@@ -513,7 +561,7 @@
           }
         })
       },
-      getCharts(){
+      getCharts() {
         this.$http.get(globalConfig.server_user1 + 'houses/charts').then((res) => {
           if (res.data.status === 'success') {
             this.houseStatus = res.data.data.house;
@@ -521,7 +569,7 @@
         })
       },
       //复选框变化
-      handleSelectionChange(val){
+      handleSelectionChange(val) {
         this.operateArray = [];
         if (val.length > 0) {
           val.forEach((item) => {
@@ -530,15 +578,17 @@
         }
       },
       //*****************************高级搜索/各种搜索项****************************//
-      highGrade(){
+      highGrade() {
         this.isHigh = !this.isHigh;
       },
-      resetting(){
+      resetting() {
         this.formInline.org_id = '';
         this.department_name = '';
         this.formInline.status = '';
+        this.formInline.warning_status = '';
+        // this.formInline.current_ready_days = '';
       },
-      search(){
+      search() {
         this.isHigh = false;
         this.houseId = '';
         this.formInline.page = 1;
@@ -556,13 +606,13 @@
       },
 
       //选人模态框
-      openOrganizationModal(val){
+      openOrganizationModal(val) {
         this.organizationDialog = true;
         this.organizationType = val;
         this.length = 1;
       },
 
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         if (this.organizationType === 'dispatch') {
           this.$confirm('分配后将不可撤回, 是否继续?', '提示', {
@@ -583,14 +633,14 @@
         }
       },
       //分配房屋
-      dispatchHouse(itemParams){
+      dispatchHouse(itemParams) {
         let object = {};
         let update = {};
         let org = {};
-        if(itemParams[0].hasOwnProperty('avatar')){
-           org = {org_id: itemParams[0].org[0].id,user_id:itemParams[0].id};
-        }else {
-           org = {org_id: itemParams[0].id};
+        if (itemParams[0].hasOwnProperty('avatar')) {
+          org = {org_id: itemParams[0].org[0].id, user_id: itemParams[0].id};
+        } else {
+          org = {org_id: itemParams[0].id};
         }
         this.operateArray.forEach((item) => {
           object[item] = org;
@@ -607,7 +657,7 @@
         })
       },
       //************************************************************************/
-      clickTable(row, event){
+      clickTable(row, event) {
         this.houseId = row.id;
         this.collectData = row.lords;
         if (this.collectData.length > 0) {
@@ -622,12 +672,12 @@
         return '';
       },
       //*****************************右键操作****************************//
-      searchPic(id){
+      searchPic(id) {
         this.isOnlyPic = true;
         this.houseId = id;
         this.houseDetailDialog = true;
       },
-      dblClickTable(row, event){
+      dblClickTable(row, event) {
         this.isOnlyPic = false;
         this.houseId = row.id;
         this.houseDetail = row;
@@ -635,7 +685,7 @@
       },
 
       //房屋右键
-      houseMenu(row, event){
+      houseMenu(row, event) {
         this.houseId = row.id;
         this.houseDetail = row;
         this.collectData = row.lords;
@@ -663,7 +713,7 @@
       },
 
       //右键回调时间
-      clickEvent (index) {
+      clickEvent(index) {
         this.changeHouseStatus = false;
         switch (index) {
           case 'edit' :
@@ -692,7 +742,7 @@
             break;
         }
       },
-      closeModal(val){
+      closeModal(val) {
         this.editHouseDialog = false;
         this.addFollowDialog = false;
         this.organizationDialog = false;
@@ -720,12 +770,12 @@
         }
       },
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
 
       //右键参数
-      contextMenuParam(event){
+      contextMenuParam(event) {
         //param: user right param
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
@@ -738,7 +788,7 @@
         })
       },
 
-      refreshList(){
+      refreshList() {
         this.formInline = {
           q: '',
           per_page_number: 5,
@@ -747,6 +797,8 @@
           org_id: '',
           is_nrcy: 0,
           is_lord: 1,
+          warning_status: '',
+          // current_ready_days: '',
         };
         this.department_name = '';
         this.getData();
@@ -754,19 +806,19 @@
       },
 
       //*************************合并房屋**************************
-      getHouseAddress(val){
+      getHouseAddress(val) {
         this.houseDialog = false;
-        if(val){
+        if (val) {
           this.mergeName = val.name;
           this.mergeParams.id = val.id;
         }
       },
-      isConfirmMerge(){
+      isConfirmMerge() {
         let msg = `<div>
                       此操作将会将<b style="color: #e4393c">${this.oldHouseName}</b>合并到<b style="color: #e4393c">${this.mergeName}</b>,
                       <b style="color: #e4393c">${this.oldHouseName}</b>下的所有合同将会转移到<b style="color: #e4393c">${this.mergeName}</b>下,是否继续?
                   </div>`;
-        this.$confirm( msg, '提示', {
+        this.$confirm(msg, '提示', {
           dangerouslyUseHTMLString: true,
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -780,19 +832,19 @@
           });
         });
       },
-      confirmMerge(){
-        this.$http.put(globalConfig.server+'coreproject/houses/merge/'+this.houseId,this.mergeParams).then(res=>{
-          if(res.data.code === '20000'){
+      confirmMerge() {
+        this.$http.put(globalConfig.server + 'coreproject/houses/merge/' + this.houseId, this.mergeParams).then(res => {
+          if (res.data.code === '20000') {
             this.$notify.success({
-              title:'成功',
-              message : res.data.msg,
+              title: '成功',
+              message: res.data.msg,
             });
             this.getData();
             this.mergeDialog = false;
-          }else {
+          } else {
             this.$notify.warning({
-              title:'警告',
-              message : res.data.msg,
+              title: '警告',
+              message: res.data.msg,
             })
           }
         })
@@ -822,7 +874,7 @@
       border-radius: 4px;
       color: #ffffff;
     }
-    .label_inline{
+    .label_inline {
       display: inline-block;
       margin-right: 5px;
       padding: 5px;

@@ -9,17 +9,17 @@ const Lock =()=> import  ('../components/common/lockedScreen.vue')
 
 
 //租赁管理
-const WholeRentManage =()=> import  ('../components/rentManage/wholeRentManage/index.vue')
+const WholeRentManage =()=> import  ('../components/rentManage/wholeRentManage/index.vue')//整租管理
 const JointRentManage =()=> import  ('../components/rentManage/jointRentManage/index.vue')
 
 //客服中心
-const ExpenseAccount =()=> import  ('../components/customService/expenseAccount/index.vue')   //报销
-const CustomerService =()=> import  ('../components/rentManage/customerService/ReturnVisitManage/index.vue')                //回访
+const ExpenseAccount =()=> import  ('../components/customService/expenseAccount/index.vue')   //报销管理
+const CustomerService =()=> import  ('../components/rentManage/customerService/ReturnVisitManage/index.vue') //回访
 
 // const ContractManage =()=> import  ('../components/rentManage/datumMessage/contractManage/index1.vue')
 // const ClientManage =()=> import  ('../components/rentManage/datumMessage/clientManage/index1.vue')
 const HousesManage =()=> import  ('../components/rentManage/housesManage/index.vue')                      //产品管控中心
-const RepairManage =()=> import  ('../components/rentManage/repairManage/index.vue')
+const RepairManage =()=> import  ('../components/rentManage/repairManage/index.vue')        //维修管理
 const ClientManage =()=> import  ('../components/rentManage/datumMessage/clientManage/index.vue')         //客户管理
 const ContractManage =()=> import  ('../components/rentManage/datumMessage/contractManage/index.vue')     //合同管理
 const WorkOrderManage =()=> import  ('../components/rentManage/datumMessage/workOrderManage/index.vue')   //工单管理
@@ -85,9 +85,9 @@ const ExamineAndApprove =()=> import  ('../components/OAWork/examineAndApprove/i
 
 
 // 乐伽大学
-const LineCollege =()=> import  ('../components/lejiaCollege/LineCollege/index.vue')
+const LineCollege =()=> import  ('../components/lejiaCollege/LineCollege/index.vue')//考试列表
 const StaffRegistration =()=> import  ('../components/lejiaCollege/StaffRegistration/index.vue')
-const College =()=> import  ('../components/lejiaCollege/college/index.vue')
+const College =()=> import  ('../components/lejiaCollege/college/index.vue') //乐伽大学
 const OnlineExam =()=> import  ('../components/lejiaCollege/OnlineExam/index.vue')    //在线考试
 
 const ConfigExam =()=> import  ('../components/lejiaCollege/OnlineExam/configExam/index.vue')  //管理试卷
@@ -184,7 +184,7 @@ const BeforeExam =()=> import  ('../components/lejiaCollege/OnlineExam/beforeExa
 const BeforeNaire =()=> import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue')  //开考之前
 const MyNaire =()=> import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue')  //我的调查列表
 
-const DataMove =()=> import  ('../components/dataMove.vue')
+const DataMove =()=> import  ('../components/dataMove.vue')//数据迁移
 
 const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 
@@ -192,12 +192,13 @@ const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
 const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
-
-
 const Application = ()=> import ('../components/C-manage/applicationManage/index');
 const Houses = ()=> import ('../components/C-manage/houseManage/index');
 const DormManage = ()=> import ('../components/dormManage/index');
 const OfficeManage = ()=> import ('../components/officeManage/index');
+
+// B端管理
+const UntiePhone = ()=> import ('../components/B-manage/untiePhone/index');
 
 Vue.use(Router);
 
@@ -607,6 +608,15 @@ export default new Router({
       children: [
         {path: '/application', component: Application, name: '申请管理'},
         {path: '/houses', component: Houses, name: '房源管理'},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: 'B端管理',
+      icon: 'iconfont icon-b',
+      children: [
+        {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
       ]
     },
   ]
