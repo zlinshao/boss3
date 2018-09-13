@@ -76,9 +76,9 @@
                     </el-dropdown>
                   </el-form-item>
 
-                  <el-form-item>
-                    <el-button type="primary" size="mini" @click="leadingOut">导出</el-button>
-                  </el-form-item>
+                  <!--<el-form-item>-->
+                    <!--<el-button type="primary" size="mini" @click="leadingOut">导出</el-button>-->
+                  <!--</el-form-item>-->
 
                 </el-form>
               </div>
