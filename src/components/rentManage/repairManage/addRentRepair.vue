@@ -16,7 +16,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
+                <el-select clearable v-model="form.city" placeholder="选择城市" value="" disabled>
                   <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
