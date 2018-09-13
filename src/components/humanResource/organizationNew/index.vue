@@ -75,6 +75,11 @@
                       </el-dropdown-menu>
                     </el-dropdown>
                   </el-form-item>
+
+                  <el-form-item>
+                    <el-button type="primary" size="mini" @click="leadingOut">导出</el-button>
+                  </el-form-item>
+
                 </el-form>
               </div>
               <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -1167,6 +1172,24 @@
       },
     },
     methods: {
+      // 导出
+      leadingOut() {
+        this.isHigh = false;
+        let data = Object.assign({}, this.params);
+        data.index = 1;
+        this.$http.get(globalConfig.server + 'manager/staff', {params: data}).then((res) => {
+          if (!res.data) {
+            return;
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        })
+      },
       goPersonnel(val) {
         if (val === 'a') {
           this.$router.push({path: '/personnelStatement'});
@@ -1180,8 +1203,8 @@
       resetting() {
         this.params.is_dimission = '';
         this.params.forward = '';
-        this.params.entry_time = '';
-        this.params.leave_time = '';
+        this.params.entry_time = [];
+        this.params.leave_time = [];
       },
       //入职材料
       getEntryMaterials() {
