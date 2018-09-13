@@ -99,20 +99,20 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">当前控制时长</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-input v-model="formInline.current_ready_days" placeholder="请输入天数">
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
+              <!--<el-col :span="12">-->
+                <!--<el-row>-->
+                  <!--<el-col :span="8">-->
+                    <!--<div class="el_col_label">当前控制时长</div>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="16" class="el_col_option">-->
+                    <!--<el-form-item>-->
+                      <!--<el-input v-model="formInline.current_ready_days" placeholder="请输入天数">-->
+                      <!--</el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -433,7 +433,7 @@
           is_nrcy: 0,
           is_lord: 1,
           warning_status: '',
-          current_ready_days: '',
+          // current_ready_days: '',
         },
         warning_status: [
           {
@@ -586,7 +586,7 @@
         this.department_name = '';
         this.formInline.status = '';
         this.formInline.warning_status = '';
-        this.formInline.current_ready_days = '';
+        // this.formInline.current_ready_days = '';
       },
       search() {
         this.isHigh = false;
@@ -798,7 +798,7 @@
           is_nrcy: 0,
           is_lord: 1,
           warning_status: '',
-          current_ready_days: '',
+          // current_ready_days: '',
         };
         this.department_name = '';
         this.getData();
