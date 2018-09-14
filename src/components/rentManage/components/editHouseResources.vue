@@ -969,7 +969,7 @@
             data.customers && data.customers.forEach((item) => {
               this.nameArray.push(item.name);
               this.sexArray.push(String(item.sex));
-              this.id_typeArray.push(item.idtype);
+              item.idtype ? this.id_typeArray.push(Number(item.idtype)) : '';
               this.id_numberArray.push(item.idcard);
               this.idArray.push(item.id);
               this.phoneArray.push(item.phone);
