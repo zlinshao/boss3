@@ -6,7 +6,11 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='city_name' disabled></el-input>
+                <el-input v-if="city_name" v-model='city_name' disabled></el-input>
+                <el-select v-else clearable v-model="params.city" placeholder="请选择" value="">
+                  <el-option v-for="item in cities" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -29,12 +33,12 @@
           </el-row>
           <el-row>
             <!--<el-col :span="12">-->
-              <!--<el-form-item label="跟进状态">-->
-                <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
-                  <!--<el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"-->
-                             <!--:key="item.id"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
+            <!--<el-form-item label="跟进状态">-->
+            <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
+            <!--<el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"-->
+            <!--:key="item.id"></el-option>-->
+            <!--</el-select>-->
+            <!--</el-form-item>-->
             <!--</el-col>-->
             <el-col :span="12">
               <el-form-item label="紧急程度" required="">
@@ -133,6 +137,7 @@
         city_name: '',
         house_name: '',
         forbidden: false,
+        cities: [],
       };
     },
     watch: {
@@ -152,6 +157,7 @@
         this.params.city = val.city_id;
         this.city_name = val.city_name;
         this.house_name = val.house_name;
+        this.cities = val.cities;
       },
       contractModule(val) {
         this.params.module = val;

@@ -1046,23 +1046,37 @@
         let c = {};
         cities.forEach(res => {
           if (res.variable.city_id === city) {
+            if (city.startsWith('500')) {
+              c.id = res.id;
+              c.name = res.dictionary_name;
+              return;
+            }
             c.id = res.id;
             c.name = res.dictionary_name;
           }
         });
+        console.log(c);
         return c;
       },
       // 工单/维修单 参数
       returnInfo(row) {
-        let city = this.forCity(this.cities, row.city);
+        let city = {};
+        if (row.city) {
+          city = this.forCity(this.cities, row.city);
+        } else {
+          city.id = '';
+          city.name = '';
+        }
         this.addReturnInfo = row;
         this.addReturnInfo.city_id = city.id;
         this.addReturnInfo.city_name = city.name;
+        this.addReturnInfo.cities = this.cities;
         this.collectHouseId = row.house_id;
         this.collectContractId = row.contract_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.houseAddress = row.address;
         this.houseData = {
+          cities: this.cities,
           contract_id: row.contract_id,
           house_name: row.address,
           city_id: city.id,
@@ -1474,7 +1488,6 @@
         this.isHigh = !this.isHigh;
       },
       resetting() {
-        this.highGrade();
         this.collectParams.lord_start_time = [];
         this.collectParams.lord_end_time = [];
         this.collectParams.org_id = '';

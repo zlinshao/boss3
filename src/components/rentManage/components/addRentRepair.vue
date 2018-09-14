@@ -16,7 +16,11 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
-                <el-input v-model='city_name' disabled></el-input>
+                <el-input v-if="city_name" v-model='city_name' disabled></el-input>
+                <el-select v-else clearable v-model="form.city" placeholder="请选择" value="">
+                  <el-option v-for="item in cities" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -147,7 +151,8 @@
         emergencies: [                  // 紧急程度
           {id: 1, value: "一般"},
           {id: 2, value: "紧急"}
-        ]
+        ],
+        cities: [],
       };
     },
     mounted() {
@@ -171,6 +176,7 @@
         this.form.contract_id = val.contract_id;
         this.form.contract_number = val.contract_number;
         this.form.landlord_mobile = val.phone;
+        this.cities = val.cities;
       },
     },
     methods: {
