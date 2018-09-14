@@ -4,10 +4,10 @@
 const app = {
   state: {
     visitedViews: [],
-    menuStatus : false,
-    isLoading:false,
-    isBasicChange:false,
-    isEditReportManage:false,
+    menuStatus: false,
+    isLoading: false,
+    isBasicChange: false,
+    isEditReportManage: false,
   },
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
@@ -20,78 +20,78 @@ const app = {
     DEL_VISITED_VIEWS: (state, view) => {
       for (const [i, v] of state.visitedViews.entries()) {
         if (v.path === view.path) {
-          state.visitedViews.splice(i, 1)
+          state.visitedViews.splice(i, 1);
           break
         }
       }
     },
     CLOSE_ALL_VISITED: (state, view) => {
-      state.visitedViews.splice(view+1,state.visitedViews.length);
-      state.visitedViews.splice(0,view);
+      state.visitedViews.splice(view + 1, state.visitedViews.length);
+      state.visitedViews.splice(0, view);
     },
     CLOSE_LEFT_VISITED: (state, view) => {
-      state.visitedViews.splice(0,view);
+      state.visitedViews.splice(0, view);
     },
     CLOSE_RIGHT_VISITED: (state, view) => {
-      state.visitedViews.splice(view+1,state.visitedViews.length);
+      state.visitedViews.splice(view + 1, state.visitedViews.length);
     },
-    CLOSE_MENU:(state,view) => {
+    CLOSE_MENU: (state, view) => {
       state.menuStatus = false;
     },
-    OPEN_MENU:(state,view) => {
+    OPEN_MENU: (state, view) => {
       state.menuStatus = true;
     },
-    SHOW_LOADING:(state,view) => {
+    SHOW_LOADING: (state, view) => {
       state.isLoading = true;
     },
-    HIDE_LOADING:(state,view) => {
+    HIDE_LOADING: (state, view) => {
       state.isLoading = false;
     },
-    CHANGE_BASIC_SETTING:(state) => {
+    CHANGE_BASIC_SETTING: (state) => {
       state.isBasicChange = !state.isBasicChange;
     },
-    TO_EDIT_LIST:(state) => {
+    TO_EDIT_LIST: (state) => {
       state.isEditReportManage = !state.isEditReportManage;
     }
   },
   actions: {
-    addVisitedViews({ commit }, view) {
+    addVisitedViews({commit}, view) {
       commit('ADD_VISITED_VIEWS', view)
     },
-    delVisitedViews({ commit, state }, view) {
+    delVisitedViews({commit, state}, view) {
       return new Promise((resolve) => {
-        commit('DEL_VISITED_VIEWS', view)
+        commit('DEL_VISITED_VIEWS', view);
         resolve([...state.visitedViews])
       })
     },
-    closeALLVisited({ commit }, view){
+    closeALLVisited({commit}, view) {
       commit('CLOSE_ALL_VISITED', view)
     },
-    closeLeftVisited({ commit }, view){
+    closeLeftVisited({commit}, view) {
       commit('CLOSE_LEFT_VISITED', view)
     },
-    closeRightVisited({ commit }, view){
+    closeRightVisited({commit}, view) {
       commit('CLOSE_RIGHT_VISITED', view)
     },
-    closeMenu({ commit }, view){
+    closeMenu({commit}, view) {
       commit('CLOSE_MENU', view)
     },
-    openMenu({ commit }, view){
+    openMenu({commit}, view) {
       commit('OPEN_MENU', view)
     },
-    showLoading({ commit }, view){
+    showLoading({commit}, view) {
       commit('SHOW_LOADING', view)
     },
-    hideLoading({ commit }, view){
+    hideLoading({commit}, view) {
       commit('HIDE_LOADING', view)
     },
     //改变基本设置
-    changeBasicSetting({commit}){
+    changeBasicSetting({commit}) {
       commit('CHANGE_BASIC_SETTING')
     },
 
     //喜报界面切换状态
-    toEditList({commit}){
+    toEditList({commit}) {
       commit('TO_EDIT_LIST')
     }
   }

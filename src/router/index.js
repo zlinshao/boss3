@@ -1,38 +1,38 @@
-import Vue from  'vue'
+import Vue from 'vue'
 import Router from 'vue-router'
 
 //路由
-const Login =()=> import  ('../components/Login.vue')
-const Index =()=> import  ('../components/index.vue')
-const Main =()=> import  ('../components/main.vue')
-const Lock =()=> import  ('../components/common/lockedScreen.vue')
+const Login = () => import  ('../components/Login.vue')
+const Index = () => import  ('../components/index.vue')
+const Main = () => import  ('../components/main.vue')
+const Lock = () => import  ('../components/common/lockedScreen.vue')
 
 
 //租赁管理
-const WholeRentManage =()=> import  ('../components/rentManage/wholeRentManage/index.vue')//整租管理
-const JointRentManage =()=> import  ('../components/rentManage/jointRentManage/index.vue')
+const WholeRentManage = () => import  ('../components/rentManage/wholeRentManage/index.vue')//整租管理
+const JointRentManage = () => import  ('../components/rentManage/jointRentManage/index.vue')
 
 //客服中心
-const ExpenseAccount =()=> import  ('../components/customService/expenseAccount/index.vue')   //报销管理
-const CustomerService =()=> import  ('../components/rentManage/customerService/ReturnVisitManage/index.vue') //回访
+const ExpenseAccount = () => import  ('../components/customService/expenseAccount/index.vue')   //报销管理
+const CustomerService = () => import  ('../components/rentManage/customerService/ReturnVisitManage/index.vue') //回访
 
 // const ContractManage =()=> import  ('../components/rentManage/datumMessage/contractManage/index1.vue')
 // const ClientManage =()=> import  ('../components/rentManage/datumMessage/clientManage/index1.vue')
-const HousesManage =()=> import  ('../components/rentManage/housesManage/index.vue')                      //产品管控中心
-const RepairManage =()=> import  ('../components/rentManage/repairManage/index.vue')        //维修管理
-const ClientManage =()=> import  ('../components/rentManage/datumMessage/clientManage/index.vue')         //客户管理
-const ContractManage =()=> import  ('../components/rentManage/datumMessage/contractManage/index.vue')     //合同管理
-const WorkOrderManage =()=> import  ('../components/rentManage/datumMessage/workOrderManage/index.vue')   //工单管理
-const RetreatManage =()=> import  ('../components/rentManage/datumMessage/retreatManage/index.vue') //退租管理
+const HousesManage = () => import  ('../components/rentManage/housesManage/index.vue')                      //产品管控中心
+const RepairManage = () => import  ('../components/rentManage/repairManage/index.vue')        //维修管理
+const ClientManage = () => import  ('../components/rentManage/datumMessage/clientManage/index.vue')         //客户管理
+const ContractManage = () => import  ('../components/rentManage/datumMessage/contractManage/index.vue')     //合同管理
+const WorkOrderManage = () => import  ('../components/rentManage/datumMessage/workOrderManage/index.vue')   //工单管理
+const RetreatManage = () => import  ('../components/rentManage/datumMessage/retreatManage/index.vue') //退租管理
 
 // 财务账本
 // const Foundation =()=> import  ('../components/finance/foundation/index')                                //基础管理
 // const FundMessage =()=> import  ('../components/finance/fundMessage/index.vue')                          //款项管理
-const ClientMessage =()=> import  ('../components/finance/clientMessage/index.vue')                         //客户管理
-const PendingItem =()=> import  ('../components/finance/pendingItem/index.vue')                             //待处理项
-const PendingSettle =()=> import  ('../components/finance/pendingItem/components/pendingSettle.vue')        //结算
+const ClientMessage = () => import  ('../components/finance/clientMessage/index.vue')                         //客户管理
+const PendingItem = () => import  ('../components/finance/pendingItem/index.vue')                             //待处理项
+const PendingSettle = () => import  ('../components/finance/pendingItem/components/pendingSettle.vue')        //结算
 
-const StaticDetail =()=> import  ('../components/finance/statistics/components/staticDetail')            //统计详情
+const StaticDetail = () => import  ('../components/finance/statistics/components/staticDetail')            //统计详情
 // const Statistics =()=> import  ('../components/finance/statistics/index.vue')                            //数据统计
 // const IncomeFlow =()=> import  ('../components/finance/incomeFlow/index')                                //收支流水
 
@@ -43,78 +43,78 @@ const StaticDetail =()=> import  ('../components/finance/statistics/components/s
 // const LookHouse =()=> import  ('../comments/wechatMessage/lookHouse/index1.vue')                    //预约看房
 // const League =()=> import  ('../comments/wechatMessage/league/index1.vue')                          //房东加盟
 // const Feedback =()=> import  ('../comments/wechatMessage/feedback/index1.vue')                      //意见反馈
-const WechatMessage =()=> import  ('../components/wechatMessage/index.vue')                           //微信管理
+const WechatMessage = () => import  ('../components/wechatMessage/index.vue')                           //微信管理
 
 
 //人资管理
 // const StaffManage =()=> import  ('../comments/humanResource/staffManage/index1.vue')
 // const Organization =()=> import  ('../components/humanResource/organization/index1.vue')
 // const Achievement =()=> import  ('../comments/humanResource/achievement/index1.vue')
-const LeaveOffice =()=> import  ('../components/humanResource/leaveOffice/index.vue')
-const IntegralManage =()=> import  ('../components/humanResource/integralManage/index.vue')
-const OrganizationNew =()=> import  ('../components/humanResource/organizationNew/index.vue')       // add by cj 组织架构
-const PersonalRecords =()=> import  ('../components/humanResource/personalRecords/index')
-const StaffRecords =()=> import  ('../components/humanResource/staffRecords/index')     // add by cj 员工档案
-const PersonnelStatement =()=> import  ('../components/humanResource/organizationNew/components/personnelStatement')     // add by cj 人事报表
+const LeaveOffice = () => import  ('../components/humanResource/leaveOffice/index.vue')
+const IntegralManage = () => import  ('../components/humanResource/integralManage/index.vue')
+const OrganizationNew = () => import  ('../components/humanResource/organizationNew/index.vue')       // add by cj 组织架构
+const PersonalRecords = () => import  ('../components/humanResource/personalRecords/index')
+const StaffRecords = () => import  ('../components/humanResource/staffRecords/index')     // add by cj 员工档案
+const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement')     // add by cj 人事报表
 
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
 // const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue')               //日程管理
-const Institution =()=> import  ('../components/OAWork/management/institution/index.vue')           //制度管理
+const Institution = () => import  ('../components/OAWork/management/institution/index.vue')           //制度管理
 // const Vote =()=> import  ('../comments/OAWork/vote/index1.vue')                                   //投票管理
-const Counter =()=> import  ('../components/OAWork/management/counter/index.vue')                   //业绩计算器
-const Management =()=> import  ('../components/OAWork/management/index.vue')                        //办公管理
+const Counter = () => import  ('../components/OAWork/management/counter/index.vue')                   //业绩计算器
+const Management = () => import  ('../components/OAWork/management/index.vue')                        //办公管理
 
 // const SuppliesUse =()=> import  ('../comments/OAWork/property/items/officeSuppliesUse.vue')                       //办公用品申领
 // const SuppliesGather =()=> import  ('../comments/OAWork/property/officeSuppliesGather/officeSuppliesGather.vue')  //办公用品汇总
 // const CapitalChange =()=> import  ('../comments/OAWork/property/items/capitalAssetsChange.vue')                   //固定资产异动
 // const CapitalGather =()=> import  ('../comments/OAWork/property/items/capitalAssetsGather.vue')                   //固定资产总汇
-const Property =()=> import  ('../components/OAWork/property/index.vue')                                               //资产管理
+const Property = () => import  ('../components/OAWork/property/index.vue')                                               //资产管理
 
 // const ArticleMessage =()=> import  ('../comments/OAWork/articleMessage/staffSquare/index1.vue')                    //员工广场
-const PublicArticle =()=> import  ('../components/OAWork/articleMessage/staffSquare/components/publicArticle.vue')     //文章发布
-const ArticleMessage =()=> import  ('../components/OAWork/articleMessage/index.vue')                                   //文章管理
+const PublicArticle = () => import  ('../components/OAWork/articleMessage/staffSquare/components/publicArticle.vue')     //文章发布
+const ArticleMessage = () => import  ('../components/OAWork/articleMessage/index.vue')                                   //文章管理
 
 // const ContractClaim =()=> import  ('../comments/OAWork/pagerData/contractClaim/index1.vue')
-const PagerData =()=> import  ('../components/OAWork/pagerData/index.vue')                        //纸质资料
+const PagerData = () => import  ('../components/OAWork/pagerData/index.vue')                        //纸质资料
 
 // const Knowledge =()=> import  ('../comments/OAWork/knowledge/index1.vue')                     //知识管理
 
-const ExamineAndApprove =()=> import  ('../components/OAWork/examineAndApprove/index.vue')
+const ExamineAndApprove = () => import  ('../components/OAWork/examineAndApprove/index.vue')
 
 
 // 乐伽大学
-const LineCollege =()=> import  ('../components/lejiaCollege/LineCollege/index.vue')//考试列表
-const StaffRegistration =()=> import  ('../components/lejiaCollege/StaffRegistration/index.vue')
-const College =()=> import  ('../components/lejiaCollege/college/index.vue') //乐伽大学
-const OnlineExam =()=> import  ('../components/lejiaCollege/OnlineExam/index.vue')    //在线考试
+const LineCollege = () => import  ('../components/lejiaCollege/LineCollege/index.vue')//考试列表
+const StaffRegistration = () => import  ('../components/lejiaCollege/StaffRegistration/index.vue')
+const College = () => import  ('../components/lejiaCollege/college/index.vue') //乐伽大学
+const OnlineExam = () => import  ('../components/lejiaCollege/OnlineExam/index.vue')    //在线考试
 
-const ConfigExam =()=> import  ('../components/lejiaCollege/OnlineExam/configExam/index.vue')  //管理试卷
-const BatchQuestions =()=> import  ('../components/lejiaCollege/OnlineExam/batchQuestions/index.vue')  //批量导入试题
-const MyselfQuestions =()=> import  ('../components/lejiaCollege/OnlineExam/myselfQuestions/index.vue')  //自己录入
-const PreviewExam =()=> import  ('../components/lejiaCollege/OnlineExam/previewExam/index.vue')  //预览试卷
-const AnswerExam =()=> import  ('../components/lejiaCollege/OnlineExam/answerExam/index.vue')  //考生答题
-const LookExam =()=> import  ('../components/lejiaCollege/OnlineExam/lookExam/index.vue')  //查看答题试卷
-const ExaminerRead =()=> import  ('../components/lejiaCollege/OnlineExam/examinerRead/index.vue')  //主考官阅卷
-const ExaminerReadEach =()=> import  ('../components/lejiaCollege/OnlineExam/examinerReadEach/index.vue')  //主考官阅卷试题
-const ExaminerShortAn =()=> import  ('../components/lejiaCollege/OnlineExam/examinerShortAn/index.vue')  //主考官阅卷－简答题
+const ConfigExam = () => import  ('../components/lejiaCollege/OnlineExam/configExam/index.vue')  //管理试卷
+const BatchQuestions = () => import  ('../components/lejiaCollege/OnlineExam/batchQuestions/index.vue')  //批量导入试题
+const MyselfQuestions = () => import  ('../components/lejiaCollege/OnlineExam/myselfQuestions/index.vue')  //自己录入
+const PreviewExam = () => import  ('../components/lejiaCollege/OnlineExam/previewExam/index.vue')  //预览试卷
+const AnswerExam = () => import  ('../components/lejiaCollege/OnlineExam/answerExam/index.vue')  //考生答题
+const LookExam = () => import  ('../components/lejiaCollege/OnlineExam/lookExam/index.vue')  //查看答题试卷
+const ExaminerRead = () => import  ('../components/lejiaCollege/OnlineExam/examinerRead/index.vue')  //主考官阅卷
+const ExaminerReadEach = () => import  ('../components/lejiaCollege/OnlineExam/examinerReadEach/index.vue')  //主考官阅卷试题
+const ExaminerShortAn = () => import  ('../components/lejiaCollege/OnlineExam/examinerShortAn/index.vue')  //主考官阅卷－简答题
 
 // 系统设置
-const ModuleSetting =()=> import  ('../components/systemSetting/moduleSetting/index.vue')                             //模块设置
+const ModuleSetting = () => import  ('../components/systemSetting/moduleSetting/index.vue')                             //模块设置
 
 //问答中心
-const AnswerCenter =()=> import  ('../components/OAWork/answerCenter/index.vue')                             //问答中心
+const AnswerCenter = () => import  ('../components/OAWork/answerCenter/index.vue')                             //问答中心
 
 //问卷调查
-const Questionnaire =()=> import  ('../components/OAWork/questionnaire/index.vue')               //问卷调查
-const ConfigNaire =()=> import  ('../components/OAWork/questionnaire/configNaire/index.vue')  //管理问卷
-const PreviewNaire =()=> import  ('../components/OAWork/questionnaire/previewNaire/index.vue')  //管理问卷
-const BatchNaire =()=> import  ('../components/OAWork/questionnaire/batchNaire/index.vue')  //批量导入问卷
-const MyselfNaire =()=> import  ('../components/OAWork/questionnaire/myselfNaire/index.vue')  //自己录入问卷
-const LookNaire =()=> import  ('../components/OAWork/questionnaire/lookNaire/index.vue')  //问卷调查统计
-const AnswerAll =()=> import  ('../components/OAWork/questionnaire/answerAll/index.vue')  //问卷调查统计
-const AnswerNaire =()=> import  ('../components/OAWork/questionnaire/answerNaire/index.vue')  //问卷作答
+const Questionnaire = () => import  ('../components/OAWork/questionnaire/index.vue')               //问卷调查
+const ConfigNaire = () => import  ('../components/OAWork/questionnaire/configNaire/index.vue')  //管理问卷
+const PreviewNaire = () => import  ('../components/OAWork/questionnaire/previewNaire/index.vue')  //管理问卷
+const BatchNaire = () => import  ('../components/OAWork/questionnaire/batchNaire/index.vue')  //批量导入问卷
+const MyselfNaire = () => import  ('../components/OAWork/questionnaire/myselfNaire/index.vue')  //自己录入问卷
+const LookNaire = () => import  ('../components/OAWork/questionnaire/lookNaire/index.vue')  //问卷调查统计
+const AnswerAll = () => import  ('../components/OAWork/questionnaire/answerAll/index.vue')  //问卷调查统计
+const AnswerNaire = () => import  ('../components/OAWork/questionnaire/answerNaire/index.vue')  //问卷作答
 
 
 // const Message =()=> import  ('../comments/systemSetting/message/index1.vue')                                      //短信模板
@@ -122,9 +122,9 @@ const AnswerNaire =()=> import  ('../components/OAWork/questionnaire/answerNaire
 // const UserDictionary =()=> import  ('../comments/systemSetting/userDictionary/index1.vue')                        //用户字典
 // const RoleManage =()=> import  ('../comments/systemSetting/roleManage/index1.vue')                                //角色管理
 // const PowerManage =()=> import  ('../comments/systemSetting/powerManage/index1.vue')                              //权限管理
-const VillageManage =()=> import  ('../components/systemSetting/managerSetting/villageManage/index.vue')              //小区管理
-const VillageDetail =()=> import  ('../components/systemSetting/managerSetting/villageManage/villageDetail.vue')      //小区管理详情
-const ManagerSetting =()=> import  ('../components/systemSetting/managerSetting/index.vue')                           //管理员设置
+const VillageManage = () => import  ('../components/systemSetting/managerSetting/villageManage/index.vue')              //小区管理
+const VillageDetail = () => import  ('../components/systemSetting/managerSetting/villageManage/villageDetail.vue')      //小区管理详情
+const ManagerSetting = () => import  ('../components/systemSetting/managerSetting/index.vue')                           //管理员设置
 
 
 // const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue')                                   //回收站
@@ -141,64 +141,64 @@ const ManagerSetting =()=> import  ('../components/systemSetting/managerSetting/
 
 
 // 业绩工资
-const PeriodicTable =()=> import  ('../components/meritPay/periodicTable/index')
-const Achievement =()=> import  ('../components/meritPay/achievement/index')
-const PersonalSalary =()=> import  ('../components/meritPay/personalSalary/index')
+const PeriodicTable = () => import  ('../components/meritPay/periodicTable/index')
+const Achievement = () => import  ('../components/meritPay/achievement/index')
+const PersonalSalary = () => import  ('../components/meritPay/personalSalary/index')
 
-const CollectDetail =()=> import  ('../components/rentManage/collectDetail.vue')
-const RentingDetail =()=> import  ('../components/rentManage/rentingDetail.vue')
+const CollectDetail = () => import  ('../components/rentManage/collectDetail.vue')
+const RentingDetail = () => import  ('../components/rentManage/rentingDetail.vue')
 //合同修改历史快照
-const HistoryCollectDetail =()=> import  ('../components/rentManage/datumMessage/contractManage/components/historyCollectDetail.vue')
-const HistoryRentingDetail =()=> import  ('../components/rentManage/datumMessage/contractManage/components/historyRentingDetail.vue')
+const HistoryCollectDetail = () => import  ('../components/rentManage/datumMessage/contractManage/components/historyCollectDetail.vue')
+const HistoryRentingDetail = () => import  ('../components/rentManage/datumMessage/contractManage/components/historyRentingDetail.vue')
 
-const MessageCenter =()=> import  ('../components/messageCenter/index.vue')                         //消息中心
-const SthToDoDetail =()=> import  ('../components/OAWork/sthToDo/components/detail_1.vue')          //喜报详情
-const SthToDoDetail_2 =()=> import  ('../components/OAWork/sthToDo/components/detail_2.vue')        //喜报
-const PersonalSetting =()=> import  ('../components/personalSetting/index.vue')                     //个人设置
-const CheckWork =()=> import  ('../components/checkWork/index.vue')                                 //考勤自助
-const Register =()=> import  ('../components/register/index.vue')                                   //签到自助
-const ContractChange =()=> import  ('../components/OAWork/sthToDo/components/contractChange.vue')   //TEST_1
-const Deliver =()=> import  ('../components/OAWork/sthToDo/components/deliver.vue')                 //TEST_2
-const throwALease =()=> import  ('../components/OAWork/sthToDo/components/throwALease.vue')         //TEST_3
-const Individual =()=> import  ('../components/individual/index.vue')                               //个人门户
+const MessageCenter = () => import  ('../components/messageCenter/index.vue')                         //消息中心
+const SthToDoDetail = () => import  ('../components/OAWork/sthToDo/components/detail_1.vue')          //喜报详情
+const SthToDoDetail_2 = () => import  ('../components/OAWork/sthToDo/components/detail_2.vue')        //喜报
+const PersonalSetting = () => import  ('../components/personalSetting/index.vue')                     //个人设置
+const CheckWork = () => import  ('../components/checkWork/index.vue')                                 //考勤自助
+const Register = () => import  ('../components/register/index.vue')                                   //签到自助
+const ContractChange = () => import  ('../components/OAWork/sthToDo/components/contractChange.vue')   //TEST_1
+const Deliver = () => import  ('../components/OAWork/sthToDo/components/deliver.vue')                 //TEST_2
+const throwALease = () => import  ('../components/OAWork/sthToDo/components/throwALease.vue')         //TEST_3
+const Individual = () => import  ('../components/individual/index.vue')                               //个人门户
 
-const Converge =()=> import  ('../components/converge/index.vue')                                   //员工广场
-const Infodetails =()=> import  ('../components/converge/details/infodetails.vue')                  //员工广场详情
-const DailyRecord =()=> import  ('../components/dailyRecord/index.vue')                             //日志管理
-const SthToDo =()=> import  ('../components/OAWork/sthToDo/index.vue')                              //待办事项
+const Converge = () => import  ('../components/converge/index.vue')                                   //员工广场
+const Infodetails = () => import  ('../components/converge/details/infodetails.vue')                  //员工广场详情
+const DailyRecord = () => import  ('../components/dailyRecord/index.vue')                             //日志管理
+const SthToDo = () => import  ('../components/OAWork/sthToDo/index.vue')                              //待办事项
 
 
-const Integraldetail =()=> import  ('../components/integraldetail/integraldetail.vue')         // 积分明细
+const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue')         // 积分明细
 
-const PictureManage =()=> import  ('../components/pictureManage/pictureManage.vue')                //相册管理
-const CreateAlbum =()=> import  ('../components/pictureManage/createAlbum.vue')                //创建相册
-const ChoosePictures =()=> import  ('../components/pictureManage/selectPictures.vue')                //选择照片
-const ImproveImgInfo =()=> import  ('../components/pictureManage/improveImage.vue')                //完善照片信息
-const PictureDetail =()=> import  ('../components/pictureManage/pictureDetail.vue');               //相册详情
-const VisitRecord =()=> import  ('../components/rentManage/components/visitRecord.vue');               //回访记录
-const IncompleteRecord =()=> import  ('../components/rentManage/datumMessage/contractManage/components/incompleteRecord.vue'); //合同不齐记录
-const ExamineRecord =()=> import  ('../components/rentManage/datumMessage/contractManage/components/examineRecord')        //合同审批报表
+const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue')                //相册管理
+const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue')                //创建相册
+const ChoosePictures = () => import  ('../components/pictureManage/selectPictures.vue')                //选择照片
+const ImproveImgInfo = () => import  ('../components/pictureManage/improveImage.vue')                //完善照片信息
+const PictureDetail = () => import  ('../components/pictureManage/pictureDetail.vue');               //相册详情
+const VisitRecord = () => import  ('../components/rentManage/components/visitRecord.vue');               //回访记录
+const IncompleteRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/incompleteRecord.vue'); //合同不齐记录
+const ExamineRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/examineRecord')        //合同审批报表
 
-const ReportManage =()=> import  ('../components/reportManage/index.vue')
-const BeforeExam =()=> import  ('../components/lejiaCollege/OnlineExam/beforeExam.vue')  //开考之前
-const BeforeNaire =()=> import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue')  //开考之前
-const MyNaire =()=> import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue')  //我的调查列表
+const ReportManage = () => import  ('../components/reportManage/index.vue')
+const BeforeExam = () => import  ('../components/lejiaCollege/OnlineExam/beforeExam.vue')  //开考之前
+const BeforeNaire = () => import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue')  //开考之前
+const MyNaire = () => import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue')  //我的调查列表
 
-const DataMove =()=> import  ('../components/dataMove.vue')//数据迁移
+const DataMove = () => import  ('../components/dataMove.vue')//数据迁移
 
-const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
+const BatchEnter = () => import  ('../components/batchEnter/index') //批量入账
 
 //数据中心
-const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
-const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
+const AchievementData = () => import ('../components/dataCenter/index'); //业绩数据
+const ReportingData = () => import ('../components/reportManage/reportingData/index'); //报备数据
 
-const Application = ()=> import ('../components/C-manage/applicationManage/index');
-const Houses = ()=> import ('../components/C-manage/houseManage/index');
-const DormManage = ()=> import ('../components/dormManage/index');
-const OfficeManage = ()=> import ('../components/officeManage/index');
+const Application = () => import ('../components/C-manage/applicationManage/index');
+const Houses = () => import ('../components/C-manage/houseManage/index');
+const DormManage = () => import ('../components/dormManage/index');
+const OfficeManage = () => import ('../components/officeManage/index');
 
 // B端管理
-const UntiePhone = ()=> import ('../components/B-manage/untiePhone/index');
+const UntiePhone = () => import ('../components/B-manage/untiePhone/index');
 
 Vue.use(Router);
 

@@ -1045,12 +1045,14 @@
       forCity(cities, city) {
         let c = {};
         cities.forEach(res => {
-          if (res.variable.city_id === city) {
-            if (city.startsWith('500')) {
+          if (city.startsWith('500')) {
+            if (res.variable.city_id.startsWith('500')) {
               c.id = res.id;
               c.name = res.dictionary_name;
-              return;
             }
+            return;
+          }
+          if (res.variable.city_id === city) {
             c.id = res.id;
             c.name = res.dictionary_name;
           }

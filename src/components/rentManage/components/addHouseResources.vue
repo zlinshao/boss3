@@ -909,7 +909,7 @@
             data.customers && data.customers.forEach((item) => {
               this.nameArray.push(item.name);
               this.sexArray.push(item.sex);
-              this.id_typeArray.push(item.id_type);
+              this.id_typeArray.push(Number(item.id_type));
               this.id_numberArray.push(item.id_number);
               this.phoneArray.push(item.phone);
             });

@@ -1,11 +1,12 @@
 <template>
-  <div  @click="show=false" @contextmenu="closeMenu">
+  <div @click="show=false" @contextmenu="closeMenu">
 
     <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input v-model="params.search" onsubmit="return false" placeholder="搜索" clearable @keydown.enter.native="search">
+            <el-input v-model="params.search" onsubmit="return false" placeholder="搜索" clearable
+                      @keydown.enter.native="search">
               <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
@@ -35,7 +36,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input readonly="" placeholder="点击选择" v-model="staff_name" @focus="openOrganizationModal('staff')"></el-input>
+                    <el-input readonly="" placeholder="点击选择" v-model="staff_name"
+                              @focus="openOrganizationModal('staff')"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -47,7 +49,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input readonly="" placeholder="点击选择" v-model="depart_name" @focus="openOrganizationModal('depart')"></el-input>
+                    <el-input readonly="" placeholder="点击选择" v-model="depart_name"
+                              @focus="openOrganizationModal('depart')"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -130,7 +133,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0)"
-          @row-dblclick = 'showContractDetail'
+          @row-dblclick='showContractDetail'
           @row-contextmenu='openTotalMenu'
           style="width: 100%">
           <el-table-column
@@ -188,7 +191,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0)"
-          @row-dblclick = 'showContractDetail'
+          @row-dblclick='showContractDetail'
           @row-contextmenu='openApplyMenu'
           style="width: 100%">
           <el-table-column
@@ -223,7 +226,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0)"
-          @row-dblclick = 'showContractDetail'
+          @row-dblclick='showContractDetail'
           @row-contextmenu='openCancelMenu'
           style="width: 100%">
           <el-table-column
@@ -258,7 +261,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0)"
-          @row-dblclick = 'showContractDetail'
+          @row-dblclick='showContractDetail'
           @row-contextmenu='openHandInMenu'
           style="width: 100%">
           <el-table-column
@@ -293,7 +296,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0)"
-          @row-dblclick = 'showContractDetail'
+          @row-dblclick='showContractDetail'
           @row-contextmenu='openLossMenu'
           style="width: 100%">
           <el-table-column
@@ -338,11 +341,16 @@
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close="closeModalCallback" @selectMember="selectMember"></Organization>
 
-    <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail" @close="closeModalCallback"></Contact>
-    <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail" @close="closeModalCallback"></ContactCancel>
-    <ContactLoss :contractCancelDialog="contractLossDialog" :cancelEditId_detail="lossEditId_detail" @close="closeModalCallback"></ContactLoss>
-    <ContactHandIn :contractHandInDialog="contractHandInDialog" :handInEditId_detail="handInEditId_detail" @close="closeModalCallback"></ContactHandIn>
-    <ContactTotal :totalDialog="totalDialog" :totalId_detail="totalId_detail" @close="closeModalCallback"></ContactTotal>
+    <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail"
+             @close="closeModalCallback"></Contact>
+    <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail"
+                   @close="closeModalCallback"></ContactCancel>
+    <ContactLoss :contractCancelDialog="contractLossDialog" :cancelEditId_detail="lossEditId_detail"
+                 @close="closeModalCallback"></ContactLoss>
+    <ContactHandIn :contractHandInDialog="contractHandInDialog" :handInEditId_detail="handInEditId_detail"
+                   @close="closeModalCallback"></ContactHandIn>
+    <ContactTotal :totalDialog="totalDialog" :totalId_detail="totalId_detail"
+                  @close="closeModalCallback"></ContactTotal>
 
     <CreateTask :selectFlag="selectFlag" :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
 
@@ -353,10 +361,10 @@
                :startOperate="startApplyOperate" @close="closeModalCallback"></EditApply>
 
     <EditCancel :editCancelDialog="editCancelDialog" :cancelEditId="cancelEditId"
-               :startOperate="startCancelOperate" @close="closeModalCallback"></EditCancel>
+                :startOperate="startCancelOperate" @close="closeModalCallback"></EditCancel>
 
     <EditHandIn :editHandInDialog="editHandInDialog" :handInEditId="handInEditId"
-               :startOperate="startHandInOperate" @close="closeModalCallback"></EditHandIn>
+                :startOperate="startHandInOperate" @close="closeModalCallback"></EditHandIn>
 
     <EditLoss :editLossDialog="editLossDialog" :lostEditId="lostEditId"
               :startOperate="startLossOperate" @close="closeModalCallback"></EditLoss>
@@ -383,125 +391,126 @@
   import EditLoss from './components/editLoss.vue'
 
 
-
   export default {
-    components:{Organization,Contact,CreateTask,RightMenu,Dispatch,EditLoss,
-                EditApply,EditCancel,EditHandIn,ContactCancel,ContactHandIn,ContactLoss,ContactTotal},
-    data () {
+    components: {
+      Organization, Contact, CreateTask, RightMenu, Dispatch, EditLoss,
+      EditApply, EditCancel, EditHandIn, ContactCancel, ContactHandIn, ContactLoss, ContactTotal
+    },
+    data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
         /***********/
-        selectFlag:1,
-        totalNumbers:0,
-        params:{
-          page:1,
-          search:'',
-          proof:'',
-          department_id : '',
-          start : '',
-          end : '',
-          staff_id : '',
+        selectFlag: 1,
+        totalNumbers: 0,
+        params: {
+          page: 1,
+          search: '',
+          proof: '',
+          department_id: '',
+          start: '',
+          end: '',
+          staff_id: '',
         },
 
         //***********************//
-        organizationDialog:false,
-        createTaskDialog : false,
+        organizationDialog: false,
+        createTaskDialog: false,
         contractDialog: false,  //合同详情
         contractCancelDialog: false,  //合同详情
         contractHandInDialog: false,  //合同详情
         totalDialog: false,  //合同详情
-        dispatchDialog:false,
-        contractLossDialog : false,
+        dispatchDialog: false,
+        contractLossDialog: false,
 
-        editApplyDialog:false,    //修改合同申领
-        editCancelDialog:false,    //修改合同作废
-        editHandInDialog:false,    //修改合同作废
-        editLossDialog :false,
+        editApplyDialog: false,    //修改合同申领
+        editCancelDialog: false,    //修改合同作废
+        editHandInDialog: false,    //修改合同作废
+        editLossDialog: false,
 
-        contractTotalData:[],    //汇总列表列表数据
-        contractApplyData:[],    //列表数据
-        contractCancelData:[],    //列表数据
-        contractHandInData:[],    //列表数据
-        contractLossData:[],
+        contractTotalData: [],    //汇总列表列表数据
+        contractApplyData: [],    //列表数据
+        contractCancelData: [],    //列表数据
+        contractHandInData: [],    //列表数据
+        contractLossData: [],
 
-        applyEditId:'',     //领取合同id
-        cancelEditId:'',     //领取合同id
-        handInEditId:'',     //领取合同id
-        lostEditId:'',
-        startOperate:false,   //开始操作
-        startHandInOperate:false,   //开始操作
-        startCancelOperate:false,   //开始操作
-        startApplyOperate:false,   //开始操作
-        startLossOperate:false,
-        showDetail:false,         //查看详情
-        dispatchObject:{},
+        applyEditId: '',     //领取合同id
+        cancelEditId: '',     //领取合同id
+        handInEditId: '',     //领取合同id
+        lostEditId: '',
+        startOperate: false,   //开始操作
+        startHandInOperate: false,   //开始操作
+        startCancelOperate: false,   //开始操作
+        startApplyOperate: false,   //开始操作
+        startLossOperate: false,
+        showDetail: false,         //查看详情
+        dispatchObject: {},
         //详情
-        applyEditId_detail : '',
-        cancelEditId_detail : '',
-        handInEditId_detail : '',
-        totalId_detail : '',
-        lossEditId_detail : '',
+        applyEditId_detail: '',
+        cancelEditId_detail: '',
+        handInEditId_detail: '',
+        totalId_detail: '',
+        lossEditId_detail: '',
 
-        emptyContent : ' ',
-        tableLoading : false,
-        isHigh :false,
-        staff_name : '',
-        depart_name : '',
-        length : '',
-        type : '',
-        dateRange:[],
+        emptyContent: ' ',
+        tableLoading: false,
+        isHigh: false,
+        staff_name: '',
+        depart_name: '',
+        length: '',
+        type: '',
+        dateRange: [],
       }
     },
-    watch:{
-      selectFlag(val){
+    watch: {
+      selectFlag(val) {
         this.params.page = 1;
-        if(val ===2){
+        if (val === 2) {
           this.getApplyList();
-        }else if(val === 3){
+        } else if (val === 3) {
           this.getCancelList();
-        }else if(val === 4){
+        } else if (val === 4) {
           this.getHandInList();
-        }else if(val === 1){
+        } else if (val === 1) {
           this.getTotalList();
-        }else if(val === 5){
+        } else if (val === 5) {
           this.getLossList();
         }
       },
-      dateRange(val){
-        this.params.start = val[0]?val[0]:'';
-        this.params.end = val[1]? val[1]:'';
+      dateRange(val) {
+        this.params.start = val[0] ? val[0] : '';
+        this.params.end = val[1] ? val[1] : '';
       }
     },
-    mounted(){
+    mounted() {
       this.getTotalList();
     },
-    methods:{
+    methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
 
       handleCurrentChange(val) {
         this.params.page = val;
-        if(this.selectFlag ===2){
+        if (this.selectFlag === 2) {
           this.getApplyList();
-        }else if(this.selectFlag === 3){
+        } else if (this.selectFlag === 3) {
           this.getCancelList();
-        }else if(this.selectFlag === 4){
+        } else if (this.selectFlag === 4) {
           this.getHandInList();
-        }else if(this.selectFlag === 1){
+        } else if (this.selectFlag === 1) {
           this.getTotalList();
-        }else if(this.selectFlag === 5){
+        } else if (this.selectFlag === 5) {
           this.getLossList();
         }
       },
 
-      highGrade(){
+      highGrade() {
         this.isHigh = !this.isHigh;
       },
-      resetting(){
+      resetting() {
         this.params.department_id = '';
         this.dateRange = [];
         this.params.start = '';
@@ -510,27 +519,27 @@
         this.staff_name = '';
         this.depart_name = '';
       },
-      search(){
+      search() {
         this.isHigh = false;
         this.params.page = 1;
-        if(this.selectFlag ===2){
+        if (this.selectFlag === 2) {
           this.getApplyList();
-        }else if(this.selectFlag === 3){
+        } else if (this.selectFlag === 3) {
           this.getCancelList();
-        }else if(this.selectFlag === 4){
+        } else if (this.selectFlag === 4) {
           this.getHandInList();
-        }else if(this.selectFlag === 1){
+        } else if (this.selectFlag === 1) {
           this.getTotalList();
-        }else if(this.selectFlag === 5){
+        } else if (this.selectFlag === 5) {
           this.getLossList();
         }
       },
-      selectStatus(flag){
+      selectStatus(flag) {
         this.selectFlag = flag;
       },
 
       //************************右键操作项*****************************
-      openTotalMenu(row, event){
+      openTotalMenu(row, event) {
         this.dispatchObject = row;
         this.lists = [
           {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
@@ -541,7 +550,7 @@
         this.contextMenuParam(event);
       },
 
-      openApplyMenu(row, event){
+      openApplyMenu(row, event) {
         this.applyEditId = row.id;
 //        this.dispatchObject = row;
         this.lists = [
@@ -553,7 +562,7 @@
         this.contextMenuParam(event);
       },
 
-      openCancelMenu(row, event){
+      openCancelMenu(row, event) {
         this.cancelEditId = row.id;
         this.lists = [
           {clickIndex: 'editCancel', headIcon: 'el-icon-edit', label: '修改',},
@@ -562,7 +571,7 @@
         this.contextMenuParam(event);
       },
 
-      openHandInMenu(row,event){
+      openHandInMenu(row, event) {
         this.handInEditId = row.id;
         this.lists = [
           {clickIndex: 'editHandIn', headIcon: 'el-icon-edit', label: '修改',},
@@ -571,7 +580,7 @@
         this.contextMenuParam(event);
       },
 
-      openLossMenu(row,event){
+      openLossMenu(row, event) {
         this.lostEditId = row.id;
         this.lists = [
           {clickIndex: 'editLoss', headIcon: 'el-icon-edit', label: '修改',},
@@ -581,104 +590,103 @@
       },
 
       //右键回调时间
-      clickEvent (index) {
+      clickEvent(index) {
         this.applyMenuCallback(index);
       },
 
-      applyMenuCallback(index){
-          switch (index){
-            case 'editApply' :
-              this.startApplyOperate = true;
-              this.editApplyDialog = true;
-              break;
-            case 'dispatchApply' :
-                this.startOperate = true;
-                this.dispatchDialog = true;
-                break;
-            case 'deleteApply':
-              this.$confirm('您确定将其删除吗', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-              }).then(() => {
-                this.deleteApplyContract();
-              }).catch(() => {
-                this.$message({
-                  type: 'info',
-                  message: '已取消删除'
-                });
+      applyMenuCallback(index) {
+        switch (index) {
+          case 'editApply' :
+            this.startApplyOperate = true;
+            this.editApplyDialog = true;
+            break;
+          case 'dispatchApply' :
+            this.startOperate = true;
+            this.dispatchDialog = true;
+            break;
+          case 'deleteApply':
+            this.$confirm('您确定将其删除吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deleteApplyContract();
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
               });
-              break;
-            case 'editCancel' :
-              this.startCancelOperate = true;
-              this.editCancelDialog = true;
-              break;
-            case 'editHandIn' :
-              this.startHandInOperate = true;
-              this.editHandInDialog = true;
-              break;
-            case 'editLoss' :
-              this.startLossOperate =true;
-              this.editLossDialog = true;
-              break;
-          }
+            });
+            break;
+          case 'editCancel' :
+            this.startCancelOperate = true;
+            this.editCancelDialog = true;
+            break;
+          case 'editHandIn' :
+            this.startHandInOperate = true;
+            this.editHandInDialog = true;
+            break;
+          case 'editLoss' :
+            this.startLossOperate = true;
+            this.editLossDialog = true;
+            break;
+        }
       },
 
 
-
-      openOrganizationModal(val){
+      openOrganizationModal(val) {
         this.length = 1;
         this.type = val;
         this.organizationDialog = true
       },
-      selectMember(val){
-        if(this.type==='staff'){
+      selectMember(val) {
+        if (this.type === 'staff') {
           this.staff_name = val[0].name;
           this.params.staff_id = val[0].id;
-        }else {
+        } else {
           this.depart_name = val[0].name;
           this.params.department_id = val[0].id;
         }
       },
 
       //显示合同详情
-      showContractDetail(row,event){
-        if(this.selectFlag ===2){
+      showContractDetail(row, event) {
+        if (this.selectFlag === 2) {
           this.contractDialog = true;
           this.applyEditId_detail = row.id;
-        }else if(this.selectFlag === 3){
-           this.cancelEditId_detail = row.id;
-           this.contractCancelDialog = true;
-        }else if(this.selectFlag === 4){
+        } else if (this.selectFlag === 3) {
+          this.cancelEditId_detail = row.id;
+          this.contractCancelDialog = true;
+        } else if (this.selectFlag === 4) {
           this.handInEditId_detail = row.id;
           this.contractHandInDialog = true;
-        }else if(this.selectFlag === 1){
+        } else if (this.selectFlag === 1) {
           this.totalId_detail = row.staff_id;
           this.totalDialog = true;
-        }else if(this.selectFlag === 5){
+        } else if (this.selectFlag === 5) {
           this.lossEditId_detail = row.id;
           this.contractLossDialog = true;
         }
       },
 
-      createNewTask(){
+      createNewTask() {
         this.createTaskDialog = true;
       },
 
 
       //****************************汇总***************************//
 
-      getTotalList(){
+      getTotalList() {
         this.tableLoading = true;
         this.emptyContent = ' ';
-        this.$http.get(globalConfig.server+'contract/mission',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'contract/mission', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.contractTotalData = res.data.data.data;
-            this.totalNumbers =res.data.data.count;
-          }else {
-            this.contractTotalData =[];
-            this.totalNumbers =0;
+            this.totalNumbers = res.data.data.count;
+          } else {
+            this.contractTotalData = [];
+            this.totalNumbers = 0;
             this.emptyContent = '暂无数据';
           }
         })
@@ -689,7 +697,7 @@
 
 
       //修改合同相关回调
-      closeModalCallback(val){
+      closeModalCallback(val) {
         this.startOperate = false;
         this.startApplyOperate = false;
         this.startHandInOperate = false;
@@ -709,33 +717,33 @@
         this.createTaskDialog = false;
         this.dispatchDialog = false;
 
-        if(val === 'success'){
+        if (val === 'success') {
           this.search();
         }
       },
 
 
-      getApplyList(){
+      getApplyList() {
         this.tableLoading = true;
         this.emptyContent = ' ';
-        this.$http.get(globalConfig.server+'contract/apply',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'contract/apply', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.contractApplyData = res.data.data.data;
-            this.totalNumbers =res.data.data.count;
-          }else {
-            this.contractApplyData =[];
-            this.totalNumbers =0;
+            this.totalNumbers = res.data.data.count;
+          } else {
+            this.contractApplyData = [];
+            this.totalNumbers = 0;
             this.emptyContent = '暂无数据';
           }
         })
       },
 
-      deleteApplyContract(){
-        this.$http.post(globalConfig.server+'contract/apply/delete/'+this.applyEditId).then((res) => {
-          if(res.data.code === '20010'){
+      deleteApplyContract() {
+        this.$http.post(globalConfig.server + 'contract/apply/delete/' + this.applyEditId).then((res) => {
+          if (res.data.code === '20010') {
             this.search();
-          }else {
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
@@ -744,17 +752,17 @@
         })
       },
       //****************************合同作废***********************//
-      getCancelList(){
+      getCancelList() {
         this.tableLoading = true;
         this.emptyContent = ' ';
-        this.$http.get(globalConfig.server+'contract/invalidate',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'contract/invalidate', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.contractCancelData = res.data.data.data;
-            this.totalNumbers =res.data.data.count;
-          }else {
-            this.contractCancelData =[];
-            this.totalNumbers =0;
+            this.totalNumbers = res.data.data.count;
+          } else {
+            this.contractCancelData = [];
+            this.totalNumbers = 0;
             this.emptyContent = '暂无数据';
           }
         })
@@ -762,37 +770,36 @@
 
       //***************************合同上缴**************************//
 
-      getHandInList(){
+      getHandInList() {
         this.tableLoading = true;
         this.emptyContent = ' ';
-        this.$http.get(globalConfig.server+'contract/handin',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'contract/handin', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.contractHandInData = res.data.data.data;
-            this.totalNumbers =res.data.data.count;
-          }else {
-            this.contractHandInData =[];
-            this.totalNumbers =0;
+            this.totalNumbers = res.data.data.count;
+          } else {
+            this.contractHandInData = [];
+            this.totalNumbers = 0;
             this.emptyContent = '暂无数据';
           }
         })
       },
 
 
-
       //***************************合同丢失**************************//
 
-      getLossList(){
+      getLossList() {
         this.tableLoading = true;
         this.emptyContent = ' ';
-        this.$http.get(globalConfig.server+'contract/loss',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'contract/loss', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.contractLossData = res.data.data.data;
-            this.totalNumbers =res.data.data.count;
-          }else {
-            this.contractLossData =[];
-            this.totalNumbers =0;
+            this.totalNumbers = res.data.data.count;
+          } else {
+            this.contractLossData = [];
+            this.totalNumbers = 0;
             this.emptyContent = '暂无数据';
           }
         })
@@ -800,11 +807,11 @@
 
       ///***********************************************************//
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event){
+      contextMenuParam(event) {
         //param: user right param
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
@@ -818,30 +825,42 @@
       },
 
       //导出合同
-      exportContract(){
-        if(this.selectFlag ===2){
-          this.$http.get(globalConfig.server+'contract/export/apply',{responseType: 'arraybuffer',params:this.params}).then((res) => {
+      exportContract() {
+        if (this.selectFlag === 2) {
+          this.$http.get(globalConfig.server + 'contract/export/apply', {
+            responseType: 'arraybuffer',
+            params: this.params
+          }).then((res) => {
             if (!res.data) {
               return;
             }
             this.$exportData(res.data)
           })
-        }else if(this.selectFlag ===3){
-          this.$http.get(globalConfig.server+'contract/invalidate/export', {responseType: 'arraybuffer',params:this.params}).then((res) => {
+        } else if (this.selectFlag === 3) {
+          this.$http.get(globalConfig.server + 'contract/invalidate/export', {
+            responseType: 'arraybuffer',
+            params: this.params
+          }).then((res) => {
             if (!res.data) {
               return;
             }
             this.$exportData(res.data)
           })
-        }else if(this.selectFlag ===4){
-          this.$http.get(globalConfig.server+'contract/export/handin', {responseType: 'arraybuffer',params:this.params}).then((res) => {
+        } else if (this.selectFlag === 4) {
+          this.$http.get(globalConfig.server + 'contract/export/handin', {
+            responseType: 'arraybuffer',
+            params: this.params
+          }).then((res) => {
             if (!res.data) {
               return;
             }
             this.$exportData(res.data)
           })
-        }else if(this.selectFlag ===5){
-          this.$http.get(globalConfig.server+'contract/loss/export', {responseType: 'arraybuffer',params:this.params}).then((res) => {
+        } else if (this.selectFlag === 5) {
+          this.$http.get(globalConfig.server + 'contract/loss/export', {
+            responseType: 'arraybuffer',
+            params: this.params
+          }).then((res) => {
             if (!res.data) {
               return;
             }
@@ -861,7 +880,8 @@
     display: flex;
     justify-content: flex-end;
   }
-  .selectButton{
+
+  .selectButton {
     color: #fff;
     background: #66b1ff;
   }

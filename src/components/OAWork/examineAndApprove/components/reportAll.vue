@@ -339,8 +339,10 @@
       },
       resetting() {
         this.params.processable_type = '';
-        this.params.start_time = [];
-        this.params.end_time = [];
+        this.params.start_time = '';
+        this.params.end_time = '';
+        this.department_name = '';
+        this.params.org_id = '';
       },
       closeFrame(val) {
         this.reportModule = false;
