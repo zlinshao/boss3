@@ -478,7 +478,7 @@
         this.params.agency_user_name = data.agency_user_name;
         this.params.agency_phone = data.agency_phone;
         this.params.is_corp = String(data.is_corp.id);
-        this.params.is_agency = String(data.is_agency.id);   //是否中介
+        this.params.is_agency = String(data.is_agency.id);
         this.params.property = data.property;
 
         this.params.is_other_fee = String(data.is_other_fee);

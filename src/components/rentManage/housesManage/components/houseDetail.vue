@@ -352,7 +352,7 @@
                 <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
                      :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
                 <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
-                <video v-if="item.info.mime&&item.info.mime.indexOf('mp4')>-1"
+                <video v-if="item.info.mime && (item.info.mime.indexOf('mp4') > -1 || item.info.mime.indexOf('video') > -1)"
                        class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
                   <source :src="item.uri" type="video/mp4">
                 </video>
@@ -376,7 +376,7 @@
                     v-if="albumArray.staffs&&albumArray.staffs.role&&albumArray.staffs.role.length>0">
                 岗位：
                 <span v-for="item in albumArray.staffs.role">
-                  <span>{{item.display_name}}&nbsp;&nbsp;  </span>
+                  <span>{{item.display_name}}&nbsp;&nbsp;</span>
                 </span>
               </span>
 
@@ -390,7 +390,7 @@
                 <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
                      :src="item.uri" data-magnify="" :data-src="item.uri">
                 <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
-                <video v-if="item.info.mime&&item.info.mime.indexOf('mp4')>-1"
+                <video v-if="item.info.mime && (item.info.mime.indexOf('mp4') > -1 || item.info.mime.indexOf('video') > -1)"
                        controls preload="auto" width="200" height="120">
                   <source :src="item.uri" type="video/mp4">
                 </video>

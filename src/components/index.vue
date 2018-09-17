@@ -546,30 +546,24 @@
           if (!JSON.parse(localStorage.personal).data.medal) {
             this.badgeDialog = true;
           }
-          this.$http
-            .get(globalConfig.server + "setting/update/read?a=1")
-            .then(res => {
-              if (res.data.code === "50040") {
-                this.yanFirstInfo = res.data.data;
-                if (res.data.data.type == 2) {
-                  this.yanFirstDialog = true;
-                }
-                else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
-                  this.ReadingDialog = true;
-                }
-
+          this.$http.get(globalConfig.server + "setting/update/read?a=1").then(res => {
+            if (res.data.code === "50040") {
+              this.yanFirstInfo = res.data.data;
+              if (res.data.data.type == 2) {
+                this.yanFirstDialog = true;
               }
-            });
+              else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
+                this.ReadingDialog = true;
+              }
+            }
+          });
           //制度弹窗
-          this.$http
-            .get(globalConfig.server + "oa/portal/last")
-            .then(res => {
-              if (res.data.code === "800110") {
-                this.institutionMore = res.data.data;
-                this.institutionDialog = true;
-
-              }
-            });
+          this.$http.get(globalConfig.server + "oa/portal/last").then(res => {
+            if (res.data.code === "800110") {
+              this.institutionMore = res.data.data;
+              this.institutionDialog = true;
+            }
+          });
         }
       },
     },
@@ -595,25 +589,21 @@
         cookie.set("reFresh", true);
       }
       //版本更新
-      this.$http
-        .get(globalConfig.server + "setting/update/read?a=1")
-        .then(res => {
-          if (res.data.code === "50040") {
-            this.yanFirstInfo = res.data.data;
-            if (res.data.data.type == 2) {
-              this.yanFirstDialog = true;
-            }
-            else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
-              this.ReadingDialog = true;
-            }
+      this.$http.get(globalConfig.server + "setting/update/read?a=1").then(res => {
+        if (res.data.code === "50040") {
+          this.yanFirstInfo = res.data.data;
+          if (res.data.data.type == 2) {
+            this.yanFirstDialog = true;
           }
-        });
-
+          else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
+            this.ReadingDialog = true;
+          }
+        }
+      });
     },
     mounted() {
       //鼠标滑动监听
       let _this = this;
-
       this.$http.get(globalConfig.server + "oa/portal/last").then(res => {
         if (res.data.code === "800110") {
           this.institutionMore = res.data.data;
@@ -670,22 +660,21 @@
                   let examIds;
                   if (this.confirmArrival === null) {
                     examIds = [];
-                  }else {
+                  } else {
                     examIds = this.confirmArrival;
                   }
                   examIds.push(this.examData.id);
                   localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
-                  this.$router.push({path: '/answerExam', query: { id: this.examData.id}});
+                  this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
                 }
               });
             }
           } else {
-            if(this.examData.id) {
+            if (this.examData.id) {
               this.$router.push({path: '/beforeExam', query: {address: 'exam', id: this.examData.id}});
-            }else{
+            } else {
               this.$router.push({path: '/beforeExam', query: {address: 'exam', id: 0, type: 'first'}});
             }
-
           }
         } else {
           if (this.questionnaireData.available) {
@@ -745,9 +734,7 @@
         if (!this.personal.data.medal) {
           this.badgeDialog = true;
         }
-
         //判断是否存在锁屏密码]
-
         if (this.personal.data.setting && Array.isArray(this.personal.data.setting)) {
           if (this.personal.data.setting.length < 1 || this.personal.detail.pwd_lock == 2) {
             this.setLockPwdDialog = true;
@@ -755,9 +742,7 @@
         } else {
           this.setLockPwdDialog = true;
         }
-
       },
-
       //定时器 轮巡获取最新消息
       getUnreadTermly() {
         clearInterval(this.messageInterval);
@@ -830,13 +815,11 @@
       showMessageDetail(val) {
         this.messageDetail = val;
         this.messageDialog = true;
-        this.$http
-          .put(globalConfig.server_user + "messages/" + val.id)
-          .then(res => {
-            if (res.data.status === "success") {
-              this.getUnReadMessage();
-            }
-          });
+        this.$http.put(globalConfig.server_user + "messages/" + val.id).then(res => {
+          if (res.data.status === "success") {
+            this.getUnReadMessage();
+          }
+        });
       },
 
       showOtherDetail(val) {
@@ -892,14 +875,12 @@
 
       //获取未读消息
       getUnReadMessage() {
-        this.$http
-          .get(globalConfig.server_user + "messages?unread=1")
-          .then(res => {
-            if (res.data.status === "success") {
-              this.unReadMessageData = res.data.data;
-              this.messageTotal = res.data.meta.total;
-            }
-          });
+        this.$http.get(globalConfig.server_user + "messages?unread=1").then(res => {
+          if (res.data.status === "success") {
+            this.unReadMessageData = res.data.data;
+            this.messageTotal = res.data.meta.total;
+          }
+        });
       },
 
       //二级密码
@@ -930,28 +911,26 @@
 
       countTime() {
         let countDown = [];
-        this.$http
-          .get(globalConfig.server + "setting/dictionary/203")
-          .then(res => {
-            if (res.data.code === "30010") {
-              countDown = res.data.data;
-              this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + this.personal.id).then((res) => {
-                if (res.data.code === '50010') {
-                  let array = res.data.data;
-                  for (let i = 0; i < array.length; i++) {
-                    countDown.forEach((item) => {
-                      if (array[i].dict_id == item.id) {
-                        this.defaultTime = this.Countdown = Number(item.dictionary_name);
+        this.$http.get(globalConfig.server + "setting/dictionary/203").then(res => {
+          if (res.data.code === "30010") {
+            countDown = res.data.data;
+            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + this.personal.id).then((res) => {
+              if (res.data.code === '50010') {
+                let array = res.data.data;
+                for (let i = 0; i < array.length; i++) {
+                  countDown.forEach((item) => {
+                    if (array[i].dict_id == item.id) {
+                      this.defaultTime = this.Countdown = Number(item.dictionary_name);
 //                        this.defaultTime = this.Countdown = 5;
-                        localStorage.setItem('countdownTime', item.id);
-                        this.startCount();
-                      }
-                    })
-                  }
+                      localStorage.setItem('countdownTime', item.id);
+                      this.startCount();
+                    }
+                  })
                 }
-              })
-            }
-          });
+              }
+            })
+          }
+        });
       },
 
       startCount() {
