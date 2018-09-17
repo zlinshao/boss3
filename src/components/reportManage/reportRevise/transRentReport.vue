@@ -452,7 +452,11 @@
         console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
-        this.params.trans_type = String(data.trans_type.id);
+        if (data.trans_type.id) {
+          this.params.trans_type = String(data.trans_type.id);
+        } else {
+          this.params.trans_type = String(data.trans_type);
+        }
         this.params.contract_id = data.contract_id;
         this.params.house_id = data.house_id;
 
