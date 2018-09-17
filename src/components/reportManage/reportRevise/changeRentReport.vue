@@ -353,7 +353,7 @@
 
           discount: 0,                   //让价金额
           contract_number: 'LJZF',           //合同编号
-          is_corp: 1,                   //是否公司单  0个人1公司
+          is_corp: '1',                   //是否公司单  0个人1公司
           receipt: [''],                    //收据编号
           retainage_date: '',           //尾款补齐时间
 
@@ -374,14 +374,14 @@
         screenshot_leader: {},
         screenshot: {},
         photo: {},
-        deposit_photo : {},
+        deposit_photo: {},
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
         moneyTableChangeAmount: 1,
         receiptAmount: 1,
         purchase_way_dic: [],
-        isUpload : false,
+        isUpload: false,
       };
     },
     watch: {
@@ -457,7 +457,11 @@
         this.params.other_fee = data.other_fee;
 
 
-        this.params.is_corp = String(data.is_corp.id);
+        if (data.is_corp.id) {
+          this.params.is_corp = String(data.is_corp.id);
+        } else {
+          this.params.is_corp = String(data.is_corp);
+        }
         this.params.property = data.property;
 
         this.params.is_other_fee = String(data.is_other_fee);
@@ -651,7 +655,7 @@
         });
       },
       confirmSubmit() {
-        if(!this.isUpload){
+        if (!this.isUpload) {
           this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
           this.$http.post(globalConfig.server + 'bulletin/change', this.params).then((res) => {
             if (res.data.code === '50530') {
@@ -667,10 +671,10 @@
               })
             }
           })
-        }else {
+        } else {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传',
+            title: '警告',
+            message: '图片正在上传',
           })
         }
       },
@@ -711,7 +715,7 @@
 
           discount: 0,                   //让价金额
           contract_number: 'LJZF',           //合同编号
-          is_corp: 1,                   //是否公司单  0个人1公司
+          is_corp: '1',                   //是否公司单  0个人1公司
           receipt: [''],                    //收据编号
           retainage_date: '',           //尾款补齐时间
 

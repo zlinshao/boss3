@@ -91,7 +91,9 @@
                   <div class="title" v-else="">附属租客信息({{item - 1}})</div>
                   <div>
                     <div class="deleteNumber" @click="houseOwnerInfoDialog=true" v-if="item == 1">更换租客信息</div>
-                    <div v-if="(isAll || (isPc && !isDoc)) && item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                    <div v-if="(isAll || (isPc && !isDoc)) && item>1" class="deleteNumber"
+                         @click="deleteCustoms(item-1)">删除
+                    </div>
                   </div>
 
                 </div>
@@ -120,7 +122,8 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="证件类型">
-                          <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll" v-model="id_typeArray[item-1]"
+                          <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll"
+                                     v-model="id_typeArray[item-1]"
                                      placeholder="请选择证件类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
@@ -129,7 +132,8 @@
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="证件号码">
-                          <el-input :disabled="isDoc && !isAll" placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
+                          <el-input :disabled="isDoc && !isAll" placeholder="请输入内容"
+                                    v-model="id_numberArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -151,7 +155,8 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否公司单" required="">
-                        <el-switch :disabled="(!isPc || isDoc) && !isAll" v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
+                        <el-switch :disabled="(!isPc || isDoc) && !isAll" v-model="params.contract_type"
+                                   active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -161,7 +166,8 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="是否中介" required="">
-                        <el-switch :disabled="(!isPc || isDoc) && !isAll" v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
+                        <el-switch :disabled="(!isPc || isDoc) && !isAll" v-model="params.is_agency" active-value="1"
+                                   inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
 
@@ -170,25 +176,29 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="签约日期" required="">
-                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" value-format="yyyy-MM-dd" type="date"
+                                        placeholder="选择日期"
                                         v-model="params.sign_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同开始时间" required="">
-                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" @blur="computedEndDate" value-format="yyyy-MM-dd"
+                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" @blur="computedEndDate"
+                                        value-format="yyyy-MM-dd"
                                         type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约月数" required>
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="月数" @blur="changeMonth" v-model="params.month">
+                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="月数" @blur="changeMonth"
+                                    v-model="params.month">
                             <template slot="append">月</template>
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="天数" @blur="computedEndDate" v-model="params.day">
+                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="天数" @blur="computedEndDate"
+                                    v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -205,12 +215,14 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="押金" required>
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.deposit"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  v-model="params.deposit"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="总收款金额" required>
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.money_sum"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  v-model="params.money_sum"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -221,7 +233,8 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="月单价" required="">
-                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="priceArray[item-1]"></el-input>
+                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                      v-model="priceArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -230,7 +243,7 @@
                                       v-model="periodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="6"  v-if="(isAll || (isPc && !isDoc)) && item>1">
+                        <el-col :span="6" v-if="(isAll || (isPc && !isDoc)) && item>1">
                           <div class="deleteNumber">
                             <span @click="deletePriceChange(item-1)">删除</span>
                           </div>
@@ -250,7 +263,8 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="押" required="">
-                            <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="pay_way_bet[0]" placeholder="请选择付款方式" value="">
+                            <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="pay_way_bet[0]"
+                                       placeholder="请选择付款方式" value="">
                               <el-option v-for="item in 3" :value="item-1"
                                          :key="item-1"></el-option>
                             </el-select>
@@ -268,7 +282,7 @@
                                       v-model="payPeriodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="6"  v-if="(isAll || (isPc && !isDoc)) && item>1">
+                        <el-col :span="6" v-if="(isAll || (isPc && !isDoc)) && item>1">
                           <div class="deleteNumber">
                             <span @click="deletePayWayChange(item-1)">删除</span>
                           </div>
@@ -297,10 +311,11 @@
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="金额（元）" required="">
-                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="moneySepArray[item-1]"></el-input>
+                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                      v-model="moneySepArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="6"  v-if="(isAll || (isPc && !isDoc)) && item>1">
+                        <el-col :span="6" v-if="(isAll || (isPc && !isDoc)) && item>1">
                           <div class="deleteNumber">
                             <span @click="deleteMoneyTableChange(item-1)">删除</span>
                           </div>
@@ -319,7 +334,7 @@
                     <div v-for="item in receiptChangeAmount">
                       <el-row>
                         <el-col :span="6">
-                          <el-form-item label="收据编号" >
+                          <el-form-item label="收据编号">
                             <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
                                       v-model="params.receipt[item-1]"></el-input>
                           </el-form-item>
@@ -342,7 +357,8 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="中介费">
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.agency"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -408,7 +424,8 @@
                     <el-col :span="6">
                       <el-form-item label="尾款补齐时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        :disabled="(!isPc || isDoc) && !isAll" v-model="params.retainage_date"></el-date-picker>
+                                        :disabled="(!isPc || isDoc) && !isAll"
+                                        v-model="params.retainage_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -421,7 +438,8 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="开单人">
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly=""
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  @focus="openOrganizeModal('staff')" readonly=""
                                   v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -433,7 +451,8 @@
                     <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="部门">
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  @focus="openOrganizeModal('depart')" readonly=""
                                   v-model="department_name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -517,7 +536,8 @@
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
-    <HouseOwnerInfo :houseOwnerDialog="houseOwnerInfoDialog" @close="houseOwnerInfoDialog=false" :contractId="rentContractId" module="2"></HouseOwnerInfo>
+    <HouseOwnerInfo :houseOwnerDialog="houseOwnerInfoDialog" @close="houseOwnerInfoDialog=false"
+                    :contractId="rentContractId" module="2"></HouseOwnerInfo>
 
   </div>
 </template>
@@ -546,7 +566,7 @@
         params: {
           is_submit: 0,
           id: '',   //合同id
-          house_id:'',
+          house_id: '',
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
@@ -607,7 +627,7 @@
         sexArray: [],
         id_typeArray: [],
         id_numberArray: [],
-        idArray : [],
+        idArray: [],
         phoneArray: [],
 
         //-----------------字典----------------------//
@@ -634,7 +654,7 @@
         moneyTableChangeAmount: 1,
         moneyWayArray: [],
         moneySepArray: [],
-        receiptChangeAmount : 1,
+        receiptChangeAmount: 1,
         py: '',
         year: '',
         //照片修改
@@ -649,23 +669,23 @@
         other_photo: {},
         checkout_photo: {},
         checkout_settle_photo: {},
-        tableLoading : false,
+        tableLoading: false,
 
-        isPc : false,
-        isDoc : false,
-        isAll : false,
+        isPc: false,
+        isDoc: false,
+        isAll: false,
       };
     },
     watch: {
-      houseOwnerInfoDialog(val){
-        if(!val){
+      houseOwnerInfoDialog(val) {
+        if (!val) {
           this.getDetail();
         }
       },
-      editRentInfoDialog(val){
+      editRentInfoDialog(val) {
         this.editRentInfoDialogVisible = val
       },
-      editRentInfoDialogVisible(val){
+      editRentInfoDialogVisible(val) {
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -679,14 +699,14 @@
           }
         }
       },
-      rentContractId(val){
+      rentContractId(val) {
         this.params.id = val;
       },
-      collectHouseId(val){
+      collectHouseId(val) {
         this.params.house_id = val;
       },
       'params.purchase_way': {
-        handler(val, oldVal){
+        handler(val, oldVal) {
           this.account = '';
           this.bank = '';
           this.subbranch = '';
@@ -694,15 +714,15 @@
       },
     },
     methods: {
-      getCurrentCity(){
+      getCurrentCity() {
         this.$http.get(globalConfig.server + 'setting/others/ip_address').then((res) => {
-          if(res.data.code === '1000120'){
+          if (res.data.code === '1000120') {
             this.py = res.data.data.py;
             this.year = res.data.data.year;
           }
         });
       },
-      getDictionary(){
+      getDictionary() {
         this.dictionary(410, 1).then((res) => {
           this.property_type_dic = res.data;
           this.isDictionary = true
@@ -742,7 +762,7 @@
         });
       },
 
-      getHouseInfo(){
+      getHouseInfo() {
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'house/album/' + this.collectHouseId).then((res) => {
           this.tableLoading = false;
@@ -753,9 +773,9 @@
       },
 
       //获取详情
-      getDetail(){
-        this.$http.get(globalConfig.server+'lease/rent/'+this.rentContractId).then((res) => {
-          if(res.data.code === '61110'){
+      getDetail() {
+        this.$http.get(globalConfig.server + 'lease/rent/' + this.rentContractId).then((res) => {
+          if (res.data.code === '61110') {
             this.nameArray = [];
             this.sexArray = [];
             this.id_typeArray = [];
@@ -765,8 +785,8 @@
 
             let data = res.data.data;
 
-            this.isPc = data.generate_from==2;
-            this.isDoc = data.doc_status.id>2;
+            this.isPc = data.generate_from == 2;
+            this.isDoc = data.doc_status.id > 2;
             this.isAll = data.auth_level == 'all';
 
             //租客信息
@@ -788,38 +808,42 @@
             this.params.sign_date = data.sign_date;
             this.params.begin_date = data.begin_date;
             this.params.end_date = data.end_date;
-            this.params.is_agency = String(data.is_agency);
+            if (data.is_agency.id) {
+              this.params.is_agency = String(data.is_agency.id);
+            } else {
+              this.params.is_agency = String(data.is_agency);
+            }
             this.params.deposit = data.deposit;
             this.params.money_sum = data.money_sum;
 
             //------------月单价和付款方式-----------------------//
-            if(data.price && Array.isArray(data.price)){
+            if (data.price && Array.isArray(data.price)) {
               this.priceChangeAmount = data.price.length;
               this.priceArray = [];
               this.periodArray = [];
-              data.price.forEach((item,index) => {
+              data.price.forEach((item, index) => {
                 this.priceArray.push(item.price);
                 this.periodArray.push(item.period);
               });
             }
 
-            if(data.pay_way && Array.isArray(data.pay_way)){
+            if (data.pay_way && Array.isArray(data.pay_way)) {
               this.payWayChangeAmount = data.pay_way.length;
               this.payWayArray = [];
               this.pay_way_bet = [];
               this.payPeriodArray = [];
-              data.pay_way.forEach((item,index) => {
+              data.pay_way.forEach((item, index) => {
                 this.payWayArray.push(Number(item.pay_way));
                 this.pay_way_bet.push(Number(item.pay_way_bet));
                 this.payPeriodArray.push(item.period);
               });
             }
 
-            if(data.money_table && Array.isArray(data.money_table)){
+            if (data.money_table && Array.isArray(data.money_table)) {
               this.moneyTableChangeAmount = data.money_table.length;
               this.moneyWayArray = [];
               this.moneySepArray = [];
-              data.money_table.forEach((item,index) => {
+              data.money_table.forEach((item, index) => {
                 this.moneyWayArray.push(item.money_way);
                 this.moneySepArray.push(item.money_sep);
               });
@@ -828,30 +852,30 @@
             //--------------------------------------------------//
             this.params.retainage_date = data.retainage_date;
 
-            if(Array.isArray(data.receipt)){
+            if (Array.isArray(data.receipt)) {
               this.receiptChangeAmount = data.receipt.length ? data.receipt.length : 1;
 
               data.receipt.forEach((item) => {
                 this.params.receipt.push(item);
               });
-            }else {
+            } else {
               this.receiptArray[0] = data.receipt;
               this.receiptChangeAmount = 1;
             }
-            if(data.agency_info && Array.isArray(data.agency_info)&&data.agency_info.length>0){
+            if (data.agency_info && Array.isArray(data.agency_info) && data.agency_info.length > 0) {
               this.params.agency = data.agency_info[0].agency_price;
-            }else {
+            } else {
               this.params.agency = '';
             }
             this.params.penalty = data.penalty;
-            this.params.property = data.property?Number(data.property):'';
+            this.params.property = data.property ? Number(data.property) : '';
             this.params.property_payer = data.property_payer;
             this.params.water = data.water;
             this.params.electricity_peak = data.electricity_peak;
             this.params.electricity_valley = data.electricity_valley;
             this.params.gas = data.gas;
             this.params.public_fee = data.public_fee;
-            this.params.manage_fee = data.manage_fee?Number(data.manage_fee):'';
+            this.params.manage_fee = data.manage_fee ? Number(data.manage_fee) : '';
             this.params.data_date = data.data_date;
 
             this.params.staff_id = data.staff_id;
@@ -877,33 +901,33 @@
             this.checkout_settle_photo = data.checkout_settle_photo;
 
             //先清空图片数组id
-            this.params.identity_photo= [];
-            this.params.photo= [];
-            this.params.water_photo= [];
-            this.params.electricity_photo= [];
-            this.params.gas_photo= [];
-            this.params.checkin_photo= [];
-            this.params.certificate_photo= [];
-            this.params.deposit_photo= [];
-            this.params.other_photo= [];
-            this.params.checkout_photo= [];
-            this.params.checkout_settle_photo= [];
-            this.imageArray(data.identity_photo,this.params.identity_photo);
-            this.imageArray(data.photo,this.params.photo);
-            this.imageArray(data.water_photo,this.params.water_photo);
-            this.imageArray(data.electricity_photo,this.params.electricity_photo);
-            this.imageArray(data.gas_photo,this.params.gas_photo);
-            this.imageArray(data.checkin_photo,this.params.checkin_photo);
-            this.imageArray(data.certificate_photo,this.params.certificate_photo);
-            this.imageArray(data.deposit_photo,this.params.deposit_photo);
-            this.imageArray(data.other_photo,this.params.other_photo);
-            this.imageArray(data.checkout_photo,this.params.checkout_photo);
-            this.imageArray(data.checkout_settle_photo,this.params.checkout_settle_photo)
+            this.params.identity_photo = [];
+            this.params.photo = [];
+            this.params.water_photo = [];
+            this.params.electricity_photo = [];
+            this.params.gas_photo = [];
+            this.params.checkin_photo = [];
+            this.params.certificate_photo = [];
+            this.params.deposit_photo = [];
+            this.params.other_photo = [];
+            this.params.checkout_photo = [];
+            this.params.checkout_settle_photo = [];
+            this.imageArray(data.identity_photo, this.params.identity_photo);
+            this.imageArray(data.photo, this.params.photo);
+            this.imageArray(data.water_photo, this.params.water_photo);
+            this.imageArray(data.electricity_photo, this.params.electricity_photo);
+            this.imageArray(data.gas_photo, this.params.gas_photo);
+            this.imageArray(data.checkin_photo, this.params.checkin_photo);
+            this.imageArray(data.certificate_photo, this.params.certificate_photo);
+            this.imageArray(data.deposit_photo, this.params.deposit_photo);
+            this.imageArray(data.other_photo, this.params.other_photo);
+            this.imageArray(data.checkout_photo, this.params.checkout_photo);
+            this.imageArray(data.checkout_settle_photo, this.params.checkout_settle_photo)
           }
         })
       },
 
-      imageArray(data, array){
+      imageArray(data, array) {
         if (!Array.isArray(data)) {
           for (let key in data) {
             array.push(key)
@@ -912,7 +936,7 @@
       },
 
       //改变收房月数
-      changeMonth(){
+      changeMonth() {
         this.computedEndDate();
         this.periodArray[0] = this.params.month;
         this.payPeriodArray[0] = this.params.month;
@@ -924,22 +948,22 @@
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
       },
-      vacancyWay(){
+      vacancyWay() {
         this.params.vacancy_other = '';
       },
       //调出选人组件
-      openOrganizeModal(val){
+      openOrganizeModal(val) {
         this.selectType = val;
         this.type = val === 'depart' ? 'depart' : 'staff';
         this.organizationDialog = true;
         this.length = 1;
       },
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
           this.staff_name = val[0].name;
-          if(val[0].org.length>0){
+          if (val[0].org.length > 0) {
             this.params.department_id = val[0].org[0].id;
             this.department_name = val[0].org[0].name;
           }
@@ -949,15 +973,15 @@
         }
       },
 
-      closeModal(){
+      closeModal() {
         this.organizationDialog = false
       },
 
       //打开小区模态框
-      openVillageModal(){
+      openVillageModal() {
         this.villageDialog = true
       },
-      closeVillageModal(val){
+      closeVillageModal(val) {
         this.villageDialog = false;
         if (val) {
           this.params.community_id = val.id;
@@ -967,10 +991,10 @@
       },
 
       //增加附属租客
-      addMoreCustoms(){
+      addMoreCustoms() {
         this.customersAmount++;
       },
-      deleteCustoms(item){
+      deleteCustoms(item) {
         this.nameArray.splice(item, 1);
         this.sexArray.splice(item, 1);
         this.id_typeArray.splice(item, 1);
@@ -981,47 +1005,47 @@
       },
 
       //月单价变化
-      addMorePriceChange(){
+      addMorePriceChange() {
         this.priceChangeAmount++;
       },
-      deletePriceChange(item){
+      deletePriceChange(item) {
         this.priceArray.splice(item, 1);
         this.periodArray.splice(item, 1);
         this.priceChangeAmount--;
       },
 
       //付款方式变化
-      addMorePayWayChange(){
+      addMorePayWayChange() {
         this.payWayChangeAmount++;
       },
-      deletePayWayChange(item){
+      deletePayWayChange(item) {
 //        this.pay_way_bet.splice(item, 1);
         this.payWayArray.splice(item, 1);
         this.payPeriodArray.splice(item, 1);
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      addMoreMoneyTableChange(){
+      addMoreMoneyTableChange() {
         this.moneyTableChangeAmount++;
       },
-      deleteMoneyTableChange(item){
+      deleteMoneyTableChange(item) {
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
       },
-      addReceiptChange(){
+      addReceiptChange() {
         this.receiptChangeAmount++;
-        this.params.receipt[this.receiptChangeAmount-1] = this.py+this.year;
+        this.params.receipt[this.receiptChangeAmount - 1] = this.py + this.year;
       },
-      deleteReceiptChange(item){
+      deleteReceiptChange(item) {
         this.receiptChangeAmount--;
         this.params.receipt.splice(item, 1);
       },
       //计算空置期结束时间
-      computedEndDate(){
-        this.$http.get(globalConfig.server+'lease/helper/rentdates?begin_date='+this.params.begin_date+'&month='
-          +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
-          if(res.data.code === '69910'){
+      computedEndDate() {
+        this.$http.get(globalConfig.server + 'lease/helper/rentdates?begin_date=' + this.params.begin_date + '&month='
+          + this.params.month + '&day=' + this.params.day + '&vacancy=' + this.params.vacancy).then((res) => {
+          if (res.data.code === '69910') {
             this.params.end_date = res.data.data.end_date;
           }
         })
@@ -1032,7 +1056,7 @@
         let date = now.getDate();
         return year + "-" + month + "-" + date;
       },
-      getImg(val){
+      getImg(val) {
         this.isUpPic = val[2];
         if (val[0] === 'editRent_id_card') {
           this.params.identity_photo = val[1];
@@ -1059,8 +1083,8 @@
         }
       },
 
-      confirmAdd(val){
-        this.params.is_submit =val;
+      confirmAdd(val) {
+        this.params.is_submit = val;
         //租客
         let customItem = {};
         this.params.customers = [];
@@ -1106,11 +1130,11 @@
         }
 
         if (!this.isUpPic) {
-          this.$http.put(globalConfig.server + 'lease/rent/'+this.rentContractId, this.params).then((res) => {
+          this.$http.put(globalConfig.server + 'lease/rent/' + this.rentContractId, this.params).then((res) => {
             if (res.data.code === '61110') {
               this.clearData();
               this.editRentInfoDialogVisible = false;
-              this.$emit('close','updateRent');
+              this.$emit('close', 'updateRent');
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -1129,12 +1153,12 @@
           })
         }
       },
-      clearData(){
+      clearData() {
         this.isClear = false;
         this.params = {
-          is_submit:0,
+          is_submit: 0,
           id: this.rentContractId,   //合同id
-          house_id : this.collectHouseId,
+          house_id: this.collectHouseId,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
           contract_type: '1',           // 订单性质（合同种类）
@@ -1152,7 +1176,7 @@
           money_sum: '',              //收款总金额
           money_table: [],            //金额+付款方式
           retainage_date: '',         //尾款补齐时间
-          receipt : [],
+          receipt: [],
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费

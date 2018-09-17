@@ -242,10 +242,12 @@
             </div>
           </div>
           <el-form-item label="领导同意截图">
-            <UpLoad :ID="'rent_report_leader'" :isClear="isClear" :editImage="screenshot_leader" @getImg="getImg"></UpLoad>
+            <UpLoad :ID="'rent_report_leader'" :isClear="isClear" :editImage="screenshot_leader"
+                    @getImg="getImg"></UpLoad>
           </el-form-item>
           <el-form-item label="凭证截图" required="">
-            <UpLoad :ID="'rent_report_certificate'" :isClear="isClear" :editImage="screenshot" @getImg="getImg"></UpLoad>
+            <UpLoad :ID="'rent_report_certificate'" :isClear="isClear" :editImage="screenshot"
+                    @getImg="getImg"></UpLoad>
           </el-form-item>
           <el-form-item label="合同照片">
             <UpLoad :ID="'rent_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
@@ -293,21 +295,21 @@
   import RentSearch from '../../common/rentSearch.vue'
 
   export default {
-    components: {UpLoad, Organization,RentSearch},
-    props: ['continueRentReport','reportDetailData','processableId','reportId'],
+    components: {UpLoad, Organization, RentSearch},
+    props: ['continueRentReport', 'reportDetailData', 'processableId', 'reportId'],
     data() {
       return {
         continueRentReportVisible: false,
         isClear: false,
         organizationDialog: false,
         rentDialog: false,
-        fullLoading : false,
+        fullLoading: false,
         length: '',
         type: '',
         selectType: '',
-        receiptDate : '',
+        receiptDate: '',
 
-        params : {
+        params: {
           address: '',
           id: '',
           processable_id: '',
@@ -359,41 +361,41 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
         },
-        screenshot_leader : {},
-        screenshot : {},
-        photo : {},
-        deposit_photo : {},
+        screenshot_leader: {},
+        screenshot: {},
+        photo: {},
+        deposit_photo: {},
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
         moneyTableChangeAmount: 1,
-        receiptAmount:1,
+        receiptAmount: 1,
         purchase_way_dic: [],
         property_payer_dic: [],
-        isUpload : false,
+        isUpload: false,
       };
     },
     watch: {
-      continueRentReport(val){
+      continueRentReport(val) {
         this.continueRentReportVisible = val
       },
-      continueRentReportVisible(val){
+      continueRentReportVisible(val) {
         if (!val) {
           this.$emit('close');
           this.clearData();
         } else {
           this.isClear = true;
-          setTimeout( () => {
+          setTimeout(() => {
             this.preloadData();
-          },50);
+          }, 50);
 
         }
       },
     },
-    created(){
+    created() {
       this.getDictionary();
     },
     methods: {
-      getDictionary(){
+      getDictionary() {
         this.dictionary(508, 1).then((res) => {
           this.purchase_way_dic = res.data;
         });
@@ -402,7 +404,7 @@
         });
       },
       //预填报备数据
-      preloadData(){
+      preloadData() {
         let data = this.reportDetailData;
         console.log(data);
         this.params.processable_id = this.reportId;
@@ -439,7 +441,11 @@
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
 
-        this.params.is_corp = String(data.is_corp.id);
+        if (data.is_corp.id) {
+          this.params.is_corp = String(data.is_corp.id);
+        } else {
+          this.params.is_corp = String(data.is_corp);
+        }
         this.params.property = data.property;
 
         this.params.is_other_fee = String(data.is_other_fee);
@@ -469,40 +475,40 @@
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
 
-        if(data.receipt && typeof(data.receipt) === 'string'){
+        if (data.receipt && typeof(data.receipt) === 'string') {
           this.params.receipt.push(data.receipt)
-        }else if(Array.isArray(data.receipt) && data.receipt.length>0){
+        } else if (Array.isArray(data.receipt) && data.receipt.length > 0) {
           this.receiptAmount = data.receipt.length;
-          data.receipt.forEach((item)=>{
-            if(typeof item === 'string'){
+          data.receipt.forEach((item) => {
+            if (typeof item === 'string') {
               this.params.receipt.push(item);
-            }else if(item.number){
+            } else if (item.number) {
               this.params.receipt.push(item.number);
             }
           })
-        }else {
+        } else {
           this.receiptNum();
         }
       },
       //详情照片展示
-      getImgObject(data){
+      getImgObject(data) {
         let img = {};
-        if(data && data.constructor === Object){
+        if (data && data.constructor === Object) {
           let imgArray = data.pic_addresses;
-          if(imgArray.length>0){
-            imgArray.forEach((item)=>{
-              this.$set(img,item.id,item.uri)
+          if (imgArray.length > 0) {
+            imgArray.forEach((item) => {
+              this.$set(img, item.id, item.uri)
             });
           }
         }
         return img;
       },
-      getImgIdArray(data){
+      getImgIdArray(data) {
         let img = [];
-        if(data && data.constructor === Object){
+        if (data && data.constructor === Object) {
           let imgArray = data.pic_addresses;
-          if(imgArray.length>0){
-            imgArray.forEach((item)=>{
+          if (imgArray.length > 0) {
+            imgArray.forEach((item) => {
               img.push(item.id);
             });
           }
@@ -511,18 +517,18 @@
       },
 
       //打开房屋选择模态框
-      selectHouse(){
+      selectHouse() {
         this.rentDialog = true;
       },
       //调出选人组件
-      openOrganizeModal(val){
+      openOrganizeModal(val) {
         this.selectType = val;
         this.type = val === 'depart' ? 'depart' : 'staff';
         this.organizationDialog = true;
         this.length = 1;
       },
       //选人组件回调
-      selectMember(val){
+      selectMember(val) {
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
           this.params.staff_name = val[0].name;
@@ -537,45 +543,45 @@
       },
 
       //月单价变化
-      addMorePriceChange(){
+      addMorePriceChange() {
         this.priceChangeAmount++;
       },
-      deletePriceChange(item){
+      deletePriceChange(item) {
         this.params.price_arr.splice(item, 1);
         this.params.period_price_arr.splice(item, 1);
         this.priceChangeAmount--;
       },
       //付款方式变化
-      addMorePayWayChange(){
+      addMorePayWayChange() {
         this.payWayChangeAmount++;
       },
-      deletePayWayChange(item){
+      deletePayWayChange(item) {
         this.params.pay_way_arr.splice(item, 1);
         this.params.period_pay_arr.splice(item, 1);
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      addMoreMoneyTableChange(){
+      addMoreMoneyTableChange() {
         this.moneyTableChangeAmount++;
       },
-      deleteMoneyTableChange(item){
+      deleteMoneyTableChange(item) {
         this.params.money_way.splice(item, 1);
         this.params.money_sep.splice(item, 1);
         this.moneyTableChangeAmount--;
       },
 
-      addReceiptAmount(){
+      addReceiptAmount() {
         this.receiptAmount++;
         this.params.receipt.push(this.receiptDate);
 
       },
-      deleteReceiptAmount(item){
+      deleteReceiptAmount(item) {
         this.params.receipt.splice(item, 1);
         this.receiptAmount--;
       },
 
       //改变收房月数
-      changeMonth(){
+      changeMonth() {
         this.computedEndDate();
         this.params.period_price_arr[0] = this.params.month;
         this.params.period_pay_arr[0] = this.params.month;
@@ -587,8 +593,8 @@
       },
 
       //计算空置期结束时间
-      computedEndDate(){
-        this.params.day = this.params.day?this.params.day:0;
+      computedEndDate() {
+        this.params.day = this.params.day ? this.params.day : 0;
         let params = {};
         params.begin_date = this.params.begin_date;
         params.month = this.params.month;
@@ -603,17 +609,17 @@
         })
       },
       //关闭模态框
-      closeModal(val){
+      closeModal(val) {
         this.rentDialog = false;
         this.organizationDialog = false;
-        if(val){
+        if (val) {
           this.params.address = val.address;
           this.params.contract_id = val.contract_id;
           this.params.house_id = val.house_id;
         }
       },
 
-      getImg(val){
+      getImg(val) {
         this.isUpload = val[2];
         if (val[0] === 'rent_report_leader') {
           this.params.screenshot_leader = val[1];
@@ -635,33 +641,33 @@
           }
         });
       },
-      confirmSubmit(){
-        if(!this.isUpload){
+      confirmSubmit() {
+        if (!this.isUpload) {
           this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
-          this.$http.post(globalConfig.server+'bulletin/rent',this.params).then((res)=>{
-            if(res.data.code === '50230'){
+          this.$http.post(globalConfig.server + 'bulletin/rent', this.params).then((res) => {
+            if (res.data.code === '50230') {
               this.$notify.success({
-                title : '成功',
-                message:res.data.msg
+                title: '成功',
+                message: res.data.msg
               });
-              this.$emit('close','success')
-            }else {
+              this.$emit('close', 'success')
+            } else {
               this.$notify.warning({
-                title : '警告',
-                message:res.data.msg
+                title: '警告',
+                message: res.data.msg
               })
             }
           })
-        }else {
+        } else {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传',
+            title: '警告',
+            message: '图片正在上传',
           })
         }
       },
-      clearData(){
+      clearData() {
         this.isClear = false;
-        this.params={
+        this.params = {
           address: '',
           id: '',
           processable_id: '',

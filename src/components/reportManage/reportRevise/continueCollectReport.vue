@@ -416,7 +416,11 @@
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;
         this.params.house = data.house;
-        this.params.is_corp = String(data.is_corp.id);
+        if (data.is_corp.id) {
+          this.params.is_corp = String(data.is_corp.id);
+        } else {
+          this.params.is_corp = String(data.is_corp);
+        }
 
         this.params.month = data.month;
         this.params.day = data.day === '0' ? '' : data.day;
@@ -425,7 +429,11 @@
 
         this.params.begin_date = data.begin_date;
         this.params.end_date = data.end_date;
-        this.params.is_agency = String(data.is_agency.id);
+        if (data.is_agency.id) {
+          this.params.is_agency = String(data.is_agency.id);
+        } else {
+          this.params.is_agency = String(data.is_agency);
+        }
 
         this.params.pay_first_date = data.pay_first_date;
         this.params.pay_second_date = data.pay_second_date;
