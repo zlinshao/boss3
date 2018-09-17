@@ -423,10 +423,9 @@
         this.params.contract_number = data.contract_number === '' ? 'LJSF' : data.contract_number;
         this.params.sign_date = data.sign_date;
 
-        //
         this.params.begin_date = data.begin_date;
         this.params.end_date = data.end_date;
-
+        this.params.is_agency = String(data.is_agency.id);
 
         this.params.pay_first_date = data.pay_first_date;
         this.params.pay_second_date = data.pay_second_date;

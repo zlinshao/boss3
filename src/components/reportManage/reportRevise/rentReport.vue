@@ -473,18 +473,16 @@
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
 
-        this.params.is_agency = String(data.is_agency.id);   //是否中介
         this.params.agency_name = data.agency_name;
         this.params.agency_price = data.agency_price;
         this.params.agency_user_name = data.agency_user_name;
         this.params.agency_phone = data.agency_phone;
-
         this.params.is_corp = String(data.is_corp.id);
+        this.params.is_agency = String(data.is_agency.id);   //是否中介
         this.params.property = data.property;
 
         this.params.is_other_fee = String(data.is_other_fee);
         this.params.property_payer = data.property_payer.id;
-
 
         this.params.retainage_date = data.retainage_date;
         this.params.name = data.name;
