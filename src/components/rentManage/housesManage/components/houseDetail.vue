@@ -385,15 +385,15 @@
               </span>
             </div>
             <div class="describe_border">
-              <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0"
+              <div v-if="albumArray.album && albumArray.album.album_file && albumArray.album.album_file.length > 0"
                    v-for="item in albumArray.album.album_file" style="display: inline-block">
-                <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
-                     :src="item.uri" data-magnify="" :data-src="item.uri">
-                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
                 <video v-if="item.info.mime && (item.info.mime.indexOf('mp4') > -1 || item.info.mime.indexOf('video') > -1)"
                        controls preload="auto" width="200" height="120">
                   <source :src="item.uri" type="video/mp4">
                 </video>
+                <img v-else="item.info.mime && item.info.mime.indexOf('image') > -1"
+                     :src="item.uri" data-magnify="" :data-src="item.uri">
+                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
               </div>
             </div>
           </div>
