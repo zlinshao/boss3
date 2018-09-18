@@ -989,7 +989,7 @@
             this.params.vacancy_other = data.vacancy_other;
             this.params.warranty_month = data.warranty_month ? data.warranty_month : 0;
             this.params.warranty_day = data.warranty_day ? data.warranty_day : 0;
-            if (data.is_agency.id) {
+            if (data.is_agency.name) {
               this.params.is_agency = String(data.is_agency.id);
             } else {
               this.params.is_agency = String(data.is_agency);

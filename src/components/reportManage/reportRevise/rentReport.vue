@@ -479,12 +479,12 @@
         this.params.agency_price = data.agency_price;
         this.params.agency_user_name = data.agency_user_name;
         this.params.agency_phone = data.agency_phone;
-        if (data.is_corp.id) {
+        if (data.is_corp.name) {
           this.params.is_corp = String(data.is_corp.id);
         } else {
           this.params.is_corp = String(data.is_corp);
         }
-        if (data.is_agency.id) {
+        if (data.is_agency.name) {
           this.params.is_agency = String(data.is_agency.id);
         } else {
           this.params.is_agency = String(data.is_agency);

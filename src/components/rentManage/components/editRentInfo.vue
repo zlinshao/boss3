@@ -790,16 +790,17 @@
             this.isAll = data.auth_level == 'all';
 
             //租客信息
-            this.customersAmount = data.customers && data.customers.length;
-            data.customers.forEach((item) => {
-              this.nameArray.push(item.name);
-              this.sexArray.push(String(item.sex));
-              item.idtype ? this.id_typeArray.push(Number(item.idtype)) : '';
-              this.id_numberArray.push(item.idcard);
-              this.idArray.push(item.id);
-              this.phoneArray.push(item.phone);
-            });
-
+            if (data.customers && data.customers.length) {
+              this.customersAmount = data.customers.length;
+              data.customers.forEach((item) => {
+                this.nameArray.push(item.name);
+                this.sexArray.push(String(item.sex));
+                item.idtype ? this.id_typeArray.push(Number(item.idtype)) : '';
+                this.id_numberArray.push(item.idcard);
+                this.idArray.push(item.id);
+                this.phoneArray.push(item.phone);
+              });
+            }
             //合同信息
             this.params.contract_type = String(data.contract_type);
             this.params.contract_number = data.contract_number;
@@ -808,7 +809,7 @@
             this.params.sign_date = data.sign_date;
             this.params.begin_date = data.begin_date;
             this.params.end_date = data.end_date;
-            if (data.is_agency.id) {
+            if (data.is_agency.name) {
               this.params.is_agency = String(data.is_agency.id);
             } else {
               this.params.is_agency = String(data.is_agency);

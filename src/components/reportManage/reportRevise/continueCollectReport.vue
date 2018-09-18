@@ -416,7 +416,7 @@
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;
         this.params.house = data.house;
-        if (data.is_corp.id) {
+        if (data.is_corp.name) {
           this.params.is_corp = String(data.is_corp.id);
         } else {
           this.params.is_corp = String(data.is_corp);
@@ -429,7 +429,7 @@
 
         this.params.begin_date = data.begin_date;
         this.params.end_date = data.end_date;
-        if (data.is_agency.id) {
+        if (data.is_agency.name) {
           this.params.is_agency = String(data.is_agency.id);
         } else {
           this.params.is_agency = String(data.is_agency);

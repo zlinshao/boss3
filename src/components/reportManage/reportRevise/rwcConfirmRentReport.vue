@@ -455,7 +455,7 @@
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
 
-        if (data.is_agency.id) {
+        if (data.is_agency.name) {
           this.params.is_agency = String(data.is_agency.id);
         } else {
           this.params.is_agency = String(data.is_agency);
