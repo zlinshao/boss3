@@ -88,7 +88,7 @@
           :total="totalNumber">
         </el-pagination>
       </div>
-      <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
+      <OrderDetail :orderDetailDialog="orderDetailDialog" :wordData="activeId"  @close="closeModal"></OrderDetail>
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                  @clickOperate="clickEvent"></RightMenu>
       <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
@@ -173,7 +173,7 @@
             this.getData();
           } ,
           dblClickTable(row, event){
-            this.activeId = row.id;
+            this.activeId = row;
             this.startDetail = true;
             this.orderDetailDialog = true;
           },

@@ -206,12 +206,12 @@
                   </template>
                 </el-table-column>
                 <!--<el-table-column-->
-                  <!--prop="events"-->
-                  <!--label="事件数">-->
-                  <!--<template slot-scope="scope">-->
-                    <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
-                    <!--<span v-if="!scope.row.events">暂无</span>-->
-                  <!--</template>-->
+                <!--prop="events"-->
+                <!--label="事件数">-->
+                <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
+                <!--<span v-if="!scope.row.events">暂无</span>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <el-table-column
                   prop="types"
@@ -316,12 +316,12 @@
                   </template>
                 </el-table-column>
                 <!--<el-table-column-->
-                  <!--prop="events"-->
-                  <!--label="事件数">-->
-                  <!--<template slot-scope="scope">-->
-                    <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
-                    <!--<span v-if="!scope.row.events">暂无</span>-->
-                  <!--</template>-->
+                <!--prop="events"-->
+                <!--label="事件数">-->
+                <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
+                <!--<span v-if="!scope.row.events">暂无</span>-->
+                <!--</template>-->
                 <!--</el-table-column>-->
                 <el-table-column
                   prop="types"
@@ -484,11 +484,35 @@
           data[i].overdueTime = currentTime - foundTime; //得到  创建的时间  距离现在 有多少小时
         }
       },
-      handleClick() {
+      searchList() {
         if (this.activeName === "first") {
           this.collectDatafunc();
         } else {
           this.rentDatafunc();
+        }
+      },
+      handleClick() {
+        this.close_();
+        if (this.activeName === "first") {
+          this.params.module = 1;
+          this.collectDatafunc();
+        } else {
+          this.params.module = 2;
+          this.rentDatafunc();
+        }
+      },
+      close_() {
+        this.params = {
+          pages: 1,
+          limit: 12,
+          keywords: '',
+          follow_status: '',
+          follow_id: '',
+          create_time: [],
+          follow_time: '',
+          update_time: '',
+          finish_time: '',
+          type: '',
         }
       },
       getDictionary() {
@@ -540,7 +564,7 @@
       },
       handleCurrentChange(val) {
         this.params.pages = val;
-        this.handleClick();
+        this.searchList();
         this.$store.dispatch('workOrderFilter', this.params);
       },
       //房屋右键
@@ -593,7 +617,7 @@
       },
       closeOrder() {
         this.orderDetailDialog = false;
-        this.handleClick();
+        this.searchList();
       },
       //选人组件
       openOrganizeModal() {
@@ -617,7 +641,7 @@
       search() {
         this.isHigh = false;
         this.params.pages = 1;
-        this.handleClick();
+        this.searchList();
       },
       resetting() {
         this.params.follow_id = '';
