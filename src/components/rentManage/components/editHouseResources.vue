@@ -689,7 +689,8 @@
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
-    <HouseOwnerInfo :houseOwnerDialog="houseOwnerInfoDialog" @close="houseOwnerInfoDialog=false" :contractId="collectContractId" module="1"></HouseOwnerInfo>
+    <HouseOwnerInfo :houseOwnerDialog="houseOwnerInfoDialog" @close="houseOwnerInfoDialog=false"
+                    :contractId="collectContractId" module="1"></HouseOwnerInfo>
   </div>
 </template>
 
@@ -857,8 +858,8 @@
       };
     },
     watch: {
-      houseOwnerInfoDialog(val){
-        if(!val){
+      houseOwnerInfoDialog(val) {
+        if (!val) {
           this.getDetail();
         }
       },
@@ -989,10 +990,14 @@
             this.params.vacancy_other = data.vacancy_other;
             this.params.warranty_month = data.warranty_month ? data.warranty_month : 0;
             this.params.warranty_day = data.warranty_day ? data.warranty_day : 0;
-            if (data.is_agency.name) {
-              this.params.is_agency = String(data.is_agency.id);
+            if (data.is_agency) {
+              if (data.is_agency.name) {
+                this.params.is_agency = String(data.is_agency.id);
+              } else {
+                this.params.is_agency = String(data.is_agency);
+              }
             } else {
-              this.params.is_agency = String(data.is_agency);
+              this.params.is_agency = '0';
             }
             this.params.deposit = data.deposit;
             //------------月单价和付款方式-----------------------//
@@ -1020,9 +1025,9 @@
             this.params.bank = data.bank;
             this.params.subbranch = data.subbranch;
 
-            if(data.agency_info && Array.isArray(data.agency_info)&&data.agency_info.length>0){
+            if (data.agency_info && Array.isArray(data.agency_info) && data.agency_info.length > 0) {
               this.params.agency = data.agency_info[0].agency_price;
-            }else {
+            } else {
               this.params.agency = '';
             }
 

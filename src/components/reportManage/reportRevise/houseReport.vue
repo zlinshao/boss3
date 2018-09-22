@@ -530,10 +530,14 @@
             this.params.floor = data.floor;                                   //楼层
             this.params.floors = data.floors;                                 //总楼层
             this.params.price = data.price;                                   //价格
-            if (data.is_agency.name) {
-              this.params.is_agency = String(data.is_agency.id);
+            if (data.is_agency) {
+              if (data.is_agency.name) {
+                this.params.is_agency = String(data.is_agency.id);
+              } else {
+                this.params.is_agency = String(data.is_agency);
+              }
             } else {
-              this.params.is_agency = String(data.is_agency);
+              this.params.is_agency = '0';
             }
             this.params.air_condition = data.air_condition;                   //空调
             this.params.fridge = data.fridge;                                 //冰箱

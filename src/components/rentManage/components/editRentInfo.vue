@@ -809,10 +809,14 @@
             this.params.sign_date = data.sign_date;
             this.params.begin_date = data.begin_date;
             this.params.end_date = data.end_date;
-            if (data.is_agency.name) {
-              this.params.is_agency = String(data.is_agency.id);
+            if (data.is_agency) {
+              if (data.is_agency.name) {
+                this.params.is_agency = String(data.is_agency.id);
+              } else {
+                this.params.is_agency = String(data.is_agency);
+              }
             } else {
-              this.params.is_agency = String(data.is_agency);
+              this.params.is_agency = '0';
             }
             this.params.deposit = data.deposit;
             this.params.money_sum = data.money_sum;

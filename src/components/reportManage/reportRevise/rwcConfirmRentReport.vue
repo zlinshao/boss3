@@ -455,10 +455,14 @@
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
 
-        if (data.is_agency.name) {
-          this.params.is_agency = String(data.is_agency.id);
+        if (data.is_agency) {
+          if (data.is_agency.name) {
+            this.params.is_agency = String(data.is_agency.id);
+          } else {
+            this.params.is_agency = String(data.is_agency);
+          }
         } else {
-          this.params.is_agency = String(data.is_agency);
+          this.params.is_agency = '0';
         }
         this.params.agency_name = data.agency_name;
         this.params.agency_price = data.agency_price;

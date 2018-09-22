@@ -484,10 +484,14 @@
         } else {
           this.params.is_corp = String(data.is_corp);
         }
-        if (data.is_agency.name) {
-          this.params.is_agency = String(data.is_agency.id);
+        if (data.is_agency) {
+          if (data.is_agency.name) {
+            this.params.is_agency = String(data.is_agency.id);
+          } else {
+            this.params.is_agency = String(data.is_agency);
+          }
         } else {
-          this.params.is_agency = String(data.is_agency);
+          this.params.is_agency = '0';
         }
         this.params.property = data.property;
 

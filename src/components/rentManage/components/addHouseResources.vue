@@ -927,10 +927,14 @@
             this.params.vacancy_other = data.vacancy_other;
             this.params.warranty_month = data.warranty_month ? data.warranty_month : 0;
             this.params.warranty_day = data.warranty_day ? data.warranty_day : 0;
-            if (data.is_agency.name) {
-              this.params.is_agency = String(data.is_agency.id);
+            if (data.is_agency) {
+              if (data.is_agency.name) {
+                this.params.is_agency = String(data.is_agency.id);
+              } else {
+                this.params.is_agency = String(data.is_agency);
+              }
             } else {
-              this.params.is_agency = String(data.is_agency);
+              this.params.is_agency = '0';
             }
             this.params.deposit = data.deposit;
             //------------月单价和付款方式-----------------------//
