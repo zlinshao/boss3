@@ -484,10 +484,14 @@
         this.params.agency_user_name = data.agency_user_name;
         this.params.agency_phone = data.agency_phone;
 
-        if (data.is_corp.name) {
-          this.params.is_corp = String(data.is_corp.id);
+        if (data.is_corp) {
+          if (data.is_corp.name) {
+            this.params.is_corp = String(data.is_corp.id);
+          } else {
+            this.params.is_corp = String(data.is_corp);
+          }
         } else {
-          this.params.is_corp = String(data.is_corp);
+          this.params.is_corp = '0';
         }
         this.params.property = data.property;
 

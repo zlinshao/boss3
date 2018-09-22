@@ -416,12 +416,16 @@
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;
         this.params.house = data.house;
-        if (data.is_corp.name) {
-          this.params.is_corp = String(data.is_corp.id);
-        } else {
-          this.params.is_corp = String(data.is_corp);
-        }
 
+        if (data.is_corp) {
+          if (data.is_corp.name) {
+            this.params.is_corp = String(data.is_corp.id);
+          } else {
+            this.params.is_corp = String(data.is_corp);
+          }
+        } else {
+          this.params.is_corp = '0';
+        }
         this.params.month = data.month;
         this.params.day = data.day === '0' ? '' : data.day;
         this.params.contract_number = data.contract_number === '' ? 'LJSF' : data.contract_number;
