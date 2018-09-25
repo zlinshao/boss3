@@ -176,8 +176,6 @@
         totalNum: 0,
         params: {
           page: 1,
-          is_page: 1,
-          search: 1,
           q: '',
           processable_type: '', //报备类型
           start_time: '',
@@ -235,6 +233,7 @@
               if (data[i]) {
                 user.created_at = data[i].created_at;
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
+                user.id = data[i].id;
                 if (data[i].content) {
                   user.bulletin = data[i].content.staff_name + '的' + data[i].content.bulletin_name || '/';
                   user.name = data[i].content.staff_name || '';
@@ -246,10 +245,21 @@
                   } else {
                     user.house_name = '/';
                   }
+                  user.place = data[i].place.display_name;
+                  user.status = data[i].place.status;
+                } else {
+                  user.bulletin = data[i].flow.content.staff_name + '的' + data[i].flow.content.bulletin_name || '/';
+                  user.name = data[i].flow.content.staff_name || '';
+                  if (data[i].flow.content.house) {
+                    user.house_name = data[i].flow.content.house.name;
+                  } else if (data[i].flow.content.address) {
+                    user.house_name = data[i].flow.content.address;
+                  } else {
+                    user.house_name = '/';
+                  }
+                  user.place = data[i].flow.place.display_name;
+                  user.status = data[i].flow.place.status;
                 }
-                user.id = data[i].id;
-                user.place = data[i].place.display_name;
-                user.status = data[i].place.status;
               } else {
                 user.place = '/';
                 user.status = '/';
@@ -269,7 +279,6 @@
       },
       handleCurrentChange(val) {
         this.params.page = val;
-        this.params.is_page = val;
         this.getTableData();
       },
       //房屋右键
@@ -335,6 +344,7 @@
       },
       search() {
         this.isHigh = false;
+        this.params.page = 1;
         this.getTableData();
       },
       resetting() {
