@@ -164,6 +164,7 @@
   import ReportDetail from '../../../reportManage/components/editReportDetail'          //报备详情
   export default {
     name: 'hello',
+    props: ['active'],
     components: {RightMenu, Organization, ReportDetail},
     data() {
       return {
@@ -213,7 +214,14 @@
         reportID: '',
       }
     },
-    watch: {},
+    watch: {
+      active(val) {
+        if (val === 'sixth') {
+          this.resetting();
+          this.getTableData();
+        }
+      }
+    },
     activated() {
       this.getTableData();
     },
@@ -345,14 +353,22 @@
       search() {
         this.isHigh = false;
         this.params.page = 1;
+        if (this.params.q === '' && this.params.processable_type === '' && this.params.start_time === '' && this.params.end_time === '' && this.params.org_id === '') {
+          this.params.search = '';
+        } else {
+          this.params.search = 1;
+        }
         this.getTableData();
       },
       resetting() {
-        this.params.processable_type = '';
-        this.params.start_time = '';
-        this.params.end_time = '';
-        this.department_name = '';
-        this.params.org_id = '';
+        this.params = {
+          page: 1,
+          q: '',
+          processable_type: '', //报备类型
+          start_time: '',
+          end_time: '',
+          org_id: '',
+        };
       },
       closeFrame(val) {
         this.reportModule = false;

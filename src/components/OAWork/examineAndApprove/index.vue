@@ -712,7 +712,7 @@
         <!--</el-tabs>-->
       </el-tab-pane>
       <el-tab-pane label="全部" name="sixth">
-        <ReportAll></ReportAll>
+        <ReportAll :active="activeName"></ReportAll>
       </el-tab-pane>
 
     </el-tabs>
