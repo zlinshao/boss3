@@ -352,7 +352,7 @@
                 <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
                      :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
                 <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
-                <video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"
+                <video v-if="item.info.mime && (item.info.mime.indexOf('mp4') > -1 || item.info.mime.indexOf('video') > -1)"
                        class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
                   <source :src="item.uri" type="video/mp4">
                 </video>
@@ -376,7 +376,7 @@
                     v-if="albumArray.staffs&&albumArray.staffs.role&&albumArray.staffs.role.length>0">
                 岗位：
                 <span v-for="item in albumArray.staffs.role">
-                  <span>{{item.display_name}}&nbsp;&nbsp;  </span>
+                  <span>{{item.display_name}}&nbsp;&nbsp;</span>
                 </span>
               </span>
 
@@ -385,15 +385,15 @@
               </span>
             </div>
             <div class="describe_border">
-              <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0"
+              <div v-if="albumArray.album && albumArray.album.album_file && albumArray.album.album_file.length > 0"
                    v-for="item in albumArray.album.album_file" style="display: inline-block">
-                <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
-                     :src="item.uri" data-magnify="" :data-src="item.uri">
-                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
-                <video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"
+                <video v-if="item.info.mime && (item.info.mime.indexOf('mp4') > -1 || item.info.mime.indexOf('video') > -1)"
                        controls preload="auto" width="200" height="120">
                   <source :src="item.uri" type="video/mp4">
                 </video>
+                <img v-else="item.info.mime && item.info.mime.indexOf('image') > -1"
+                     :src="item.uri" data-magnify="" :data-src="item.uri">
+                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
               </div>
             </div>
           </div>
@@ -443,11 +443,6 @@
           </div>
         </div>
       </el-dialog>
-
-      <span slot="footer" class="dialog-footer">
-        <!--<el-button size="small" @click="houseDetailDialogVisible = false">取 消</el-button>-->
-        <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -467,8 +462,7 @@
         tableLoading: false,
 
         oldData : {},
-        printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
-
+        printScreen: ['新凭证截图', '证件照片', '房产证照片', '旧凭证截图', '新押金收条', '旧押金收条', '押金收条', '款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '组长同意截图', '房屋影像', '房屋照片', '退租交接单'],
       };
     },
     watch: {
@@ -540,7 +534,6 @@
         });
         return dictionary_name;
       },
-
       searchOldData(data){
         this.oldData = data;
         this.innerVisible = true;

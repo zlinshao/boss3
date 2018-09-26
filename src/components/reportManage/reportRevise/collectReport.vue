@@ -266,11 +266,20 @@
           </el-row>
 
           <el-form-item label="领导同意截图">
-            <UpLoad :ID="'collect_report_leader'" :isClear="isClear" :editImage="screenshot_leader" @getImg="getImg"></UpLoad>
+            <UpLoad :ID="'collect_report_leader'" :isClear="isClear" :editImage="screenshot_leader"
+                    @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-form-item label="合同照片" required="">
             <UpLoad :ID="'collect_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
+          </el-form-item>
+
+          <el-form-item label="房产证照片" required="">
+            <UpLoad :ID="'property_photo'" :isClear="isClear" :editImage="property_photos" @getImg="getImg"></UpLoad>
+          </el-form-item>
+
+          <el-form-item label="证件照片" required="">
+            <UpLoad :ID="'identity_photo'" :isClear="isClear" :editImage="identity_photos" @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-row>
@@ -313,8 +322,8 @@
   import HouseSearch from '../../common/houseSearch.vue'
 
   export default {
-    components: {UpLoad, Organization,HouseSearch},
-    props: ['collectReport','reportDetailData','processableId','reportId'],
+    components: {UpLoad, Organization, HouseSearch},
+    props: ['collectReport', 'reportDetailData', 'processableId', 'reportId'],
     data() {
       return {
         collectReportVisible: false,
@@ -324,9 +333,9 @@
         length: '',
         type: '',
         selectType: '',
-        fullLoading : false,
+        fullLoading: false,
 
-        params : {
+        params: {
           id: '',
           processable_id: '',
           type: 1,
@@ -359,7 +368,7 @@
           vacancy_other: '',            //空置期安排方式 随便填
           warranty: '',                 //保修期月
           warranty_day: '',             //保修期天
-          is_corp: '1',                   //是否公司单  0个人1公司
+          is_corp: '1',                 //是否公司单  0个人1公司
           deposit: '',                  //押金
           property_payer: '',           //物业费付款人
           name: '',                     //房东姓名
@@ -374,14 +383,18 @@
           contract_number: 'LJSF',      //合同编号
           screenshot_leader: [],        //领导截图 数组
           photo: [],                    //合同照片 数组
+          property_photo: [],           //房产证照片
+          identity_photo: [],           //证件照片
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
-          staff_name: '',                 //开单人name
-          department_name: '',            //部门name
+          staff_name: '',               //开单人name
+          department_name: '',          //部门name
         },
-        screenshot_leader : {},
-        photo : {},
+        screenshot_leader: {},
+        photo: {},
+        property_photos: {},            //房产证照片
+        identity_photos: {},            //证件照片
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
@@ -390,30 +403,30 @@
         vacancy_way_dic: [],
         pay_way_dic: [],
         property_payer_dic: [],
-        isUpload : false,
+        isUpload: false,
       };
     },
     watch: {
-      collectReport(val){
+      collectReport(val) {
         this.collectReportVisible = val
       },
-      collectReportVisible(val){
+      collectReportVisible(val) {
         if (!val) {
           this.$emit('close');
           this.clearData();
         } else {
           this.isClear = true;
-          setTimeout( () => {
+          setTimeout(() => {
             this.preloadData();
-          },100);
+          }, 100);
         }
       },
     },
-    created(){
+    created() {
       this.getDictionary();
     },
     methods: {
-      getDictionary(){
+      getDictionary() {
         this.dictionary(508, 1).then((res) => {
           this.purchase_way_dic = res.data;
         });
@@ -429,11 +442,11 @@
         });
       },
       //安置方式
-      vacancyWay(){
+      vacancyWay() {
         this.params.vacancy_other = '';
       },
       //预填报备数据
-      preloadData(){
+      preloadData() {
         let data = this.reportDetailData;
         console.log(data);
         this.params.purchase_way = 509;
@@ -455,15 +468,28 @@
 
         this.params.pay_first_date = data.pay_first_date;
         this.params.pay_second_date = data.pay_second_date;
-
-        this.params.is_agency = String(data.is_agency.id);   //是否中介
+        if (data.is_agency) {
+          if (data.is_agency.name) {
+            this.params.is_agency = String(data.is_agency.id);
+          } else {
+            this.params.is_agency = String(data.is_agency);
+          }
+        } else {
+          this.params.is_agency = '0';
+        }
         this.params.agency_name = data.agency_name;
         this.params.agency_price = data.agency_price;
         this.params.agency_user_name = data.agency_user_name;
         this.params.agency_phone = data.agency_phone;
-
-        this.params.is_corp = String(data.is_corp.id);
-
+        if (data.is_corp) {
+          if (data.is_corp.name) {
+            this.params.is_corp = String(data.is_corp.id);
+          } else {
+            this.params.is_corp = String(data.is_corp);
+          }
+        } else {
+          this.params.is_corp = '0';
+        }
         this.params.deposit = data.deposit;
         this.params.vacancy_other = data.vacancy_other;
         this.params.warranty = data.warranty;
@@ -478,11 +504,11 @@
         this.params.penalty = data.penalty;
         this.params.remark = data.remark;
 
-        if(data.vacancy_way && data.vacancy_way.constructor === Object){
+        if (data.vacancy_way && data.vacancy_way.constructor === Object) {
           this.params.vacancy_way = data.vacancy_way.id;
         }
 
-        if(data.property_payer && data.property_payer.constructor === Object){
+        if (data.property_payer && data.property_payer.constructor === Object) {
           this.params.property_payer = data.property_payer.id;
         }
 
@@ -500,30 +526,36 @@
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
 
+        this.identity_photos = this.getImgObject(data.identity_photo);
+        this.params.identity_photo = this.getImgIdArray(data.identity_photo);
+
+        this.property_photos = this.getImgObject(data.property_photo);
+        this.params.property_photo = this.getImgIdArray(data.property_photo);
+
         this.params.staff_id = data.staff_id;
         this.params.staff_name = data.staff_name;
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
       },
       //详情照片展示
-      getImgObject(data){
+      getImgObject(data) {
         let img = {};
-        if(data && data.constructor === Object){
+        if (data && data.constructor === Object) {
           let imgArray = data.pic_addresses;
-          if(imgArray.length>0){
-            imgArray.forEach((item)=>{
-              this.$set(img,item.id,item.uri)
+          if (imgArray.length > 0) {
+            imgArray.forEach((item) => {
+              this.$set(img, item.id, item.uri)
             });
           }
         }
         return img;
       },
-      getImgIdArray(data){
+      getImgIdArray(data) {
         let img = [];
-        if(data && data.constructor === Object){
+        if (data && data.constructor === Object) {
           let imgArray = data.pic_addresses;
-          if(imgArray.length>0){
-            imgArray.forEach((item)=>{
+          if (imgArray.length > 0) {
+            imgArray.forEach((item) => {
               img.push(item.id);
             });
           }
@@ -532,18 +564,18 @@
       },
 
       //打开房屋选择模态框
-      selectHouse(){
+      selectHouse() {
         this.houseDialog = true;
       },
       //调出选人组件
-      openOrganizeModal(val){
+      openOrganizeModal(val) {
         this.selectType = val;
         this.type = val === 'depart' ? 'depart' : 'staff';
         this.organizationDialog = true;
         this.length = 1;
       },
       //选人组件回调
-      selectMember(val){
+      selectMember(val) {
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
           this.params.staff_name = val[0].name;
@@ -558,26 +590,26 @@
       },
 
       //月单价变化
-      addMorePriceChange(){
+      addMorePriceChange() {
         this.priceChangeAmount++;
       },
-      deletePriceChange(item){
+      deletePriceChange(item) {
         this.params.price_arr.splice(item, 1);
         this.params.period_price_arr.splice(item, 1);
         this.priceChangeAmount--;
       },
       //付款方式变化
-      addMorePayWayChange(){
+      addMorePayWayChange() {
         this.payWayChangeAmount++;
       },
-      deletePayWayChange(item){
+      deletePayWayChange(item) {
         this.params.pay_way_arr.splice(item, 1);
         this.params.period_pay_arr.splice(item, 1);
         this.payWayChangeAmount--;
       },
 
       //改变收房月数
-      changeMonth(){
+      changeMonth() {
         this.computedEndDate();
         this.params.period_price_arr[0] = this.params.month;
         this.params.period_pay_arr[0] = this.params.month;
@@ -589,11 +621,11 @@
       },
 
       //计算空置期结束时间
-      computedEndDate(){
-        this.params.day = this.params.day?this.params.day:0;
-        this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
-          +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
-          if(res.data.code === '69910'){
+      computedEndDate() {
+        this.params.day = this.params.day ? this.params.day : 0;
+        this.$http.get(globalConfig.server + 'lease/helper/collectdates?begin_date=' + this.params.begin_date + '&month='
+          + this.params.month + '&day=' + this.params.day + '&vacancy=' + this.params.vacancy).then((res) => {
+          if (res.data.code === '69910') {
             this.params.vacancy_end_date = res.data.data.vac_end_date;
             this.params.end_date = res.data.data.end_date;
           }
@@ -601,49 +633,53 @@
       },
 
       //关闭模态框
-      closeModal(val){
+      closeModal(val) {
         this.houseDialog = false;
         this.organizationDialog = false;
-        if(val){
+        if (val) {
           this.params.house.id = val.house_id;
           this.params.house.name = val.house_name;
-          this.params.is_agency = val.is_agency;
+          this.params.is_agency = String(val.is_agency) || String(val.is_agency.id);
         }
       },
 
-      getImg(val){
+      getImg(val) {
         this.isUpload = val[2];
         if (val[0] === 'collect_report_leader') {
           this.params.screenshot_leader = val[1];
         } else if (val[0] === 'collect_report_contract') {
           this.params.photo = val[1];
+        } else if (val[0] === 'property_photo') {
+          this.params.property_photo = val[1];
+        } else if (val[0] === 'identity_photo') {
+          this.params.identity_photo = val[1];
         }
       },
 
-      confirmSubmit(){
-        if(!this.isUpload){
-          this.$http.post(globalConfig.server+'bulletin/collect',this.params).then((res)=>{
-            if(res.data.code === '50130'){
+      confirmSubmit() {
+        if (!this.isUpload) {
+          this.$http.post(globalConfig.server + 'bulletin/collect', this.params).then((res) => {
+            if (res.data.code === '50130') {
               this.$notify.success({
-                title : '成功',
-                message:res.data.msg
+                title: '成功',
+                message: res.data.msg
               });
-              this.$emit('close','success')
-            }else {
+              this.$emit('close', 'success')
+            } else {
               this.$notify.warning({
-                title : '警告',
-                message:res.data.msg
+                title: '警告',
+                message: res.data.msg
               })
             }
           })
-        }else {
+        } else {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传',
+            title: '警告',
+            message: '图片正在上传',
           })
         }
       },
-      clearData(){
+      clearData() {
         this.isClear = false;
         this.params = {
           id: '',
@@ -693,14 +729,18 @@
           contract_number: 'LJSF',      //合同编号
           screenshot_leader: [],        //领导截图 数组
           photo: [],                    //合同照片 数组
+          property_photo: [],           //房产证照片
+          identity_photo: [],           //证件照片
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
-          staff_name: '',                 //开单人name
-          department_name: '',            //部门name
+          staff_name: '',               //开单人name
+          department_name: '',          //部门name
         };
         this.screenshot_leader = {};
         this.photo = {};
+        this.property_photos = {};         //房产证照片
+        this.identity_photos = {};         //证件照片
 
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;

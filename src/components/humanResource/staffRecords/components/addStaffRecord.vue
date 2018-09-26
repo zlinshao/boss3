@@ -37,7 +37,7 @@
                 <el-row>
                   <el-col :span="16">
                     <el-form-item label="添加描述" required>
-                      <el-input v-model="value.remark" type="textarea" rows="2" placeholder="请填写描述"></el-input>
+                      <el-input v-model="value.remark" type="textarea" :rows="2" placeholder="请填写描述"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>

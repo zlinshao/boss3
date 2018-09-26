@@ -210,8 +210,7 @@
           <el-row style="display: -webkit-flex;display: flex;">
             <!--客户纪实-->
             <el-col :span="12" style="margin-right: 10px;" class="customer">
-              <div class="title color2 a2">客户纪实</div>
-
+              <div class="title color2 a2">"周"言片语</div>
               <div class="elPadding box">
                 <div v-for="(key,index) in cusData.data" v-if="index === 0 && cusData.data[0] !== ''">
                   <div class="titleImg box">

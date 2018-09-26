@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.keywords" placeholder="跟进事项" @keyup.enter.native="search" clearable>
+              <el-input v-model="params.keywords" placeholder="请输入地址/下次跟进人" @keyup.enter.native="search" clearable>
                 <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -30,7 +30,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="params.follow_status" placeholder="请选择跟进状态" value="">
+                      <el-select clearable v-model="params.follow_status" placeholder="请选择跟进状态">
                         <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -142,7 +142,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select clearable v-model="params.type" placeholder="请选择工单类型" value="">
-                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                        <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>
@@ -169,10 +169,19 @@
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 0)"
-                @row-click="clickTable"
                 @row-dblclick="dblClickTable"
-                @row-contextmenu='houseMenu'
                 style="width: 100%">
+                <el-table-column
+                  prop="emergency"
+                  label="紧急程度">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.emergency === 1 && scope.row.follow_status !== 338"
+                          :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                    <span v-if="scope.row.emergency === 2 && scope.row.follow_status !== 338"
+                          style="color:red">紧急</span>
+                    <span v-if="!scope.row.emergency"></span>
+                  </template>
+                </el-table-column>
                 <el-table-column
                   prop="create_time"
                   label="创建时间">
@@ -196,14 +205,14 @@
                     <span v-if="!scope.row.address">暂无</span>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="events"
-                  label="事件数">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.events">{{scope.row.events}}</span>
-                    <span v-if="!scope.row.events">暂无</span>
-                  </template>
-                </el-table-column>
+                <!--<el-table-column-->
+                <!--prop="events"-->
+                <!--label="事件数">-->
+                <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
+                <!--<span v-if="!scope.row.events">暂无</span>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column
                   prop="types"
                   label="工单类型">
@@ -214,7 +223,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="matters"
-                  label="跟进事项">
+                  label="工单内容">
                   <template slot-scope="scope">
                     <span v-if="scope.row.matters">{{scope.row.matters}}</span>
                     <span v-if="!scope.row.matters">暂无</span>
@@ -224,8 +233,8 @@
                   prop="expected_finish_time"
                   label="下次跟进时间">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
-                    <span v-if="!scope.row.expected_finish_time">暂无</span>
+                    <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
+                    <span v-if="!scope.row.follow_time">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -238,11 +247,11 @@
                 </el-table-column>
                 <el-table-column
                   prop="follow"
-                  label="跟进人">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.follow">{{scope.row.follow}}</span>
-                      <span v-if="!scope.row.follow">暂无</span>
-                    </template>
+                  label="下次跟进人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.follow">{{scope.row.follow}}</span>
+                    <span v-if="!scope.row.follow">暂无</span>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   prop="follow_statuss"
@@ -270,10 +279,19 @@
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 0)"
-                @row-click="clickTable"
                 @row-dblclick="dblClickTable"
-                @row-contextmenu='houseMenu'
                 style="width: 100%">
+                <el-table-column
+                  prop="emergency"
+                  label="紧急程度">
+                  <template slot-scope="scope">
+                  <span v-if="scope.row.emergency === 1 && scope.row.follow_status !== 338"
+                        :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">一般</span>
+                    <span v-if="scope.row.emergency === 2 && scope.row.follow_status !== 338"
+                          style="color:red">紧急</span>
+                    <span v-if="!scope.row.emergency"></span>
+                  </template>
+                </el-table-column>
                 <el-table-column
                   prop="create_time"
                   label="创建时间">
@@ -297,14 +315,14 @@
                     <span v-if="!scope.row.address">暂无</span>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="events"
-                  label="事件数">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.events">{{scope.row.events}}</span>
-                    <span v-if="!scope.row.events">暂无</span>
-                  </template>
-                </el-table-column>
+                <!--<el-table-column-->
+                <!--prop="events"-->
+                <!--label="事件数">-->
+                <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.events">{{scope.row.events}}</span>-->
+                <!--<span v-if="!scope.row.events">暂无</span>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
                 <el-table-column
                   prop="types"
                   label="工单类型">
@@ -315,7 +333,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="matters"
-                  label="跟进事项">
+                  label="工单内容">
                   <template slot-scope="scope">
                     <span v-if="scope.row.matters">{{scope.row.matters}}</span>
                     <span v-if="!scope.row.matters">暂无</span>
@@ -323,10 +341,10 @@
                 </el-table-column>
                 <el-table-column
                   prop="expected_finish_time"
-                  label="预计完成时间">
+                  label="下次跟进时间">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
-                    <span v-if="!scope.row.expected_finish_time">暂无</span>
+                    <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
+                    <span v-if="!scope.row.follow_time">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -339,7 +357,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="follow"
-                  label="跟进人">
+                  label="下次跟进人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.follow">{{scope.row.follow}}</span>
                     <span v-if="!scope.row.follow">暂无</span>
@@ -384,11 +402,12 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
-                  @close='closeOrganize' @selectMember="selectMember"></Organization>
-    <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit"
-                  @close="closeModal"></AddChildTask>
-    <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail"
-                 @close="closeModal"></OrderDetail>
+                  @close='closeModal' @selectMember="selectMember"></Organization>
+
+    <!--<AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :module="params.module" :startAddResult="startEdit"-->
+    <!--@close="closeModal"></AddChildTask>-->
+
+    <OrderDetail :orderDetailDialog="orderDetailDialog" :wordData="wordData" @close="closeOrder"></OrderDetail>
   </div>
 </template>
 
@@ -396,12 +415,11 @@
   import RightMenu from '../../../common/rightMenu.vue'
   import Organization from '../../../common/organization.vue'
 
-  import AddChildTask from './components/addChildTask.vue'
   import OrderDetail from './components/workOrderDetail.vue'
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, AddChildTask, OrderDetail},
+    components: {RightMenu, Organization, OrderDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -412,6 +430,7 @@
         statisticDate: '',
         activeName: 'first',
         totalNumber: 0,
+        currentTime: 48,
         params: {
           pages: 1,
           limit: 12,
@@ -433,64 +452,76 @@
         options: [],
         //模态框
         organizationDialog: false,
-        editWorkDialog: false,     //编辑
-        addChildTaskDialog: false,     //添加子任务框
         orderDetailDialog: false,
         isHigh: false,
-        activeId: '',
-        startEdit: false,
-        startAddResult: false,
-        startDetail: false,
-        dictionary: [],
+        wordData: {},
+
+        dictionaries: [],
         dictionary_follow: [],//  跟进状态字典
         workOrderStatus: ' ',
         workOrderLoading: false,
-        isDictionary: false,
         rentStatus: ' ',
         rentLoading: false,
       }
     },
     created() {
-      if (!this.isDictionary) {
-        this.getDictionary();
-      }
+      this.getDictionary();
       if (this.$store.state.datum.work_order_filter.pages) {
         this.params.pages = this.$store.state.datum.work_order_filter.pages;
         this.params.limit = this.$store.state.datum.work_order_filter.limit;
       }
       this.collectDatafunc();
     },
-    watch: {
-      activeName(val) {
-        if (val === 'first') {
-          this.module = 1;
-        } else {
-          this.module = 2;
+    watch: {},
+    methods: {
+      getTime(val) {
+        let data = [];
+        val === 1 ? (data = this.collectTableData) : (data = this.rentTableData);
+        for (let i = 0; i < data.length; i++) {
+          let foundTime = parseInt(Date.parse(data[i].create_time) / 1000 / 3600); //创建时间 的小时
+          let currentTime = parseInt(Date.parse(new Date()) / 1000 / 3600); //现在的时间 的小时
+          //  判断 创建时间  到当前的时间 有没有 超过 48小时
+          data[i].overdueTime = currentTime - foundTime; //得到  创建的时间  距离现在 有多少小时
         }
       },
-    },
-    methods: {
-      handleClick() {
-        if (this.activeName == "first") {
+      searchList() {
+        if (this.activeName === "first") {
           this.collectDatafunc();
-        }else if (this.activeName == "second") {
+        } else {
           this.rentDatafunc();
         }
       },
+      handleClick() {
+        this.close_();
+        if (this.activeName === "first") {
+          this.params.module = 1;
+          this.collectDatafunc();
+        } else {
+          this.params.module = 2;
+          this.rentDatafunc();
+        }
+      },
+      close_() {
+        this.params = {
+          pages: 1,
+          limit: 12,
+          keywords: '',
+          follow_status: '',
+          follow_id: '',
+          create_time: [],
+          follow_time: '',
+          update_time: '',
+          finish_time: '',
+          type: '',
+        }
+      },
       getDictionary() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/255').then((res) => {
-          if (res.data.code === "30010") {
-            this.dictionary = res.data.data;
-            this.isDictionary = true;
-          }
+        this.dictionary(696, 1).then((res) => {
+          this.dictionaries = res.data;
         });
-        this.$http.get(globalConfig.server + 'setting/dictionary/335').then((res) => {
-          if (res.data.code === "30010") {
-            this.dictionary_follow = res.data.data;
-            this.isDictionary = true;
-          }
+        this.dictionary(335, 1).then((res) => {
+          this.dictionary_follow = res.data;
         });
-
       },
       //获取列表数据
       collectDatafunc() {
@@ -502,6 +533,7 @@
           if (res.data.code === '100200') {
             this.collectTableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
+            this.getTime(1);
           } else {
             this.workOrderStatus = '暂无数据';
             this.collectTableData = [];
@@ -518,6 +550,7 @@
           if (res.data.code === '100200') {
             this.rentTableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
+            this.getTime(2);
           } else {
             this.rentStatus = '暂无数据';
             this.rentTableData = [];
@@ -527,45 +560,38 @@
       },
 
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
         this.$store.dispatch('workOrderFilter', this.params);
       },
       handleCurrentChange(val) {
         this.params.pages = val;
-        if (this.activeName == "first") {
-          this.collectDatafunc();
-        } else if (this.activeName == "second") {
-          this.rentDatafunc();
-        }
+        this.searchList();
         this.$store.dispatch('workOrderFilter', this.params);
-      },
-      clickTable(row, event, column) {
-        console.log(row, event, column)
       },
       //房屋右键
       houseMenu(row, event) {
-        this.activeId = row.id;
-        this.lists = [
-//          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
-        ];
+        // this.wordData.id = row.id;
+        // this.lists = [
+        //  {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+        //   {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
+        // ];
         this.contextMenuParam(event);
       },
-      dblClickTable(row, event) {
-        this.activeId = row.id;
-        this.startDetail = true;
+      dblClickTable(row) {
+        this.wordData.name = row.address ? row.address : '暂无';
+        this.wordData.id = row.id;
+        this.wordData.module = this.params.module;
         this.orderDetailDialog = true;
       },
       //右键回调事件
       clickEvent(index) {
         switch (index) {
-//          case 'edit' :
+          case 'edit' :
 //            this.editWorkDialog = true;
 //            this.startEdit = true;
-//            break;
+            break;
           case 'addChildren' :
-            this.addChildTaskDialog = true;
-            this.startEdit = true;
+            // this.addChildTaskDialog = true;
+            // this.startEdit = true;
             break;
         }
       },
@@ -575,32 +601,25 @@
       },
       //右键参数
       contextMenuParam(event) {
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
+        let e = event || window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
         event.preventDefault();
         event.stopPropagation();
         this.$nextTick(() => {
-          this.show = true
+          this.show = true;
         })
       },
-
-      closeModal(val) {
-//        this.editWorkDialog = false;
-        this.addChildTaskDialog = false;
-        this.orderDetailDialog = false;
-        //操作状态
-//        this.startEdit = false;
-        this.startAddResult = false;
-        this.startDetail = false;
-        this.search();
-      },
-      closeOrganize() {
+      // 关闭模态框
+      closeModal() {
         this.organizationDialog = false;
       },
-      //调出选人组件
+      closeOrder() {
+        this.orderDetailDialog = false;
+        this.searchList();
+      },
+      //选人组件
       openOrganizeModal() {
         this.organizationDialog = true;
         this.type = 'staff';
@@ -621,13 +640,8 @@
       },
       search() {
         this.isHigh = false;
-        if (this.activeName == "first") {
-          this.params.pages = 1;
-          this.collectDatafunc();
-        } else if (this.activeName == "second") {
-          this.params.pages = 1;
-          this.rentDatafunc();
-        }
+        this.params.pages = 1;
+        this.searchList();
       },
       resetting() {
         this.params.follow_id = '';
@@ -642,7 +656,7 @@
       exportData() {
         this.$http.get(globalConfig.server + 'customer/work_order/export', {
           responseType: 'arraybuffer',
-          params: this.params
+          params: this.params,
         }).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
@@ -689,6 +703,15 @@
           }
         }
       }
+    }
+    .blue {
+      color: blue;
+    }
+    .orange {
+      color: orange;
+    }
+    .width {
+      width: 90px;
     }
   }
 </style>

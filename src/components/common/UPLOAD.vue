@@ -1,9 +1,9 @@
 <template>
   <div>
     <div :id="'pictureContainer'+ID" class="pictureContainer">
-      <div class="editImg" v-if="Object.keys(editImg).length>0">
+      <div class="editImg" v-if="Object.keys(editImg).length > 0">
         <div class="imgItem" style="position: relative" v-for="(val,key) in editImg">
-          <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
+          <div class="imageDiv">
             <img :src="val" alt="" data-magnify="" :data-src="val">
           </div>
           <div class="remove el-icon-circle-close" @click="deleteImage(key)" v-if="!onlyShow"></div>
@@ -16,7 +16,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -24,7 +23,7 @@
 
   export default {
     name: 'hello',
-    props: ['ID', 'editImage', 'isClear', 'onlyShow','noMulti','disabled'],
+    props: ['ID', 'editImage', 'isClear', 'onlyShow', 'noMulti', 'disabled'],
     data() {
       return {
         imgArray: [],
@@ -108,7 +107,7 @@
       getToken() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
-          if(!this.uploader && !this.disabled){
+          if (!this.uploader && !this.disabled) {
             this.uploaderReady();
           }
         })
@@ -117,7 +116,7 @@
       getTokenMessage() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
-          if(!this.disabled){
+          if (!this.disabled) {
             this.uploaderReady();
           }
         })
@@ -138,7 +137,7 @@
           flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
           max_retries: 1,                     // 上传失败最大重试次数
           dragdrop: true,                     // 开启可拖曳上传
-          drop_element: 'pickfiles'+_this.ID,          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+          drop_element: 'pickfiles' + _this.ID,          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
           chunk_size: '4mb',                  // 分块上传时，每块的体积
           auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
 
@@ -229,8 +228,8 @@
                   document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-success"></span>';
                 }
               }).catch(error => {
-                  _this.$http.defaults.timeout = null;
-                  document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-error"></span>';
+                _this.$http.defaults.timeout = null;
+                document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-error"></span>';
               });
             },
             'FilesRemoved': function (uploader, files) {
@@ -239,12 +238,12 @@
 
 //              console.log(errTip);
             'Error': function (up, err, errTip) {
-             _this.$notify.warning({
-               title:'警告',
-               message:errTip,
-             })
+              _this.$notify.warning({
+                title: '警告',
+                message: errTip,
+              })
             },
-            'UploadComplete': function (uploader,files) {
+            'UploadComplete': function (uploader, files) {
               //队列文件处理完毕后，处理相关的事情
               _this.isUploading = false;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
@@ -299,7 +298,6 @@
           margin-left: 0;
         }
       }
-
       .remove {
         font-size: 26px;
         border-radius: 50%;
@@ -315,6 +313,12 @@
         &:hover {
           opacity: .9;
         }
+      }
+      .imageDiv {
+        width: 120px;
+        height: 120px;
+        border-radius: 6px;
+        background: #f0f0f0
       }
     }
     .pickfiles {

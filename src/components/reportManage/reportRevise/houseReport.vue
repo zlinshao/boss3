@@ -21,7 +21,8 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="城市" required="">
-                <el-select clearable v-model="params.city_id" placeholder="请选择城市" value="" :disabled="params.quality_up == 1">
+                <el-select clearable v-model="params.city_id" placeholder="请选择城市" value=""
+                           :disabled="params.quality_up == 1">
                   <el-option v-for="item in city_dic" :label="item.dictionary_name"
                              :value="item.variable.city_id" :key="item.id"></el-option>
                 </el-select>
@@ -39,20 +40,24 @@
             <el-col :span="12">
               <el-form-item label="门牌地址" required>
                 <el-col :span="8" style="padding-right: 10px">
-                  <el-input placeholder="座/栋" :disabled="params.quality_up == 1" v-model="params.door_address[0]"></el-input>
+                  <el-input placeholder="座/栋" :disabled="params.quality_up == 1"
+                            v-model="params.door_address[0]"></el-input>
                 </el-col>
                 <el-col :span="8" style="padding-right: 10px">
-                  <el-input placeholder="单元" :disabled="params.quality_up == 1" v-model="params.door_address[1]"></el-input>
+                  <el-input placeholder="单元" :disabled="params.quality_up == 1"
+                            v-model="params.door_address[1]"></el-input>
                 </el-col>
                 <el-col :span="8">
-                  <el-input placeholder="门牌号" :disabled="params.quality_up == 1" v-model="params.door_address[2]"></el-input>
+                  <el-input placeholder="门牌号" :disabled="params.quality_up == 1"
+                            v-model="params.door_address[2]"></el-input>
                 </el-col>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="房型" required="">
                 <el-col :span="8" style="padding-right: 10px">
-                  <el-select clearable v-model="params.house_type[0]" placeholder="室" value=""  :disabled="params.quality_up == 1">
+                  <el-select clearable v-model="params.house_type[0]" placeholder="室" value=""
+                             :disabled="params.quality_up == 1">
                     <el-option label="一室" value="1"></el-option>
                     <el-option label="二室" value="2"></el-option>
                     <el-option label="三室" value="3"></el-option>
@@ -64,7 +69,8 @@
                   </el-select>
                 </el-col>
                 <el-col :span="8" style="padding-right: 10px">
-                  <el-select clearable v-model="params.house_type[1]" placeholder="厅" value=""  :disabled="params.quality_up == 1">
+                  <el-select clearable v-model="params.house_type[1]" placeholder="厅" value=""
+                             :disabled="params.quality_up == 1">
                     <el-option label="无" value=""></el-option>
                     <el-option label="一厅" value="1"></el-option>
                     <el-option label="二厅" value="2"></el-option>
@@ -74,7 +80,8 @@
                   </el-select>
                 </el-col>
                 <el-col :span="8">
-                  <el-select clearable v-model="params.house_type[2]" placeholder="卫" value=""  :disabled="params.quality_up == 1">
+                  <el-select clearable v-model="params.house_type[2]" placeholder="卫" value=""
+                             :disabled="params.quality_up == 1">
                     <el-option label="无" value=""></el-option>
                     <el-option label="一卫" value="1"></el-option>
                     <el-option label="二卫" value="2"></el-option>
@@ -90,7 +97,7 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="建筑面积" required>
-                <el-input placeholder="请输入内容" v-model="params.area"  :disabled="params.quality_up == 1"></el-input>
+                <el-input placeholder="请输入内容" v-model="params.area" :disabled="params.quality_up == 1"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -127,19 +134,19 @@
             <el-col :span="6">
               <el-form-item label="楼层" required>
                 <el-col :span="10">
-                  <el-input placeholder="楼层" v-model="params.floor"  :disabled="params.quality_up == 1"></el-input>
+                  <el-input placeholder="楼层" v-model="params.floor" :disabled="params.quality_up == 1"></el-input>
                 </el-col>
                 <el-col :span="4" style="text-align: center">
                   /
                 </el-col>
                 <el-col :span="10">
-                  <el-input placeholder="总楼层" v-model="params.floors"  :disabled="params.quality_up == 1"></el-input>
+                  <el-input placeholder="总楼层" v-model="params.floors" :disabled="params.quality_up == 1"></el-input>
                 </el-col>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="价格" required>
-                <el-input placeholder="请输入内容" v-model="params.price"  :disabled="params.quality_up == 1"></el-input>
+                <el-input placeholder="请输入内容" v-model="params.price" :disabled="params.quality_up == 1"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -360,8 +367,8 @@
   import VillageSearch from '../../common/villageSearch'
 
   export default {
-    components: {UpLoad, Organization,HouseSearch,VillageSearch},
-    props: ['houseReport','processableId','reportId'],
+    components: {UpLoad, Organization, HouseSearch, VillageSearch},
+    props: ['houseReport', 'processableId', 'reportId'],
     data() {
       return {
         houseReportVisible: false,
@@ -372,10 +379,10 @@
         length: '',
         type: '',
         selectType: '',
-        modalType : '',
-        fullLoading : false,
+        modalType: '',
+        fullLoading: false,
 
-        params : {
+        params: {
           id: '',
           processable_id: '',
           house_id: '',
@@ -437,28 +444,28 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
         },
-        house_name:'',
+        house_name: '',
 
-        screenshot_leader : {},
-        photo : {},
+        screenshot_leader: {},
+        photo: {},
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
 
-        isUpload : false,
+        isUpload: false,
         city_dic: [],
         property_type_dic: [],   //房屋类型
         decorate_dic: [],        //装修
         unit_ge: ['0个', '1个', '2个', '3个', '4个', '5个'],
         unit_tai: ['0台', '1台', '2台', '3台', '4台', '5台'],
-        decorate: ['东', '南', '西', '北', '东南', '东北', '西南', '西北','南北'],
+        decorate: ['东', '南', '西', '北', '东南', '东北', '西南', '西北', '南北'],
       };
     },
     watch: {
-      houseReport(val){
+      houseReport(val) {
         this.houseReportVisible = val
       },
-      houseReportVisible(val){
+      houseReportVisible(val) {
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -468,11 +475,11 @@
         }
       },
     },
-    created(){
+    created() {
       this.getDictionary();
     },
     methods: {
-      getDictionary(){
+      getDictionary() {
         this.dictionary(306, 1).then((res) => {
           this.city_dic = res.data;
         });
@@ -486,20 +493,20 @@
         });
       },
       //安置方式
-      vacancyWay(){
+      vacancyWay() {
         this.params.vacancy_other = '';
       },
       //预填报备数据
-      preloadData(){
+      preloadData() {
         this.params.processable_id = this.reportId;
-        this.$http.get(globalConfig.server+'bulletin/quality/'+this.processableId).then((res)=>{
-          if(res.data.code === '51420'){
+        this.$http.get(globalConfig.server + 'bulletin/quality/' + this.processableId).then((res) => {
+          if (res.data.code === '51420') {
             let data = res.data.data;
             console.log(data);
             this.params.quality_up = String(data.quality_up);
-            if(data.quality_up === '1'){
+            if (data.quality_up === '1') {
               this.house_name = data.address;
-            }else {
+            } else {
               this.house_name = '';
             }
             this.params.id = data.id || res.data.id;                     //id
@@ -510,8 +517,8 @@
             this.community_name = data.community.village_name;    //小区id
             this.params.door_address = data.door_address;
 
-            if(data.house_type && Array.isArray(data.house_type)){
-              data.house_type.forEach((item,index)=>{
+            if (data.house_type && Array.isArray(data.house_type)) {
+              data.house_type.forEach((item, index) => {
                 this.params.house_type[index] = String(item)
               })
             }
@@ -523,7 +530,15 @@
             this.params.floor = data.floor;                                   //楼层
             this.params.floors = data.floors;                                 //总楼层
             this.params.price = data.price;                                   //价格
-            this.params.is_agency = data.is_agency;                           //是否中介
+            if (data.is_agency) {
+              if (data.is_agency.name) {
+                this.params.is_agency = String(data.is_agency.id);
+              } else {
+                this.params.is_agency = String(data.is_agency);
+              }
+            } else {
+              this.params.is_agency = '0';
+            }
             this.params.air_condition = data.air_condition;                   //空调
             this.params.fridge = data.fridge;                                 //冰箱
             this.params.television = data.television;                         //电视
@@ -562,19 +577,19 @@
         });
       },
       //详情照片展示
-      getImgObject(data){
+      getImgObject(data) {
         let img = {};
-        if(Array.isArray(data) && data.length>0){
-          data.forEach((item)=>{
-            this.$set(img,item.id,item.uri)
+        if (Array.isArray(data) && data.length > 0) {
+          data.forEach((item) => {
+            this.$set(img, item.id, item.uri)
           });
         }
         return img;
       },
-      getImgIdArray(data){
+      getImgIdArray(data) {
         let img = [];
-        if(Array.isArray(data) && data.length>0){
-          data.forEach((item)=>{
+        if (Array.isArray(data) && data.length > 0) {
+          data.forEach((item) => {
             img.push(item.id);
           });
         }
@@ -582,23 +597,23 @@
       },
 
       //打开房屋选择模态框
-      selectHouse(){
+      selectHouse() {
         this.houseDialog = true;
         this.modalType = 'house';
       },
-      selectVillage(){
+      selectVillage() {
         this.villageDialog = true;
         this.modalType = 'village';
       },
       //调出选人组件
-      openOrganizeModal(val){
+      openOrganizeModal(val) {
         this.selectType = val;
         this.type = val === 'depart' ? 'depart' : 'staff';
         this.organizationDialog = true;
         this.length = 1;
       },
       //选人组件回调
-      selectMember(val){
+      selectMember(val) {
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
           this.params.staff_name = val[0].name;
@@ -613,26 +628,26 @@
       },
 
       //月单价变化
-      addMorePriceChange(){
+      addMorePriceChange() {
         this.priceChangeAmount++;
       },
-      deletePriceChange(item){
+      deletePriceChange(item) {
         this.params.price_arr.splice(item, 1);
         this.params.period_price_arr.splice(item, 1);
         this.priceChangeAmount--;
       },
       //付款方式变化
-      addMorePayWayChange(){
+      addMorePayWayChange() {
         this.payWayChangeAmount++;
       },
-      deletePayWayChange(item){
+      deletePayWayChange(item) {
         this.params.pay_way_arr.splice(item, 1);
         this.params.period_pay_arr.splice(item, 1);
         this.payWayChangeAmount--;
       },
 
       //改变收房月数
-      changeMonth(){
+      changeMonth() {
         this.computedEndDate();
         this.params.period_price_arr[0] = this.params.month;
         this.params.period_pay_arr[0] = this.params.month;
@@ -644,11 +659,11 @@
       },
 
       //计算空置期结束时间
-      computedEndDate(){
-        this.params.day = this.params.day?this.params.day:0;
-        this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
-          +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
-          if(res.data.code === '69910'){
+      computedEndDate() {
+        this.params.day = this.params.day ? this.params.day : 0;
+        this.$http.get(globalConfig.server + 'lease/helper/collectdates?begin_date=' + this.params.begin_date + '&month='
+          + this.params.month + '&day=' + this.params.day + '&vacancy=' + this.params.vacancy).then((res) => {
+          if (res.data.code === '69910') {
             this.params.vacancy_end_date = res.data.data.vac_end_date;
             this.params.end_date = res.data.data.end_date;
           }
@@ -656,21 +671,21 @@
       },
 
       //关闭模态框
-      closeModal(val){
+      closeModal(val) {
         this.houseDialog = false;
         this.villageDialog = false;
         this.organizationDialog = false;
-        if(val){
-          if(this.modalType === 'house'){
+        if (val) {
+          if (this.modalType === 'house') {
             this.house_name = val.house_name;
             this.params.house_id = val.house_id;
-          }else {
+          } else {
             this.params.community = val;
           }
         }
       },
 
-      getImg(val){
+      getImg(val) {
         this.isUpload = val[2];
         if (val[0] === 'collect_report_leader') {
           this.params.screenshot_leader = val[1];
@@ -679,32 +694,32 @@
         }
       },
 
-      confirmSubmit(){
-        if(!this.isUpload){
-          this.$http.post(globalConfig.server+'bulletin/quality',this.params).then((res)=>{
-            if(res.data.code === '51430'){
+      confirmSubmit() {
+        if (!this.isUpload) {
+          this.$http.post(globalConfig.server + 'bulletin/quality', this.params).then((res) => {
+            if (res.data.code === '51430') {
               this.$notify.success({
-                title : '成功',
-                message:res.data.msg
+                title: '成功',
+                message: res.data.msg
               });
-              this.$emit('close','success')
-            }else {
+              this.$emit('close', 'success')
+            } else {
               this.$notify.warning({
-                title : '警告',
-                message:res.data.msg
+                title: '警告',
+                message: res.data.msg
               })
             }
           })
-        }else {
+        } else {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传',
+            title: '警告',
+            message: '图片正在上传',
           })
         }
       },
-      clearData(){
+      clearData() {
         this.isClear = false;
-        this.params={
+        this.params = {
           id: '',
           processable_id: '',
           house_id: '',

@@ -186,22 +186,39 @@
         :total="paging">
       </el-pagination>
     </div>
+
+    <!--模态框-->
+    <el-dialog title="合并小区" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
+      <el-form size="mini" label-width="80px">
+        <el-form-item label="小区名称" required>
+          <el-input v-model="mergeName" @focus="villageDialog = true" placeholder="请选择小区" readonly></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="mergeDialog = false">取 消</el-button>
+        <el-button type="primary" @click="isConfirmMerge">确 定</el-button>
+      </span>
+    </el-dialog>
+
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList"
                    :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
+
+    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue'    //右键
   import VillageModule from './villageModule'
+  import VillageSearch from '../../../common/villageSearch'
 
   export default {
     name: 'hello',
-    components: {RightMenu, VillageModule},
+    components: {RightMenu, VillageModule,VillageSearch},
     data() {
       return {
         urls: globalConfig.server,
@@ -218,6 +235,8 @@
 
         isHigh: false,
         addVisible: false,
+        mergeDialog: false,
+        villageDialog: false,
         form: {
           pages: 1,
           house_type: '',
@@ -238,6 +257,9 @@
 
         emptyContent: ' ',
         villageLoading: false,
+        mergeParams:{id:''},
+        mergeName : '',
+        oldVillageName : '',
       }
     },
     mounted() {
@@ -395,9 +417,11 @@
       // 右键
       houseMenu(row, event) {
         this.pitch = row.id;
+        this.oldVillageName = row.village_name;
         this.lists = [
           {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+          {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
         ];
         this.contextMenuParam(event);
       },
@@ -405,8 +429,10 @@
       clickEvent(val) {
         if (val === 'delete') {
           this.openDelete();
-        } else {
+        } else if(val === 'revise') {
           this.openVillage('修改小区');
+        }else {
+          this.mergeDialog = true;
         }
       },
       //关闭右键菜单
@@ -454,7 +480,52 @@
             message: '已取消删除'
           });
         });
-      }
+      },
+
+      //*************************合并小区**************************
+      getVillage(val){
+        this.villageDialog = false;
+        if(val){
+          this.mergeName = val.village_name;
+          this.mergeParams.id = val.id;
+        }
+      },
+      isConfirmMerge(){
+        let msg = `<div>
+                      此操作将会将<b style="color: #e4393c">${this.oldVillageName}</b>合并到<b style="color: #e4393c">${this.mergeName}</b>,
+                      <b style="color: #e4393c">${this.oldVillageName}</b>下的所有房屋以及合同将会转移到<b style="color: #e4393c">${this.mergeName}</b>下,是否继续?
+                  </div>`;
+        this.$confirm( msg, '提示', {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.confirmMerge()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消合并'
+          });
+        });
+      },
+      confirmMerge(){
+        this.$http.put(globalConfig.server+'setting/community/merge/'+this.pitch,this.mergeParams).then(res=>{
+          if(res.data.code === '10000'){
+            this.$notify.success({
+              title:'成功',
+              message : res.data.msg,
+            });
+            this.mergeDialog = false;
+            this.myData(1);
+          }else {
+            this.$notify.warning({
+              title:'警告',
+              message : res.data.msg,
+            })
+          }
+        })
+      },
     }
   }
 </script>

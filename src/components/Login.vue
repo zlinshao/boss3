@@ -125,6 +125,7 @@
         this.sureLogin(phone, code);
         this.underWay = false;
       }
+      document.getElementById('login').style.height = window.innerHeight + 'px';
     },
     methods: {
       phoneLogin() {
@@ -185,8 +186,8 @@
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
-          let badge = true;
-          this.$store.dispatch('badgeFlag', badge);
+            let badge = true;
+            this.$store.dispatch('badgeFlag', badge);
             this.$router.push({path: '/main'});
           });
         });
@@ -552,7 +553,6 @@
           }
         }
       }
-
       .messageLogin {
         width: 100%;
         height: 100%;
@@ -588,7 +588,6 @@
             }
           }
         }
-
         .top {
           width: 100%;
           height: 210px;
@@ -617,7 +616,6 @@
             }
           }
         }
-
         .formItem {
           padding: 0 50px;
         }
@@ -627,7 +625,6 @@
           border-radius: 0;
           height: 80px;
         }
-
         .el-checkbox {
           color: #909399;
           margin: 18px 0;
@@ -644,7 +641,6 @@
             }
           }
         }
-
         .el-input-group__append, .el-input-group__prepend {
           background-color: #fff;
           border: none;
@@ -668,6 +664,4 @@
       }
     }
   }
-
-
 </style>

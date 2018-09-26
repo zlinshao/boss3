@@ -73,7 +73,20 @@
                   </el-col>
                 </el-row>
               </el-col>
-
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">所属部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="department_name" @focus="openOrganizeModal" placeholder="请选择" readonly="">
+                        <el-button slot="append" type="primary" @click="emptyDepart">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -137,7 +150,7 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" :type="organType"
-                  @close='closeOrganize' @selectMember="selectMember"></Organization>
+                  @close='closeOrganize' @selectMember="selectMember" :length="length"></Organization>
 
     <!--报备详情-->
     <ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>
@@ -163,13 +176,13 @@
         totalNum: 0,
         params: {
           page: 1,
-          is_page: 1,
-          search: 1,
           q: '',
           processable_type: '', //报备类型
           start_time: '',
           end_time: '',
+          org_id: '',
         },
+        department_name: '',
         processableType: [
           {key: 'bulletin_quality', name: '质量报备'},
           {key: 'bulletin_collect_basic', name: '普通收房报备'},
@@ -193,6 +206,7 @@
         //模态框
         organizationDialog: false,
         organType: '',
+        length: '',
         tableStatus: ' ',
         tableLoading: false,
         reportModule: false,
@@ -219,8 +233,9 @@
               if (data[i]) {
                 user.created_at = data[i].created_at;
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
-                if(data[i].content){
-                  user.bulletin = data[i].content.staff_name+'的'+data[i].content.bulletin_name || '/';
+                user.id = data[i].id;
+                if (data[i].content) {
+                  user.bulletin = data[i].content.staff_name + '的' + data[i].content.bulletin_name || '/';
                   user.name = data[i].content.staff_name || '';
                   // user.house_name = (data[i].content.house && data[i].content.house.name) || '/';
                   if (data[i].content.house) {
@@ -230,10 +245,21 @@
                   } else {
                     user.house_name = '/';
                   }
+                  user.place = data[i].place.display_name;
+                  user.status = data[i].place.status;
+                } else {
+                  user.bulletin = data[i].flow.content.staff_name + '的' + data[i].flow.content.bulletin_name || '/';
+                  user.name = data[i].flow.content.staff_name || '';
+                  if (data[i].flow.content.house) {
+                    user.house_name = data[i].flow.content.house.name;
+                  } else if (data[i].flow.content.address) {
+                    user.house_name = data[i].flow.content.address;
+                  } else {
+                    user.house_name = '/';
+                  }
+                  user.place = data[i].flow.place.display_name;
+                  user.status = data[i].flow.place.status;
                 }
-                user.id = data[i].id;
-                user.place = data[i].place.display_name;
-                user.status = data[i].place.status;
               } else {
                 user.place = '/';
                 user.status = '/';
@@ -253,16 +279,15 @@
       },
       handleCurrentChange(val) {
         this.params.page = val;
-        this.params.is_page = val;
         this.getTableData();
       },
       //房屋右键
       houseMenu(row, event) {
-        this.activeId = row.id;
-        this.lists = [
+        // this.activeId = row.id;
+        // this.lists = [
 //          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
-        ];
+//           {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
+//         ];
         this.contextMenuParam(event);
       },
       dblClickTable(row, event) {
@@ -297,25 +322,37 @@
       },
       closeOrganize() {
         this.organizationDialog = false;
+        this.organType = '';
+        this.length = '';
       },
       //调出选人组件
       openOrganizeModal() {
         this.organizationDialog = true;
+        this.organType = 'depart';
+        this.length = 1;
       },
       selectMember(val) {
-
+        this.department_name = val[0].name;
+        this.params.org_id = val[0].id;
+      },
+      emptyDepart() {
+        this.department_name = '';
+        this.params.org_id = '';
       },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
       search() {
         this.isHigh = false;
+        this.params.page = 1;
         this.getTableData();
       },
       resetting() {
         this.params.processable_type = '';
-        this.params.start_time = [];
-        this.params.end_time = [];
+        this.params.start_time = '';
+        this.params.end_time = '';
+        this.department_name = '';
+        this.params.org_id = '';
       },
       closeFrame(val) {
         this.reportModule = false;

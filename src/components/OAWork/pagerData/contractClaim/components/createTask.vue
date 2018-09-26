@@ -19,22 +19,25 @@
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" placeholder="请选择城市" @change="selectCity" value="">
-                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name"
+                               :value="item.variable.city_code"
                                :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8" v-if="taskType==3">
                 <el-form-item label="合同类型">
-                  <el-select clearable v-model="params.contract_type" placeholder="请选择合同类型" @change="selectContractType">
-                    <el-option v-for="item in contractDictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-select clearable v-model="params.contract_type" placeholder="请选择合同类型"
+                             @change="selectContractType">
+                    <el-option v-for="item in contractDictionary" :label="item.dictionary_name" :value="item.id"
+                               :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
-              <el-col :span="8"  v-if="taskType==1">
+              <el-col :span="8" v-if="taskType==1">
                 <el-form-item label="领用日期">
                   <el-date-picker
                     type="datetime"
@@ -43,7 +46,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="8"  v-if="taskType==2">
+              <el-col :span="8" v-if="taskType==2">
                 <el-form-item label="报备日期">
                   <el-date-picker
                     type="datetime"
@@ -95,6 +98,13 @@
                   <el-input disabled="" v-model="depart_name"></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :span="12" v-if="taskType==1">
+                <el-form-item label="版本号">
+                  <el-radio-group v-model="version_name" @change="selectCity">
+                    <el-radio v-for="(item,index) in version" :label="index" :key="index"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
         </div>
@@ -105,12 +115,14 @@
             <el-row class="noMarginForm">
               <el-col :span="8">
                 <el-form-item label="领取合同数（收）">
-                  <el-input v-model="params.collect_amount" @focus="currentType('collect')" @blur="computeContractEnd('collect')"></el-input>
+                  <el-input v-model="params.collect_amount" @focus="currentType('collect')"
+                            @blur="computeContractEnd('collect')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同编号">
-                  <el-input v-model="params.collect_start" @focus="currentType('collect')" @blur="computeContractEnd('collect')"></el-input>
+                  <el-input v-model="params.collect_start" @focus="currentType('collect')"
+                            @blur="computeContractEnd('collect')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -132,20 +144,22 @@
               </el-col>
             </el-row>
 
-            <el-row  class="noMarginForm">
+            <el-row class="noMarginForm">
               <el-col :span="8">
                 <el-form-item label="领取合同数（租）">
-                  <el-input v-model="params.rent_amount" @focus="currentType('rent')"  @blur="computeContractEnd('rent')"></el-input>
+                  <el-input v-model="params.rent_amount" @focus="currentType('rent')"
+                            @blur="computeContractEnd('rent')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同编号">
-                  <el-input  v-model="params.rent_start" @focus="currentType('rent')"  @blur="computeContractEnd('rent')"></el-input>
+                  <el-input v-model="params.rent_start" @focus="currentType('rent')"
+                            @blur="computeContractEnd('rent')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="到">
-                  <el-input disabled=""  v-model="params.rent_end"></el-input>
+                  <el-input disabled="" v-model="params.rent_end"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -201,8 +215,8 @@
                 收房合同上缴(请勾选)
               </div>
 
-              <div v-for="(item,index) in Object.keys(collectCancelCollect)" >
-                <el-row >
+              <div v-for="(item,index) in Object.keys(collectCancelCollect)">
+                <el-row>
                   <el-col :span="6">
                     <el-checkbox-group v-model="checkBox">
                       <el-checkbox :label="item">{{collectCancelCollect[item]}}</el-checkbox>
@@ -225,8 +239,8 @@
               <div class="title">
                 租房合同上缴(请勾选)
               </div>
-              <div v-for="(item,index) in Object.keys(collectCancelRent)" >
-                <el-row >
+              <div v-for="(item,index) in Object.keys(collectCancelRent)">
+                <el-row>
                   <el-col :span="6">
                     <el-checkbox-group v-model="checkBox">
                       <el-checkbox :label="item">{{collectCancelRent[item]}}</el-checkbox>
@@ -260,7 +274,7 @@
                     <el-input v-model="medi_contracts_number[item-1]"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col  :span="7">
+                <el-col :span="7">
                   <el-form-item label="房屋地址">
                     <el-input v-model="medi_contracts_address[item-1]"></el-input>
                   </el-form-item>
@@ -270,8 +284,9 @@
                   <el-checkbox v-model="medi_contracts_proof_2[item-1]" label="2" value="2">收据</el-checkbox>
                   <el-checkbox v-model="medi_contracts_proof_3[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
-                <el-col  :span="2">
-                  <div v-if="mediumNumberCollect>1" class="deleteNumber" @click="deleteMediumNumberCollect(item-1)">删除</div>
+                <el-col :span="2">
+                  <div v-if="mediumNumberCollect>1" class="deleteNumber" @click="deleteMediumNumberCollect(item-1)">删除
+                  </div>
                 </el-col>
               </el-row>
               <div style="text-align: center">
@@ -289,7 +304,7 @@
                     <el-input v-model="medi_contracts_number_rent[item-1]"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col  :span="7">
+                <el-col :span="7">
                   <el-form-item label="房屋地址">
                     <el-input v-model="medi_contracts_address_rent[item-1]"></el-input>
                   </el-form-item>
@@ -299,7 +314,7 @@
                   <el-checkbox v-model="medi_contracts_proof_2_rent[item-1]" label="2" value="2">收据</el-checkbox>
                   <el-checkbox v-model="medi_contracts_proof_3_rent[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
-                <el-col  :span="2">
+                <el-col :span="2">
                   <div v-if="mediumNumberRent>1" class="deleteNumber" @click="deleteMediumNumberRent(item-1)">删除</div>
                 </el-col>
               </el-row>
@@ -324,7 +339,7 @@
                     <el-input v-model="personal_contracts_number[item-1]"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col  :span="7">
+                <el-col :span="7">
                   <el-form-item label="房屋地址">
                     <el-input v-model="personal_contracts_address[item-1]"></el-input>
                   </el-form-item>
@@ -334,8 +349,10 @@
                   <el-checkbox v-model="personal_contracts_proof_2[item-1]" label="2" value="2">收据</el-checkbox>
                   <el-checkbox v-model="personal_contracts_proof_3[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
-                <el-col  :span="2">
-                  <div v-if="personal_mediumNumberCollect>1" class="deleteNumber" @click="personal_deleteMediumNumberCollect(item-1)">删除</div>
+                <el-col :span="2">
+                  <div v-if="personal_mediumNumberCollect>1" class="deleteNumber"
+                       @click="personal_deleteMediumNumberCollect(item-1)">删除
+                  </div>
                 </el-col>
               </el-row>
               <div style="text-align: center">
@@ -353,7 +370,7 @@
                     <el-input v-model="personal_contracts_number_rent[item-1]"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col  :span="7">
+                <el-col :span="7">
                   <el-form-item label="房屋地址">
                     <el-input v-model="personal_contracts_address_rent[item-1]"></el-input>
                   </el-form-item>
@@ -363,8 +380,10 @@
                   <el-checkbox v-model="personal_contracts_proof_2_rent[item-1]" label="2" value="2">收据</el-checkbox>
                   <el-checkbox v-model="personal_contracts_proof_3_rent[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
-                <el-col  :span="2">
-                  <div v-if="personal_mediumNumberRent>1" class="deleteNumber" @click="personal_deleteMediumNumberRent(item-1)">删除</div>
+                <el-col :span="2">
+                  <div v-if="personal_mediumNumberRent>1" class="deleteNumber"
+                       @click="personal_deleteMediumNumberRent(item-1)">删除
+                  </div>
                 </el-col>
               </el-row>
               <div style="text-align: center">
@@ -429,7 +448,7 @@
             <el-row>
               <el-col :span="16">
                 <el-form-item label="备注">
-                  <el-input v-model="params.remark" type="textarea" ></el-input>
+                  <el-input v-model="params.remark" type="textarea"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -449,201 +468,225 @@
 <script>
   import Organization from '../../../../common/organization.vue'
   import Upload from '../../../../common/UPLOAD.vue'
+
   export default {
-    components:{Organization,Upload},
-    props:['createTaskDialog','selectFlag'],
+    components: {Organization, Upload},
+    props: ['createTaskDialog', 'selectFlag'],
     data() {
       return {
-        createTaskDialogVisible:false,
+        createTaskDialogVisible: false,
         params: {
-          city_code:'',
+          city_code: '',
 //          category:'',
-          report_time:'',
-          contract_type:'',
-          staff_id:'',
-          department_id:'',
-          collect_amount:'',
-          collect_start:'',
-          collect_end:'',
-          rent_amount:'',
-          rent_start:'',
-          rent_end:'',
-          rent_extra:[],
-          collect_extra:[],
-          remark:'',
-          screenshot:[],
-
+          report_time: '',
+          contract_type: '',
+          staff_id: '',
+          department_id: '',
+          collect_amount: '',
+          collect_start: '',
+          collect_end: '',
+          rent_amount: '',
+          rent_start: '',
+          rent_end: '',
+          rent_extra: [],
+          collect_extra: [],
+          remark: '',
+          screenshot: [],
           //zuofei
-          candidate:[],
-          medi_contracts:[],//s上缴中介合同
-          personal_contracts:[],//s上缴个人合同
+          candidate: [],
+          medi_contracts: [],//s上缴中介合同
+          personal_contracts: [],//s上缴个人合同
+          version: 2,
         },
-        taskType:'1',
-        cityDictionary:[],
-        contractDictionary:[],    //合同类型字典
-        length:0,
-        type:'',
-        organizationDialog:false,
-        staff_name : '',
-        depart_name : '',
-        collect : '',
-        rent : '',
-        upStatus:false,
-        contractCollectNum:0,
-        contractRentNum:0,
+        version: {'1-LJ': 1, '2-LJGY': 2},
+        version_name: '2-LJGY',
+        taskType: '1',
+        cityDictionary: [],
+        contractDictionary: [],    //合同类型字典
+        length: 0,
+        type: '',
+        organizationDialog: false,
+        staff_name: '',
+        depart_name: '',
+        collect: '',
+        rent: '',
+        upStatus: false,
+        contractCollectNum: 0,
+        contractRentNum: 0,
 
         //作废
-        collectCancelCollect:[],
-        collectCancelRent:[],
+        collectCancelCollect: [],
+        collectCancelRent: [],
 
         //公司合同备用字段
-        rentHandinAddress:{},
-        handover:{},
-        receipt:{},
-        keyCode:{},
-        checkBox:[],
+        rentHandinAddress: {},
+        handover: {},
+        receipt: {},
+        keyCode: {},
+        checkBox: [],
 
         //中介合同备用字段（shou）
-        medi_contracts_number:[],
-        medi_contracts_address:[],
-        medi_contracts_proof_1:[false],
-        medi_contracts_proof_2:[false],
-        medi_contracts_proof_3:[false],
-        mediumNumberCollect:1,
+        medi_contracts_number: [],
+        medi_contracts_address: [],
+        medi_contracts_proof_1: [false],
+        medi_contracts_proof_2: [false],
+        medi_contracts_proof_3: [false],
+        mediumNumberCollect: 1,
 
         //中介合同备用字段（zu）
-        mediumNumberRent:1,
-        medi_contracts_proof_1_rent:[false],
-        medi_contracts_proof_2_rent:[false],
-        medi_contracts_proof_3_rent:[false],
-        medi_contracts_number_rent:[],
-        medi_contracts_address_rent:[],
+        mediumNumberRent: 1,
+        medi_contracts_proof_1_rent: [false],
+        medi_contracts_proof_2_rent: [false],
+        medi_contracts_proof_3_rent: [false],
+        medi_contracts_number_rent: [],
+        medi_contracts_address_rent: [],
 
 
         //个人合同备用字段（shou）
-        personal_contracts_number:[],
-        personal_contracts_address:[],
-        personal_contracts_proof_1:[false],
-        personal_contracts_proof_2:[false],
-        personal_contracts_proof_3:[false],
-        personal_mediumNumberCollect:1,
+        personal_contracts_number: [],
+        personal_contracts_address: [],
+        personal_contracts_proof_1: [false],
+        personal_contracts_proof_2: [false],
+        personal_contracts_proof_3: [false],
+        personal_mediumNumberCollect: 1,
 
         //个人合同备用字段（zu）
-        personal_mediumNumberRent:1,
-        personal_contracts_proof_1_rent:[false],
-        personal_contracts_proof_2_rent:[false],
-        personal_contracts_proof_3_rent:[false],
-        personal_contracts_number_rent:[],
-        personal_contracts_address_rent:[],
+        personal_mediumNumberRent: 1,
+        personal_contracts_proof_1_rent: [false],
+        personal_contracts_proof_2_rent: [false],
+        personal_contracts_proof_3_rent: [false],
+        personal_contracts_number_rent: [],
+        personal_contracts_address_rent: [],
 
-        collect_rent : '',
-        search:'',
+        collect_rent: '',
+        search: '',
       };
     },
-    mounted(){
+    mounted() {
 
     },
-    watch:{
-      createTaskDialog(val){
+    watch: {
+      createTaskDialog(val) {
         this.getDictionary();
         this.createTaskDialogVisible = val
       },
-      createTaskDialogVisible(val){
-        if(!val){
+      createTaskDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
           this.closeAddModal();
         }
       },
-      selectFlag(val){
-        if(val ===2){
+      selectFlag(val) {
+        if (val === 2) {
           this.taskType = '1';
-        }else if(val === 3){
+        } else if (val === 3) {
           this.taskType = '2';
-        }else if(val === 4){
+        } else if (val === 4) {
           this.taskType = '3';
-        }else if(val === 5){
+        } else if (val === 5) {
           this.taskType = '4';
+        }
+      },
+      taskType(val) {
+        if (val === '1') {
+          this.version_name = '2-LJGY';
+          this.params.version = 2;
+        } else {
+          this.version_name = '2-LJGY';
+          delete this.params.version;
         }
       }
     },
-    methods:{
-      getDictionary(){
-        this.dictionary(306,1).then((res) => {this.cityDictionary = res.data;});
-        this.dictionary(107,1).then((res) => {this.contractDictionary = res.data;});
+    methods: {
+      getDictionary() {
+        this.dictionary(306, 1).then((res) => {
+          this.cityDictionary = res.data;
+        });
+        this.dictionary(107, 1).then((res) => {
+          this.contractDictionary = res.data;
+        });
       },
       //调出选人组件
-      openOrganizeModal(){
+      openOrganizeModal() {
         this.organizationDialog = true;
         this.type = 'staff';
         this.length = 1;
       },
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         this.type = '';
         this.length = '';
         this.params.staff_id = val[0].id;
         this.params.department_id = val[0].org[0].id;
         this.staff_name = val[0].name;
-        this.depart_name =  val[0].org[0].name;
+        this.depart_name = val[0].org[0].name;
         this.getContractStatus(this.params.staff_id);
         this.getPersonalContract();
 
       },
-      closeModal(){
+      closeModal() {
         this.organizationDialog = false
       },
       //获取作废合同信息
-      getPersonalContract(){
-        this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id+'?search='+this.search).then((res) => {
-          if(res.data.code === '20000'){
+      getPersonalContract() {
+        this.$http.get(globalConfig.server + 'contract/staff/' + this.params.staff_id + '?search=' + this.search).then((res) => {
+          if (res.data.code === '20000') {
             this.collectCancelCollect = res.data.data.collect;
             this.collectCancelRent = res.data.data.rent;
             this.fuckCheckBug(this.collectCancelCollect);
             this.fuckCheckBug(this.collectCancelRent);
-          }else {
+          } else {
             this.collectCancelCollect = [];
             this.collectCancelRent = [];
           }
         })
       },
-      fuckCheckBug(data){
-        for(let key in data){
-          if(!this.handover[key]){this.$set(this.handover,key,false)}
-          if(!this.receipt[key]){this.$set(this.receipt,key,false)}
-          if(!this.keyCode[key]){this.$set(this.keyCode,key,false)}
+      fuckCheckBug(data) {
+        for (let key in data) {
+          if (!this.handover[key]) {
+            this.$set(this.handover, key, false)
+          }
+          if (!this.receipt[key]) {
+            this.$set(this.receipt, key, false)
+          }
+          if (!this.keyCode[key]) {
+            this.$set(this.keyCode, key, false)
+          }
         }
       },
 
-      getContractStatus(id){
+      getContractStatus(id) {
 //        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
 //          this.collect = res.data.data.collect;
 //          this.rent = res.data.data.rent;
 //        })
       },
-      getImg(val){
+      getImg(val) {
         this.upStatus = val[2];
         this.params.screenshot = val[1];
       },
-      addCollect(){
-        this.contractCollectNum ++;
+      addCollect() {
+        this.contractCollectNum++;
       },
-      reduceCollect(){
-        if(this.contractCollectNum>0){
-          this.contractCollectNum --;
+      reduceCollect() {
+        if (this.contractCollectNum > 0) {
+          this.contractCollectNum--;
         }
       },
-      addRent(){
-        this.contractRentNum ++;
+      addRent() {
+        this.contractRentNum++;
       },
-      reduceRent(){
-        if(this.contractRentNum>0){
-          this.contractRentNum --;
+      reduceRent() {
+        if (this.contractRentNum > 0) {
+          this.contractRentNum--;
         }
       },
-      //      //selectCity
 
-      selectCity(){
-        this.$http.get(globalConfig.server+'contract/max/'+this.params.city_code).then((res) => {
+      selectCity() {
+        if (this.taskType === '1') {
+          this.params.version = this.version[this.version_name];
+        }
+        this.$http.get(globalConfig.server + 'contract/max/' + this.params.city_code + "?version=" + this.params.version).then((res) => {
           this.params.collect_start = res.data.data.collect;
           this.params.rent_start = res.data.data.rent;
           this.computeContractEnd('collect');
@@ -652,322 +695,324 @@
       },
 
       //选择合同类型
-      selectContractType(val){
+      selectContractType(val) {
         console.log(val)
       },
 
-      currentType(val){
+      currentType(val) {
         this.collect_rent = val;
       },
 
-      computeContractEnd(val){
-        if(val === 'collect'){
-          this.$http.get(globalConfig.server+'contract/end?start='+this.params.collect_start+'&count='+this.params.collect_amount).then((res) => {
+      computeContractEnd(val) {
+        if (val === 'collect') {
+          this.$http.get(globalConfig.server + 'contract/end?start=' + this.params.collect_start + '&count=' + this.params.collect_amount).then((res) => {
             this.params.collect_end = res.data.data;
           })
-        }else {
-          this.$http.get(globalConfig.server+'contract/end?start='+this.params.rent_start+'&count='+this.params.rent_amount).then((res) => {
+        } else {
+          this.$http.get(globalConfig.server + 'contract/end?start=' + this.params.rent_start + '&count=' + this.params.rent_amount).then((res) => {
             this.params.rent_end = res.data.data;
           })
         }
       },
 
       //新增更多中介合同作废编号
-      addMediumNumberCollect(){
-        this.mediumNumberCollect ++;
+      addMediumNumberCollect() {
+        this.mediumNumberCollect++;
         this.medi_contracts_proof_1.push(false);
         this.medi_contracts_proof_2.push(false);
         this.medi_contracts_proof_3.push(false);
       },
       //删除中介合同编号
-      deleteMediumNumberCollect(item){
-        this.medi_contracts_number.splice(item,1);
-        this.medi_contracts_address.splice(item,1);
-        this.medi_contracts_proof_1.splice(item,1);
-        this.medi_contracts_proof_2.splice(item,1);
-        this.medi_contracts_proof_3.splice(item,1);
-        this.mediumNumberCollect --;
+      deleteMediumNumberCollect(item) {
+        this.medi_contracts_number.splice(item, 1);
+        this.medi_contracts_address.splice(item, 1);
+        this.medi_contracts_proof_1.splice(item, 1);
+        this.medi_contracts_proof_2.splice(item, 1);
+        this.medi_contracts_proof_3.splice(item, 1);
+        this.mediumNumberCollect--;
       },
       //新增更多中介合同作废编号（zu）
-      addMediumNumberRent(){
-        this.mediumNumberRent ++;
+      addMediumNumberRent() {
+        this.mediumNumberRent++;
         this.medi_contracts_proof_1_rent.push(false);
         this.medi_contracts_proof_2_rent.push(false);
         this.medi_contracts_proof_3_rent.push(false);
       },
       //删除中介合同编号(zu)
-      deleteMediumNumberRent(item){
-        this.medi_contracts_number_rent.splice(item,1);
-        this.medi_contracts_address_rent.splice(item,1);
-        this.medi_contracts_proof_1_rent.splice(item,1);
-        this.medi_contracts_proof_2_rent.splice(item,1);
-        this.medi_contracts_proof_3_rent.splice(item,1);
-        this.mediumNumberRent --;
+      deleteMediumNumberRent(item) {
+        this.medi_contracts_number_rent.splice(item, 1);
+        this.medi_contracts_address_rent.splice(item, 1);
+        this.medi_contracts_proof_1_rent.splice(item, 1);
+        this.medi_contracts_proof_2_rent.splice(item, 1);
+        this.medi_contracts_proof_3_rent.splice(item, 1);
+        this.mediumNumberRent--;
       },
 
 
       //新增更多个人合同作废编号
-      personal_addMediumNumberCollect(){
-        this.personal_mediumNumberCollect ++;
+      personal_addMediumNumberCollect() {
+        this.personal_mediumNumberCollect++;
         this.personal_contracts_proof_1.push(false);
         this.personal_contracts_proof_2.push(false);
         this.personal_contracts_proof_3.push(false);
       },
       //删除中个人号
-      personal_deleteMediumNumberCollect(item){
-        this.personal_contracts_number.splice(item,1);
-        this.personal_contracts_address.splice(item,1);
-        this.personal_contracts_proof_1.splice(item,1);
-        this.personal_contracts_proof_2.splice(item,1);
-        this.personal_contracts_proof_3.splice(item,1);
-        this.personal_mediumNumberCollect --;
+      personal_deleteMediumNumberCollect(item) {
+        this.personal_contracts_number.splice(item, 1);
+        this.personal_contracts_address.splice(item, 1);
+        this.personal_contracts_proof_1.splice(item, 1);
+        this.personal_contracts_proof_2.splice(item, 1);
+        this.personal_contracts_proof_3.splice(item, 1);
+        this.personal_mediumNumberCollect--;
       },
       //新增更多个人合同作废编号（zu）
-      personal_addMediumNumberRent(){
-        this.personal_mediumNumberRent ++;
+      personal_addMediumNumberRent() {
+        this.personal_mediumNumberRent++;
         this.personal_contracts_proof_1_rent.push(false);
         this.personal_contracts_proof_2_rent.push(false);
         this.personal_contracts_proof_3_rent.push(false);
       },
       //删除个人合同编号(zu)
-      personal_deleteMediumNumberRent(item){
-        this.personal_contracts_number_rent.splice(item,1);
-        this.personal_contracts_address_rent.splice(item,1);
-        this.personal_contracts_proof_1_rent.splice(item,1);
-        this.personal_contracts_proof_2_rent.splice(item,1);
-        this.personal_contracts_proof_3_rent.splice(item,1);
-        this.personal_mediumNumberRent --;
+      personal_deleteMediumNumberRent(item) {
+        this.personal_contracts_number_rent.splice(item, 1);
+        this.personal_contracts_address_rent.splice(item, 1);
+        this.personal_contracts_proof_1_rent.splice(item, 1);
+        this.personal_contracts_proof_2_rent.splice(item, 1);
+        this.personal_contracts_proof_3_rent.splice(item, 1);
+        this.personal_mediumNumberRent--;
       },
 
 
       //确认提交
-      confirmAdd(){
-        if(this.upStatus === true){
+      confirmAdd() {
+        if (this.upStatus === true) {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传'
+            title: '警告',
+            message: '图片正在上传'
           })
-        }else {
-          if(this.taskType === '1'){
-            new Promise((resolve,reject)=>{
-              if(this.collect_rent === 'collect'){
-                this.$http.get(globalConfig.server+'contract/end?start='+this.params.collect_start
-                                +'&count='+this.params.collect_amount).then((res) => {
+        } else {
+          if (this.taskType === '1') {
+            new Promise((resolve, reject) => {
+              if (this.collect_rent === 'collect') {
+                this.$http.get(globalConfig.server + 'contract/end?start=' + this.params.collect_start
+                  + '&count=' + this.params.collect_amount).then((res) => {
                   this.params.collect_end = res.data.data;
                   resolve('');
                 })
-              }else {
-                this.$http.get(globalConfig.server+'contract/end?start='+this.params.rent_start
-                                +'&count='+this.params.rent_amount).then((res) => {
+              } else {
+                this.$http.get(globalConfig.server + 'contract/end?start=' + this.params.rent_start
+                  + '&count=' + this.params.rent_amount).then((res) => {
                   this.params.rent_end = res.data.data;
                   resolve('');
                 })
               }
-            }).then((data)=>{
-              this.$http.post(globalConfig.server+'contract/apply',this.params).then((res) => {
-                if(res.data.code ==='20010'){
+            }).then((data) => {
+              this.$http.post(globalConfig.server + 'contract/apply', this.params).then((res) => {
+                if (res.data.code === '20010') {
                   this.$notify.success({
-                    title:'成功',
-                    message:res.data.msg
+                    title: '成功',
+                    message: res.data.msg
                   });
                   this.closeAddModal();
-                  this.$emit('close','success');
-                }else {
+                  this.$emit('close', 'success');
+                } else {
                   this.$notify.warning({
-                    title:'警告',
-                    message:res.data.msg
+                    title: '警告',
+                    message: res.data.msg
                   })
                 }
               })
             })
-          }else if(this.taskType === '2') {
-            this.$http.post(globalConfig.server+'contract/invalidate',this.params).then((res) => {
-              if(res.data.code ==='20000'){
+          } else if (this.taskType === '2') {
+            this.$http.post(globalConfig.server + 'contract/invalidate', this.params).then((res) => {
+              if (res.data.code === '20000') {
                 this.$notify.success({
-                  title:'成功',
-                  message:res.data.msg
+                  title: '成功',
+                  message: res.data.msg
                 });
                 this.closeAddModal();
-                this.$emit('close','success');
-              }else {
+                this.$emit('close', 'success');
+              } else {
                 this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
+                  title: '警告',
+                  message: res.data.msg
                 })
               }
             })
-          }else if(this.taskType === '3'){
+          } else if (this.taskType === '3') {
 
-            if(Number(this.params.contract_type) === 108){
+            if (Number(this.params.contract_type) === 108) {
               this.params.candidate = {};
               let candidateArray = {};
               let candidateItem = {
-                address:'',
-                proof:0,
+                address: '',
+                proof: 0,
               };
               this.checkBox.forEach((item) => {
                 candidateItem = {};
                 candidateItem.address = this.rentHandinAddress[item];
                 candidateItem.proof = 0;
-                if(this.handover[item]){
-                  candidateItem.proof+=1;
+                if (this.handover[item]) {
+                  candidateItem.proof += 1;
                 }
-                if(this.receipt[item]){
-                  candidateItem.proof+=2;
+                if (this.receipt[item]) {
+                  candidateItem.proof += 2;
                 }
-                if(this.keyCode[item]){
-                  candidateItem.proof+=4;
+                if (this.keyCode[item]) {
+                  candidateItem.proof += 4;
                 }
                 candidateArray[item] = candidateItem;
               });
               //计算出最终结果
 
-              this.params.candidate = Object.assign({},this.params.candidate,candidateArray);
-            }else if(Number(this.params.contract_type) === 109){
+              this.params.candidate = Object.assign({}, this.params.candidate, candidateArray);
+            } else if (Number(this.params.contract_type) === 109) {
               this.params.candidate = {};
               let contentItem = {};
               this.params.medi_contracts = [];
-              for(let i=0;i<this.mediumNumberCollect;i++){
+              for (let i = 0; i < this.mediumNumberCollect; i++) {
                 contentItem = {};
                 contentItem.category = 1;
-                contentItem.address = this.medi_contracts_address[i]?this.medi_contracts_address[i]:'';
-                contentItem.number = this.medi_contracts_number[i]?this.medi_contracts_number[i]:'';
+                contentItem.address = this.medi_contracts_address[i] ? this.medi_contracts_address[i] : '';
+                contentItem.number = this.medi_contracts_number[i] ? this.medi_contracts_number[i] : '';
                 contentItem.proof = 0;
-                if(this.medi_contracts_proof_1[i]){
-                  contentItem.proof+=1;
+                if (this.medi_contracts_proof_1[i]) {
+                  contentItem.proof += 1;
                 }
-                if(this.medi_contracts_proof_2[i]){
-                  contentItem.proof+=2;
+                if (this.medi_contracts_proof_2[i]) {
+                  contentItem.proof += 2;
                 }
-                if(this.medi_contracts_proof_3[i]){
-                  contentItem.proof+=4;
+                if (this.medi_contracts_proof_3[i]) {
+                  contentItem.proof += 4;
                 }
                 this.params.medi_contracts.push(contentItem);
               }
-              for(let i=0;i<this.mediumNumberRent;i++){
+              for (let i = 0; i < this.mediumNumberRent; i++) {
                 contentItem = {};
                 contentItem.category = 2;
-                contentItem.address = this.medi_contracts_address_rent[i]?this.medi_contracts_address_rent[i]:'';
-                contentItem.number = this.medi_contracts_number_rent[i]?this.medi_contracts_number_rent[i]:'';
+                contentItem.address = this.medi_contracts_address_rent[i] ? this.medi_contracts_address_rent[i] : '';
+                contentItem.number = this.medi_contracts_number_rent[i] ? this.medi_contracts_number_rent[i] : '';
                 contentItem.proof = 0;
-                if(this.medi_contracts_proof_1_rent[i]){
-                  contentItem.proof+=1;
+                if (this.medi_contracts_proof_1_rent[i]) {
+                  contentItem.proof += 1;
                 }
-                if(this.medi_contracts_proof_2_rent[i]){
-                  contentItem.proof+=2;
+                if (this.medi_contracts_proof_2_rent[i]) {
+                  contentItem.proof += 2;
                 }
-                if(this.medi_contracts_proof_3_rent[i]){
-                  contentItem.proof+=4;
+                if (this.medi_contracts_proof_3_rent[i]) {
+                  contentItem.proof += 4;
                 }
                 this.params.medi_contracts.push(contentItem);
               }
-            }else if(Number(this.params.contract_type) === 110){
+            } else if (Number(this.params.contract_type) === 110) {
               this.params.candidate = {};
               //个人
               let contentItem = {};
               this.params.personal_contracts = [];
-              for(let i=0;i<this.personal_mediumNumberCollect;i++){
+              for (let i = 0; i < this.personal_mediumNumberCollect; i++) {
                 contentItem = {};
                 contentItem.category = 1;
-                contentItem.address = this.personal_contracts_address[i]?this.personal_contracts_address[i]:'';
-                contentItem.number = this.personal_contracts_number[i]?this.personal_contracts_number[i]:'';
+                contentItem.address = this.personal_contracts_address[i] ? this.personal_contracts_address[i] : '';
+                contentItem.number = this.personal_contracts_number[i] ? this.personal_contracts_number[i] : '';
                 contentItem.proof = 0;
-                if(this.personal_contracts_proof_1[i]){
-                  contentItem.proof+=1;
+                if (this.personal_contracts_proof_1[i]) {
+                  contentItem.proof += 1;
                 }
-                if(this.personal_contracts_proof_2[i]){
-                  contentItem.proof+=2;
+                if (this.personal_contracts_proof_2[i]) {
+                  contentItem.proof += 2;
                 }
-                if(this.personal_contracts_proof_3[i]){
-                  contentItem.proof+=4;
+                if (this.personal_contracts_proof_3[i]) {
+                  contentItem.proof += 4;
                 }
                 this.params.personal_contracts.push(contentItem);
               }
-              for(let i=0;i<this.personal_mediumNumberRent;i++){
+              for (let i = 0; i < this.personal_mediumNumberRent; i++) {
                 contentItem = {};
                 contentItem.category = 2;
-                contentItem.address = this.personal_contracts_address_rent[i]?this.personal_contracts_address_rent[i]:'';
-                contentItem.number = this.personal_contracts_number_rent[i]?this.personal_contracts_number_rent[i]:'';
+                contentItem.address = this.personal_contracts_address_rent[i] ? this.personal_contracts_address_rent[i] : '';
+                contentItem.number = this.personal_contracts_number_rent[i] ? this.personal_contracts_number_rent[i] : '';
                 contentItem.proof = 0;
-                if(this.personal_contracts_proof_1_rent[i]){
-                  contentItem.proof+=1;
+                if (this.personal_contracts_proof_1_rent[i]) {
+                  contentItem.proof += 1;
                 }
-                if(this.personal_contracts_proof_2_rent[i]){
-                  contentItem.proof+=2;
+                if (this.personal_contracts_proof_2_rent[i]) {
+                  contentItem.proof += 2;
                 }
-                if(this.personal_contracts_proof_3_rent[i]){
-                  contentItem.proof+=4;
+                if (this.personal_contracts_proof_3_rent[i]) {
+                  contentItem.proof += 4;
                 }
                 this.params.personal_contracts.push(contentItem);
               }
             }
 
-            this.$http.post(globalConfig.server+'contract/handin',this.params).then((res) => {
-              if(res.data.code ==='20010'){
+            this.$http.post(globalConfig.server + 'contract/handin', this.params).then((res) => {
+              if (res.data.code === '20010') {
                 this.$notify.success({
-                  title:'成功',
-                  message:res.data.msg
+                  title: '成功',
+                  message: res.data.msg
                 });
-                this.$emit('close','success');
+                this.$emit('close', 'success');
                 this.closeAddModal();
-              }else {
+              } else {
                 this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
+                  title: '警告',
+                  message: res.data.msg
                 })
               }
             })
-          }else if(this.taskType === '4') {
-            this.$http.post(globalConfig.server+'contract/loss',this.params).then((res) => {
-              if(res.data.code ==='20010'){
+          } else if (this.taskType === '4') {
+            this.$http.post(globalConfig.server + 'contract/loss', this.params).then((res) => {
+              if (res.data.code === '20010') {
                 this.$notify.success({
-                  title:'成功',
-                  message:res.data.msg
+                  title: '成功',
+                  message: res.data.msg
                 });
                 this.closeAddModal();
-                this.$emit('close','success');
-              }else {
+                this.$emit('close', 'success');
+              } else {
                 this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
+                  title: '警告',
+                  message: res.data.msg
                 })
               }
             })
           }
         }
       },
-      closeAddModal(){
+      closeAddModal() {
         this.createTaskDialogVisible = false;
         $('.imgItem').remove();
         this.params = {
-          city_code:'',
+          city_code: '',
 //          category:'',
-          report_time:'',
-          contract_type:'',
-          staff_id:'',
-          department_id:'',
-          collect_amount:'',
-          collect_start:'',
-          collect_end:'',
-          rent_amount:'',
-          rent_start:'',
-          rent_end:'',
-          rent_extra:[],
-          collect_extra:[],
-          remark:'',
-          screenshot:[],
-          candidate:[],
-          medi_contracts:[],//s上缴中介合同
-          personal_contracts:[],//s上缴个人合同
+          report_time: '',
+          contract_type: '',
+          staff_id: '',
+          department_id: '',
+          collect_amount: '',
+          collect_start: '',
+          collect_end: '',
+          rent_amount: '',
+          rent_start: '',
+          rent_end: '',
+          rent_extra: [],
+          collect_extra: [],
+          remark: '',
+          version: 2,
+          screenshot: [],
+          candidate: [],
+          medi_contracts: [],//s上缴中介合同
+          personal_contracts: [],//s上缴个人合同
         };
+        this.version_name = '2-LJGY';
         this.cityDictionary = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;
-        this.staff_name  =  '';
-        this.depart_name  =  '';
-        this.collect  =  '';
-        this.rent  =  '';
+        this.staff_name = '';
+        this.depart_name = '';
+        this.collect = '';
+        this.rent = '';
         this.upStatus = false;
         this.contractCollectNum = 0;
         this.contractRentNum = 0;
@@ -1023,18 +1068,19 @@
   };
 </script>
 <style lang="scss" scoped="">
-  .addMore{
+  .addMore {
     text-align: right;
-    i{
+    i {
       font-size: 18px;
     }
   }
-  .deleteNumber{
+
+  .deleteNumber {
     text-align: center;
     cursor: pointer;
     margin-top: 2px;
     color: #409EFF;
-    &:hover{
+    &:hover {
       color: #6a8dfb;
 
     }

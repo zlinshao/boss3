@@ -325,7 +325,7 @@
 </template>
 
 <script>
-  let today = new Date();
+
   import Warning from "./OAWork/management/notice/components/Warning.vue"; //预览页面
   export default {
     name: 'app',
