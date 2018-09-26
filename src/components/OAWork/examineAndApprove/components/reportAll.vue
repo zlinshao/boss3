@@ -368,6 +368,7 @@
       resetting() {
         this.params = {
           page: 1,
+          is_page: 1,
           q: '',
           processable_type: '', //报备类型
           start_time: '',
