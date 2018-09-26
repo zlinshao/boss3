@@ -214,7 +214,7 @@
       }
     },
     watch: {},
-    created() {
+    activated() {
       this.getTableData();
     },
     methods: {
