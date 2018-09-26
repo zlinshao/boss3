@@ -13,6 +13,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@antv/data-set": "^0.9.5",
+    "@antv/g2": "^3.2.7",
     "axios": "^0.17.1",
     "dropzone": "^5.2.0",
     "echarts": "^3.8.5",

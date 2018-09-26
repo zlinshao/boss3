@@ -750,10 +750,12 @@
 
         if (this.personal.data.setting && Array.isArray(this.personal.data.setting)) {
           if (this.personal.data.setting.length < 1 || this.personal.detail.pwd_lock == 2) {
-            this.setLockPwdDialog = true;
+            // this.setLockPwdDialog = true;
+            this.setLockPwdDialog = false;
           }
         } else {
-          this.setLockPwdDialog = true;
+          // this.setLockPwdDialog = true;
+            this.setLockPwdDialog = false;          
         }
 
       },

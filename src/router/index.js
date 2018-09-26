@@ -12,6 +12,8 @@ const Lock =()=> import  ('../components/common/lockedScreen.vue')
 const WholeRentManage =()=> import  ('../components/rentManage/wholeRentManage/index.vue')
 const JointRentManage =()=> import  ('../components/rentManage/jointRentManage/index.vue')
 
+
+
 //客服中心
 const ExpenseAccount =()=> import  ('../components/customService/expenseAccount/index.vue')   //报销
 const CustomerService =()=> import  ('../components/rentManage/customerService/ReturnVisitManage/index.vue')                //回访
@@ -144,6 +146,7 @@ const PeriodicTable =()=> import  ('../components/meritPay/periodicTable/index')
 const Achievement =()=> import  ('../components/meritPay/achievement/index')
 const PersonalSalary =()=> import  ('../components/meritPay/personalSalary/index')
 
+
 const CollectDetail =()=> import  ('../components/rentManage/collectDetail.vue')
 const RentingDetail =()=> import  ('../components/rentManage/rentingDetail.vue')
 //合同修改历史快照
@@ -189,6 +192,7 @@ const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 
 //数据中心
 const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
+const dataAanalysis =()=> import ('../components/dataAanalysis/index');
 const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
 
@@ -566,6 +570,7 @@ export default new Router({
         {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
         {path: '/achievement', component: Achievement, name: '业绩',},
         {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+
       ]
     },
     {
@@ -575,6 +580,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
+        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {

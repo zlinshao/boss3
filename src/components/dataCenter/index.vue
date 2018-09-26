@@ -19,7 +19,6 @@
   import CollectHouseData from './collectHouseData/index.vue'
   import RentHouseData from './rentHouseData/index.vue'
   import TargetPerformance from './targetPerformance/index.vue'
-
   export default {
     name: "index",
     components: {TargetPerformance, CollectHouseData, RentHouseData},

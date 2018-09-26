@@ -14,6 +14,8 @@ import store from './store'
 import Boss from './boss.config.js'
 import Fun from './fun.config.js'
 import Cookies from 'js-cookie';
+import G2 from '@antv/g2';//导入antv/g2图表
+import DataSet   from '@antv/data-set'; //导入antv/DataSet 
 
 import vueEventCalendar from 'vue-event-calendar'
 import 'vue-event-calendar/dist/style.css' //1.1.10之后的版本，css被放在了单独的文件中，方便替换
@@ -48,6 +50,9 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
 Vue.prototype.$http = axios;
+Vue.prototype.$G2 = G2 
+Vue.prototype.$DataSet = DataSet  
+
 
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Env'] = globalConfig.env;
