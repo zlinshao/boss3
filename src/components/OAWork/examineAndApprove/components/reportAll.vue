@@ -366,6 +366,7 @@
         this.getTableData();
       },
       resetting() {
+        this.department_name = '';
         this.params = {
           page: 1,
           is_page: 1,
