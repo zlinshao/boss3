@@ -354,7 +354,7 @@
         this.isHigh = false;
         this.params.page = 1;
         if (this.params.q === '' && this.params.processable_type === '' && this.params.start_time === '' && this.params.end_time === '' && this.params.org_id === '') {
-          this.params.search = '';
+          this.resetting();
         } else {
           this.params.search = 1;
         }
