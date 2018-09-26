@@ -182,6 +182,7 @@
           start_time: '',
           end_time: '',
           org_id: '',
+          all: 1,
         },
         department_name: '',
         processableType: [
@@ -218,6 +219,7 @@
       active(val) {
         if (val === 'sixth') {
           this.resetting();
+          this.params.all = 1;
           this.getTableData();
         }
       }
@@ -354,8 +356,10 @@
         this.isHigh = false;
         this.params.page = 1;
         if (this.params.q === '' && this.params.processable_type === '' && this.params.start_time === '' && this.params.end_time === '' && this.params.org_id === '') {
-          this.resetting();
+          delete this.params.search;
+          this.params.all = 1;
         } else {
+          delete this.params.all;
           this.params.search = 1;
         }
         this.getTableData();
