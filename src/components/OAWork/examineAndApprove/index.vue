@@ -14,7 +14,6 @@
       </div>
     </div>
     <el-tabs v-model="activeName" @tab-click="tabActive(activeName)">
-
       <div>
         <!--<el-tab-pane label="发起审批" name="first">-->
         <!--<div class="myApplication">-->
@@ -413,6 +412,7 @@
             element-loading-background="rgba(255, 255, 255, 0)"
             :data="tableData"
             @row-dblclick="dblClickTable"
+            :row-class-name="rowBackground"
             style="width: 100%">
             <el-table-column
               prop="created_at"
@@ -451,6 +451,7 @@
           element-loading-background="rgba(255, 255, 255, 0)"
           :data="tableData"
           @row-dblclick="dblClickTable"
+          :row-class-name="rowBackground"
           style="width: 100%">
           <el-table-column
             prop="created_at"
@@ -508,6 +509,7 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               :data="tableData"
               @row-dblclick="dblClickTable"
+              :row-class-name="rowBackground"
               style="width: 100%">
               <el-table-column
                 prop="created_at"
@@ -611,6 +613,7 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               :data="tableData"
               @row-dblclick="dblClickTable"
+              :row-class-name="rowBackground"
               style="width: 100%">
               <el-table-column
                 prop="created_at"
@@ -837,6 +840,7 @@
 
         reportModule: false,
         reportID: '',
+        reportAllID: [],
 
         isCollapse: true,
         emptyContent: ' ',
@@ -885,6 +889,9 @@
       this.tabActive('second');
     },
     methods: {
+      rowBackground({row, rowIndex}) {
+        if (this.reportAllID.includes(row.id)) return 'rowBackground';
+      },
       onSelect(key) {
         this.childActive(this.activeName, key);
       },
@@ -1001,7 +1008,7 @@
                   user.finish_at = data[i].flow.finish_at !== null ? data[i].finish_at : '/';
                   if (user.house_name = data[i].flow.content.house) {
                     user.house_name = data[i].flow.content.house.name;
-                  }  else if (data[i].flow.content.address) {
+                  } else if (data[i].flow.content.address) {
                     user.house_name = data[i].flow.content.address;
                   } else {
                     user.house_name = '/';
@@ -1055,10 +1062,12 @@
           this.isOpen_9 = !this.isOpen_9;
         }
       },
-      dblClickTable(type) {
-        this.reportID = type.id;
+      dblClickTable(row) {
+        this.reportID = row.id;
+        this.reportAllID.push(row.id);
+        this.reportAllID = Array.from(new Set(this.reportAllID));
         this.reportModule = true;
-        switch (type) {
+        switch (row) {
           case 'reimbursedetail':          //报销详情待审批
             this.reimbursedetail = true;
             break;
@@ -1200,7 +1209,9 @@
       -o-transition: all $n;
       transition: all $n;
     }
-
+    .rowBackground {
+      background-color: #cde0ff;
+    }
     .myApplication {
       padding: 0 20px;
       > div {

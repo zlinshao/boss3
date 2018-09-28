@@ -106,6 +106,7 @@
             element-loading-background="rgba(255, 255, 255, 0)"
             :data="tableData"
             @row-dblclick="dblClickTable"
+            :row-class-name="rowBackground"
             style="width: 100%">
             <el-table-column
               prop="created_at"
@@ -185,6 +186,7 @@
           org_id: '',
           all: 1,
         },
+        reportAllID: [],
         department_name: '',
         processableType: [
           {key: 'bulletin_quality', name: '质量报备'},
@@ -229,6 +231,9 @@
       this.getTableData();
     },
     methods: {
+      rowBackground({row, rowIndex}) {
+        if (this.reportAllID.includes(row.id)) return 'rowBackground';
+      },
       //获取列表数据
       getTableData() {
         this.tableLoading = true;
@@ -303,6 +308,8 @@
       },
       dblClickTable(row, event) {
         this.reportID = row.id;
+        this.reportAllID.push(row.id);
+        this.reportAllID = Array.from(new Set(this.reportAllID));
         this.reportModule = true;
       },
       //右键回调事件
@@ -386,6 +393,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
+  .rowBackground {
+    background-color: #cde0ff;
+  }
   .main {
     min-height: 200px;
   }
