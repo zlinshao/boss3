@@ -106,6 +106,7 @@
             element-loading-background="rgba(255, 255, 255, 0)"
             :data="tableData"
             @row-dblclick="dblClickTable"
+            :row-class-name="rowBackground"
             style="width: 100%">
             <el-table-column
               prop="created_at"
@@ -164,6 +165,7 @@
   import ReportDetail from '../../../reportManage/components/editReportDetail'          //报备详情
   export default {
     name: 'hello',
+    props: ['active'],
     components: {RightMenu, Organization, ReportDetail},
     data() {
       return {
@@ -176,12 +178,15 @@
         totalNum: 0,
         params: {
           page: 1,
+          is_page: 1,
           q: '',
           processable_type: '', //报备类型
           start_time: '',
           end_time: '',
           org_id: '',
+          all: 1,
         },
+        reportAllID: [],
         department_name: '',
         processableType: [
           {key: 'bulletin_quality', name: '质量报备'},
@@ -213,11 +218,22 @@
         reportID: '',
       }
     },
-    watch: {},
-    created() {
+    watch: {
+      active(val) {
+        if (val === 'sixth') {
+          this.resetting();
+          this.params.all = 1;
+          this.getTableData();
+        }
+      }
+    },
+    activated() {
       this.getTableData();
     },
     methods: {
+      rowBackground({row, rowIndex}) {
+        if (this.reportAllID.includes(row.id)) return 'rowBackground';
+      },
       //获取列表数据
       getTableData() {
         this.tableLoading = true;
@@ -292,6 +308,8 @@
       },
       dblClickTable(row, event) {
         this.reportID = row.id;
+        this.reportAllID.push(row.id);
+        this.reportAllID = Array.from(new Set(this.reportAllID));
         this.reportModule = true;
       },
       //右键回调事件
@@ -345,14 +363,26 @@
       search() {
         this.isHigh = false;
         this.params.page = 1;
+        if (this.params.q === '' && this.params.processable_type === '' && this.params.start_time === '' && this.params.end_time === '' && this.params.org_id === '') {
+          delete this.params.search;
+          this.params.all = 1;
+        } else {
+          delete this.params.all;
+          this.params.search = 1;
+        }
         this.getTableData();
       },
       resetting() {
-        this.params.processable_type = '';
-        this.params.start_time = '';
-        this.params.end_time = '';
         this.department_name = '';
-        this.params.org_id = '';
+        this.params = {
+          page: 1,
+          is_page: 1,
+          q: '',
+          processable_type: '', //报备类型
+          start_time: '',
+          end_time: '',
+          org_id: '',
+        };
       },
       closeFrame(val) {
         this.reportModule = false;
@@ -363,6 +393,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
+  .rowBackground {
+    background-color: #cde0ff;
+  }
   .main {
     min-height: 200px;
   }
