@@ -227,9 +227,6 @@
         }
       }
     },
-    activated() {
-      this.getTableData();
-    },
     methods: {
       rowBackground({row, rowIndex}) {
         if (this.reportAllID.includes(row.id)) return 'rowBackground';

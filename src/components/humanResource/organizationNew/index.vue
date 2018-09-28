@@ -77,7 +77,7 @@
                   </el-form-item>
 
                   <!--<el-form-item>-->
-                    <!--<el-button type="primary" size="mini" @click="leadingOut">导出</el-button>-->
+                  <!--<el-button type="primary" size="mini" @click="leadingOut">导出</el-button>-->
                   <!--</el-form-item>-->
 
                 </el-form>
@@ -628,12 +628,11 @@
                   <el-col :span="8">
                     <el-form-item label="入职途径">
                       <div class="content">
-                    <span
-                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type
-                      && staffDetailData.detail.entry_way.entry_type.length>0">
-                      <span
-                        v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
-                      </span>
+                        <span
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type && staffDetailData.detail.entry_way.entry_type.length > 0">
+                          <span
+                            v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
+                        </span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
