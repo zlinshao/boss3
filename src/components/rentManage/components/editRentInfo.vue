@@ -220,7 +220,19 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="总收款金额" required>
+                      <el-form-item label="定金" required>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  v-model="params.front_money"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="租金" required>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                  v-model="params.rent_money"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="总金额" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                   v-model="params.money_sum"></el-input>
                       </el-form-item>
@@ -301,12 +313,16 @@
                     <div v-for="item in moneyTableChangeAmount">
                       <el-row>
                         <el-col :span="6">
-                          <el-form-item label="支付方式" required="">
+                          <!-- <el-form-item label="汇款账户" required="">
                             <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="moneyWayArray[item-1]"
-                                       placeholder="请选择支付方式" value="">
+                                       placeholder="请选择汇款账户" value="">
                               <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
                                          :key="item.id"></el-option>
                             </el-select>
+                          </el-form-item> -->
+                          <el-form-item label="汇款账户" required>
+                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                                      v-model="moneyWayArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -333,18 +349,25 @@
                   <div class="form_border">
                     <div v-for="item in receiptChangeAmount">
                       <el-row>
-                        <el-col :span="6">
-                          <el-form-item label="收据编号">
-                            <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
-                                      v-model="params.receipt[item-1]"></el-input>
-                          </el-form-item>
+                        <el-col :span="12">
+                          <el-form-item label="是否电子收据" required="">
+                            <el-switch v-model="is_receipt"></el-switch>
+                          </el-form-item> 
                         </el-col>
+                        <div v-if="params.is_receipt=='0'">
+                          <el-col :span="6" >
+                            <el-form-item label="收据编号">
+                              <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
+                                        v-model="params.receipt[item-1]"></el-input>
+                            </el-form-item>
+                          </el-col>
 
-                        <el-col :span="6" v-if="(isAll || (isPc && !isDoc)) && item>1">
-                          <div class="deleteNumber">
-                            <span @click="deleteReceiptChange(item-1)">删除</span>
-                          </div>
-                        </el-col>
+                          <el-col :span="6" v-if="(isAll || (isPc && !isDoc)) && item>1">
+                            <div class="deleteNumber">
+                              <span @click="deleteReceiptChange(item-1)">删除</span>
+                            </div>
+                          </el-col>
+                        </div>
                       </el-row>
                     </div>
                     <div style="text-align: center">
@@ -583,7 +606,11 @@
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
           money_sum: '',              //收款总金额
+          front_money:'',               //定金
+          rent_money:'',                //租金
           money_table: [],            //金额+付款方式
+
+          is_receipt: "1", //是否电子收据
 
           retainage_date: '',         //尾款补齐时间
           receipt: [],                 //收据编号
@@ -616,6 +643,7 @@
           checkout_photo: [],
           checkout_settle_photo: [],
         },
+        is_receipt: false,
         community_name: '',           //小区名
         community_address: '',        //小区地址
         staff_name: '',                //组件选中显示名字
@@ -677,6 +705,9 @@
       };
     },
     watch: {
+      is_receipt(val) {
+        this.params.is_receipt = val ? "1" : "0";
+      },
       houseOwnerInfoDialog(val) {
         if (!val) {
           this.getDetail();
@@ -820,6 +851,8 @@
             }
             this.params.deposit = data.deposit;
             this.params.money_sum = data.money_sum;
+            this.params.front_money = data.front_money;
+            this.params.rent_money = data.rent_money;
 
             //------------月单价和付款方式-----------------------//
             if (data.price && Array.isArray(data.price)) {
@@ -891,6 +924,19 @@
 
             this.params.remark_terms = data.remark_terms;
             this.params.remark = data.remark;
+
+            if (data.is_receipt) {
+              if (data.is_receipt.name) {
+                this.params.is_receipt = String(data.is_receipt.id);
+                this.is_receipt = String(data.is_receipt.id) === "1" ? true : false;
+              } else {
+                this.params.is_receipt = String(data.is_receipt);
+                this.is_receipt = String(data.is_receipt) === "1" ? true : false;
+              }
+            } else {
+              this.params.is_receipt = "0";
+              this.is_receipt = false;
+            }
 
             //照片
             this.identity_photo = data.identity_photo;

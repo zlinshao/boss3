@@ -53,6 +53,27 @@
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
+            </el-col> 
+            <el-col :span="8">
+              <el-form-item label="押金" required="">
+                <el-input placeholder="押金" v-model="params.deposit">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="定金" required="">
+                <el-input placeholder="定金" v-model="params.front_money">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="租金" required="">
+                <el-input placeholder="租金" v-model="params.rent_money">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
             </el-col>
           </el-row>
 
@@ -128,8 +149,8 @@
             <div v-for="item in moneyTableChangeAmount">
               <el-row>
                 <el-col :span="6">
-                  <el-form-item label="支付方式" required="">
-                    <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择支付方式" value="">
+                  <el-form-item label="汇款银行" required="">
+                    <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择汇款银行" value="">
                       <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
@@ -250,7 +271,13 @@
           <div class="title">收据编号</div>
           <div class="form_border">
             <el-row>
+              <el-col :span="12">
+                <el-form-item label="是否电子收据" required="">
+                  <el-switch v-model="is_receipt"></el-switch>
+                </el-form-item> 
+              </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
+                <div v-if="params.is_receipt=='0'">
                 <el-col :span="12">
                   <el-form-item label="收据编号" required="">
                     <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
@@ -261,6 +288,7 @@
                     <span @click="deleteReceiptAmount(item-1)">删除</span>
                   </div>
                 </el-col>
+                </div>
               </el-col>
             </el-row>
             <div style="text-align: center">
@@ -359,8 +387,12 @@
           period_pay_arr: [''],         //付款方式周期
 
           money_sum: '',                //总金额
+          front_money:'',               //定金
+          rent_money:'',                //租金
           money_sep: [''],              //分金额
           money_way: [''],              //分金额 方式
+
+          is_receipt: "1",              //是否电子收据
 
           is_other_fee: '0',
           other_fee: '',
@@ -391,6 +423,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
         },
+        is_receipt: false,
         screenshot_leader: {},
         deposit_photo: {},
         screenshot: {},
@@ -406,6 +439,9 @@
       };
     },
     watch: {
+      is_receipt(val) {
+        this.params.is_receipt = val ? "1" : "0";
+      },
       rwcRentReport(val) {
         this.rwcRentReportVisible = val
       },
@@ -461,6 +497,9 @@
         this.params.period_pay_arr = data.period_pay_arr;
 
         this.params.money_sum = data.money_sum;
+        this.params.front_money = data.front_money;
+        this.params.rent_money = data.rent_money;
+      
         this.params.money_sep = data.money_sep;
         this.params.money_way = data.money_way;
 
@@ -484,6 +523,19 @@
         this.params.agency_user_name = data.agency_user_name;
         this.params.agency_phone = data.agency_phone;
 
+        if (data.is_receipt) {
+          if (data.is_receipt.name) {
+            this.params.is_receipt = String(data.is_receipt.id);
+            this.is_receipt = String(data.is_receipt.id) === "1" ? true : false;
+          } else {
+            this.params.is_receipt = String(data.is_receipt);
+            this.is_receipt = String(data.is_receipt) === "1" ? true : false;
+          }
+        } else {
+          this.params.is_receipt = "0";
+          this.is_receipt = false;
+        }
+        
         if (data.is_corp) {
           if (data.is_corp.name) {
             this.params.is_corp = String(data.is_corp.id);
