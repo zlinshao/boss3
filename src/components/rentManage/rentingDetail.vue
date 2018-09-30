@@ -328,6 +328,21 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
+                <el-form-item label="押金">
+                  <div class="content">{{contractInfo.deposit_payed}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="定金">
+                  <div class="content">{{contractInfo.front_money}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="租金">
+                  <div class="content">{{contractInfo.rent_money}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="金额（支付方式）">
                   <div class="content">
                      <span v-for="(item,index) in contractInfo.money_table">
@@ -1869,6 +1884,7 @@
         this.$http.get(globalConfig.server + 'lease/rent/' + this.$route.query.id).then((res) => {
           this.loadingStatus = false;
           if (res.data.code === '61110') {
+            // console.log(res)
             this.contractInfo = res.data.data;
             this.customersInfo = res.data.data.customers;
 

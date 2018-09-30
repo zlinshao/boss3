@@ -52,5 +52,18 @@ export default {
       let D = date.getDate();
       return Y+M+D;
     }
+    Vue.prototype.addMoneySum = function (form) {
+      let deposit = form.deposit
+      let front_money = form.front_money
+      let rent_money = form.rent_money
+      
+      deposit ? deposit : 0
+      front_money ? front_money : 0
+      rent_money ? rent_money : 0
+
+      form.money_sum = Number(deposit)+Number(front_money)+Number(rent_money)
+      
+      return form.money_sum;
+    }
   }
 }

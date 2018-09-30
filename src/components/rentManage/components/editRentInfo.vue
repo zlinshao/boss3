@@ -216,24 +216,24 @@
                     <el-col :span="6">
                       <el-form-item label="押金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
-                                  v-model="params.deposit"></el-input>
+                                  v-model="params.deposit" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="定金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
-                                  v-model="params.front_money"></el-input>
+                                  v-model="params.front_money" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="租金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
-                                  v-model="params.rent_money"></el-input>
+                                  v-model="params.rent_money" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="总金额" required>
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
+                        <el-input disabled placeholder="请输入内容"
                                   v-model="params.money_sum"></el-input>
                       </el-form-item>
                     </el-col>
@@ -586,6 +586,7 @@
         type: '',
 
         houseInfo: {},                //房屋相关信息
+        
         params: {
           is_submit: 0,
           id: '',   //合同id
@@ -644,6 +645,10 @@
           checkout_settle_photo: [],
         },
         is_receipt: false,
+        deposit:'',                   //押金
+        front_money:'',               //定金
+        rent_money:"",                //租金
+
         community_name: '',           //小区名
         community_address: '',        //小区地址
         staff_name: '',                //组件选中显示名字
@@ -703,6 +708,9 @@
         isDoc: false,
         isAll: false,
       };
+    },
+    computed:{
+      
     },
     watch: {
       is_receipt(val) {
@@ -849,7 +857,7 @@
             } else {
               this.params.is_agency = '0';
             }
-            this.params.deposit = data.deposit;
+            this.params.deposit = data.deposit_payed;
             this.params.money_sum = data.money_sum;
             this.params.front_money = data.front_money;
             this.params.rent_money = data.rent_money;

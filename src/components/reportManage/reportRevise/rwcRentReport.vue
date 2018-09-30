@@ -49,28 +49,28 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="已收金额" required="">
-                <el-input placeholder="已收金额" v-model="params.money_sum">
+                <el-input placeholder="已收金额" v-model="params.money_sum" disabled>
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
             </el-col> 
             <el-col :span="8">
               <el-form-item label="押金" required="">
-                <el-input placeholder="押金" v-model="params.deposit">
+                <el-input placeholder="押金" v-model="params.deposit" @keyup.native="addMoneySum(params)">
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="定金" required="">
-                <el-input placeholder="定金" v-model="params.front_money">
+                <el-input placeholder="定金" v-model="params.front_money" @keyup.native="addMoneySum(params)" >
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="租金" required="">
-                <el-input placeholder="租金" v-model="params.rent_money">
+                <el-input placeholder="租金" v-model="params.rent_money" @keyup.native="addMoneySum(params)">
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
