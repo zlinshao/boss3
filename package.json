@@ -28,6 +28,7 @@
     "vue": "^2.5.2",
     "vue-amap": "^0.5.3",
     "vue-event-calendar": "^1.5.2",
+    "vue-pdf": "^3.3.1",
     "vue-router": "^3.0.1",
     "vue2-editor": "^2.4.2",
     "vuedraggable": "2.15.0",

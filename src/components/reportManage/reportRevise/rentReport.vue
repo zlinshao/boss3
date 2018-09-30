@@ -54,6 +54,27 @@
                 </el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="押金" required="">
+                <el-input placeholder="押金" v-model="params.deposit">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="定金" required="">
+                <el-input placeholder="定金" v-model="params.front_money">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="租金" required="">
+                <el-input placeholder="租金" v-model="params.rent_money">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
 
           <div class="title">月单价</div>
@@ -128,8 +149,8 @@
             <div v-for="item in moneyTableChangeAmount">
               <el-row>
                 <el-col :span="6">
-                  <el-form-item label="支付方式" required="">
-                    <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择支付方式" value="">
+                  <el-form-item label="汇款银行" required="">
+                    <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择汇款银行" value="">
                       <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
@@ -249,9 +270,16 @@
           </el-row>
           <div class="title">收据编号</div>
           <div class="form_border">
-            <el-row>
+            
+            <el-row >
+              <el-col :span="12">
+                <el-form-item label="是否电子收据" required="">
+                  <el-switch v-model="is_receipt"></el-switch>
+                </el-form-item> 
+              </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
-                <el-col :span="12">
+                <div v-if="params.is_receipt=='0'">
+                <el-col :span="12" >
                   <el-form-item label="收据编号" required="">
                     <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
                   </el-form-item>
@@ -261,6 +289,7 @@
                     <span @click="deleteReceiptAmount(item-1)">删除</span>
                   </div>
                 </el-col>
+                </div>
               </el-col>
             </el-row>
             <div style="text-align: center">
@@ -318,490 +347,521 @@
 </template>
 
 <script>
-  import UpLoad from '../../common/UPLOAD.vue'
-  import Organization from '../../common/organization.vue'
-  import CollectSearch from '../../common/collectSearch.vue'
+import UpLoad from "../../common/UPLOAD.vue";
+import Organization from "../../common/organization.vue";
+import CollectSearch from "../../common/collectSearch.vue";
 
-  export default {
-    components: {UpLoad, Organization, CollectSearch},
-    props: ['rentReport', 'reportDetailData', 'processableId', 'reportId'],
-    data() {
-      return {
-        rentReportVisible: false,
-        isClear: false,
-        organizationDialog: false,
-        collectDialog: false,
-        fullLoading: false,
-        length: '',
-        type: '',
-        selectType: '',
-        receiptDate: '',
+export default {
+  components: { UpLoad, Organization, CollectSearch },
+  props: ["rentReport", "reportDetailData", "processableId", "reportId"],
+  data() {
+    return {
+      rentReportVisible: false,
+      isClear: false,
+      organizationDialog: false,
+      collectDialog: false,
+      fullLoading: false,
+      length: "",
+      type: "",
+      selectType: "",
+      receiptDate: "",
+      params: {
+        address: "",
+        id: "",
+        processable_id: "",
+        type: 1,
+        draft: 0,
+        contract_id: "", //合同id
+        house_id: "", //房屋地址id
+        discount: "", //让价总金额
 
-        params: {
-          address: '',
-          id: '',
-          processable_id: '',
-          type: 1,
-          draft: 0,
-          contract_id: '',              //合同id
-          house_id: '',                 //房屋地址id
-          discount: '',                  //让价总金额
+        month: "", //租房月数
+        day: "", //租房天数
+        sign_date: "", //签约开始日期
+        end_date: "", //签约结束日期
+        begin_date: "", //合同开始日期
 
-          month: '',                    //租房月数
-          day: '',                      //租房天数
-          sign_date: '',                //签约开始日期
-          end_date: '',                 //签约结束日期
-          begin_date: '',               //合同开始日期
+        price_arr: [""], //月单价
+        period_price_arr: [""], //月单价周期
 
-          price_arr: [''],              //月单价
-          period_price_arr: [''],       //月单价周期
+        pay_way_bet: "", //付款方式 押
 
-          pay_way_bet: '',              //付款方式 押
+        pay_way_arr: [""], //付款方式 付
+        period_pay_arr: [""], //付款方式周期
 
-          pay_way_arr: [''],            //付款方式 付
-          period_pay_arr: [''],         //付款方式周期
+        money_sum: "", //总金额
+        front_money: "", //定金
+        rent_money: "", //租金
+        money_sep: [""], //分金额
+        money_way: [""], //分金额 方式
 
-          money_sum: '',                //总金额
-          money_sep: [''],              //分金额
-          money_way: [''],              //分金额 方式
+        is_receipt: "1", //是否电子收据
 
-          is_other_fee: '0',
-          other_fee: '',
-          other_fee_name: '',
+        is_other_fee: "0",
+        other_fee: "",
+        other_fee_name: "",
 
-          deposit: '',                  //押金
-          is_agency: '1',                //客户来源    0个人1中介
-          agency_name: '',              //中介名
-          agency_price: '',             //中介费
-          agency_user_name: '',         //中介人
-          agency_phone: '',             //中介手机号
+        deposit: "", //押金
+        is_agency: "1", //客户来源    0个人1中介
+        agency_name: "", //中介名
+        agency_price: "", //中介费
+        agency_user_name: "", //中介人
+        agency_phone: "", //中介手机号
 
-          is_corp: '1',                   //是否公司单  0个人1公司
-          contract_number: 'LJZF',      //合同编号
+        is_corp: "1", //是否公司单  0个人1公司
+        contract_number: "LJZF", //合同编号
 
-          receipt: [],                //收据编号
-          property_payer: '',           //物业费付款人
-          retainage_date: '',           //尾款补齐时间
-          name: '',                     //客户姓名
-          phone: '',                    //电话号码
-          screenshot_leader: [],        //领导截图 数组
-          deposit_photo: [],        //领导截图 数组
-          screenshot: [],               //领导截图 数组
-          photo: [],                    //合同照片 数组
-          remark: '',                   //备注
-          staff_id: '',                 //开单人id
-          department_id: '',            //部门id
-          staff_name: '',               //开单人name
-          department_name: '',          //部门name
-        },
-        screenshot_leader: {},
-        deposit_photo: {},
-        screenshot: {},
-        photo: {},
-
-        priceChangeAmount: 1,
-        payWayChangeAmount: 1,
-        moneyTableChangeAmount: 1,
-        receiptAmount: 1,
-        purchase_way_dic: [],
-        property_payer_dic: [],
-        isUpload: false,
-      };
-    },
-    watch: {
-      rentReport(val) {
-        this.rentReportVisible = val
+        receipt: [], //收据编号
+        property_payer: "", //物业费付款人
+        retainage_date: "", //尾款补齐时间
+        name: "", //客户姓名
+        phone: "", //电话号码
+        screenshot_leader: [], //领导截图 数组
+        deposit_photo: [], //领导截图 数组
+        screenshot: [], //领导截图 数组
+        photo: [], //合同照片 数组
+        remark: "", //备注
+        staff_id: "", //开单人id
+        department_id: "", //部门id
+        staff_name: "", //开单人name
+        department_name: "" //部门name
       },
-      rentReportVisible(val) {
-        if (!val) {
-          this.$emit('close');
-          this.clearData();
+      is_receipt: false,
+      screenshot_leader: {},
+      deposit_photo: {},
+      screenshot: {},
+      photo: {},
+
+      priceChangeAmount: 1,
+      payWayChangeAmount: 1,
+      moneyTableChangeAmount: 1,
+      receiptAmount: 1,
+      purchase_way_dic: [],
+      property_payer_dic: [],
+      isUpload: false
+    };
+  },
+  watch: {
+    is_receipt(val) {
+      this.params.is_receipt = val ? "1" : "0";
+    },
+    rentReport(val) {
+      this.rentReportVisible = val;
+    },
+    rentReportVisible(val) {
+      if (!val) {
+        this.$emit("close");
+        this.clearData();
+      } else {
+        this.isClear = true;
+        setTimeout(() => {
+          this.preloadData();
+        }, 50);
+      }
+    }
+  },
+  created() {
+    this.getDictionary();
+  },
+  methods: {
+    getDictionary() {
+      this.dictionary(508, 1).then(res => {
+        this.purchase_way_dic = res.data;
+      });
+      this.dictionary(449, 1).then(res => {
+        this.property_payer_dic = res.data;
+      });
+    },
+    //预填报备数据
+    preloadData() {
+      let data = this.reportDetailData;
+
+      this.params.processable_id = this.reportId;
+      this.params.id = data.id;
+      this.params.contract_id = data.contract_id;
+      this.params.house_id = data.house_id;
+
+      this.params.address = data.address;
+      this.params.month = data.month;
+      this.params.day = data.day === "0" ? "" : data.day;
+      this.params.contract_number =
+        data.contract_number === "" ? "LJZF" : data.contract_number;
+      this.params.sign_date = data.sign_date;
+      this.params.begin_date = data.begin_date;
+      this.params.end_date = data.end_date;
+
+      this.priceChangeAmount = data.price_arr.length;
+      this.payWayChangeAmount = data.pay_way_arr.length;
+      this.moneyTableChangeAmount = data.money_sep.length;
+
+      this.params.price_arr = data.price_arr;
+      this.params.period_price_arr = data.period_price_arr;
+
+      this.params.pay_way_bet = data.pay_way_bet;
+      this.params.pay_way_arr = data.pay_way_arr;
+      this.params.period_pay_arr = data.period_pay_arr;
+
+      this.params.money_sum = data.money_sum;
+      this.params.front_money = data.front_money;
+      this.params.rent_money = data.rent_money;
+
+      this.params.money_sep = data.money_sep;
+      this.params.money_way = data.money_way;
+
+      this.params.deposit = data.deposit;
+      this.params.discount = data.discount;
+
+      this.params.other_fee_name = data.other_fee_name;
+      this.params.other_fee = data.other_fee;
+
+      this.params.agency_name = data.agency_name;
+      this.params.agency_price = data.agency_price;
+      this.params.agency_user_name = data.agency_user_name;
+      this.params.agency_phone = data.agency_phone;
+      if (data.is_receipt) {
+        if (data.is_receipt.name) {
+          this.params.is_receipt = String(data.is_receipt.id);
+          this.is_receipt = String(data.is_receipt.id) === "1" ? true : false;
         } else {
-          this.isClear = true;
-          setTimeout(() => {
-            this.preloadData();
-          }, 50);
-
+          this.params.is_receipt = String(data.is_receipt);
+          this.is_receipt = String(data.is_receipt) === "1" ? true : false;
         }
-      },
-    },
-    created() {
-      this.getDictionary();
-    },
-    methods: {
-      getDictionary() {
-        this.dictionary(508, 1).then((res) => {
-          this.purchase_way_dic = res.data;
+      } else {
+        this.params.is_receipt = "0";
+        this.is_receipt = false;
+      }
+      if (data.is_corp) {
+        if (data.is_corp.name) {
+          this.params.is_corp = String(data.is_corp.id);
+        } else {
+          this.params.is_corp = String(data.is_corp);
+        }
+      } else {
+        this.params.is_corp = "0";
+      }
+      if (data.is_agency) {
+        if (data.is_agency.name) {
+          this.params.is_agency = String(data.is_agency.id);
+        } else {
+          this.params.is_agency = String(data.is_agency);
+        }
+      } else {
+        this.params.is_agency = "0";
+      }
+      this.params.property = data.property;
+
+      this.params.is_other_fee = String(data.is_other_fee);
+      this.params.property_payer = data.property_payer.id;
+
+      this.params.retainage_date = data.retainage_date;
+      this.params.name = data.name;
+      this.params.phone = data.phone;
+
+      this.screenshot = this.getImgObject(data.screenshot);
+      this.params.screenshot = this.getImgIdArray(data.screenshot);
+
+      this.photo = this.getImgObject(data.photo);
+      this.params.photo = this.getImgIdArray(data.photo);
+
+      this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+      this.params.screenshot_leader = this.getImgIdArray(
+        data.screenshot_leader
+      );
+
+      this.deposit_photo = this.getImgObject(data.deposit_photo);
+      this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
+
+      this.params.remark = data.remark;
+
+      this.params.staff_id = data.staff_id;
+      this.params.staff_name = data.staff_name;
+      this.params.department_id = data.department_id;
+      this.params.department_name = data.department_name;
+
+      if (data.receipt && typeof data.receipt === "string") {
+        this.params.receipt.push(data.receipt);
+      } else if (Array.isArray(data.receipt) && data.receipt.length > 0) {
+        this.receiptAmount = data.receipt.length;
+        data.receipt.forEach(item => {
+          if (typeof item === "string") {
+            this.params.receipt.push(item);
+          } else if (item.number) {
+            this.params.receipt.push(item.number);
+          }
         });
-        this.dictionary(449, 1).then((res) => {
-          this.property_payer_dic = res.data;
-        });
-      },
-      //预填报备数据
-      preloadData() {
-        let data = this.reportDetailData;
-        console.log(data);
-        this.params.processable_id = this.reportId;
-        this.params.id = data.id;
-        this.params.contract_id = data.contract_id;
-        this.params.house_id = data.house_id;
-
-        this.params.address = data.address;
-        this.params.month = data.month;
-        this.params.day = data.day === '0' ? '' : data.day;
-        this.params.contract_number = data.contract_number === '' ? 'LJZF' : data.contract_number;
-        this.params.sign_date = data.sign_date;
-        this.params.begin_date = data.begin_date;
-        this.params.end_date = data.end_date;
-
-        this.priceChangeAmount = data.price_arr.length;
-        this.payWayChangeAmount = data.pay_way_arr.length;
-        this.moneyTableChangeAmount = data.money_sep.length;
-
-        this.params.price_arr = data.price_arr;
-        this.params.period_price_arr = data.period_price_arr;
-
-        this.params.pay_way_bet = data.pay_way_bet;
-        this.params.pay_way_arr = data.pay_way_arr;
-        this.params.period_pay_arr = data.period_pay_arr;
-
-        this.params.money_sum = data.money_sum;
-        this.params.money_sep = data.money_sep;
-        this.params.money_way = data.money_way;
-
-        this.params.deposit = data.deposit;
-        this.params.discount = data.discount;
-
-        this.params.other_fee_name = data.other_fee_name;
-        this.params.other_fee = data.other_fee;
-
-        this.params.agency_name = data.agency_name;
-        this.params.agency_price = data.agency_price;
-        this.params.agency_user_name = data.agency_user_name;
-        this.params.agency_phone = data.agency_phone;
-
-        if (data.is_corp) {
-          if (data.is_corp.name) {
-            this.params.is_corp = String(data.is_corp.id);
-          } else {
-            this.params.is_corp = String(data.is_corp);
-          }
-        } else {
-          this.params.is_corp = '0';
+      } else {
+        this.receiptNum();
+      }
+    },
+    //详情照片展示
+    getImgObject(data) {
+      let img = {};
+      if (data && data.constructor === Object) {
+        let imgArray = data.pic_addresses;
+        if (imgArray.length > 0) {
+          imgArray.forEach(item => {
+            this.$set(img, item.id, item.uri);
+          });
         }
-        if (data.is_agency) {
-          if (data.is_agency.name) {
-            this.params.is_agency = String(data.is_agency.id);
-          } else {
-            this.params.is_agency = String(data.is_agency);
-          }
-        } else {
-          this.params.is_agency = '0';
+      }
+      return img;
+    },
+    getImgIdArray(data) {
+      let img = [];
+      if (data && data.constructor === Object) {
+        let imgArray = data.pic_addresses;
+        if (imgArray.length > 0) {
+          imgArray.forEach(item => {
+            img.push(item.id);
+          });
         }
-        this.params.property = data.property;
+      }
+      return img;
+    },
 
-        this.params.is_other_fee = String(data.is_other_fee);
-        this.params.property_payer = data.property_payer.id;
-
-        this.params.retainage_date = data.retainage_date;
-        this.params.name = data.name;
-        this.params.phone = data.phone;
-
-        this.screenshot = this.getImgObject(data.screenshot);
-        this.params.screenshot = this.getImgIdArray(data.screenshot);
-
-        this.photo = this.getImgObject(data.photo);
-        this.params.photo = this.getImgIdArray(data.photo);
-
-        this.screenshot_leader = this.getImgObject(data.screenshot_leader);
-        this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
-
-        this.deposit_photo = this.getImgObject(data.deposit_photo);
-        this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
-
-        this.params.remark = data.remark;
-
-        this.params.staff_id = data.staff_id;
-        this.params.staff_name = data.staff_name;
-        this.params.department_id = data.department_id;
-        this.params.department_name = data.department_name;
-
-        if (data.receipt && typeof(data.receipt) === 'string') {
-          this.params.receipt.push(data.receipt)
-        } else if (Array.isArray(data.receipt) && data.receipt.length > 0) {
-          this.receiptAmount = data.receipt.length;
-          data.receipt.forEach((item) => {
-            if (typeof item === 'string') {
-              this.params.receipt.push(item);
-            } else if (item.number) {
-              this.params.receipt.push(item.number);
-            }
-          })
-        } else {
-          this.receiptNum();
+    //打开房屋选择模态框
+    selectHouse() {
+      this.collectDialog = true;
+    },
+    //调出选人组件
+    openOrganizeModal(val) {
+      this.selectType = val;
+      this.type = val === "depart" ? "depart" : "staff";
+      this.organizationDialog = true;
+      this.length = 1;
+    },
+    //选人组件回调
+    selectMember(val) {
+      if (this.selectType === "staff") {
+        this.params.staff_id = val[0].id;
+        this.params.staff_name = val[0].name;
+        if (val[0].org.length > 0) {
+          this.params.department_id = val[0].org[0].id;
+          this.params.department_name = val[0].org[0].name;
         }
-      },
-      //详情照片展示
-      getImgObject(data) {
-        let img = {};
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
-              this.$set(img, item.id, item.uri)
-            });
-          }
-        }
-        return img;
-      },
-      getImgIdArray(data) {
-        let img = [];
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
-              img.push(item.id);
-            });
-          }
-        }
-        return img;
-      },
+      } else if (this.selectType === "depart") {
+        this.params.department_id = val[0].id;
+        this.params.department_name = val[0].name;
+      }
+    },
 
-      //打开房屋选择模态框
-      selectHouse() {
-        this.collectDialog = true;
-      },
-      //调出选人组件
-      openOrganizeModal(val) {
-        this.selectType = val;
-        this.type = val === 'depart' ? 'depart' : 'staff';
-        this.organizationDialog = true;
-        this.length = 1;
-      },
-      //选人组件回调
-      selectMember(val) {
-        if (this.selectType === 'staff') {
-          this.params.staff_id = val[0].id;
-          this.params.staff_name = val[0].name;
-          if (val[0].org.length > 0) {
-            this.params.department_id = val[0].org[0].id;
-            this.params.department_name = val[0].org[0].name;
-          }
-        } else if (this.selectType === 'depart') {
-          this.params.department_id = val[0].id;
-          this.params.department_name = val[0].name;
-        }
-      },
+    //月单价变化
+    addMorePriceChange() {
+      this.priceChangeAmount++;
+    },
+    deletePriceChange(item) {
+      this.params.price_arr.splice(item, 1);
+      this.params.period_price_arr.splice(item, 1);
+      this.priceChangeAmount--;
+    },
+    //付款方式变化
+    addMorePayWayChange() {
+      this.payWayChangeAmount++;
+    },
+    deletePayWayChange(item) {
+      this.params.pay_way_arr.splice(item, 1);
+      this.params.period_pay_arr.splice(item, 1);
+      this.payWayChangeAmount--;
+    },
+    //jine bianhua
+    addMoreMoneyTableChange() {
+      this.moneyTableChangeAmount++;
+    },
+    deleteMoneyTableChange(item) {
+      this.params.money_way.splice(item, 1);
+      this.params.money_sep.splice(item, 1);
+      this.moneyTableChangeAmount--;
+    },
 
-      //月单价变化
-      addMorePriceChange() {
-        this.priceChangeAmount++;
-      },
-      deletePriceChange(item) {
-        this.params.price_arr.splice(item, 1);
-        this.params.period_price_arr.splice(item, 1);
-        this.priceChangeAmount--;
-      },
-      //付款方式变化
-      addMorePayWayChange() {
-        this.payWayChangeAmount++;
-      },
-      deletePayWayChange(item) {
-        this.params.pay_way_arr.splice(item, 1);
-        this.params.period_pay_arr.splice(item, 1);
-        this.payWayChangeAmount--;
-      },
-      //jine bianhua
-      addMoreMoneyTableChange() {
-        this.moneyTableChangeAmount++;
-      },
-      deleteMoneyTableChange(item) {
-        this.params.money_way.splice(item, 1);
-        this.params.money_sep.splice(item, 1);
-        this.moneyTableChangeAmount--;
-      },
+    addReceiptAmount() {
+      this.receiptAmount++;
+      this.params.receipt.push(this.receiptDate);
+    },
+    deleteReceiptAmount(item) {
+      this.params.receipt.splice(item, 1);
+      this.receiptAmount--;
+    },
 
-      addReceiptAmount() {
-        this.receiptAmount++;
-        this.params.receipt.push(this.receiptDate);
+    //改变收房月数
+    changeMonth() {
+      this.computedEndDate();
+      this.params.period_price_arr[0] = this.params.month;
+      this.params.period_pay_arr[0] = this.params.month;
 
-      },
-      deleteReceiptAmount(item) {
-        this.params.receipt.splice(item, 1);
-        this.receiptAmount--;
-      },
-
-      //改变收房月数
-      changeMonth() {
-        this.computedEndDate();
-        this.params.period_price_arr[0] = this.params.month;
-        this.params.period_pay_arr[0] = this.params.month;
-
-        this.params.price_arr.splice(1, this.params.price_arr.length);
-        this.params.pay_way_arr.splice(1, this.params.pay_way_arr.length);
-        this.priceChangeAmount = 1;
-        this.payWayChangeAmount = 1;
-      },
-      //计算空置期结束时间
-      computedEndDate() {
-        this.params.day = this.params.day ? this.params.day : 0;
-        let params = {};
-        params.begin_date = this.params.begin_date;
-        params.month = this.params.month;
-        params.day = this.params.day;
-        params.type = 2;
-        this.$http.get(globalConfig.server + 'bulletin/helper/calcdate', {
+      this.params.price_arr.splice(1, this.params.price_arr.length);
+      this.params.pay_way_arr.splice(1, this.params.pay_way_arr.length);
+      this.priceChangeAmount = 1;
+      this.payWayChangeAmount = 1;
+    },
+    //计算空置期结束时间
+    computedEndDate() {
+      this.params.day = this.params.day ? this.params.day : 0;
+      let params = {};
+      params.begin_date = this.params.begin_date;
+      params.month = this.params.month;
+      params.day = this.params.day;
+      params.type = 2;
+      this.$http
+        .get(globalConfig.server + "bulletin/helper/calcdate", {
           params: params
-        }).then((res) => {
-          if (res.data.code === '51110') {
+        })
+        .then(res => {
+          if (res.data.code === "51110") {
             this.params.end_date = res.data.data;
           }
-        })
-      },
+        });
+    },
 
-      //关闭模态框
-      closeModal(val) {
-        this.collectDialog = false;
-        this.organizationDialog = false;
-        if (val) {
-          this.params.address = val.address;
-          this.params.contract_id = val.contract_id;
-          this.params.house_id = val.house_id;
-        }
-      },
+    //关闭模态框
+    closeModal(val) {
+      this.collectDialog = false;
+      this.organizationDialog = false;
+      if (val) {
+        this.params.address = val.address;
+        this.params.contract_id = val.contract_id;
+        this.params.house_id = val.house_id;
+      }
+    },
 
-      getImg(val) {
-        this.isUpload = val[2];
-        if (val[0] === 'rent_report_leader') {
-          this.params.screenshot_leader = val[1];
-        } else if (val[0] === 'rent_report_certificate') {
-          this.params.screenshot = val[1];
-        } else if (val[0] === 'rent_report_contract') {
-          this.params.photo = val[1];
-        } else if (val[0] === 'rent_report_deposit') {
-          this.params.deposit_photo = val[1];
-        }
-      },
-      // 收据编号默认城市
-      receiptNum() {
-        this.params.receipt = [];
-        this.$http.get(globalConfig.server + 'setting/others/ip_address').then((res) => {
-          if (res.data.code === '1000120') {
+    getImg(val) {
+      this.isUpload = val[2];
+      if (val[0] === "rent_report_leader") {
+        this.params.screenshot_leader = val[1];
+      } else if (val[0] === "rent_report_certificate") {
+        this.params.screenshot = val[1];
+      } else if (val[0] === "rent_report_contract") {
+        this.params.photo = val[1];
+      } else if (val[0] === "rent_report_deposit") {
+        this.params.deposit_photo = val[1];
+      }
+    },
+    // 收据编号默认城市
+    receiptNum() {
+      this.params.receipt = [];
+      this.$http
+        .get(globalConfig.server + "setting/others/ip_address")
+        .then(res => {
+          if (res.data.code === "1000120") {
             this.receiptDate = res.data.data.py + res.data.data.year;
             this.params.receipt.push(this.receiptDate);
           }
         });
-      },
-      confirmSubmit() {
-        if (!this.isUpload) {
-          this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
-          this.$http.post(globalConfig.server + 'bulletin/rent', this.params).then((res) => {
-            if (res.data.code === '50230') {
+    },
+    confirmSubmit() {
+      if (!this.isUpload) {
+        this.params.contract_number =
+          this.params.contract_number === "LJZF"
+            ? ""
+            : this.params.contract_number;
+        this.$http
+          .post(globalConfig.server + "bulletin/rent", this.params)
+          .then(res => {
+            if (res.data.code === "50230") {
               this.$notify.success({
-                title: '成功',
+                title: "成功",
                 message: res.data.msg
               });
-              this.$emit('close', 'success')
+              this.$emit("close", "success");
             } else {
               this.$notify.warning({
-                title: '警告',
+                title: "警告",
                 message: res.data.msg
-              })
+              });
             }
-          })
-        } else {
-          this.$notify.warning({
-            title: '警告',
-            message: '图片正在上传',
-          })
-        }
-      },
-      clearData() {
-        this.isClear = false;
-        this.params = {
-          address: '',
-          id: '',
-          processable_id: '',
-          type: 1,
-          draft: 0,
-          contract_id: '',              //合同id
-          house_id: '',                 //房屋地址id
-          discount: '',                  //让价总金额
-
-          month: '',                    //租房月数
-          day: '',                      //租房天数
-          sign_date: '',                //签约开始日期
-          end_date: '',                 //签约结束日期
-          begin_date: '',               //合同开始日期
-
-          price_arr: [''],              //月单价
-          period_price_arr: [''],       //月单价周期
-
-          pay_way_bet: '',              //付款方式 押
-
-          pay_way_arr: [''],            //付款方式 付
-          period_pay_arr: [''],         //付款方式周期
-
-          money_sum: '',                //总金额
-          money_sep: [''],              //分金额
-          money_way: [''],              //分金额 方式
-
-          is_other_fee: '0',
-          other_fee: '',
-          other_fee_name: '',
-
-          deposit: '',                  //押金
-          is_agency: '1',                //客户来源    0个人1中介
-          agency_name: '',              //中介名
-          agency_price: '',             //中介费
-          agency_user_name: '',         //中介人
-          agency_phone: '',             //中介手机号
-
-          is_corp: '1',                   //是否公司单  0个人1公司
-          contract_number: 'LJZF',      //合同编号
-
-          receipt: [],                //收据编号
-          property_payer: '',           //物业费付款人
-          retainage_date: '',           //尾款补齐时间
-          name: '',                     //客户姓名
-          phone: '',                    //电话号码
-          screenshot_leader: [],        //领导截图 数组
-          deposit_photo: [],        //领导截图 数组
-          screenshot: [],               //领导截图 数组
-          photo: [],                    //合同照片 数组
-          remark: '',                   //备注
-          staff_id: '',                 //开单人id
-          department_id: '',            //部门id
-          staff_name: '',               //开单人name
-          department_name: '',          //部门name
-        };
-        this.screenshot_leader = {};
-        this.deposit_photo = {};
-        this.screenshot = {};
-        this.photo = {};
-
-        this.priceChangeAmount = 1;
-        this.payWayChangeAmount = 1;
-        this.moneyTableChangeAmount = 1;
-        this.receiptAmount = 1;
-
-        this.length = '';
-        this.type = '';
-        this.selectType = '';
-        this.receiptDate = '';
-        this.isUpload = false;
-      },
+          });
+      } else {
+        this.$notify.warning({
+          title: "警告",
+          message: "图片正在上传"
+        });
+      }
     },
-  };
-</script>
-<style lang="scss" scoped="">
-  .deleteNumber {
-    text-align: center;
-    cursor: pointer;
-    margin-top: 2px;
-    color: #409EFF;
-    &:hover {
-      color: #6a8dfb;
+    clearData() {
+      this.isClear = false;
+      this.params = {
+        address: "",
+        id: "",
+        processable_id: "",
+        type: 1,
+        draft: 0,
+        contract_id: "", //合同id
+        house_id: "", //房屋地址id
+        discount: "", //让价总金额
+
+        month: "", //租房月数
+        day: "", //租房天数
+        sign_date: "", //签约开始日期
+        end_date: "", //签约结束日期
+        begin_date: "", //合同开始日期
+
+        price_arr: [""], //月单价
+        period_price_arr: [""], //月单价周期
+
+        pay_way_bet: "", //付款方式 押
+
+        pay_way_arr: [""], //付款方式 付
+        period_pay_arr: [""], //付款方式周期
+
+        money_sum: "", //总金额
+        money_sep: [""], //分金额
+        money_way: [""], //分金额 方式
+
+        is_other_fee: "0",
+        other_fee: "",
+        other_fee_name: "",
+
+        deposit: "", //押金
+        is_agency: "1", //客户来源    0个人1中介
+        agency_name: "", //中介名
+        agency_price: "", //中介费
+        agency_user_name: "", //中介人
+        agency_phone: "", //中介手机号
+
+        is_corp: "1", //是否公司单  0个人1公司
+        contract_number: "LJZF", //合同编号
+
+        receipt: [], //收据编号
+        property_payer: "", //物业费付款人
+        retainage_date: "", //尾款补齐时间
+        name: "", //客户姓名
+        phone: "", //电话号码
+        screenshot_leader: [], //领导截图 数组
+        deposit_photo: [], //领导截图 数组
+        screenshot: [], //领导截图 数组
+        photo: [], //合同照片 数组
+        remark: "", //备注
+        staff_id: "", //开单人id
+        department_id: "", //部门id
+        staff_name: "", //开单人name
+        department_name: "" //部门name
+      };
+      this.screenshot_leader = {};
+      this.deposit_photo = {};
+      this.screenshot = {};
+      this.photo = {};
+
+      this.priceChangeAmount = 1;
+      this.payWayChangeAmount = 1;
+      this.moneyTableChangeAmount = 1;
+      this.receiptAmount = 1;
+
+      this.length = "";
+      this.type = "";
+      this.selectType = "";
+      this.receiptDate = "";
+      this.isUpload = false;
     }
   }
+};
+</script>
+<style lang="scss" scoped="">
+.deleteNumber {
+  text-align: center;
+  cursor: pointer;
+  margin-top: 2px;
+  color: #409eff;
+  &:hover {
+    color: #6a8dfb;
+  }
+}
 </style>
