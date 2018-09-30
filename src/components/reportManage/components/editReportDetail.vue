@@ -402,7 +402,6 @@
 </template>
 
 <script>
-  import pdf from 'vue-pdf'
 
   import UpLoad from '../../common/UPLOAD.vue'
   import ContrastReport from './contrastReport'
@@ -421,7 +420,6 @@
     name: "report-detail",
     props: ['module', 'reportId', 'changeId'],
     components: {
-      pdf,
       UpLoad, ContrastReport, RentReport, CollectReport, HouseReport, ContinueCollectReport,
       ContinueRentReport, TransRentReport, ChangeRentReport, RwcRentReport, RwcConfirmRentReport
     },
