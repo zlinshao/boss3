@@ -216,7 +216,7 @@
                     <el-col :span="6">
                       <el-form-item label="押金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
-                                  v-model="params.deposit" @keyup.native="addMoneySum(params)"></el-input>
+                                  v-model="params.deposit_payed" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -352,7 +352,7 @@
                         <el-col :span="12">
                           <el-form-item label="是否电子收据" required="">
                             <el-switch v-model="is_receipt"></el-switch>
-                          </el-form-item> 
+                          </el-form-item>
                         </el-col>
                         <div v-if="params.is_receipt=='0'">
                           <el-col :span="6" >
@@ -586,7 +586,7 @@
         type: '',
 
         houseInfo: {},                //房屋相关信息
-        
+
         params: {
           is_submit: 0,
           id: '',   //合同id
@@ -603,6 +603,7 @@
           end_date: '',                // 合同结束时间
           is_agency: '1',               // 来源
           deposit: '',                 // 押金
+          deposit_payed: '',           // 押金
 
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
@@ -645,9 +646,6 @@
           checkout_settle_photo: [],
         },
         is_receipt: false,
-        deposit:'',                   //押金
-        front_money:'',               //定金
-        rent_money:"",                //租金
 
         community_name: '',           //小区名
         community_address: '',        //小区地址
@@ -710,7 +708,7 @@
       };
     },
     computed:{
-      
+
     },
     watch: {
       is_receipt(val) {
@@ -857,7 +855,7 @@
             } else {
               this.params.is_agency = '0';
             }
-            this.params.deposit = data.deposit_payed;
+            this.params.deposit = data.deposit_payed ? data.deposit_payed : '';
             this.params.money_sum = data.money_sum;
             this.params.front_money = data.front_money;
             this.params.rent_money = data.rent_money;
@@ -1229,6 +1227,7 @@
           end_date: '',                // 合同结束时间
           is_agency: '',               // 来源
           deposit: '',                 // 押金
+          deposit_payed: '',           // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
 
