@@ -216,7 +216,7 @@
                     <el-col :span="6">
                       <el-form-item label="押金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
-                                  v-model="params.deposit"></el-input>
+                                  v-model="params.deposit_payed"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -818,7 +818,7 @@
             } else {
               this.params.is_agency = '0';
             }
-            this.params.deposit = data.deposit;
+            this.params.deposit_payed = data.deposit_payed ? deposit_payed : '';
             this.params.money_sum = data.money_sum;
 
             //------------月单价和付款方式-----------------------//
@@ -1175,6 +1175,7 @@
           end_date: '',                // 合同结束时间
           is_agency: '',               // 来源
           deposit: '',                 // 押金
+          deposit_payed: '',           // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
 
