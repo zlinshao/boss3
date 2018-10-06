@@ -56,7 +56,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="押金" required="">
-                <el-input placeholder="押金" v-model="params.deposit" @keyup.native="addMoneySum(params)">
+                <el-input placeholder="押金" v-model="params.deposit_payed" @keyup.native="addMoneySum(params)">
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
@@ -373,7 +373,7 @@
           other_fee: '',
           other_fee_name: '',
 
-          deposit: '',                  //押金
+          deposit_payed: '',             //押金
 
           is_corp: '1',                   //是否公司单  0个人1公司
           contract_number: 'LJZF',      //合同编号
@@ -474,7 +474,7 @@
         this.params.money_sep = data.money_sep;
         this.params.money_way = data.money_way;
 
-        this.params.deposit = data.deposit_payed;
+        this.params.deposit_payed = data.deposit_payed;
         this.params.discount = data.discount;
 
         this.params.other_fee_name = data.other_fee_name;
@@ -756,7 +756,7 @@
           other_fee: '',
           other_fee_name: '',
 
-          deposit: '',                  //押金
+          deposit_payed: '',                  //押金
           is_corp: '1',                   //是否公司单  0个人1公司
           contract_number: 'LJZF',      //合同编号
 

@@ -64,7 +64,7 @@
             </el-col> 
             <el-col :span="8">
               <el-form-item label="押金" required="">
-                <el-input placeholder="押金" v-model="params.deposit" @keyup.native="addMoneySum(params)">
+                <el-input placeholder="押金" v-model="params.deposit_payed" @keyup.native="addMoneySum(params)">
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
@@ -378,7 +378,7 @@
           money_sum: '',                //总金额
           front_money:'',               //定金
           rent_money:'',                //租金
-          deposit:'',                   //押金
+          deposit_payed:'',                   //押金
           money_sep: [''],              //分金额
           money_way: [''],              //分金额 方式
 
@@ -486,7 +486,7 @@
         this.params.money_sum = data.money_sum;
         this.params.front_money = data.front_money;
         this.params.rent_money = data.rent_money;
-        this.params.deposit = data.deposit_payed
+        this.params.deposit_payed = data.deposit_payed
 
         this.params.money_sep = data.money_sep;
         this.params.money_way = data.money_way;

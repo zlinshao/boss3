@@ -53,7 +53,7 @@ export default {
       return Y+M+D;
     }
     Vue.prototype.addMoneySum = function (form) {
-      let deposit = form.deposit
+      let deposit = form.deposit_payed
       let front_money = form.front_money
       let rent_money = form.rent_money
       

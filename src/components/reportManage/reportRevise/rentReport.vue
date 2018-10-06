@@ -56,7 +56,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="押金" required="">
-                <el-input placeholder="押金" v-model="params.deposit" @keyup.native="addMoneySum(params)">
+                <el-input placeholder="押金" v-model="params.deposit_payed" @keyup.native="addMoneySum(params)">
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
@@ -401,7 +401,7 @@ export default {
         other_fee: "",
         other_fee_name: "",
 
-        deposit: "", //押金
+        deposit_payed: "", //押金
         is_agency: "1", //客户来源    0个人1中介
         agency_name: "", //中介名
         agency_price: "", //中介费
@@ -508,7 +508,7 @@ export default {
       this.params.money_sep = data.money_sep;
       this.params.money_way = data.money_way;
 
-      this.params.deposit = data.deposit_payed;
+      this.params.deposit_payed = data.deposit_payed;
       this.params.discount = data.discount;
 
       this.params.other_fee_name = data.other_fee_name;
