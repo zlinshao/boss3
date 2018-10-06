@@ -737,12 +737,12 @@
         //判断是否存在锁屏密码]
         if (this.personal.data.setting && Array.isArray(this.personal.data.setting)) {
           if (this.personal.data.setting.length < 1 || this.personal.detail.pwd_lock == 2) {
-            // this.setLockPwdDialog = true;
-            this.setLockPwdDialog = false;
+            this.setLockPwdDialog = true;
+            // this.setLockPwdDialog = false;
           }
         } else {
-          // this.setLockPwdDialog = true;
-            this.setLockPwdDialog = false;          
+          this.setLockPwdDialog = true;
+            // this.setLockPwdDialog = false;          
         }
       },
       //定时器 轮巡获取最新消息
