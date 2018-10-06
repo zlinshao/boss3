@@ -201,11 +201,11 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item label="押金" required="">
                 <el-input placeholder="请输入押金" v-model="params.deposit"></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="6">
               <el-form-item label="让总价金额" required="">
                 <el-input placeholder="请输入让总价金额" v-model="params.discount"></el-input>
@@ -508,7 +508,7 @@ export default {
       this.params.money_sep = data.money_sep;
       this.params.money_way = data.money_way;
 
-      this.params.deposit = data.deposit;
+      this.params.deposit = data.deposit_payed;
       this.params.discount = data.discount;
 
       this.params.other_fee_name = data.other_fee_name;

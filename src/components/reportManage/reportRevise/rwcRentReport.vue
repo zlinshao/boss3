@@ -201,11 +201,11 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <el-form-item label="押金" required="">
                 <el-input placeholder="请输入押金" v-model="params.deposit"></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="6">
               <el-form-item label="让总价金额" required="">
                 <el-input placeholder="请输入让总价金额" v-model="params.discount"></el-input>
@@ -389,6 +389,7 @@
           money_sum: '',                //总金额
           front_money:'',               //定金
           rent_money:'',                //租金
+          deposit: '',                  //押金
           money_sep: [''],              //分金额
           money_way: [''],              //分金额 方式
 
@@ -398,7 +399,7 @@
           other_fee: '',
           other_fee_name: '',
 
-          deposit: '',                  //押金
+          
           is_agency: '1',                //客户来源    0个人1中介
           agency_name: '',              //中介名
           agency_price: '',             //中介费
@@ -503,7 +504,7 @@
         this.params.money_sep = data.money_sep;
         this.params.money_way = data.money_way;
 
-        this.params.deposit = data.deposit;
+        this.params.deposit = data.deposit_payed;
         this.params.discount = data.discount;
 
         this.params.other_fee_name = data.other_fee_name;

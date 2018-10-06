@@ -214,7 +214,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="押金" required>
+                      <el-form-item label="已收押金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                   v-model="params.deposit_payed" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
@@ -855,7 +855,7 @@
             } else {
               this.params.is_agency = '0';
             }
-            this.params.deposit = data.deposit_payed ? data.deposit_payed : '';
+            this.params.deposit_payed = data.deposit_payed ? data.deposit_payed : '';
             this.params.money_sum = data.money_sum;
             this.params.front_money = data.front_money;
             this.params.rent_money = data.rent_money;
