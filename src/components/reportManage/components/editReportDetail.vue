@@ -34,6 +34,7 @@
                     <el-form-item v-if="!value" :label="index" class="detailTitle">
                       <div class="special">{{value}}</div>
                     </el-form-item>
+                    
                     <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index"
                                   class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
@@ -41,7 +42,7 @@
                     </el-form-item>
                     <el-form-item v-if="value && Array.isArray(value)" :label="index">
                       <div class="special">
-                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in value">{{item}}</div>
+                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'" v-for="item in value">{{item}}</div>
                         <div v-else>
                           <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
                           <span>{{item.period}}</span>
@@ -533,6 +534,9 @@
         } else {
           this.getProcess();
           this.getReportEditInfo();
+
+          this.sendElectronicReceiptBtnText = "发送电子收据"
+          this.ElectronicReceiptBtnColor = "success"
         }
       },
       commentVisible(val) {
@@ -742,13 +746,13 @@
 
                 this.electronicReceiptParam.payer =  res.data.data.process.content.customer_name 
                 this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date
-                this.electronicReceiptParam.price =  res.data.data.process.content.money_sum
+                this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item.split(':')[1]}).join(",")
                 this.electronicReceiptParam.pay_way =  res.data.data.process.content.payWay.join(',')
               }else {
                 this.electronicReceiptParam.duration =  res.data.data.process.content.duration_days+"天"
                 this.electronicReceiptParam.payer =  res.data.data.process.content.name
                 this.electronicReceiptParam.sign_at =  res.data.data.process.content.sign_date 
-                this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.join(',')
+                this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item+"元"}).join(',')
                 this.electronicReceiptParam.pay_way =  res.data.data.process.content.pay_way_str.map((item)=>{return item.msg + " " + item.period}).join(',')
               }
 
