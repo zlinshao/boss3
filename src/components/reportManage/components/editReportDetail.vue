@@ -759,7 +759,7 @@
                 
                if(res.data.code == "20000"){
               
-                  if(res.data.data.is_sent){
+                  if(res.data.data.is_sent == true){
                     this.sendElectronicReceiptBtnText = "已发送电子收据"
                     this.ElectronicReceiptBtnColor = "info"
                   }else {
