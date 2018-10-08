@@ -42,7 +42,7 @@
                     </el-form-item>
                     <el-form-item v-if="value && Array.isArray(value)" :label="index">
                       <div class="special">
-                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'" v-for="item in value">{{item}}</div>
+                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'" v-for="item in value">{{item}}</div>
                         <div v-else>
                           <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
                           <span>{{item.period}}</span>
