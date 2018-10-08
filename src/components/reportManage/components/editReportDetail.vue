@@ -26,6 +26,7 @@
                 </div>
                 <div class="statuss"
                      :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}"></div>
+
               </div>
               <div class="scroll_bar">
                 <el-row>
@@ -607,6 +608,7 @@
           if(item.dictionary_name == this.radioCity){
             this.electronicReceiptVisible = true
             this.electronicReceiptParam.city =  item.id
+            console.log(this.electronicReceiptParam)
             this.$http.post(globalConfig.server + 'financial/receipt/generate',{...this.electronicReceiptParam,...this.bank}).then((res) => {
               // console.log({...this.electronicReceiptParam,...this.bank})
               this.pdfloading = false
@@ -706,8 +708,6 @@
         this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
           this.fullLoading = false;
           if (res.data.status === 'success' && res.data.data.length !== 0) {
-           
-            
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
@@ -739,14 +739,18 @@
               this.electronicReceiptParam.deposit =  res.data.data.process.content.front_money
               this.electronicReceiptParam.mortgage =  res.data.data.process.content.deposit_payed
               this.electronicReceiptParam.rental =  res.data.data.process.content.rent_money  
-              // this.electronicReceiptParam.bank =  res.data.data.process.content.money_way
+             
               this.electronicReceiptParam.address =  res.data.data.process.content.address
               
               if(this.bulletinType=="尾款报备"){
-                let startTime = res.data.data.process.content.payWay[0].split(':')[0].split('~')[0] //合同开始时间
-                let endTime = res.data.data.process.content.payWay[0].split(':')[0].split('~')[1] //合同结束时间
+                let startTime , endTime;//合同开始和结束时间
+                let timeArray = res.data.data.process.content.payWay
+                for(let i=0;i<timeArray.length;i++){
+                  startTime = timeArray[0].split(':')[0].split('~')[0]
+                  endTime = timeArray[timeArray.length-1].split(':')[0].split('~')[1]
+                }
                 this.electronicReceiptParam.duration = Math.floor(new Date(endTime)-new Date(startTime))/86400000 + "天" //签约时长
-
+                
                 this.electronicReceiptParam.payer =  res.data.data.process.content.customer_name 
                 this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date
                 this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item.split(':')[1]}).join(",")
@@ -776,13 +780,20 @@
                 }
               })
 
-              for(let key in this.operation){
-                if(this.operation[key]=="同意"){
-                  this.electronicReceiptDisabled = true
-                  break
-                }else{
-                  this.electronicReceiptDisabled = false
-                }
+              // console.log(this.electronicReceiptParam)
+              // for(let key in this.operation){
+              //   if(this.operation[key]=="同意"){
+              //     this.electronicReceiptDisabled = true
+              //     break
+              //   }else{
+              //     this.electronicReceiptDisabled = false
+              //   }
+              // }
+
+              if(this.approvalStatus=="published"){
+                this.electronicReceiptDisabled = false
+              }else{
+                this.electronicReceiptDisabled = true
               }
             }else{
               this.electronicReceiptStatu = false
@@ -865,12 +876,6 @@
                 this.comments(this.reportId, 1);
               } else {
                 this.getProcess(this.reportId);
-
-                // 是否生成电子数据消息框
-                // if(this.operation[val]=="同意"){
-                  
-                  
-                // }
 
               }
               this.$notify.success({
