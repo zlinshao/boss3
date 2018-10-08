@@ -537,6 +537,9 @@
 
           this.sendElectronicReceiptBtnText = "发送电子收据"
           this.ElectronicReceiptBtnColor = "success"
+
+          this.electronicReceiptParam = {}
+          this.bank = {}
         }
       },
       commentVisible(val) {

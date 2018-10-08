@@ -37,7 +37,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="定金" required="">
-                <el-input placeholder="定金" v-model="params.old_money_sum" disabled>
+                <el-input placeholder="定金" v-model="params.old_front_money" disabled>
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
@@ -350,7 +350,7 @@
           old_staff_name: '',
           old_pay_way_arr: [''],
           old_price: [''],
-          old_money_sum: '',
+          old_front_money: '',
           old_house_name: '',
 
           address: '',
@@ -464,7 +464,7 @@
         this.params.old_staff_name = data.old_staff_name;
         this.params.old_pay_way_arr = data.old_pay_way_arr;
         this.params.old_price = data.old_price;
-        this.params.old_money_sum = data.old_money_sum;
+        this.params.old_front_money = data.old_front_money;
 
         this.params.address = data.address;
         this.params.month = data.month;
@@ -740,7 +740,7 @@
           old_staff_name: '',
           old_pay_way_arr: [''],
           old_price: [''],
-          old_money_sum: '',
+          old_front_money: '',
           old_house_name: '',
 
           address: '',
@@ -772,7 +772,7 @@
           discount: 0,                   //让价金额
           contract_number: 'LJZF',           //合同编号
           is_corp: '1',                   //是否公司单  0个人1公司
-          receipt: [''],                    //收据编号
+          receipt: [],                    //收据编号
           retainage_date: '',           //尾款补齐时间
 
           is_other_fee: 0,

@@ -276,11 +276,11 @@
             </el-row>
 
             <el-row>
-              <el-col :span="8">
+              <!-- <el-col :span="8">
                 <el-form-item label="押金(元)">
                   <div class="content">{{contractInfo.deposit}}</div>
                 </el-form-item>
-              </el-col>
+              </el-col> -->
               <el-col :span="8" class="blueColor">
                 <el-form-item label="合同上传时间">
                   <div class="content">{{contractInfo.contract_create_time}}</div>
@@ -343,7 +343,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="金额（支付方式）">
+                <el-form-item label="已收金额（汇款账户）">
                   <div class="content">
                      <span v-for="(item,index) in contractInfo.money_table">
                       {{item.money_sep}}元，{{matchDictionary(item.money_way)}} <span
