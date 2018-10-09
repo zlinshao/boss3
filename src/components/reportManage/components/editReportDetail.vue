@@ -756,6 +756,14 @@
                 this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item.split(':')[1]}).join(",")
                 this.electronicReceiptParam.pay_way =  res.data.data.process.content.payWay.join(',')
               }else {
+                // if(this.bulletinType=="调房报备"){
+                //   let contract_id = res.data.data.process.content.contract_id
+                //   this.$http.get(globalConfig.server + 'lease/rent/'+ contract_id).then((res) => {
+                //     if(res.data.code == "61110"){
+                //         this.electronicReceiptParam.payer =  res.data.data.process.content.name
+                //     }
+                //   })
+                // }
                 this.electronicReceiptParam.duration =  res.data.data.process.content.duration_days+"天"
                 this.electronicReceiptParam.payer =  res.data.data.process.content.name
                 this.electronicReceiptParam.sign_at =  res.data.data.process.content.sign_date 
@@ -780,15 +788,7 @@
                 }
               })
 
-              // console.log(this.electronicReceiptParam)
-              // for(let key in this.operation){
-              //   if(this.operation[key]=="同意"){
-              //     this.electronicReceiptDisabled = true
-              //     break
-              //   }else{
-              //     this.electronicReceiptDisabled = false
-              //   }
-              // }
+              
 
               if(this.approvalStatus=="published"){
                 this.electronicReceiptDisabled = false

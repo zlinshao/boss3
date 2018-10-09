@@ -454,6 +454,9 @@
         console.log(data);
         this.params.processable_id = this.reportId;
 
+        this.params.name = data.name;
+        this.params.phone = data.phone;
+
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;
         this.params.house_id = data.house_id;
@@ -465,6 +468,7 @@
         this.params.old_pay_way_arr = data.old_pay_way_arr;
         this.params.old_price = data.old_price;
         this.params.old_front_money = data.old_front_money;
+        this.params.sign_date = data.sign_date;
 
         this.params.address = data.address;
         this.params.month = data.month;
