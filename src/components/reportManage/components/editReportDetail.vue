@@ -733,9 +733,9 @@
               this.electronicReceiptStatu = true
               this.bulletinId = res.data.data.process.id 
               this.phone = res.data.data.process.content.phone
-
+              
               this.electronicReceiptParam.process_id = res.data.data.process.id 
-
+              this.electronicReceiptParam.account_id = res.data.data.process.content.account_id||[]
               this.electronicReceiptParam.deposit =  res.data.data.process.content.front_money
               this.electronicReceiptParam.mortgage =  res.data.data.process.content.deposit_payed
               this.electronicReceiptParam.rental =  res.data.data.process.content.rent_money  

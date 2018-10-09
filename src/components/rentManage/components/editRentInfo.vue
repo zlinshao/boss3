@@ -214,7 +214,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="已收押金" required>
+                      <el-form-item label="押金" required>
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                   v-model="params.deposit_payed" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>

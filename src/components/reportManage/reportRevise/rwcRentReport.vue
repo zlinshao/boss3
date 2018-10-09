@@ -48,8 +48,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="已收金额" required="">
-                <el-input placeholder="已收金额" v-model="params.money_sum" disabled>
+              <el-form-item label="总金额" required="">
+                <el-input placeholder="总金额" v-model="params.money_sum" disabled>
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
