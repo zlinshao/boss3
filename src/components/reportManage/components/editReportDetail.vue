@@ -291,29 +291,7 @@
         <el-button  @click="electronicReceiptVisible = false">取&nbsp;消</el-button>
       </span>
     </el-dialog>
-    <!-- 选择城市 -->
-    <el-dialog
-      title="请选择城市"
-      :visible.sync="chooseCityElectronicReceiptVisible"
-      width="40%"
-      :close-on-click-modal="false"
-      center
-      >
-      <div style="text-align:center"
-        v-loading="cityloading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(255, 255, 255, 0.8)"
-      >
-        <el-radio-group v-model="radioCity" size="mini" v-for="item in city" :key="item.id">
-          <el-radio-button :label="item.dictionary_name" ></el-radio-button>
-        </el-radio-group>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="createElectronicReceipt" type="success" size="mini" >确&nbsp;定</el-button>
-        <el-button  @click="chooseCityElectronicReceiptVisible = false" size="mini">取&nbsp;消</el-button>
-      </span>
-    </el-dialog>
+    
 
     <!-- 评论 -->
     <el-dialog :close-on-click-modal="false" title="评论" :visible.sync="commentVisible" width="30%">
@@ -436,7 +414,6 @@
         electronicReceiptParam:{},//电子数据参数
         ElectronicReceiptBtnColor:"success",
         bank:{},//银行数据
-        chooseCityElectronicReceiptVisible:false,//选择城市
         signature:true,//签章按钮显示隐藏
         pdfloading:true,//pdf加载
         cityloading:true,//城市加载
@@ -510,7 +487,7 @@
       approvalStatus(newval,oldval){
         if(newval=="published"&&oldval=="review"){
           if(this.bulletinType=="租房报备"||this.bulletinType=="公司转租报备"||this.bulletinType=="调房报备"||this.bulletinType=="未收先租确定报备"||this.bulletinType=="已知未收先租报备"||this.bulletinType=="续租报备"||this.bulletinType=="尾款报备"){
-            this.createElectronicReceiptMessagebox()
+            this.createElectronicReceipt()
           }
         }
       },
@@ -585,7 +562,8 @@
           this.fullLoading = false
           if(res.data.code == '20001'){
             this.electronicReceiptDisabled = false
-            this.chooseCity()         
+            // this.chooseCity()    
+            this.createElectronicReceipt()     
           }else if(res.data.code == "20000"){
             this.electronicReceiptId = res.data.data.id
             this.electronicReceiptVisible = true
@@ -603,31 +581,25 @@
       },
       //生成电子收据
       createElectronicReceipt(){
-        this.chooseCityElectronicReceiptVisible = false
-        this.city.forEach((item)=>{
-          if(item.dictionary_name == this.radioCity){
-            this.electronicReceiptVisible = true
-            this.electronicReceiptParam.city =  item.id
-            console.log(this.electronicReceiptParam)
-            this.$http.post(globalConfig.server + 'financial/receipt/generate',{...this.electronicReceiptParam,...this.bank}).then((res) => {
-              // console.log({...this.electronicReceiptParam,...this.bank})
-              this.pdfloading = false
-              if(res.data.code =="20000"){
-                this.electronicReceiptId = res.data.data.id
-                this.pdfUrl = res.data.data.shorten_uri
-                this.signature = true
-              }else{
-                this.$notify.error({
-                  title: '错误',
-                  message: res.data.msg
-                });
-                this.electronicReceiptVisible = false
-              }
-          
-            })
+        
+        this.electronicReceiptVisible = true
+        this.$http.post(globalConfig.server + 'financial/receipt/generate',{...this.electronicReceiptParam,...this.bank}).then((res) => {
+          // console.log({...this.electronicReceiptParam,...this.bank})
+          this.pdfloading = false
+          if(res.data.code =="20000"){
+            this.electronicReceiptId = res.data.data.id
+            this.pdfUrl = res.data.data.shorten_uri
+            this.signature = true
+          }else{
+            this.$notify.error({
+              title: '错误',
+              message: res.data.msg
+            });
+            this.electronicReceiptVisible = false
           }
-          
+      
         })
+
       },
       //电子收据签章
       signaturebtn(){
@@ -676,32 +648,7 @@
           });       
         });
       },
-      //生成电子数据提示框
-      createElectronicReceiptMessagebox(){
-        this.$confirm('是否生成电子数据', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.electronicReceiptDisabled = false
-          this.chooseCity()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });          
-        });
-      },
-      //城市选择
-      chooseCity(){
-        this.chooseCityElectronicReceiptVisible=true
-        this.$http.get(globalConfig.server + 'setting/dictionary/306').then((res) => {
-          this.cityloading = false
-          if(res.data.code == "30010"){
-            this.city = res.data.data
-          }
-        })
-      },
+      
       getProcess() {
         this.fullLoading = true;
         this.approvedStatus = false;
@@ -735,36 +682,23 @@
               this.phone = res.data.data.process.content.phone
               
               this.electronicReceiptParam.process_id = res.data.data.process.id 
+              this.electronicReceiptParam.department_id = res.data.data.process.content.department_id
               this.electronicReceiptParam.account_id = res.data.data.process.content.account_id||[]
               this.electronicReceiptParam.deposit =  res.data.data.process.content.front_money
               this.electronicReceiptParam.mortgage =  res.data.data.process.content.deposit_payed
               this.electronicReceiptParam.rental =  res.data.data.process.content.rent_money  
+              this.electronicReceiptParam.duration = res.data.data.process.content.show_content["现签约时长"] || res.data.data.process.content.show_content["签约时长"]
+
              
               this.electronicReceiptParam.address =  res.data.data.process.content.address
               
               if(this.bulletinType=="尾款报备"){
-                let startTime , endTime;//合同开始和结束时间
-                let timeArray = res.data.data.process.content.payWay
-                for(let i=0;i<timeArray.length;i++){
-                  startTime = timeArray[0].split(':')[0].split('~')[0]
-                  endTime = timeArray[timeArray.length-1].split(':')[0].split('~')[1]
-                }
-                this.electronicReceiptParam.duration = Math.floor(new Date(endTime)-new Date(startTime))/86400000 + "天" //签约时长
                 
                 this.electronicReceiptParam.payer =  res.data.data.process.content.customer_name 
                 this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date
                 this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item.split(':')[1]}).join(",")
                 this.electronicReceiptParam.pay_way =  res.data.data.process.content.payWay.join(',')
               }else {
-                // if(this.bulletinType=="调房报备"){
-                //   let contract_id = res.data.data.process.content.contract_id
-                //   this.$http.get(globalConfig.server + 'lease/rent/'+ contract_id).then((res) => {
-                //     if(res.data.code == "61110"){
-                //         this.electronicReceiptParam.payer =  res.data.data.process.content.name
-                //     }
-                //   })
-                // }
-                this.electronicReceiptParam.duration =  res.data.data.process.content.duration_days+"天"
                 this.electronicReceiptParam.payer =  res.data.data.process.content.name
                 this.electronicReceiptParam.sign_at =  res.data.data.process.content.sign_date 
                 this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item+"元"}).join(',')
