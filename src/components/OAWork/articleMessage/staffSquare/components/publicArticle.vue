@@ -33,7 +33,7 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-      <el-form-item label="上传文件" required="" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="上传文件" required="" v-show="(form.type == 675 || form.type == 705) && moduleType =='newVersionUpdate'">
         <Dropzone :ID="'cover1'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
       <el-form-item label="封面图片" v-show="moduleType !='newVersionUpdate'">
@@ -42,7 +42,7 @@
       <el-form-item label="新手导读" required="" v-show="form.type == 673 && moduleType =='newVersionUpdate'">
         <Dropzone :ID="'cover3'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="是否强制更新" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="是否强制更新" v-show="(form.type == 675 || form.type == 705) && moduleType =='newVersionUpdate'">
         <el-radio v-model="form.update_install" label="1">是</el-radio>
         <el-radio v-model="form.update_install" label="2">否</el-radio>
       </el-form-item>
