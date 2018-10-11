@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="changeName">
       <div class="title"  onselectstart="return false" v-if="!changtitle" @dblclick="showInp">{{meterName}}</div>
       <div class="titleChange" v-show="changtitle">
           <el-form :inline="true" size="mini" style="text-align: center;">
@@ -41,7 +41,16 @@
 }
 
 .checkbtn {
-      background-color: #409EFF!important;
-      color: #fff!important
+  background-color: #409EFF!important;
+  color: #fff!important
+}
+</style>
+<style lang="scss">
+#changeName{
+  .el-form{
+    .el-form-item{
+      margin: 0;
+    }
+  }
 }
 </style>

@@ -96,9 +96,9 @@
   import abnormalOrder from "../components/achievementAnalysis/abnormalOrder.vue"  //租房单数
 
   //盈亏分析
-  import ProfitLossTotal from "../components/ProfitLossAnalysis/ProfitLossTotal.vue"  //盈亏总额  
-  import ProfitLossRingCompare from "../components/ProfitLossAnalysis/ProfitLossRingCompare.vue"  //盈亏金额环比
-  import ProfitLossSameCompare from "../components/ProfitLossAnalysis/ProfitLossSameCompare.vue"  //盈亏金额同比 
+  import profitLossTotal from "../components/ProfitLossAnalysis/profitLossTotal.vue"  //盈亏总额  
+  import profitLossRingCompare from "../components/ProfitLossAnalysis/profitLossRingCompare.vue"  //盈亏金额环比
+  import profitLossSameCompare from "../components/ProfitLossAnalysis/profitLossSameCompare.vue"  //盈亏金额同比 
   import averageMonthPrice from "../components/ProfitLossAnalysis/averageMonthPrice.vue"  //平均租房月单价
   import averageCollectHousePrice from "../components/ProfitLossAnalysis/averageCollectHousePrice.vue"  //平均收房价格
   import actualReceivablesRate from "../components/ProfitLossAnalysis/actualReceivablesRate.vue"  //实际收入占应收款比例
@@ -126,7 +126,7 @@
   export default {
     components:{addChartToMeter,
     achievementTotal,averageMonthRentPrice,achievementSameCompare,achievementRingCompare,achievementTargetRate,rentOrderNumber,abnormalOrder,
-    ProfitLossTotal,ProfitLossRingCompare,ProfitLossSameCompare,averageMonthPrice,averageCollectHousePrice,actualReceivablesRate,actualCashFlow,averageRentCollectionPriceTrend,collectionRentHouseCompare,
+    profitLossTotal,profitLossRingCompare,profitLossSameCompare,averageMonthPrice,averageCollectHousePrice,actualReceivablesRate,actualCashFlow,averageRentCollectionPriceTrend,collectionRentHouseCompare,
     breakPromiseProportion,defaultRate,scrapOrder,
     houseTurnoverRate,vacancyOffsetBalance,collectHouseInterestIndex,
     intermediaryFeeRingCompare,agencyFeeAverageDiscount,agencyOrderNumberRate,agencyCompanyCostCompare,excellentEmployee},
@@ -142,9 +142,9 @@
           {component:'rentOrderNumber',tag:['业务']},
           {component:'abnormalOrder',tag:['业务']},
 
-          {component:'ProfitLossTotal',tag:['财务','业务']},
-          {component:'ProfitLossRingCompare',tag:['财务','业务']},
-          {component:'ProfitLossSameCompare',tag:['财务','业务']},
+          {component:'profitLossTotal',tag:['财务','业务']},
+          {component:'profitLossRingCompare',tag:['财务','业务']},
+          {component:'profitLossSameCompare',tag:['财务','业务']},
           {component:'averageMonthPrice',tag:['财务','业务']},
           {component:'averageCollectHousePrice',tag:['财务','业务']},
           {component:'actualReceivablesRate',tag:['财务','业务']},

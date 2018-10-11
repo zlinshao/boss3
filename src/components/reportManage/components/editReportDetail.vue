@@ -562,7 +562,6 @@
           this.fullLoading = false
           if(res.data.code == '20001'){
             this.electronicReceiptDisabled = false
-            // this.chooseCity()    
             this.createElectronicReceipt()     
           }else if(res.data.code == "20000"){
             this.electronicReceiptId = res.data.data.id

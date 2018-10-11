@@ -2,129 +2,131 @@
 	<div>
     <div v-if="!showDetailMeter" id="meterList">
       <div style="margin-bottom:20px">
-        <div class="meterTop">
+        <div class="meterTop publicMeter">
             <div class="fl">预设仪表盘</div>
             <!-- <div class="fr">4/10</div> -->
         </div> 
-        <el-row> 
-          <el-col :span="4" v-for="(item,index) in publicTitle" :key="index" :offset="index%5==0?0:1">
-						<el-card class="box-card cockpit">
-							<!-- 仪表盘内容 -->
-							<div v-show="index!=publicActiveIndex" @click="hideMeterMsg" class="meterCardContant">
-								<div class="clearfix">
-									<!-- 仪表信息弹出框 -->
-									<el-popover
-										popper-class="cockpithandle"
-										placement="bottom-start"
-										trigger="click"
-										width="150"
-										visible-arrow
-										:disabled="meterPopdisabled"
-										>
-										<ul class="handleMsg">
-											<li @click='showPublicMeterMsg(index)' class="message"><i class="el-icon-info"></i>信息</li>
-											<!-- <li @click="deleteMeterDiaVisible=true"><i class="el-icon-close" ></i>删除</li> -->
-										</ul>
-										<el-button slot="reference" icon="el-icon-tickets"  class="ticbut" type="text"></el-button>
-									</el-popover>
+				<div style="padding:0 66px">
+					<el-row> 
+						<el-col :span="4" v-for="(item,index) in publicMeter" :key="index" :offset="index%5==0?0:1">
+							<el-card class="box-card cockpit">
+								<!-- 仪表盘内容 -->
+								<div v-show="index!=publicActiveIndex" @click="hideMeterMsg" class="meterCardContant">
+									<div class="clearfix">
+										<!-- 仪表信息弹出框 -->
+										<el-popover
+											popper-class="cockpithandle"
+											placement="bottom-start"
+											trigger="click"
+											width="150"
+											visible-arrow
+											:disabled="meterPopdisabled"
+											>
+											<ul class="handleMsg">
+												<li @click='showPublicMeterMsg(index)' class="message"><i class="el-icon-info"></i>信息</li>
+											</ul>
+											<el-button slot="reference" icon="el-icon-tickets"  class="ticbut" type="text"></el-button>
+										</el-popover>
+									</div>
+									<div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click='showDetailMeterEven(index)'>
+										<img src="@/assets/images/meter2.png" alt=""> 
+									</div>
 								</div>
-								<div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click='showDetailMeterEven(index)'>
-									<img src="@/assets/images/meter2.png" alt=""> 
+								
+								
+								<!-- 仪表盘信息 -->
+								<div class="meterMsg meterCardContant" v-show="index==publicActiveIndex">
+									<i class="el-icon-arrow-left goback" @click="hideMeterMsg"></i>
+									<ul class="meterMsgBody">
+										<li><span>创建人：</span><i v-if="item.simple_staff">{{item.simple_staff.real_name}}</i></li>
+										<li><span>创建时间：</span><i>{{item.create_time}}</i></li>
+										<li><span>修改时间：</span><i>{{item.update_time}}</i></li>
+									</ul>
 								</div>
-							</div>
-							<!-- 仪表盘信息 -->
-							<div class="meterMsg meterCardContant" v-show="index==publicActiveIndex">
-								<i class="el-icon-arrow-left goback" @click="hideMeterMsg"></i>
-								<ul class="meterMsgBody">
-									<li><span>创建人：</span><i>{{item.createPerson}}</i></li>
-									<li><span>创建时间：</span><i>{{item.createdata}}</i></li>
-									<li><span>修改时间：</span><i>{{item.updataData}}</i></li>
-								</ul>
-							</div>
-							<changename :meterName="item.title"></changename>
-							
-							
-						</el-card>
-          </el-col>
-        </el-row>
+								<div class="metertitle">{{item.name}}</div>
+							</el-card>
+						</el-col>
+					</el-row>
+				</div>
       </div>
       <div>
-        <div class="meterTop">
+        <div class="meterTop private">
             <div class="fl">个人仪表盘</div>  
         </div> 
-        <el-row>
-          <el-col :span="4" v-for="(item,index) in personalTitle" :key="index" :offset="index%5==0?0:1">
-						<el-card class="box-card cockpit">
-							<!-- 仪表盘内容 -->
-							<div v-show="index!=personalActiveIndex" @click="hideMeterMsg" class="meterCardContant">
-								<div class="clearfix">
-									<!-- 仪表信息弹出框 -->
-									<el-popover
-										popper-class="cockpithandle"
-										placement="bottom-start"
-										trigger="click"
-										width="150"
-										visible-arrow
-										:disabled="meterPopdisabled"
-										>
-										<ul class="handleMsg">
-											<li @click='showPersonalMeterMsg(index)' class="message"><i class="el-icon-info"></i>信息</li>
-											<li @click="deleteMeterDiaVisible=true" class="delete"><i class="el-icon-close" ></i>删除</li>
-										</ul>
-										<el-button slot="reference" icon="el-icon-tickets"  class="ticbut" type="text"></el-button>
-									</el-popover>
+				<div style="padding:0 66px">
+					<el-row>
+						<el-col :span="4" v-for="(item,index) in privateMeter" :key="index" :offset="index%5==0?0:1">
+							<el-card class="box-card cockpit">
+								<!-- 仪表盘内容 -->
+								<div v-show="index!=personalActiveIndex" @click="hideMeterMsg" class="meterCardContant">
+									<div class="clearfix">
+										<!-- 仪表信息弹出框 -->
+										<el-popover
+											popper-class="cockpithandle"
+											placement="bottom-start"
+											trigger="click"
+											width="150"
+											visible-arrow
+											:disabled="meterPopdisabled"
+											>
+											<ul class="handleMsg">
+												<li @click='showPersonalMeterMsg(index)' class="message"><i class="el-icon-info"></i>信息</li>
+												<li @click="deleteMeterDiaVisible=true" class="delete"><i class="el-icon-close" ></i>删除</li>
+											</ul>
+											<el-button slot="reference" icon="el-icon-tickets"  class="ticbut" type="text"></el-button>
+										</el-popover>
+									</div>
+									<div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" >
+										<img src="@/assets/images/meter2.png" alt=""> 
+									</div>
 								</div>
-								<div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" >
-									<img src="@/assets/images/meter2.png" alt=""> 
+								<!-- 仪表盘信息 -->
+								<div class="meterMsg meterCardContant" v-show="index==personalActiveIndex">
+									<i class="el-icon-arrow-left goback" @click="hideMeterMsg"></i>
+									<ul class="meterMsgBody">
+										<li><span>创建人：</span><i v-if="item.simple_staff">{{item.simple_staff.real_name}}</i></li>
+										<li><span>创建时间：</span><i>{{item.create_time}}</i></li>
+										<li><span>修改时间：</span><i>{{item.update_time}}</i></li>
+									</ul>
 								</div>
-							</div>
-							<!-- 仪表盘信息 -->
-							<div class="meterMsg meterCardContant" v-show="index==personalActiveIndex">
-								<i class="el-icon-arrow-left goback" @click="hideMeterMsg"></i>
-								<ul class="meterMsgBody">
-									<li><span>创建人：</span><i>{{item.createPerson}}</i></li>
-									<li><span>创建时间：</span><i>{{item.createdata}}</i></li>
-									<li><span>修改时间：</span><i>{{item.updataData}}</i></li>
-								</ul>
-							</div>
-							<changename :meterName="item.title"></changename>
+								<changename :meterName="item.name"></changename>
 
-						</el-card>
-          </el-col>
-					<el-col :span="4" :offset="personalTitle.length%5==0?0:1">
-						<el-card class="box-card cockpit">
-							<!-- 仪表盘内容 -->
-							<div class="meterCardContant" v-show="showAddmeter">
-								<i class="el-icon-arrow-left goback" @click="showAddmeter=false"></i>
-								<div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click='showDetailMeter=true'>
-									<img src="@/assets/images/meter2.png" alt="">
+							</el-card>
+						</el-col>
+						<el-col :span="4" :offset="privateMeter.length%5==0?0:1">
+							<el-card class="box-card cockpit">
+								<!-- 仪表盘内容 -->
+								<div class="meterCardContant" v-show="showAddmeter">
+									<i class="el-icon-arrow-left goback" @click="showAddmeter=false"></i>
+									<div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click='showDetailMeter=true'>
+										<img src="@/assets/images/meter2.png" alt="">
+									</div>
+									<el-form :inline="true" size="mini" style="text-align: center;">
+										<el-form-item>
+											<el-input placeholder="请输入名称" size="mini" v-model.trim="addmeterName">
+												<el-button slot="append" icon="el-icon-check"  size="mini" class="checkbtn" @click="addMeter"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-form>
 								</div>
-								<el-form :inline="true" size="mini" style="text-align: center;">
-									<el-form-item>
-										<el-input placeholder="请输入名称" size="mini" v-model.trim="addmeterName">
-											<el-button slot="append" icon="el-icon-check"  size="mini" class="checkbtn" @click="addMeter"></el-button>
-										</el-input>
-									</el-form-item>
-								</el-form>
-							</div>
-							<div @click="showAddmeter=true">
-								<div class="addmeterface">
-									<i class="el-icon-plus"></i>
+								<div @click="showAddmeter=true">
+									<div class="addmeterface">
+										<i class="el-icon-plus"></i>
+									</div>
+									<div class="addmeterfaceBottom">
+										添加仪表盘
+									</div>
 								</div>
-								<div class="addmeterfaceBottom">
-									添加仪表盘
-								</div>
-							</div>
-						</el-card>
-					</el-col> 
-        </el-row>
+							</el-card>
+						</el-col> 
+					</el-row>
+				</div>
       </div>
 		</div>
 
     <div>
 			<!-- 仪表盘详情页面 -->
       <detailMeter @close="hidedetailMeter" :detailMeterVisible="showDetailMeter" :detailMeterid="detailMeterId"></detailMeter>
-      <!-- <detailMeter :show="showDetailMeter" @close="hidedetailMeter" :detailMeterVisible="showDetailMeterScond"></detailMeter> -->
     </div>
 		<!-- 仪表盘删除弹窗 -->
 		<el-dialog
@@ -154,106 +156,21 @@
     components: {detailMeter,changename},
     data() {
       return {
-				publicTitle:[],//预设仪表盘
-				personalTitle:[],//个人仪表盘
-				showDetailMeter:false,//仪表盘详情页面
-				publicActiveIndex:-1, //预设仪表盘内容的显示隐藏
+				publicMeter:[],//预设仪表盘
+				privateMeter:[],//个人仪表盘
+				showDetailMeter:false,//仪表盘详情页面显示隐藏
+				publicActiveIndex:-1, //预设仪表盘信息的显示隐藏
 				personalActiveIndex:-1, //个人仪表盘内容的显示隐藏
 				meterPopdisabled:false,//仪表信息框是否禁用
 				deleteMeterDiaVisible:false,//删除仪表弹出框
 				addmeterName:"",//添加仪表盘名称
 				showAddmeter:false,//显示添加仪表盘
 				detailMeterId:"",
-				personMeter:{
-					code:200,
-					msg:'查询成功',
-					results:[{
-							id:1,
-							title:"主题1",
-							type:"personal",
-							createdata:"2019/09/01",
-							createPerson:"王晓伟",
-							updataData:"2019/09/01",
-							meterContentId:20
-						},{
-							id:2,
-							title:"主题2",
-							type:"personal",
-							createdata:"2019/09/02",
-							createPerson:"李四",
-							updataData:"2019/09/02",
-							meterContentId:30
-						},{
-							id:3,
-							title:"主题3",
-							type:"personal",
-							createdata:"2019/09/02",
-							createPerson:"张三",
-							updataData:"2019/09/02",
-							meterContentId:40
-						},{
-							id:4,
-							title:"主题4",
-							type:"personal",
-							createdata:"2019/09/02",
-							createPerson:"王五",
-							updataData:"2019/09/02",
-							meterContentId:50
-						},{
-							id:5,
-							title:"主题5",
-							type:"personal",
-							createdata:"2019/09/02",
-							createPerson:"小明",
-							updataData:"2019/09/02",
-							meterContentId:60
-						}]
-				},//个人仪表盘假数据
-        publicMeter:{
-					code:200,
-					msg:'查询成功',
-					results:[{
-							id:1,
-							title:"业绩分析",
-							type:"public",
-							createdata:"2019/09/01",
-							createPerson:"王晓伟",
-							updataData:"2019/09/01",
-							meterContentId:2
-						},{
-							id:2,
-							title:"盈亏分析",
-							type:"public",
-							createdata:"2019/09/01",
-							createPerson:"王晓伟",
-							updataData:"2019/09/01",
-							meterContentId:3
-						},{
-							id:3,
-							title:"违约收入分析",
-							type:"public",
-							createdata:"2019/09/01",
-							createPerson:"王晓伟",
-							updataData:"2019/09/01",
-							meterContentId:400
-						},{
-							id:4,
-							title:"房屋运营分析",
-							type:"public",
-							createdata:"2019/09/01",
-							createPerson:"王晓伟",
-							updataData:"2019/09/01",
-							meterContentId:500
-						},{
-							id:5,
-							title:"中介分析",
-							type:"public",
-							createdata:"2019/09/01",
-							createPerson:"王晓伟",
-							updataData:"2019/09/01",
-							meterContentId:500
-						}]
-				},//公共仪表盘假数据
+				// meterDescrip:{ //仪表盘信息 false
+				// 	createPerson:"强强",
+				// 	createdata:"2018-10-1",
+				// 	updataData:"2018-10-1"
+				// }
       }
     },
     methods:{
@@ -278,44 +195,74 @@
 				this.detailMeterId = index
 			},
 			addMeter(){
-				let add = {
-					id:1,
-					title: this.addmeterName,
-					type:"personal",
-					createdata:"2019/09/01",
-					createPerson:"王晓伟",
-					updataData:"2019/09/01",
-					meterContentId:20
-				}
-				this.personalTitle.push(add)
+				console.log(11211)
+				// let add = {
+				// 	id:1,
+				// 	title: this.addmeterName,
+				// 	type:"personal",
+				// 	createdata:"2019/09/01",
+				// 	createPerson:"王晓伟",
+				// 	updataData:"2019/09/01",
+				// 	meterContentId:20
+				// }
+				// this.personalTitle.push(add)
 			},
 			deleteMeter(){
 				this.deleteMeterDiaVisible = false
+			},
+			getPublicMeter(){ //获取预设仪表盘
+				this.$http.get(globalConfig.server + "bisys/dashboard",{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
+					// console.log(res)
+					if(res.data.code === "20000"){
+						this.publicMeter = res.data.data.data
+					}
+					
+        });
+			},
+			getPrivateMeter(){//获取个人仪表盘
+				this.$http.get(globalConfig.server + "bisys/dashboard",{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
+					console.log(res)
+					if(res.data.code === "20000"){
+						this.privateMeter = res.data.data.data
+					}
+        });
 			}
 			
 		},
 		mounted () {
-			this.publicTitle = this.publicMeter.results
-			this.personalTitle = this.personMeter.results
+			this.getPublicMeter()
+			this.getPrivateMeter()
+
 		}
 
   }
 </script>
 <style scoped lang="scss">
 #meterList{
-	padding: 0 30px;
-}
-//页面仪表标题
-.meterTop {
-	padding: 30px 0;
-	font-size: 18px;
-	color: #409EFF;
-	overflow: hidden;
-	.fl {
-		font-weight: 700;
-		float: left;
+	padding: 0 16px;
+	//页面仪表标题
+	.meterTop {
+		&.publicMeter{
+			padding:17px 0 32px 0;
+		}
+		&.private{
+			padding: 8px 0 32px 0;
+		}
+		font-size: 18px;
+		color: #409EFF;
+		overflow: hidden;
+		.fl {
+			font-weight: 700;
+			float: left;
+		}
+	}
+	.metertitle{
+		font-size: 18px;
+		text-align: center;
+		color:#409EFF
 	}
 }
+
 //element-ui layout布局
 .el-row {
 	margin-bottom: 20px;

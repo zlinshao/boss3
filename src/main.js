@@ -34,6 +34,7 @@ import 'vue2-editor/node_modules/quill/dist/quill.bubble.css'
 import './assets/css/reset.css'
 import './assets/font/iconfont.css'
 import './assets/fontawesome/fontawesome/font-awesome.min.css'
+import './assets/bifonts/bifont.css'
 import './assets/js/drag.js'
 
 // import './directives.js';  //弹框拖拽

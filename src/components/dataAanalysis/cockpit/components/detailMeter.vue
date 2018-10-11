@@ -135,9 +135,9 @@
   import abnormalOrder from "../../components/achievementAnalysis/abnormalOrder.vue"  //租房单数
 
   //盈亏分析
-  import ProfitLossTotal from "../../components/ProfitLossAnalysis/ProfitLossTotal.vue"  //盈亏总额  
-  import ProfitLossRingCompare from "../../components/ProfitLossAnalysis/ProfitLossRingCompare.vue"  //盈亏金额环比
-  import ProfitLossSameCompare from "../../components/ProfitLossAnalysis/ProfitLossSameCompare.vue"  //盈亏金额同比 
+  import profitLossTotal from "../../components/ProfitLossAnalysis/profitLossTotal.vue"  //盈亏总额  
+  import profitLossRingCompare from "../../components/ProfitLossAnalysis/profitLossRingCompare.vue"  //盈亏金额环比
+  import profitLossSameCompare from "../../components/ProfitLossAnalysis/profitLossSameCompare.vue"  //盈亏金额同比 
   import averageMonthPrice from "../../components/ProfitLossAnalysis/averageMonthPrice.vue"  //平均租房月单价
   import averageCollectHousePrice from "../../components/ProfitLossAnalysis/averageCollectHousePrice.vue"  //平均收房价格
   import actualReceivablesRate from "../../components/ProfitLossAnalysis/actualReceivablesRate.vue"  //实际收入占应收款比例
@@ -148,7 +148,7 @@
   //违约收入分析
   import breakPromiseProportion from "../../components/breakPromiseAnalysis/breakPromiseProportion.vue"  //违约金、滞纳金、炸单已收定金收入
   import defaultRate from "../../components/breakPromiseAnalysis/defaultRate.vue"  //违约率占比
-  import scrapOrder from "../../components/breakPromiseAnalysis/scrapOrder.vue"  //违约率占比
+  import scrapOrder from "../../components/breakPromiseAnalysis/scrapOrder.vue"  //租房炸弹数量、炸单率
 
   //房屋运营分析
   import houseTurnoverRate from "../../components/houseOperationAnalysis/houseTurnoverRate.vue" // 房屋周转率
@@ -167,7 +167,7 @@
   export default {
     props:['detailMeterVisible','detailMeterid'],
     components:{achievementTotal,averageMonthRentPrice,achievementSameCompare,achievementRingCompare,achievementTargetRate,rentOrderNumber,abnormalOrder,
-    ProfitLossTotal,ProfitLossRingCompare,ProfitLossSameCompare,averageMonthPrice,averageCollectHousePrice,actualReceivablesRate,actualCashFlow,averageRentCollectionPriceTrend,collectionRentHouseCompare,
+    profitLossTotal,profitLossRingCompare,profitLossSameCompare,averageMonthPrice,averageCollectHousePrice,actualReceivablesRate,actualCashFlow,averageRentCollectionPriceTrend,collectionRentHouseCompare,
     breakPromiseProportion,defaultRate,scrapOrder,
     houseTurnoverRate,vacancyOffsetBalance,collectHouseInterestIndex,
     intermediaryFeeRingCompare,agencyFeeAverageDiscount,agencyOrderNumberRate,agencyCompanyCostCompare,excellentEmployee},
@@ -263,10 +263,10 @@
           {component:'abnormalOrder'}
           ]
         }else if(val==1){
-          this.mainchartItem={component:'ProfitLossTotal',title:"盈亏总额",type:"盈亏分析"}
+          this.mainchartItem={component:'profitLossTotal',title:"盈亏总额",type:"盈亏分析"}
           this.chartItems = [
-            {component:'ProfitLossRingCompare'},
-            {component:"ProfitLossSameCompare"},
+            {component:'profitLossRingCompare'},
+            {component:"profitLossSameCompare"},
             {component:"averageMonthPrice"},
             {component:"averageCollectHousePrice"},
             {component:'actualReceivablesRate'},
