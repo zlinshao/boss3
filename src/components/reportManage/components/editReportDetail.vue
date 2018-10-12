@@ -687,7 +687,7 @@
               this.electronicReceiptParam.mortgage =  res.data.data.process.content.deposit_payed
               this.electronicReceiptParam.rental =  res.data.data.process.content.rent_money  
               this.electronicReceiptParam.duration = res.data.data.process.content.show_content["现签约时长"] || res.data.data.process.content.show_content["签约时长"]
-
+              this.electronicReceiptParam.money_sep = res.data.data.process.content.money_sep 
              
               this.electronicReceiptParam.address =  res.data.data.process.content.address
               

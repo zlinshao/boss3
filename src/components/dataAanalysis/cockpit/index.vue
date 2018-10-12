@@ -71,7 +71,7 @@
 											>
 											<ul class="handleMsg">
 												<li @click='showPersonalMeterMsg(index)' class="message"><i class="el-icon-info"></i>信息</li>
-												<li @click="deleteMeterDiaVisible=true" class="delete"><i class="el-icon-close" ></i>删除</li>
+												<li @click="deterMeter(item.id)" class="delete"><i class="el-icon-close" ></i>删除</li>
 											</ul>
 											<el-button slot="reference" icon="el-icon-tickets"  class="ticbut" type="text"></el-button>
 										</el-popover>
@@ -81,7 +81,7 @@
 									</div>
 								</div>
 								<!-- 仪表盘信息 -->
-								<div class="meterMsg meterCardContant" v-show="index==personalActiveIndex">
+								<div class="meterMsg meterCardContant" v-show="index == personalActiveIndex">
 									<i class="el-icon-arrow-left goback" @click="hideMeterMsg"></i>
 									<ul class="meterMsgBody">
 										<li><span>创建人：</span><i v-if="item.simple_staff">{{item.simple_staff.real_name}}</i></li>
@@ -89,7 +89,17 @@
 										<li><span>修改时间：</span><i>{{item.update_time}}</i></li>
 									</ul>
 								</div>
-								<changename :meterName="item.name"></changename>
+								<div class="metertitle"  onselectstart="return false" v-if="index !== changeMeterNameIndex" @dblclick="showInp(item,index)">{{item.name}}</div>
+								<!-- 修改仪表盘名称 -->
+								<div class="titleChange" v-show="index == changeMeterNameIndex">
+										<el-form :inline="true" size="mini" style="text-align: center;">
+											<el-form-item>
+												<el-input placeholder="请输入名称" size="mini" @keyup.enter.native="updataTitle(item.name)"  v-model="meterName">
+													<el-button slot="append" icon="el-icon-check" @click="updataTitle(item.name)" size="mini" class="checkbtn"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-form>
+								</div>
 
 							</el-card>
 						</el-col>
@@ -103,7 +113,7 @@
 									</div>
 									<el-form :inline="true" size="mini" style="text-align: center;">
 										<el-form-item>
-											<el-input placeholder="请输入名称" size="mini" v-model.trim="addmeterName">
+											<el-input placeholder="请输入名称" size="mini" v-model.trim="meterName">
 												<el-button slot="append" icon="el-icon-check"  size="mini" class="checkbtn" @click="addMeter"></el-button>
 											</el-input>
 										</el-form-item>
@@ -140,7 +150,7 @@
 				<p class="deleteMeterDiaContent">确认删除后将无法找回，所有的指标都会丢失，请谨慎选择。</p>
 			</div>
 			<span slot="footer" class="dialog-footer">
-				<el-button type="danger" @click="deleteMeter" size="mini" >删除</el-button>
+				<el-button type="danger" @click="confirmdeleteMeter" size="mini" >删除</el-button>
 			</span>
 		</el-dialog>
 	</div>
@@ -149,11 +159,9 @@
 
 </style>
 <script>
-// deleteMeterDiaVisible = false
-	import changename from "./components/changename.vue"//改名
   import detailMeter from "./components/detailMeter.vue" //仪表盘详细界面
   export default {
-    components: {detailMeter,changename},
+    components: {detailMeter},
     data() {
       return {
 				publicMeter:[],//预设仪表盘
@@ -161,16 +169,14 @@
 				showDetailMeter:false,//仪表盘详情页面显示隐藏
 				publicActiveIndex:-1, //预设仪表盘信息的显示隐藏
 				personalActiveIndex:-1, //个人仪表盘内容的显示隐藏
+				changeMeterNameIndex: -1,//改名输入框显示隐藏
 				meterPopdisabled:false,//仪表信息框是否禁用
 				deleteMeterDiaVisible:false,//删除仪表弹出框
-				addmeterName:"",//添加仪表盘名称
+				meterName:"",//添加修改仪表盘名称
 				showAddmeter:false,//显示添加仪表盘
-				detailMeterId:"",
-				// meterDescrip:{ //仪表盘信息 false
-				// 	createPerson:"强强",
-				// 	createdata:"2018-10-1",
-				// 	updataData:"2018-10-1"
-				// }
+				detailMeterId:'',
+				selectMeterId:"",//所选仪表盘id
+				meterparams:{},//仪表盘信息
       }
     },
     methods:{
@@ -194,45 +200,107 @@
 				this.showDetailMeter=true
 				this.detailMeterId = index
 			},
-			addMeter(){
-				console.log(11211)
-				// let add = {
-				// 	id:1,
-				// 	title: this.addmeterName,
-				// 	type:"personal",
-				// 	createdata:"2019/09/01",
-				// 	createPerson:"王晓伟",
-				// 	updataData:"2019/09/01",
-				// 	meterContentId:20
-				// }
-				// this.personalTitle.push(add)
+			showInp(val,index,id){	//显示更改仪表盘名称输入框
+				this.meterName = val.name
+				this.selectMeterId = val.id
+				this.meterparams.is_public = val.is_public
+				this.meterparams.user_id = val.user_id
+				this.changeMeterNameIndex = index
 			},
-			deleteMeter(){
-				this.deleteMeterDiaVisible = false
+			updataTitle(val){ //更改仪表盘名称
+				if(this.meterName == val){
+					this.changeMeterNameIndex = -1
+				}else{
+					this.meterparams.name = this.meterName
+					this.$http.put(globalConfig.server + "bisys/dashboard/"+this.selectMeterId,this.meterparams,{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
+						if(res.data.code === "20030"){
+							this.$message({
+								message: res.data.msg,
+								type: 'success'
+							});
+							this.changeMeterNameIndex = -1
+							this.meterName = ""
+							this.meterparams = {}
+							this.getMeter()
+						}else{
+							this.$notify.error({
+								title: '错误',
+								message: res.data.msg
+							});
+						}
+					});
+				}
 			},
-			getPublicMeter(){ //获取预设仪表盘
-				this.$http.get(globalConfig.server + "bisys/dashboard",{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
-					// console.log(res)
-					if(res.data.code === "20000"){
-						this.publicMeter = res.data.data.data
+			addMeter(){//新增仪表盘
+				if(!this.meterName){
+					this.$message({
+						showClose: true,
+						message: '仪表盘名称不能为空',
+						type: 'error'
+					})
+				}else{
+					let params = {
+						name:this.meterName,
+						is_public: 0 ,
+						user_id: JSON.parse(localStorage.getItem("personal")).id
 					}
-					
-        });
+					this.$http.post(globalConfig.server + "bisys/dashboard",params,{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
+						if(res.data.code === "20010"){
+							this.$message({
+								message: res.data.msg,
+								type: 'success'
+							});
+							this.showAddmeter = false
+							this.meterName = ""
+							this.getMeter()
+						}else{
+							this.$notify.error({
+								title: '错误',
+								message: res.data.msg
+							});
+						}
+					});
+				}
+				
 			},
-			getPrivateMeter(){//获取个人仪表盘
+			deterMeter(val){ //删除个人仪表盘
+				this.deleteMeterDiaVisible = true
+				this.selectMeterId = val
+			},
+			confirmdeleteMeter(){ //确认删除仪表盘
+				this.$http.get(globalConfig.server + "/bisys/dashboard/delete/"+this.selectMeterId,{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
+					if(res.data.code === "20040"){
+						this.$message({
+							message: res.data.msg,
+							type: 'success'
+						});
+						this.getMeter()
+						this.deleteMeterDiaVisible = false
+					}else{
+						this.$notify.error({
+							title: '错误',
+							message: res.data.msg
+						});
+					}
+				});
+			},
+			getMeter(){ //获取仪表盘
 				this.$http.get(globalConfig.server + "bisys/dashboard",{headers:{"Accept":"application/vnd.boss18+json"}}).then((res) => {
-					console.log(res)
 					if(res.data.code === "20000"){
-						this.privateMeter = res.data.data.data
+						this.publicMeter = res.data.data.data.public
+						this.privateMeter = res.data.data.data.private
+					}else{
+						this.$notify.error({
+							title: '错误',
+							message: res.data.msg
+						});
 					}
         });
 			}
 			
 		},
 		mounted () {
-			this.getPublicMeter()
-			this.getPrivateMeter()
-
+			this.getMeter()
 		}
 
   }
