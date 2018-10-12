@@ -7,9 +7,9 @@
     <div slot="header" class="clearfix card-header" >
       <div>
         <span>城市盈亏总额</span>
-        <div style="position: absolute;top:15px;right: 15px;">
+        <div>
           <!-- 说明弹出框 -->
-          
+          <toprightControl></toprightControl>
         </div>
       </div>
       <div>
@@ -24,19 +24,21 @@
   </el-card>
 </template>
 <script>
-  export default {
-    data(){
-      return {
-        bodyStyle:{//卡片主体样式
-          padding:'0',
-          position:'relative',
-          height:'300px',
-          width:'100%',
-          backgroundColor: '#fff'
-        },
-      }
+import toprightControl from "../components/toprightControl.vue"
+export default {
+  components:{toprightControl},
+  data(){
+    return {
+      bodyStyle:{//卡片主体样式
+        padding:'0',
+        position:'relative',
+        height:'300px',
+        width:'100%',
+        backgroundColor: '#fff'
+      },
     }
   }
+}
 </script>
 <style scoped lang="scss">
 //仪表卡片

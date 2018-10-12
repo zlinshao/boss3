@@ -272,7 +272,7 @@
       @open="removeDiaHead"
       custom-class="electronicReceipt"
       :visible.sync="electronicReceiptVisible"
-      width="50%"
+      width="80%"
       :close-on-click-modal="false"
       center
       >
