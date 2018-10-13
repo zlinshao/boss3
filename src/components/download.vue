@@ -18,7 +18,7 @@
         </a>
       </div>
     </div>
-    <div class="choose" @click="androidStatus = false" v-show="status && androidStatus">
+    <div class="choose" @click="androidStatus = false" v-show="androidStatus">
       <img src="../assets/download/live_weixin.png">
     </div>
   </div>
@@ -33,20 +33,18 @@
           height: '100%',
           width: '100%',
         },
-        status: false,
+        androidStatus: false,
         android: '',
         iphone: 'https://itunes.apple.com/cn/app/id1425042588?mt=8',
       }
     },
     mounted() {
       if (this.IsPC) {
-        this.status = false;
         this.imgCss = {
           height: '100%',
           width: '100%',
         };
       } else {
-        this.status = true;
         this.imgCss.height = window.innerHeight + 'px';
         this.imgCss.maxWidth = '100%';
       }
@@ -60,8 +58,16 @@
     computed: {},
     methods: {
       androidLoad() {
-        this.androidStatus = true;
+        this.androidStatus = this.is_wei();
         location.href = this.android;
+      },
+      is_wei() {
+        let ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) === "micromessenger") {
+          return true;
+        } else {
+          return false;
+        }
       },
       IsPC() {
         let userAgentInfo = navigator.userAgent;
