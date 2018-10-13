@@ -249,11 +249,9 @@
         if (organ === 'org_names') {
           for (let item of val) {
             this.params[organ] = item.name + ',' + item.name;
-            this.orgData[organ] = item.name + ',' + item.name;
           }
         } else {
           this.params[organ] = val[0].id;
-          this.orgData[organ] = val[0].name;
         }
       },
       // 新增员工

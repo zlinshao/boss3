@@ -58,7 +58,6 @@
     computed: {},
     methods: {
       androidLoad() {
-        alert(this.is_wei());
         if (this.is_wei()) {
           this.androidStatus = true;
         } else {
@@ -67,14 +66,7 @@
       },
       is_wei() {
         let ua = navigator.userAgent.toLowerCase();
-        alert(ua);
-        alert(ua.includes("micromessenger"));
         return ua.includes("micromessenger");
-        // if (ua.includes("micromessenger")) {
-        //   return true;
-        // } else {
-        //   return false;
-        // }
       },
       IsPC() {
         let userAgentInfo = navigator.userAgent;
