@@ -59,6 +59,7 @@
     methods: {
       androidLoad() {
         this.androidStatus = this.is_wei();
+        if(this.is_wei()) return;
         location.href = this.android;
       },
       is_wei() {
