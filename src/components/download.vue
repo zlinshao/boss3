@@ -67,6 +67,8 @@
       },
       is_wei() {
         let ua = navigator.userAgent.toLowerCase();
+        alert(ua);
+        alert(ua.match(/MicroMessenger/i) === "micromessenger");
         if (ua.match(/MicroMessenger/i) === "micromessenger") {
           return true;
         } else {

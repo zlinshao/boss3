@@ -4,7 +4,8 @@
       <div class="highSearch">
         <el-form :model="params" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入员工姓名" v-model="params.user_name" size="mini" @keyup.enter.native="search" clearable>
+            <el-input placeholder="请输入员工姓名" v-model="params.user_name" size="mini" @keyup.enter.native="search"
+                      clearable>
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
@@ -31,11 +32,11 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">支付方式</div>
+                  <div class="el_col_label">部门</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
-                  <el-form-item label="部门">
-                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="orgData.org_id"
+                  <el-form-item>
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="orgData.org_names"
                               size="mini">
                       <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
                     </el-input>
@@ -129,15 +130,19 @@
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
+    <!--组织架构-->
+    <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths"
+                  @close="closeOrgan" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
   import AddStaff from './components/addStaff.vue';//房东
   import RightMenu from '../../../common/rightMenu.vue';//右键
+  import Organization from '../../../common/organization.vue';//组织架构
   export default {
     name: "index",
-    components: {RightMenu, AddStaff},
+    components: {RightMenu, AddStaff, Organization},
     data() {
       return {
         is_enable: false,
@@ -154,8 +159,13 @@
         isHigh: false,              //高级
         tableData: [],
         params: {},
-        orgData: {},                //组织架构 显示
         totalNum: 0,
+
+        orgData: {},                //组织架构 显示
+        organModule: false,
+        organizeType: '',
+        lengths: 0,
+        organDivision: '',
       }
     },
     created() {
@@ -211,7 +221,7 @@
         this.organModule = true;
         this.organizeType = type;
         if (val === 'org_id') {
-          this.form[val] = [];
+          this.params[val] = [];
           this.lengths = '';
         } else {
           this.lengths = 1;
@@ -236,14 +246,13 @@
       // 确认部门
       selectMember(val) {
         let organ = this.organDivision;
-        if (organ === 'org_id') {
+        if (organ === 'org_names') {
           for (let item of val) {
-            this.duties(item.id);
-            this.form[organ].push(item.id);
+            this.params[organ] = item.id + ',' + item.id;
             this.orgData[organ] = item.name + ',' + item.name;
           }
         } else {
-          this.form[organ] = val[0].id;
+          this.params[organ] = val[0].id;
           this.orgData[organ] = val[0].name;
         }
       },
