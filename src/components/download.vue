@@ -58,9 +58,12 @@
     computed: {},
     methods: {
       androidLoad() {
-        this.androidStatus = this.is_wei();
-        if(this.is_wei()) return;
-        location.href = this.android;
+        alert(this.is_wei());
+        if (this.is_wei()) {
+          this.androidStatus = true;
+        } else {
+          location.href = this.android;
+        }
       },
       is_wei() {
         let ua = navigator.userAgent.toLowerCase();

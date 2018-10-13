@@ -34,14 +34,11 @@
                   <div class="el_col_label">支付方式</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="params.payWay" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option label="银行卡" value="1"></el-option>
-                      <el-option label="支付宝" value="2"></el-option>
-                      <el-option label="微信" value="3"></el-option>
-                      <el-option label="现金" value="4"></el-option>
-                    </el-select>
+                  <el-form-item label="部门">
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="orgData.org_id"
+                              size="mini">
+                      <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -151,13 +148,13 @@
         lists: [],
         tableStatus: ' ',
         tableLoading: false,
-
         assistShow: '',             //是否显示辅助信息
         staffVisible: false,        //增加新员工
         currentPage: 1,             //当前页数
         isHigh: false,              //高级
         tableData: [],
         params: {},
+        orgData: {},                //组织架构 显示
         totalNum: 0,
       }
     },
@@ -207,6 +204,48 @@
       // 双击
       dblClickTable() {
 
+      },
+      // 打开组织架构
+      openOrgan(val, type) {
+        this.organDivision = val;
+        this.organModule = true;
+        this.organizeType = type;
+        if (val === 'org_id') {
+          this.form[val] = [];
+          this.lengths = '';
+        } else {
+          this.lengths = 1;
+        }
+      },
+      // 清空部门
+      emptyDepart(val) {
+        this.params[val] = '';
+        this.orgData[val] = '';
+        this.orgData = Object.assign({}, this.orgData);
+        if (val === 'org_id') {
+          this.resetOrg();
+        }
+      },
+      // 关闭组织架构
+      closeOrgan() {
+        this.organDivision = '';
+        this.organModule = false;
+        this.organizeType = '';
+        this.lengths = 0;
+      },
+      // 确认部门
+      selectMember(val) {
+        let organ = this.organDivision;
+        if (organ === 'org_id') {
+          for (let item of val) {
+            this.duties(item.id);
+            this.form[organ].push(item.id);
+            this.orgData[organ] = item.name + ',' + item.name;
+          }
+        } else {
+          this.form[organ] = val[0].id;
+          this.orgData[organ] = val[0].name;
+        }
       },
       // 新增员工
       newAddStaff() {
