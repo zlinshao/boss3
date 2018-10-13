@@ -15,7 +15,7 @@ import Boss from './boss.config.js'
 import Fun from './fun.config.js'
 import Cookies from 'js-cookie';
 import G2 from '@antv/g2';//导入antv/g2图表
-import DataSet   from '@antv/data-set'; //导入antv/DataSet 
+import DataSet from '@antv/data-set'; //导入antv/DataSet
 
 import vueEventCalendar from 'vue-event-calendar'
 import 'vue-event-calendar/dist/style.css' //1.1.10之后的版本，css被放在了单独的文件中，方便替换
@@ -36,6 +36,7 @@ import './assets/font/iconfont.css'
 import './assets/fontawesome/fontawesome/font-awesome.min.css'
 import './assets/bifonts/bifont.css'
 import './assets/js/drag.js'
+import './assets/js/formData.js'
 
 // import './directives.js';  //弹框拖拽
 
@@ -53,8 +54,8 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
 Vue.prototype.$http = axios;
-Vue.prototype.$G2 = G2 
-Vue.prototype.$DataSet = DataSet  
+Vue.prototype.$G2 = G2
+Vue.prototype.$DataSet = DataSet
 
 
 axios.defaults.withCredentials = true;
@@ -81,7 +82,6 @@ Vue.config.productionTip = false;
 //
 
 
-
 //重定向router
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
@@ -90,7 +90,10 @@ router.beforeEach((to, from, next) => {
     globalConfig.header.Authorization = '';
   }
   let data = localStorage.getItem("myData");
-
+  if (to.path === '/download') {
+    next();
+    return;
+  }
   if (!data && to.path !== '/login') {
     next({path: '/login'})
   } else if (data && to.path === '/') {

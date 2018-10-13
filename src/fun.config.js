@@ -14,8 +14,8 @@ export default {
         globalConfig.personal = res.data.data.data;
       });
     };
-
-    Vue.prototype.dictionary = function (data,flag) {
+    // 字典
+    Vue.prototype.dictionary = function (data, flag) {
       return new Promise((resolve, reject) => {
         this.$http.get(globalConfig.server + 'setting/dictionary/' +data,{params:{status:flag}}).then( (res) => {
           if(res.data.code === '30010'){
@@ -51,19 +51,44 @@ export default {
       let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
       let D = date.getDate();
       return Y+M+D;
-    }
+    };
     Vue.prototype.addMoneySum = function (form) {
-      let deposit = form.deposit_payed
-      let front_money = form.front_money
-      let rent_money = form.rent_money
-      
-      deposit ? deposit : 0
-      front_money ? front_money : 0
-      rent_money ? rent_money : 0
+      let deposit = form.deposit_payed;
+      let front_money = form.front_money;
+      let rent_money = form.rent_money;
 
-      form.money_sum = Number(deposit)+Number(front_money)+Number(rent_money)
-      
+      deposit ? deposit : 0;
+      front_money ? front_money : 0;
+      rent_money ? rent_money : 0;
+
+      form.money_sum = Number(deposit)+Number(front_money)+Number(rent_money);
+
       return form.money_sum;
-    }
+    };
+    Vue.prototype.prompt = function (val, msg) {
+      switch (val) {
+        case 'success':
+          this.$notify.success({
+            title: '成功',
+            duration: 2000,
+            message: msg
+          });
+          break;
+        case 'warning':
+          this.$notify.warning({
+            title: "警告",
+            duration: 2000,
+            message: msg,
+          });
+          break;
+        case 'error':
+          this.$notify.error({
+            title: "错误",
+            duration: 2000,
+            message: msg,
+          });
+          break;
+      }
+    };
   }
 }
