@@ -327,7 +327,7 @@
                       <span>{{child.name}}</span>
                     </template>
                     <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"
-                                  style="padding-left: 74px">
+                                  style="padding-left: 74px;min-width: 190px;">
                       {{last.name}}
                     </el-menu-item>
                   </el-submenu>
@@ -742,7 +742,7 @@
           }
         } else {
           this.setLockPwdDialog = true;
-            // this.setLockPwdDialog = false;          
+            // this.setLockPwdDialog = false;
         }
       },
       //定时器 轮巡获取最新消息

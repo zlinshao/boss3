@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 //路由
 const Login = () => import  ('../components/Login.vue')
+const Download = () => import  ('../components/download.vue')
 const Index = () => import  ('../components/index.vue')
 const Main = () => import  ('../components/main.vue')
 const Lock = () => import  ('../components/common/lockedScreen.vue')
@@ -11,7 +12,6 @@ const Lock = () => import  ('../components/common/lockedScreen.vue')
 //租赁管理
 const WholeRentManage = () => import  ('../components/rentManage/wholeRentManage/index.vue')//整租管理
 const JointRentManage = () => import  ('../components/rentManage/jointRentManage/index.vue')
-
 
 
 //客服中心
@@ -59,6 +59,10 @@ const PersonalRecords = () => import  ('../components/humanResource/personalReco
 const StaffRecords = () => import  ('../components/humanResource/staffRecords/index')     // add by cj 员工档案
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement')     // add by cj 人事报表
 
+// 人员信息管理
+const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');         // 人员信息管理
+const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');      // 花名册
+const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');      // 花名册
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
@@ -191,9 +195,9 @@ const DataMove = () => import  ('../components/dataMove.vue')//数据迁移
 
 const BatchEnter = () => import  ('../components/batchEnter/index') //批量入账
 
-const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
-const dataAanalysis =()=> import ('../components/dataAanalysis/index');
-const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
+const AchievementData = () => import ('../components/dataCenter/index'); //业绩数据
+const dataAanalysis = () => import ('../components/dataAanalysis/index');
+const ReportingData = () => import ('../components/reportManage/reportingData/index'); //报备数据
 
 const Application = () => import ('../components/C-manage/applicationManage/index');
 const Houses = () => import ('../components/C-manage/houseManage/index');
@@ -218,6 +222,15 @@ export default new Router({
     {
       path: '/login',
       component: Login,
+      name: '',
+      hidden: true,
+      meta: {
+        keepAlive: true // 不需要缓存
+      }
+    },
+    {
+      path: '/download',
+      component: Download,
       name: '',
       hidden: true,
       meta: {
@@ -500,7 +513,21 @@ export default new Router({
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
-
+    {
+      path: '/',
+      component: Index,
+      name: 'HRM',
+      icon: 'iconfont icon-renzi',
+      children: [
+        {
+          path: '/teamManage', component: TeamManage, name: '人员信息管理',
+          children: [
+            {path: '/teamManage/roster', component: Roster, name: '花名册'},
+            {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+          ],
+        },
+      ]
+    },
     // {
     //   path: '/',
     //   component: Index,
