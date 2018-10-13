@@ -248,7 +248,7 @@
         let organ = this.organDivision;
         if (organ === 'org_names') {
           for (let item of val) {
-            this.params[organ] = item.id + ',' + item.id;
+            this.params[organ] = item.name + ',' + item.name;
             this.orgData[organ] = item.name + ',' + item.name;
           }
         } else {

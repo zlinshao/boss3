@@ -68,12 +68,13 @@
       is_wei() {
         let ua = navigator.userAgent.toLowerCase();
         alert(ua);
-        alert(ua.match(/MicroMessenger/i) === "micromessenger");
-        if (ua.match(/MicroMessenger/i) === "micromessenger") {
-          return true;
-        } else {
-          return false;
-        }
+        alert(ua.includes("micromessenger"));
+        return ua.includes("micromessenger");
+        // if (ua.includes("micromessenger")) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
       },
       IsPC() {
         let userAgentInfo = navigator.userAgent;
