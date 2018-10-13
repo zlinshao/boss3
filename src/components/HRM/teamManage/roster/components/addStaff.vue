@@ -483,6 +483,7 @@
       dialogVisible(val) {
         if (!val) {
           this.isClear = true;
+          this.activeName = 'first';
           this.form = {};
           this.orgData = {};      //部门显示
           this.resetOrg();        //职位 岗位
