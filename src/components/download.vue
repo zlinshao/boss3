@@ -8,7 +8,7 @@
       <h2>乐伽公寓</h2>
       <h3>便捷租房&nbsp;真实房源&nbsp;预约看房&nbsp;省心托管</h3>
       <div>
-        <a :href="android">
+        <a @click="androidLoad">
           <img src="../assets/download/ad.png" alt="">
           <span>Android下载</span>
         </a>
@@ -17,6 +17,9 @@
           <span>iphone下载</span>
         </a>
       </div>
+    </div>
+    <div class="choose" @click="androidStatus = false" v-show="status && androidStatus">
+      <img src="../assets/download/live_weixin.png">
     </div>
   </div>
 </template>
@@ -30,20 +33,23 @@
           height: '100%',
           width: '100%',
         },
+        status: false,
         android: '',
         iphone: 'https://itunes.apple.com/cn/app/id1425042588?mt=8',
       }
     },
     mounted() {
-      // if (this.IsPC) {
-      //   this.imgCss = {
-      //     height: '100%',
-      //     width: '100%',
-      //   };
-      // } else {
-      //   this.imgCss.height = window.innerHeight + 'px';
-      //   this.imgCss.maxWidth = '100%';
-      // }
+      if (this.IsPC) {
+        this.status = false;
+        this.imgCss = {
+          height: '100%',
+          width: '100%',
+        };
+      } else {
+        this.status = true;
+        this.imgCss.height = window.innerHeight + 'px';
+        this.imgCss.maxWidth = '100%';
+      }
       this.$http.post(globalConfig.server + "api/client/version/check").then(res => {
         this.android = res.data.data.download_url;
       });
@@ -53,6 +59,10 @@
     watch: {},
     computed: {},
     methods: {
+      androidLoad() {
+        this.androidStatus = true;
+        location.href = this.android;
+      },
       IsPC() {
         let userAgentInfo = navigator.userAgent;
         let Agents = ["Android", "iPhone",
@@ -77,7 +87,7 @@
     top: .8rem;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 3;
     text-align: center;
     h1, h2, h3 {
       font-weight: normal;
@@ -126,6 +136,19 @@
       .ios {
         background-color: #43C915;
       }
+    }
+  }
+
+  .choose {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .6);
+    z-index: 6;
+    img {
+      max-width: 100%;
     }
   }
 </style>

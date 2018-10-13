@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :model="params" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="params.user_name" size="mini" @keyup.enter.native="search" clearable>
+            <el-input placeholder="请输入员工姓名" v-model="params.user_name" size="mini" @keyup.enter.native="search" clearable>
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
