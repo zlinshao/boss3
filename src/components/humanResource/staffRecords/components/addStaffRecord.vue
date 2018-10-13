@@ -101,15 +101,13 @@
             ],
           }
         ],
-        typeCategory: [
-          {id: 1, name: '表扬'},
-          {id: 2, name: '批评'},
-          {id: 3, name: '疑惑'},
-          {id: 4, name: '其他'},
-        ],
+        typeCategory: [],
         isClear: false,
         disabledBtn: false,
       };
+    },
+    created(){
+      this.typeCategory = typeCategory;
     },
     watch: {
       addStaffDialog(val) {

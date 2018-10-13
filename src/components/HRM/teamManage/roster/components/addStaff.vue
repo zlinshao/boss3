@@ -349,11 +349,42 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="奖惩记录" name="third">奖惩记录</el-tab-pane>
+          <el-tab-pane label="奖惩记录" name="third">
+            <div class="addRecord scroll_bar">
+              <div class="moreRecord" v-for="(item,index) in form3">
+                <div v-if="form3.length > 1" @click="remRecord(index)" class="closeIcon">
+                  <i class="el-icon-close"></i>
+                </div>
+                <div v-else>&nbsp;</div>
+                <div class="staffRecord">
+                  <el-form-item label="部门" required>
+                    <el-input placeholder="请选择" @focus="openOrgan('uid', 'staff')" v-model="orgData.uid"
+                              size="mini">
+                      <el-button slot="append" @click="emptyDepart('uid')">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="奖惩类型" required>
+                    <el-select v-model="form3.type" size="mini" placeholde="请选择" clearable>
+                      <el-option v-for="key in typeCategory" :label="key.name" :value="key.id"
+                                 :key="key.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="增加描述" required>
+                    <el-input placeholder="请填写增加描述" type="textarea" v-model="form3.remark" clearable>
+                    </el-input>
+                  </el-form-item>
+                </div>
+                <el-form-item label="添加照片">
+                  <UpLoad :ID="'images'" :isClear="isClear" @getImg="getImg" editImage="images"></UpLoad>
+                </el-form-item>
+              </div>
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
+        <el-button size="small" type="primary" @click="addRecord">新增记录</el-button>
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
         <el-button size="small" type="primary" @click="setStaff">新&nbsp;增</el-button>
       </div>
@@ -375,14 +406,24 @@
     data() {
       return {
         url: globalConfig.server,
-        activeName: 'first',
+        dialogVisible: true,
+        fullLoading: false,
+        activeName: 'third',
         organModule: false,
         organizeType: '',
         lengths: 0,
         organDivision: '',
-
-        fullLoading: false,
-        dialogVisible: false,
+        // 奖惩记录
+        form3: [{
+          uid: '',
+          type: '',
+          remark: '',
+        }],
+        moreRecord: {
+          uid: '',
+          type: '',
+          remark: '',
+        },
         //辅助信息
         form2: {},
         emergency_call: {},     //紧急联系
@@ -410,51 +451,24 @@
         city: [],               //城市
         education: [],          //学历
         level: [],              //级别
-        // 当前在职状态
-        position_status: [
-          {id: 1, name: '待调岗'},
-          {id: 2, name: '无异动'},
-          {id: 3, name: '待转正'},
-          {id: 4, name: '待离职'},
-        ],
-        // 转正类型
-        formal_status: [
-          {id: 1, name: '提前转正'},
-          {id: 2, name: '正常转正'},
-          {id: 3, name: '延期转正'},
-        ],
-        // 员工类型
-        job_type: [
-          {id: 1, name: '全职'},
-          {id: 2, name: '兼职'},
-          {id: 3, name: '实习'},
-        ],
-        // 员工状态
-        job_status: [
-          {id: 1, name: '在职'},
-          {id: 2, name: '离职'},
-          {id: 3, name: '停薪留职'},
-          {id: 4, name: '二次入职'},
-        ],
-        // 入职途径
-        entry_way: [
-          {id: 1, name: '智联招聘'},
-          {id: 2, name: '前程无忧'},
-          {id: 3, name: '58同城'},
-          {id: 4, name: 'BOSS直聘'},
-          {id: 5, name: '猎聘网'},
-          {id: 6, name: '首席信才'},
-          {id: 7, name: '德胜人才'},
-          {id: 8, name: '校园招聘会'},
-          {id: 9, name: '社会招聘会'},
-          {id: 10, name: '推荐'},
-          {id: 11, name: '其他'},
-        ],
+
+        position_status: [],    //当前在职状态
+        formal_status: [],      //转正类型
+        job_type: [],           //员工类型
+        job_status: [],         //员工状态
+        entry_way: [],          //入职途径
+        typeCategory: [],       //奖惩记录
       }
     },
     created() {
       this.dict();
       this.initForm();
+      this.position_status = position_status;
+      this.formal_status = formal_status;
+      this.job_type = job_type;
+      this.job_status = job_status;
+      this.entry_way = entry_way;
+      this.typeCategory = typeCategory;
     },
     mounted() {
     },
@@ -482,14 +496,16 @@
       },
       dialogVisible(val) {
         if (!val) {
-          this.isClear = true;
           this.activeName = 'first';
+          this.isClear = true;
           this.form = {};
           this.orgData = {};      //部门显示
           this.resetOrg();        //职位 岗位
           this.form2 = {};        //辅助信息
           this.initForm();        //图片信息
           this.$emit('close', 'close');
+          this.form3 = [];
+          this.addRecord();
         } else {
           this.isClear = false;
         }
@@ -497,6 +513,30 @@
     },
     computed: {},
     methods: {
+      // 字典
+      dict() {
+        this.dictionary(228, 1).then(res => {// 性别
+          this.gender = res.data;
+        });
+        this.dictionary(231, 1).then(res => {// 生育状况
+          this.fertility_status = res.data;
+        });
+        this.dictionary(33, 1).then(res => {// 婚姻状况
+          this.marital_status = res.data;
+        });
+        this.dictionary(38, 1).then(res => {// 政治面貌
+          this.political_status = res.data;
+        });
+        this.dictionary(306, 1).then(res => {// 城市
+          this.city = res.data;
+        });
+        this.dictionary(39, 1).then(res => {// 城市
+          this.education = res.data;
+        });
+        this.dictionary(234, 1).then(res => {// 级别
+          this.level = res.data;
+        });
+      },
       // tabs切换
       handleClick(tab, event) {
 
@@ -527,6 +567,14 @@
           }
         })
       },
+      // 增加多条奖惩记录
+      addRecord() {
+        this.form3.unshift(this.moreRecord);
+      },
+      // 删除奖惩记录
+      remRecord(index) {
+        this.form3.splice(index, 1);
+      },
       // 初始化form
       initForm() {
         this.emergency_call = {};
@@ -538,33 +586,13 @@
           this.image_info[item.formKey] = {};
         }
       },
-      // 字典
-      dict() {
-        this.dictionary(228, 1).then(res => {// 性别
-          this.gender = res.data;
-        });
-        this.dictionary(231, 1).then(res => {// 生育状况
-          this.fertility_status = res.data;
-        });
-        this.dictionary(33, 1).then(res => {// 婚姻状况
-          this.marital_status = res.data;
-        });
-        this.dictionary(38, 1).then(res => {// 政治面貌
-          this.political_status = res.data;
-        });
-        this.dictionary(306, 1).then(res => {// 城市
-          this.city = res.data;
-        });
-        this.dictionary(39, 1).then(res => {// 城市
-          this.education = res.data;
-        });
-        this.dictionary(234, 1).then(res => {// 级别
-          this.level = res.data;
-        });
-      },
       // 上传图片
       getImg(val) {
-        this.form2.image_info[val[0]] = val[1];
+        if (val[0] === 'images') {
+          this.form3[val[0]] = val[1];
+        } else {
+          this.form2.image_info[val[0]] = val[1];
+        }
         this.isUpload = val[2];
       },
       // 职务
@@ -654,8 +682,10 @@
 
 <style lang="scss">
   #addStaff {
+    .addForm, .addRecord {
+      max-height: 480px;
+    }
     .addForm, .supplementary {
-      max-height: 500px;
       display: flex;
       display: -webkit-flex;
       flex-wrap: wrap;
@@ -686,6 +716,27 @@
       display: -webkit-flex;
       .el-radio {
         min-width: 40px;
+      }
+    }
+    .moreRecord + .moreRecord {
+      margin-top: 18px;
+    }
+    .moreRecord {
+      border: 1px solid #dfe6fb;
+      padding: 0 20px 10px;
+      -webkit-border-radius: 6px;
+      -moz-border-radius: 6px;
+      border-radius: 6px;
+      .closeIcon {
+        text-align: right;
+        padding: 10px 0;
+        i {
+          cursor: pointer;
+          font-size: 18px;
+        }
+      }
+      .staffRecord {
+        width: 66%;
       }
     }
   }

@@ -36,10 +36,132 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="orgData.org_names"
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="params.org_names"
                               size="mini">
                       <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">员工类型</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.job_type" clearable>
+                      <el-option v-for="item in job_type" :value="item.id" :key="item.id" :label="item.name">
+                        {{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">员工状态</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.job_status" clearable>
+                      <el-option v-for="item in job_status" :value="item.id" :key="item.id" :label="item.name">
+                        {{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">当前在职状态</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.position_status" clearable>
+                      <el-option v-for="item in position_status" :value="item.id" :key="item.id" :label="item.name">
+                        {{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">入职时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="params.enroll_min"
+                      type="date"
+                      value-format="yyyy-MM-dd"
+                      placeholder="请选择日期"
+                      clearable>
+                    </el-date-picker>
+                  </el-form-item>
+                  <span class="zhi">至</span>
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="params.enroll_max"
+                      type="date"
+                      value-format="yyyy-MM-dd"
+                      placeholder="请选择日期"
+                      clearable>
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">当前在职状态</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="params.dismiss_time_min"
+                      type="date"
+                      value-format="yyyy-MM-dd"
+                      placeholder="请选择日期"
+                      clearable>
+                    </el-date-picker>
+                  </el-form-item>
+                  <span class="zhi">至</span>
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="params.dismiss_time_max"
+                      type="date"
+                      value-format="yyyy-MM-dd"
+                      placeholder="请选择日期"
+                      clearable>
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">职位</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input placeholder="职位名称之间请用逗号隔开" v-model="params.position_names" clearable></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -161,24 +283,33 @@
         params: {},
         totalNum: 0,
 
-        orgData: {},                //组织架构 显示
         organModule: false,
         organizeType: '',
         lengths: 0,
-        organDivision: '',
+        organDivision: '',          //字段名
+        orgName: [],                //部门名称
+
+        job_type: [],               //员工类型
+        job_status: [],             //员工状态
+        position_status: [],        //当前在职状态
       }
     },
     created() {
       this.resetting();
+      this.job_type = job_type;
+      this.job_status = job_status;
+      this.position_status = position_status;
     },
     mounted() {
       this.staffList(1);
+      console.log(this.nowDateTime('time'));
     },
     activated() {
     },
     watch: {},
     computed: {},
     methods: {
+      // 花名册列表
       staffList(page) {
         this.tableLoading = true;
         this.tableStatus = ' ';
@@ -187,20 +318,62 @@
           params: this.params,
         }).then(res => {
           this.tableLoading = false;
-          if (res.data.code === '90010') {
-            this.tableData = res.data.data.data;
+          if (res.data.success) {
+            let data = res.data.data.data;
+            if (data.length < 1) {
+              this.emptyList();
+            }
+            this.tableData = data;
             this.totalNum = res.data.data.count;
           } else {
-            this.tableStatus = '暂无数据';
+            this.emptyList();
           }
         })
       },
+      // 列表无数据
+      emptyList() {
+        this.totalNum = 0;
+        this.tableData = [];
+        this.tableStatus = '暂无数据';
+        return false;
+      },
       // 导出
       leadingOut() {
+        this.$http.get(this.url + 'hrm/User/lists?export=1', {
+          params: this.params,
+        }).then(res => {
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          let title = this.nowDateTime('time') + '花名册.xlsx';
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', title);
+          document.body.appendChild(link);
+          link.click();
+        })
+      },
+      // 当前时间
+      nowDateTime(time) {
+        let noTime, haveTime;
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
 
+        let mm = month.toString();
+        let dd = day.toString();
+        mm = mm[1] ? mm : '0' + mm;
+        dd = dd[1] ? dd : '0' + dd;
+        noTime = year + '-' + mm + '-' + dd;
+        haveTime = year + '-' + mm + '-' + dd + " " + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        if (time === 'time') {
+          return haveTime;
+        }
+        return noTime;
       },
       // 搜索
       search() {
+        this.isHigh = false;
         this.staffList(1);
       },
       // 高级
@@ -209,6 +382,7 @@
       },
       // 重置
       resetting() {
+        this.orgName = [];
         this.params = JSON.parse(JSON.stringify(rosterParams));
       },
       // 双击
@@ -220,21 +394,12 @@
         this.organDivision = val;
         this.organModule = true;
         this.organizeType = type;
-        if (val === 'org_id') {
-          this.params[val] = [];
-          this.lengths = '';
-        } else {
-          this.lengths = 1;
-        }
+        this.lengths = '';
       },
       // 清空部门
       emptyDepart(val) {
+        this.orgName = [];
         this.params[val] = '';
-        this.orgData[val] = '';
-        this.orgData = Object.assign({}, this.orgData);
-        if (val === 'org_id') {
-          this.resetOrg();
-        }
       },
       // 关闭组织架构
       closeOrgan() {
@@ -246,13 +411,15 @@
       // 确认部门
       selectMember(val) {
         let organ = this.organDivision;
-        if (organ === 'org_names') {
-          for (let item of val) {
-            this.params[organ] = item.name + ',' + item.name;
-          }
-        } else {
-          this.params[organ] = val[0].id;
+        let str = [];
+        for (let item of val) {
+          this.orgName.push(item.name);
         }
+        this.orgName = Array.from(new Set(this.orgName));
+        for (let key of this.orgName) {
+          str = key + ',' + str;
+        }
+        this.params[organ] = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
       },
       // 新增员工
       newAddStaff() {

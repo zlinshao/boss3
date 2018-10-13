@@ -304,8 +304,17 @@
           padding: 8px 30px;
         }
         .el_col_option {
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
           padding: 8px 12px;
           background-color: #f3f3f3;
+          .zhi {
+            padding: 0 8px;
+          }
+          .el-date-editor.el-input {
+            width: 180px;
+          }
         }
       }
     }
