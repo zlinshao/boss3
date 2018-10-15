@@ -506,10 +506,6 @@
       this.typeCategory = typeCategory;
     },
     mounted() {
-      this.entry_way = {
-        entry_type: '',
-        entry_mess: '',
-      }
     },
     activated() {
     },
@@ -528,7 +524,6 @@
       },
       // 模态框
       module(val) {
-        console.log(this.assist);
         if (this.assist !== 'new') {
           this.activeName = this.assist;
           this.fullLoading = false;
@@ -595,7 +590,11 @@
         for (let key of keys) {
           switch (key) {
             case 'entry_way':         //入职方式
-              this.entry_way = JSON.parse(val.entry_way);
+              if (val.entry_way && val.entry_way !== 'null') {
+                this.entry_way = JSON.parse(val.entry_way);
+              } else {
+                this.entry_way = {};
+              }
               break;
             case 'city':              //城市
               this.form.city = Number(val.city);
@@ -606,7 +605,11 @@
               });
               break;
             case 'position_id':       //岗位
-              this.positionSelect(val.duty_id, 'position_id');
+              if (val.duty_id) {
+                this.positionSelect(val.duty_id, 'position_id');
+              } else {
+                this.resetOrg('position');
+              }
               break;
             case 'org_id':            //部门
               let organ = JSON.parse(val.organizationInfo);
@@ -617,18 +620,24 @@
               this.departName(arr, key);
               break;
             case 'recommender':        //推荐人
-              this.$http.get(this.url + 'hrm/User/getName?id=' + val.recommender).then(res => {
-                this.orgData[key] = res.data.name;
-              });
+              if (val.recommender && val.recommender !== 'null') {
+                this.$http.get(this.url + 'hrm/User/getName?id=' + val.recommender).then(res => {
+                  this.orgData[key] = res.data.name;
+                });
+              }
               break;
             case 'user_id':
+              this.form.id = val.user_id;
+              this.form3.id = val.user_id;
               break;
             default:
-              this.form[key] = val[key];
+              if (val[key] && val[key] !== 'null') {
+                this.form[key] = val[key];
+              } else {
+                this.form[key] = '';
+              }
           }
         }
-        this.form.id = val.user_id;
-        this.form3.id = val.user_id;
         this.fullLoading = false;
       },
       // 获取辅助信息
@@ -757,7 +766,11 @@
               this.duty.push(item);
             });
             if (type === 'duty_id') {
-              this.form[type] = this.getStaffDetail[type];
+              if (this.getStaffDetail[type] && this.getStaffDetail[type] !== 'null') {
+                this.form[type] = this.getStaffDetail[type];
+              } else {
+                this.form[type] = [];
+              }
             } else {
               this.resetOrg('position');
             }
@@ -774,6 +787,8 @@
           for (let item of val) {
             this.quarters(item, type);
           }
+        } else {
+
         }
       },
       // 岗位
