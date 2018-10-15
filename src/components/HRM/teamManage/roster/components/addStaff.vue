@@ -512,7 +512,6 @@
     watch: {
       detail(val) {
         this.getStaffDetail = val;
-        this.fullLoading = true;
         if (this.assist === 'first') {
           this.personalInfo(val);
         } else {
@@ -526,9 +525,10 @@
       module(val) {
         if (this.assist !== 'new') {
           this.activeName = this.assist;
-          this.fullLoading = false;
+          this.fullLoading = true;
         } else {
           this.activeName = 'first';
+          this.fullLoading = false;
         }
         this.dialogVisible = val;
       },
