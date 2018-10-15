@@ -248,7 +248,7 @@
       </el-pagination>
     </div>
     <!--新增员工-->
-    <AddStaff :module="staffVisible" :assist="assistShow" @close="closeStaff"></AddStaff>
+    <AddStaff :module="staffVisible" :assist="assistShow" :detail="staffDetail" @close="closeStaff"></AddStaff>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -287,11 +287,13 @@
         organizeType: '',
         lengths: 0,
         organDivision: '',          //字段名
-        orgName: [],                //部门名称
 
         job_type: [],               //员工类型
         job_status: [],             //员工状态
         position_status: [],        //当前在职状态
+
+        user_id: '',                //员工ID
+        staffDetail: {},            //员工详情
       }
     },
     created() {
@@ -302,7 +304,6 @@
     },
     mounted() {
       this.staffList(1);
-      console.log(this.nowDateTime('time'));
     },
     activated() {
     },
@@ -382,7 +383,6 @@
       },
       // 重置
       resetting() {
-        this.orgName = [];
         this.params = JSON.parse(JSON.stringify(rosterParams));
       },
       // 双击
@@ -398,7 +398,6 @@
       },
       // 清空部门
       emptyDepart(val) {
-        this.orgName = [];
         this.params[val] = '';
       },
       // 关闭组织架构
@@ -413,10 +412,10 @@
         let organ = this.organDivision;
         let str = [];
         for (let item of val) {
-          this.orgName.push(item.name);
+          str.push(item.name);
         }
-        this.orgName = Array.from(new Set(this.orgName));
-        for (let key of this.orgName) {
+        str = Array.from(new Set(str));
+        for (let key of str) {
           str = key + ',' + str;
         }
         this.params[organ] = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
@@ -424,7 +423,7 @@
       // 新增员工
       newAddStaff() {
         this.staffVisible = true;
-        this.assistShow = '';
+        this.assistShow = 'new';
       },
       closeStaff(val) {
         this.staffVisible = false;
@@ -462,12 +461,16 @@
           type: 'warning'
         }).then(() => {
           this.changeEnable(row.user_id);
+        }).catch(() => {
         })
       },
       // 右键
       openContextMenu(row, event) {
+        this.user_id = row.user_id;
         this.lists = [
-          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
+          {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
+          {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
+          {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
           {clickIndex: 'formal', headIcon: 'iconfont icon-chenggong', label: '转正'},
           {clickIndex: 'transfer', headIcon: 'iconfont icon-tiaogang', label: '调岗'},
           {clickIndex: 'dimission', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -477,9 +480,26 @@
       // 右键回调
       clickEvent(val) {
         switch (val) {
-          case 'revise':
+          case 'first':// 编辑基本信息
+          case 'second':
             this.staffVisible = true;
-            this.assistShow = 'second';
+            this.assistShow = val;
+            this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
+              if (res.data.success) {
+                this.staffDetail = res.data.data;
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+            });
+            break;
+          case 'record':// 编辑奖惩记录
+            this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + this.user_id).then(res => {
+              if (res.data.success) {
+
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+            });
             break;
           case 'formal':
             console.log(val);

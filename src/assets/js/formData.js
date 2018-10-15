@@ -13,6 +13,60 @@ rosterParams = {
   dismiss_time_max: '',     //离职时间最大值
   position_names: '',       //职位
 };
+
+// 新增花名册员工
+rosterAddStaff = {
+  name: '',               //姓名
+  gender: '',             //性别
+  phone: '',              //手机号
+  archive_number: '',     //档案编号
+  birthday: '',           //出生日期
+  fertility_status: '',   //生育状况
+  job_number: '',         //工号
+  marital_status: '',     //婚姻状况
+  id_num: '',             //身份证
+  home_addr: '',          //家庭住址
+  political_status: '',   //政治面貌
+  org_id: '',             //部门
+  duty_id: [],            //职位
+  position_id: [],        //岗位
+  recommender: '',        //推荐人
+  enroll: '',             //入职日期
+  try_out_time: '',       //试用期
+  expected_formal: '',    //预计转正日期
+  formal: '',             //实际转正日期
+  forward_time: '',       //实际转正日期
+  formal_status: '',      //转正类型
+  position_status: '',    //当前在职状态
+  job_type: '',           //员工类型
+  job_status: '',         //员工状态
+  bank_num: '',           //银行卡号
+  account_bank: '',       //开户行
+  branch_bank_code: '',   //支行行号
+  account_name: '',       //开户名
+  branch_bank: '',        //支行
+  city: '',               //城市
+  area: '',               //区域
+  education: '',          //学历
+  email: '',              //个人邮箱
+  salary: '',             //薪资
+  level: '',              //级别
+  entry_way: '',          //入职途径
+};
+
+// 新增辅助信息
+rosterAddAssist = {
+  origin_addr: '',                //籍贯
+  emergency_call: '',             //紧急联系电话+与该员工关系
+  school: '',                     //毕业学校
+  major: '',                      //所学专业
+  graduation_time: '',            //毕业时间
+  agreement_first_time: '',       //第一次签合同时间
+  agreement_first_end_time: '',   //第一次合同到期时间
+  agreement_second_time: '',      //第二次签合同时间
+  image_info: {},                 //第二次签合同时间
+};
+
 // 花名册 图片上传
 rosterImgInfo = [
   {
@@ -71,7 +125,7 @@ job_status = [
   {id: 4, name: '二次入职'},
 ];
 // 入职途径
-entry_way = [
+entry_ways = [
   {id: 1, name: '智联招聘'},
   {id: 2, name: '前程无忧'},
   {id: 3, name: '58同城'},

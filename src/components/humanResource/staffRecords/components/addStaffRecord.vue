@@ -127,8 +127,7 @@
     },
     methods: {
       getImg(val) {
-        console.log(val)
-        let ID = val[0] && val[0].split('_');  // '0_0_staff_records'
+        let ID = val[0] && val[0].split('_');
         let key = ID[0];
         let index = ID[1];
         this.staffRecords[key].remarks[index].images = val[1];
@@ -169,7 +168,6 @@
         }
       },
       openOrganization(type, key) {
-        //type: depart/staff ,position: search/dialog
         this.organizationDialog = true;
         this.organizeType = type;
         this.currentKey = key;
