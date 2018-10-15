@@ -23,39 +23,40 @@
 
 <script>
   import UpLoad from '../../../../common/UPLOAD.vue'
+
   export default {
-    props:['upLoadDialog','vacationId','status'],
-    components:{UpLoad},
+    props: ['upLoadDialog', 'vacationId', 'status'],
+    components: {UpLoad},
     data() {
       return {
-        upLoadDialogVisible:false,
-        formInline:{
-          payment_pic:[],
+        upLoadDialogVisible: false,
+        formInline: {
+          payment_pic: [],
         },
         editImage: {},
-        isClear:false,
-        isUpload:false,
+        isClear: false,
+        isUpload: false,
       };
     },
-    watch:{
-      upLoadDialog(val){
+    watch: {
+      upLoadDialog(val) {
         this.upLoadDialogVisible = val
       },
-      upLoadDialogVisible(val){
-        if(!val){
+      upLoadDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
           this.formInline = {
-            payment_pic : [],
+            payment_pic: [],
           };
           this.isClear = false;
-        }else {
+        } else {
           this.getData();
           this.isClear = true;
         }
       },
     },
-    methods:{
-      getImg(val){
+    methods: {
+      getImg(val) {
         this.formInline.payment_pic = val[1];
         this.isUpload = val[2];
       },
@@ -67,8 +68,8 @@
             let picObject = {};
             this.editImage = {};
             this.formInline.payment_pic = [];
-            if (data.payment_pic && data.payment_pic.length>0) {
-              data.payment_pic.forEach((item)=>{
+            if (data.payment_pic && data.payment_pic.length > 0) {
+              data.payment_pic.forEach((item) => {
                 picObject[item.id] = item.uri;
                 this.formInline.payment_pic.push(item.id);
               })
@@ -77,9 +78,9 @@
           }
         })
       },
-      confirmAdd(){
-        if(!this.isUpload){
-          this.$http.put(globalConfig.server+'customer/check_out/status/'+this.vacationId,this.formInline).then((res)=> {
+      confirmAdd() {
+        if (!this.isUpload) {
+          this.$http.put(globalConfig.server + 'customer/check_out/status/' + this.vacationId, this.formInline).then((res) => {
             if (res.data.code == '20060') {
               this.$emit('close', 'success');
               this.$notify.success({
@@ -93,10 +94,10 @@
               })
             }
           })
-        }else {
+        } else {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传',
+            title: '警告',
+            message: '图片正在上传',
           })
         }
       },
