@@ -6,19 +6,19 @@
     >
     <div slot="header" class="clearfix card-header" >
       <div>
-        <span>城市盈亏总额</span>
+        <span>{{cardData.name}}</span>
         <div>
           <!-- 说明弹出框 -->
           <toprightControl></toprightControl>
         </div>
       </div>
       <div>
-        <el-tag type="success">业务</el-tag>
+        <el-tag type="success" v-for="(item,index) in cardData.tags" :key="index">{{item.name}}</el-tag>
       </div>
     </div>
     <div> 
-      <div style="width:100%;height:260px;position:relative" class="chartbox">
-        
+      <div  class="chartbox">
+        <slot></slot>
       </div>
     </div>
   </el-card>
@@ -27,6 +27,7 @@
 import toprightControl from "../components/toprightControl.vue"
 export default {
   components:{toprightControl},
+  props:["cardData"],
   data(){
     return {
       bodyStyle:{//卡片主体样式
@@ -41,6 +42,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+
 //仪表卡片
 .clearfix:before,
 .clearfix:after {
@@ -52,7 +54,6 @@ export default {
 }
 .card-header{
   font-size: 18px;
-  
 }
 .box-card {
   width: 100%;
@@ -64,10 +65,16 @@ export default {
     border:1px solid #409EFF
   }
 }
+.chartbox{
+  width:100%;
+  height:300px;
+  position:relative
+}
 </style>
 <style lang="scss">
 .el-card__header{
   padding:5px 10px;
+  height: 55px;
 }
 // 卡片类型标签
 .el-tag{

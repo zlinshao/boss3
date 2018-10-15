@@ -273,7 +273,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="是否电子收据" required="">
-                  <el-switch v-model="is_receipt"></el-switch>
+                  <el-switch v-model="is_receipt" disabled></el-switch>
                 </el-form-item> 
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">

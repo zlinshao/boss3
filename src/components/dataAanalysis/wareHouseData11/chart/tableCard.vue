@@ -1,4 +1,5 @@
 <template>
+<!-- 表格卡片 -->
   <div ref="chartId" id="chartTable">
     <el-table
       @click.native ="detaildialogVisible=true"

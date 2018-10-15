@@ -1,37 +1,27 @@
 <template>
 <!-- 基础柱状图 -->
     <div ref="chartId">
-
+      <div v-if="chartText!=''">{{chartText}}</div>
     </div>
 </template>
 <script>
   export default {
-    props:['chartheight','chartData'],
+    props:['chartheight','url'],
     data(){
       return {
-        data:[{
-          city: '南京',
-          salary: 38 
-        }, {
-          city: '杭州',
-          salary: 52
-        }, {
-          city: '苏州',
-          salary: 61
-        }, {
-          city: '合肥',
-          salary: 145
-        }, {
-          city: '西安',
-          salary: 200
-        },{
-          city: '成都',
-          salary: 150
-        },{
-          city: '重庆',
-          salary: 210
-        }]
+        data:[],
+        dataParams:{
+          // city:"",
+          // area:"",
+          // group:"",
+          start_date:"2018-01-15",
+          end_date:"2018-10-30",
+        },
+        interval:"",
+        chartText:"",//显示文本
       }
+      
+     
     },
     methods:{
       drawChart(data) {
@@ -39,30 +29,37 @@
           container: this.$refs.chartId,
           forceFit: true,
           // width:300,
-          height:this.chartheight+50,
+          // height:this.chartheight+50,
+          height:300,
         });
         chart.source(data);
-        chart.scale('salary', {
-          tickInterval: 20
+        chart.scale('value', {
+          tickInterval: this.interval
         });
        
-        chart.interval().position('city*salary');
+        chart.interval().position('cate*value');
         chart.render();
       },
-      
+      getChart(){
+        console.log(this.url)
+        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+          console.log(res)
+          if(res.data.code == "20000"){
+            this.data = res.data.data
+            this.chartText = ''
+            let arr = res.data.data
+            arr.sort()
+            this.interval = Math.ceil((arr[arr.length-1]-arr[0])/arr.length)
+            this.drawChart(this.data)
+          }else{
+            this.chartText = res.data.msg
+          }
+        });
+      }
 
     },
     mounted () {
-      if(this.chartData){
-        this.drawChart(this.chartData)
-      }
-     
-    },
-    watch:{
-      chartData(val){
-        this.$refs.chartId.innerHTML = ""
-        this.drawChart(val)
-      }
+     this.getChart()
     }
   }
 </script>

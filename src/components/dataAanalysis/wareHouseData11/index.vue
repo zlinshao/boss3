@@ -1,13 +1,28 @@
-<template >
+<template>
   <div id="wareHouseData">
     <!-- 图表展示 -->
     <div>
-      <el-row :gutter="20" >
-          <el-col :span="8" >
+        <el-row :gutter="20" >
+          <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" >
             <!-- 图表卡片 -->
-            <chartCard></chartCard>
+            <chartCard id="card" :cardData="item" v-if="item.name=='业绩环比增长'">
+              <!-- <component :is="item.chart_set[0].type" :url="item.data_source"></component> -->
+              <!-- <basicColumn :url="item.data_source"></basicColumn> -->
+              <seriesLine url="item.data_source"></seriesLine>
+            </chartCard>
+          </el-col>
+          <el-col 
+            v-if="!cardloading"
+            :span="24" 
+            v-loading="cardloading"
+            style="text-align: center;"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0.5)">
+            {{loadingText}}
           </el-col>
         </el-row>
+        
     </div>
     <!-- 筛选框 -->
     <div class="filterBox">
@@ -18,7 +33,7 @@
         v-model="searchQuotaVal"
         >
       </el-input>
-      <el-select placeholder="全部" class="selectFil" v-model="selectClassValue">
+      <el-select placeholder="全部" class="selectFil" v-model="classSelectValue">
         <el-option
           v-for="item in classSelect"
           :key="item.value"
@@ -31,13 +46,25 @@
   </div>
 </template>
 <script>
-import chartCard from "./chartCard.vue"
+import chartCard from "./chartCard.vue" //图表卡片
+import basicColumn from "./chart/basicColumn.vue"          //基础柱状图
+import bubblePoint from "./chart/bubblePoint.vue"          //气泡图
+import donut from "./chart/donut.vue"                      //基础环图
+import gauge from "./chart/gauge.vue"                      //仪表图
+import groupedColumn from "./chart/groupedColumn.vue"      //分组柱状图
+import pie from "./chart/pie.vue"                          //饼图
+import seriesLine from "./chart/seriesLine.vue"            //折线图
+import stackedColumn from "./chart/stackedColumn.vue"      //堆叠柱状图
+import stackedPercentageColumn from "./chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
+import textCard from "./chart/textCard.vue"               //文本卡片
+import tableCard from "./chart/tableCard.vue"            //表格卡片
+
 export default {
-  components:{chartCard},
+  components:{chartCard,basicColumn,bubblePoint,donut,gauge,groupedColumn,pie,seriesLine,stackedColumn,stackedPercentageColumn,textCard,tableCard},
   data(){
     return {
       searchQuotaVal:"",//输入框查询指标
-      selectClassValue:"",//选择框选择类型
+      classSelectValue:"",//选择框选择类型
       classSelect:[{    //指标类型选择
         value: '选项0',
         label: '全部'
@@ -57,13 +84,55 @@ export default {
         value: '选项5',
         label: '行政'
       }],
+      cardCharts:[],//指标卡片
+      page:1, //加载页码
+      limit:31, //加载条数
+      cardloading: false ,//正在加载
+      loadingText:"", //加载文字
       
     }
+  },
+  methods:{
+    getCard(page){
+      if(this.loadingText != "已经到底了"){
+        this.cardloading = true
+        this.loadingText = ""
+        this.$http.get(globalConfig.server + "bisys/card",{headers:{"Accept":"application/vnd.boss18+json"},params: {page:page,limit: this.limit}}).then((res) => {        
+          if(res.data.code == "20000"){
+            console.log(res)
+            res.data.data.data.forEach((item) => {
+              this.cardCharts.push(item) 
+            });
+          }else {
+            this.cardloading = false
+            this.loadingText = "已经到底了"
+          }
+        });
+      }
+    }
+  },
+  mounted () {
+    this.getCard(this.page)
+  },
+  created () {
+    var self = this
+    $(window).scroll(function () { //滚动到页面底部加载数据
+      let scrollTop = $(this).scrollTop()
+      let scrollHeight = $(document).height()
+      let windowHeight = $(this).height()
+      if (scrollTop + windowHeight === scrollHeight) {
+        self.page+=1
+        self.getCard(self.page)
+      }
+    })
   }
   
 }
 </script>
 <style scoped lang="scss">
+#card{
+  margin-bottom: 48px
+}
 // 筛选框
 .filterBox{
   position: absolute;

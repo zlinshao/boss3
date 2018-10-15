@@ -1,4 +1,5 @@
 <template>
+<!-- 气泡图 -->
     <div ref="chartId">
 
     </div>

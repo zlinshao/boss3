@@ -1,4 +1,5 @@
 <template>
+<!-- 文本卡片 -->
     <div ref="chartId" class="textContent">
       <span>1,138.82<b>元</b></span>
     </div>

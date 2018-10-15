@@ -272,7 +272,8 @@
       @open="removeDiaHead"
       custom-class="electronicReceipt"
       :visible.sync="electronicReceiptVisible"
-      width="80%"
+      top="8vh"
+      width="70%"
       :close-on-click-modal="false"
       center
       >
@@ -282,7 +283,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
       >
-        <embed width="100%" height="500px" :src="pdfUrl" type="application/pdf" internalinstanceid="25"></embed>
+        <embed width="100%" height="700px" :src="pdfUrl" type="application/pdf" internalinstanceid="25"></embed>
       </div>
       
       <span slot="footer" class="dialog-footer">
@@ -423,6 +424,7 @@
         electronicReceiptId:'',//电子收据id 
         phone:'',//手机号
         city:[],//城市
+        is_receipt:"",//是否电子收据
         radioCity:"南京市",
         sendElectronicReceiptNumber:'',
         address: globalConfig.server_user,
@@ -485,7 +487,7 @@
 
     watch: {
       approvalStatus(newval,oldval){
-        if(newval=="published"&&oldval=="review"){
+        if(newval=="published"&&oldval=="review"&&this.is_receipt.id == "1"){
           if(this.bulletinType=="租房报备"||this.bulletinType=="公司转租报备"||this.bulletinType=="调房报备"||this.bulletinType=="未收先租确定报备"||this.bulletinType=="已知未收先租报备"||this.bulletinType=="续租报备"||this.bulletinType=="尾款报备"){
             this.createElectronicReceipt()
           }
@@ -679,7 +681,8 @@
               this.electronicReceiptStatu = true
               this.bulletinId = res.data.data.process.id 
               this.phone = res.data.data.process.content.phone
-              
+              this.is_receipt = res.data.data.process.content.is_receipt
+
               this.electronicReceiptParam.process_id = res.data.data.process.id 
               this.electronicReceiptParam.department_id = res.data.data.process.content.department_id
               this.electronicReceiptParam.account_id = res.data.data.process.content.account_id||[]
@@ -723,7 +726,7 @@
 
               
 
-              if(this.approvalStatus=="published"){
+              if(this.approvalStatus=="published"&&this.is_receipt.id == "1"){
                 this.electronicReceiptDisabled = false
               }else{
                 this.electronicReceiptDisabled = true

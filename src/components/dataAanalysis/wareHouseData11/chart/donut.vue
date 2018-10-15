@@ -1,4 +1,5 @@
 <template>
+<!-- 基础环图 -->
     <div ref="chartId" style="margin-left:-50px">
 
     </div>
