@@ -1,7 +1,8 @@
 <template>
   <!-- 盈亏总额 -->
-  <div id="chartCard" >
-    <basicColumn :chartheight="chartheight" :chartData="chartData" @click.native="detaildialogVisible=true"></basicColumn>
+  <div id="chartCard">
+    <basicColumn :chartheight="chartheight" :chartData="chartData"
+                 @click.native="detaildialogVisible=true"></basicColumn>
     <el-dialog
       custom-class="detailDia"
       :show-close="false"
@@ -50,7 +51,7 @@
               </el-select>
             </div>
             <!-- 开始日期 -->
-            <div class="detailSelect" >
+            <div class="detailSelect">
               <el-date-picker
                 size="small"
                 v-model="value7"
@@ -78,161 +79,162 @@
 <script>
   import basicColumn from "../../wareHouseData/chart/basicColumn.vue"
   import toprightControl from "../../components/toprightControl.vue"
-    export default {
-      components:{basicColumn,toprightControl},
-      data(){
-				return {
-          chartData:"",//图表数据
-          chartMsg:{  //图表所需信息
-            component:'ProfitLossTotal',
-            id:1,//图表id
-            title:'盈亏总额', //标题
-            detailMsg:"这是说明。。。。",//说明
-            chartType:"basicColumn",//类型
-            tag:['财务','业务'],//标签
-          },
-          theme:"盈亏总额",
-          chartheight:260,
-          chartheightDia:500,
-          detaildialogVisible : false,
-          bodyStyle:{
-            padding:'0',
-            position:'relative',
-            height:'',
-            width:'100%',
-            backgroundColor: '#fff'
-          },
-          options: [{
-            value: '选项1',
-            label: '黄金糕'
+
+  export default {
+    components: {basicColumn, toprightControl},
+    data() {
+      return {
+        chartData: "",//图表数据
+        chartMsg: {  //图表所需信息
+          component: 'ProfitLossTotal',
+          id: 1,//图表id
+          title: '盈亏总额', //标题
+          detailMsg: "这是说明。。。。",//说明
+          chartType: "basicColumn",//类型
+          tag: ['财务', '业务'],//标签
+        },
+        theme: "盈亏总额",
+        chartheight: 260,
+        chartheightDia: 500,
+        detaildialogVisible: false,
+        bodyStyle: {
+          padding: '0',
+          position: 'relative',
+          height: '',
+          width: '100%',
+          backgroundColor: '#fff'
+        },
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '',
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
           }, {
-            value: '选项2',
-            label: '双皮奶'
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
           }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
-          value: '',
-          pickerOptions2: {
-            shortcuts: [{
-              text: '最近一周',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit('pick', [start, end]);
-              }
-            }, {
-              text: '最近一个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit('pick', [start, end]);
-              }
-            }, {
-              text: '最近三个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                picker.$emit('pick', [start, end]);
-              }
-            }]
-          },
-          value7: '',
-          jiadata:[{
-            city: '南京',
-            salary: 290 
-          }, {
-            city: '杭州',
-            salary: 260
-          }, {
-            city: '苏州',
-            salary: 320
-          }, {
-            city: '合肥',
-            salary: 200
-          }, {
-            city: '西安',
-            salary: 300
-          },{
-            city: '成都',
-            salary: 150
-          },{
-            city: '重庆',
-            salary: 210
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
           }]
+        },
+        value7: '',
+        jiadata: [{
+          city: '南京',
+          salary: 290
+        }, {
+          city: '杭州',
+          salary: 260
+        }, {
+          city: '苏州',
+          salary: 320
+        }, {
+          city: '合肥',
+          salary: 200
+        }, {
+          city: '西安',
+          salary: 300
+        }, {
+          city: '成都',
+          salary: 150
+        }, {
+          city: '重庆',
+          salary: 210
+        }]
 
-		    }
-      },
-			methods:{
-       
-			},
-			mounted(){
-        this.bodyStyle.height=this.chartheight+"px";
-        
-        this.$http.get("http://test.v3.api.boss.lejias.cn/bisys/Statistic/achieveTotal",
-        {headers:{
-            Accept:"application/vnd.boss18+json"}
-        }).then((res) => {
-          if (res.data.code === "20000") {
-            // let result = res.data.data
-            // this.chartData = result.data
-
-            // this.chartMsg.title = result.title
-            // this.chartMsg.chartType = result.chartType
-            // this.chartMsg.detailMsg = result.detailMsg
-            // this.chartMsg.tag = result.tag
-
-            this.chartData = this.jiadata
-
-            this.$emit('sendChartMsg',this.chartMsg)
-          }
-        })
       }
+    },
+    methods: {},
+    mounted() {
+      this.bodyStyle.height = this.chartheight + "px";
+
+      this.$http.get("http://test.v3.api.boss.lejias.cn/bisys/Statistic/achieveTotal",
+        {
+          headers: {
+            Accept: "application/vnd.boss18+json"
+          }
+        }).then((res) => {
+        if (res.data.code === "20000") {
+          // let result = res.data.data
+          // this.chartData = result.data
+
+          // this.chartMsg.title = result.title
+          // this.chartMsg.chartType = result.chartType
+          // this.chartMsg.detailMsg = result.detailMsg
+          // this.chartMsg.tag = result.tag
+
+          this.chartData = this.jiadata
+
+          this.$emit('sendChartMsg', this.chartMsg)
+        }
+      })
     }
+  }
 </script>
 <style scoped lang="scss">
-//图表详细弹出框
-.detailDia {
-  .detailMsgHead{
-     font-size: 25px;
-    i {
-     color:#2496FF;
-     padding-right:25px;
-    }
-  }
-  .contentTop{
-    margin-top: 20px;
-    text-align: center;
-    .detailSelect{
-      display:inline-block;
-      width: 15%;
-      margin-left: 20px;
-      &:nth-of-type(4){
-        width: 20%;
-      }
-      &:last-of-type{
-        margin-left:0;
+  //图表详细弹出框
+  .detailDia {
+    .detailMsgHead {
+      font-size: 25px;
+      i {
+        color: #2496FF;
+        padding-right: 25px;
       }
     }
+    .contentTop {
+      margin-top: 20px;
+      text-align: center;
+      .detailSelect {
+        display: inline-block;
+        width: 15%;
+        margin-left: 20px;
+        &:nth-of-type(4) {
+          width: 20%;
+        }
+        &:last-of-type {
+          margin-left: 0;
+        }
+      }
+    }
+    .content {
+      margin-top: 30px;
+    }
+
   }
-  .content {
-    margin-top:30px;
-  }
-   
-}
 </style>
 <style lang="scss">
-  #chartCard .detailDia .el-dialog__header{
-    padding:0px;
-    border-bottom:none
+  #chartCard .detailDia .el-dialog__header {
+    padding: 0px;
+    border-bottom: none
   }
 </style>

@@ -39,16 +39,15 @@
                   prop="create_time"
                   label="导入时间">
                 </el-table-column>
-
                 <el-table-column
                   width="500"
                   label="账户及余额">
                   <template slot-scope="scope">
                     <ul>
-                      <li v-for="(val,key) in scope.row.account_snapshot">
-                        <span
+                      <li v-for="(val,key) in scope.row.account_snapshot" class="account_snapshot">
+                        <span class="span1"
                           style="display:inline-block;width: 200px;text-align: right;color: #6a8dfb">{{key}} : </span>
-                        <span style="display:inline-block;width: 200px;text-align: left">{{val}}元</span>
+                        <span class="span2" style="display:inline-block;width: 200px;text-align: left">{{val}}元</span>
                       </li>
                     </ul>
                   </template>
@@ -134,7 +133,7 @@
   import Organization from '../common/organization.vue'                          //选人组件
   export default {
     name: "index",
-    components: {ExportData, ImportData, Organization,Remind},
+    components: {ExportData, ImportData, Organization, Remind},
     data() {
       return {
         tableData: [],
@@ -185,7 +184,7 @@
         }
         header.then((res) => {
           this.rentLoading = false;
-          if (res.data.code == '80000') {
+          if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
             this.tableNum = res.data.data.count;
           } else {
@@ -237,5 +236,8 @@
 <style lang="scss" scoped>
   .filter {
     float: right;
+  }
+  .account_snapshot{
+
   }
 </style>
