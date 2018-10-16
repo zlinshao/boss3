@@ -1,33 +1,33 @@
 <template>
-<!-- 折线图 -->
-    <div ref="chartId">
+  <!-- 折线图 -->
+  <div ref="chartId">
 
-    </div>
+  </div>
 </template>
 <script>
   export default {
-    props:['chartheight','url'],
-    data(){
+    props: ['chartheight', 'url'],
+    data() {
       return {
-        data:[],
-        dataParams:{
+        data: [],
+        dataParams: {
           // city:"",
           // area:"",
           // group:"",
-          start_date:"2018-01-15",
-          end_date:"2018-10-30",
+          start_date: "2018-01-15",
+          end_date: "2018-10-30",
         },
-        interval:"",
-        chartText:"",//显示文本
+        interval: "",
+        chartText: "",    //显示文本
       }
     },
-    methods:{
+    methods: {
       drawChart(data) {
-        var chart = new this.$G2.Chart({
+        let chart = new this.$G2.Chart({
           container: this.$refs.chartId,
           forceFit: true,
           // width:800,
-          height:300,
+          height: 300,
         });
         chart.source(data, {
           month: {
@@ -53,24 +53,26 @@
         });
         chart.render();
       },
-      getChart(){
-        console.log(this.url)
-        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          console.log(res)
-          if(res.data.code == "20000"){
-            this.data = res.data.data
-            this.chartText = ''
-            let arr = res.data.data
-            arr.sort()
-            this.interval = Math.ceil((arr[arr.length-1]-arr[0])/arr.length)
+      getChart() {
+        this.$http.get(this.url, {
+          headers: {"Accept": "application/vnd.boss18+json"},
+          params: this.dataParams
+        }).then((res) => {
+          console.log(res);
+          if (res.data.code === "20000") {
+            this.data = res.data.data;
+            this.chartText = '';
+            let arr = res.data.data;
+            arr.sort();
+            this.interval = Math.ceil((arr[arr.length - 1] - arr[0]) / arr.length);
             this.drawChart(this.data)
-          }else{
+          } else {
             this.chartText = res.data.msg
           }
         });
       }
     },
-    mounted () {
+    mounted() {
       this.getChart()
       // if(this.chartData){
       //   this.drawChart(this.chartData)
