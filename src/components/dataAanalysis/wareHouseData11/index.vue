@@ -128,16 +128,16 @@
       this.getCard(this.page)
     },
     created() {
-      let self = this;
-      $(window).scroll(function () { //滚动到页面底部加载数据
-        let scrollTop = $(this).scrollTop();
-        let scrollHeight = $(document).height();
-        let windowHeight = $(this).height();
-        if (scrollTop + windowHeight === scrollHeight) {
-          self.page += 1;
-          self.getCard(self.page)
-        }
-      })
+      // let self = this;
+      // $(window).scroll(function () { //滚动到页面底部加载数据
+      //   let scrollTop = $(this).scrollTop();
+      //   let scrollHeight = $(document).height();
+      //   let windowHeight = $(this).height();
+      //   if (scrollTop + windowHeight === scrollHeight) {
+      //     self.page += 1;
+      //     self.getCard(self.page)
+      //   }
+      // })
     }
   }
 </script>

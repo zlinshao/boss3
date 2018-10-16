@@ -174,6 +174,7 @@
 
       },
       myData() {
+        this.tableData = [];
         this.rentStatus = " ";
         this.rentLoading = true;
         let header;
@@ -189,7 +190,6 @@
             this.tableNum = res.data.data.count;
           } else {
             this.rentStatus = "暂无数据";
-            this.tableData = [];
             this.tableNum = 0;
           }
         });
