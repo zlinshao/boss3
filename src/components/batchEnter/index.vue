@@ -4,31 +4,95 @@
       <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
-            <el-form-item>
-              <el-input placeholder="请选择员工" v-model="staff_name" size="mini" readOnly @focus="openOrganizeModal">
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="exportDialog = true">导 出</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="importDialog = true">导 入</el-button>
-            </el-form-item>
-            <el-form-item v-if="activeName ==='first'">
-              <el-button type="primary" size="mini" @click="remindDialog = true">尾款提醒</el-button>
-            </el-form-item>
+            <div v-if="activeName === 'report'">
+              <el-form-item>
+                <el-input placeholder="请输入内容" clearable v-model="params.search"
+                          @keyup.enter.native="search" size="mini">
+                  <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="mini">一键入账</el-button>
+              </el-form-item>
+            </div>
+            <div v-else>
+              <el-form-item>
+                <el-input placeholder="请选择员工" v-model="staff_name" size="mini" readOnly @focus="openOrganizeModal">
+                  <template slot="append">
+                    <div style="cursor: pointer;" @click="emptySearch">清空</div>
+                  </template>
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="mini" @click="exportDialog = true">导 出</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" size="mini" @click="importDialog = true">导 入</el-button>
+              </el-form-item>
+              <el-form-item v-if="activeName ==='first'">
+                <el-button type="primary" size="mini" @click="remindDialog = true">尾款提醒</el-button>
+              </el-form-item>
+            </div>
           </el-form>
         </div>
       </div>
       <div class="main">
         <div>
           <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="应收入账" name="first">
+            <el-tab-pane label="报备入账" name="report">
               <el-table
                 :data="tableData"
+                :empty-text='rentStatus'
+                v-loading="rentLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0)"
+                style="width: 100%">
+                <el-table-column>
+                  <template slot-scope="scope">
+
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="create_time"
+                  label="收款时间">
+                </el-table-column>
+                <el-table-column
+                  prop="create_time"
+                  label="房屋地址">
+                </el-table-column>
+                <el-table-column
+                  prop="create_time"
+                  label="科目">
+                </el-table-column>
+                <el-table-column
+                  prop="create_time"
+                  label="应收金额">
+                </el-table-column>
+                <el-table-column
+                  prop="create_time"
+                  label="实收金额">
+                </el-table-column>
+                <el-table-column
+                  label="状态">
+                  <template slot-scope="scope">
+
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="操作人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.simple_staff && scope.row.simple_staff.real_name">
+                      {{scope.row.simple_staff.real_name}}
+                    </span>
+                    <span v-else>/</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="应收入账" name="first">
+              <el-table
+                :data="tableData1"
                 :empty-text='rentStatus'
                 v-loading="rentLoading"
                 element-loading-text="拼命加载中"
@@ -46,7 +110,7 @@
                     <ul>
                       <li v-for="(val,key) in scope.row.account_snapshot" class="account_snapshot">
                         <span class="span1"
-                          style="display:inline-block;width: 200px;text-align: right;color: #6a8dfb">{{key}} : </span>
+                              style="display:inline-block;width: 200px;text-align: right;color: #6a8dfb">{{key}} : </span>
                         <span class="span2" style="display:inline-block;width: 200px;text-align: left">{{val}}元</span>
                       </li>
                     </ul>
@@ -65,7 +129,7 @@
             </el-tab-pane>
             <el-tab-pane label="应付入账" name="second">
               <el-table
-                :data="tableData"
+                :data="tableData2"
                 :empty-text='rentStatus'
                 v-loading="rentLoading"
                 element-loading-text="拼命加载中"
@@ -137,6 +201,8 @@
     data() {
       return {
         tableData: [],
+        tableData1: [],
+        tableData2: [],
         tableNum: 0,
         params: {
           limit: 12,
@@ -152,7 +218,7 @@
         importDialog: false,
         remindDialog: false,
         organizationDialog: false,
-        activeName: 'first',
+        activeName: 'report',
       };
     },
     activated() {
@@ -175,10 +241,15 @@
       },
       myData() {
         this.tableData = [];
+        this.tableData1 = [];
+        this.tableData2 = [];
         this.rentStatus = " ";
         this.rentLoading = true;
         let header;
-        if (this.activeName === 'first') {
+        let val = this.activeName;
+        if (val === 'report') {
+          header = this.$http.get(globalConfig.server + "financial/receivable/transfer/record", {params: this.params});
+        } else if (val === 'first') {
           header = this.$http.get(globalConfig.server + "financial/receivable/transfer/record", {params: this.params});
         } else {
           header = this.$http.get(globalConfig.server + "financial/payable/transfer/record", {params: this.params});
@@ -186,7 +257,13 @@
         header.then((res) => {
           this.rentLoading = false;
           if (res.data.code === '80000') {
-            this.tableData = res.data.data.data;
+            if (val === 'report') {
+              this.tableData = res.data.data.data;
+            } else if (val === 'first') {
+              this.tableData1 = res.data.data.data;
+            } else {
+              this.tableData2 = res.data.data.data;
+            }
             this.tableNum = res.data.data.count;
           } else {
             this.rentStatus = "暂无数据";
@@ -237,7 +314,8 @@
   .filter {
     float: right;
   }
-  .account_snapshot{
+
+  .account_snapshot {
 
   }
 </style>

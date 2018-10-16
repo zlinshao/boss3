@@ -342,7 +342,7 @@
       leadingOut() {
         this.$http.get(this.url + 'hrm/User/lists?export=1', {
           params: this.params,
-        }).then(res => {
+        }, {responseType: 'arraybuffer'}).then(res => {
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           let title = this.nowDateTime('time') + '花名册.xlsx';
