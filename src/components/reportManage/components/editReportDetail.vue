@@ -256,8 +256,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
-                   v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled"
-        >
+                   v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
         </el-button>
         <el-button v-if="!fullLoading" size="small" type="primary"
@@ -271,7 +270,6 @@
       </div>
     </el-dialog>
     <!-- 生成电子收据 -->
-
     <el-dialog
       @open="removeDiaHead"
       custom-class="electronicReceipt"
@@ -279,14 +277,12 @@
       top="8vh"
       width="70%"
       :close-on-click-modal="false"
-      center
-    >
+      center>
       <div
         v-loading="pdfloading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-      >
+        element-loading-background="rgba(0, 0, 0, 0.8)">
         <embed width="100%" height="700px" :src="pdfUrl" type="application/pdf" internalinstanceid="25"></embed>
       </div>
 
@@ -518,10 +514,10 @@
           this.getProcess();
           this.getReportEditInfo();
 
-          this.sendElectronicReceiptBtnText = "发送电子收据"
-          this.ElectronicReceiptBtnColor = "success"
+          this.sendElectronicReceiptBtnText = "发送电子收据";
+          this.ElectronicReceiptBtnColor = "success";
 
-          this.electronicReceiptParam = {}
+          this.electronicReceiptParam = {};
           this.bank = {}
         }
       },
@@ -545,13 +541,10 @@
         } else {
           this.leader_phone = '';
           this.leader_name = '';
-          "welcome youxi ahhh "
         }
-
       }
     },
     methods: {
-
       // 审批人信息
       approvePersonal() {
         if (this.place.auditors) {
@@ -560,39 +553,35 @@
         }
       },
       //判断是否有电子收据
-      electronicReceiptDia(id) {
-        this.fullLoading = true
+      electronicReceiptDia() {
+        this.fullLoading = true;
         this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
-
-          this.fullLoading = false
-          if (res.data.code == '20001') {
-            this.electronicReceiptDisabled = false
-            this.createElectronicReceipt()
-          } else if (res.data.code == "20000") {
-            this.electronicReceiptId = res.data.data.id
-            this.electronicReceiptVisible = true
-            this.pdfloading = false
-            this.pdfUrl = res.data.data.shorten_uri
-            if (res.data.data.is_signed == "0") {
-              this.signature = true
-            } else if (res.data.data.is_signed == "1") {
-              this.signature = false
+          this.fullLoading = false;
+          if (res.data.code === '20001') {
+            this.electronicReceiptDisabled = false;
+            this.createElectronicReceipt();
+          } else if (res.data.code === "20000") {
+            this.electronicReceiptId = res.data.data.id;
+            this.electronicReceiptVisible = true;
+            this.pdfloading = false;
+            this.pdfUrl = res.data.data.shorten_uri;
+            if (res.data.data.is_signed === "0") {
+              this.signature = true;
+            } else if (res.data.data.is_signed === "1") {
+              this.signature = false;
             }
 
           }
         })
-
       },
       //生成电子收据
       createElectronicReceipt() {
-
-        this.electronicReceiptVisible = true
+        this.electronicReceiptVisible = true;
         this.$http.post(globalConfig.server + 'financial/receipt/generate', {...this.electronicReceiptParam, ...this.bank}).then((res) => {
-          // console.log({...this.electronicReceiptParam,...this.bank})
-          this.pdfloading = false
-          if (res.data.code == "20000") {
-            this.electronicReceiptId = res.data.data.id
-            this.pdfUrl = res.data.data.shorten_uri
+          this.pdfloading = false;
+          if (res.data.code === "20000") {
+            this.electronicReceiptId = res.data.data.id;
+            this.pdfUrl = res.data.data.shorten_uri;
             this.signature = true
           } else {
             this.$notify.error({
@@ -601,18 +590,16 @@
             });
             this.electronicReceiptVisible = false
           }
-
         })
-
       },
       //电子收据签章
       signaturebtn() {
-        this.pdfloading = true
+        this.pdfloading = true;
         this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
 
-          if (res.data.code == "20000") {
-            this.pdfloading = false
-            this.pdfUrl = res.data.data.shorten_uri
+          if (res.data.code === "20000") {
+            this.pdfloading = false;
+            this.pdfUrl = res.data.data.shorten_uri;
             this.signature = false
           } else {
 
@@ -623,12 +610,11 @@
           }
 
         })
-
       },
       //发送电子收据
       sendElectronicReceipt() {
-        this.signature = true
-        this.electronicReceiptVisible = false
+        this.signature = true;
+        this.electronicReceiptVisible = false;
 
         this.$prompt('请输入手机号码', '提示', {
           confirmButtonText: '确定',
@@ -673,86 +659,74 @@
             this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
             this.getReportAboutInfo();
 
+            this.bulletinType = res.data.data.process.content.bulletin_name;
 
-            this.bulletinType = res.data.data.process.content.bulletin_name
+            this.approvalStatus = pro.place.status;
 
-            this.approvalStatus = pro.place.status
+            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
 
-            if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
+              this.electronicReceiptStatu = true;
+              this.bulletinId = res.data.data.process.id;
+              this.phone = res.data.data.process.content.phone;
+              this.is_receipt = res.data.data.process.content.is_receipt;
 
-              this.electronicReceiptStatu = true
-              this.bulletinId = res.data.data.process.id
-              this.phone = res.data.data.process.content.phone
-              this.is_receipt = res.data.data.process.content.is_receipt
-
-              this.electronicReceiptParam.process_id = res.data.data.process.id
-              this.electronicReceiptParam.department_id = res.data.data.process.content.department_id
-              this.electronicReceiptParam.account_id = res.data.data.process.content.account_id || []
-              this.electronicReceiptParam.deposit = res.data.data.process.content.front_money
-              this.electronicReceiptParam.mortgage = res.data.data.process.content.deposit_payed
-              this.electronicReceiptParam.rental = res.data.data.process.content.rent_money
+              this.electronicReceiptParam.process_id = res.data.data.process.id;
+              this.electronicReceiptParam.department_id = res.data.data.process.content.department_id;
+              this.electronicReceiptParam.account_id = res.data.data.process.content.account_id || [];
+              this.electronicReceiptParam.deposit = res.data.data.process.content.front_money;
+              this.electronicReceiptParam.mortgage = res.data.data.process.content.deposit_payed;
+              this.electronicReceiptParam.rental = res.data.data.process.content.rent_money;
               this.electronicReceiptParam.duration = res.data.data.process.content.show_content["现签约时长"] || res.data.data.process.content.show_content["签约时长"]
-              this.electronicReceiptParam.money_sep = res.data.data.process.content.money_sep
+              this.electronicReceiptParam.money_sep = res.data.data.process.content.money_sep;
+              this.electronicReceiptParam.address = res.data.data.process.content.address;
 
-              this.electronicReceiptParam.address = res.data.data.process.content.address
-
-              if (this.bulletinType == "尾款报备") {
-
-                this.electronicReceiptParam.payer = res.data.data.process.content.customer_name
-                this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date
+              if (this.bulletinType === "尾款报备") {
+                this.electronicReceiptParam.payer = res.data.data.process.content.customer_name;
+                this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date;
                 this.electronicReceiptParam.price = res.data.data.process.content.price_arr.map(item => {
-                  return item.split(':')[1]
-                }).join(",")
+                  return item.split(':')[1];
+                }).join(",");
                 this.electronicReceiptParam.pay_way = res.data.data.process.content.payWay.join(',')
               } else {
-                this.electronicReceiptParam.payer = res.data.data.process.content.name
-                this.electronicReceiptParam.sign_at = res.data.data.process.content.sign_date
+                this.electronicReceiptParam.payer = res.data.data.process.content.name;
+                this.electronicReceiptParam.sign_at = res.data.data.process.content.sign_date;
                 this.electronicReceiptParam.price = res.data.data.process.content.price_arr.map(item => {
                   return item + "元"
-                }).join(',')
+                }).join(',');
                 this.electronicReceiptParam.pay_way = res.data.data.process.content.pay_way_str.map((item) => {
-                  return item.msg + " " + item.period
-                }).join(',')
+                  return item.msg + " " + item.period;
+                }).join(',');
               }
-
-
               res.data.data.process.content.money_way.forEach((item, index) => {
-                this.bank["bank" + (index + 1)] = item
-              })
+                this.bank["bank" + (index + 1)] = item;
+              });
 
               this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
-
-                if (res.data.code == "20000") {
-
-                  if (res.data.data.is_sent == true) {
-                    this.sendElectronicReceiptBtnText = "已发送电子收据"
+                if (res.data.code === "20000") {
+                  if (res.data.data.is_sent) {
+                    this.sendElectronicReceiptBtnText = "已发送电子收据";
                     this.ElectronicReceiptBtnColor = "info"
                   } else {
-                    this.sendElectronicReceiptBtnText = "发送电子收据"
+                    this.sendElectronicReceiptBtnText = "发送电子收据";
                     this.ElectronicReceiptBtnColor = "success"
                   }
                 }
-              })
-
-
-              if (this.approvalStatus == "published" && this.is_receipt.id == "1") {
+              });
+              if (this.approvalStatus === "published" && this.is_receipt.id == "1") {
                 this.electronicReceiptDisabled = false
               } else {
                 this.electronicReceiptDisabled = true
               }
             } else {
-              this.electronicReceiptStatu = false
+              this.electronicReceiptStatu = false;
               this.electronicReceiptDisabled = false
             }
-
-
             for (let key in this.operation) {
               if (key.indexOf('approved') > -1) {
                 this.approvedStatus = true;
                 return;
               }
             }
-
           } else {
             this.show_content = {};
             this.operation = {};
@@ -780,13 +754,9 @@
           }
         })
       },
-
       commentOn(val) {
-
         this.form.operation = val;
         this.commentVisible = true;
-
-
       },
 
       getImg(val) {
@@ -810,7 +780,6 @@
           }
         }
       },
-
 
       sureComment(val) {
         if (this.picStatus) {
