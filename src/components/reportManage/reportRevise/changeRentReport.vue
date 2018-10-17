@@ -789,6 +789,7 @@
 
           money_sum: '',                //总金额
           money_sep: [''],              //分金额
+          real_pay_at: [""],        //实际收款时间
           money_way: [''],              //分金额 方式
 
           discount: 0,                   //让价金额

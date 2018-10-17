@@ -462,7 +462,7 @@
           this.clearData();
         } else {
           this.isClear = true;
-          this.getDictionary()
+          this.getDictionary();
           setTimeout(() => {
             this.preloadData();
           }, 50);
@@ -766,26 +766,21 @@
       confirmSubmit() {
         if (!this.isUpload) {
           this.params.account_id = this.account_ids(this.params.money_way, this.purchase_way_dic);
-          this.params.contract_number =
-            this.params.contract_number === "LJZF"
-              ? ""
-              : this.params.contract_number;
-          this.$http
-            .post(globalConfig.server + "bulletin/rent", this.params)
-            .then(res => {
-              if (res.data.code === "50230") {
-                this.$notify.success({
-                  title: "成功",
-                  message: res.data.msg
-                });
-                this.$emit("close", "success");
-              } else {
-                this.$notify.warning({
-                  title: "警告",
-                  message: res.data.msg
-                });
-              }
-            });
+          this.params.contract_number = this.params.contract_number === "LJZF" ? "" : this.params.contract_number;
+          this.$http.post(globalConfig.server + "bulletin/rent", this.params).then(res => {
+            if (res.data.code === "50230") {
+              this.$notify.success({
+                title: "成功",
+                message: res.data.msg
+              });
+              this.$emit("close", "success");
+            } else {
+              this.$notify.warning({
+                title: "警告",
+                message: res.data.msg
+              });
+            }
+          });
         } else {
           this.$notify.warning({
             title: "警告",
@@ -821,6 +816,7 @@
 
           money_sum: "", //总金额
           money_sep: [""], //分金额
+          real_pay_at: [""], //实际收款时间
           money_way: [""], //分金额 方式
 
           is_other_fee: "0",
