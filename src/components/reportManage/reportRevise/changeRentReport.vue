@@ -182,7 +182,7 @@
                 <el-col :span="6">
                   <el-form-item label="汇款银行" required="">
                     <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择汇款银行" value="">
-                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.id"
+                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.bank_info"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -200,9 +200,9 @@
               </el-row>
             </div>
             <div style="text-align: center">
-              <!--<el-button type="text" @click="addMoreMoneyTableChange">-->
-                <!--<i class="el-icon-circle-plus"></i>添加支付方式变化-->
-              <!--</el-button>-->
+              <el-button type="text" @click="addMoreMoneyTableChange">
+                <i class="el-icon-circle-plus"></i>添加支付方式变化
+              </el-button>
             </div>
           </div>
 
@@ -258,16 +258,16 @@
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
                 <div v-if="params.is_receipt=='0'">
-                <el-col :span="12">
-                  <el-form-item label="收据编号" required="">
-                    <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12" v-if="item>1">
-                  <div class="deleteNumber">
-                    <span @click="deleteReceiptAmount(item-1)">删除</span>
-                  </div>
-                </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="收据编号" required="">
+                      <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12" v-if="item>1">
+                    <div class="deleteNumber">
+                      <span @click="deleteReceiptAmount(item-1)">删除</span>
+                    </div>
+                  </el-col>
                 </div>
               </el-col>
             </el-row>
@@ -376,9 +376,9 @@
           period_pay_arr: [''],         //付款方式周期
 
           money_sum: '',                //总金额
-          front_money:'',               //定金
-          rent_money:'',                //租金
-          deposit_payed:'',             //押金
+          front_money: '',               //定金
+          rent_money: '',                //租金
+          deposit_payed: '',             //押金
           money_sep: [''],              //分金额
           money_way: [''],              //分金额 方式
 
@@ -404,8 +404,8 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id:'',
-          real_pay_at:''
+          account_id: '',
+          real_pay_at: ''
         },
         is_receipt: false,
         screenshot_leader: {},
@@ -447,9 +447,9 @@
     },
     methods: {
       getDictionary() {
-        let department_id = this.reportDetailData.department_id
-        this.$http.get(globalConfig.server+"/financial/account_alloc/map?org_id="+department_id).then((res) => {
-          if(res.data.code == "20000"){
+        let department_id = this.reportDetailData.department_id;
+        this.$http.get(globalConfig.server + "financial/account_alloc/map?org_id=" + department_id).then((res) => {
+          if (res.data.code === "20000") {
             this.purchase_way_dic = res.data.data
           }
         });
@@ -726,6 +726,7 @@
       },
       confirmSubmit() {
         if (!this.isUpload) {
+          this.params.account_id = this.account_ids(this.params.money_way, this.purchase_way_dic);
           this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
           this.$http.post(globalConfig.server + 'bulletin/change', this.params).then((res) => {
             if (res.data.code === '50530') {

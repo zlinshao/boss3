@@ -159,7 +159,7 @@
                 <el-col :span="6">
                   <el-form-item label="汇款银行" required="">
                     <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择汇款银行" value="">
-                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.id"
+                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.bank_info"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -177,9 +177,9 @@
               </el-row>
             </div>
             <div style="text-align: center">
-              <!--<el-button type="text" @click="addMoreMoneyTableChange">-->
-                <!--<i class="el-icon-circle-plus"></i>添加支付方式变化-->
-              <!--</el-button>-->
+              <el-button type="text" @click="addMoreMoneyTableChange">
+                <i class="el-icon-circle-plus"></i>添加支付方式变化
+              </el-button>
             </div>
           </div>
 
@@ -480,9 +480,9 @@
     },
     methods: {
       getDictionary() {
-        let department_id = this.reportDetailData.department_id
-        this.$http.get(globalConfig.server+"/financial/account_alloc/map?org_id="+department_id).then((res) => {
-          if(res.data.code == "20000"){
+        let department_id = this.reportDetailData.department_id;
+        this.$http.get(globalConfig.server+"financial/account_alloc/map?org_id="+department_id).then((res) => {
+          if(res.data.code === "20000"){
             this.purchase_way_dic = res.data.data
           }
         });
@@ -772,6 +772,7 @@
       },
       confirmSubmit() {
         if (!this.isUpload) {
+          this.params.account_id = this.account_ids(this.params.money_way, this.purchase_way_dic);
           this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
           this.$http.post(globalConfig.server + 'bulletin/rent', this.params).then((res) => {
             if (res.data.code === '50230') {
