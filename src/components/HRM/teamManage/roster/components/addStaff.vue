@@ -11,7 +11,8 @@
       </div>
       <el-form :inline="true" size="mini" label-width="100px" v-if="!fullLoading">
         <el-tabs v-model="activeName">
-          <el-tab-pane v-if="assist === 'new' || assist === 'first'" class="scroll_bar" label="基本信息" name="first">
+          <el-tab-pane v-if="(assist === 'new' || assist === 'first') && this.assist !== 'record'" class="scroll_bar"
+                       label="基本信息" name="first">
             <div class="addForm">
               <div class='formList'>
                 <el-form-item label="姓名" required>
@@ -272,7 +273,8 @@
               </div>
             </div>
           </el-tab-pane>
-          <el-tab-pane v-if="assist === 'second'" class="scroll_bar" label="辅助信息" name="second">
+          <el-tab-pane v-if="assist === 'second' && this.assist !== 'record'" class="scroll_bar" label="辅助信息"
+                       name="second">
             <div class="supplementary">
               <div class="formList">
                 <el-form-item label="籍贯">
@@ -362,9 +364,11 @@
                 <div class="staffRecord">
                   <div class="addMoreRecord">
                     <el-form-item label="部门" required class="width66">
-                      <el-input placeholder="请选择" @focus="openUid('uid', 'staff', index)" v-model="form3[index].name"
-                                size="mini">
-                        <el-button slot="append" @click="emptyUid('uid', index)">清空</el-button>
+                      <!--<el-input placeholder="请选择" @focus="openUid('uid', 'staff', index)" v-model="form3[index].name"-->
+                      <!--size="mini">-->
+                      <!--<el-button slot="append" @click="emptyUid('uid', index)">清空</el-button>-->
+                      <!--</el-input>-->
+                      <el-input v-model="recordName[index]" disabled size="mini">
                       </el-input>
                     </el-form-item>
                     <!--<el-button class="addBtnRecord" size="mini" type="success" @click="addBtnRecord(index)">增加类型-->
@@ -414,7 +418,7 @@
         </el-button>
 
         <el-button size="small" type="primary" @click="setStaff('third')"
-                   v-if="activeName === 'third'">新&nbsp;增
+                   v-if="activeName === 'third' || assist === 'record'">新&nbsp;增
         </el-button>
       </div>
     </el-dialog>
@@ -454,6 +458,7 @@
             images: '',
           }]
         }],
+        recordName: [],
         //辅助信息
         form2: {},
         emergency_call: {},     //紧急联系
@@ -512,10 +517,16 @@
     watch: {
       detail(val) {
         this.getStaffDetail = val;
-        if (this.assist === 'first') {
-          this.personalInfo(val);
-        } else {
-          this.personalAssist(val);
+        switch (this.assist) {
+          case 'first':
+            this.personalInfo(val);
+            break;
+          case 'second':
+            this.personalAssist(val);
+            break;
+          case 'record':
+            this.personalRecord(val);
+            break;
         }
       },
       'form.formal'(val) {  //实际转正日期
@@ -525,7 +536,12 @@
       module(val) {
         if (this.assist !== 'new') {
           this.activeName = this.assist;
-          this.fullLoading = true;
+          if (this.assist === 'record') {
+            this.activeName = 'third';
+            this.fullLoading = false;
+          } else {
+            this.fullLoading = true;
+          }
         } else {
           this.activeName = 'first';
           this.fullLoading = false;
@@ -673,6 +689,13 @@
         this.form2.id = val.user_id;
         this.form3.id = val.user_id;
         this.fullLoading = false;
+      },
+      // 获取奖惩记录部门
+      personalRecord(val) {
+        let organ = JSON.parse(val.organizationInfo);
+        this.form3[0].uid = val.user_id;
+        this.form3[0].name = val.name;
+        this.recordName[0] = organ[0].name;
       },
       // 确认新增
       setStaff(val) {

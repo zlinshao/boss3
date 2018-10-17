@@ -249,6 +249,8 @@
     </div>
     <!--新增员工-->
     <AddStaff :module="staffVisible" :assist="assistShow" :detail="staffDetail" @close="closeStaff"></AddStaff>
+    <!--修改奖惩记录-->
+    <ReviseRecord :module="recordVisible" :data="recordData" @close="closeRecord"></ReviseRecord>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -260,11 +262,12 @@
 
 <script>
   import AddStaff from './components/addStaff.vue';//房东
+  import ReviseRecord from './components/reviseRecord.vue';//修改奖惩记录
   import RightMenu from '../../../common/rightMenu.vue';//右键
   import Organization from '../../../common/organization.vue';//组织架构
   export default {
     name: "index",
-    components: {RightMenu, AddStaff, Organization},
+    components: {RightMenu, AddStaff, ReviseRecord, Organization},
     data() {
       return {
         is_enable: false,
@@ -277,6 +280,8 @@
         tableLoading: false,
         assistShow: '',             //是否显示辅助信息
         staffVisible: false,        //增加新员工
+        recordVisible: false,       //修改奖惩记录
+        recordData: [],             //修改奖惩记录
         currentPage: 1,             //当前页数
         isHigh: false,              //高级
         tableData: [],
@@ -385,10 +390,6 @@
       resetting() {
         this.params = JSON.parse(JSON.stringify(rosterParams));
       },
-      // 双击
-      dblClickTable() {
-
-      },
       // 打开组织架构
       openOrgan(val, type) {
         this.organDivision = val;
@@ -432,6 +433,10 @@
           this.staffList(1);
         }
       },
+      // 关闭奖惩记录编辑
+      closeRecord() {
+        this.recordVisible = false;
+      },
       // 分页
       handleSizeChange(val) {
         this.params.limit = val;
@@ -464,24 +469,42 @@
         }).catch(() => {
         })
       },
+      // 双击
+      dblClickTable() {
+
+      },
       // 右键
       openContextMenu(row, event) {
         this.user_id = row.user_id;
-        this.lists = [
+        let list = [
           {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
           {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
-          {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
-          {clickIndex: 'formal', headIcon: 'iconfont icon-chenggong', label: '转正'},
-          {clickIndex: 'transfer', headIcon: 'iconfont icon-tiaogang', label: '调岗'},
-          {clickIndex: 'dimission', headIcon: 'iconfont icon-lizhi', label: '离职'},
+          {clickIndex: 'reviseRecord', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
+          {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '新增奖惩记录'},
         ];
+        this.lists = JSON.parse(JSON.stringify(list));
+        if (row.position_status) {
+          let num = Number(row.position_status);
+          switch (num) {
+            case 2:
+              this.lists.push({clickIndex: 'transfer', headIcon: 'iconfont icon-tiaogang', label: '调岗'});
+              break;
+            case 3:
+              this.lists.push({clickIndex: 'formal', headIcon: 'iconfont icon-chenggong', label: '转正'});
+              break;
+            case 4:
+              this.lists.push({clickIndex: 'dimission', headIcon: 'iconfont icon-lizhi', label: '离职'});
+              break;
+          }
+        }
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
         switch (val) {
           case 'first':// 编辑基本信息
-          case 'second':
+          case 'second':// 编辑辅助信息
+          case 'record':// 新增奖惩记录
             this.staffVisible = true;
             this.assistShow = val;
             this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
@@ -492,12 +515,20 @@
               }
             });
             break;
-          case 'record':// 编辑奖惩记录
+          case 'reviseRecord':// 编辑奖惩记录
             this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + this.user_id).then(res => {
               if (res.data.success) {
-
+                this.recordVisible = true;
+                this.recordData = res.data.data;
               } else {
-                this.prompt('warning', res.data.msg);
+                this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
+                  if (res.data.success) {
+                    this.recordVisible = true;
+                    this.recordData = res.data.data;
+                  } else {
+                    this.prompt('warning', res.data.msg);
+                  }
+                });
               }
             });
             break;
