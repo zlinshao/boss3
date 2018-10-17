@@ -60,9 +60,12 @@ const StaffRecords = () => import  ('../components/humanResource/staffRecords/in
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement')     // add by cj 人事报表
 
 // 人员信息管理
-const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');         // 人员信息管理
-const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');      // 花名册
-const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');      // 花名册
+const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
+const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');                       // 花名册
+const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 花名册
+const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/index.vue');           // 转正管理
+const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
+const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
@@ -526,6 +529,9 @@ export default new Router({
             {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
           ],
         },
+        {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+        {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+        {path: '/dimission', component: Dimission, name: '离职管理'},
       ]
     },
     // {

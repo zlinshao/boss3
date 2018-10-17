@@ -310,7 +310,10 @@
       // 复选框
       handleSelection(val) {
         this.query = {};
-        this.ids = val;
+        val.forEach(res => {
+          this.ids.push(res);
+        });
+        this.ids = Array.from(new Set(this.ids));
       },
       // 全选
       handleSelectionAll() {
@@ -324,16 +327,6 @@
         this.ids = [];
         this.query.search = this.arc.search;
         this.query.org_id = this.arc.org_id;
-      },
-      // 取消全选
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
       },
       myData() {
         this.tableData = [];
@@ -371,6 +364,16 @@
           }
         });
       },
+      // 复选框 自动选中
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
       // 一键入账
       enterAccount() {
         let id = [];
@@ -382,7 +385,10 @@
           query: this.query,
         }).then(res => {
           if (res.data.code === '20000') {
+            this.ids = [];
+            this.query = {};
             this.search();
+            this.$refs.multipleTable.clearSelection();
             this.prompt('success', res.data.msg);
           } else {
             this.prompt('warning', res.data.msg);
@@ -403,6 +409,7 @@
       },
       handleCurrentChange(val) {
         this.params.page = val;
+        this.arc.page = val;
         this.myData();
       },
 
