@@ -352,7 +352,6 @@
             if (val === 'report') {
               this.tableStatus = (this.arc.search || this.arc.org_id) ? true : false;
               this.tableData = res.data.data.data;
-              // this.toggleSelection(this.ids);
             } else if (val === 'first') {
               this.tableData1 = res.data.data.data;
             } else {
@@ -386,7 +385,10 @@
           query: this.query,
         }).then(res => {
           if (res.data.code === '20000') {
+            this.ids = [];
+            this.query = {};
             this.search();
+            this.$refs.multipleTable.clearSelection();
             this.prompt('success', res.data.msg);
           } else {
             this.prompt('warning', res.data.msg);

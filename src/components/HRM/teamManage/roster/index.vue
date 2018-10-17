@@ -516,14 +516,13 @@
             });
             break;
           case 'reviseRecord':// 编辑奖惩记录
+            this.recordVisible = true;
             this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + this.user_id).then(res => {
               if (res.data.success) {
-                this.recordVisible = true;
                 this.recordData = res.data.data;
               } else {
                 this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
                   if (res.data.success) {
-                    this.recordVisible = true;
                     this.recordData = res.data.data;
                   } else {
                     this.prompt('warning', res.data.msg);

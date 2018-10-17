@@ -368,7 +368,7 @@
                       <!--size="mini">-->
                       <!--<el-button slot="append" @click="emptyUid('uid', index)">清空</el-button>-->
                       <!--</el-input>-->
-                      <el-input v-model="recordName[index]" disabled size="mini">
+                      <el-input v-model="recordName" disabled size="mini">
                       </el-input>
                     </el-form-item>
                     <!--<el-button class="addBtnRecord" size="mini" type="success" @click="addBtnRecord(index)">增加类型-->
@@ -458,7 +458,7 @@
             images: '',
           }]
         }],
-        recordName: [],
+        recordName:'',
         //辅助信息
         form2: {},
         emergency_call: {},     //紧急联系
@@ -574,6 +574,7 @@
         this.$emit('close', 'close');
         this.form3 = [];
         this.addRecord();
+        this.recordName = '';
       },
       // 字典
       dict() {
@@ -695,7 +696,7 @@
         let organ = JSON.parse(val.organizationInfo);
         this.form3[0].uid = val.user_id;
         this.form3[0].name = val.name;
-        this.recordName[0] = organ[0].name;
+        this.recordName = organ[0].name;
       },
       // 确认新增
       setStaff(val) {
