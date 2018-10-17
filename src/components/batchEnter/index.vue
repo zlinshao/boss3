@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="show = false" @contextmenu="closeMenu">
     <div id="batchEnter">
       <div class="highRanking">
         <div class="tabsSearch">
@@ -83,6 +83,7 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @select="handleSelection"
                 @select-all="handleSelectionAll"
+                @row-contextmenu='openContextMenu'
                 style="width: 100%">
                 <el-table-column
                   type="selection">
@@ -225,6 +226,10 @@
 
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
+
+    <!--右键-->
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
@@ -232,12 +237,18 @@
   import ExportData from './components/exportData'
   import ImportData from './components/importData'
   import Remind from './components/remind'
-  import Organization from '../common/organization.vue'                          //选人组件
+  import Organization from '../common/organization.vue';  //选人组件
+  import RightMenu from '../common/rightMenu.vue';        //右键
   export default {
     name: "index",
-    components: {ExportData, ImportData, Organization, Remind},
+    components: {RightMenu, ExportData, ImportData, Organization, Remind},
     data() {
       return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+
         isHigh: false,
         tableData: [],
         tableData1: [],
@@ -255,6 +266,7 @@
           org_id: '',
         },
         tableStatus: false,
+        patch_id: '',
         organData: {},
         ids: [],
         query: {},
@@ -329,9 +341,6 @@
         this.query.org_id = this.arc.org_id;
       },
       myData() {
-        this.tableData = [];
-        this.tableData1 = [];
-        this.tableData2 = [];
         this.rentStatus = " ";
         this.rentLoading = true;
         let header, params;
@@ -359,6 +368,9 @@
             }
             this.tableNum = res.data.data.count;
           } else {
+            this.tableData = [];
+            this.tableData1 = [];
+            this.tableData2 = [];
             this.rentStatus = "暂无数据";
             this.tableNum = 0;
           }
@@ -450,6 +462,55 @@
           this.organData[organ] = val[0].name;
           this.search();
         }
+      },
+      showMessage() {
+        this.$confirm('此操作将删除该账单不可逆转, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(globalConfig.server + 'financial/arc/delete/' + this.patch_id).then(res => {
+            if (res.data.code === '20040') {
+              this.myData();
+              this.prompt('success', res.data.msg);
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+        })
+      },
+      // 右键
+      openContextMenu(row, event) {
+        this.patch_id = row.id;
+        this.lists = [
+          {clickIndex: 'delete', headIcon: 'el-icon-edit-outline', label: '删除'},
+        ];
+        this.contextMenuParam(event);
+      },
+      // 右键回调
+      clickEvent(val) {
+        switch (val) {
+          case 'delete':
+            this.showMessage();
+            break;
+        }
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
       },
     }
   };
