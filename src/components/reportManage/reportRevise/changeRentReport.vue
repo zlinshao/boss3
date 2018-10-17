@@ -43,7 +43,7 @@
               </el-form-item>
             </el-col>
           </el-row>
- 
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="现房屋地址" required>
@@ -254,7 +254,7 @@
               <el-col :span="12">
                 <el-form-item label="是否电子收据" required="">
                   <el-switch v-model="is_receipt"></el-switch>
-                </el-form-item> 
+                </el-form-item>
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
                 <div v-if="params.is_receipt=='0'">
@@ -499,7 +499,7 @@
 
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
-        
+
         if (data.is_receipt) {
           if (data.is_receipt.name) {
             this.params.is_receipt = String(data.is_receipt.id);
