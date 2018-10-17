@@ -1,36 +1,36 @@
 <template>
-<!-- 折线图 -->
-    <div ref="chartId">
-
-    </div>
+  <!-- 折线图 -->
+  <div ref="chartId">
+    <div v-if="chartTextStatus">{{chartText}}</div>
+  </div>
 </template>
 <script>
   export default {
-    props:['chartheight','url'],
-    data(){
+    props: ['url'],
+    data() {
       return {
-        data:[],
-        dataParams:{
-          // city:"",
-          // area:"",
-          // group:"",
-          start_date:"2018-01-15",
-          end_date:"2018-10-30",
+        data: [],
+        dataParams: {
+          city:"",
+          area:"",
+          group:"",
+          start_date: "2018-01-15",
+          end_date: "2018-10-30",
         },
-        interval:"",
-        chartText:"",//显示文本
+        chartText:"暂无数据",//显示文本
+        chartTextStatus:true,//文本状态
       }
     },
-    methods:{
+    methods: {
       drawChart(data) {
-        var chart = new this.$G2.Chart({
+        let chart = new this.$G2.Chart({
           container: this.$refs.chartId,
           forceFit: true,
           // width:800,
-          height:300,
+          height: 300,
         });
         chart.source(data, {
-          month: {
+          date: {
             range: [0, 1]
           }
         });
@@ -42,7 +42,7 @@
         chart.axis('value', {
           label: {
             formatter: function formatter(val) {
-              return val + 'k';
+              return val ;
             }
           }
         });
@@ -53,28 +53,26 @@
         });
         chart.render();
       },
-      getChart(){
-        console.log(this.url)
-        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          console.log(res)
-          if(res.data.code == "20000"){
-            this.data = res.data.data
+      getChart() {
+        this.$http.get(this.url, {
+          headers: {"Accept": "application/vnd.boss18+json"},
+          params: this.dataParams
+        }).then((res) => {
+          console.log(res);
+          if (res.data.code === "20000") {
+            this.chartTextStatus = false
+            this.data = res.data.data;
             this.chartText = ''
-            let arr = res.data.data
-            arr.sort()
-            this.interval = Math.ceil((arr[arr.length-1]-arr[0])/arr.length)
             this.drawChart(this.data)
-          }else{
+          } else {
+            this.chartTextStatus = true
             this.chartText = res.data.msg
           }
         });
       }
     },
-    mounted () {
+    mounted() {
       this.getChart()
-      // if(this.chartData){
-      //   this.drawChart(this.chartData)
-      // }
     }
   }
 </script>

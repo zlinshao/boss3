@@ -177,23 +177,23 @@ const SthToDo = () => import  ('../components/OAWork/sthToDo/index.vue')        
 
 const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue')         // 积分明细
 
-const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue')                //相册管理
-const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue')                //创建相册
-const ChoosePictures = () => import  ('../components/pictureManage/selectPictures.vue')                //选择照片
-const ImproveImgInfo = () => import  ('../components/pictureManage/improveImage.vue')                //完善照片信息
+const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue');                //相册管理
+const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue');                //创建相册
+const ChoosePictures = () => import  ('../components/pictureManage/selectPictures.vue');                //选择照片
+const ImproveImgInfo = () => import  ('../components/pictureManage/improveImage.vue');                //完善照片信息
 const PictureDetail = () => import  ('../components/pictureManage/pictureDetail.vue');               //相册详情
 const VisitRecord = () => import  ('../components/rentManage/components/visitRecord.vue');               //回访记录
 const IncompleteRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/incompleteRecord.vue'); //合同不齐记录
-const ExamineRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/examineRecord')        //合同审批报表
+const ExamineRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/examineRecord');        //合同审批报表
 
-const ReportManage = () => import  ('../components/reportManage/index.vue')
-const BeforeExam = () => import  ('../components/lejiaCollege/OnlineExam/beforeExam.vue')  //开考之前
-const BeforeNaire = () => import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue')  //开考之前
-const MyNaire = () => import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue')  //我的调查列表
+const ReportManage = () => import  ('../components/reportManage/index.vue');
+const BeforeExam = () => import  ('../components/lejiaCollege/OnlineExam/beforeExam.vue');  //开考之前
+const BeforeNaire = () => import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue');  //开考之前
+const MyNaire = () => import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue');  //我的调查列表
 
-const DataMove = () => import  ('../components/dataMove.vue')//数据迁移
+const DataMove = () => import  ('../components/dataMove.vue');//数据迁移
 
-const BatchEnter = () => import  ('../components/batchEnter/index') //批量入账
+const BatchEnter = () => import  ('../components/batchEnter/index'); //批量入账
 
 const AchievementData = () => import ('../components/dataCenter/index'); //业绩数据
 const dataAanalysis = () => import ('../components/dataAanalysis/index');

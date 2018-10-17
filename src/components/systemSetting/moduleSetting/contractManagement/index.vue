@@ -68,7 +68,7 @@
                 for(let j=0;j<res.data.data.data.length;j++){
                   if(res.data.data.data[j].city_code == val[i].variable.city_code)
                   {
-                    this.consractList[j].city_name=val[i].dictionary_name
+                    this.consract[j].city_name=val[i].dictionary_name
                   }
 
                 }
@@ -79,7 +79,7 @@
       //打开城市编号模态框
       // OpenCityInfo(){
       //   this.cityInfoDialog=true;
-      // },
+      // }, 
       contractInfo(){
         this.contractInfoDialog=true;
       },

@@ -403,6 +403,9 @@
           department_id: '',            //部门id
           staff_name: '',               //开单人name
           department_name: '',          //部门name
+
+          account_id:'',            
+          real_pay_at:''
         },
         is_receipt: false,
         screenshot_leader: {},
@@ -499,6 +502,9 @@
 
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
+
+        this.params.account_id = data.account_id;
+        this.params.real_pay_at = data.real_pay_at;
         
         if (data.is_receipt) {
           if (data.is_receipt.name) {

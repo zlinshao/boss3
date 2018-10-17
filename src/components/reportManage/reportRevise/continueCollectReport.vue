@@ -358,6 +358,9 @@
           department_id: '',            //部门id
           staff_name: '',               //开单人name
           department_name: '',          //部门name
+
+          account_id:'',            
+          real_pay_at:''
         },
         screenshot_leader: {},
         photo: {},
@@ -371,6 +374,7 @@
         pay_way_dic: [],
         property_payer_dic: [],
         isUpload: false,
+
       };
     },
     watch: {
@@ -487,6 +491,9 @@
         this.params.staff_name = data.staff_name;
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
+
+        this.params.account_id = data.account_id;
+        this.params.real_pay_at = data.real_pay_at;
       },
       //详情照片展示
       getImgObject(data) {
