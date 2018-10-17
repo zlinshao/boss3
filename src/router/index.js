@@ -60,9 +60,12 @@ const StaffRecords = () => import  ('../components/humanResource/staffRecords/in
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement')     // add by cj 人事报表
 
 // 人员信息管理
-const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');         // 人员信息管理
-const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');      // 花名册
-const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');      // 花名册
+const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
+const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');                       // 花名册
+const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 花名册
+const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/index.vue');           // 转正管理
+const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
+const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
@@ -177,23 +180,23 @@ const SthToDo = () => import  ('../components/OAWork/sthToDo/index.vue')        
 
 const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue')         // 积分明细
 
-const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue')                //相册管理
-const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue')                //创建相册
-const ChoosePictures = () => import  ('../components/pictureManage/selectPictures.vue')                //选择照片
-const ImproveImgInfo = () => import  ('../components/pictureManage/improveImage.vue')                //完善照片信息
+const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue');                //相册管理
+const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue');                //创建相册
+const ChoosePictures = () => import  ('../components/pictureManage/selectPictures.vue');                //选择照片
+const ImproveImgInfo = () => import  ('../components/pictureManage/improveImage.vue');                //完善照片信息
 const PictureDetail = () => import  ('../components/pictureManage/pictureDetail.vue');               //相册详情
 const VisitRecord = () => import  ('../components/rentManage/components/visitRecord.vue');               //回访记录
 const IncompleteRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/incompleteRecord.vue'); //合同不齐记录
-const ExamineRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/examineRecord')        //合同审批报表
+const ExamineRecord = () => import  ('../components/rentManage/datumMessage/contractManage/components/examineRecord');        //合同审批报表
 
-const ReportManage = () => import  ('../components/reportManage/index.vue')
-const BeforeExam = () => import  ('../components/lejiaCollege/OnlineExam/beforeExam.vue')  //开考之前
-const BeforeNaire = () => import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue')  //开考之前
-const MyNaire = () => import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue')  //我的调查列表
+const ReportManage = () => import  ('../components/reportManage/index.vue');
+const BeforeExam = () => import  ('../components/lejiaCollege/OnlineExam/beforeExam.vue');  //开考之前
+const BeforeNaire = () => import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue');  //开考之前
+const MyNaire = () => import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue');  //我的调查列表
 
-const DataMove = () => import  ('../components/dataMove.vue')//数据迁移
+const DataMove = () => import  ('../components/dataMove.vue');//数据迁移
 
-const BatchEnter = () => import  ('../components/batchEnter/index') //批量入账
+const BatchEnter = () => import  ('../components/batchEnter/index'); //批量入账
 
 const AchievementData = () => import ('../components/dataCenter/index'); //业绩数据
 const dataAanalysis = () => import ('../components/dataAanalysis/index');
@@ -526,6 +529,9 @@ export default new Router({
     //         {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
     //       ],
     //     },
+    //     {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+    //     {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+    //     {path: '/dimission', component: Dimission, name: '离职管理'},
     //   ]
     // },
     // {

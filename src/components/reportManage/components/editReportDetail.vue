@@ -1,6 +1,6 @@
 <template>
   <div id="reportDetail">
-    
+
     <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%"
                class="reportDialog">
       <div style="min-height: 550px" v-loading="fullLoading"
@@ -35,7 +35,7 @@
                     <el-form-item v-if="!value" :label="index" class="detailTitle">
                       <div class="special">{{value}}</div>
                     </el-form-item>
-                    
+
                     <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index"
                                   class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
@@ -43,7 +43,10 @@
                     </el-form-item>
                     <el-form-item v-if="value && Array.isArray(value)" :label="index">
                       <div class="special">
-                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'" v-for="item in value">{{item}}</div>
+                        <div
+                          v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'"
+                          v-for="item in value">{{item}}
+                        </div>
                         <div v-else>
                           <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
                           <span>{{item.period}}</span>
@@ -252,8 +255,8 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()" v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled" 
-                >
+        <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
+                   v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
         </el-button>
         <el-button v-if="!fullLoading" size="small" type="primary"
@@ -267,31 +270,28 @@
       </div>
     </el-dialog>
     <!-- 生成电子收据 -->
-    
     <el-dialog
       @open="removeDiaHead"
       custom-class="electronicReceipt"
       :visible.sync="electronicReceiptVisible"
-      width="80%"
+      top="8vh"
+      width="70%"
       :close-on-click-modal="false"
-      center
-      >
+      center>
       <div
         v-loading="pdfloading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-      >
-        <embed width="100%" height="500px" :src="pdfUrl" type="application/pdf" internalinstanceid="25"></embed>
+        element-loading-background="rgba(0, 0, 0, 0.8)">
+        <embed width="100%" height="700px" :src="pdfUrl" type="application/pdf" internalinstanceid="25"></embed>
       </div>
-      
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="signaturebtn" type="success" v-if="signature">签&nbsp;章</el-button>
         <el-button @click="sendElectronicReceipt" type="success" v-if="!signature">发送电子数据</el-button>
-        <el-button  @click="electronicReceiptVisible = false">取&nbsp;消</el-button>
+        <el-button @click="electronicReceiptVisible = false">取&nbsp;消</el-button>
       </span>
     </el-dialog>
-    
 
     <!-- 评论 -->
     <el-dialog :close-on-click-modal="false" title="评论" :visible.sync="commentVisible" width="30%">
@@ -405,26 +405,27 @@
     },
     data() {
       return {
-        pdfUrl:"",
-        electronicReceiptStatu:true,//电子数据按钮显示
-        electronicReceiptDisabled:true,//电子数据按钮禁用
-        electronicReceiptVisible:false,//电子收据弹窗
-        sendElectronicReceiptVisible:false,//发送电子收据弹窗
-        sendElectronicReceiptBtnText:"发送电子收据", //发送电子收据按钮文字
-        electronicReceiptParam:{},//电子数据参数
-        ElectronicReceiptBtnColor:"success",
-        bank:{},//银行数据
-        signature:true,//签章按钮显示隐藏
-        pdfloading:true,//pdf加载
-        cityloading:true,//城市加载
-        bulletinType:"",//报备类型
-        bulletinId:"",//报备id
-        approvalStatus:"",
-        electronicReceiptId:'',//电子收据id 
-        phone:'',//手机号
-        city:[],//城市
-        radioCity:"南京市",
-        sendElectronicReceiptNumber:'',
+        pdfUrl: "",
+        electronicReceiptStatu: true,//电子数据按钮显示
+        electronicReceiptDisabled: true,//电子数据按钮禁用
+        electronicReceiptVisible: false,//电子收据弹窗
+        sendElectronicReceiptVisible: false,//发送电子收据弹窗
+        sendElectronicReceiptBtnText: "发送电子收据", //发送电子收据按钮文字
+        electronicReceiptParam: {},//电子数据参数
+        ElectronicReceiptBtnColor: "success",
+        bank: {},//银行数据
+        signature: true,//签章按钮显示隐藏
+        pdfloading: true,//pdf加载
+        cityloading: true,//城市加载
+        bulletinType: "",//报备类型
+        bulletinId: "",//报备id
+        approvalStatus: "",
+        electronicReceiptId: '',//电子收据id
+        phone: '',//手机号
+        city: [],//城市
+        is_receipt: "",//是否电子收据
+        radioCity: "南京市",
+        sendElectronicReceiptNumber: '',
         address: globalConfig.server_user,
         fullLoading: false,
         reportVisible: false,
@@ -484,16 +485,16 @@
     },
 
     watch: {
-      approvalStatus(newval,oldval){
-        if(newval=="published"&&oldval=="review"){
-          if(this.bulletinType=="租房报备"||this.bulletinType=="公司转租报备"||this.bulletinType=="调房报备"||this.bulletinType=="未收先租确定报备"||this.bulletinType=="已知未收先租报备"||this.bulletinType=="续租报备"||this.bulletinType=="尾款报备"){
+      approvalStatus(newval, oldval) {
+        if (newval == "published" && oldval == "review" && this.is_receipt.id == "1") {
+          if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
             this.createElectronicReceipt()
           }
         }
       },
       module(val) {
         this.reportVisible = val;
-        if(!val){
+        if (!val) {
           this.approvalStatus = ""
         }
       },
@@ -513,10 +514,10 @@
           this.getProcess();
           this.getReportEditInfo();
 
-          this.sendElectronicReceiptBtnText = "发送电子收据"
-          this.ElectronicReceiptBtnColor = "success"
+          this.sendElectronicReceiptBtnText = "发送电子收据";
+          this.ElectronicReceiptBtnColor = "success";
 
-          this.electronicReceiptParam = {}
+          this.electronicReceiptParam = {};
           this.bank = {}
         }
       },
@@ -540,13 +541,10 @@
         } else {
           this.leader_phone = '';
           this.leader_name = '';
-          "welcome youxi ahhh "
         }
-
       }
     },
     methods: {
-      
       // 审批人信息
       approvePersonal() {
         if (this.place.auditors) {
@@ -555,85 +553,80 @@
         }
       },
       //判断是否有电子收据
-      electronicReceiptDia(id){
-        this.fullLoading = true
-        this.$http.get(globalConfig.server + 'financial/receipt/button?process_id='+this.bulletinId).then((res) => {
-          
-          this.fullLoading = false
-          if(res.data.code == '20001'){
-            this.electronicReceiptDisabled = false
-            this.createElectronicReceipt()     
-          }else if(res.data.code == "20000"){
-            this.electronicReceiptId = res.data.data.id
-            this.electronicReceiptVisible = true
-            this.pdfloading = false
-            this.pdfUrl = res.data.data.shorten_uri
-            if(res.data.data.is_signed=="0"){
-              this.signature = true
-            }else if(res.data.data.is_signed=="1"){
-              this.signature = false
+      electronicReceiptDia() {
+        console.log(this.bank);
+        console.log({...this.electronicReceiptParam, ...this.bank});
+        this.fullLoading = true;
+        this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
+          this.fullLoading = false;
+          if (res.data.code === '20001') {
+            this.electronicReceiptDisabled = false;
+            this.createElectronicReceipt();
+          } else if (res.data.code === "20000") {
+            this.electronicReceiptId = res.data.data.id;
+            this.electronicReceiptVisible = true;
+            this.pdfloading = false;
+            this.pdfUrl = res.data.data.shorten_uri;
+            if (res.data.data.is_signed === "0") {
+              this.signature = true;
+            } else if (res.data.data.is_signed === "1") {
+              this.signature = false;
             }
-            
+
           }
         })
-        
       },
       //生成电子收据
-      createElectronicReceipt(){
-        
-        this.electronicReceiptVisible = true
-        this.$http.post(globalConfig.server + 'financial/receipt/generate',{...this.electronicReceiptParam,...this.bank}).then((res) => {
-          // console.log({...this.electronicReceiptParam,...this.bank})
-          this.pdfloading = false
-          if(res.data.code =="20000"){
-            this.electronicReceiptId = res.data.data.id
-            this.pdfUrl = res.data.data.shorten_uri
+      createElectronicReceipt() {
+        this.electronicReceiptVisible = true;
+        this.$http.post(globalConfig.server + 'financial/receipt/generate', {...this.electronicReceiptParam, ...this.bank}).then((res) => {
+          this.pdfloading = false;
+          if (res.data.code === "20000") {
+            this.electronicReceiptId = res.data.data.id;
+            this.pdfUrl = res.data.data.shorten_uri;
             this.signature = true
-          }else{
+          } else {
             this.$notify.error({
               title: '错误',
               message: res.data.msg
             });
             this.electronicReceiptVisible = false
           }
-      
         })
-
       },
       //电子收据签章
-      signaturebtn(){
-        this.pdfloading = true
-        this.$http.post(globalConfig.server + '/financial/receipt/sign/'+this.electronicReceiptId).then((res) => {
-          
-          if(res.data.code =="20000"){
-            this.pdfloading = false
-            this.pdfUrl = res.data.data.shorten_uri
-            this.signature = false
-          }else{
-           
-             this.$notify.error({
-                title: '错误',
-                message: res.data.msg
-              });
-          }
-      
-        })
+      signaturebtn() {
+        this.pdfloading = true;
+        this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
 
+          if (res.data.code === "20000") {
+            this.pdfloading = false;
+            this.pdfUrl = res.data.data.shorten_uri;
+            this.signature = false
+          } else {
+
+            this.$notify.error({
+              title: '错误',
+              message: res.data.msg
+            });
+          }
+
+        })
       },
       //发送电子收据
-      sendElectronicReceipt(){
-        this.signature = true
-        this.electronicReceiptVisible = false
+      sendElectronicReceipt() {
+        this.signature = true;
+        this.electronicReceiptVisible = false;
 
         this.$prompt('请输入手机号码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputValue:this.phone,
+          inputValue: this.phone,
           inputPattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
           inputErrorMessage: '手机号格式不正确'
-        }).then(({ value }) => {
-          this.$http.post(globalConfig.server + '/financial/receipt/send/'+this.electronicReceiptId,{"phone":value}).then((res) => {
-            if(res.data){
+        }).then(({value}) => {
+          this.$http.post(globalConfig.server + '/financial/receipt/send/' + this.electronicReceiptId, {"phone": value}).then((res) => {
+            if (res.data) {
               this.$message({
                 type: 'success',
                 message: '发送成功'
@@ -644,10 +637,10 @@
           this.$message({
             type: 'info',
             message: '发送失败'
-          });       
+          });
         });
       },
-      
+
       getProcess() {
         this.fullLoading = true;
         this.approvedStatus = false;
@@ -668,79 +661,74 @@
             this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
             this.getReportAboutInfo();
 
-            
+            this.bulletinType = res.data.data.process.content.bulletin_name;
 
-            this.bulletinType = res.data.data.process.content.bulletin_name
+            this.approvalStatus = pro.place.status;
 
-            this.approvalStatus = pro.place.status
+            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
 
-            if(this.bulletinType=="租房报备"||this.bulletinType=="公司转租报备"||this.bulletinType=="调房报备"||this.bulletinType=="未收先租确定报备"||this.bulletinType=="已知未收先租报备"||this.bulletinType=="续租报备"||this.bulletinType=="尾款报备"){
-              
-              this.electronicReceiptStatu = true
-              this.bulletinId = res.data.data.process.id 
-              this.phone = res.data.data.process.content.phone
-              
-              this.electronicReceiptParam.process_id = res.data.data.process.id 
-              this.electronicReceiptParam.department_id = res.data.data.process.content.department_id
-              this.electronicReceiptParam.account_id = res.data.data.process.content.account_id||[]
-              this.electronicReceiptParam.deposit =  res.data.data.process.content.front_money
-              this.electronicReceiptParam.mortgage =  res.data.data.process.content.deposit_payed
-              this.electronicReceiptParam.rental =  res.data.data.process.content.rent_money  
+              this.electronicReceiptStatu = true;
+              this.bulletinId = res.data.data.process.id;
+              this.phone = res.data.data.process.content.phone;
+              this.is_receipt = res.data.data.process.content.is_receipt;
+
+              this.electronicReceiptParam.process_id = res.data.data.process.id;
+              this.electronicReceiptParam.department_id = res.data.data.process.content.department_id;
+              this.electronicReceiptParam.account_id = res.data.data.process.content.account_id || [];
+              this.electronicReceiptParam.deposit = res.data.data.process.content.front_money;
+              this.electronicReceiptParam.mortgage = res.data.data.process.content.deposit_payed;
+              this.electronicReceiptParam.rental = res.data.data.process.content.rent_money;
               this.electronicReceiptParam.duration = res.data.data.process.content.show_content["现签约时长"] || res.data.data.process.content.show_content["签约时长"]
-              this.electronicReceiptParam.money_sep = res.data.data.process.content.money_sep 
-             
-              this.electronicReceiptParam.address =  res.data.data.process.content.address
-              
-              if(this.bulletinType=="尾款报备"){
-                
-                this.electronicReceiptParam.payer =  res.data.data.process.content.customer_name 
-                this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date
-                this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item.split(':')[1]}).join(",")
-                this.electronicReceiptParam.pay_way =  res.data.data.process.content.payWay.join(',')
-              }else {
-                this.electronicReceiptParam.payer =  res.data.data.process.content.name
-                this.electronicReceiptParam.sign_at =  res.data.data.process.content.sign_date 
-                this.electronicReceiptParam.price =  res.data.data.process.content.price_arr.map(item=>{return item+"元"}).join(',')
-                this.electronicReceiptParam.pay_way =  res.data.data.process.content.pay_way_str.map((item)=>{return item.msg + " " + item.period}).join(',')
+              this.electronicReceiptParam.money_sep = res.data.data.process.content.money_sep;
+              this.electronicReceiptParam.address = res.data.data.process.content.address;
+
+              if (this.bulletinType === "尾款报备") {
+                this.electronicReceiptParam.payer = res.data.data.process.content.customer_name;
+                this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date;
+                this.electronicReceiptParam.price = res.data.data.process.content.price_arr.map(item => {
+                  return item.split(':')[1];
+                }).join(",");
+                this.electronicReceiptParam.pay_way = res.data.data.process.content.payWay.join(',')
+              } else {
+                this.electronicReceiptParam.payer = res.data.data.process.content.name;
+                this.electronicReceiptParam.sign_at = res.data.data.process.content.sign_date;
+                this.electronicReceiptParam.price = res.data.data.process.content.price_arr.map(item => {
+                  return item + "元"
+                }).join(',');
+                this.electronicReceiptParam.pay_way = res.data.data.process.content.pay_way_str.map((item) => {
+                  return item.msg + " " + item.period;
+                }).join(',');
               }
+              res.data.data.process.content.money_way.forEach((item, index) => {
+                this.bank["bank" + (index + 1)] = item;
+              });
 
-             
-              res.data.data.process.content.money_way.forEach((item,index)=>{this.bank["bank"+(index+1)] = item})
-
-              this.$http.get(globalConfig.server + 'financial/receipt/button?process_id='+this.bulletinId).then((res) => {
-                
-               if(res.data.code == "20000"){
-              
-                  if(res.data.data.is_sent == true){
-                    this.sendElectronicReceiptBtnText = "已发送电子收据"
+              this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
+                if (res.data.code === "20000") {
+                  if (res.data.data.is_sent) {
+                    this.sendElectronicReceiptBtnText = "已发送电子收据";
                     this.ElectronicReceiptBtnColor = "info"
-                  }else {
-                    this.sendElectronicReceiptBtnText = "发送电子收据"
+                  } else {
+                    this.sendElectronicReceiptBtnText = "发送电子收据";
                     this.ElectronicReceiptBtnColor = "success"
                   }
                 }
-              })
-
-              
-
-              if(this.approvalStatus=="published"){
+              });
+              if (this.approvalStatus === "published" && this.is_receipt.id == "1") {
                 this.electronicReceiptDisabled = false
-              }else{
+              } else {
                 this.electronicReceiptDisabled = true
               }
-            }else{
-              this.electronicReceiptStatu = false
+            } else {
+              this.electronicReceiptStatu = false;
               this.electronicReceiptDisabled = false
             }
-            
-
             for (let key in this.operation) {
               if (key.indexOf('approved') > -1) {
                 this.approvedStatus = true;
                 return;
               }
             }
-
           } else {
             this.show_content = {};
             this.operation = {};
@@ -768,13 +756,9 @@
           }
         })
       },
-
       commentOn(val) {
-        
         this.form.operation = val;
         this.commentVisible = true;
-          
-        
       },
 
       getImg(val) {
@@ -787,7 +771,7 @@
         if (this.form.operation !== 'to_comment') {
           this.sureComment(this.form.operation);
         } else {
-          
+
           if (this.form.comment !== '' || this.form.album.length !== 0) {
             this.sureComment(this.form.operation);
           } else {
@@ -799,7 +783,6 @@
         }
       },
 
-      
       sureComment(val) {
         if (this.picStatus) {
           this.$http.put(this.address + 'process/' + this.reportId, this.form).then((res) => {
@@ -815,8 +798,8 @@
                 title: '成功',
                 message: res.data.message,
               })
-              
-              
+
+
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -838,8 +821,8 @@
         this.form.comment = '';
         this.form.album = [];
       },
-      removeDiaHead(){
-         $('.electronicReceipt .el-dialog__header').remove()
+      removeDiaHead() {
+        $('.electronicReceipt .el-dialog__header').remove()
       },
       //-------------------------相关报备信息-----------------------------//
       handleCommand(command) {
@@ -857,7 +840,7 @@
           }
         })
       },
-      //查看报备对比 
+      //查看报备对比
       contrast(item) {
         this.contrastDialog = true;
         this.aboutReportId = item.id;

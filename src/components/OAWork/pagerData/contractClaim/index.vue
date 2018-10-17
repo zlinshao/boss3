@@ -334,6 +334,34 @@
           </el-pagination>
         </div>
       </div>
+
+      <div v-show="selectFlag==1">
+        <el-table
+          :data="consractList"
+          border
+          style="width: 100%">
+          <el-table-column
+            prop="city_name"
+            label="城市">
+          </el-table-column>
+          <el-table-column
+            prop="collect_sum"
+            label="总合同数（收）">
+          </el-table-column>
+          <el-table-column
+            prop="rent_sum"
+            label="总合同数（租）">
+          </el-table-column>
+          <el-table-column
+            prop="collect_remain"
+            label="剩余合同数（收）">
+          </el-table-column>
+          <el-table-column
+            prop="rent_remain"
+            label="剩余合同数（租）">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -462,6 +490,8 @@
         length: '',
         type: '',
         dateRange: [],
+        consractList:[], //合同总数表格数据
+        cityList:[]
       }
     },
     watch: {
@@ -486,8 +516,31 @@
     },
     mounted() {
       this.getTotalList();
+      this.dictionary(306,1).then((res) => {this.cityList = res.data;
+        this.getContract(this.cityList);
+        
+      });
     },
     methods: {
+      getContract(val){
+        this.$http
+        .get(globalConfig.server + "contract/reserve")
+        .then(res => {
+          if (res.data.code === "20000") {
+              this.consractList=res.data.data.data;
+              for(let i=0;i<val.length;i++){
+                for(let j=0;j<res.data.data.data.length;j++){
+                  if(res.data.data.data[j].city_code == val[i].variable.city_code)
+                  {
+                    this.consractList[j].city_name=val[i].dictionary_name
+                  }
+
+                }
+              }
+          }
+        });      
+      },
+
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },

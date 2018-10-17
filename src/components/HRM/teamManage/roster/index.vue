@@ -248,7 +248,9 @@
       </el-pagination>
     </div>
     <!--新增员工-->
-    <AddStaff :module="staffVisible" :assist="assistShow" @close="closeStaff"></AddStaff>
+    <AddStaff :module="staffVisible" :assist="assistShow" :detail="staffDetail" @close="closeStaff"></AddStaff>
+    <!--修改奖惩记录-->
+    <ReviseRecord :module="recordVisible" :data="recordData" @close="closeRecord"></ReviseRecord>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -260,11 +262,12 @@
 
 <script>
   import AddStaff from './components/addStaff.vue';//房东
+  import ReviseRecord from './components/reviseRecord.vue';//修改奖惩记录
   import RightMenu from '../../../common/rightMenu.vue';//右键
   import Organization from '../../../common/organization.vue';//组织架构
   export default {
     name: "index",
-    components: {RightMenu, AddStaff, Organization},
+    components: {RightMenu, AddStaff, ReviseRecord, Organization},
     data() {
       return {
         is_enable: false,
@@ -277,6 +280,8 @@
         tableLoading: false,
         assistShow: '',             //是否显示辅助信息
         staffVisible: false,        //增加新员工
+        recordVisible: false,       //修改奖惩记录
+        recordData: [],             //修改奖惩记录
         currentPage: 1,             //当前页数
         isHigh: false,              //高级
         tableData: [],
@@ -287,11 +292,13 @@
         organizeType: '',
         lengths: 0,
         organDivision: '',          //字段名
-        orgName: [],                //部门名称
 
         job_type: [],               //员工类型
         job_status: [],             //员工状态
         position_status: [],        //当前在职状态
+
+        user_id: '',                //员工ID
+        staffDetail: {},            //员工详情
       }
     },
     created() {
@@ -302,7 +309,6 @@
     },
     mounted() {
       this.staffList(1);
-      console.log(this.nowDateTime('time'));
     },
     activated() {
     },
@@ -341,7 +347,7 @@
       leadingOut() {
         this.$http.get(this.url + 'hrm/User/lists?export=1', {
           params: this.params,
-        }).then(res => {
+        }, {responseType: 'arraybuffer'}).then(res => {
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           let title = this.nowDateTime('time') + '花名册.xlsx';
@@ -382,12 +388,7 @@
       },
       // 重置
       resetting() {
-        this.orgName = [];
         this.params = JSON.parse(JSON.stringify(rosterParams));
-      },
-      // 双击
-      dblClickTable() {
-
       },
       // 打开组织架构
       openOrgan(val, type) {
@@ -398,7 +399,6 @@
       },
       // 清空部门
       emptyDepart(val) {
-        this.orgName = [];
         this.params[val] = '';
       },
       // 关闭组织架构
@@ -413,10 +413,10 @@
         let organ = this.organDivision;
         let str = [];
         for (let item of val) {
-          this.orgName.push(item.name);
+          str.push(item.name);
         }
-        this.orgName = Array.from(new Set(this.orgName));
-        for (let key of this.orgName) {
+        str = Array.from(new Set(str));
+        for (let key of str) {
           str = key + ',' + str;
         }
         this.params[organ] = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
@@ -424,7 +424,7 @@
       // 新增员工
       newAddStaff() {
         this.staffVisible = true;
-        this.assistShow = '';
+        this.assistShow = 'new';
       },
       closeStaff(val) {
         this.staffVisible = false;
@@ -432,6 +432,10 @@
         if (val === 'success') {
           this.staffList(1);
         }
+      },
+      // 关闭奖惩记录编辑
+      closeRecord() {
+        this.recordVisible = false;
       },
       // 分页
       handleSizeChange(val) {
@@ -462,24 +466,70 @@
           type: 'warning'
         }).then(() => {
           this.changeEnable(row.user_id);
+        }).catch(() => {
         })
+      },
+      // 双击
+      dblClickTable() {
+
       },
       // 右键
       openContextMenu(row, event) {
-        this.lists = [
-          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
-          {clickIndex: 'formal', headIcon: 'iconfont icon-chenggong', label: '转正'},
-          {clickIndex: 'transfer', headIcon: 'iconfont icon-tiaogang', label: '调岗'},
-          {clickIndex: 'dimission', headIcon: 'iconfont icon-lizhi', label: '离职'},
+        this.user_id = row.user_id;
+        let list = [
+          {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
+          {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
+          {clickIndex: 'reviseRecord', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
+          {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '新增奖惩记录'},
         ];
+        this.lists = JSON.parse(JSON.stringify(list));
+        if (row.position_status) {
+          let num = Number(row.position_status);
+          switch (num) {
+            case 2:
+              this.lists.push({clickIndex: 'transfer', headIcon: 'iconfont icon-tiaogang', label: '调岗'});
+              break;
+            case 3:
+              this.lists.push({clickIndex: 'formal', headIcon: 'iconfont icon-chenggong', label: '转正'});
+              break;
+            case 4:
+              this.lists.push({clickIndex: 'dimission', headIcon: 'iconfont icon-lizhi', label: '离职'});
+              break;
+          }
+        }
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
         switch (val) {
-          case 'revise':
+          case 'first':// 编辑基本信息
+          case 'second':// 编辑辅助信息
+          case 'record':// 新增奖惩记录
             this.staffVisible = true;
-            this.assistShow = 'second';
+            this.assistShow = val;
+            this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
+              if (res.data.success) {
+                this.staffDetail = res.data.data;
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+            });
+            break;
+          case 'reviseRecord':// 编辑奖惩记录
+            this.recordVisible = true;
+            this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + this.user_id).then(res => {
+              if (res.data.success) {
+                this.recordData = res.data.data;
+              } else {
+                this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
+                  if (res.data.success) {
+                    this.recordData = res.data.data;
+                  } else {
+                    this.prompt('warning', res.data.msg);
+                  }
+                });
+              }
+            });
             break;
           case 'formal':
             console.log(val);

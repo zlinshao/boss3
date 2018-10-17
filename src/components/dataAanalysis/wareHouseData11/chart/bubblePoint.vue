@@ -1,136 +1,48 @@
 <template>
-    <div ref="chartId">
-
-    </div>
+<!-- 气泡图 -->
+  <div ref="chartId">
+    <div v-if="chartTextStatus">{{chartText}}</div>
+  </div>
 </template>
 <script>
   export default {
-    props:['chartheight','chartData'],
+    props:['url','chartName'],
     data(){
       return {
-        data:[{
-          city: "南京",
-          AverageLife: 5,
-          AverageVacancy: 5,
-          HouseNumber: 500
-          },{
-          city: "杭州",
-          AverageLife: 4,
-          AverageVacancy:4,
-          HouseNumber: 300
-          },
-          {
-          city: "苏州",
-          AverageLife:5,
-          AverageVacancy:7,
-          HouseNumber: 400
-          },{
-          city: "合肥",
-          AverageLife: 3,
-          AverageVacancy: 6,
-          HouseNumber: 600
-          },{
-          city: "西安",
-          AverageLife: 6,
-          AverageVacancy: 2,
-          HouseNumber: 450
-          },{
-          city: "成都",
-          AverageLife: 7,
-          AverageVacancy: 4,
-          HouseNumber: 360
-          },{
-          city: "重庆",
-          AverageLife: 2,
-          AverageVacancy: 9,
-          HouseNumber: 380
-          }],
-        monidata:{
-            code:200,
-            msg:'请求成功',
-            result:{
-              title:"收房利益指数",
-              chartType:"bubblePoint", 
-              tag:['业务'],
-              detailMsg:"图表说明信息......",
-              data:[{
-              city: "南京",
-              AverageLife: 5,
-              AverageVacancy: 5,
-              HouseNumber: 500
-              },{
-              city: "杭州",
-              AverageLife: 4,
-              AverageVacancy:4,
-              HouseNumber: 300
-              },
-              {
-              city: "苏州",
-              AverageLife:5,
-              AverageVacancy:7,
-              HouseNumber: 400
-              },{
-              city: "合肥",
-              AverageLife: 3,
-              AverageVacancy: 6,
-              HouseNumber: 600
-              },{
-              city: "西安",
-              AverageLife: 6,
-              AverageVacancy: 2,
-              HouseNumber: 450
-              },{
-              city: "成都",
-              AverageLife: 7,
-              AverageVacancy: 4,
-              HouseNumber: 360
-              },{
-              city: "重庆",
-              AverageLife: 2,
-              AverageVacancy: 9,
-              HouseNumber: 380
-              }]
-            }
-          }
+        data:[],
+        dataParams:{//传入参数
+          city:"",
+          area:"",
+          group:"",
+          start_date:"2018-9-1",
+          end_date:"2018-10-17",
+        },
+        chartText:"暂无数据",//显示文本
+        chartTextStatus:true,//文本状态
+        chartReset:{  //图表配置
+          colorMap:{}, //各地区气泡颜色
+          alias:{},    //设置字段别名
+        },
+        city:""
       }
     },
     methods:{
-      drawChart(data) {
+      drawChart(data) { //绘制图表
         var _G = this.$G2,
           Global = _G.Global;
 
-        var colorMap = {
-          '苏州': Global.colors[0],
-          '南京': Global.colors[1],
-          '合肥': Global.colors[2],
-          '杭州': Global.colors[3],
-          '西安': Global.colors[4],
-          '成都': Global.colors[5],
-          '重庆': Global.colors[6]
-        };
+        var colorMap = this.chartReset.colorMap;
+        for(let key in colorMap){
+          colorMap[key] = Global.colors[colorMap[key]]
+        }
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
           forceFit: true,
-          // width:800,
-          height:this.chartheight,
+          height:300,
         });
         chart.source(data);
         // 为各个字段设置别名
-        chart.scale({
-          AverageLife: {
-            alias: '平均年限'
-          },
-          HouseNumber: {
-            type: 'pow',
-            alias: '收房数量'
-          },
-          AverageVacancy: {
-            alias: '平均空置期'
-          },
-          city: {
-            alias: '城市'
-          }
-        });
+        chart.scale(this.chartReset.alias);
         chart.axis('AverageVacancy', {
           label: {
             formatter: function formatter(value) {
@@ -156,17 +68,50 @@
         });
         chart.render();
       },
+      getChart(){ //获取图表
+        console.log(this.url)
+        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+          console.log(res)
+          if(res.data.code == "20000"){
+            res.data.data.forEach((item,index)=>{
+              this.chartReset.colorMap[item.city] = index
+            })
+            this.chartTextStatus = false
+            this.data = res.data.data
+            this.chartText = ''
+            this.drawChart(this.data)
+          }else{
+            this.chartTextStatus = true
+            this.chartText = res.data.msg
+          }
+        });
+      },
+      resetChart(){  //配置图表
+        switch(this.chartName){
+          case "收房利益指数":
+            this.chartReset.alias ={
+              AverageLife: {
+                alias: '平均年限'
+              },
+              HouseNumber: {
+                alias: '收房数量'
+              },
+              AverageVacancy: {
+                alias: '平均空置期'
+              },
+              city: {
+                alias: '城市'
+              }
+            }
+          break;
+         
+          default:
+          break;
+        }
+      }
     },
     mounted () {
-      if(this.chartData){
-        this.drawChart(this.chartData)
-      }
-    },
-     watch:{
-      chartData(val){
-        this.$refs.chartId.innerHTML = ""
-        this.drawChart(val)
-      }
+      this.getChart()
     }
   }
 </script>

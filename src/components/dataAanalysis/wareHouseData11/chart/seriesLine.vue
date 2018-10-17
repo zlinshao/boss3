@@ -1,59 +1,78 @@
 <template>
-    <div ref="chartId">
-
-    </div>
+  <!-- 折线图 -->
+  <div ref="chartId">
+    <div v-if="chartTextStatus">{{chartText}}</div>
+  </div>
 </template>
 <script>
   export default {
-    props:['chartheight','chartData'],
-    data(){
+    props: ['url'],
+    data() {
       return {
-          
+        data: [],
+        dataParams: {
+          city:"",
+          area:"",
+          group:"",
+          start_date: "2018-01-15",
+          end_date: "2018-10-30",
+        },
+        chartText:"暂无数据",//显示文本
+        chartTextStatus:true,//文本状态
       }
     },
-    methods:{
+    methods: {
       drawChart(data) {
-        var chart = new this.$G2.Chart({
+        let chart = new this.$G2.Chart({
           container: this.$refs.chartId,
           forceFit: true,
           // width:800,
-          height:this.chartheight+30,
+          height: 300,
         });
         chart.source(data, {
-          month: {
+          date: {
             range: [0, 1]
           }
         });
         chart.tooltip({
           crosshairs: {
-            type: 'line'
+            name: 'line'
           }
         });
-        chart.axis('price', {
+        chart.axis('value', {
           label: {
             formatter: function formatter(val) {
-              return val + 'k';
+              return val ;
             }
           }
         });
-        chart.line().position('month*price').color('type');
-        chart.point().position('month*price').color('type').size(4).shape('circle').style({
+        chart.line().position('date*value').color('name');
+        chart.point().position('date*value').color('name').size(4).shape('circle').style({
           stroke: '#fff',
           lineWidth: 1
         });
         chart.render();
       },
-    },
-    mounted () {
-      if(this.chartData){
-        this.drawChart(this.chartData)
+      getChart() {
+        this.$http.get(this.url, {
+          headers: {"Accept": "application/vnd.boss18+json"},
+          params: this.dataParams
+        }).then((res) => {
+          console.log(res);
+          if (res.data.code === "20000") {
+            this.chartTextStatus = false
+            this.data = res.data.data;
+            this.chartText = ''
+            this.drawChart(this.data)
+          } else {
+            this.chartTextStatus = true
+            this.chartText = res.data.msg
+          }
+        });
       }
     },
-    watch:{
-      chartData(val){
-        this.$refs.chartId.innerHTML = ""
-        this.drawChart(val)
-      }
+    mounted() {
+      this.getChart()
     }
   }
 </script>

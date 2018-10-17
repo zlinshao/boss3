@@ -1,5 +1,5 @@
 <template>
-  <!-- 业绩总额 -->
+  <!-- 盈亏总额 -->
   <div id="chartCard">
     <basicColumn :chartheight="chartheight" :chartData="chartData"
                  @click.native="detaildialogVisible=true"></basicColumn>
@@ -13,7 +13,7 @@
         <div class="detailMsgHead">
           <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
           <span>{{theme}}</span>
-          <topRightControl></topRightControl>
+          <toprightControl></toprightControl>
         </div>
         <div class="detailcontent">
           <div class="contentTop">
@@ -78,22 +78,22 @@
 </template>
 <script>
   import basicColumn from "../../wareHouseData/chart/basicColumn.vue"
-  import topRightControl from "../../components/toprightControl.vue"
+  import toprightControl from "../../components/toprightControl.vue"
 
   export default {
-    components: {basicColumn, topRightControl},
+    components: {basicColumn, toprightControl},
     data() {
       return {
-        chartData: '',//图表数据
+        chartData: "",//图表数据
         chartMsg: {  //图表所需信息
-          component: 'achievementTotal',
+          component: 'ProfitLossTotal',
           id: 1,//图表id
-          title: '业绩总额', //标题
-          detailMsg: '这是说明。。。。',//说明
+          title: '盈亏总额', //标题
+          detailMsg: "这是说明。。。。",//说明
           chartType: "basicColumn",//类型
-          tag: ['人力', '财务'],//标签
+          tag: ['财务', '业务'],//标签
         },
-        theme: "业绩总额",
+        theme: "盈亏总额",
         chartheight: 260,
         chartheightDia: 500,
         detaildialogVisible: false,
@@ -171,6 +171,7 @@
           city: '重庆',
           salary: 210
         }]
+
       }
     },
     methods: {},
