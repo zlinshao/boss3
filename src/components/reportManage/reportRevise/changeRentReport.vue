@@ -182,7 +182,7 @@
                 <el-col :span="6">
                   <el-form-item label="汇款银行" required="">
                     <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择汇款银行" value="">
-                      <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
+                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -434,6 +434,7 @@
           this.clearData();
         } else {
           this.isClear = true;
+          this.getDictionary();
           setTimeout(() => {
             this.preloadData();
           }, 50);
@@ -441,15 +442,18 @@
         }
       },
     },
-    created() {
-      this.getDictionary();
+    mounted() {
+      // this.getDictionary();
     },
     methods: {
       getDictionary() {
-        this.dictionary(508, 1).then((res) => {
-          this.purchase_way_dic = res.data;
+        let department_id = this.reportDetailData.department_id
+        this.$http.get(globalConfig.server+"/financial/account_alloc/map?org_id="+department_id).then((res) => {
+          if(res.data.code == "20000"){
+            this.purchase_way_dic = res.data.data
+          }
         });
-
+        
       },
       //预填报备数据
       preloadData() {

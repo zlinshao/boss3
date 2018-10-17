@@ -1,6 +1,7 @@
 <template>
 <!-- 表格卡片 -->
   <div ref="chartId" id="chartTable">
+    <!-- 中介费占业绩比最高的前100名员工 -->
     <el-table
       v-if="chartName=='中介费占业绩比最高的前100名员工'"
       @click.native ="detaildialogVisible=true"
@@ -38,8 +39,39 @@
         label="中介费占业绩比">
       </el-table-column>
     </el-table>
+    <!-- 异常单列表 -->
+    <el-table
+      v-if="chartName=='异常单列表'"
+      @click.native ="detaildialogVisible=true"
+      class="comTable"
+      :data="tableData"
+      height="260"
+      size='mini'
+      border
+      :highlight-current-row='true'
+      :cellStyle='colstyle'
+      :header-cell-style='headerrowstyle'
+      style="width: 100%">
+      <el-table-column
+        prop="org_name"
+        label="片区">
+      </el-table-column>
+      <el-table-column
+        prop="leader_name"
+        label="片区经理">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="房屋地址">
+      </el-table-column>
+      <el-table-column
+        prop="excep_rent_price"
+        label="让价金额">
+      </el-table-column>
+    </el-table>
     <!-- 分页 -->
     <el-pagination
+      small
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
@@ -218,7 +250,7 @@ import toprightControl from "../../components/toprightControl"
           start_date:"2018-9-1",
           end_date:"2018-10-17",
           page: 1,
-          limit:10
+          limit:5
         }
         
       }
@@ -240,9 +272,13 @@ import toprightControl from "../../components/toprightControl"
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        this.dataParams.limit = val
+        this.getData()
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.dataParams.page = val
+        this.getData()
       },
       getData(){ //获取数据
         this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
@@ -259,11 +295,6 @@ import toprightControl from "../../components/toprightControl"
     mounted () {
       this.getData()
     },
-    watch:{
-      chartData(val){
-        this.tableData=val
-      }
-    }
 
   }
 </script>

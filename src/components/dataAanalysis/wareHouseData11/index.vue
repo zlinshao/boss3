@@ -3,10 +3,10 @@
     <!-- 图表展示 -->
     <div>
       <el-row :gutter="20" >
-        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" >
+        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="!(item.data_source=='null')">
           <!-- 图表卡片 -->
-          <chartCard id="card" :cardData="item" v-if="item.name=='中介费占业绩比最高的前100名员工'">
-            <component :is="item.chart_set[0].type" :url="item.data_source" v-if="!(item.data_source=='null')"
+          <chartCard id="card" :cardData="item" >
+            <component :is="item.chart_set[0].type" :url="item.data_source" 
               :chartName="item.name"
             ></component>
             <!-- <basicColumn :url="item.data_source"></basicColumn> -->
