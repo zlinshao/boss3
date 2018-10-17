@@ -5,10 +5,10 @@
         <el-row :gutter="20" >
           <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" >
             <!-- 图表卡片 -->
-            <chartCard id="card" :cardData="item" v-if="item.name=='业绩环比增长'">
-              <!-- <component :is="item.chart_set[0].type" :url="item.data_source"></component> -->
+            <chartCard id="card" :cardData="item" v-if="item.name=='业绩总额'">
+              <component :is="item.chart_set[0].type" :url="item.data_source"></component>
               <!-- <basicColumn :url="item.data_source"></basicColumn> -->
-              <seriesLine url="item.data_source"></seriesLine>
+              <!-- <seriesLine url="item.data_source"></seriesLine> -->
             </chartCard>
           </el-col>
           <el-col 
