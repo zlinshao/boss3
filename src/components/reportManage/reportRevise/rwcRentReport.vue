@@ -175,9 +175,9 @@
               </el-row>
             </div>
             <div style="text-align: center">
-              <!--<el-button type="text" @click="addMoreMoneyTableChange">-->
-              <!--<i class="el-icon-circle-plus"></i>添加支付方式变化-->
-              <!--</el-button>-->
+              <el-button type="text" @click="addMoreMoneyTableChange">
+                <i class="el-icon-circle-plus"></i>添加支付方式变化
+              </el-button>
             </div>
           </div>
 
