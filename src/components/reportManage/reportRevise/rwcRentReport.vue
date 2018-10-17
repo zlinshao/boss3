@@ -157,6 +157,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
+                  <el-form-item label="实际收款日期" required="">
+                    <el-date-picker value-format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择日期"
+                                    v-model="params.real_pay_at[item-1]"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
                   <el-form-item label="金额（元）" required="">
                     <el-input placeholder="请输入内容" v-model="params.money_sep[item-1]"></el-input>
                   </el-form-item>
@@ -425,7 +431,7 @@
           department_name: '',          //部门name
 
           account_id: '',
-          real_pay_at: ''
+          real_pay_at: [],
         },
         is_receipt: false,
         screenshot_leader: {},
@@ -672,6 +678,7 @@
       },
       deleteMoneyTableChange(item) {
         this.params.money_way.splice(item, 1);
+        this.params.real_pay_at.splice(item, 1);
         this.params.money_sep.splice(item, 1);
         this.moneyTableChangeAmount--;
       },

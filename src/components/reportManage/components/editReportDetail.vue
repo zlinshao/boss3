@@ -554,6 +554,8 @@
       },
       //判断是否有电子收据
       electronicReceiptDia() {
+        console.log(this.bank);
+        console.log({...this.electronicReceiptParam, ...this.bank});
         this.fullLoading = true;
         this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
           this.fullLoading = false;
