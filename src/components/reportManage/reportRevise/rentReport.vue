@@ -169,9 +169,9 @@
               </el-row>
             </div>
             <div style="text-align: center">
-              <el-button type="text" @click="addMoreMoneyTableChange">
-                <i class="el-icon-circle-plus"></i>添加支付方式变化
-              </el-button>
+              <!--<el-button type="text" @click="addMoreMoneyTableChange">-->
+                <!--<i class="el-icon-circle-plus"></i>添加支付方式变化-->
+              <!--</el-button>-->
             </div>
           </div>
 
@@ -270,12 +270,12 @@
           </el-row>
           <div class="title">收据编号</div>
           <div class="form_border">
-            
+
             <el-row >
               <el-col :span="12">
                 <el-form-item label="是否电子收据" required="">
                   <el-switch v-model="is_receipt" disabled></el-switch>
-                </el-form-item> 
+                </el-form-item>
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
                 <div v-if="params.is_receipt=='0'">
@@ -426,7 +426,7 @@ export default {
         staff_name: "", //开单人name
         department_name: "", //部门name
 
-        account_id:'',            
+        account_id:'',
         real_pay_at:''
       },
       is_receipt: false,
@@ -465,7 +465,7 @@ export default {
     }
   },
   mounted () {
-    
+
   },
   methods: {
     getDictionary() {

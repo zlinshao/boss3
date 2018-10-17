@@ -47,7 +47,7 @@
                                 v-model="params.end_date"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8"> 
+            <el-col :span="8">
               <el-form-item label="总金额" required="">
                 <el-input placeholder="总金额" v-model="params.money_sum" disabled>
                   <template slot="append">元</template>
@@ -169,9 +169,9 @@
               </el-row>
             </div>
             <div style="text-align: center">
-              <el-button type="text" @click="addMoreMoneyTableChange">
-                <i class="el-icon-circle-plus"></i>添加支付方式变化
-              </el-button>
+              <!--<el-button type="text" @click="addMoreMoneyTableChange">-->
+                <!--<i class="el-icon-circle-plus"></i>添加支付方式变化-->
+              <!--</el-button>-->
             </div>
           </div>
 
@@ -246,7 +246,7 @@
               <el-col :span="12">
                 <el-form-item label="是否电子收据" required="">
                   <el-switch v-model="is_receipt" disabled></el-switch>
-                </el-form-item> 
+                </el-form-item>
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
                 <div v-if="params.is_receipt=='0'">
@@ -393,7 +393,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id:'',            
+          account_id:'',
           real_pay_at:''
         },
         is_receipt: false,
@@ -500,7 +500,7 @@
           this.params.is_receipt = "0";
           this.is_receipt = false;
         }
-        
+
         if (data.is_corp) {
           if (data.is_corp.name) {
             this.params.is_corp = String(data.is_corp.id);
@@ -538,7 +538,7 @@
         this.params.staff_name = data.staff_name;
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
-        
+
         this.params.account_id = data.account_id;
         this.params.real_pay_at = data.real_pay_at;
 

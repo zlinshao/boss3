@@ -61,7 +61,7 @@
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
-            </el-col> 
+            </el-col>
             <el-col :span="8">
               <el-form-item label="押金" required="">
                 <el-input placeholder="押金" v-model="params.deposit_payed" @keyup.native="addMoneySum(params)">
@@ -177,9 +177,9 @@
               </el-row>
             </div>
             <div style="text-align: center">
-              <el-button type="text" @click="addMoreMoneyTableChange">
-                <i class="el-icon-circle-plus"></i>添加支付方式变化
-              </el-button>
+              <!--<el-button type="text" @click="addMoreMoneyTableChange">-->
+                <!--<i class="el-icon-circle-plus"></i>添加支付方式变化-->
+              <!--</el-button>-->
             </div>
           </div>
 
@@ -282,7 +282,7 @@
               <el-col :span="12">
                 <el-form-item label="是否电子收据" required="">
                   <el-switch v-model="is_receipt" disabled></el-switch>
-                </el-form-item> 
+                </el-form-item>
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
                 <div v-if="params.is_receipt=='0'">
@@ -412,7 +412,7 @@
           other_fee: '',
           other_fee_name: '',
 
-          
+
           is_agency: '1',                //客户来源    0个人1中介
           agency_name: '',              //中介名
           agency_price: '',             //中介费
@@ -437,7 +437,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id:'',            
+          account_id:'',
           real_pay_at:''
         },
         is_receipt: false,
