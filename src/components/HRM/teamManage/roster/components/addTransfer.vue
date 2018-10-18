@@ -61,14 +61,30 @@
           </div>
           <div class='formList'>
             <el-form-item label="当前职位">
-              <el-input placeholder="当前职位" v-model="orgData.position_id" disabled></el-input>
+              <el-select v-model="form.duty_id" multiple disabled>
+                <el-option v-for="item in duty" :value="item.id" :key="item.id" :label="item.name">
+                </el-option>
+              </el-select>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="调岗后职位" required>
-              <el-select v-model="form.transfer_type" size="mini" placeholde="请选择" clearable>
-                <el-option v-for="key in transfer_type" :label="key.name" :value="key.id"
-                           :key="key.id"></el-option>
+              <el-select v-model="form.old_duty_id" @change="positionSelect" clearable multiple>
+                <el-option v-for="item in duty" :value="item.id" :key="item.id" :label="item.name">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+          <div class='formList'>
+            <el-form-item label="当前岗位">
+              <el-input placeholder="当前岗位" v-model="orgData.position_id" disabled></el-input>
+            </el-form-item>
+          </div>
+          <div class='formList'>
+            <el-form-item label="调岗后岗位" required>
+              <el-select v-model="form.position_id" clearable multiple>
+                <el-option v-for="item in position" :value="item.id" :key="item.id" :label="item.name">
+                </el-option>
               </el-select>
             </el-form-item>
           </div>
@@ -125,6 +141,8 @@
         form: {},
         orgData: {},          //组织架构 文本显示
         transfer_type: [],
+        duty: [],
+        position: [],
       }
     },
     created() {
