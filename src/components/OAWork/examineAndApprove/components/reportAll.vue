@@ -107,7 +107,12 @@
             :data="tableData"
             @row-dblclick="dblClickTable"
             :row-class-name="rowBackground"
+            :cell-class-name="colTag"
             style="width: 100%">
+            <el-table-column
+              label="#"
+              width="40">
+            </el-table-column>
             <el-table-column
               prop="created_at"
               label="发起时间">
@@ -231,6 +236,11 @@
       rowBackground({row, rowIndex}) {
         if (this.reportAllID.includes(row.id)) return 'rowBackground';
       },
+      colTag({row, column, rowIndex, columnIndex}){
+        if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
+          return 'colTag'
+        }
+      },
       //获取列表数据
       getTableData() {
         this.tableLoading = true;
@@ -244,6 +254,7 @@
             for (let i = 0; i < data.length; i++) {
               let user = {};
               if (data[i]) {
+                user.is_receipt = data[i].content.is_receipt
                 user.created_at = data[i].created_at;
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
                 user.id = data[i].id;
@@ -390,6 +401,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
+  .colTag{
+    padding: 6px;
+    background:url("../../../../assets/images/info.jpg") no-repeat 20px 10px;
+    background-size: 20px 20px;
+  }
   .rowBackground {
     background-color: #cde0ff;
   }
