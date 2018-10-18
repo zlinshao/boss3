@@ -46,6 +46,84 @@
         </el-form>
       </div>
     </div>
+    <div>
+      <el-table
+        :data="tableData"
+        :empty-text='tableStatus'
+        v-loading="tableLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(255, 255, 255, 0)"
+        @cell-dblclick='dblClickTable'
+        @row-contextmenu='openContextMenu'
+        style="width: 100%">
+        <el-table-column
+          prop="name"
+          label="姓名">
+        </el-table-column>
+        <el-table-column
+          label="部门">
+          <template slot-scope="scope">
+            <div class="departPosition">
+              <span v-for="(item,index) in scope.row.org">
+                <b v-if="index !== 0">,</b>
+                {{item.name}}
+              </span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="职位">
+          <template slot-scope="scope">
+            <div class="departPosition">
+              <span v-for="(item,index) in scope.row.position">
+                <b v-if="index !== 0">,</b>
+                {{item.name}}
+              </span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="staff_extend.enroll"
+          label="入职时间">
+        </el-table-column>
+        <el-table-column
+          label="试用期">
+          <template slot-scope="scope">
+            {{scope.row.staff_extend.try_out_time}}个月
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="staff_extend.expected_formal"
+          label="预计转正日期">
+        </el-table-column>
+        <el-table-column
+          prop="phone"
+          label="手机号码">
+        </el-table-column>
+        <el-table-column
+          prop="email"
+          label="个人邮箱">
+        </el-table-column>
+        <el-table-column
+          label="是否转正">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="becomeFull(scope.row)">转正</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="params.page"
+        :page-sizes="[15, 20, 25, 30]"
+        :page-size="params.limit"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalNum">
+      </el-pagination>
+    </div>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -68,39 +146,83 @@
         rightMenuY: 0,
         show: false,
         lists: [],
-        tableStatus: ' ',
-        tableLoading: false,
+
         isHigh: false,
+
         organModule: false,
         organizeType: '',
         lengths: 0,
-        organDivision: '',          //字段名
+        organDivision: '',          //组织架构字段名
 
-        organData: {},
+        tableStatus: ' ',
+        tableLoading: false,
+        totalNum: 0,
+        tableData: [],
         params: {
           limit: 12,
           page: 1,
           org_id: '',
           keywords: '',
-        }
+        },
+        organData: {},
       }
     },
     mounted() {
+      this.becomeFormal();
     },
     activated() {
     },
     watch: {},
     computed: {},
     methods: {
-      becomeFormal() {
+      // 列表
+      becomeFormal(page) {
+        this.tableStatus = ' ';
+        this.tableLoading = true;
+        this.params.page = page || 1;
         this.$http.get(this.url + 'hrm/User/turnPositiveList', {
           params: this.params,
+        }).then(res => {
+          this.tableLoading = false;
+          if (res.data.success) {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+          } else {
+            this.emptyList();
+          }
         })
+      },
+      // 列表无数据
+      emptyList() {
+        this.totalNum = 0;
+        this.tableData = [];
+        this.tableStatus = '暂无数据';
+        return false;
+      },
+      // 转正
+      becomeFull(row) {
+        this.$confirm('是否转正员工 ' + row.name + ' 不可逆转操作，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(this.url + 'hrm/User/affirm', {
+            id: row.id
+          }).then(res => {
+            if (res.data.success) {
+              this.prompt('success', res.data.msg);
+              this.becomeFormal(this.params.page);
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+        });
       },
       // 搜索
       search() {
         this.isHigh = false;
-        this.staffList(1);
+        this.becomeFormal();
       },
       // 高级
       highGrade() {
@@ -115,6 +237,15 @@
           keywords: '',
         };
         this.organData = {};
+      },
+      // 分页
+      handleSizeChange(val) {
+        this.params.limit = val;
+        this.becomeFormal();
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        this.becomeFormal(val);
       },
       // 打开组织架构
       openOrgan(val, type) {
@@ -150,9 +281,6 @@
       openContextMenu(row, event) {
         this.lists = [
           {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
-          {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
-          {clickIndex: 'reviseRecord', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
-          {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '新增奖惩记录'},
         ];
         this.contextMenuParam(event);
       },
