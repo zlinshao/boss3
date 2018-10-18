@@ -620,7 +620,7 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputValue: this.phone,
-          inputPattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
+          inputPattern: /^(0|86|17951)?(13[0-9]|14[01456789]|15[0-9]|16[56]|17[0-8]|18[0-9]|198|199)[0-9]{8}$/,
           inputErrorMessage: '手机号格式不正确'
         }).then(({value}) => {
           this.$http.post(globalConfig.server + '/financial/receipt/send/' + this.electronicReceiptId, {"phone": value}).then((res) => {

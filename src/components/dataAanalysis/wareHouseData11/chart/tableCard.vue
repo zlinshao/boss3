@@ -3,7 +3,7 @@
   <div ref="chartId" id="chartTable">
     <!-- 中介费占业绩比最高的前100名员工 -->
     <el-table
-      v-if="chartName=='中介费占业绩比最高的前100名员工'"
+      v-if="this.chartData.name=='中介费占业绩比最高的前100名员工'"
       @click.native ="detaildialogVisible=true"
       class="comTable"
       :data="tableData"
@@ -41,7 +41,7 @@
     </el-table>
     <!-- 异常单列表 -->
     <el-table
-      v-if="chartName=='异常单列表'"
+      v-if="this.chartData.name=='异常单列表'"
       @click.native ="detaildialogVisible=true"
       class="comTable"
       :data="tableData"
@@ -271,17 +271,15 @@ import toprightControl from "../../components/toprightControl"
         }
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
         this.dataParams.limit = val
         this.getData()
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
         this.dataParams.page = val
         this.getData()
       },
       getData(){ //获取数据
-        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
           console.log(res)
           if(res.data.code == "20000"){
             this.tableData = res.data.data.data

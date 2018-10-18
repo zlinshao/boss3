@@ -6,7 +6,7 @@
 </template>
 <script>
   export default {
-    props:['url','chartName'],
+    props:['chartData'],
     data(){
       return {
         data:[],
@@ -49,9 +49,8 @@
         chart.render();
       },
       getChart(){ //获取图表
-        console.log(this.url)
-        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          console.log(res)
+        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+          
           if(res.data.code == "20000"){
             for(let key in res.data.data[0]){
               if(key!=="name"){
@@ -70,7 +69,7 @@
         });
       },
       resetChart(){ //配置图表
-        switch(this.chartName){
+        switch(this.chartData.data_source){
           case "租房炸单数量、炸单率":
             this.chartReset.key = "城市";
             this.chartReset.value = "炸弹率";

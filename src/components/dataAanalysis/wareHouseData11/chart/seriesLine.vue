@@ -6,7 +6,7 @@
 </template>
 <script>
   export default {
-    props: ['url'],
+    props: ['chartData'],
     data() {
       return {
         data: [],
@@ -54,7 +54,7 @@
         chart.render();
       },
       getChart() {
-        this.$http.get(this.url, {
+        this.$http.get(this.chartData.data_source, {
           headers: {"Accept": "application/vnd.boss18+json"},
           params: this.dataParams
         }).then((res) => {

@@ -6,7 +6,7 @@
 </template>
 <script>
   export default {
-    props:['url','chartName'],
+    props:['chartData'],
     data(){
       return {
         data:[],
@@ -51,8 +51,7 @@
           chart.render();
       },
       getChart(){ //获取图表
-        console.log(this.url)
-        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
           console.log(res)
           if(res.data.code == "20000"){
             this.chartTextStatus = false
@@ -67,7 +66,7 @@
         });
       },
       resetChart(){ //配置图表
-        switch(this.chartName){
+        switch(this.chartData.name){
           case "房屋周转率":
             this.chartReset.field = "value"
             this.chartReset.dimension = "name";

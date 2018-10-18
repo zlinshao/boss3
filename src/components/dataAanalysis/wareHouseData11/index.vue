@@ -3,14 +3,11 @@
     <!-- 图表展示 -->
     <div>
       <el-row :gutter="20" >
-        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="!(item.data_source=='null')">
+        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
-            <component :is="item.chart_set[0].type" :url="item.data_source" 
-              :chartName="item.name"
+            <component :is="item.chart_set[0].type" :chartData="item" @click="showDetailChartDialog(item)"
             ></component>
-            <!-- <basicColumn :url="item.data_source"></basicColumn> -->
-            <!-- <seriesLine url="item.data_source"></seriesLine> -->
           </chartCard>
         </el-col>
         <el-col 
@@ -62,7 +59,7 @@
   import textCard from "./chart/textCard.vue"               //文本卡片
   import tableCard from "./chart/tableCard.vue"            //表格卡片
 
-  import detailChartDialog from "../components/detailChartDialog.vue"
+  import detailChartDialog from "../components/detailChartDialog.vue" //指标详情页
 
   export default {
     components: {

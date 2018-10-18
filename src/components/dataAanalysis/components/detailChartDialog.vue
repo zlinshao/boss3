@@ -66,16 +66,32 @@
           </div>
         </div>
         <div class="content">
-          <pie :chartheight="chartheightDia" :chartData="chartData"></pie>
+          <!-- <component :is="item.chart_set[0].type" :url="item.data_source" 
+              :chartName="item.name" 
+            ></component> -->
         </div>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
+  import basicColumn from "../wareHouseData11/chart/basicColumn.vue"          //基础柱状图
+  import bubblePoint from "../wareHouseData11/chart/bubblePoint.vue"          //气泡图
+  import donut from "../wareHouseData11/chart/donut.vue"                      //基础环图
+  import gauge from "../wareHouseData11/chart/gauge.vue"                      //仪表图
+  import groupedColumn from "../wareHouseData11/chart/groupedColumn.vue"      //分组柱状图
+  import pie from "../wareHouseData11/chart/pie.vue"                          //饼图
+  import seriesLine from "../wareHouseData11/chart/seriesLine.vue"            //折线图
+  import stackedColumn from "../wareHouseData11/chart/stackedColumn.vue"      //堆叠柱状图
+  import stackedPercentageColumn from "../wareHouseData11/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
+  import textCard from "../wareHouseData11/chart/textCard.vue"               //文本卡片
+  import tableCard from "../wareHouseData11/chart/tableCard.vue"            //表格卡片
+
   import toprightControl from "./toprightControl.vue"
     export default {
-      components:{toprightControl},
+      components:{toprightControl,
+      basicColumn,bubblePoint,donut,gauge,groupedColumn,pie,seriesLine,stackedColumn,stackedPercentageColumn,tableCard
+      },
       data(){
 				return {
           chartData:'',//图表数据

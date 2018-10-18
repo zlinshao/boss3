@@ -6,7 +6,7 @@
 </template>
 <script>
   export default {
-    props:['url','chartName'],
+    props:['chartData'],
     data(){
       return {
         data:[],
@@ -69,9 +69,8 @@
         chart.render();
       },
       getChart(){ //获取图表
-        console.log(this.url)
-        this.$http.get(this.url,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          console.log(res)
+        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+        
           if(res.data.code == "20000"){
             res.data.data.forEach((item,index)=>{
               this.chartReset.colorMap[item.city] = index
@@ -87,7 +86,7 @@
         });
       },
       resetChart(){  //配置图表
-        switch(this.chartName){
+        switch(this.chartData.name){
           case "收房利益指数":
             this.chartReset.alias ={
               AverageLife: {
