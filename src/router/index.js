@@ -516,24 +516,24 @@ export default new Router({
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
-    {
-      path: '/',
-      component: Index,
-      name: 'HRM',
-      icon: 'iconfont icon-renzi',
-      children: [
-        {
-          path: '/teamManage', component: TeamManage, name: '人员信息管理',
-          children: [
-            {path: '/teamManage/roster', component: Roster, name: '花名册'},
-            {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-          ],
-        },
-        {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-        {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-        {path: '/dimission', component: Dimission, name: '离职管理'},
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: 'HRM',
+    //   icon: 'iconfont icon-renzi',
+    //   children: [
+    //     {
+    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
+    //       children: [
+    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
+    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+    //         {path: '/dimission', component: Dimission, name: '离职管理'},
+    //       ],
+    //     },
+    //   ]
+    // },
     // {
     //   path: '/',
     //   component: Index,
@@ -615,7 +615,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
+        // {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {
