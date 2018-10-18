@@ -386,6 +386,8 @@
           rent_money: '',                //租金
           deposit_payed: '',             //押金
           money_sep: [''],              //分金额
+          account_id: [''],
+          real_pay_at: [],
           money_way: [''],              //分金额 方式
 
           is_receipt: "1",              //是否电子收据
@@ -409,9 +411,6 @@
           department_id: '',            //部门id
           staff_name: '',               //开单人name
           department_name: '',          //部门name
-
-          account_id: '',
-          real_pay_at: [],
         },
         is_receipt: false,
         screenshot_leader: {},
@@ -513,8 +512,8 @@
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
 
-        this.params.account_id = data.account_id;
-        this.params.real_pay_at = data.real_pay_at;
+        this.params.account_id = data.account_id ? data.account_id : [];
+        this.params.real_pay_at = data.real_pay_at ? data.real_pay_at : [];
 
         if (data.is_receipt) {
           if (data.is_receipt.name) {
