@@ -567,9 +567,9 @@
             this.electronicReceiptVisible = true;
             this.pdfloading = false;
             this.pdfUrl = res.data.data.shorten_uri;
-            if (res.data.data.is_signed === "0") {
+            if (res.data.data.is_signed == "0") {
               this.signature = true;
-            } else if (res.data.data.is_signed === "1") {
+            } else if (res.data.data.is_signed == "1") {
               this.signature = false;
             }
 

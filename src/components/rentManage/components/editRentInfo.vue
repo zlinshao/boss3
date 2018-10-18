@@ -214,19 +214,19 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="押金" required>
+                      <el-form-item label="押金" >
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                   v-model="params.deposit_payed" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="定金" required>
+                      <el-form-item label="定金" >
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                   v-model="params.front_money" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="租金" required>
+                      <el-form-item label="租金" >
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                   v-model="params.rent_money" @keyup.native="addMoneySum(params)"></el-input>
                       </el-form-item>
