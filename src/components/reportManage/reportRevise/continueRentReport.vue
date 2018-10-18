@@ -399,7 +399,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id: '',
+          account_id: [],
           real_pay_at: []
         },
         is_receipt: false,
@@ -545,8 +545,8 @@
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
 
-        this.params.account_id = data.account_id;
-        this.params.real_pay_at = data.real_pay_at;
+        this.params.account_id = data.account_id ? data.account_id : [];
+        this.params.real_pay_at = data.real_pay_at ? data.real_pay_at : [];
 
         if (data.receipt && typeof(data.receipt) === 'string') {
           this.params.receipt.push(data.receipt)
@@ -768,7 +768,7 @@
 
           money_sum: '',                //总金额
           money_sep: [''],              //分金额
-          real_pay_at: [""], //实际收款时间
+          real_pay_at: [''], //实际收款时间
           money_way: [''],              //分金额 方式
 
           is_other_fee: '0',

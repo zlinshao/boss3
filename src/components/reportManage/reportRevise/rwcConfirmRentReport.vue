@@ -414,7 +414,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id: '',
+          account_id: [],
           real_pay_at: []
         },
         is_receipt: false,
@@ -564,8 +564,9 @@
         this.params.department_name = data.department_name;
 
 
-        this.params.account_id = data.account_id;
-        this.params.real_pay_at = data.real_pay_at;
+        this.params.account_id = data.account_id ? data.account_id : [];
+        this.params.real_pay_at = data.real_pay_at ? data.real_pay_at : [];
+
         if (data.receipt && typeof(data.receipt) === 'string') {
           this.params.receipt.push(data.receipt)
         } else if (Array.isArray(data.receipt) && data.receipt.length > 0) {

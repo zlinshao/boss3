@@ -590,7 +590,7 @@
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
 
-        this.params.account_id = data.account_id;
+        this.params.account_id = data.account_id ? data.account_id : [];
         this.params.real_pay_at = data.real_pay_at;
 
         if (data.receipt && typeof data.receipt === "string") {
