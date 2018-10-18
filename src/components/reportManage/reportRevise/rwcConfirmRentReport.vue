@@ -61,7 +61,7 @@
                   <template slot="append">元</template>
                 </el-input>
               </el-form-item>
-            </el-col> 
+            </el-col>
             <el-col :span="8">
               <el-form-item label="押金" required="">
                 <el-input placeholder="押金" v-model="params.deposit_payed" @keyup.native="addMoneySum(params)">
@@ -159,9 +159,15 @@
                 <el-col :span="6">
                   <el-form-item label="支付方式" required="">
                     <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择支付方式" value="">
-                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.id"
+                      <el-option v-for="item in purchase_way_dic" :label="item.bank_info" :value="item.bank_info"
                                  :key="item.id"></el-option>
                     </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="实际收款日期" required="">
+                    <el-date-picker value-format="yyyy-MM-dd HH:mm" type="datetime" placeholder="选择日期"
+                                    v-model="params.real_pay_at[item-1]"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -256,20 +262,20 @@
               <el-col :span="12">
                 <el-form-item label="是否电子收据" required="">
                   <el-switch v-model="is_receipt" disabled></el-switch>
-                </el-form-item> 
+                </el-form-item>
               </el-col>
               <el-col :span="12" v-for="item in receiptAmount" :key="item">
                 <div v-if="params.is_receipt=='0'">
-                <el-col :span="12">
-                  <el-form-item label="收据编号" required="">
-                    <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12" v-if="item>1">
-                  <div class="deleteNumber">
-                    <span @click="deleteReceiptAmount(item-1)">删除</span>
-                  </div>
-                </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="收据编号" required="">
+                      <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12" v-if="item>1">
+                    <div class="deleteNumber">
+                      <span @click="deleteReceiptAmount(item-1)">删除</span>
+                    </div>
+                  </el-col>
                 </div>
               </el-col>
             </el-row>
@@ -376,9 +382,9 @@
           period_pay_arr: [''],         //付款方式周期
 
           money_sum: '',                //总金额
-          front_money:'',               //定金
-          rent_money:'',                //租金
-          deposit_payed:'',                   //押金
+          front_money: '',               //定金
+          rent_money: '',                //租金
+          deposit_payed: '',                   //押金
           money_sep: [''],              //分金额
           money_way: [''],              //分金额 方式
 
@@ -408,8 +414,8 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id:'',            
-          real_pay_at:''
+          account_id: [],
+          real_pay_at: []
         },
         is_receipt: false,
         screenshot_leader: {},
@@ -451,9 +457,9 @@
     },
     methods: {
       getDictionary() {
-        let department_id = this.reportDetailData.department_id
-        this.$http.get(globalConfig.server+"/financial/account_alloc/map?org_id="+department_id).then((res) => {
-          if(res.data.code == "20000"){
+        let department_id = this.reportDetailData.department_id;
+        this.$http.get(globalConfig.server + "financial/account_alloc/map?org_id=" + department_id).then((res) => {
+          if (res.data.code === "20000") {
             this.purchase_way_dic = res.data.data
           }
         });
@@ -558,8 +564,9 @@
         this.params.department_name = data.department_name;
 
 
-        this.params.account_id = data.account_id;
-        this.params.real_pay_at = data.real_pay_at;
+        this.params.account_id = data.account_id ? data.account_id : [];
+        this.params.real_pay_at = data.real_pay_at ? data.real_pay_at : [];
+
         if (data.receipt && typeof(data.receipt) === 'string') {
           this.params.receipt.push(data.receipt)
         } else if (Array.isArray(data.receipt) && data.receipt.length > 0) {
@@ -651,6 +658,7 @@
       },
       deleteMoneyTableChange(item) {
         this.params.money_way.splice(item, 1);
+        this.params.real_pay_at.splice(item, 1);
         this.params.money_sep.splice(item, 1);
         this.moneyTableChangeAmount--;
       },
@@ -728,6 +736,7 @@
       },
       confirmSubmit() {
         if (!this.isUpload) {
+          this.params.account_id = this.account_ids(this.params.money_way, this.purchase_way_dic);
           this.$http.post(globalConfig.server + 'bulletin/rent_without_collect', this.params).then((res) => {
             if (res.data.code === '51330') {
               this.$notify.success({
@@ -781,6 +790,7 @@
 
           money_sum: '',                //总金额
           money_sep: [''],              //分金额
+          real_pay_at: [""], //实际收款时间
           money_way: [''],              //分金额 方式
 
           is_other_fee: '0',

@@ -34,7 +34,18 @@ export default {
       document.body.appendChild(link);
       link.click();
     };
-
+    Vue.prototype.account_ids = function ( data, dict) {
+      let account = [];
+      data.forEach((res, index) => {
+        account.push('');
+        dict.forEach(item => {
+          if (res === item.bank_info) {
+            account[index] = item.id;
+          }
+        })
+      });
+      return account;
+    };
     Vue.prototype.timestampToTime = function (timestamp) {
       let date =String(timestamp).length>10?new Date(timestamp): new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
       let Y = date.getFullYear() + '-';
