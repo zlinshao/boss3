@@ -108,70 +108,55 @@
       @cell-dblclick='openDetail'
       width="100%">
       <el-table-column
-        label="发喜报日期"
-        prop="generate_date">
+        label="员工"
+        prop="rent_staff"
+      ></el-table-column>
+      <el-table-column
+        label="租房溢出业绩"
+        prop="rent_overflow">
       </el-table-column>
       <el-table-column
-        label="房屋地址"
-        prop="address">
+        label="收房溢出业绩"
+        prop="lord_overflow">
       </el-table-column>
       <el-table-column
-        label="收租状态"
-        prop="contract_category">
-        <templete slot-scope="scope">
-          <div>
-            <span v-if="scope.row.contract_category === 1">收</span>
-            <span v-if="scope.row.contract_category === 2">租</span>
-          </div>
-        </templete>
+        label="收房综合金额"
+        prop="lord_push_money">
       </el-table-column>
       <el-table-column
-        label="付款方式"
-        prop="pay_type">
+        label="租房综合金额"
+        prop="rent_push_money">
+      </el-table-column>
+
+      <el-table-column
+        label="租房中介费"
+        prop="rent_agency_count">
       </el-table-column>
       <el-table-column
-        label="签约月数"
-        prop="month">
+        label="收房中介费"
+        prop="lord_agency_count">
+      </el-table-column>
+
+      <el-table-column
+        label="收房净得金额"
+        prop="lord_real_money">
+      </el-table-column>
+
+      <el-table-column
+        label="租房净得金额"
+        prop="rent_real_money">
       </el-table-column>
       <el-table-column
-        label="单价"
-        prop="price">
-      </el-table-column>
-      <el-table-column
-        label="总金额"
-        prop="total_price">
-      </el-table-column>
-      <el-table-column
-        label="空置期"
-        prop="vacancy">
-      </el-table-column>
-      <el-table-column
-        label="中介费"
-        prop="agency">
-      </el-table-column>
-      <el-table-column
-        label="实际业绩"
-        prop="achv_real">
-      </el-table-column>
-      <el-table-column
-        label="溢出业绩">
+        fixed="right"
+        label="操作">
         <template slot-scope="scope">
-          <span v-if="!editAble">{{scope.row.achv_overflow}}</span>
-          <span v-if="editAble"><input v-model="scope.row.achv_overflow" type="text" @blur="onsubmit(scope.row)"
-                                       style="border: none;"></span>
+          <el-button
+            @click.native.prevent=""
+            type="text"
+            size="small">
+            详情
+          </el-button>
         </template>
-      </el-table-column>
-      <el-table-column
-        label="姓名"
-        prop="staff_name">
-      </el-table-column>
-      <el-table-column
-        label="所属部门"
-        prop="department">
-      </el-table-column>
-      <el-table-column
-        label="政务不齐"
-        prop="module">
       </el-table-column>
     </el-table>
 
@@ -185,7 +170,7 @@
         :total="totalNum">
       </el-pagination>
     </div>
-    <el-dialog :close-on-click-modal="false" title="业绩详情" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="true" title="业绩详情" :visible.sync="dialogVisible" width="30%">
       <el-row style="margin: 0 20px;">
         <el-col :span="6">个人提成：</el-col>
         <el-col :span="18">{{dblRowData.achv}}</el-col>
@@ -321,7 +306,7 @@
         }
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(globalConfig.server + 'salary/achv?limit=12&page=' + this.form.page
+        this.$http.get(globalConfig.server + 'salary/achv?limit=5&page=' + this.form.page
           + '&start_time=' + this.form.start_time + '&end_time=' + this.form.end_time
           + '&depart_ids=' + this.form.depart_ids).then((res) => {
           this.isHigh = false;
