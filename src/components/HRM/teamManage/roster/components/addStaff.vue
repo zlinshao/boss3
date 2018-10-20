@@ -656,9 +656,9 @@
               if (val.recommender && val.recommender !== 'null') {
                 this.$http.get(this.url + 'hrm/User/getName?id=' + val.recommender).then(res => {
                   this.orgData[key] = res.data.name;
+                  this.orgData = Object.assign({}, this.orgData);
                 });
               }
-              this.orgData = Object.assign({}, this.orgData);
               break;
             case 'id':
               this.form.id = val.user_id;
