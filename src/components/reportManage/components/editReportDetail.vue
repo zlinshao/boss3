@@ -487,7 +487,7 @@
     watch: {
       approvalStatus(newval, oldval) {
         if (newval == "published" && oldval == "review" && this.is_receipt.id == "1") {
-          if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
+          if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" ||this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
             this.createElectronicReceipt()
           }
         }
@@ -665,7 +665,7 @@
 
             this.approvalStatus = pro.place.status;
 
-            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
+            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" ||this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
 
               this.electronicReceiptStatu = true;
               this.bulletinId = res.data.data.process.id;
