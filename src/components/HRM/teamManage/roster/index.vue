@@ -217,6 +217,9 @@
         <el-table-column
           prop="positionStatus"
           label="当前在职状态">
+          <template slot-scope="scope">
+            <span :style="{'color': scope.row.position_status === 5 ? 'red' : ''}">{{scope.row.positionStatus}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="phone"
