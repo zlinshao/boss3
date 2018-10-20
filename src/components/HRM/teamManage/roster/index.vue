@@ -257,17 +257,20 @@
     <!--组织架构-->
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
+    <!--新增调岗-->
+    <AddTransfer :module="transferModule" :assist="'new'" :detail="staffDetail" @close="closeTransfer"></AddTransfer>
   </div>
 </template>
 
 <script>
-  import AddStaff from './components/addStaff.vue';//房东
+  import AddStaff from './components/addStaff.vue';//新增员工
+  import AddTransfer from './components/addTransfer.vue';//新增调岗
   import ReviseRecord from './components/reviseRecord.vue';//修改奖惩记录
   import RightMenu from '../../../common/rightMenu.vue';//右键
   import Organization from '../../../common/organization.vue';//组织架构
   export default {
     name: "index",
-    components: {RightMenu, AddStaff, ReviseRecord, Organization},
+    components: {RightMenu, AddStaff, ReviseRecord, Organization, AddTransfer},
     data() {
       return {
         is_enable: false,
@@ -299,6 +302,8 @@
 
         user_id: '',                //员工ID
         staffDetail: {},            //员工详情
+
+        transferModule: false,
       }
     },
     created() {
@@ -389,6 +394,10 @@
       // 重置
       resetting() {
         this.params = JSON.parse(JSON.stringify(rosterParams));
+      },
+      // 新增调岗
+      closeTransfer() {
+        this.transferModule = false;
       },
       // 打开组织架构
       openOrgan(val, type) {
@@ -481,6 +490,7 @@
           {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
           {clickIndex: 'reviseRecord', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
           {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '新增奖惩记录'},
+          {clickIndex: 'addTransfer', headIcon: 'iconfont icon-xibaoguanli', label: '新增调岗'},
         ];
         this.lists = JSON.parse(JSON.stringify(list));
         if (row.position_status) {
@@ -505,7 +515,12 @@
           case 'first':// 编辑基本信息
           case 'second':// 编辑辅助信息
           case 'record':// 新增奖惩记录
-            this.staffVisible = true;
+          case 'addTransfer':// 新增调岗
+            if (val !== 'addTransfer') {
+              this.staffVisible = true;
+            } else {
+              this.transferModule = true;
+            }
             this.assistShow = val;
             this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
               if (res.data.success) {

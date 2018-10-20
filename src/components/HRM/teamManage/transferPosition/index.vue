@@ -12,6 +12,9 @@
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="addTransfer">新增调岗</el-button>
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -88,27 +91,51 @@
           label="入职时间">
         </el-table-column>
         <el-table-column
-          prop="staff_extend"
+          prop="transfer_time"
           label="调岗生效日">
         </el-table-column>
         <el-table-column
-          prop="staff_extend.expected_formal"
           label="当前在职状态">
+          <template slot-scope="scope">
+            <div class="departPosition">
+              {{position_status[scope.row.staff_extend.position_status]}}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           prop="user.phone"
           label="调岗类型">
+          <template slot-scope="scope">
+            <div class="departPosition">
+              {{transfer_type[scope.row.staff_extend.transfer_type]}}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="email"
           label="调岗后部门">
+          <template slot-scope="scope">
+            <div class="departPosition">
+              <span v-for="(item,index) in scope.row.organization">
+                <b v-if="index !== 0">,</b>
+                {{item.name}}
+              </span>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           prop="email"
           label="调岗后职位">
+          <template slot-scope="scope">
+            <div class="departPosition">
+              <span v-for="(item,index) in scope.row.position">
+                <b v-if="index !== 0">,</b>
+                {{item.name}}
+              </span>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="email"
+          prop="user.phone"
           label="手机号码">
         </el-table-column>
         <el-table-column
@@ -154,6 +181,7 @@
         lists: [],
 
         isHigh: false,
+        transferModule: false,
 
         organModule: false,
         organizeType: '',
@@ -171,6 +199,13 @@
           keywords: '',
         },
         organData: {},
+        position_status: {},
+        transfer_type: {1: '平行调岗', 2: '升职调岗', 3: '降至调岗'},
+      }
+    },
+    created() {
+      for (let key of position_status) {
+        this.position_status[key.id] = key.name;
       }
     },
     mounted() {
@@ -204,6 +239,14 @@
         this.tableData = [];
         this.tableStatus = '暂无数据';
         return false;
+      },
+      // 新增调岗
+      addTransfer() {
+        this.transferModule = true;
+      },
+      // 新增调岗
+      closeTransfer() {
+        this.transferModule = false;
       },
       // 转正
       becomeFull(row) {

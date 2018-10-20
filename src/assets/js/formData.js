@@ -145,3 +145,9 @@ typeCategory = [
   {id: 3, name: '疑惑'},
   {id: 4, name: '其他'},
 ];
+// 调岗类型
+transfer_type = [
+  {id: 1, name: '平行调岗'},
+  {id: 2, name: '升职调岗'},
+  {id: 3, name: '降至调岗'},
+];
