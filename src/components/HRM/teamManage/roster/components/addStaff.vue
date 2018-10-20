@@ -607,6 +607,7 @@
       },
       // 获取个人信息
       personalInfo(val) {
+        this.personalRecord(val);
         this.form = JSON.parse(JSON.stringify(rosterAddStaff));
         let keys = Object.keys(this.form);
         for (let key of keys) {
@@ -662,7 +663,6 @@
               break;
             case 'id':
               this.form.id = val.user_id;
-              this.form3.id = val.user_id;
               break;
             default:
               if (val[key] && val[key] !== 'null') {
@@ -676,6 +676,7 @@
       },
       // 获取辅助信息
       personalAssist(val) {
+        this.personalRecord(val);
         this.form2 = JSON.parse(JSON.stringify(rosterAddAssist));
         this.initForm();
         let keys = Object.keys(this.form2);
@@ -705,7 +706,6 @@
           }
         }
         this.form2.id = val.user_id;
-        this.form3.id = val.user_id;
         this.fullLoading = false;
       },
       // 获取奖惩记录部门
