@@ -202,7 +202,7 @@
               </div>
               <div class='formList'>
                 <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入银行卡号" v-model="form.account_bank" clearable></el-input>
+                  <el-input placeholder="请输入开户行" v-model="form.account_bank" clearable></el-input>
                 </el-form-item>
               </div>
               <div class='formList'>

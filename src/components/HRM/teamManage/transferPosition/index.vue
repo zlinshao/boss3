@@ -160,15 +160,18 @@
     <!--组织架构-->
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
+    <!--新增调岗-->
+    <AddTransfer :module="transferModule" :detail="staffDetail" @close="closeModule"></AddTransfer>
   </div>
 </template>
 
 <script>
+  import AddTransfer from '../roster/components/addTransfer.vue';//新增调岗
   import RightMenu from '../../../common/rightMenu.vue';//右键
   import Organization from '../../../common/organization.vue';//组织架构
   export default {
     name: "index",
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization, AddTransfer},
     data() {
       return {
         url: globalConfig.server,
@@ -178,6 +181,10 @@
         lists: [],
 
         isHigh: false,
+
+        transferModule: false,
+        staffDetail: {},
+        user_info: {},
 
         organModule: false,
         organizeType: '',
@@ -205,7 +212,7 @@
       }
     },
     mounted() {
-      this.becomeFormal();
+      this.transferList();
     },
     activated() {
     },
@@ -213,7 +220,7 @@
     computed: {},
     methods: {
       // 列表
-      becomeFormal(page) {
+      transferList(page) {
         this.tableStatus = ' ';
         this.tableLoading = true;
         this.params.page = page || 1;
@@ -248,7 +255,7 @@
           }).then(res => {
             if (res.data.success) {
               this.prompt('success', res.data.msg);
-              this.becomeFormal(this.params.page);
+              this.transferList(this.params.page);
             } else {
               this.prompt('warning', res.data.msg);
             }
@@ -259,7 +266,7 @@
       // 搜索
       search() {
         this.isHigh = false;
-        this.becomeFormal();
+        this.transferList();
       },
       // 高级
       highGrade() {
@@ -278,11 +285,11 @@
       // 分页
       handleSizeChange(val) {
         this.params.limit = val;
-        this.becomeFormal();
+        this.transferList();
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.becomeFormal(val);
+        this.transferList(val);
       },
       // 打开组织架构
       openOrgan(val, type) {
@@ -314,24 +321,33 @@
       dblClickTable() {
 
       },
+      // 关闭调岗/离职
+      closeModule(val) {
+        this.transferModule = false;
+        if (val === 'success') {
+          this.transferList(this.params.page);
+        }
+      },
       // 右键
       openContextMenu(row, event) {
+        this.user_info = row.user;
         this.lists = [
-          {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
+          {clickIndex: 'transfer', headIcon: 'iconfont icon-xibaoguanli', label: '编辑调岗'},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
         switch (val) {
-          case 'formal':
-            console.log(val);
-            break;
           case 'transfer':
-            console.log(val);
-            break;
-          case 'dimission':
-            console.log(val);
+            this.transferModule = true;
+            this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_info.id).then(res => {
+              if (res.data.success) {
+                this.staffDetail = res.data.data;
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+            });
             break;
         }
       },

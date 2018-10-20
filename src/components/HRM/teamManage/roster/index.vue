@@ -249,7 +249,7 @@
     <!--新增员工-->
     <AddStaff :module="staffVisible" :assist="assistShow" :detail="staffDetail" @close="closeStaff"></AddStaff>
     <!--修改奖惩记录-->
-    <ReviseRecord :module="recordVisible" :data="recordData" @close="closeRecord"></ReviseRecord>
+    <ReviseRecord :module="recordVisible" :data="recordID" @close="closeRecord"></ReviseRecord>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -283,7 +283,7 @@
         assistShow: '',             //是否显示辅助信息
         staffVisible: false,        //增加新员工
         recordVisible: false,       //修改奖惩记录
-        recordData: [],             //修改奖惩记录
+        recordID: '',               //修改奖惩记录 ID
         currentPage: 1,             //当前页数
         isHigh: false,              //高级
         tableData: [],
@@ -444,6 +444,7 @@
       // 关闭奖惩记录编辑
       closeRecord() {
         this.recordVisible = false;
+        this.recordID = '';
       },
       // 分页
       handleSizeChange(val) {
@@ -488,8 +489,8 @@
         let list = [
           {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
           {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
-          {clickIndex: 'reviseRecord', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
           {clickIndex: 'record', headIcon: 'iconfont icon-xibaoguanli', label: '新增奖惩记录'},
+          {clickIndex: 'reviseRecord', headIcon: 'iconfont icon-xibaoguanli', label: '编辑奖惩记录'},
           {clickIndex: 'addTransfer', headIcon: 'iconfont icon-xibaoguanli', label: '新增调岗'},
         ];
         this.lists = JSON.parse(JSON.stringify(list));
@@ -527,19 +528,7 @@
             break;
           case 'reviseRecord':// 编辑奖惩记录
             this.recordVisible = true;
-            this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + info.user_id).then(res => {
-              if (res.data.success) {
-                this.recordData = res.data.data;
-              } else {
-                this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + info.user_id).then(res => {
-                  if (res.data.success) {
-                    this.recordData = res.data.data;
-                  } else {
-                    this.prompt('warning', res.data.msg);
-                  }
-                });
-              }
-            });
+            this.recordID = info.user_id;
             break;
           case 'formal':
             // 转正
