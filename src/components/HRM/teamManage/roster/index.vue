@@ -127,7 +127,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">当前在职状态</div>
+                  <div class="el_col_label">离职时间</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -426,11 +426,11 @@
         for (let item of val) {
           str.push(item.name);
         }
-        str = Array.from(new Set(str));
-        for (let key of str) {
-          str = key + ',' + str;
-        }
-        this.params[organ] = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
+        this.departName(str, organ);
+      },
+      // 数组名称去重 拼接
+      departName(arr, organ) {
+        this.params[organ] = this.montage(arr);
       },
       // 新增员工
       newAddStaff() {
