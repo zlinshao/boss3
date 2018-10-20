@@ -24,7 +24,15 @@ export default {
         })
       })
     };
-
+    // 数组拼接
+    Vue.prototype.montage = function (arr) {
+      let str = '';
+      arr = Array.from(new Set(arr));
+      for (let key of arr) {
+        str = key + '，' + str;
+      }
+      return (str.substring(str.length - 1) === '，') ? str.substring(0, str.length - 1) : str;
+    };
     Vue.prototype.$exportData = function (data) {
       let url =  window.URL.createObjectURL(new Blob([data]));
       let link = document.createElement('a');

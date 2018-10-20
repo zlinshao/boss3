@@ -89,27 +89,30 @@
               <div class='formList'>
                 <el-form-item label="部门" required>
                   <el-input placeholder="请选择" @focus="openOrgan('org_id', 'depart')" v-model="orgData.org_id"
-                            size="mini">
-                    <el-button slot="append" @click="emptyDepart('org_id')">清空</el-button>
+                            size="mini" v-if="assist === 'new'">
+                    <el-button slot="append" @click="emptyDepart('org_id')" v-if="assist === 'new'">清空</el-button>
                   </el-input>
+                  <div class="showTitles" v-else>{{orgData.org_id}}</div>
                 </el-form-item>
               </div>
               <div class='formList'>
                 <el-form-item label="职位" required>
-                  <el-select v-model="form.duty_id" @change="positionSelect" clearable multiple>
-                    <el-option v-for="item in duty" :value="item.id" :key="item.id"
-                               :label="item.name">
+                  <el-select v-model="form.duty_id" @change="positionSelect" clearable multiple
+                             :disabled="duty.length < 1" v-if="assist === 'new'">
+                    <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
                     </el-option>
                   </el-select>
+                  <div class="showTitles" v-else>{{orgData.duty_id}}</div>
                 </el-form-item>
               </div>
               <div class='formList'>
                 <el-form-item label="岗位" required>
-                  <el-select v-model="form.position_id" clearable multiple>
-                    <el-option v-for="item in position" :value="item.id" :key="item.id"
-                               :label="item.name">
+                  <el-select v-model="form.position_id" clearable multiple :disabled="position.length < 1"
+                             v-if="assist === 'new'">
+                    <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
                     </el-option>
                   </el-select>
+                  <div class="showTitles" v-else>{{orgData.position_id}}</div>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -168,10 +171,12 @@
               </div>
               <div class='formList'>
                 <el-form-item label="当前在职状态" required>
-                  <el-select v-model="form.position_status" clearable :disabled="assist === 'new'">
+                  <el-select v-model="form.position_status" clearable :disabled="assist === 'new'"
+                             v-if="form.position_status !== 5">
                     <el-option v-for="item in position_status" :value="item.id" :key="item.id" :label="item.name">
                     </el-option>
                   </el-select>
+                  <div class="showTitles" v-else>已离职</div>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -458,7 +463,7 @@
             images: '',
           }]
         }],
-        recordName:'',
+        recordName: '',
         //辅助信息
         form2: {},
         emergency_call: {},     //紧急联系
@@ -515,23 +520,6 @@
     activated() {
     },
     watch: {
-      detail(val) {
-        this.getStaffDetail = val;
-        switch (this.assist) {
-          case 'first':
-            this.personalInfo(val);
-            break;
-          case 'second':
-            this.personalAssist(val);
-            break;
-          case 'record':
-            this.personalRecord(val);
-            break;
-        }
-      },
-      'form.formal'(val) {  //实际转正日期
-        this.form.forward_time = val;
-      },
       // 模态框
       module(val) {
         if (this.assist !== 'new') {
@@ -555,13 +543,30 @@
           this.isClear = false;
         }
       },
+      detail(val) {
+        this.getStaffDetail = val;
+        switch (this.assist) {
+          case 'first':
+            this.personalInfo(val);
+            break;
+          case 'second':
+            this.personalAssist(val);
+            break;
+          case 'record':
+            this.personalRecord(val);
+            break;
+        }
+      },
+      'form.formal'(val) {  //实际转正日期
+        this.form.forward_time = val;
+      },
     },
     computed: {},
     methods: {
       // 模态框关闭触发
       closeModule() {
         this.isClear = true;
-        this.form = {};
+        this.form = JSON.parse(JSON.stringify(rosterAddStaff));
         this.form.position_status = 3;
         this.orgData = {};      //部门显示
         this.entry_way = {      //入职途径
@@ -616,25 +621,36 @@
             case 'city':              //城市
               this.form.city = Number(val.city);
               break;
-            case 'duty_id':           //职务
-              val.org_id.forEach(res => {
-                this.duties(res, 'duty_id');
-              });
-              break;
-            case 'position_id':       //岗位
-              if (val.duty_id) {
-                this.positionSelect(val.duty_id, 'position_id');
-              } else {
-                this.resetOrg('position');
-              }
-              break;
             case 'org_id':            //部门
               let organ = JSON.parse(val.organizationInfo);
-              let arr = [];
-              organ.forEach(res => {
-                arr.push(res.name);
+              let org_id = [];
+              this.form[key] = [];
+              organ.forEach(item => {
+                org_id.push(item.name);
+                this.form[key].push(item.id);
+                this.duties(item.id);
               });
-              this.departName(arr, key);
+              this.departName(org_id, key);
+              break;
+            case 'duty_id':           //职务
+              if (val.dutyInfo) {
+                let dutyInfo = [];
+                for (let item of val.dutyInfo) {
+                  dutyInfo.push(item.duty_name);
+                  this.form[key].push(item.duty_id);
+                }
+                this.departName(dutyInfo, key);
+              }
+              break;
+            case 'position_id':       //岗位
+              if (val.positionInfo) {
+                let pos = [];
+                for (let item of val.positionInfo) {
+                  pos.push(item.position_name);
+                  this.form[key].push(item.position_id);
+                }
+                this.departName(pos, key);
+              }
               break;
             case 'recommender':        //推荐人
               if (val.recommender && val.recommender !== 'null') {
@@ -642,8 +658,9 @@
                   this.orgData[key] = res.data.name;
                 });
               }
+              this.orgData = Object.assign({}, this.orgData);
               break;
-            case 'user_id':
+            case 'id':
               this.form.id = val.user_id;
               this.form3.id = val.user_id;
               break;
@@ -783,21 +800,12 @@
         this.isUpload = val[2];
       },
       // 职务
-      duties(id, type) {
+      duties(id) {
         this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach(item => {
               this.duty.push(item);
             });
-            if (type === 'duty_id') {
-              if (this.getStaffDetail[type] && this.getStaffDetail[type] !== 'null') {
-                this.form[type] = this.getStaffDetail[type];
-              } else {
-                this.form[type] = [];
-              }
-            } else {
-              this.resetOrg('position');
-            }
           } else {
             this.duty = [];
             this.prompt('warning', res.data.msg);
@@ -805,30 +813,33 @@
         })
       },
       // 多职务
-      positionSelect(val, type) {
+      positionSelect(val) {
         this.resetOrg('position');
         if (val.length > 0) {
           for (let item of val) {
-            this.quarters(item, type);
+            this.quarters(item);
           }
-        } else {
-
         }
       },
       // 岗位
-      quarters(id, type) {
+      quarters(id) {
         this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
           if (res.data.code === '20000') {
-            res.data.data.data.forEach(item => {
+            for (let item of res.data.data.data) {
               this.position.push(item);
-            });
-            if (type === 'position_id') {
-              this.form[type] = this.getStaffDetail[type];
             }
           } else {
             this.prompt('warning', res.data.msg);
           }
         })
+      },
+      // 重置职位 岗位
+      resetOrg(val) {
+        this.position = [];
+        this.form.position_id = [];
+        if (val === 'position') return;
+        this.duty = [];
+        this.form.duty_id = [];
       },
       // 多条记录 选择员工
       openUid(val, type, index) {
@@ -861,14 +872,6 @@
           this.resetOrg();
         }
       },
-      // 重置职位 岗位
-      resetOrg(val) {
-        this.position = [];
-        this.form.position_id = [];
-        if (val === 'position') return;
-        this.duty = [];
-        this.form.duty_id = [];
-      },
       // 关闭组织架构
       closeOrgan() {
         this.organDivision = '';
@@ -880,6 +883,7 @@
       selectMember(val) {
         let organ = this.organDivision;
         if (organ === 'org_id') {
+          this.resetOrg();
           let arr = [];
           this.form[organ] = [];
           for (let item of val) {
@@ -899,14 +903,9 @@
           this.orgData[organ] = val[0].name;
         }
       },
-      // 部门名称去重
+      // 数组名称去重 拼接
       departName(arr, organ) {
-        let str = '';
-        arr = Array.from(new Set(arr));
-        for (let key of arr) {
-          str = key + ',' + str;
-        }
-        this.orgData[organ] = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
+        this.orgData[organ] = this.montage(arr);
       },
       // 增加多条奖惩记录
       addRecord() {
@@ -965,16 +964,19 @@
         width: 99%;
       }
     }
-    .el-form-item__content {
-      label {
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-      }
-    }
     .addForm {
       label {
         min-width: 100px;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      .showTitles {
+        width: 100%;
+        background-color: #F5F7FA;
+        padding: 3px 12px;
+        border-radius: 6px;
       }
     }
     .supplementary {

@@ -12,9 +12,6 @@
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="addTransfer">新增调岗</el-button>
-          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -141,7 +138,7 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="becomeFull(scope.row)">转正</el-button>
+            <el-button type="primary" size="mini" @click="transfer(scope.row)">调岗</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -181,7 +178,6 @@
         lists: [],
 
         isHigh: false,
-        transferModule: false,
 
         organModule: false,
         organizeType: '',
@@ -240,23 +236,15 @@
         this.tableStatus = '暂无数据';
         return false;
       },
-      // 新增调岗
-      addTransfer() {
-        this.transferModule = true;
-      },
-      // 新增调岗
-      closeTransfer() {
-        this.transferModule = false;
-      },
       // 转正
-      becomeFull(row) {
-        this.$confirm('是否转正员工 ' + row.name + ' 不可逆转操作，是否继续?', '提示', {
+      transfer(row) {
+        this.$confirm('是否确认调岗员工 ' + row.user.name + ' 不可逆转操作，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(this.url + 'hrm/User/affirm', {
-            id: row.id
+          this.$http.put(this.url + 'hrm/User/transfer', {
+            id: row.user.id
           }).then(res => {
             if (res.data.success) {
               this.prompt('success', res.data.msg);

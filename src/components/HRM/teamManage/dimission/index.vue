@@ -54,48 +54,31 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
-        @cell-dblclick='dblClickTable'
         @row-contextmenu='openContextMenu'
         style="width: 100%">
         <el-table-column
-          prop="name"
+          prop="real_name"
           label="姓名">
         </el-table-column>
         <el-table-column
+          prop="organizationInfo"
           label="部门">
-          <template slot-scope="scope">
-            <div class="departPosition">
-              <span v-for="(item,index) in scope.row.org">
-                <b v-if="index !== 0">,</b>
-                {{item.name}}
-              </span>
-            </div>
-          </template>
         </el-table-column>
         <el-table-column
+          prop="dutyInfo"
           label="职位">
-          <template slot-scope="scope">
-            <div class="departPosition">
-              <span v-for="(item,index) in scope.row.position">
-                <b v-if="index !== 0">,</b>
-                {{item.name}}
-              </span>
-            </div>
-          </template>
         </el-table-column>
         <el-table-column
-          prop="staff_extend.enroll"
+          prop="forward_time"
           label="入职时间">
         </el-table-column>
         <el-table-column
-          label="试用期">
-          <template slot-scope="scope">
-            {{scope.row.staff_extend.try_out_time}}个月
-          </template>
+          prop="dismiss_time"
+          label="离职时间">
         </el-table-column>
         <el-table-column
-          prop="staff_extend.expected_formal"
-          label="预计转正日期">
+          prop="id_num"
+          label="身份证">
         </el-table-column>
         <el-table-column
           prop="phone"
@@ -106,9 +89,13 @@
           label="个人邮箱">
         </el-table-column>
         <el-table-column
+          prop="resignation_type"
+          label="离职类型">
+        </el-table-column>
+        <el-table-column
           label="是否转正">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="becomeFull(scope.row)">转正</el-button>
+            <el-button type="primary" size="mini" @click="dimission(scope.row)">离职</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -130,15 +117,18 @@
     <!--组织架构-->
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
+    <!--新增离职-->
+    <AddDismission :module="dismissionModule" :detail="staffDetail" @close="closeModule"></AddDismission>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue';//右键
+  import AddDismission from './components/addDimission.vue'//确认离职
   import Organization from '../../../common/organization.vue';//组织架构
   export default {
     name: "index",
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization, AddDismission},
     data() {
       return {
         url: globalConfig.server,
@@ -148,6 +138,9 @@
         lists: [],
 
         isHigh: false,
+
+        dismissionModule: false,
+        staffDetail: {},
 
         organModule: false,
         organizeType: '',
@@ -161,14 +154,14 @@
         params: {
           limit: 12,
           page: 1,
-          org_id: '',
-          keywords: '',
+          orgNames: '',
+          positionNames: '',
         },
         organData: {},
       }
     },
     mounted() {
-      this.becomeFormal();
+      this.dimissionList();
     },
     activated() {
     },
@@ -176,15 +169,18 @@
     computed: {},
     methods: {
       // 列表
-      becomeFormal(page) {
+      dimissionList(page) {
         this.tableStatus = ' ';
         this.tableLoading = true;
         this.params.page = page || 1;
-        this.$http.get(this.url + 'hrm/User/turnPositiveList', {
+        this.$http.get(this.url + 'hrm/User/dismissList', {
           params: this.params,
         }).then(res => {
           this.tableLoading = false;
-          if (res.data.code === '90000') {
+          if (res.data.success) {
+            if (res.data.data.data.length < 1) {
+              this.emptyList();
+            }
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
           } else {
@@ -199,30 +195,28 @@
         this.tableStatus = '暂无数据';
         return false;
       },
-      // 转正
-      becomeFull(row) {
-        this.$confirm('是否转正员工 ' + row.name + ' 不可逆转操作，是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.put(this.url + 'hrm/User/affirm', {
-            id: row.id
-          }).then(res => {
-            if (res.data.success) {
-              this.prompt('success', res.data.msg);
-              this.becomeFormal(this.params.page);
-            } else {
-              this.prompt('warning', res.data.msg);
-            }
-          });
-        }).catch(() => {
+      // 离职
+      dimission(row) {
+        this.dismissionModule = true;
+        this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + row.user_id).then(res => {
+          if (res.data.success) {
+            this.staffDetail = res.data.data;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
         });
+      },
+      // 关闭模态框
+      closeModule(val) {
+        this.dismissionModule = false;
+        if (val === 'success') {
+          this.dimissionList(this.params.page);
+        }
       },
       // 搜索
       search() {
         this.isHigh = false;
-        this.becomeFormal();
+        this.dimissionList();
       },
       // 高级
       highGrade() {
@@ -241,11 +235,11 @@
       // 分页
       handleSizeChange(val) {
         this.params.limit = val;
-        this.becomeFormal();
+        this.dimissionList();
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.becomeFormal(val);
+        this.dimissionList(val);
       },
       // 打开组织架构
       openOrgan(val, type) {
@@ -272,10 +266,6 @@
         let organ = this.organDivision;
         this.params[organ] = val[0].id;
         this.organData[organ] = val[0].name;
-      },
-      // 双击
-      dblClickTable() {
-
       },
       // 右键
       openContextMenu(row, event) {

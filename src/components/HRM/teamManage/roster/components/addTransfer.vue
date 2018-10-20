@@ -1,7 +1,6 @@
 <template>
   <div id="addTransfer">
-    <el-dialog :close-on-click-modal="false" :title="assist !== 'new' ? '修改信息' : '新增员工'"
-               :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="新增调岗" :visible.sync="dialogVisible" width="40%">
       <div
         style="width: 90%;"
         v-loading="fullLoading"
@@ -9,34 +8,27 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)">
       </div>
-      <el-form :inline="true" size="mini" label-width="100px" v-if="!fullLoading">
+      <el-form :inline="true" size="mini" label-width="100px" v-if="!fullLoading" class="scroll_bar">
         <div class="addForm">
           <div class='formList'>
             <el-form-item label="姓名">
-              <el-input placeholder="姓名" v-model="orgData.name" disabled></el-input>
+              <div class="showTitles">{{orgData.name}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="入职时间">
-              <el-date-picker
-                v-model="orgData.entry_time"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择日期"
-                disabled>
-              </el-date-picker>
+              <div class="showTitles">{{orgData.enroll}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="调岗类型" required>
               <el-select v-model="form.transfer_type" size="mini" placeholde="请选择" clearable>
-                <el-option v-for="key in transfer_type" :label="key.name" :value="key.id"
-                           :key="key.id"></el-option>
+                <el-option v-for="key in transfer_type" :label="key.name" :value="key.id" :key="key.id"></el-option>
               </el-select>
             </el-form-item>
           </div>
           <div class='formList'>
-            <el-form-item label="调岗生效日期">
+            <el-form-item label="调岗生效日期" required>
               <el-date-picker
                 v-model="form.transfer_time"
                 type="date"
@@ -48,7 +40,7 @@
           </div>
           <div class='formList'>
             <el-form-item label="当前部门">
-              <el-input placeholder="当前部门" v-model="orgData.org_id" disabled></el-input>
+              <div class="showTitles">{{orgData.org_id}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
@@ -61,41 +53,39 @@
           </div>
           <div class='formList'>
             <el-form-item label="当前职位">
-              <el-select v-model="form.duty_id" multiple disabled>
-                <el-option v-for="item in duty" :value="item.id" :key="item.id" :label="item.name">
-                </el-option>
-              </el-select>
+              <div class="showTitles">{{orgData.duty_id}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="调岗后职位" required>
-              <el-select v-model="form.old_duty_id" @change="positionSelect" clearable multiple>
-                <el-option v-for="item in duty" :value="item.id" :key="item.id" :label="item.name">
+              <el-select v-model="form.new_duty_id" @change="positionSelect" clearable multiple
+                         :disabled="new_duty.length < 1">
+                <el-option v-for="(item,index) in new_duty" :value="item.id" :key="index" :label="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="当前岗位">
-              <el-input placeholder="当前岗位" v-model="orgData.position_id" disabled></el-input>
+              <div class="showTitles">{{orgData.position_id}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="调岗后岗位" required>
-              <el-select v-model="form.position_id" clearable multiple>
-                <el-option v-for="item in position" :value="item.id" :key="item.id" :label="item.name">
+              <el-select v-model="form.new_position_id" clearable multiple :disabled="new_position.length < 1">
+                <el-option v-for="(item,index) in new_position" :value="item.id" :key="index" :label="item.name">
                 </el-option>
               </el-select>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="当前部门负责人">
-              <el-input placeholder="当前部门负责人" v-model="orgData.old_leader_id" disabled></el-input>
+              <div class="showTitles">{{orgData.old_leader_id}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
             <el-form-item label="调岗后部门负责人">
-              <el-input placeholder="调岗后部门负责人" v-model="orgData.leader_id" disabled></el-input>
+              <div class="showTitles">{{orgData.leader_id}}</div>
             </el-form-item>
           </div>
           <div class='formList list3'>
@@ -108,7 +98,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary">新&nbsp;增</el-button>
+        <el-button size="small" type="primary" @click="addTransfer">新&nbsp;增</el-button>
       </div>
     </el-dialog>
 
@@ -119,17 +109,16 @@
 
 <script>
   import Organization from '../../../../common/organization.vue';     //组织架构
-  import UpLoad from '../../../../common/UPLOAD.vue'                  //图片上传
 
   export default {
     name: "add-transfer",
-    props: ['module', 'detail', 'assist'],
-    components: {Organization, UpLoad},
+    props: ['module', 'detail'],
+    components: {Organization},
     data() {
       return {
         url: globalConfig.server,
         dialogVisible: false,
-        fullLoading: false,
+        fullLoading: true,
 
         organModule: false,
         organizeType: '',
@@ -142,11 +131,14 @@
         orgData: {},          //组织架构 文本显示
         transfer_type: [],
         duty: [],
+        new_duty: [],
         position: [],
+        new_position: [],
       }
     },
     created() {
       this.transfer_type = transfer_type;
+      this.form = JSON.parse(JSON.stringify(rosterTransfer));
     },
     mounted() {
     },
@@ -154,13 +146,15 @@
     },
     watch: {
       detail(val) {
+        this.fullLoading = true;
         this.getStaffDetail = val;
-        console.log(val);
-        this.personalInfo(val);
+        if (this.module) {
+          this.personalInfo(val);
+        }
       },
       // 模态框
       module(val) {
-        this.fullLoading = false;
+        this.fullLoading = true;
         this.dialogVisible = val;
       },
       dialogVisible(val) {
@@ -171,24 +165,82 @@
     },
     computed: {},
     methods: {
+      addTransfer() {
+        this.$http.post(this.url + 'hrm/User/transferAdd', this.form).then(res => {
+          if (res.data.success) {
+            this.$emit('close', 'success');
+            this.prompt('success', res.data.msg);
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
+      },
       // 模态框关闭触发
       closeModule() {
-        this.form = {};
+        this.form = JSON.parse(JSON.stringify(rosterTransfer));
         this.orgData = {};
         this.$emit('close', 'close');
       },
       // 获取
       personalInfo(val) {
-        console.log(val);
+        let data = {
+          id: '',
+          name: '',
+          enroll: '',
+          org_id: '',
+          position_id: '',
+          duty_id: '',
+        };
+        let keys = Object.keys(data);
+        for (let key of keys) {
+          switch (key) {
+            case 'name':
+            case 'enroll':
+              this.orgData[key] = val[key];
+              break;
+            case 'org_id':            //部门
+              let organ = JSON.parse(val.organizationInfo);
+              let org_name = [];
+              this.form[key] = [];
+              organ.forEach(res => {
+                org_name.push(res.name);
+                this.form[key].push(res.id);
+              });
+              this.departName(org_name, key);
+              this.getLeader(this.form[key], 'old_leader_id');
+              break;
+            case 'duty_id':           //职务
+              if (val.dutyInfo) {
+                let dutyInfo = [];
+                for (let item of val.dutyInfo) {
+                  dutyInfo.push(item.duty_name);
+                  this.form[key].push(item.duty_id);
+                }
+                this.departName(dutyInfo, key);
+              }
+              break;
+            case 'position_id':       //岗位
+              if (val.duty_id) {
+                let pos = [];
+                for (let item of val.positionInfo) {
+                  pos.push(item.position_name);
+                  this.form[key].push(item.position_id);
+                }
+                this.departName(pos, key);
+              }
+              break;
+            case 'id':
+              this.form.id = val.user_id;
+              break;
+            default:
+              if (val[key] && val[key] !== 'null') {
+                this.form[key] = val[key];
+              } else {
+                this.form[key] = [];
+              }
+          }
+        }
         this.fullLoading = false;
-      },
-      // 确认提交
-      transferInfo(val) {
-
-      },
-      // 处理数据
-      handleData() {
-
       },
       // 修改
       reviseInfo() {
@@ -201,26 +253,61 @@
           }
         })
       },
+      // 职务
+      duties(id) {
+        this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
+          if (res.data.code === '20000') {
+            res.data.data.data.forEach(item => {
+              this.new_duty.push(item);
+            });
+          } else {
+            this.duty = [];
+            this.prompt('warning', res.data.msg);
+          }
+        })
+      },
+      // 多职务
+      positionSelect(val) {
+        this.resetOrg('position');
+        if (val.length > 0) {
+          for (let item of val) {
+            this.quarters(item);
+          }
+        }
+      },
+      // 岗位
+      quarters(id) {
+        this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
+          if (res.data.code === '20000') {
+            res.data.data.data.forEach(item => {
+              this.new_position.push(item);
+            });
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        })
+      },
       // 组织架构
       openOrgan(val, type) {
         this.organDivision = val;
         this.organModule = true;
         this.organizeType = type;
-        this.lengths = 1;
+        this.lengths = '';
       },
       // 清空 部门
       emptyDepart(val) {
         this.form[val] = '';
         this.orgData[val] = '';
         this.orgData = Object.assign({}, this.orgData);
+        this.resetOrg();
       },
       // 重置职位 岗位
       resetOrg(val) {
-        this.position = [];
-        this.form.position_id = [];
+        this.new_position = [];
+        this.form.new_position_id = [];
         if (val === 'position') return;
-        this.duty = [];
-        this.form.duty_id = [];
+        this.new_duty = [];
+        this.form.new_duty_id = [];
       },
       // 关闭组织架构
       closeOrgan() {
@@ -232,8 +319,37 @@
       // 确认选择
       selectMember(val) {
         let organ = this.organDivision;
-        this.form[organ] = val[0].id;
-        this.orgData[organ] = val[0].name;
+        this.resetOrg();
+        let arr = [];
+        this.form[organ] = [];
+        for (let item of val) {
+          arr.push(item.name);
+          this.duties(item.id);
+          this.form[organ].push(item.id);
+        }
+        this.getLeader(this.form[organ], 'leader_id');
+        this.departName(arr, organ);
+      },
+      // 获取负责人
+      getLeader(ids, key) {
+        this.$http.get(this.url + 'hrm/User/orgLeaders', {
+          params: {id: ids},
+        }).then(res => {
+          let leaders = [];
+          res.data.forEach(lead => {
+            if (lead.leader) {
+              leaders.push(lead.leader.name);
+            } else {
+              return false;
+            }
+          });
+          this.departName(leaders, key);
+        });
+      },
+      // 数组名称去重 拼接
+      departName(arr, organ) {
+        this.orgData[organ] = this.montage(arr);
+        this.orgData = Object.assign({}, this.orgData);
       },
     },
   }
@@ -241,13 +357,8 @@
 
 <style lang="scss">
   #addTransfer {
-    .addForm, .addRecord {
+    .addForm {
       max-height: 480px;
-      .width66 {
-        width: 66%;
-      }
-    }
-    .addForm, .supplementary {
       display: flex;
       display: -webkit-flex;
       flex-wrap: wrap;
@@ -255,20 +366,24 @@
       .formList {
         width: 48%;
       }
+      .width66 {
+        width: 66%;
+      }
       .list3 {
         width: 96%;
       }
-    }
-    .el-form-item__content {
       label {
+        min-width: 120px;
         display: flex;
         display: -webkit-flex;
         align-items: center;
+        justify-content: flex-end;
       }
-    }
-    .addForm {
-      label {
-        min-width: 120px;
+      .showTitles {
+        width: 100%;
+        background-color: #F5F7FA;
+        padding: 3px 12px;
+        border-radius: 6px;
       }
     }
     .el-form-item, .el-form-item__content {

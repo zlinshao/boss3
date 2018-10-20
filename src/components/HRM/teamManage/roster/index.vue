@@ -207,15 +207,15 @@
           label="职位">
         </el-table-column>
         <el-table-column
-          prop="job_type"
+          prop="jobType"
           label="员工类型">
         </el-table-column>
         <el-table-column
-          prop="job_status"
+          prop="jobStatus"
           label="员工状态">
         </el-table-column>
         <el-table-column
-          prop="position_status"
+          prop="positionStatus"
           label="当前在职状态">
         </el-table-column>
         <el-table-column
@@ -230,8 +230,7 @@
           prop="is_enable"
           label="账号管理">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.is_enable === 1"
-                       @change="showMessage(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.is_enable === 1" @change="showMessage(scope.row)"></el-switch>
           </template>
         </el-table-column>
       </el-table>
@@ -258,7 +257,7 @@
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
     <!--新增调岗-->
-    <AddTransfer :module="transferModule" :assist="'new'" :detail="staffDetail" @close="closeTransfer"></AddTransfer>
+    <AddTransfer :module="transferModule" :detail="staffDetail" @close="closeModule"></AddTransfer>
   </div>
 </template>
 
@@ -300,10 +299,10 @@
         job_status: [],             //员工状态
         position_status: [],        //当前在职状态
 
-        user_id: '',                //员工ID
+        user_info: {},              //员工信息
         staffDetail: {},            //员工详情
 
-        transferModule: false,
+        transferModule: false,      //调岗
       }
     },
     created() {
@@ -313,7 +312,7 @@
       this.position_status = position_status;
     },
     mounted() {
-      this.staffList(1);
+      this.staffList();
     },
     activated() {
     },
@@ -324,7 +323,7 @@
       staffList(page) {
         this.tableLoading = true;
         this.tableStatus = ' ';
-        this.params.page = page;
+        this.params.page = page || 1;
         this.$http.get(this.url + 'hrm/User/lists', {
           params: this.params,
         }).then(res => {
@@ -385,7 +384,7 @@
       // 搜索
       search() {
         this.isHigh = false;
-        this.staffList(1);
+        this.staffList();
       },
       // 高级
       highGrade() {
@@ -395,8 +394,8 @@
       resetting() {
         this.params = JSON.parse(JSON.stringify(rosterParams));
       },
-      // 新增调岗
-      closeTransfer() {
+      // 关闭调岗/离职
+      closeModule() {
         this.transferModule = false;
       },
       // 打开组织架构
@@ -439,7 +438,7 @@
         this.staffVisible = false;
         this.assistShow = '';
         if (val === 'success') {
-          this.staffList(1);
+          this.staffList();
         }
       },
       // 关闭奖惩记录编辑
@@ -484,7 +483,8 @@
       },
       // 右键
       openContextMenu(row, event) {
-        this.user_id = row.user_id;
+        if (row.position_status === 5) return;
+        this.user_info = row;
         let list = [
           {clickIndex: 'first', headIcon: 'el-icon-edit-outline', label: '编辑基本信息'},
           {clickIndex: 'second', headIcon: 'el-icon-edit-outline', label: '编辑辅助信息'},
@@ -496,14 +496,8 @@
         if (row.position_status) {
           let num = Number(row.position_status);
           switch (num) {
-            case 2:
-              this.lists.push({clickIndex: 'transfer', headIcon: 'iconfont icon-tiaogang', label: '调岗'});
-              break;
             case 3:
               this.lists.push({clickIndex: 'formal', headIcon: 'iconfont icon-chenggong', label: '转正'});
-              break;
-            case 4:
-              this.lists.push({clickIndex: 'dimission', headIcon: 'iconfont icon-lizhi', label: '离职'});
               break;
           }
         }
@@ -511,18 +505,19 @@
       },
       // 右键回调
       clickEvent(val) {
+        let info = this.user_info;
         switch (val) {
           case 'first':// 编辑基本信息
           case 'second':// 编辑辅助信息
           case 'record':// 新增奖惩记录
-          case 'addTransfer':// 新增调岗
-            if (val !== 'addTransfer') {
-              this.staffVisible = true;
-            } else {
+          case 'addTransfer'://新增调岗
+            if (val === 'addTransfer') {
               this.transferModule = true;
+            } else {
+              this.staffVisible = true;
             }
             this.assistShow = val;
-            this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
+            this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + info.user_id).then(res => {
               if (res.data.success) {
                 this.staffDetail = res.data.data;
               } else {
@@ -532,11 +527,11 @@
             break;
           case 'reviseRecord':// 编辑奖惩记录
             this.recordVisible = true;
-            this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + this.user_id).then(res => {
+            this.$http.get(this.url + 'hrm/staffRecords/employeedetail?user_id=' + info.user_id).then(res => {
               if (res.data.success) {
                 this.recordData = res.data.data;
               } else {
-                this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + this.user_id).then(res => {
+                this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + info.user_id).then(res => {
                   if (res.data.success) {
                     this.recordData = res.data.data;
                   } else {
@@ -547,13 +542,24 @@
             });
             break;
           case 'formal':
-            console.log(val);
-            break;
-          case 'transfer':
-            console.log(val);
-            break;
-          case 'dimission':
-            console.log(val);
+            // 转正
+            this.$confirm('是否转正员工 ' + info.real_name + ' 不可逆转操作，是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$http.put(this.url + 'hrm/User/affirm', {
+                id: info.user_id,
+              }).then(res => {
+                if (res.data.success) {
+                  this.prompt('success', res.data.msg);
+                  this.staffList(this.params.page);
+                } else {
+                  this.prompt('warning', res.data.msg);
+                }
+              });
+            }).catch(() => {
+            });
             break;
         }
       },

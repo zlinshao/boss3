@@ -14,8 +14,9 @@ rosterParams = {
   position_names: '',       //职位
 };
 
-// 新增花名册员工
+// 花名册 form
 rosterAddStaff = {
+  id: '',
   name: '',               //姓名
   gender: '',             //性别
   phone: '',              //手机号
@@ -54,7 +55,7 @@ rosterAddStaff = {
   entry_way: '',          //入职途径
 };
 
-// 新增辅助信息
+// 辅助信息 form
 rosterAddAssist = {
   origin_addr: '',                //籍贯
   emergency_call: '',             //紧急联系电话+与该员工关系
@@ -65,6 +66,20 @@ rosterAddAssist = {
   agreement_first_end_time: '',   //第一次合同到期时间
   agreement_second_time: '',      //第二次签合同时间
   image_info: {},                 //第二次签合同时间
+};
+
+// 调岗信息 form
+rosterTransfer = {
+  id: '',
+  new_org_id: [],
+  new_position_id: [],
+  new_duty_id: [],
+  org_id: [],
+  position_id: [],
+  duty_id: [],
+  transfer_type: '',
+  remark_transfer: '',
+  transfer_time: '',
 };
 
 // 花名册 图片上传
@@ -100,8 +115,8 @@ rosterImgInfo = [
 ];
 // 当前在职状态
 position_status = [
-  {id: 1, name: '待调岗'},
-  {id: 2, name: '无异动'},
+  {id: 1, name: '无异动'},
+  {id: 2, name: '待调岗'},
   {id: 3, name: '待转正'},
   {id: 4, name: '待离职'},
 ];
@@ -150,4 +165,11 @@ transfer_type = [
   {id: 1, name: '平行调岗'},
   {id: 2, name: '升职调岗'},
   {id: 3, name: '降至调岗'},
+];
+// 离职类型
+resignation_type = [
+  {id: 1, name: '主动离职'},
+  {id: 2, name: '旷工离职'},
+  {id: 3, name: '劝退'},
+  {id: 4, name: '开除'},
 ];
