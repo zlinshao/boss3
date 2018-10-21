@@ -29,8 +29,8 @@ rosterAddStaff = {
   home_addr: '',          //家庭住址
   political_status: '',   //政治面貌
   org_id: '',             //部门
-  duty_id: [],            //职位
-  position_id: [],        //岗位
+  duty_id: [],            //职务
+  position_id: [],        //职位
   recommender: '',        //推荐人
   enroll: '',             //入职日期
   try_out_time: '',       //试用期
@@ -54,7 +54,43 @@ rosterAddStaff = {
   level: '',              //级别
   entry_way: '',          //入职途径
 };
-
+rosterBasicInfo = {
+  name: '姓名',
+  gender: '性别',
+  phone: '手机',
+  archive_number: '档案编号',
+  birthday: '出生日期',
+  fertility_status: '生育状况',
+  job_number: '工号',
+  marital_status: '婚姻状况',
+  id_num: '身份证',
+  home_addr: '家庭住址',
+  political_status: '政治面貌',
+  organizationNames: '部门',
+  dutyInfoNames: '职务',
+  positionInfoNames: '职位',
+  recommender: '推荐人',
+  enroll: '入职日期',
+  try_out_time: '试用期',
+  expected_formal: '预计转正日期',
+  formal_status: '转正类型',
+  position_status: '当前在职状态',
+  job_type: '员工类型',
+  job_status: '员工状态',
+  bank_num: '银行卡号',
+  account_bank: '开户行',
+  branch_bank_code: '支行行号',
+  account_name: '开户名',
+  branch_bank: '支行',
+  city: '城市',
+  area: '区域',
+  education: '学历',
+  email: '个人邮箱',
+  salary: '薪资',
+  level: '级别',
+  entry_type: '入职途径',
+  entry_mess: '入职描述',
+};
 // 辅助信息 form
 rosterAddAssist = {
   origin_addr: '',                //籍贯
@@ -116,7 +152,6 @@ rosterImgInfo = [
 // 当前在职状态
 position_status = [
   {id: 1, name: '无异动'},
-  {id: 2, name: '待调岗'},
   {id: 3, name: '待转正'},
   {id: 4, name: '待离职'},
 ];

@@ -52,12 +52,12 @@
             </el-form-item>
           </div>
           <div class='formList'>
-            <el-form-item label="当前职位">
+            <el-form-item label="当前职务">
               <div class="showTitles">{{orgData.duty_id}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
-            <el-form-item label="调岗后职位" required>
+            <el-form-item label="调岗后职务" required>
               <el-select v-model="form.new_duty_id" @change="positionSelect" clearable multiple
                          :disabled="new_duty.length < 1">
                 <el-option v-for="(item,index) in new_duty" :value="item.id" :key="index" :label="item.name">
@@ -66,12 +66,12 @@
             </el-form-item>
           </div>
           <div class='formList'>
-            <el-form-item label="当前岗位">
+            <el-form-item label="当前职位">
               <div class="showTitles">{{orgData.position_id}}</div>
             </el-form-item>
           </div>
           <div class='formList'>
-            <el-form-item label="调岗后岗位" required>
+            <el-form-item label="调岗后职位" required>
               <el-select v-model="form.new_position_id" clearable multiple :disabled="new_position.length < 1">
                 <el-option v-for="(item,index) in new_position" :value="item.id" :key="index" :label="item.name">
                 </el-option>
@@ -88,7 +88,7 @@
               <div class="showTitles">{{orgData.leader_id}}</div>
             </el-form-item>
           </div>
-          <div class='formList list3'>
+          <div class='formList list3'>8
             <el-form-item label="调岗描述">
               <el-input placeholder="请输入调岗描述" v-model="form.remark_transfer" clearable></el-input>
             </el-form-item>

@@ -9,7 +9,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)">
       </div>
-      <el-form :inline="true" size="mini" label-width="100px" v-if="!fullLoading">
+      <el-form :inline="true" size="mini" label-width="100px" v-show="!fullLoading">
         <el-tabs v-model="activeName">
           <el-tab-pane v-if="(assist === 'new' || assist === 'first') && this.assist !== 'record'" class="scroll_bar"
                        label="基本信息" name="first">
@@ -96,7 +96,7 @@
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="职位" required>
+                <el-form-item label="职务" required>
                   <el-select v-model="form.duty_id" @change="positionSelect" clearable multiple
                              :disabled="duty.length < 1" v-if="assist === 'new'">
                     <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
@@ -106,7 +106,7 @@
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="岗位" required>
+                <el-form-item label="职位" required>
                   <el-select v-model="form.position_id" clearable multiple :disabled="position.length < 1"
                              v-if="assist === 'new'">
                     <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
@@ -616,7 +616,10 @@
               if (val.entry_way && val.entry_way !== 'null') {
                 this.entry_way = JSON.parse(val.entry_way);
               } else {
-                this.entry_way = {};
+                this.entry_way = {
+                  entry_type: '',
+                  entry_mess: '',
+                };
               }
               break;
             case 'city':              //城市
@@ -762,6 +765,7 @@
       },
       // 修改个人信息
       reviseStaff() {
+        this.form.entry_way = JSON.stringify(this.entry_way);
         this.$http.put(this.url + 'hrm/User/editDetail', this.form).then(res => {
           if (res.data.success) {
             this.$emit('close', 'success');

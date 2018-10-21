@@ -62,7 +62,8 @@ const PersonnelStatement = () => import  ('../components/humanResource/organizat
 // 人员信息管理
 const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
 const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');                       // 花名册
-const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 花名册
+const StaffDetail = () => import  ('../components/HRM/teamManage/roster/components/staffDetail.vue'); // 花名册 详情
+// const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 入职管理
 const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/index.vue');           // 转正管理
 const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
@@ -251,7 +252,6 @@ export default new Router({
         keepAlive: true // 不需要缓存
       }
     },
-
     {
       path: '/rentingDetail',
       component: RentingDetail,
@@ -534,6 +534,12 @@ export default new Router({
           ],
         },
       ]
+    },
+    {
+      path: '/staffDetail',
+      component: StaffDetail,
+      name: '',
+      hidden: true
     },
     // {
     //   path: '/',

@@ -297,13 +297,12 @@
         organizeType: '',
         lengths: 0,
         organDivision: '',          //字段名
-
+        staffDetail: {},            //员工详情
         job_type: [],               //员工类型
         job_status: [],             //员工状态
         position_status: [],        //当前在职状态
 
         user_info: {},              //员工信息
-        staffDetail: {},            //员工详情
 
         transferModule: false,      //调岗
       }
@@ -482,8 +481,9 @@
         })
       },
       // 双击
-      dblClickTable() {
-
+      dblClickTable(row) {
+        // const {href} = this.$router.resolve({path: '/staffDetail', query: {id: row.user_id}});
+        // window.open(href, '_blank', 'width=1920,height=1080');
       },
       // 右键
       openContextMenu(row, event) {
@@ -521,13 +521,7 @@
               this.staffVisible = true;
             }
             this.assistShow = val;
-            this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + info.user_id).then(res => {
-              if (res.data.success) {
-                this.staffDetail = res.data.data;
-              } else {
-                this.prompt('warning', res.data.msg);
-              }
-            });
+            this.getDetail(info);
             break;
           case 'reviseRecord':// 编辑奖惩记录
             this.recordVisible = true;
@@ -554,6 +548,15 @@
             });
             break;
         }
+      },
+      getDetail(info) {
+        this.$http.get(this.url + 'hrm/User/userInfo?user_id=' + info.user_id).then(res => {
+          if (res.data.success) {
+            this.staffDetail = res.data.data;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       },
       //关闭右键菜单
       closeMenu() {
