@@ -24,7 +24,7 @@
         <div class="staffInfo">
           <div class='formList' v-for="(key,index) in basicInfo">
             <el-form-item :label="key" v-if="index !== 'entry_type' && index !== 'entry_mess'">
-              <div class="showTitles">{{getStaffDetai l[index]}}</div>
+              <div class="showTitles">{{getStaffDetail[index]}}</div>
             </el-form-item>
             <el-form-item :label="key" v-else-if="index === 'entry_type'">
               <div class="showTitles">{{allDict.entry_way[getStaffDetail[index]]}}</div>
