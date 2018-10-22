@@ -62,7 +62,8 @@ const PersonnelStatement = () => import  ('../components/humanResource/organizat
 // 人员信息管理
 const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
 const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');                       // 花名册
-const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 花名册
+const StaffDetail = () => import  ('../components/HRM/teamManage/roster/components/staffDetail.vue'); // 花名册 详情
+// const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 入职管理
 const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/index.vue');           // 转正管理
 const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
@@ -237,7 +238,8 @@ export default new Router({
       name: '',
       hidden: true,
       meta: {
-        keepAlive: true // 不需要缓存
+        keepAlive: true, // 不需要缓存
+        title: '乐伽公寓'
       }
     },
 
@@ -250,7 +252,6 @@ export default new Router({
         keepAlive: true // 不需要缓存
       }
     },
-
     {
       path: '/rentingDetail',
       component: RentingDetail,
@@ -516,24 +517,30 @@ export default new Router({
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: 'HRM',
-    //   icon: 'iconfont icon-renzi',
-    //   children: [
-    //     {
-    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
-    //       children: [
-    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
-    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-    //         {path: '/dimission', component: Dimission, name: '离职管理'},
-    //       ],
-    //     },
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: 'HRM',
+      icon: 'iconfont icon-renzi',
+      children: [
+        {
+          path: '/teamManage', component: TeamManage, name: '人员信息管理',
+          children: [
+            {path: '/teamManage/roster', component: Roster, name: '花名册'},
+            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+            {path: '/dimission', component: Dimission, name: '离职管理'},
+          ],
+        },
+      ]
+    },
+    {
+      path: '/staffDetail',
+      component: StaffDetail,
+      name: '',
+      hidden: true
+    },
     // {
     //   path: '/',
     //   component: Index,
