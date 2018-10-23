@@ -466,7 +466,7 @@
         loginPercent: 0,
         creditTotal: 0, // 积分总数
 
-        setLockPwdDialog: false,
+        setLockPwdDialog: true,
         instructionDialog: false, //功能说明
         ReadingDialog: false,  //导读
         dictionary2: [], //二级密码所需模块
