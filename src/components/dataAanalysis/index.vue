@@ -15,7 +15,7 @@
 </template>
 <script>
     import cockpit from "./cockpit/index.vue"
-    import wareHouseData from "./wareHouseData11/index.vue"
+    import wareHouseData from "./wareHouseData/index.vue"
 
     export default {
     name: "index",

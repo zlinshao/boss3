@@ -1,22 +1,63 @@
 <template>
+<!-- 表格卡片 -->
   <div ref="chartId" id="chartTable">
+    <!-- 中介费占业绩比最高的前100名员工 -->
     <el-table
+      v-if="this.chartData.name=='中介费占业绩比最高的前100名员工'"
       @click.native ="detaildialogVisible=true"
       class="comTable"
       :data="tableData"
-      height="200"
+      height="260"
       size='mini'
       border
       :highlight-current-row='true'
       :cellStyle='colstyle'
       :header-cell-style='headerrowstyle'
-      style="width: 90%">
+      style="width: 100%">
+      <el-table-column
+        prop="rank"
+        label="排名">
+      </el-table-column>
       <el-table-column
         prop="area"
         label="片区">
       </el-table-column>
       <el-table-column
-        prop="manager"
+        prop="name"
+        label="业务员">
+      </el-table-column>
+      <el-table-column
+        prop="achieve"
+        label="业绩金额">
+      </el-table-column>
+      <el-table-column
+        prop="agency"
+        label="中介费金额">
+      </el-table-column>
+      <el-table-column
+        prop="percent"
+        label="中介费占业绩比">
+      </el-table-column>
+    </el-table>
+    <!-- 异常单列表 -->
+    <el-table
+      v-if="this.chartData.name=='异常单列表'"
+      @click.native ="detaildialogVisible=true"
+      class="comTable"
+      :data="tableData"
+      height="260"
+      size='mini'
+      border
+      :highlight-current-row='true'
+      :cellStyle='colstyle'
+      :header-cell-style='headerrowstyle'
+      style="width: 100%">
+      <el-table-column
+        prop="org_name"
+        label="片区">
+      </el-table-column>
+      <el-table-column
+        prop="leader_name"
         label="片区经理">
       </el-table-column>
       <el-table-column
@@ -24,15 +65,20 @@
         label="房屋地址">
       </el-table-column>
       <el-table-column
-        prop="price"
+        prop="excep_rent_price"
         label="让价金额">
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <el-pagination
-    class="paging"
-    layout="prev, pager, next"
-    :total="100">
+      small
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[5, 10, 20]"
+      :page-size="currentlimit"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalPage">
     </el-pagination>
     <!-- 弹出框 -->
     <el-dialog
@@ -44,7 +90,7 @@
       <div>
         <div class="detailMsgHead">
           <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
-          <span>{{theme}}</span>
+          <span>{{chartName}}</span>
           <toprightControl></toprightControl>
         </div>
         <div class="detailcontent">
@@ -144,10 +190,12 @@
 import toprightControl from "../../components/toprightControl"
   export default {
     components:{toprightControl},
-    props:['theme','chartData'],
+    props:['chartName','chartData','url'],
     data(){
       return {
-        gaodu:300,
+        currentPage:1, //当前页
+        currentlimit:5,//选择条数
+        totalPage:1, //总页数
         detaildialogVisible:false,
         options: [{
           value: '选项1',
@@ -194,74 +242,17 @@ import toprightControl from "../../components/toprightControl"
           }]
         },
         value7: '',
-        tableData: [{
-            area: '南京油坊桥组',
-            manager: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            price:'200'
-          }, {
-            area: '南京油坊桥组',
-            manager: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            price:'200'
-          },{
-            area: '南京油坊桥组',
-            manager: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            price:'200'
-          }],
-        monidata:{
-            code:200,
-            msg:'请求成功',
-            result:{
-              title:"异常单列表",
-              chartType:"table", 
-              tag:['业务'],
-              detailMsg:"图表说明信息......",
-              totalPage:100,
-              data:[{
-                area: '南京油坊桥组',
-                manager: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              }, {
-                area: '南京油坊桥组',
-                manager: '小红',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              },{
-                area: '南京油坊桥组',
-                manager: '小明',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              },{
-                area: '南京油坊桥组',
-                manager: '小明',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              },{
-                area: '南京油坊桥组',
-                manager: '小明',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              },{
-                area: '南京油坊桥组',
-                manager: '小明',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              },{
-                area: '南京油坊桥组',
-                manager: '小明',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              },{
-                area: '南京油坊桥组',
-                manager: '小明',
-                address: '上海市普陀区金沙江路 1518 弄',
-                price:'200'
-              }]
-            }
-          }
+        tableData: [],//表格数据
+        dataParams:{   //传参
+          city:"",
+          area:"",
+          group:"",
+          start_date:"2018-9-1",
+          end_date:"2018-10-17",
+          page: 1,
+          limit:5
+        }
+        
       }
     },
     methods:{
@@ -278,15 +269,30 @@ import toprightControl from "../../components/toprightControl"
         }else {
           return 'background:#fff!important;color:#6EAAD7;'
         }
+      },
+      handleSizeChange(val) {
+        this.dataParams.limit = val
+        this.getData()
+      },
+      handleCurrentChange(val) {
+        this.dataParams.page = val
+        this.getData()
+      },
+      getData(){ //获取数据
+        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+          console.log(res)
+          if(res.data.code == "20000"){
+            this.tableData = res.data.data.data
+            this.totalPage = res.data.data.total
+          }else{
+            this.tableData = []
+          }
+        });
       }
     },
     mounted () {
+      this.getData()
     },
-    watch:{
-      chartData(val){
-        this.tableData=val
-      }
-    }
 
   }
 </script>

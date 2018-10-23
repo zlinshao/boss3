@@ -200,7 +200,7 @@ const DataMove = () => import  ('../components/dataMove.vue');//数据迁移
 const BatchEnter = () => import  ('../components/batchEnter/index'); //批量入账
 
 const AchievementData = () => import ('../components/dataCenter/index'); //业绩数据
-const dataAanalysis = () => import ('../components/dataAanalysis/index');
+const dataAanalysis = () => import ('../components/dataAanalysis/index'); //数据分析
 const ReportingData = () => import ('../components/reportManage/reportingData/index'); //报备数据
 
 const Application = () => import ('../components/C-manage/applicationManage/index');
@@ -622,7 +622,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-        // {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
+        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {
