@@ -290,7 +290,10 @@
         currentPage: 1,             //当前页数
         isHigh: false,              //高级
         tableData: [],
-        params: {},
+        params: {
+          limit: 15,
+          page: 1,
+        },
         totalNum: 0,
 
         organModule: false,

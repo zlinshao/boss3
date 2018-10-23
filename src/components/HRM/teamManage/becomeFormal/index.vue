@@ -64,26 +64,10 @@
         <el-table-column
           prop="organizationInfo"
           label="部门">
-          <!--<template slot-scope="scope">-->
-            <!--<div class="departPosition">-->
-              <!--<span v-for="(item,index) in scope.row.org">-->
-                <!--<b v-if="index !== 0">,</b>-->
-                <!--{{item.name}}-->
-              <!--</span>-->
-            <!--</div>-->
-          <!--</template>-->
         </el-table-column>
         <el-table-column
           prop="positionInfo"
           label="职位">
-          <!--<template slot-scope="scope">-->
-            <!--<div class="departPosition">-->
-              <!--<span v-for="(item,index) in scope.row.position">-->
-                <!--<b v-if="index !== 0">,</b>-->
-                <!--{{item.name}}-->
-              <!--</span>-->
-            <!--</div>-->
-          <!--</template>-->
         </el-table-column>
         <el-table-column
           prop="enroll"
@@ -92,11 +76,6 @@
         <el-table-column
           prop="try_out_time"
           label="试用期">
-          <!--<template slot-scope="scope">-->
-            <!--<span v-if="scope.row.staff_extend">-->
-               <!--{{scope.row.staff_extend.try_out_time}}个月-->
-            <!--</span>-->
-          <!--</template>-->
         </el-table-column>
         <el-table-column
           prop="expected_formal"
@@ -164,7 +143,7 @@
         totalNum: 0,
         tableData: [],
         params: {
-          limit: 12,
+          limit: 15,
           page: 1,
           org_id: '',
           keywords: '',
@@ -236,7 +215,7 @@
       // 重置
       resetting() {
         this.params = {
-          limit: 12,
+          limit: 15,
           page: 1,
           org_id: '',
           keywords: '',
