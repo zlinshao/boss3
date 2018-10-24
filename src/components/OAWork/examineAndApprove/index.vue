@@ -918,6 +918,9 @@
         if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
           return 'colTag'
         }
+        if(row.status=="published"&&columnIndex==5){
+          return "greenCol"
+        }
       },
       onSelect(key) {
         this.childActive(this.activeName, key);
@@ -1092,6 +1095,7 @@
         }
       },
       dblClickTable(row) {
+        console.log(row)
         this.reportID = row.id;
         this.reportAllID.push(row.id);
         this.reportAllID = Array.from(new Set(this.reportAllID));
@@ -1245,6 +1249,9 @@
       padding: 6px;
       background:url("../../../assets/images/info.jpg") no-repeat 20px 10px;
       background-size: 20px 20px;
+    }
+    .greenCol{
+      color: green
     }
     .myApplication {
       padding: 0 20px;

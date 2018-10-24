@@ -30,6 +30,11 @@
               </div>
               <div class="scroll_bar">
                 <el-row>
+                  <el-col :span="12" v-if="suggestpriceStatus">
+                    <el-form-item  class="detailTitle" label="建议价格">
+                      <div class="special"><span style="color: red">{{suggest_price}}</span></div>
+                    </el-form-item>
+                  </el-col>
                   <el-col :span="12" v-for="(value,index) in show_content" :key="index"
                           v-if="printScreen.indexOf(index) === -1">
                     <el-form-item v-if="!value" :label="index" class="detailTitle">
@@ -58,7 +63,9 @@
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
+                    
                   </el-col>
+                  
                   <!--图片-->
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
@@ -405,6 +412,8 @@
     },
     data() {
       return {
+        suggest_price:'',
+        suggestpriceStatus:false,
         pdfUrl: "",
         electronicReceiptStatu: true,//电子数据按钮显示
         electronicReceiptDisabled: true,//电子数据按钮禁用
@@ -552,6 +561,18 @@
           this.showContent = true;
         }
       },
+      //建议价格
+      getSuggestPrice(){
+        console.log(this.houseId)
+        this.$http.get(globalConfig.server + 'coreproject/houses/suggestprice?house_id='+this.houseId).then((res) => {
+          
+          if (res.data.code === "20010") {
+            this.suggest_price = res.data.data.suggest_price 
+          } else {
+            this.suggest_price = '没有价格'
+          }
+        })
+      },
       //判断是否有电子收据
       electronicReceiptDia() {
         console.log(this.bank);
@@ -642,6 +663,7 @@
       },
 
       getProcess() {
+        this.suggestpriceStatus = false
         this.fullLoading = true;
         this.approvedStatus = false;
         this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
@@ -662,6 +684,11 @@
             this.getReportAboutInfo();
 
             this.bulletinType = res.data.data.process.content.bulletin_name;
+
+            if(this.bulletinType === "租房报备"){
+              this.suggestpriceStatus = true
+              this.getSuggestPrice()
+            }
 
             this.approvalStatus = pro.place.status;
 
