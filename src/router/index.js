@@ -68,6 +68,11 @@ const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/i
 const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
+//考勤管理
+const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
+const WatchArrange = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/index.vue'); //查看排班
+const MarkInfo = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/markInfo/index.vue'); //标记信息
+
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
 // const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue')               //日程管理
@@ -515,6 +520,28 @@ export default new Router({
         {path: '/staffRecords', component: StaffRecords, name: '员工档案',},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
+      ]
+    },
+    //write by shuisheng 2018-10-24
+    {
+      path: '/',
+      component: Index,
+      name: '考勤管理',
+      icon: 'el-icon-document',
+      children: [
+        {
+          path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
+          children: [
+            {
+              path: '/watchArrange',component: WatchArrange, name: '查看排班',
+              children: [
+                {
+                  path: '/',component: MarkInfo, name: '标记信息'
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
