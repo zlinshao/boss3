@@ -2,9 +2,9 @@
 <!-- 表格卡片 -->
   <div ref="chartId" id="chartTable">
     <!-- 中介费占业绩比最高的前100名员工 -->
-    <el-table
+    <!-- <el-table
       v-if="this.chartData.name=='中介费占业绩比最高的前100名员工'"
-      @click.native ="detaildialogVisible=true"
+      @click.native ="showDetailChartDialog"
       class="comTable"
       :data="tableData"
       height="260"
@@ -38,11 +38,11 @@
         prop="percent"
         label="中介费占业绩比">
       </el-table-column>
-    </el-table>
+    </el-table> -->
     <!-- 异常单列表 -->
-    <el-table
+    <!-- <el-table
       v-if="this.chartData.name=='异常单列表'"
-      @click.native ="detaildialogVisible=true"
+      @click.native ="showDetailChartDialog"
       class="comTable"
       :data="tableData"
       height="260"
@@ -68,10 +68,37 @@
         prop="excep_rent_price"
         label="让价金额">
       </el-table-column>
+    </el-table> -->
+    <el-table
+      v-for="(item,index) in tableTh"
+      :key="index"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0.8)"
+      v-if="chartData.name==item.name"
+      @click.native ="showDetailChartDialog"
+      class="comTable"
+      :data="tableData"
+      height="260"
+      size='mini'
+      border
+      :highlight-current-row='true'
+      :cellStyle='colstyle'
+      :header-cell-style='headerrowstyle'
+      style="width: 100%">
+
+      <el-table-column
+        v-for="(val,index) in item.thData"
+        :key="index"
+        :prop="val.prop"
+        :label="val.label">
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <el-pagination
       small
+      style="text-align:center"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
@@ -82,6 +109,7 @@
     </el-pagination>
     <!-- 弹出框 -->
     <el-dialog
+      id="detailChartDialog"
       custom-class="detailDia"
       :show-close="false"
       :visible.sync="detaildialogVisible"
@@ -90,169 +118,168 @@
       <div>
         <div class="detailMsgHead">
           <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
-          <span>{{chartName}}</span>
+          <span>{{chartData.name}}</span>
           <toprightControl></toprightControl>
         </div>
         <div class="detailcontent">
           <div class="contentTop">
-            <!-- 城市 -->
-            <div class="detailSelect">
-              <el-select v-model="value" placeholder="城市" size="small">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <!-- 区域 -->
-            <div class="detailSelect">
-              <el-select v-model="value" placeholder="区域" size="small">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <!-- 片区 -->
-            <div class="detailSelect">
-              <el-select v-model="value" placeholder="片区" size="small">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <!-- 开始日期 -->
-            <div class="detailSelect" >
-              <el-date-picker
-                size="small"
-                v-model="value7"
-                type="daterange"
-                align="right"
-                unlink-panels
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="pickerOptions2">
-              </el-date-picker>
-            </div>
-            <div class="detailSelect">
-              <el-button type="primary" size="small">查询</el-button>
-            </div>
+            <el-row :gutter="20">
+              <el-col :span="4">
+                <div class="detailSelect">
+                  <!-- 城市 -->
+                  <el-select v-model="placeForm.city" clearable placeholder="城市" size="small" @change="choose('city',placeForm.city)">
+                    <el-option
+                      v-for="item in cityOption"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-col>
+              <el-col :span="4">
+                <!-- 区域 -->
+                <div class="detailSelect">
+                  <el-select v-model="placeForm.area" clearable :disabled="placeForm.city?false:true" placeholder="区域" size="small" @change="choose('area',placeForm.area)">
+                    <el-option
+                      v-for="item in areaOption"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-col>
+              <el-col :span="4">
+                <!-- 片区 -->
+                <div class="detailSelect">
+                  <el-select v-model="placeForm.group" clearable :disabled="placeForm.area?false:true" placeholder="片区" size="small" >
+                    <el-option
+                      v-for="item in groupOption"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-col>
+                <!-- 开始日期 -->
+              <el-col :span="8">
+                <div class="detailSelect" >
+                  <el-date-picker
+                    size="small"
+                    v-model="selectDate"
+                    :picker-options="pickerOptions"
+                    type="daterange"
+                    value-format="yyyy-MM-dd"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+                </div>
+              </el-col>
+              <el-col :span="4">
+                <div class="detailSelect">
+                  <el-button type="primary" size="small" @click="changChart">查询</el-button>
+                </div>
+              </el-col>
+            </el-row>
           </div>
           <div class="content">
             <el-table
-              @click="detaildialogVisible=true"
+              v-for="(item,index) in tableTh"
+              :key="index"
+              v-if="chartData.name==item.name"
               class="comTable"
-              :data="chartData"
-              
+              :data="tableData"
+              height="450"
               size='mini'
               border
               :highlight-current-row='true'
               :cellStyle='colstyle'
               :header-cell-style='headerrowstyle'
-              style="width: 90%">
+              style="width: 100%">
               <el-table-column
-                prop="area"
-                label="片区">
-              </el-table-column>
-              <el-table-column
-                prop="manager"
-                label="片区经理">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="房屋地址">
-              </el-table-column>
-              <el-table-column
-                prop="price"
-                label="让价金额">
+                v-for="(val,index) in item.thData"
+                :key="index"
+                :prop="val.prop"
+                :label="val.label">
               </el-table-column>
             </el-table>
+            <!-- 分页 -->
             <el-pagination
-            class="paging"
-            layout="prev, pager, next"
-            :total="100">
+              small
+              style="text-align:center"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20]"
+              :page-size="currentlimit"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalPage">
             </el-pagination>
           </div>
         </div>
       </div>
     </el-dialog>
+    
   </div>
 </template>
 <script>
-import toprightControl from "../../components/toprightControl"
+import toprightControl from "../../components/toprightControl.vue"
   export default {
     components:{toprightControl},
-    props:['chartName','chartData','url'],
+    props:['chartData'],
     data(){
       return {
         currentPage:1, //当前页
         currentlimit:5,//选择条数
         totalPage:1, //总页数
-        detaildialogVisible:false,
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-        pickerOptions2: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        value7: '',
+        detaildialogVisible:false, //模态窗状态
+        loading:true,
         tableData: [],//表格数据
         dataParams:{   //传参
           city:"",
           area:"",
           group:"",
-          start_date:"2018-9-1",
-          end_date:"2018-10-17",
+          start_date:"",
+          end_date:"",
           page: 1,
           limit:5
-        }
-        
+        },
+        tableTh:[],//表头数据
+        selectDate:'',
+        cityOption:[],
+        areaOption:[],
+        groupOption:[],
+        placeForm:{
+          city: '',
+          area: '',
+          group:''
+        },
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [ {
+            text: '一周前',
+            onClick(picker) {
+              const start = new Date();
+              const end = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          },{
+            text: '一个月前',
+            onClick(picker) {
+              const start = new Date();
+              const end = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          },
+          ]
+        },
       }
     },
     methods:{
@@ -278,9 +305,63 @@ import toprightControl from "../../components/toprightControl"
         this.dataParams.page = val
         this.getData()
       },
+      choose(val,id){
+        if(val=='city'){
+          this.placeForm.area = ''
+          this.placeForm.group = ''
+          this.getList("area",id)
+          // console.log(this.placeForm)
+        }else if(val=='area'){
+          this.placeForm.group = ''
+          this.getList("group",id)
+        }
+      },
+      getList(val,id){
+        if(val=='city'){
+          this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id=331&per_page_number=50").then((res) => {          
+            // console.log(res)
+            if(res.data.status_code == 200){
+              this.cityOption = res.data.data
+            }
+          });
+        }else if(val=="area"){
+          this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+            if(res.data.status_code == 200){
+              this.areaOption = res.data.data
+            }
+          });
+        }else if(val=="group"){
+          this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+            if(res.data.status_code == 200){
+              this.groupOption = res.data.data
+            }
+          });
+        }
+      },
+      changChart(){
+        if(!this.selectDate){
+          return this.prompt('warning','请选择时间')
+        }
+          this.dataParams.city = this.placeForm.city
+          this.dataParams.area = this.placeForm.area
+          this.dataParams.group = this.placeForm.group
+          this.dataParams.start_date = this.selectDate[0]
+          this.dataParams.end_date = this.selectDate[1]
+          this.getData()
+      },
+      getNewDate(){
+        var date =  new Date()
+        var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+        var year = lastdate.getFullYear();
+        var month = lastdate.getMonth()+1;   //js从0开始取 
+        var day = lastdate.getDate(); 
+        this.dataParams.start_date = year + '-' +month + '-' + day
+        this.dataParams.end_date = year + '-' +month + '-' + day
+      },
       getData(){ //获取数据
+        this.loading = true
         this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          console.log(res)
+          this.loading = false
           if(res.data.code == "20000"){
             this.tableData = res.data.data.data
             this.totalPage = res.data.data.total
@@ -288,11 +369,43 @@ import toprightControl from "../../components/toprightControl"
             this.tableData = []
           }
         });
+        console.log(this.chartData)
+        // this.tableData = yichangdan
+        // this.tableData = []
+
+      },
+      showDetailChartDialog(){
+        // console.log(111)
+        this.detaildialogVisible = true
+        // this.sendDetailData = item
       }
     },
     mounted () {
+      this.tableTh = tableChartData
       this.getData()
+      this.getList('city')
     },
+    watch:{
+      detaildialogVisible(val){
+          if(!val){
+            this.placeForm ={
+              city: '',
+              area: '',
+              group:'',
+              
+            }
+            this.dataParams={
+              city: '',
+              area: '',
+              group:'',
+              page: 1,
+              limit:5
+            },
+            this.getNewDate()
+            this.selectDate = ''
+          }
+        }
+    }
 
   }
 </script>
@@ -312,7 +425,7 @@ import toprightControl from "../../components/toprightControl"
   }
 }
 
-// 弹出框
+//图表详细弹出框
 .detailDia {
   .detailMsgHead{
      font-size: 25px;
@@ -322,22 +435,16 @@ import toprightControl from "../../components/toprightControl"
     }
   }
   .contentTop{
-    margin-top: 20px;
-    text-align: center;
+    margin: 20px 20px 0px 20px;
     .detailSelect{
-      display:inline-block;
-      width: 15%;
-      margin-left: 20px;
-      &:nth-of-type(4){
-        width: 20%;
-      }
-      &:last-of-type{
-        margin-left:0;
-      }
+      display:block;
     }
   }
   .content {
+    height: 500px;
+    margin: 0 auto;
     margin-top:30px;
+    padding: 0 50px;
   }
    
 }

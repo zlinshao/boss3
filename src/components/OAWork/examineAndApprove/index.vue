@@ -438,6 +438,9 @@
             <el-table-column
               prop="place"
               label="状态">
+              <template slot-scope="scope">
+                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+              </template>
             </el-table-column>
             <el-table-column
               prop="finish_at"
@@ -482,6 +485,9 @@
           <el-table-column
             prop="place"
             label="状态">
+            <template slot-scope="scope">
+              <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             prop="finish_at"
@@ -545,6 +551,9 @@
               <el-table-column
                 prop="place"
                 label="状态">
+                <template slot-scope="scope">
+                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="finish_at"
@@ -654,6 +663,9 @@
               <el-table-column
                 prop="place"
                 label="状态">
+                <template slot-scope="scope">
+                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="finish_at"
@@ -920,6 +932,23 @@
         }
         if(row.status=="published"&&columnIndex==5){
           return "greenCol"
+        }
+      },
+      statusStyle(val){
+        if(val.status=="review"){
+          if(val.place=="片区经理审批中"){
+            return ""
+          }
+          return "warning"
+        }
+        if(val.status=="rejected"){
+          return "danger"
+        }
+        if(val.status=="published"){
+          return "success"
+        }
+        if(val.status=="cancelled"){
+          return "info"
         }
       },
       onSelect(key) {

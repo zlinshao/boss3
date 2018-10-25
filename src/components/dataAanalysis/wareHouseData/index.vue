@@ -3,10 +3,10 @@
     <!-- 图表展示 -->
     <div>
       <el-row :gutter="20" >
-        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.name == '业绩总额'">
+        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.name == '异常单列表'">
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
-            <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
+            <component :status="item.chart_set[0].type=='tableCard'?true:false" :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
             ></component>
           </chartCard>
         </el-col>
@@ -137,6 +137,9 @@
         this.showDetailChart = false
       },
       showDetailChartDialog(item){
+        if(item.chart_set[0].type == 'tableCard'){
+          return
+        }
         this.showDetailChart = true
         this.sendDetailData = item
         // console.log(item)

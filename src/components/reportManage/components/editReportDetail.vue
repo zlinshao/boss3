@@ -1,6 +1,5 @@
 <template>
   <div id="reportDetail">
-
     <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%"
                class="reportDialog">
       <div style="min-height: 550px" v-loading="fullLoading"
@@ -494,13 +493,18 @@
     },
 
     watch: {
-      approvalStatus(newval, oldval) {
-        if (newval == "published" && oldval == "review" && this.is_receipt.id == "1") {
-          if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" ||this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
-            this.createElectronicReceipt()
+      place: {
+        handler(newval,oldval){
+          if (newval.name == "fund-master_review" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
+            if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" ||this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
+              this.createElectronicReceipt()
+            }
           }
-        }
+        },
+        deep:true
+       
       },
+
       module(val) {
         this.reportVisible = val;
         if (!val) {
@@ -519,6 +523,7 @@
             this.isEdit = false;
           });
           this.clearData();
+          this.place = {}
         } else {
           this.getProcess();
           this.getReportEditInfo();
@@ -563,7 +568,7 @@
       },
       //建议价格
       getSuggestPrice(){
-        console.log(this.houseId)
+        // console.log(this.houseId)
         this.$http.get(globalConfig.server + 'coreproject/houses/suggestprice?house_id='+this.houseId).then((res) => {
           
           if (res.data.code === "20010") {
@@ -575,8 +580,8 @@
       },
       //判断是否有电子收据
       electronicReceiptDia() {
-        console.log(this.bank);
-        console.log({...this.electronicReceiptParam, ...this.bank});
+        // console.log(this.bank);
+        // console.log({...this.electronicReceiptParam, ...this.bank});
         this.fullLoading = true;
         this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
           this.fullLoading = false;
@@ -617,12 +622,13 @@
       },
       //电子收据签章
       signaturebtn() {
-        this.pdfloading = true;
+        // this.pdfloading = true;
         this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
-
           if (res.data.code === "20000") {
-            this.pdfloading = false;
-            this.pdfUrl = res.data.data.shorten_uri;
+            // this.pdfloading = false;
+            // this.pdfUrl = res.data.data.shorten_uri;
+            this.directSendElectronicReceipt()
+            this.electronicReceiptVisible = false
             this.signature = false
           } else {
 
@@ -661,7 +667,20 @@
           });
         });
       },
-
+      //直接发送电子收据
+      directSendElectronicReceipt(){
+        this.$http.post(globalConfig.server + '/financial/receipt/send/' + this.electronicReceiptId, {"phone": this.phone}).then((res) => {
+          console.log(res)
+          if (res.data.code=="20000") {
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            });
+          }else{
+            this.prompt('error',res.data.msg);
+          }
+        })
+      },
       getProcess() {
         this.suggestpriceStatus = false
         this.fullLoading = true;
@@ -741,7 +760,8 @@
                   }
                 }
               });
-              if (this.approvalStatus === "published" && this.is_receipt.id == "1") {
+              
+              if ((this.approvalStatus === "published"||(this.approvalStatus === "review"&&this.place.name==="fund-master_review")) && this.is_receipt.id == "1") {
                 this.electronicReceiptDisabled = false
               } else {
                 this.electronicReceiptDisabled = true
@@ -939,6 +959,7 @@
         this.changeRentReport = false;
         this.rwcRentReport = false;
         this.rwcConfirmRentReport = false;
+        
         if (val === 'success') {
           this.getProcess();
           this.getReportEditInfo();

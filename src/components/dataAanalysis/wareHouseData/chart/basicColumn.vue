@@ -1,12 +1,8 @@
 <template>
 <!-- 基础柱状图 -->
-  <div>
-    {{params}}
-    {{dataParams}}
     <div ref="chartId" >
       <div v-if="chartTextStatus">{{chartText}}</div>
     </div>
-  </div>
 </template>
 <script>
   export default {
@@ -17,9 +13,7 @@
         dataParams:{//传入参数
           city:"",
           area:"",
-          group:"",
-          start_date:"2018-9-1",
-          end_date:"2018-10-17",
+          group:""
         },
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
@@ -28,15 +22,17 @@
      
     },
     watch: {
-      params(val){
-        this.dataParams = val
-        console.log(val)
-        this.getChart()
+      params:{
+        handler(val){
+           this.dataParams = val
+           this.getChart()
+        },
+        deep:true
       }
     },
     methods:{
       drawChart(data) {
-        console.log(this.dataParams)
+        // console.log(this.dataParams)
         this.$refs.chartId.innerHTML  = ''
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
@@ -53,30 +49,31 @@
             this.chartTextStatus = false
             this.data = res.data.data
             this.chartText = ''
-            setTimeout(()=>{
-              this.drawChart(this.data)
-            },1500)
+            this.drawChart(this.data)
           }else{
             this.chartTextStatus = true
             this.chartText = res.data.msg
+            this.prompt('error',res.data.msg)
           }
         });
-        // setTimeout(() => {
-        //   this.chartTextStatus = false
-        //   this.data = zhuzhuangtu
-        //   this.drawChart(this.data)
-        // }, 1500);
+        
          
       },
-      getDate(){
-        // var start_date = 
+      getNewDate(){
+        var date =  new Date()
+        var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+        var year = lastdate.getFullYear();
+        var month = lastdate.getMonth()+1;   
+        var day = lastdate.getDate(); 
+        this.dataParams.start_date = year + '-' +month + '-' + day
+        this.dataParams.end_date = year + '-' +month + '-' + day
       }
-
-
     },
     mounted () {
-      console.log(this.params)
-      setTimeout(()=>{this.getChart()},2000)
+      // console.log(this.params)
+      this.getNewDate()
+      setTimeout(()=>{this.getChart()},1500)
+      
     }
   }
 </script>

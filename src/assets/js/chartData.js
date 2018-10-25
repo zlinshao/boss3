@@ -167,144 +167,150 @@ baifenbiduidie = [{
 
 //异常单列表
 yichangdan = [{
-  area: '南京油坊桥组',
-  manager: '王小虎',
+  org_name: '南京油坊桥组',
+  leader_name: '王小虎',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   }, {
-  area: '南京油坊桥组',
-  manager: '小红',
+  org_name: '南京油坊桥组',
+  leader_name: '小红',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   },{
-  area: '南京油坊桥组',
-  manager: '小明',
+  org_name: '南京油坊桥组',
+  leader_name: '小明',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   },{
-  area: '南京油坊桥组',
-  manager: '小明',
+  org_name: '南京油坊桥组',
+  leader_name: '小明',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   },{
-  area: '南京油坊桥组',
-  manager: '小明',
+  org_name: '南京油坊桥组',
+  leader_name: '小明',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   },{
-  area: '南京油坊桥组',
-  manager: '小明',
+  org_name: '南京油坊桥组',
+  leader_name: '小明',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   },{
-  area: '南京油坊桥组',
-  manager: '小明',
+  org_name: '南京油坊桥组',
+  leader_name: '小明',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
   },{
-  area: '南京油坊桥组',
-  manager: '小明',
+  org_name: '南京油坊桥组',
+  leader_name: '小明',
   address: '上海市普陀区金沙江路 1518 弄',
-  price:'200'
+  excep_rent_price:'200'
 }]
-
+//中介费占业绩比最高的前100名员工
+zhongjiefei = [{
+  org_name: '南京油坊桥组',
+  leader_name: '王小虎',
+  address: '上海市普陀区金沙江路 1518 弄',
+  excep_rent_price:'200'
+  }]
 //折线图
 zhexiantu = [{
   month: 'Jan',
   type: '收房平均月单价',
-  price: 7
+  excep_rent_price: 7
   }, {
   month: 'Jan',
   type: '租房平均月单价',
-  price: 3.9
+  excep_rent_price: 3.9
   }, {
   month: 'Feb',
   type: '收房平均月单价',
-  price: 6.9
+  excep_rent_price: 6.9
   }, {
   month: 'Feb',
   type: '租房平均月单价',
-  price: 4.2
+  excep_rent_price: 4.2
   }, {
   month: 'Mar',
   type: '收房平均月单价',
-  price: 9.5
+  excep_rent_price: 9.5
   }, {
   month: 'Mar',
   type: '租房平均月单价',
-  price: 5.7
+  excep_rent_price: 5.7
   }, {
   month: 'Apr',
   type: '收房平均月单价',
-  price: 14.5
+  excep_rent_price: 14.5
   }, {
   month: 'Apr',
   type: '租房平均月单价',
-  price: 8.5
+  excep_rent_price: 8.5
   }, {
   month: 'May',
   type: '收房平均月单价',
-  price: 18.4
+  excep_rent_price: 18.4
   }, {
   month: 'May',
   type: '租房平均月单价',
-  price: 11.9
+  excep_rent_price: 11.9
   }, {
   month: 'Jun',
   type: '收房平均月单价',
-  price: 21.5
+  excep_rent_price: 21.5
   }, {
   month: 'Jun',
   type: '租房平均月单价',
-  price: 15.2
+  excep_rent_price: 15.2
   }, {
   month: 'Jul',
   type: '收房平均月单价',
-  price: 25.2
+  excep_rent_price: 25.2
   }, {
   month: 'Jul',
   type: '租房平均月单价',
-  price: 17
+  excep_rent_price: 17
   }, {
   month: 'Aug',
   type: '收房平均月单价',
-  price: 26.5
+  excep_rent_price: 26.5
   }, {
   month: 'Aug',
   type: '租房平均月单价',
-  price: 16.6
+  excep_rent_price: 16.6
   }, {
   month: 'Sep',
   type: '收房平均月单价',
-  price: 23.3
+  excep_rent_price: 23.3
   }, {
   month: 'Sep',
   type: '租房平均月单价',
-  price: 14.2
+  excep_rent_price: 14.2
   }, {
   month: 'Oct',
   type: '收房平均月单价',
-  price: 18.3
+  excep_rent_price: 18.3
   }, {
   month: 'Oct',
   type: '租房平均月单价',
-  price: 10.3
+  excep_rent_price: 10.3
   }, {
   month: 'Nov',
   type: '收房平均月单价',
-  price: 13.9
+  excep_rent_price: 13.9
   }, {
   month: 'Nov',
   type: '租房平均月单价',
-  price: 6.6
+  excep_rent_price: 6.6
   }, {
   month: 'Dec',
   type: '收房平均月单价',
-  price: 9.6
+  excep_rent_price: 9.6
   }, {
   month: 'Dec',
   type: '租房平均月单价',
-  price: 4.8
+  excep_rent_price: 4.8
   }]
 
 //饼图
@@ -381,5 +387,58 @@ qipaotu = [{
   AverageVacancy: 9,
   HouseNumber: 380
   }]
+
+  tableChartData = [
+    {
+      name:"中介费占业绩比最高的前100名员工",
+      thData:[
+        {
+          label:'排名',
+          prop:'rank'
+        },
+        {
+          label:'片区',
+          prop:'area'
+        },
+        {
+          label:'业务员',
+          prop:'name'
+        },
+        {
+          label:'业绩金额',
+          prop:'achieve'
+        },
+        {
+          label:'中介费金额',
+          prop:'agency'
+        },
+        {
+          label:'中介费占业绩比',
+          prop:'percent'
+        },
+      ]
+    },
+    {
+      name:"异常单列表",
+      thData:[
+        {
+          label:'片区',
+          prop:'org_name'
+        },
+        {
+          label:'片区经理',
+          prop:'leader_name'
+        },
+        {
+          label:'房屋地址',
+          prop:'address'
+        },
+        {
+          label:'让价金额',
+          prop:'excep_rent_price'
+        }
+      ]
+    }
+  ]
 
   

@@ -79,9 +79,9 @@
           </el-row>
         </div>
         <div class="content">
-         <!-- <component :is="detailData.chart_set[0].type" :chartData="detailData"
-            ></component> -->
-          <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn>
+         <component :is="detailData.chart_set[0].type" :chartData="detailData" :chartStyle="chartstyle" :params="params"
+            ></component>
+          <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
       </div>
     </div>
@@ -117,9 +117,9 @@
             area: '',
             group:'',
             start_date:"",
-            end_date:""
+            end_date:"",
           },
-          selectDate:[],
+          selectDate:'',
           cityOption:[],
           areaOption:[],
           groupOption:[],
@@ -151,7 +151,6 @@
             },
             ]
           },
-          value2: '',
 		    }
       },
 			methods:{
@@ -188,24 +187,25 @@
             });
           }
         },
-       
-       changChart(){
-         this.params.start_date = this.selectDate[0]
-         this.params.end_date = this.selectDate[1]
-         this.params.city = this.placeForm.city
-         this.params.area = this.placeForm.area
-         this.params.group = this.placeForm.group
-
-        // this.Vue.$set(this.params, start_date, this.selectDate[0] )
-        // this.Vue.$set(this.params, end_date, this.selectDate[1] )
-        // this.Vue.$set(this.params, city, this.placeForm.city )
-        // this.Vue.$set(this.params, area, this.placeForm.area )
-        // this.Vue.$set(this.params, group, this.placeForm.group )
-
-         console.log(this.params)
-
-         
-       }
+        changChart(){
+          if(!this.selectDate){
+            return this.prompt('warning','请选择时间')
+          }
+            this.params.city = this.placeForm.city
+            this.params.area = this.placeForm.area
+            this.params.group = this.placeForm.group
+            this.params.start_date = this.selectDate[0]
+            this.params.end_date = this.selectDate[1]
+        },
+        getNewDate(){
+          var date =  new Date()
+          var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+          var year = lastdate.getFullYear();
+          var month = lastdate.getMonth()+1;   //js从0开始取 
+          var day = lastdate.getDate(); 
+          this.params.start_date = year + '-' +month + '-' + day
+          this.params.end_date = year + '-' +month + '-' + day
+        }
       },
       watch:{
         modules(val){
@@ -219,7 +219,14 @@
               area: '',
               group:''
             }
-          this.selectDate = []
+
+            this.params={
+              city: '',
+              area: '',
+              group:''
+            },
+            this.getNewDate()
+            this.selectDate = ''
             this.$emit('close')
           }
         }
@@ -247,7 +254,6 @@
     }
   }
   .content {
-    
     height: 500px;
     margin: 0 auto;
     margin-top:30px;
