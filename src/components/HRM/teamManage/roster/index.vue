@@ -290,7 +290,10 @@
         currentPage: 1,             //当前页数
         isHigh: false,              //高级
         tableData: [],
-        params: {},
+        params: {
+          limit: 15,
+          page: 1,
+        },
         totalNum: 0,
 
         organModule: false,
@@ -397,8 +400,11 @@
         this.params = JSON.parse(JSON.stringify(rosterParams));
       },
       // 关闭调岗/离职
-      closeModule() {
+      closeModule(val) {
         this.transferModule = false;
+        if (val === 'success') {
+          this.staffList(this.params.page);
+        }
       },
       // 打开组织架构
       openOrgan(val, type) {
