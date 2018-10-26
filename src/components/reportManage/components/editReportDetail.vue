@@ -25,9 +25,11 @@
                 <div class="auditStatus deal" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{deal}}
                 </div>
                 <div class="statuss"
-                     :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}"></div>
-
+                     :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}">
+                </div>
+                <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">本小区价格区间：{{priceRegion}}</div>
               </div>
+              
               <div class="scroll_bar">
                 <el-row>
                   <el-col :span="12" v-for="(value,index) in show_content" :key="index"
@@ -481,6 +483,8 @@
         staffDetailDialog: false,
         leader_phone: '',
         leader_name: '',
+        showPriceRange : false, //显示价格区间
+        priceRegion : '',
       }
     },
 
@@ -646,6 +650,7 @@
         this.approvedStatus = false;
         this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
           this.fullLoading = false;
+          console.log(res)
           if (res.data.status === 'success' && res.data.data.length !== 0) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
@@ -664,7 +669,16 @@
             this.bulletinType = res.data.data.process.content.bulletin_name;
 
             this.approvalStatus = pro.place.status;
-
+            if(pro.content.bulletin_type === "bulletin_quality" && pro.place.name === "appraiser-officer_review"){
+              this.showPriceRange = true;
+              let priceObj = {};
+              priceObj.decorate = pro.content.decorate.id;
+              priceObj.property_type = pro.content.property_type.id;
+              priceObj.community = pro.content.community.id;
+              this.priceArea(priceObj)
+            }else{
+              this.showPriceRange = false;
+            }
             if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" ||this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
 
               this.electronicReceiptStatu = true;
@@ -917,6 +931,15 @@
           this.getReportEditInfo();
           this.isEdit = true;
         }
+      },
+      //获取小区价格区间
+      priceArea(price) {
+        this.$http.get(globalConfig.server + 'bulletin/quality/range', {
+          params: price,
+        }).then((res) => {
+          console.log(res);
+          this.priceRegion = res.data.priceMin + '~' + res.data.priceMax + '元';
+        });
       },
     },
   }
