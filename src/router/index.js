@@ -73,6 +73,12 @@ const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSett
 const WatchArrange = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/index.vue'); //查看排班
 const MarkInfo = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/markInfo/index.vue'); //标记信息
 
+// 考勤记录
+const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue')
+
+// 月度总汇
+const monthlySummary = () => import('../components/attendanceManage/monthlySummary/monthly/index.vue')
+
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
 // const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue')               //日程管理
@@ -541,6 +547,12 @@ export default new Router({
               ]
             }
           ]
+        },
+        {
+          path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
+        },
+        {
+          path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
         }
       ]
     },
