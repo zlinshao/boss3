@@ -133,7 +133,9 @@
             <el-table-column
               prop="place"
               label="状态">
-              
+              <template slot-scope="scope">
+                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+              </template>
             </el-table-column>
             <el-table-column
               prop="finish_at"
@@ -242,6 +244,23 @@
       colTag({row, column, rowIndex, columnIndex}){
         if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
           return 'colTag'
+        }
+      },
+      statusStyle(val){
+        if(val.status=="review"){
+          if(val.place=="片区经理审批中"){
+            return ""
+          }
+          return "warning"
+        }
+        if(val.status=="rejected"){
+          return "danger"
+        }
+        if(val.status=="published"){
+          return "success"
+        }
+        if(val.status=="cancelled"){
+          return "info"
         }
       },
       //获取列表数据

@@ -7,68 +7,81 @@
     :modal="false"
     width="65%">
     <div>
+      {{params}}
+      {{selectDate}}
       <div class="detailMsgHead">
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
-        <span>{{theme}}</span>
+        <span>{{detailData.name}}</span>
         <toprightControl></toprightControl>
       </div>
       <div class="detailcontent">
         <div class="contentTop">
-          <!-- 城市 -->
-          <div class="detailSelect">
-            <el-select v-model="value" placeholder="城市" size="small">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
-          <!-- 区域 -->
-          <div class="detailSelect">
-            <el-select v-model="value" placeholder="区域" size="small">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
-          <!-- 片区 -->
-          <div class="detailSelect">
-            <el-select v-model="value" placeholder="片区" size="small">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
-          <!-- 开始日期 -->
-          <div class="detailSelect" >
-            <el-date-picker
-              size="small"
-              v-model="value7"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions2">
-            </el-date-picker>
-          </div>
-          <div class="detailSelect">
-            <el-button type="primary" size="small">查询</el-button>
-          </div>
+          <el-row :gutter="20">
+            <el-col :span="4">
+              <div class="detailSelect">
+                <!-- 城市 -->
+                <el-select v-model="placeForm.city" clearable placeholder="城市" size="small" @change="choose('city',placeForm.city)">
+                  <el-option
+                    v-for="item in cityOption"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="4">
+               <!-- 区域 -->
+              <div class="detailSelect">
+                <el-select v-model="placeForm.area" clearable :disabled="placeForm.city?false:true" placeholder="区域" size="small" @change="choose('area',placeForm.area)">
+                  <el-option
+                    v-for="item in areaOption"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <!-- 片区 -->
+              <div class="detailSelect">
+                <el-select v-model="placeForm.group" clearable :disabled="placeForm.area?false:true" placeholder="片区" size="small" >
+                  <el-option
+                    v-for="item in groupOption"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
+              </div>
+            </el-col>
+              <!-- 开始日期 -->
+            <el-col :span="8">
+              <div class="detailSelect" >
+                <el-date-picker
+                  size="small"
+                  v-model="selectDate"
+                  :picker-options="pickerOptions"
+                  type="daterange"
+                  value-format="yyyy-MM-dd"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
+                </el-date-picker>
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <div class="detailSelect">
+                <el-button type="primary" size="small" @click="changChart">查询</el-button>
+              </div>
+            </el-col>
+          </el-row>
         </div>
         <div class="content">
-          <!-- <component :is="item.chart_set[0].type" :url="item.data_source" 
-              :chartName="item.name" 
-            ></component> -->
+         <component :is="detailData.chart_set[0].type" :chartData="detailData" :chartStyle="chartstyle" :params="params"
+            ></component>
+          <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
       </div>
     </div>
@@ -92,112 +105,134 @@
       components:{toprightControl,
       basicColumn,bubblePoint,donut,gauge,groupedColumn,pie,seriesLine,stackedColumn,stackedPercentageColumn,tableCard
       },
+      props:['modules','detailData'],
       data(){
 				return {
-          chartData:'',//图表数据
-          chartMsg:{  //图表所需信息
-            component:'breakPromiseProportion',
-            id:1,//图表id
-            title:'违约金、滞纳金、炸单已收定金收入', //标题
-            detailMsg:'这是说明。。。。',//说明
-            chartType:"pie",//类型
-            tag:['财务','业务'],//标签
-          },
-          theme:"违约金、滞纳金、炸单已收定金收入",
-          chartheight:260,
-          chartheightDia:500,
           detaildialogVisible : false,
-          bodyStyle:{
-            padding:'0',
-            position:'relative',
-            height:'',
-            width:'100%',
-            backgroundColor: '#fff'
+          chartstyle:{
+            height:500
           },
-          options: [{
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
-          value: '',
-          pickerOptions2: {
-            shortcuts: [{
-              text: '最近一周',
+          params:{
+            city: '',
+            area: '',
+            group:'',
+            start_date:"",
+            end_date:"",
+          },
+          selectDate:'',
+          cityOption:[],
+          areaOption:[],
+          groupOption:[],
+          placeForm:{
+            city: '',
+            area: '',
+            group:''
+          },
+          pickerOptions: {
+            disabledDate(time) {
+              return time.getTime() > Date.now();
+            },
+            shortcuts: [ {
+              text: '一周前',
               onClick(picker) {
-                const end = new Date();
                 const start = new Date();
+                const end = new Date();
                 start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
                 picker.$emit('pick', [start, end]);
               }
-            }, {
-              text: '最近一个月',
+            },{
+              text: '一个月前',
               onClick(picker) {
-                const end = new Date();
                 const start = new Date();
+                const end = new Date();
                 start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
                 picker.$emit('pick', [start, end]);
               }
-            }, {
-              text: '最近三个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                picker.$emit('pick', [start, end]);
-              }
-            }]
+            },
+            ]
           },
-          value7: '',
-          jiadata:[{
-            item: '违约金',
-            count: 40,
-            percent: 0.4
-          }, {
-            item: '滞纳金',
-            count: 21,
-            percent: 0.21
-          }, {
-            item: '炸单收入',
-            count: 17,
-            percent: 0.17
-          }]
 		    }
       },
 			methods:{
-       
-			},
-			mounted(){
-        this.bodyStyle.height=this.chartheight+"px"
-
-        this.$http.get("http://test.v3.api.boss.lejias.cn/bisys/Statistic/achieveTotal",
-        {headers:{
-            Accept:"application/vnd.boss18+json"}
-        }).then((res) => {
-          if (res.data.code === "20000") {
-            // let result = res.data.data
-            // this.chartData = result.data
-
-            // this.chartMsg.title = result.title
-            // this.chartMsg.chartType = result.chartType
-            // this.chartMsg.detailMsg = result.detailMsg
-            // this.chartMsg.tag = result.tag
-
-            this.chartData = this.jiadata
-
-            this.$emit('sendChartMsg',this.chartMsg)
+        choose(val,id){
+          if(val=='city'){
+            this.placeForm.area = ''
+            this.placeForm.group = ''
+            this.getList("area",id)
+            // console.log(this.placeForm)
+          }else if(val=='area'){
+            this.placeForm.group = ''
+            this.getList("group",id)
           }
-        })
+        },
+        getList(val,id){
+          if(val=='city'){
+            this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id=331&per_page_number=50").then((res) => {          
+              // console.log(res)
+              if(res.data.status_code == 200){
+                this.cityOption = res.data.data
+              }
+            });
+          }else if(val=="area"){
+            this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+              if(res.data.status_code == 200){
+                this.areaOption = res.data.data
+              }
+            });
+          }else if(val=="group"){
+            this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+              if(res.data.status_code == 200){
+                this.groupOption = res.data.data
+              }
+            });
+          }
+        },
+        changChart(){
+          if(!this.selectDate){
+            return this.prompt('warning','请选择时间')
+          }
+            this.params.city = this.placeForm.city
+            this.params.area = this.placeForm.area
+            this.params.group = this.placeForm.group
+            this.params.start_date = this.selectDate[0]
+            this.params.end_date = this.selectDate[1]
+        },
+        getNewDate(){
+          var date =  new Date()
+          var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+          var year = lastdate.getFullYear();
+          var month = lastdate.getMonth()+1;   //js从0开始取 
+          var day = lastdate.getDate(); 
+          this.params.start_date = year + '-' +month + '-' + day
+          this.params.end_date = year + '-' +month + '-' + day
+        }
+      },
+      watch:{
+        modules(val){
+          this.detaildialogVisible = val
+          
+        },
+        detaildialogVisible(val){
+          if(!val){
+            this.placeForm ={
+              city: '',
+              area: '',
+              group:''
+            }
+
+            this.params={
+              city: '',
+              area: '',
+              group:''
+            },
+            this.getNewDate()
+            this.selectDate = ''
+            this.$emit('close')
+          }
+        }
+      },
+			mounted(){
+        this.getList('city')
       }
       
     }
@@ -213,22 +248,16 @@
     }
   }
   .contentTop{
-    margin-top: 20px;
-    text-align: center;
+    margin: 20px 20px 0px 20px;
     .detailSelect{
-      display:inline-block;
-      width: 15%;
-      margin-left: 20px;
-      &:nth-of-type(4){
-        width: 20%;
-      }
-      &:last-of-type{
-        margin-left:0;
-      }
+      display:block;
     }
   }
   .content {
+    height: 500px;
+    margin: 0 auto;
     margin-top:30px;
+    padding: 0 50px;
   }
    
 }

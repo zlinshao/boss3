@@ -152,6 +152,7 @@ rosterImgInfo = [
 // 当前在职状态
 position_status = [
   {id: 1, name: '无异动'},
+  {id: 2, name: '待调岗'},
   {id: 3, name: '待转正'},
   {id: 4, name: '待离职'},
 ];
@@ -199,7 +200,7 @@ typeCategory = [
 transfer_type = [
   {id: 1, name: '平行调岗'},
   {id: 2, name: '升职调岗'},
-  {id: 3, name: '降至调岗'},
+  {id: 3, name: '降职调岗'},
 ];
 // 离职类型
 resignation_type = [

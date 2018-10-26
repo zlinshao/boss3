@@ -88,7 +88,7 @@
               <div class="showTitles">{{orgData.leader_id}}</div>
             </el-form-item>
           </div>
-          <div class='formList list3'>8
+          <div class='formList list3'>
             <el-form-item label="调岗描述">
               <el-input placeholder="请输入调岗描述" v-model="form.remark_transfer" clearable></el-input>
             </el-form-item>

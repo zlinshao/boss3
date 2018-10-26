@@ -38,6 +38,7 @@ import './assets/bifonts/bifont.css'
 import './assets/js/drag.js'
 import './assets/js/formData.js'
 
+import "./assets/js/chartData.js"
 // import './directives.js';  //弹框拖拽
 
 // 地图

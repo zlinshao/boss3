@@ -37,14 +37,11 @@
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="出生日期">
-                  <el-date-picker
-                    v-model="form.birthday"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="请选择日期"
-                    clearable>
-                  </el-date-picker>
+                <el-form-item label="婚姻状况">
+                  <el-select v-model="form.marital_status" size="mini" placeholde="请选择" clearable>
+                    <el-option v-for="key in marital_status" :label="key.dictionary_name" :value="key.id"
+                               :key="key.id"></el-option>
+                  </el-select>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -61,16 +58,20 @@
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="婚姻状况">
-                  <el-select v-model="form.marital_status" size="mini" placeholde="请选择" clearable>
-                    <el-option v-for="key in marital_status" :label="key.dictionary_name" :value="key.id"
-                               :key="key.id"></el-option>
-                  </el-select>
+                <el-form-item label="身份证" required>
+                  <el-input placeholder="请输入身份证" @blur="checkIDNumData(form.id_num)" v-model="form.id_num"
+                            clearable></el-input>
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="身份证" required>
-                  <el-input placeholder="请输入身份证" v-model="form.id_num" clearable></el-input>
+                <el-form-item label="出生日期">
+                  <el-date-picker
+                    v-model="form.birthday"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="请选择日期"
+                    clearable>
+                  </el-date-picker>
                 </el-form-item>
               </div>
               <div class='formList list2'>
@@ -173,7 +174,8 @@
                 <el-form-item label="当前在职状态" required>
                   <el-select v-model="form.position_status" clearable :disabled="assist === 'new'"
                              v-if="form.position_status !== 5">
-                    <el-option v-for="item in position_status" :value="item.id" :key="item.id" :label="item.name">
+                    <el-option v-for="item in position_status" v-if="item.id !== 2" :value="item.id" :key="item.id"
+                               :label="item.name">
                     </el-option>
                   </el-select>
                   <div class="showTitles" v-else>已离职</div>
@@ -197,7 +199,8 @@
               </div>
               <div class='formList'>
                 <el-form-item label="银行卡号" required>
-                  <el-input placeholder="请输入银行卡号" v-model="form.bank_num" clearable></el-input>
+                  <el-input placeholder="请输入银行卡号" @blur="checkBankData(form.bank_num)" v-model="form.bank_num"
+                            clearable></el-input>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -566,6 +569,7 @@
       // 模态框关闭触发
       closeModule() {
         this.isClear = true;
+        this.form = {};
         this.form = JSON.parse(JSON.stringify(rosterAddStaff));
         this.form.position_status = 3;
         this.orgData = {};      //部门显示
@@ -940,6 +944,37 @@
       // 删除奖惩类型
       remBtnRecord(index, idx) {
         this.form3[index].remarks.splice(idx, 1);
+      },
+      //校验身份证号
+      checkIDNumData(val) {
+        this.$http.get(this.url + 'manager/staff/info?id_num=' + val).then((res) => {
+          if (res.data.code === '10050') {
+            let data = res && res.data && res.data.data;
+            if (data.birthday && !this.form.birthday) {
+              this.form.birthday = data.birthday;
+            }
+            if (data.origin_addr && !this.form.home_addr) {
+              this.form.home_addr = data.origin_addr.result;
+            }
+            this.form = Object.assign({}, this.form);
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
+      },
+      //校验银行卡号
+      checkBankData(val) {
+        this.$http.get(this.url + 'manager/staff/info?bank_num=' + val).then((res) => {
+          if (res.data.code === '10050') {
+            let data = res.data.data;
+            if (data.bankname && !this.form.account_bank) {
+              this.form.account_bank = data.bankname;
+            }
+            this.form = Object.assign({}, this.form);
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       },
     },
   }

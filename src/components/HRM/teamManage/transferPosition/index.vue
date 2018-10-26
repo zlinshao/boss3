@@ -196,7 +196,7 @@
         totalNum: 0,
         tableData: [],
         params: {
-          limit: 12,
+          limit: 15,
           page: 1,
           org_id: '',
           keywords: '',
@@ -275,7 +275,7 @@
       // 重置
       resetting() {
         this.params = {
-          limit: 12,
+          limit: 15,
           page: 1,
           org_id: '',
           keywords: '',

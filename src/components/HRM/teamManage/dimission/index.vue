@@ -29,9 +29,24 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_id', 'depart')" v-model="organData.org_id"
+                    <el-input placeholder="请选择" @focus="openOrgan('orgNames', 'depart')" v-model="params.orgNames"
                               size="mini">
-                      <el-button slot="append" @click="emptyDepart('org_id')">清空</el-button>
+                      <el-button slot="append" @click="emptyDepart('orgNames')">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">职位</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input placeholder="请选择" @focus="openOrgan('positionNames', 'depart')" v-model="params.orgNames"
+                              size="mini">
+                      <el-button slot="append" @click="emptyDepart('positionNames')">清空</el-button>
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -54,8 +69,8 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
-        @row-contextmenu='openContextMenu'
         style="width: 100%">
+        <!--@row-contextmenu='openContextMenu'-->
         <el-table-column
           prop="real_name"
           label="姓名">
@@ -152,12 +167,11 @@
         totalNum: 0,
         tableData: [],
         params: {
-          limit: 12,
+          limit: 15,
           page: 1,
           orgNames: '',
           positionNames: '',
         },
-        organData: {},
       }
     },
     mounted() {
@@ -225,12 +239,11 @@
       // 重置
       resetting() {
         this.params = {
-          limit: 12,
+          limit: 15,
           page: 1,
-          org_id: '',
-          keywords: '',
+          orgNames: '',
+          positionNames: '',
         };
-        this.organData = {};
       },
       // 分页
       handleSizeChange(val) {
@@ -251,8 +264,6 @@
       // 清空部门
       emptyDepart(val) {
         this.params[val] = '';
-        this.organData[val] = '';
-        this.organData = Object.assign({}, this.organData);
       },
       // 关闭组织架构
       closeOrgan() {
@@ -264,8 +275,17 @@
       // 确认部门
       selectMember(val) {
         let organ = this.organDivision;
-        this.params[organ] = val[0].id;
-        this.organData[organ] = val[0].name;
+        let arr = [];
+        this.params[organ] = [];
+        for (let item of val) {
+          arr.push(item.name);
+        }
+        this.departName(arr, organ);
+        this.dimissionList(this.params.page);
+      },
+      // 数组名称去重 拼接
+      departName(arr, organ) {
+        this.params[organ] = this.montage(arr);
       },
       // 右键
       openContextMenu(row, event) {

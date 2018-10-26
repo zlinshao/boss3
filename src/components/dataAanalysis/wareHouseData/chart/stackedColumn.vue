@@ -6,7 +6,7 @@
 </template>
 <script>
   export default {
-    props:['chartData'],
+    props:['chartData','chartStyle','params'],
     data(){
       return {
         data:[],
@@ -16,7 +16,8 @@
           group:"",
           start_date:"2018-9-1",
           end_date:"2018-10-17",
-          date:"2018-10-17"
+          date:"2018-10-17",
+          status:false
         },
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
@@ -24,8 +25,19 @@
           fields:[], //字段集
           key:"",   //key字段名
           value:"",  //value字段名
+          
         }
         
+      }
+    },
+    watch: {
+      params:{
+        handler(val){
+          console.log(val)
+           this.dataParams = val
+           this.getChart()
+        },
+        deep:true
       }
     },
     methods:{
@@ -42,7 +54,7 @@
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
           forceFit: true,
-          height:300,
+          height:this.chartStyle.height,
         });
         chart.source(dv);
         chart.intervalStack().position(this.chartReset.key+'*'+this.chartReset.value).color('name');
@@ -50,7 +62,7 @@
       },
       getChart(){ //获取图表
         this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          
+        
           if(res.data.code == "20000"){
             for(let key in res.data.data[0]){
               if(key!=="name"){
@@ -81,9 +93,19 @@
           default:
           break;
         }
+      },
+      getNewDate(){
+        var date =  new Date()
+        var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+        var year = lastdate.getFullYear();
+        var month = lastdate.getMonth()+1;   
+        var day = lastdate.getDate(); 
+        this.dataParams.start_date = year + '-' +month + '-' + day
+        this.dataParams.end_date = year + '-' +month + '-' + day
       }
     },
     mounted () {
+      this.getNewDate()
       this.getChart()
     }
   }

@@ -3,10 +3,10 @@
     <!-- 图表展示 -->
     <div>
       <el-row :gutter="20" >
-        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
+        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.name == '异常单列表'">
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
-            <component :is="item.chart_set[0].type" :chartData="item" @click="showDetailChartDialog(item)"
+            <component :status="item.chart_set[0].type=='tableCard'?true:false" :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
             ></component>
           </chartCard>
         </el-col>
@@ -42,7 +42,7 @@
     </div>
 
     <!-- 详情弹出框 -->
-    <detailChartDialog></detailChartDialog>
+    <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog>
   </div>
 </template>
 <script>
@@ -106,6 +106,11 @@
         cardloading: false,//正在加载
         loadingText: "", //加载文字
         selectType:"对比",//所选类型
+        showDetailChart:false,
+        chartstyle:{
+          height:300
+        },
+        sendDetailData:{}
       }
     },
     methods: {
@@ -127,6 +132,17 @@
             }
           });
         }
+      },
+      closeModule(val){
+        this.showDetailChart = false
+      },
+      showDetailChartDialog(item){
+        if(item.chart_set[0].type == 'tableCard'){
+          return
+        }
+        this.showDetailChart = true
+        this.sendDetailData = item
+        // console.log(item)
       }
     },
     mounted() {
