@@ -719,7 +719,7 @@
               this.showPriceRange = true;
               let priceObj = {};
               priceObj.decorate = pro.content.decorate.id;
-              priceObj.property_type = pro.content.property_type.id;
+              priceObj.room = pro.content.house_type[0];
               priceObj.community = pro.content.community.id;
               this.priceArea(priceObj)
             }else{
