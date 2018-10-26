@@ -542,13 +542,12 @@ export default new Router({
       children: [
         {
           path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
-<<<<<<< HEAD
           children: [
             {
               path: '/watchArrange',component: WatchArrange, name: '查看排班',
               children: [
                 {
-                  path: '/',component: MarkInfo, name: '标记信息'
+                  path: '/', component: EditArrange, name: '标记信息'
                 }
               ]
             }
@@ -559,8 +558,6 @@ export default new Router({
         },
         {
           path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
-=======
->>>>>>> edc1b0d0c6d7fefa4e5dd30963ab362a50f4efc7
         }
       ]
     },
