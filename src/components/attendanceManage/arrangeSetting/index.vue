@@ -31,36 +31,26 @@
 </template>
 
 <script>
+import GetDateList from './editArrange/components/currentData.js';
+
 export default {
     name: 'index',
     data (){
         return {
-            tableData:[
-                {sort:1,date:'2018-10-25',edit:true},
-                {sort:2,date:'2018-11-25',edit:true},
-                {sort:3,date:'2018-12-25',edit:true},
-                {sort:4,date:'2019-01-25',edit:true},
-                {sort:5,date:'2019-02-25',edit:true},
-                {sort:6,date:'2019-03-25',edit:true},
-                {sort:7,date:'2018-09-25',edit:false},
-                {sort:8,date:'2018-08-25',edit:false},
-                {sort:9,date:'2018-07-25',edit:false},
-                {sort:10,date:'2018-06-25',edit:false},
-                {sort:11,date:'2018-05-25',edit:false},
-                {sort:12,date:'2018-04-25',edit:false},
-            ]
+            tableData:[]
         }
     },
     created (){
+        var res = GetDateList();
+        this.tableData = res;
     },
     methods: {
         LookInfo (scope){
             console.log(scope);
         },
         editInfo (scope){
-            console.log(scope);
-            this.$router.push('/editArrange');
-        }
+            this.$router.push({path:'/editArrange',query:{date:scope.row.date,edit:scope.row.edit}});
+        },
     }
 }
 </script>

@@ -70,7 +70,6 @@ const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.v
 
 //考勤管理
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
-const WatchArrange = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/index.vue'); //查看排班
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 
 //OA办公
@@ -375,7 +374,8 @@ export default new Router({
         {
           path: '/editArrange',
           component: EditArrange,
-          name: '编辑排班'
+          name: '编辑排班',
+          props:true
         }, 
         {path: '/clientManage', component: ClientManage, name: ' 客户管理 ', icon: "iconfont icon-kehu"},
         // {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
