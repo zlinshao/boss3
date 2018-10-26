@@ -18,7 +18,7 @@
           <img src="../assets/images/slogan.png" style="width: 100%" alt="">
         </div>
         <div class="login_type">
-          <div @click="sweepCode">
+          <div @click="sweepCode('ding')">
             <div>
               <img src="../assets/images/dd1.png" alt="">
             </div>
@@ -30,7 +30,7 @@
             <div style="color:#fb4699;">手机号</div>
             <div>快速登录</div>
           </div>
-          <div>
+          <div @click="sweepCode('wei')">
             <div><img src="../assets/images/weixin2.png" alt=""></div>
             <div style="color: #58d788">微信 - 扫码</div>
             <div>一键登录</div>
@@ -192,8 +192,14 @@
           });
         });
       },
-      sweepCode() {
-        window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
+      sweepCode(val) {
+        if (val === 'wei') {
+          // this.$http.get(globalConfig.server + 'company_wechat_login').then(res => {
+          //
+          // })
+        } else {
+          window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
+        }
       },
       //背景特效
       getBackground() {

@@ -529,51 +529,51 @@ export default new Router({
       ]
     },
     //write by shuisheng 2018-10-24
-    {
-      path: '/',
-      component: Index,
-      name: '考勤管理',
-      icon: 'el-icon-document',
-      children: [
-        {
-          path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
-          children: [
-            {
-              path: '/watchArrange',component: WatchArrange, name: '查看排班',
-              children: [
-                {
-                  path: '/',component: MarkInfo, name: '标记信息'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
-        },
-        {
-          path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
-        }
-      ]
-    },
-    {
-      path: '/',
-      component: Index,
-      name: 'HRM',
-      icon: 'iconfont icon-renzi',
-      children: [
-        {
-          path: '/teamManage', component: TeamManage, name: '人员信息管理',
-          children: [
-            {path: '/teamManage/roster', component: Roster, name: '花名册'},
-            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-            {path: '/dimission', component: Dimission, name: '离职管理'},
-          ],
-        },
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '考勤管理',
+    //   icon: 'el-icon-document',
+    //   children: [
+    //     {
+    //       path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
+    //       children: [
+    //         {
+    //           path: '/watchArrange',component: WatchArrange, name: '查看排班',
+    //           children: [
+    //             {
+    //               path: '/',component: MarkInfo, name: '标记信息'
+    //             }
+    //           ]
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
+    //     },
+    //     {
+    //       path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
+    //     }
+    //   ]
+    // },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: 'HRM',
+    //   icon: 'iconfont icon-renzi',
+    //   children: [
+    //     {
+    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
+    //       children: [
+    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
+    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+    //         {path: '/dimission', component: Dimission, name: '离职管理'},
+    //       ],
+    //     },
+    //   ]
+    // },
     {
       path: '/staffDetail',
       component: StaffDetail,
@@ -661,7 +661,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
+        // {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {
