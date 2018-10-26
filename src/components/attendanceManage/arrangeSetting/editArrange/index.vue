@@ -37,11 +37,21 @@
        <div class="tableInfo">
            <el-table
                 :data = "arrangeListData"
-                style="width:100%;"
                 :header-cell-style="changeTable"
+                @cell-dblclick="dbclickCell"
+                :cell-class-name="rowClass"
            >
-            <el-table-column v-for="(colu,index) in columnList" :key="index" :prop="colu.prop" :label="colu.label" :width="colu.width">
-
+           <el-table-column prop="part" label="部门" width="80px"></el-table-column>
+           <el-table-column prop="name" label="姓名" width="80px"></el-table-column>
+            <el-table-column 
+                v-for="(colu,index) in columnList" 
+                :key="index" 
+                :prop="colu.prop" 
+                :label="colu.label" 
+                >
+                <template>
+                    <div><a style="color:red">..</a></div>
+                </template>
             </el-table-column>
             <el-table-column
                 label="操作"
@@ -77,29 +87,64 @@
                     </template>     -->
                 </el-table-column>
                 <el-table-column v-for="(colu,idx) in columnListLook" :key="idx" :prop="colu.prop" :label="colu.label" :width="colu.width">
-
                 </el-table-column>
            </el-table>
+       </div>
+       <div>
+           <el-dialog
+            title="修改班次"
+            :visible.sync="dialogShow"
+            width="25%"
+           >
+                <div>
+                    <p><el-radio v-model="currentArrange" label="A">A:早班 09:00-18:00</el-radio></p>
+                    <p><el-radio v-model="currentArrange" label="B">B:正常班 10:00-19:00</el-radio></p>
+                    <p><el-radio v-model="currentArrange" label="C">C:晚班 13:00-21:00</el-radio></p>
+                    <p><el-radio v-model="currentArrange" label="D">D:休息</el-radio></p>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="okShow = true" size="mini">取 消</el-button>
+                    <el-button type="primary" @click="okEdit" size="mini">确 定</el-button>
+                </span>
+           </el-dialog>
+       </div>
+       <div>
+           <el-dialog
+            :visible.sync="okShow"
+            width="15%"
+           >
+                <h4>有修改的数据尚未保存，是否保存？</h4>
+                <div style="text-align:right;">
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="okShow = false" size="mini">取消</el-button>
+                        <el-button type="primary" @click="okShow = false" size="mini">确定</el-button>
+                    </span>
+                </div>
+           </el-dialog>
        </div>
     </div>
 </template>
 
 <script>
+
 export default {
     name: 'markInfo',
     data (){
         return {
             //第一个表格
-            columnList: [
-                {prop:'part',label:'部门',width: '80px'},
-                {prop:'name',label:'姓名',width: '80px'},
-            ],
+            columnList: [],
             //第二个表格
             columnListLook:[],
             currentDate:'',
             //数据1
             arrangeListData:[
-                {part:'研发部',name:'小米',day1:'A',day2:'A',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'}
+                {part:'研发部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
+                {part:'人事部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
+                {part:'研发部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
+                {part:'研发部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
+                {part:'研发部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
+                {part:'研发部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
+                {part:'研发部',name:'小米',day1:'休',day2:'休',day3:'A',day4:'A',day5:'A',day6:'A',day7:'A',day8:'A',day9:'A'},
             ],
             //数据2
             arrangeListDataLook:[
@@ -107,15 +152,35 @@ export default {
                 {date:'B:正常班',day1:'A'},
                 {date:'C:晚班',day1:'A'},
                 {date:'D:休息',day1:'A'},
-            ]
+            ],
+            dialogShow:false, //修改班次dialog
+            currentArrange:'A', //点击后当前班次
+            okShow:false
         }
     },
     methods: {
         getColumnList (){
 
         },
+        handleClick (scope){
+            console.log(scope);
+        },
+        dbclickCell (row, column, cell, event){
+            console.log(row,column,cell,event);
+            console.log(cell.innerHtml);
+            this.dialogShow = true;
+        },
         cellStyle ({row, column, rowIndex, columnIndex}){
             
+        },
+        okEdit (){
+            this.dialogShow = false;
+        },
+        rowClass ({ row, column, rowIndex, columnIndex }){
+            console.log(columnIndex);
+            if(columnIndex == 2 || columnIndex == 3){
+                return 'colorGray';
+            }
         },
         getCurrentMonthDays (currentDate){
             var days = 0;
@@ -135,11 +200,11 @@ export default {
                 var nowDate = `${year}-${month}-${i}`;
                 var nowWeek = new Date(nowDate).getDay();
                 if(nowWeek == 6 || nowWeek == 0){
-                    this.columnList.push({prop: 'day'+i,label: `${i}`,width:'50px',work:false});
-                    this.columnListLook.push({prop: 'day'+i,label: `${i}`,width:'55px',work:false});
+                    this.columnList.push({prop: 'day'+i,label: `${i}`,work:false});
+                    this.columnListLook.push({prop: 'day'+i,label: `${i}`,work:false});
                 }else{
                     this.columnList.push({prop: 'day'+i,label: `${i}`,width:'50px',work:true});
-                    this.columnListLook.push({prop: 'day'+i,label: `${i}`,width:'55px',work:true});
+                    this.columnListLook.push({prop: 'day'+i,label: `${i}`,work:true});
                 }
             }
         },
@@ -162,6 +227,12 @@ export default {
     #markInfo{
         .tableInfo{
             margin-top: 30px;
+        }
+        .colorRed{
+            background-color: red;
+        }
+        .colorGray{
+            background-color: #C4C4C4;
         }
     }
 </style>
