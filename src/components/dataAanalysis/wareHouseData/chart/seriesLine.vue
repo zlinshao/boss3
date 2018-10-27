@@ -6,28 +6,23 @@
 </template>
 <script>
   export default {
-    props: ['chartData'],
+    props: ['chartData','chartStyle','params'],
     data() {
       return {
         data: [],
-        dataParams: {
-          city:"",
-          area:"",
-          group:"",
-          start_date: "2018-01-15",
-          end_date: "2018-10-30",
-        },
+        dataParams: {},
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
       }
     },
     methods: {
       drawChart(data) {
+        this.$refs.chartId.innerHTML  = ''
         let chart = new this.$G2.Chart({
           container: this.$refs.chartId,
           forceFit: true,
           // width:800,
-          height: 300,
+          height: this.chartStyle.height,
         });
         chart.source(data, {
           date: {
@@ -53,12 +48,11 @@
         });
         chart.render();
       },
-      getChart() {
+      getChart(params) {
         this.$http.get(this.chartData.data_source, {
           headers: {"Accept": "application/vnd.boss18+json"},
-          params: this.dataParams
+          params: params
         }).then((res) => {
-          console.log(res);
           if (res.data.code === "20000") {
             this.chartTextStatus = false
             this.data = res.data.data;
@@ -69,10 +63,22 @@
             this.chartText = res.data.msg
           }
         });
-      }
+      },
+      // getNewDate(){
+      //   var date =  new Date()
+      //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+      //   var year = lastdate.getFullYear();
+      //   var month = lastdate.getMonth()+1;   
+      //   var day = lastdate.getDate(); 
+      //   this.dataParams.start_date = year + '-' +month + '-' + day
+      //   this.dataParams.end_date = year + '-' +month + '-' + day
+      // }
     },
     mounted() {
-      this.getChart()
+      this.dataParams = JSON.parse(JSON.stringify(chartParams))
+      this.getChartDate(this.dataParams)
+      // this.getNewDate()
+      this.getChart(this.dataParams)
     }
   }
 </script>

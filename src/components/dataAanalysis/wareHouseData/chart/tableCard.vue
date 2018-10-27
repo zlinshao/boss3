@@ -1,74 +1,6 @@
 <template>
 <!-- 表格卡片 -->
   <div ref="chartId" id="chartTable">
-    <!-- 中介费占业绩比最高的前100名员工 -->
-    <!-- <el-table
-      v-if="this.chartData.name=='中介费占业绩比最高的前100名员工'"
-      @click.native ="showDetailChartDialog"
-      class="comTable"
-      :data="tableData"
-      height="260"
-      size='mini'
-      border
-      :highlight-current-row='true'
-      :cellStyle='colstyle'
-      :header-cell-style='headerrowstyle'
-      style="width: 100%">
-      <el-table-column
-        prop="rank"
-        label="排名">
-      </el-table-column>
-      <el-table-column
-        prop="area"
-        label="片区">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="业务员">
-      </el-table-column>
-      <el-table-column
-        prop="achieve"
-        label="业绩金额">
-      </el-table-column>
-      <el-table-column
-        prop="agency"
-        label="中介费金额">
-      </el-table-column>
-      <el-table-column
-        prop="percent"
-        label="中介费占业绩比">
-      </el-table-column>
-    </el-table> -->
-    <!-- 异常单列表 -->
-    <!-- <el-table
-      v-if="this.chartData.name=='异常单列表'"
-      @click.native ="showDetailChartDialog"
-      class="comTable"
-      :data="tableData"
-      height="260"
-      size='mini'
-      border
-      :highlight-current-row='true'
-      :cellStyle='colstyle'
-      :header-cell-style='headerrowstyle'
-      style="width: 100%">
-      <el-table-column
-        prop="org_name"
-        label="片区">
-      </el-table-column>
-      <el-table-column
-        prop="leader_name"
-        label="片区经理">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="房屋地址">
-      </el-table-column>
-      <el-table-column
-        prop="excep_rent_price"
-        label="让价金额">
-      </el-table-column>
-    </el-table> -->
     <el-table
       v-for="(item,index) in tableTh"
       :key="index"
@@ -113,7 +45,6 @@
       custom-class="detailDia"
       :show-close="false"
       :visible.sync="detaildialogVisible"
-      :modal="false"
       width="65%">
       <div>
         <div class="detailMsgHead">
@@ -170,6 +101,7 @@
                     size="small"
                     v-model="selectDate"
                     :picker-options="pickerOptions"
+                    unlink-panels
                     type="daterange"
                     value-format="yyyy-MM-dd"
                     range-separator="至"
@@ -318,20 +250,20 @@ import toprightControl from "../../components/toprightControl.vue"
       },
       getList(val,id){
         if(val=='city'){
-          this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id=331&per_page_number=50").then((res) => {          
+          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
             // console.log(res)
             if(res.data.status_code == 200){
               this.cityOption = res.data.data
             }
           });
         }else if(val=="area"){
-          this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
             if(res.data.status_code == 200){
               this.areaOption = res.data.data
             }
           });
         }else if(val=="group"){
-          this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
             if(res.data.status_code == 200){
               this.groupOption = res.data.data
             }
@@ -353,7 +285,7 @@ import toprightControl from "../../components/toprightControl.vue"
         var date =  new Date()
         var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
         var year = lastdate.getFullYear();
-        var month = lastdate.getMonth()+1;   //js从0开始取 
+        var month = lastdate.getMonth()+1;   
         var day = lastdate.getDate(); 
         this.dataParams.start_date = year + '-' +month + '-' + day
         this.dataParams.end_date = year + '-' +month + '-' + day
@@ -367,6 +299,7 @@ import toprightControl from "../../components/toprightControl.vue"
             this.totalPage = res.data.data.total
           }else{
             this.tableData = []
+            this.prompt('error',res.data.msg)
           }
         });
         console.log(this.chartData)
@@ -391,18 +324,11 @@ import toprightControl from "../../components/toprightControl.vue"
             this.placeForm ={
               city: '',
               area: '',
-              group:'',
-              
+              group:''
             }
-            this.dataParams={
-              city: '',
-              area: '',
-              group:'',
-              page: 1,
-              limit:5
-            },
             this.getNewDate()
-            this.selectDate = ''
+            this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
+            this.changChart()
           }
         }
     }

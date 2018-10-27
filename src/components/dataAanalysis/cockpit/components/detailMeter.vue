@@ -1,25 +1,27 @@
 <template>
   <div v-if="showDetailMeter" id="detailMeter">
+    {{mainchartItem}}
+    {{chartItems}}
     <el-container>
       <el-aside width="482px">
         <header>
           <i class="el-icon-arrow-left" @click="showDetailMeter=false"></i>
-          <span>{{mainchartItem.type}}</span>
+          <span>{{detailMsg.name}}</span>
           <el-button type="primary" icon="el-icon-setting" size="mini" style="display:none">编辑模式</el-button>
         </header>
         <div class="content">
           <div class="content_top">
-            <span>{{mainchartItem.title}}</span>
-            <el-button type="primary" size="mini">设置默认显示维度</el-button>
+            <span>{{mainchartItem.name}}</span>
+            <!-- <el-button type="primary" size="mini">设置默认显示维度</el-button> -->
           </div>
           <div style="margin-top: 20px" class="content_form">
             <div class="clearfix">
-              <div class="radio_contrast" style="display:none">
+              <!-- <div class="radio_contrast" >
                 <el-radio-group v-model="radioContrast" size="mini" class="radioreset">
                   <el-radio-button label="同比"></el-radio-button>
                   <el-radio-button label="环比"></el-radio-button>
                 </el-radio-group>
-              </div>
+              </div> -->
               <div class="data_picker">
                 <el-date-picker
                   size="mini"
@@ -68,7 +70,7 @@
             </div>
           </div>
           <div class="chartCanva">
-            <component :is="mainchartItem.component"></component>
+            <component :is="mainchartItem.chart_set[0].type" :chartData="mainchartItem" :chartStyle="chartstyle" v-if="mainchartItem.chart_set"></component>
           </div>
           <div class="instructions">
             <p>
@@ -85,36 +87,11 @@
         <el-scrollbar class="content_scroll">
           <div style="width:98%">
             <el-row :gutter="20">
-              <el-col :span="12" v-for="(item,index) in chartItems" :key="index">
-                <el-card class="box-card"
-                         style="width:100%"
-                         :body-style="bodyStyle"
-                         shadow="hover">
-                  <div slot="header" class="clearfix card-header">
-                    <span>{{item.title}}</span>
-                    <div style="position: absolute;top:15px;right: 15px;">
-                      <!-- 说明弹出框 -->
-                      <el-popover
-                        placement="right-start"
-                        width="200"
-                        trigger="click"
-                        title="说明">
-                        <p>
-                          {{item.detailMsg}}
-                        </p>
-                        <el-button icon="el-icon-question" class="toprightBtn" slot="reference" circle size="mini"
-                                   type="text"></el-button>
-                      </el-popover>
-                      <el-button icon="el-icon-search" class="toprightBtn enlargebtn" circle size="mini"
-                                 type="text"></el-button>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="width:100%;height:260px;position:relative" class="chartbox">
-                      <component :is="item.component" @sendChartMsg="getChartMsg"></component>
-                    </div>
-                  </div>
-                </el-card>
+              <el-col :span="12" v-for="(item,index) in chartItems" :key="index" v-if="chartItems">
+                <chartCard id="card" :cardData="item" >
+                  <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" v-if="item.chart_set"
+                  ></component>
+                </chartCard>
               </el-col>
             </el-row>
           </div>
@@ -125,88 +102,62 @@
 </template>
 
 <script>
-  // 业绩分析
-  import achievementTotal from "../../components/achievementAnalysis/achievementTotal.vue" //业绩总额
-  import averageMonthRentPrice from "../../components/achievementAnalysis/averageMonthRentPrice.vue"  //平均每月租房单价
-  import achievementSameCompare from "../../components/achievementAnalysis/achievementSameCompare.vue"  //业绩同比增长
-  import achievementRingCompare from "../../components/achievementAnalysis/achievementRingCompare.vue"  //业绩环比增长
-  import achievementTargetRate from "../../components/achievementAnalysis/achievementTargetRate.vue"  //业绩环比增长
-  import rentOrderNumber from "../../components/achievementAnalysis/rentOrderNumber.vue"  //租房单数
-  import abnormalOrder from "../../components/achievementAnalysis/abnormalOrder.vue"  //租房单数
-
-  //盈亏分析
-  import profitLossTotal from "../../components/ProfitLossAnalysis/profitLossTotal.vue"  //盈亏总额
-  import profitLossRingCompare from "../../components/ProfitLossAnalysis/profitLossRingCompare.vue"  //盈亏金额环比
-  import profitLossSameCompare from "../../components/ProfitLossAnalysis/profitLossSameCompare.vue"  //盈亏金额同比
-  import averageMonthPrice from "../../components/ProfitLossAnalysis/averageMonthPrice.vue"  //平均租房月单价
-  import averageCollectHousePrice from "../../components/ProfitLossAnalysis/averageCollectHousePrice.vue"  //平均收房价格
-  import actualReceivablesRate from "../../components/ProfitLossAnalysis/actualReceivablesRate.vue"  //实际收入占应收款比例
-  import actualCashFlow from "../../components/ProfitLossAnalysis/actualCashFlow.vue"  //实际收入现金流
-  import averageRentCollectionPriceTrend from "../../components/ProfitLossAnalysis/averageRentCollectionPriceTrend.vue"  //平均收租价格趋势
-  import collectionRentHouseCompare from "../../components/ProfitLossAnalysis/collectionRentHouseCompare.vue"  //收租房数量对比
-
-  //违约收入分析
-  import breakPromiseProportion from "../../components/breakPromiseAnalysis/breakPromiseProportion.vue"  //违约金、滞纳金、炸单已收定金收入
-  import defaultRate from "../../components/breakPromiseAnalysis/defaultRate.vue"  //违约率占比
-  import scrapOrder from "../../components/breakPromiseAnalysis/scrapOrder.vue"  //租房炸弹数量、炸单率
-
-  //房屋运营分析
-  import houseTurnoverRate from "../../components/houseOperationAnalysis/houseTurnoverRate.vue" // 房屋周转率
-  import vacancyOffsetBalance from "../../components/houseOperationAnalysis/vacancyOffsetBalance.vue" // 空置期抵消差额
-  import collectHouseInterestIndex from "../../components/houseOperationAnalysis/collectHouseInterestIndex.vue" // 收房利益指数
-
-  //中介分析
-  import intermediaryFeeRingCompare from "../../components/intermediaryAnalysis/intermediaryFeeRingCompare.vue" // 中介费环比
-  import agencyFeeAverageDiscount from "../../components/intermediaryAnalysis/agencyFeeAverageDiscount.vue" // 中介费平均折扣
-  import agencyOrderNumberRate from "../../components/intermediaryAnalysis/agencyOrderNumberRate.vue" // 中介单数量占比
-  import agencyCompanyCostCompare from "../../components/intermediaryAnalysis/agencyCompanyCostCompare.vue" // 中介费金额与公司业绩比
-  import excellentEmployee from "../../components/intermediaryAnalysis/excellentEmployee.vue" // 中介费占业绩比最高前100名员工
+  import chartCard from "../../wareHouseData/chartCard.vue" //图表卡片
+  import basicColumn from "../../wareHouseData/chart/basicColumn.vue"          //基础柱状图
+  import bubblePoint from "../../wareHouseData/chart/bubblePoint.vue"          //气泡图
+  import donut from "../../wareHouseData/chart/donut.vue"                      //基础环图
+  import gauge from "../../wareHouseData/chart/gauge.vue"                      //仪表图
+  import groupedColumn from "../../wareHouseData/chart/groupedColumn.vue"      //分组柱状图
+  import pie from "../../wareHouseData/chart/pie.vue"                          //饼图
+  import seriesLine from "../../wareHouseData/chart/seriesLine.vue"            //折线图
+  import stackedColumn from "../../wareHouseData/chart/stackedColumn.vue"      //堆叠柱状图
+  import stackedPercentageColumn from "../../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
+  import textCard from "../../wareHouseData/chart/textCard.vue"               //文本卡片
+  import tableCard from "../../wareHouseData/chart/tableCard.vue"            //表格卡片
 
 
   export default {
     props: ['detailMeterVisible', 'detailMeterid'],
     components: {
-      achievementTotal,
-      averageMonthRentPrice,
-      achievementSameCompare,
-      achievementRingCompare,
-      achievementTargetRate,
-      rentOrderNumber,
-      abnormalOrder,
-      profitLossTotal,
-      profitLossRingCompare,
-      profitLossSameCompare,
-      averageMonthPrice,
-      averageCollectHousePrice,
-      actualReceivablesRate,
-      actualCashFlow,
-      averageRentCollectionPriceTrend,
-      collectionRentHouseCompare,
-      breakPromiseProportion,
-      defaultRate,
-      scrapOrder,
-      houseTurnoverRate,
-      vacancyOffsetBalance,
-      collectHouseInterestIndex,
-      intermediaryFeeRingCompare,
-      agencyFeeAverageDiscount,
-      agencyOrderNumberRate,
-      agencyCompanyCostCompare,
-      excellentEmployee
+      chartCard,
+      basicColumn,
+      bubblePoint,
+      donut,
+      gauge,
+      groupedColumn,
+      pie,
+      seriesLine,
+      stackedColumn,
+      stackedPercentageColumn,
+      textCard,
+      tableCard
     },
     data() {
       return {
+        params:{},
+        chartstyle:{
+          height:300
+        },
         mainchartItem: {},//主指标
-        chartItems: [],//侧边指标
-        bodyStyle: {//卡片主体样式
-          padding: '0',
-          position: 'relative',
-          height: '300px',
-          width: '100%',
-          backgroundColor: '#fff'
+        chartItems: {},//侧边指标
+        detailMsg:{
+          name:'',
+          title:'',
+        },
+        params:{ //待传参数
+          city: '',
+          area: '',
+          group:'',
+          start_date:"",
+          end_date:"",
+          date:""
+        },
+        placeForm:{ //城市信息
+          city: '',
+          area: '',
+          group:''
         },
         showDetailMeter: false,//隐藏仪表编辑页
-        chartheight: 300,
         radioContrast: "同比", //同比环比按钮
         radioCity: "全部",//选择城市按钮
         pickerOptions2: { //时间选择器
@@ -257,6 +208,39 @@
       }
     },
     methods: {
+      choose(val,id){ //城市区域选择
+        if(val=='city'){
+          this.placeForm.area = ''
+          this.placeForm.group = ''
+          this.getList("area",id)
+          // console.log(this.placeForm)
+        }else if(val=='area'){
+          this.placeForm.group = ''
+          this.getList("group",id)
+        }
+      },
+      getList(val,id){ 
+        if(val=='city'){
+          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
+            // console.log(res)
+            if(res.data.status_code == 200){
+              this.cityOption = res.data.data
+            }
+          });
+        }else if(val=="area"){
+          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+            if(res.data.status_code == 200){
+              this.areaOption = res.data.data
+            }
+          });
+        }else if(val=="group"){
+          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+            if(res.data.status_code == 200){
+              this.groupOption = res.data.data
+            }
+          });
+        }
+      },
       getChartMsg(data) {
         for (let i = 0; i < this.chartItems.length; i++) {
           if (this.chartItems[i].component == data.component) {
@@ -275,49 +259,62 @@
         }
       },
       detailMeterid(val) {
-        if (val == 0) {
-          this.mainchartItem = {component: 'achievementTotal', title: "业绩总额", type: "业绩分析"}
-          this.chartItems = [
-            {component: 'averageMonthRentPrice'},
-            {component: "achievementSameCompare"},
-            {component: "achievementRingCompare"},
-            {component: "achievementTargetRate"},
-            {component: "rentOrderNumber"},
-            {component: 'abnormalOrder'}
-          ]
-        } else if (val == 1) {
-          this.mainchartItem = {component: 'profitLossTotal', title: "盈亏总额", type: "盈亏分析"}
-          this.chartItems = [
-            {component: 'profitLossRingCompare'},
-            {component: "profitLossSameCompare"},
-            {component: "averageMonthPrice"},
-            {component: "averageCollectHousePrice"},
-            {component: 'actualReceivablesRate'},
-            {component: 'actualCashFlow'},
-            {component: 'averageRentCollectionPriceTrend'},
-            {component: 'collectionRentHouseCompare'}
-          ]
-        } else if (val == 2) {
-          this.mainchartItem = {component: 'breakPromiseProportion', title: "违约金、滞纳金、炸单已收定金收入", type: "违约收入分析"}
-          this.chartItems = [
-            {component: 'defaultRate'},
-            {component: "scrapOrder"},
-          ]
-        } else if (val == 3) {
-          this.mainchartItem = {component: 'houseTurnoverRate', title: "房屋周转率", type: "房屋运营分析"}
-          this.chartItems = [
-            {component: 'vacancyOffsetBalance'},
-            {component: "collectHouseInterestIndex"},
-          ]
-        } else if (val == 4) {
-          this.mainchartItem = {component: 'intermediaryFeeRingCompare', title: "中介费环比", type: "中介分析"}
-          this.chartItems = [
-            {component: "agencyFeeAverageDiscount"},
-            {component: "agencyOrderNumberRate"},
-            {component: "agencyCompanyCostCompare"},
-            {component: "excellentEmployee"},
-          ]
-        }
+        val = 8
+        this.$http.get(globalConfig.server + "bisys/dashboard/" + val, {
+          headers: {"Accept": "application/vnd.boss18+json"}
+        }).then((res) => {
+          // console.log(res)
+            if (res.data.code == "20020") {
+              this.detailMsg.name= res.data.data.name
+              this.mainchartItem = res.data.data.topic
+              this.chartItems = res.data.data.cards
+            } else {
+             this.prompt('error',res.data.msg)
+            }
+          });
+        // if (val == 0) {
+        //   this.mainchartItem = {component: 'achievementTotal', title: "业绩总额", type: "业绩分析"}
+        //   this.chartItems = [
+        //     {component: 'averageMonthRentPrice'},
+        //     {component: "achievementSameCompare"},
+        //     {component: "achievementRingCompare"},
+        //     {component: "achievementTargetRate"},
+        //     {component: "rentOrderNumber"},
+        //     {component: 'abnormalOrder'}
+        //   ]
+        // } else if (val == 1) {
+        //   this.mainchartItem = {component: 'profitLossTotal', title: "盈亏总额", type: "盈亏分析"}
+        //   this.chartItems = [
+        //     {component: 'profitLossRingCompare'},
+        //     {component: "profitLossSameCompare"},
+        //     {component: "averageMonthPrice"},
+        //     {component: "averageCollectHousePrice"},
+        //     {component: 'actualReceivablesRate'},
+        //     {component: 'actualCashFlow'},
+        //     {component: 'averageRentCollectionPriceTrend'},
+        //     {component: 'collectionRentHouseCompare'}
+        //   ]
+        // } else if (val == 2) {
+        //   this.mainchartItem = {component: 'breakPromiseProportion', title: "违约金、滞纳金、炸单已收定金收入", type: "违约收入分析"}
+        //   this.chartItems = [
+        //     {component: 'defaultRate'},
+        //     {component: "scrapOrder"},
+        //   ]
+        // } else if (val == 3) {
+        //   this.mainchartItem = {component: 'houseTurnoverRate', title: "房屋周转率", type: "房屋运营分析"}
+        //   this.chartItems = [
+        //     {component: 'vacancyOffsetBalance'},
+        //     {component: "collectHouseInterestIndex"},
+        //   ]
+        // } else if (val == 4) {
+        //   this.mainchartItem = {component: 'intermediaryFeeRingCompare', title: "中介费环比", type: "中介分析"}
+        //   this.chartItems = [
+        //     {component: "agencyFeeAverageDiscount"},
+        //     {component: "agencyOrderNumberRate"},
+        //     {component: "agencyCompanyCostCompare"},
+        //     {component: "excellentEmployee"},
+        //   ]
+        // }
       }
     }
   }
