@@ -3,10 +3,10 @@
     <!-- 图表展示 -->
     <div>
       <el-row :gutter="20" >
-        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.name == '异常单列表'">
+        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
-            <component :status="item.chart_set[0].type=='tableCard'?true:false" :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
+            <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
             ></component>
           </chartCard>
         </el-col>

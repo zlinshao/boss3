@@ -29,7 +29,7 @@
                     </el-popover>
                   </div>
                   <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%"
-                       @click='showDetailMeterEven(index)'>
+                       @click='showDetailMeterEven(item.id)'>
                     <img src="@/assets/images/meter2.png" alt="">
                   </div>
                 </div>
@@ -203,9 +203,9 @@
         this.personalActiveIndex = -1;
         this.meterPopdisabled = false
       },
-      showDetailMeterEven(index) {//仪表详细页面显示
+      showDetailMeterEven(id) {//仪表详细页面显示
         this.showDetailMeter = true;
-        this.detailMeterId = index
+        this.detailMeterId = id
       },
       showInp(val, index, id) {	//显示更改仪表盘名称输入框
         this.meterName = val.name;
@@ -295,6 +295,7 @@
           if (res.data.code === "20000") {
             let data = res.data.data.data;
             this.publicMeter = data.public;
+            console.log(this.publicMeter)
             if (data.private) {
               this.privateMeter = data.private;
             } else {

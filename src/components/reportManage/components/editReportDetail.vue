@@ -2,6 +2,7 @@
   <div id="reportDetail">
     <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%"
                class="reportDialog">
+      {{phone}}
       <div style="min-height: 550px" v-loading="fullLoading"
            element-loading-text="拼命加载中"
            element-loading-spinner="el-icon-loading"
@@ -293,7 +294,7 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="signaturebtn" type="success" v-if="signature">签&nbsp;章</el-button>
+        <el-button @click="signaturebtn" type="success" v-if="signature" >确&nbsp;定</el-button>
         <el-button @click="sendElectronicReceipt" type="success" v-if="!signature">发送电子数据</el-button>
         <el-button @click="electronicReceiptVisible = false">取&nbsp;消</el-button>
       </span>
@@ -421,6 +422,7 @@
         sendElectronicReceiptBtnText: "发送电子收据", //发送电子收据按钮文字
         electronicReceiptParam: {},//电子数据参数
         ElectronicReceiptBtnColor: "success",
+        pdfLoadingStatus:true,
         bank: {},//银行数据
         signature: true,//签章按钮显示隐藏
         pdfloading: true,//pdf加载
@@ -495,16 +497,16 @@
     watch: {
       place: {
         handler(newval,oldval){
-          if (newval.name == "fund-master_review" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
+          // if (newval.name == "fund-master_review" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
+          if (newval.status == "published"&&oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
             if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" ||this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
               this.createElectronicReceipt()
             }
           }
         },
         deep:true
-       
       },
-
+      
       module(val) {
         this.reportVisible = val;
         if (!val) {
@@ -583,6 +585,7 @@
         // console.log(this.bank);
         // console.log({...this.electronicReceiptParam, ...this.bank});
         this.fullLoading = true;
+        this.pdfloading = true;
         this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20001') {
@@ -611,6 +614,7 @@
             this.electronicReceiptId = res.data.data.id;
             this.pdfUrl = res.data.data.shorten_uri;
             this.signature = true
+            this.pdfLoadingStatus = false
           } else {
             this.$notify.error({
               title: '错误',
@@ -622,13 +626,14 @@
       },
       //电子收据签章
       signaturebtn() {
-        // this.pdfloading = true;
+        this.pdfloading = true;
         this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
           if (res.data.code === "20000") {
-            // this.pdfloading = false;
-            // this.pdfUrl = res.data.data.shorten_uri;
-            this.directSendElectronicReceipt()
-            this.electronicReceiptVisible = false
+            this.pdfloading = false;
+            this.pdfUrl = res.data.data.shorten_uri;
+            
+            // this.directSendElectronicReceipt()
+            // this.electronicReceiptVisible = false
             this.signature = false
           } else {
 
@@ -752,8 +757,8 @@
               this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
                 if (res.data.code === "20000") {
                   if (res.data.data.is_sent) {
-                    this.sendElectronicReceiptBtnText = "已发送电子收据";
-                    this.ElectronicReceiptBtnColor = "info"
+                    this.sendElectronicReceiptBtnText = "发送电子收据";
+                    this.ElectronicReceiptBtnColor = "success"
                   } else {
                     this.sendElectronicReceiptBtnText = "发送电子收据";
                     this.ElectronicReceiptBtnColor = "success"
