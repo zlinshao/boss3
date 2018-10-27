@@ -70,8 +70,7 @@ const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.v
 
 //考勤管理
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
-const WatchArrange = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/index.vue'); //查看排班
-const MarkInfo = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/markInfo/index.vue'); //标记信息
+const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue')
@@ -378,6 +377,12 @@ export default new Router({
       abnormal: true,
       isShortcut: true,
       children: [
+        {
+          path: '/editArrange',
+          component: EditArrange,
+          name: '编辑排班',
+          props:true
+        }, 
         {path: '/clientManage', component: ClientManage, name: ' 客户管理 ', icon: "iconfont icon-kehu"},
         // {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon: "iconfont icon-guizhangzhidu"},
@@ -529,51 +534,51 @@ export default new Router({
       ]
     },
     //write by shuisheng 2018-10-24
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: '考勤管理',
-    //   icon: 'el-icon-document',
-    //   children: [
-    //     {
-    //       path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
-    //       children: [
-    //         {
-    //           path: '/watchArrange',component: WatchArrange, name: '查看排班',
-    //           children: [
-    //             {
-    //               path: '/',component: MarkInfo, name: '标记信息'
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
-    //     },
-    //     {
-    //       path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: 'HRM',
-    //   icon: 'iconfont icon-renzi',
-    //   children: [
-    //     {
-    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
-    //       children: [
-    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
-    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-    //         {path: '/dimission', component: Dimission, name: '离职管理'},
-    //       ],
-    //     },
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: '考勤管理',
+      icon: 'el-icon-document',
+      children: [
+        {
+          path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
+          children: [
+            {
+              path: '/watchArrange',component: WatchArrange, name: '查看排班',
+              children: [
+                {
+                  path: '/',component: MarkInfo, name: '标记信息'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
+        },
+        {
+          path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
+        }
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: 'HRM',
+      icon: 'iconfont icon-renzi',
+      children: [
+        {
+          path: '/teamManage', component: TeamManage, name: '人员信息管理',
+          children: [
+            {path: '/teamManage/roster', component: Roster, name: '花名册'},
+            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+            {path: '/dimission', component: Dimission, name: '离职管理'},
+          ],
+        },
+      ]
+    },
     {
       path: '/staffDetail',
       component: StaffDetail,
