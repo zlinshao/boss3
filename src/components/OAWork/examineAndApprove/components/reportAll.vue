@@ -99,6 +99,7 @@
       <div class="main">
         <div>
           <el-table
+            :cell-style="changeStyle"
             :empty-text='tableStatus'
             v-loading="tableLoading"
             element-loading-text="拼命加载中"
@@ -224,6 +225,7 @@
         tableLoading: false,
         reportModule: false,
         reportID: '',
+        approveStatus:''
       }
     },
     watch: {
@@ -415,6 +417,29 @@
       closeFrame(val) {
         this.reportModule = false;
       },
+      changeStyle({row, column, rowIndex, columnIndex}) {
+        // console.log(row) //表头行标号为0
+        // console.log(columnIndex)
+        // console.log(1111111111111)
+        if(columnIndex === 5){
+          if(row.status === 'review'){
+            if(row.place === '片区经理审批中'){
+              return 'color:blue'
+            }else{
+              return 'color:orange'
+            }
+          }
+          if(row.status === 'published'){
+            return 'color:green'
+          }
+          if(row.status === 'cancelled'){
+            return 'color:gray'
+          }
+          if(row.status === 'rejected'){
+            return 'color:red'
+          }
+        }
+      }
     }
   }
 </script>
