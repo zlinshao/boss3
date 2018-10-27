@@ -6,7 +6,6 @@
       <div class="loadingBoss"></div>
       <div class="loadingTitle">Loading.....</div>
     </div>
-
     <div class="container" v-if="underWay">
 
       <div class="login_main" v-if="!isMessage">
@@ -18,7 +17,7 @@
           <img src="../assets/images/slogan.png" style="width: 100%" alt="">
         </div>
         <div class="login_type">
-          <div @click="sweepCode('ding')">
+          <div @click="sweepCode">
             <div>
               <img src="../assets/images/dd1.png" alt="">
             </div>
@@ -30,7 +29,7 @@
             <div style="color:#fb4699;">手机号</div>
             <div>快速登录</div>
           </div>
-          <div @click="sweepCode('wei')">
+          <div>
             <div><img src="../assets/images/weixin2.png" alt=""></div>
             <div style="color: #58d788">微信 - 扫码</div>
             <div>一键登录</div>
@@ -94,6 +93,94 @@
 
       </div>
     </div>
+
+    <!--小飞-->
+    <div class="container" style="margin-top: 500px;" v-if="underWay">
+      <div class="login_main" v-if="!isMessage">
+        <div class="beijing"></div>
+        <div class="logo">
+          <img src="../assets/images/maotou.png" alt="">
+        </div>
+        <div style="text-align: center;color: red;">小飞</div>
+        <div class="slogan">
+          <img src="../assets/images/slogan.png" style="width: 100%" alt="">
+        </div>
+        <div class="login_type">
+          <div @click="sweepCodeFly('ding')">
+            <div>
+              <img src="../assets/images/dd1.png" alt="">
+            </div>
+            <div style="color:#6a8dfb;">钉钉 - 扫码</div>
+            <div>一键登录</div>
+          </div>
+          <div @click="messageLogin">
+            <div><img src="../assets/images/sj.png" alt=""></div>
+            <div style="color:#fb4699;">手机号</div>
+            <div>快速登录</div>
+          </div>
+          <div @click="sweepCodeFly('wei')">
+            <div><img src="../assets/images/weixin2.png" alt=""></div>
+            <div style="color: #58d788">微信 - 扫码</div>
+            <div>一键登录</div>
+          </div>
+        </div>
+      </div>
+      <div v-if="isMessage" class="messageLogin">
+        <div class="top">
+          <div class="beijing"></div>
+          <div class="logo">
+            <img src="../assets/images/maotou.png" alt="">
+          </div>
+          <div class="slogan">
+            <img src="../assets/images/slogan.png" style="width: 100%" alt="">
+          </div>
+        </div>
+        <div class="formItem" v-if="loginModel==2">
+          <el-input placeholder="请输入手机号" v-model="phone">
+            <template slot="append">
+              <span class="china">中国</span> +86
+            </template>
+          </el-input>
+          <el-input placeholder="请输入4位短信验证码" @keyup.enter.native="sureLoginFly(identifyingCode)"
+                    v-model="identifyingCode">
+
+            <el-button slot="append" style="width: 102px;" size="small" v-if="!loading" type="success"
+                       @click.native="phoneLoginFly()">
+              获取验证码
+            </el-button>
+
+            <el-button slot="append" style="width: 102px;" size="small" v-if="loading" :disabled="loading"
+                       type="success">发送中({{loadingNum}})
+            </el-button>
+          </el-input>
+
+          <div style="display: flex;justify-content: flex-end;margin-top: 20px">
+            <el-button type="text" @click="isMessage=false">更换登录方式</el-button>
+          </div>
+
+          <div class="confirmLogin">
+            <el-button size="medium" type="primary" @click.native.prevent="sureLoginFly(identifyingCode)">登 录
+            </el-button>
+          </div>
+        </div>
+        <div v-if="loginModel == 1">
+          <div class="dingLogin">
+            <div><img src="../assets/images/dd1.png" alt=""></div>
+            <div style="color:#6a8dfb;">钉钉 - 扫码</div>
+            <div>一键登录</div>
+          </div>
+        </div>
+
+        <div v-if="loginModel == 3">
+          <div class="dingLogin">
+            <div><img src="../assets/images/weixin2.png" alt=""></div>
+            <div style="color: #58d788">微信 - 扫码</div>
+            <div>一键登录</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -118,7 +205,7 @@
       };
     },
     mounted() {
-//      this.getBackground();
+      this.getBackground();
       if (JSON.stringify(this.$route.query) !== '{}') {
         let phone = this.$route.query.phone;
         let code = this.$route.query.code;
@@ -128,34 +215,20 @@
       document.getElementById('login').style.height = window.innerHeight + 'px';
     },
     methods: {
-      phoneLogin() {
-        this.$http.post(globalConfig.server_token + 'api/v1/sms', {
-          phone: this.phone,
-        }).then((res) => {
+      // 验证码
+      phoneLoginFly() {
+        this.$http.get(globalConfig.server + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
           let msg = res.data.message;
-          if (res.data.status === 'success') {
+          if (res.data.code === '20000') {
             this.countDown();
             this.loading = true;
-            this.$message({
-              message: msg,
-              type: 'success'
-            });
+            this.prompt('success', res.data.msg);
           } else {
-            if (typeof msg !== 'string') {
-              this.$message({
-                message: res.data.message.phone[0],
-                type: 'info'
-              });
-            } else {
-              this.$message({
-                message: res.data.message,
-                type: 'info'
-              });
-            }
+            this.prompt('warning', res.data.msg);
           }
         })
       },
-
+      // 倒计时
       countDown() {
         new Promise((resolve, reject) => {
           let interval = setInterval(() => {
@@ -170,7 +243,52 @@
           }, 1000)
         })
       },
+      // 短信登录
+      sureLoginFly(code) {
+        this.$http.post(globalConfig.server + 'organization/user_authorize/login', {
+          channel: 'sms',
+          authorization: code,
+        }).then((res) => {
+          if (res.data.code === '20000') {
 
+            this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+              localStorage.setItem('personal', JSON.stringify(res.data.data));
+              globalConfig.personal = res.data.data.data;
+              let badge = true;
+              this.$store.dispatch('badgeFlag', badge);
+              this.$router.push({path: '/main'});
+            });
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
+      },
+      // 二维码登录
+      sweepCodeFly(val) {
+        if (val === 'wei') {
+          window.location.href = 'http://test.v3.api.boss.lejias.cn/organization/user_authorize/qrcode?channel=wechat'
+        } else {
+          window.location.href = 'http://test.v3.api.boss.lejias.cn/organization/user_authorize/qrcode?channel=ding'
+        }
+      },
+      phoneLogin() {
+        this.$http.post(globalConfig.server_token + 'api/v1/sms', {
+          phone: this.phone,
+        }).then((res) => {
+          let msg = res.data.message;
+          if (res.data.status === 'success') {
+            this.countDown();
+            this.loading = true;
+            this.prompt('success', res.data.message);
+          } else {
+            if (typeof msg !== 'string') {
+              this.prompt('warning', res.data.message.phone[0]);
+            } else {
+              this.prompt('warning', res.data.message);
+            }
+          }
+        })
+      },
       sureLogin(a, b) {
         this.$http.post(globalConfig.server_token + 'oauth/token', {
           client_secret: globalConfig.client_secret,
@@ -192,14 +310,8 @@
           });
         });
       },
-      sweepCode(val) {
-        if (val === 'wei') {
-          // this.$http.get(globalConfig.server + 'company_wechat_login').then(res => {
-          //
-          // })
-        } else {
-          window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
-        }
+      sweepCode() {
+        window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
       },
       //背景特效
       getBackground() {
@@ -489,7 +601,7 @@
       background: #FFFFFF;
       position: absolute;
       box-sizing: border-box;
-      top: 50%;
+      top: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
       /*border: 1px solid rgba(106, 141, 251, .12);*/

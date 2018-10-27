@@ -74,7 +74,7 @@
     props: ['module', 'title', 'addID', 'msg', 'names'],
     data() {
       return {
-        urls: globalConfig.server_user,
+        urls: globalConfig.server,
         dialogVisible: false,
 
         checked: false,
@@ -134,29 +134,29 @@
       // ===============系统新增/修改=================
       addPower(val) {
         if (val === '修改') {
-          this.$http.put(this.urls + 'systems/' + this.form.ids, {
+          this.$http.put(this.urls + 'organization/System/' + this.form.ids, {
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.status === 'success') {
-              this.prompt(res.data.message, 1);
+            if (res.data.code === '20030') {
+              this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
             } else {
-              this.prompt(res.data.message, 2);
+              this.prompt(res.data.msg, 2);
             }
           })
         } else {
-          this.$http.post(this.urls + 'systems', {
+          this.$http.post(this.urls + 'organization/System', {
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.status === 'success') {
-              this.prompt(res.data.message, 1);
+            if (res.data.code === '20030') {
+              this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
             } else {
-              this.prompt(res.data.message, 2);
+              this.prompt(res.data.msg, 2);
             }
           })
         }
@@ -165,30 +165,30 @@
       // ====================新增/修改模块==============
       addModule(val) {
         if (val === '修改') {
-          this.$http.put(this.urls + 'modules/' + this.form.ids, {
+          this.$http.put(this.urls + 'organization/module/' + this.form.ids, {
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.status === 'success') {
-              this.prompt(res.data.message, 1);
+            if (res.data.code === '20030') {
+              this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
             } else {
-              this.prompt(res.data.message, 2);
+              this.prompt(res.data.msg, 2);
             }
           })
         } else {
-          this.$http.post(this.urls + 'modules', {
+          this.$http.post(this.urls + 'organization/module', {
             sys_id: this.addID.firstID,
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.status === 'success') {
-              this.prompt(res.data.message, 1);
+            if (res.data.code === '20030') {
+              this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
             } else {
-              this.prompt(res.data.message, 2);
+              this.prompt(res.data.msg, 2);
             }
           })
         }
@@ -197,22 +197,22 @@
       // ===================新增/修改权限=================
       authorityModule(val) {
         if (val === '修改') {
-          this.$http.put(this.urls + 'permissions/' + this.form.ids, {
+          this.$http.put(this.urls + 'organization/permission/' + this.form.ids, {
             mod_id: this.addID.secondID,
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.status === 'success') {
-              this.prompt(res.data.message, 1);
+            if (res.data.code === '20030') {
+              this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
               this.$emit('close');
             } else {
-              this.prompt(res.data.message, 2);
+              this.prompt(res.data.msg, 2);
             }
           })
         } else {
-          this.$http.post(this.urls + 'permissions', {
+          this.$http.post(this.urls + 'organization/permission', {
             type: this.form.radio,
             sys_id: this.addID.firstID,
             mod_id: this.addID.secondID,
@@ -220,8 +220,8 @@
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.status === 'success') {
-              this.prompt(res.data.message, 1);
+            if (res.data.code === '20030') {
+              this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
               if (this.checked) {
                 this.close_();
@@ -229,7 +229,7 @@
                 this.$emit('close');
               }
             } else {
-              this.prompt(res.data.message, 2);
+              this.prompt(res.data.msg, 2);
             }
           })
         }
@@ -256,30 +256,45 @@
             type: 'success'
           });
         } else {
-          let dataList = [];
-          let index = 0;
-          let interval = null;
-          for (let key in val) {
-            dataList.push(val[key][0]);
-          }
-          new Promise((resolve, reject) => {
-            interval = setInterval(() => {
-              this.$notify({
-                title: '警告',
-                message: dataList[index],
-                type: 'warning'
-              });
-              index++;
-              if (index === dataList.length) {
-                resolve()
-              }
-            }, 100)
-          }).then(() => {
-            clearInterval(interval);
-            interval = null;
-          })
+          this.$notify({
+            title: '警告',
+            message: val,
+            type: 'warning'
+          });
         }
       },
+      // prompt(val, stu) {
+      //   if (stu === 1) {
+      //     this.$notify({
+      //       title: '成功',
+      //       message: val,
+      //       type: 'success'
+      //     });
+      //   } else {
+      //     let dataList = [];
+      //     let index = 0;
+      //     let interval = null;
+      //     for (let key in val) {
+      //       dataList.push(val[key][0]);
+      //     }
+      //     new Promise((resolve, reject) => {
+      //       interval = setInterval(() => {
+      //         this.$notify({
+      //           title: '警告',
+      //           message: dataList[index],
+      //           type: 'warning'
+      //         });
+      //         index++;
+      //         if (index === dataList.length) {
+      //           resolve()
+      //         }
+      //       }, 100)
+      //     }).then(() => {
+      //       clearInterval(interval);
+      //       interval = null;
+      //     })
+      //   }
+      // },
     },
   }
 </script>

@@ -70,7 +70,8 @@ const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.v
 
 //考勤管理
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
-const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
+const WatchArrange = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/index.vue'); //查看排班
+const MarkInfo = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/markInfo/index.vue'); //标记信息
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue')
@@ -377,12 +378,6 @@ export default new Router({
       abnormal: true,
       isShortcut: true,
       children: [
-        {
-          path: '/editArrange',
-          component: EditArrange,
-          name: '编辑排班',
-          props:true
-        }, 
         {path: '/clientManage', component: ClientManage, name: ' 客户管理 ', icon: "iconfont icon-kehu"},
         // {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon: "iconfont icon-guizhangzhidu"},
@@ -541,24 +536,13 @@ export default new Router({
       icon: 'el-icon-document',
       children: [
         {
-          path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
-          // children: [
-          //   {
-          //     // path: '/watchArrange',component: WatchArrange, name: '查看排班',
-          //     children: [
-          //       {
-          //         // path: '/',component: MarkInfo, name: '标记信息'
-          //       }
-          //     ]
-          //   }
-          // ]
+          path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置',
+          children: [
+            {path: '/watchArrange', component: WatchArrange, name: '查看排班'}
+          ]
         },
-        {
-          path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
-        },
-        {
-          path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
-        }
+        {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
+        {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
       ]
     },
     {
@@ -666,7 +650,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-        // {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
+        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {
