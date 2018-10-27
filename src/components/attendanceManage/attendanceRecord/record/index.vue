@@ -3,7 +3,7 @@
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
-        <el-button type="primary" @click="collapseClick">{{collapse}}</el-button>
+        <el-button type="primary" @click="collapseClick" size="small">{{collapse}}</el-button>
       </div>
       <el-checkbox-group v-model="checkList" v-show="this.collapse == '收起'">
         <el-checkbox :label="item.name" v-for="(item, index) in this.celeckList" :key="index" @change="selecked(item)" :disabled="item.disabled" :checked="item.disabled"></el-checkbox>
@@ -19,18 +19,17 @@
       <el-input v-model="inputName" placeholder="请输入内容" size="small"></el-input>
     </div>
     <div class="selectTips">
-      <el-select v-model="selectValue" placeholder="请选择" size="small">
-        <el-option v-for="item in selectOptions" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
+      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="small">
+        <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
+      </el-input>
     </div>
     <div class="resignation">
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
     </div>
     <div class="btn">
-      <el-button type="primary">确定</el-button>
-      <el-button type="primary">同步考勤记录</el-button>
-      <el-button type="primary">导出</el-button>
+      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small">同步考勤记录</el-button>
+      <el-button type="primary" size="small">导出</el-button>
     </div>
     <div class="table">
       <el-table :data="tableData" border style="width: 100%">
@@ -54,14 +53,41 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="block pages">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 100, 200, 300, 400]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="400">
+      </el-pagination>
+    </div>
+    <!-- 组织结构 -->
+    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></organization>
   </div>
 </template>
 
 <script>
+import organization from "../../../common/organization"; // 组织架构
 export default {
   // name: '考勤记录',
+  components: { organization },
   data() {
     return {
+      params: {
+        pages: 1,
+        limit: 12,
+        keywords: "",
+        follow_status: "",
+        follow_id: "",
+        create_time: [],
+        follow_time: "",
+        update_time: "",
+        finish_time: "",
+        type: "",
+        module: 1
+      },
+      follow_name: "", //跟进人
+      //模态框
+      organizationDialog: false,
+      length: 0,
+      type: "",
+      organizeVisible: false, // 组织架构
       collapse: "收起",
       checkList: [],
       valueTime: [
@@ -76,8 +102,8 @@ export default {
         { name: "工号", prop: "jobNumber", state: false, disabled: true },
         { name: "姓名", prop: "name", state: false, disabled: true },
         { name: "部门", prop: "department", state: false, disabled: true },
-        { name: "班次", prop: "shift", state: false, disabled: true },
-        { name: "职位", prop: "position", state: false },
+        { name: "职位", prop: "position", state: false, disabled: true },
+        { name: "班次", prop: "shift", state: false },
         { name: "日期", prop: "date", state: false },
         { name: "休息天数", prop: "restDay", state: false },
         { name: "上午上班", prop: "morningWork", state: false },
@@ -94,22 +120,34 @@ export default {
         { name: "早退次数", prop: "earlyRetreat", state: false },
         { name: "早退时长", prop: "earlyDepartureTime", state: false },
         { name: "上班缺卡次数", prop: "numberMissedCardsWork", state: false },
-        { name: "下班缺卡次数", prop: "numberMissedCardsOffWork", state: false},
+        {
+          name: "下班缺卡次数",
+          prop: "numberMissedCardsOffWork",
+          state: false
+        },
         { name: "旷工天数", prop: "daysCompletion", state: false },
         { name: "出差", prop: "travel", state: false },
         { name: "请假", prop: "leave", state: false }
       ],
       seleckedList: [
-        { name: "工号", prop: "jobNumber", state: false },
-        { name: "姓名", prop: "name", state: false },
-        { name: "部门", prop: "department", state: false },
-        { name: "班次", prop: "shift", state: false }
+        { name: "工号", prop: "jobNumber", state: true },
+        { name: "姓名", prop: "name", state: true },
+        { name: "部门", prop: "department", state: true },
+        { name: "职位", prop: "position", state: true }
       ],
-      selectOptions: [],
-      selectValue: ''
+      selectValue: "",
+      currentPage: 1
     };
   },
   methods: {
+    // 部门员工筛选
+    openOrganize() {
+      this.organizeVisible = true;
+    },
+    // 部门员工筛选
+    closeOrganize() {
+      this.organizeVisible = false;
+    },
     collapseClick() {
       return (this.collapse = this.collapse == "收起" ? "展示" : "收起");
     },
@@ -125,10 +163,48 @@ export default {
       console.log(item);
     },
     selecked(val) {
+      // 选择和删除选项
       val.state = !val.state;
-      return val.state
-        ? this.seleckedList.push(val)
-        : this.seleckedList.pop(val);
+      if (val.state) {
+        this.seleckedList.push(val);
+      } else {
+        this.seleckedList.forEach(item => {
+          if (!item.state) {
+            this.seleckedList[this.seleckedList.indexOf(item)] = null;
+            this.seleckedList.splice(this.seleckedList.indexOf(null), 1);
+          }
+        });
+      }
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    //选人组件
+    openOrganizeModal() {
+      this.organizationDialog = true;
+      this.type = "staff";
+      this.length = 5;
+    },
+    selectMember(val) {
+      this.type = "";
+      this.length = "";
+      val.forEach(item => {
+        this.params.follow_id += item.id + ",";
+        this.follow_name += item.name + ",";
+      });
+      this.params.follow_id = this.params.follow_id.substring(0, this.params.follow_id.length - 1);
+      this.follow_name = this.follow_name.substring(0, this.follow_name.length - 1);
+    },
+    // 关闭模态框
+    closeModal() {
+      this.organizationDialog = false;
+    },
+    emptyFollowPeople() {
+      this.params.follow_id = "";
+      this.follow_name = "";
     }
   }
 };
@@ -157,6 +233,7 @@ export default {
   .resignation,
   .btn {
     display: inline-block;
+    vertical-align: top;
   }
   .nameInput {
     margin: 0 40px;
@@ -170,6 +247,9 @@ export default {
   }
   .table {
     margin-top: 10px;
+  }
+  .has-gutter {
+    max-height: 72px;
   }
 }
 </style>
