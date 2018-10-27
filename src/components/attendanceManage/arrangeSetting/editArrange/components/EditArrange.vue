@@ -4,7 +4,7 @@
             <el-row>
                 <el-col span="12">
                     排班月份
-                    <div class="time" >{{date}}</div>
+                    <div class="time">{{date}}</div>
                 </el-col>
                 <el-col span="12">
                     应用对象
@@ -34,33 +34,29 @@
 </template>
 
 <script>
-import GetDateList from './currentData.js'
+import GetDateList from "./currentData.js";
 export default {
   name: "editArrange",
   props: ["date"],
   data() {
-      return {
-          time: '',
-          tableData: [{
-              one: 1,
-              two: 2,
-              three: 3,
-              four: 4,
-              five: 5,
-              six: 6,
-              seven: 7
-          }]
-      }
+    return {
+      time: "",
+      tableData: [],
+      
+    };
   },
   created() {
-      console.log(GetDateList());
-      
+    console.log(GetDateList());
+  
   },
-  mehtod: {
-      getDay() {
-          let currentDate = new Date();
-      }
-  }
+  methods: {
+ 
+      
+    },
+
+    getDay() {
+      let currentDate = new Date();
+    }
 };
 </script>
 
@@ -71,9 +67,9 @@ export default {
     padding-bottom: 10px;
   }
   .time {
-      display: inline-block;
-      padding: 4px 10px;
-      border:  1px solid #dcdfe6;
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #dcdfe6;
   }
 }
 </style>
