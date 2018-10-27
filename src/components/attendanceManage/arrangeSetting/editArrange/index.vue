@@ -147,7 +147,7 @@
             :visible.sync="outputShow"
             width="60%"
            >
-                <EditArrange date="2018-10-26"/> 
+                <EditArrange :date="this.currentMonth"/> 
            </el-dialog>
        </div>
 

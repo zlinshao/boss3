@@ -68,8 +68,9 @@ const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/i
 const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
-//考勤管理
+//考勤管理 ../components/attendanceManage/arrangeSetting/watchArrange/index.vue
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
+const WatchArrange = () => import('../components/attendanceManage/arrangeSetting/watchArrange/index.vue')
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 
 // 考勤记录
@@ -547,7 +548,7 @@ export default new Router({
               path: '/watchArrange',component: WatchArrange, name: '查看排班',
               children: [
                 {
-                  path: '/',component: MarkInfo, name: '标记信息'
+                  path: '/', component: EditArrange, name: '标记信息'
                 }
               ]
             }
