@@ -37,15 +37,13 @@
       }
     },
     created() {
-      if (localStorage.myData !== undefined) {
-        let head = JSON.parse(localStorage.myData);
-        globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-      }
-
+      // if (localStorage.myData !== undefined) {
+      //   let head = JSON.parse(localStorage.myData);
+      //   globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+      // }
       if (localStorage.personal !== undefined) {
         globalConfig.personal = JSON.parse(localStorage.personal);
       }
-
       this.responses();
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
@@ -59,7 +57,6 @@
         return this.$store.state.app.isLoading;
       }
     },
-
     methods: {
       responses() {
         let that = this;
@@ -73,9 +70,9 @@
                   confirmButtonText: '确定',
                   callback: action => {
                     that.loginIndex++;
-                    localStorage.removeItem('myData');
+                    // localStorage.removeItem('myData');
                     localStorage.removeItem('personal');
-                    globalConfig.header.Authorization = '';
+                    // globalConfig.header.Authorization = '';
                     that.$router.push({path: '/login'});
                   }
                 });

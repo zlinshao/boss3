@@ -54,7 +54,7 @@
               <span class="china">中国</span> +86
             </template>
           </el-input>
-          <el-input placeholder="请输入4位短信验证码" @keyup.enter.native="sureLogin(phone, identifyingCode)"
+          <el-input placeholder="请输入4位短信验证码" @keyup.enter.native="sureLogin(identifyingCode)"
                     v-model="identifyingCode">
 
             <el-button slot="append" style="width: 102px;" size="small" v-if="!loading" type="success"
@@ -72,7 +72,7 @@
           </div>
 
           <div class="confirmLogin">
-            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)">登 录
+            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(identifyingCode)">登 录
             </el-button>
           </div>
         </div>
@@ -119,43 +119,29 @@
     },
     mounted() {
 //      this.getBackground();
-      if (JSON.stringify(this.$route.query) !== '{}') {
-        let phone = this.$route.query.phone;
-        let code = this.$route.query.code;
-        this.sureLogin(phone, code);
-        this.underWay = false;
-      }
+//       if (JSON.stringify(this.$route.query) !== '{}') {
+//         let phone = this.$route.query.phone;
+//         let code = this.$route.query.code;
+//         this.sureLogin(phone, code);
+//         this.underWay = false;
+//       }
       document.getElementById('login').style.height = window.innerHeight + 'px';
     },
     methods: {
+      // 验证码
       phoneLogin() {
-        this.$http.post(globalConfig.server_token + 'api/v1/sms', {
-          phone: this.phone,
-        }).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
           let msg = res.data.message;
-          if (res.data.status === 'success') {
+          if (res.data.code === '20000') {
             this.countDown();
             this.loading = true;
-            this.$message({
-              message: msg,
-              type: 'success'
-            });
+            this.prompt('success', res.data.msg);
           } else {
-            if (typeof msg !== 'string') {
-              this.$message({
-                message: res.data.message.phone[0],
-                type: 'info'
-              });
-            } else {
-              this.$message({
-                message: res.data.message,
-                type: 'info'
-              });
-            }
+            this.prompt('warning', res.data.msg);
           }
         })
       },
-
+      // 倒计时
       countDown() {
         new Promise((resolve, reject) => {
           let interval = setInterval(() => {
@@ -170,35 +156,68 @@
           }, 1000)
         })
       },
-
-      sureLogin(a, b) {
-        this.$http.post(globalConfig.server_token + 'oauth/token', {
-          client_secret: globalConfig.client_secret,
-          client_id: globalConfig.client_id,
-          grant_type: 'password',
-          username: a,
-          password: b,
+      // 登录
+      sureLogin(code) {
+        this.$http.post(globalConfig.server + 'organization/user_authorize/login', {
+          channel: 'sms',
+          authorization: code,
         }).then((res) => {
-          localStorage.setItem('myData', JSON.stringify(res.data.data));
-          let head = res.data.data;
-          globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+          if (res.data.code === '20000') {
+            this.prompt('success', res.data.msg);
 
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-            let badge = true;
-            this.$store.dispatch('badgeFlag', badge);
-            this.$router.push({path: '/main'});
-          });
+            this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+              localStorage.setItem('personal', JSON.stringify(res.data.data));
+              globalConfig.personal = res.data.data.data;
+              let badge = true;
+              this.$store.dispatch('badgeFlag', badge);
+              this.$router.push({path: '/main'});
+            });
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+
+          // localStorage.setItem('myData', JSON.stringify(res.data.data));
+          // let head = res.data.data;
+          // globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+          //
+          // this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+          //   localStorage.setItem('personal', JSON.stringify(res.data.data));
+          //   globalConfig.personal = res.data.data.data;
+          //   let badge = true;
+          //   this.$store.dispatch('badgeFlag', badge);
+          //   this.$router.push({path: '/main'});
+          // });
         });
       },
+      // sureLogin(a, b) {
+      //   this.$http.post(globalConfig.server_token + 'oauth/token', {
+      //     client_secret: globalConfig.client_secret,
+      //     client_id: globalConfig.client_id,
+      //     grant_type: 'password',
+      //     username: a,
+      //     password: b,
+      //   }).then((res) => {
+      //     localStorage.setItem('myData', JSON.stringify(res.data.data));
+      //     let head = res.data.data;
+      //     globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+      //
+      //     this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+      //       localStorage.setItem('personal', JSON.stringify(res.data.data));
+      //       globalConfig.personal = res.data.data.data;
+      //       let badge = true;
+      //       this.$store.dispatch('badgeFlag', badge);
+      //       this.$router.push({path: '/main'});
+      //     });
+      //   });
+      // },
       sweepCode(val) {
         if (val === 'wei') {
           // this.$http.get(globalConfig.server + 'company_wechat_login').then(res => {
           //
           // })
         } else {
-          window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
+          // window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
+          window.location.href = 'http://test.v3.api.boss.lejias.cn/organization/user_authorize/qrcode?channel=ding'
         }
       },
       //背景特效

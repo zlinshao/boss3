@@ -55,8 +55,8 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
 Vue.prototype.$http = axios;
-Vue.prototype.$G2 = G2
-Vue.prototype.$DataSet = DataSet
+Vue.prototype.$G2 = G2;
+Vue.prototype.$DataSet = DataSet;
 
 
 axios.defaults.withCredentials = true;
@@ -86,11 +86,11 @@ Vue.config.productionTip = false;
 //重定向router
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
-    localStorage.removeItem('myData');
+    // localStorage.removeItem('myData');
     localStorage.removeItem('personal');
     globalConfig.header.Authorization = '';
   }
-  let data = localStorage.getItem("myData");
+  let data = localStorage.getItem("personal");
   if (to.path === '/download') {
     next();
     return;

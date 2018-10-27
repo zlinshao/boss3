@@ -83,10 +83,10 @@
       </div>
       <!--内层dialog 选择坐标-->
       <el-dialog :close-on-click-modal="false"
-        width="40%"
-        title="选取坐标"
-        :visible.sync="innerVisible"
-        append-to-body>
+                 width="40%"
+                 title="选取坐标"
+                 :visible.sync="innerVisible"
+                 append-to-body>
         <div class="map">
           <div id="mapContainer" style="width: 100%;height: 100%"></div>
           <div id="panel"></div>
@@ -134,7 +134,7 @@
   export default {
     components: {ElInput},
     props: ['FormVisible'],
-    data () {
+    data() {
       return {
         mapFormVisible: false,
         innerVisible: false,
@@ -150,16 +150,16 @@
         keywords: '',
         coordinate: '',
 
-        villageName:'',
-        address:'',
+        villageName: '',
+        address: '',
         location: '',
       }
     },
 
-    mounted(){
+    mounted() {
     },
     watch: {
-      FormVisible(val){
+      FormVisible(val) {
         this.mapFormVisible = val
       },
       mapFormVisible(val) {
@@ -171,27 +171,27 @@
           }
         }
       },
-      innerVisible(val){
+      innerVisible(val) {
         if (val) {
           setTimeout(() => {
             this.initMap();
           }, 10)
         }
       },
-      selectMember(val){
+      selectMember(val) {
         this.buttonStatus = !val.length;
       }
     },
     methods: {
 
-      getDictionary(){
+      getDictionary() {
         this.dictionary(306, 1).then((res) => {
           this.cityDictionary = res.data;
           this.isDictionary = true
         });
       },
 
-      search(){ //关键词 搜索线上高德数据
+      search() { //关键词 搜索线上高德数据
         this.$http.defaults.withCredentials = false;
         this.$http.defaults.headers = {};
         this.$http.get(addr + '&keywords=' + this.searchInfo + '&city=' + this.chooseCity).then((res) => {
@@ -202,45 +202,45 @@
             })
           }
         });
-        this.$http.defaults.withCredentials = true;
-        this.$http.defaults.headers = globalConfig.header;
-        if (localStorage.myData !== undefined) {
-          let head = JSON.parse(localStorage.myData);
-          globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-        }
+        // this.$http.defaults.withCredentials = true;
+        // this.$http.defaults.headers = globalConfig.header;
+        // if (localStorage.myData !== undefined) {
+        //   let head = JSON.parse(localStorage.myData);
+        //   globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+        // }
       },
-      closeDialog(){    //关闭模态框回调
-        if(this.isMapSearch){
-          if (Object.keys(this.selectedItem).length>0) {
+      closeDialog() {    //关闭模态框回调
+        if (this.isMapSearch) {
+          if (Object.keys(this.selectedItem).length > 0) {
             this.$emit('close', this.selectedItem);
             this.tableData = [];
             this.selectedItem = {};
             this.chooseCity = '';
             this.searchInfo = '';
             this.mapFormVisible = false;
-          }else {
+          } else {
             this.$notify.warning({
-              title:"警告",
-              message:'您尚未选择任何信息'
+              title: "警告",
+              message: '您尚未选择任何信息'
             })
           }
-        }else {
-          if(!this.villageName){
+        } else {
+          if (!this.villageName) {
             this.$notify.warning({
-              title:"警告",
-              message:'请填写小区名称！'
+              title: "警告",
+              message: '请填写小区名称！'
             })
-          }else if(!this.address){
+          } else if (!this.address) {
             this.$notify.warning({
-              title:"警告",
-              message:'请填写小区地址！'
+              title: "警告",
+              message: '请填写小区地址！'
             })
-          }else if(!this.location){
+          } else if (!this.location) {
             this.$notify.warning({
-              title:"警告",
-              message:'请选取小区坐标！'
+              title: "警告",
+              message: '请选取小区坐标！'
             })
-          }else {
+          } else {
             this.$emit('close', {
               name: this.villageName,
               address: this.address,
@@ -255,15 +255,15 @@
         }
       },
 
-      rowClick(row, event, column){
+      rowClick(row, event, column) {
         this.radio = row.id;
         this.selectedItem = row;
       },
       //选择坐标
-      enterSearch(){
+      enterSearch() {
         this.initMap();
       },
-      initMap(){
+      initMap() {
         let _this = this;
         let map = new AMap.Map("mapContainer", {
           resizeEnable: true
@@ -287,7 +287,7 @@
           });
         });
       },
-      selectCoordinate(){
+      selectCoordinate() {
         this.location = this.coordinate;
         this.innerVisible = false;
       },

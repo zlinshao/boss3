@@ -6,14 +6,14 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="角色名称" required>
-                <el-input v-model="form.display_name"  placeholder="请填写角色名称"></el-input>
+                <el-input v-model="form.display_name" placeholder="请填写角色名称"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
               <el-form-item label="角色标识" required>
-                <el-input v-model="form.name"  placeholder="请填写角色标识"></el-input>
+                <el-input v-model="form.name" placeholder="请填写角色标识"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -64,18 +64,18 @@
     },
     methods: {
       confirmAdd() {
-        this.$http.post(globalConfig.server_user+ 'roles', this.form).then((res)=>{
-          if(res.data.status === 'success') {
+        this.$http.post(globalConfig.server + 'organization/role', this.form).then((res) => {
+          if (res.data.code === '20010') {
             this.$notify.success({
               title: '成功',
-              message: res.data.message
+              message: res.data.msg
             });
             this.reviseRoleDialogVisible = false;
             this.$emit('close', 'success');
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
-              message: res.data.message
+              message: res.data.msg
             });
           }
         });
@@ -92,12 +92,12 @@
           div {
             overflow: auto;
             max-height: 550px;
-            div.radio{
+            div.radio {
               width: 100%;
               display: flex;
               display: -webkit-flex;
               flex-wrap: wrap;
-              div{
+              div {
                 height: 30px;
                 display: flex;
                 display: -webkit-flex;
