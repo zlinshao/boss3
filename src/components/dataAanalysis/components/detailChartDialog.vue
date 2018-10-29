@@ -92,7 +92,12 @@
           </el-row>
         </div>
         <div class="content">
-         <component :is="detailData.chart_set[0].type" :chartData="detailData" :chartStyle="chartstyle" :params="params" ref="chartComp"
+         <component 
+          :is="detailData.chart_set[0].type" 
+          :chartData="detailData" 
+          :chartStyle="chartstyle" 
+          :params="params" 
+          ref="chartComp"
             ></component>
           <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
@@ -229,18 +234,23 @@
             this.params.group = this.placeForm.group
             this.params.start_date = this.selectDate[0]
             this.params.end_date = this.selectDate[1]
-            this.$refs.chartComp.getChart(this.params)
+            if(this.detailData.chart_set[0].type == "tableCard"){
+              this.$refs.chartComp.getData(this.params)
+            }else{
+              this.$refs.chartComp.getChart(this.params)
+            }
+            
         },
-        getNewDate(){
-          var date =  new Date()
-          var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
-          var year = lastdate.getFullYear();
-          var month = lastdate.getMonth()+1;   //js从0开始取 
-          var day = lastdate.getDate(); 
-          this.params.start_date = year + '-' +month + '-' + day
-          this.params.end_date = year + '-' +month + '-' + day
-          this.params.date = year + '-' +month + '-' + day
-        }
+        // getNewDate(){
+        //   var date =  new Date()
+        //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+        //   var year = lastdate.getFullYear();
+        //   var month = lastdate.getMonth()+1;   
+        //   var day = lastdate.getDate(); 
+        //   this.params.start_date = year + '-' +month + '-' + day
+        //   this.params.end_date = year + '-' +month + '-' + day
+        //   this.params.date = year + '-' +month + '-' + day
+        // }
       },
       watch:{
         modules(val){
@@ -266,9 +276,9 @@
             //   date:""
             // },
             // this.getNewDate()
-
-            this.changChart()
             this.$emit('close')
+          }else{
+            setTimeout(()=>{this.changChart()},500)
           }
         }
       },

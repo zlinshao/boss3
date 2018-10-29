@@ -6,8 +6,13 @@
         <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
-            <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
-            ></component>
+            <template slot="right">
+              <toprightControl :cardData="item"></toprightControl>
+            </template>
+            <template slot="content">
+              <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
+              ></component>
+            </template>
           </chartCard>
         </el-col>
         <el-col 
@@ -60,6 +65,7 @@
   import tableCard from "./chart/tableCard.vue"            //表格卡片
 
   import detailChartDialog from "../components/detailChartDialog.vue" //指标详情页
+  import toprightControl from "../components/toprightControl.vue"
 
   export default {
     components: {
@@ -75,7 +81,8 @@
       stackedPercentageColumn,
       textCard,
       tableCard,
-      detailChartDialog
+      detailChartDialog,
+      toprightControl
     },
     data() {
       return {
@@ -158,10 +165,9 @@
   // 筛选框
   .filterBox {
     position: absolute;
-    top: 0;
+    top: -42px;
     right: 0;
     transform: translate(-10%, -60%);
-    height: 100px;
     margin: 5px;
   }
 

@@ -231,11 +231,11 @@ import toprightControl from "../../components/toprightControl.vue"
       },
       handleSizeChange(val) {
         this.dataParams.limit = val
-        this.getData()
+        this.getData(this.dataParams)
       },
       handleCurrentChange(val) {
         this.dataParams.page = val
-        this.getData()
+        this.getData(this.dataParams)
       },
       choose(val,id){
         if(val=='city'){
@@ -279,7 +279,7 @@ import toprightControl from "../../components/toprightControl.vue"
           this.dataParams.group = this.placeForm.group
           this.dataParams.start_date = this.selectDate[0]
           this.dataParams.end_date = this.selectDate[1]
-          this.getData()
+          this.getData(this.dataParams)
       },
       getNewDate(){
         var date =  new Date()
@@ -290,9 +290,9 @@ import toprightControl from "../../components/toprightControl.vue"
         this.dataParams.start_date = year + '-' +month + '-' + day
         this.dataParams.end_date = year + '-' +month + '-' + day
       },
-      getData(){ //获取数据
+      getData(params){ //获取数据
         this.loading = true
-        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: params}).then((res) => { 
           this.loading = false
           if(res.data.code == "20000"){
             this.tableData = res.data.data.data
@@ -315,7 +315,7 @@ import toprightControl from "../../components/toprightControl.vue"
     },
     mounted () {
       this.tableTh = tableChartData
-      this.getData()
+      this.getData(this.dataParams)
       this.getList('city')
     },
     watch:{

@@ -1,17 +1,20 @@
 <template>
   <div v-if="showDetailMeter" id="detailMeter">
-    {{mainchartItem}}
-    {{chartItems}}
+    {{params}}<br>
+    <!-- {{cityOption}}<br> -->
+    {{placeForm}}
+    <!-- {{mainchartItem}}<br>
+    {{chartItems}} -->
     <el-container>
       <el-aside width="482px">
         <header>
           <i class="el-icon-arrow-left" @click="showDetailMeter=false"></i>
-          <span>{{detailMsg.name}}</span>
+          <span>{{detailMeterMsg.name}}</span>
           <el-button type="primary" icon="el-icon-setting" size="mini" style="display:none">编辑模式</el-button>
         </header>
         <div class="content">
           <div class="content_top">
-            <span>{{mainchartItem.name}}</span>
+            <span>{{detailMeterMsg.topic.name}}</span>
             <!-- <el-button type="primary" size="mini">设置默认显示维度</el-button> -->
           </div>
           <div style="margin-top: 20px" class="content_form">
@@ -22,55 +25,59 @@
                   <el-radio-button label="环比"></el-radio-button>
                 </el-radio-group>
               </div> -->
-              <div class="data_picker">
-                <el-date-picker
-                  size="mini"
-                  class="dataPicker"
-                  v-model="value7"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :picker-options="pickerOptions2">
-                </el-date-picker>
-              </div>
+              <el-row >
+                <el-col :span="12"></el-col>
+                <el-col :span="12">
+                  <div class="data_picker">
+                    <el-date-picker
+                      size="small"
+                      v-model="selectDate"
+                      :picker-options="pickerOptions"
+                      type="daterange"
+                      value-format="yyyy-MM-dd"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期">
+                    </el-date-picker>
+                  </div>
+                </el-col>
+              </el-row>
+              
             </div>
             <div class="radio_city">
-              <el-radio-group v-model="radioCity" size="mini" class="radioreset">
-                <el-radio-button label="全部"></el-radio-button>
-                <el-radio-button label="南京"></el-radio-button>
-                <el-radio-button label="苏州"></el-radio-button>
-                <el-radio-button label="杭州"></el-radio-button>
-                <el-radio-button label="合肥"></el-radio-button>
-                <el-radio-button label="西安"></el-radio-button>
-                <el-radio-button label="成都"></el-radio-button>
-                <el-radio-button label="重庆"></el-radio-button>
+              <el-radio-group v-model="placeForm.city" size="mini" class="radioreset" @change="choose('city',placeForm.city)">
+                <el-radio-button label="">全部</el-radio-button>
+                <el-radio-button :label="item.id" v-for="(item,index) in cityOption" :key="index">{{item.name|fmtCity}}</el-radio-button>
               </el-radio-group>
             </div>
             <div class="form_bottom">
-              <el-select v-model="value4" clearable placeholder="区域" disabled size="mini" class="form_select">
+              <el-select v-model="placeForm.area" clearable placeholder="区域" :disabled="placeForm.city?false:true"  size="mini" class="form_select" @change="choose('area',placeForm.area)">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in areaOption"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
                 </el-option>
               </el-select>
-              <el-select v-model="value4" clearable placeholder="片区" disabled size="mini" class="form_select">
+              <el-select v-model="placeForm.group" clearable placeholder="片区" :disabled="placeForm.area?false:true" size="mini" class="form_select">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="item in groupOption"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
                 </el-option>
               </el-select>
-              <el-button type="primary" icon="el-icon-search" size="mini" class="form_searchbtn">查询</el-button>
+              <el-button type="primary" icon="el-icon-search" size="mini" class="form_searchbtn" @click="changChart">查询</el-button>
             </div>
           </div>
           <div class="chartCanva">
-            <component :is="mainchartItem.chart_set[0].type" :chartData="mainchartItem" :chartStyle="chartstyle" v-if="mainchartItem.chart_set"></component>
+            <component 
+              :is="detailMeterMsg.topic.chart_set[0].type" 
+              :chartData="detailMeterMsg.topic" 
+              :chartStyle="chartstyle" 
+              v-if="detailMeterMsg.topic.chart_set"
+              ref="mainchart"
+            ></component>
           </div>
           <div class="instructions">
             <p>
@@ -87,10 +94,21 @@
         <el-scrollbar class="content_scroll">
           <div style="width:98%">
             <el-row :gutter="20">
-              <el-col :span="12" v-for="(item,index) in chartItems" :key="index" v-if="chartItems">
+              <el-col :span="12" v-for="(item,index) in detailMeterMsg.cards" :key="index"  v-if="item.data_source">
                 <chartCard id="card" :cardData="item" >
-                  <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" v-if="item.chart_set"
-                  ></component>
+                  <template slot="right">
+                    <toprightControl :cardData="item"></toprightControl>
+                  </template>
+                  <template slot="content">
+                    <component 
+                      :is="item.chart_set[0].type" 
+                      :chartData="item" 
+                      :chartStyle="chartstyle" 
+                    
+                      ref="minor"
+                    ></component>
+                  </template>
+                  
                 </chartCard>
               </el-col>
             </el-row>
@@ -115,9 +133,10 @@
   import textCard from "../../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../../wareHouseData/chart/tableCard.vue"            //表格卡片
 
+  import toprightControl from "../../components/toprightControl.vue"
 
   export default {
-    props: ['detailMeterVisible', 'detailMeterid'],
+    props: ['detailMeterVisible', 'detailMeterMsg'],
     components: {
       chartCard,
       basicColumn,
@@ -130,7 +149,8 @@
       stackedColumn,
       stackedPercentageColumn,
       textCard,
-      tableCard
+      tableCard,
+      toprightControl
     },
     data() {
       return {
@@ -144,48 +164,40 @@
           name:'',
           title:'',
         },
-        params:{ //待传参数
-          city: '',
-          area: '',
-          group:'',
-          start_date:"",
-          end_date:"",
-          date:""
-        },
+        cityOption:[],
+        areaOption:[],
+        groupOption:[],
         placeForm:{ //城市信息
           city: '',
           area: '',
           group:''
         },
+        selectDate:[],
         showDetailMeter: false,//隐藏仪表编辑页
         radioContrast: "同比", //同比环比按钮
         radioCity: "全部",//选择城市按钮
-        pickerOptions2: { //时间选择器
-          shortcuts: [{
-            text: '最近一周',
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [ {
+            text: '一周前',
             onClick(picker) {
-              const end = new Date();
               const start = new Date();
+              const end = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit('pick', [start, end]);
             }
-          }, {
-            text: '最近一个月',
+          },{
+            text: '一个月前',
             onClick(picker) {
-              const end = new Date();
               const start = new Date();
+              const end = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit('pick', [start, end]);
             }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
+          },
+          ]
         },
         value7: '', //时间选择器
         options: [{ //区域
@@ -205,6 +217,15 @@
           label: '北京烤鸭'
         }],
         value4: '' //区域
+      }
+    },
+    filters:{
+      fmtCity(city){
+        let str = city
+        if(city.indexOf('分') !== -1){
+           str = city.split('分')[0]
+        }
+        return str
       }
     },
     methods: {
@@ -241,82 +262,77 @@
           });
         }
       },
-      getChartMsg(data) {
-        for (let i = 0; i < this.chartItems.length; i++) {
-          if (this.chartItems[i].component == data.component) {
-            this.chartItems.splice(i, 1, {...data, ...this.chartItems[i]})
-          }
-        }
-      }
+      changChart(){
+        // console.log(this.params)
+          // if(!this.selectDate){
+          //   return this.prompt('warning','请选择时间')
+          // }
+            this.params.city = this.placeForm.city
+            this.params.area = this.placeForm.area
+            this.params.group = this.placeForm.group
+            this.params.start_date = this.selectDate[0]
+            this.params.end_date = this.selectDate[1]
+            this.params.date = this.selectDate[1]
+            // console.log(this.params)
+            // this.$refs.mainchart.getChart(this.params)
+            // this.$refs.minor.getChart(this.params)
+            // this.chartItems.forEach((item,index)=>{
+            //   let minor = 'minor'+index
+            //   this.$refs.minor.getChart(this.params)
+            // })
+            // console.log(this.$refs)
+            for(var key in this.$refs){
+              console.log(key)
+              if(key=='mainchart'){
+                this.$refs[key].getChart(this.params)
+              }
+              if(key=="minor"){
+                this.$refs[key].forEach(item=>{
+                  item.getChart(this.params)
+                })
+              }
+              // console.log(this.$refs[key])
+            }
+        },
+      
     },
     watch: {
       detailMeterVisible(val) {
         this.showDetailMeter = val
       },
       showDetailMeter(val) {
+        this.params = JSON.parse(JSON.stringify(chartParams))
+        this.getChartDate(this.params)
+        this.selectDate = [this.params.start_date,this.params.end_date]
         if (!val) {
+          this.placeForm ={
+            city: '',
+            area: '',
+            group:''
+          }
+          // this.changChart()
           this.$emit('close')
         }
       },
-      detailMeterid(val) {
-        val = 8
-        this.$http.get(globalConfig.server + "bisys/dashboard/" + val, {
-          headers: {"Accept": "application/vnd.boss18+json"}
-        }).then((res) => {
-          // console.log(res)
-            if (res.data.code == "20020") {
-              this.detailMsg.name= res.data.data.name
-              this.mainchartItem = res.data.data.topic
-              this.chartItems = res.data.data.cards
-            } else {
-             this.prompt('error',res.data.msg)
-            }
-          });
-        // if (val == 0) {
-        //   this.mainchartItem = {component: 'achievementTotal', title: "业绩总额", type: "业绩分析"}
-        //   this.chartItems = [
-        //     {component: 'averageMonthRentPrice'},
-        //     {component: "achievementSameCompare"},
-        //     {component: "achievementRingCompare"},
-        //     {component: "achievementTargetRate"},
-        //     {component: "rentOrderNumber"},
-        //     {component: 'abnormalOrder'}
-        //   ]
-        // } else if (val == 1) {
-        //   this.mainchartItem = {component: 'profitLossTotal', title: "盈亏总额", type: "盈亏分析"}
-        //   this.chartItems = [
-        //     {component: 'profitLossRingCompare'},
-        //     {component: "profitLossSameCompare"},
-        //     {component: "averageMonthPrice"},
-        //     {component: "averageCollectHousePrice"},
-        //     {component: 'actualReceivablesRate'},
-        //     {component: 'actualCashFlow'},
-        //     {component: 'averageRentCollectionPriceTrend'},
-        //     {component: 'collectionRentHouseCompare'}
-        //   ]
-        // } else if (val == 2) {
-        //   this.mainchartItem = {component: 'breakPromiseProportion', title: "违约金、滞纳金、炸单已收定金收入", type: "违约收入分析"}
-        //   this.chartItems = [
-        //     {component: 'defaultRate'},
-        //     {component: "scrapOrder"},
-        //   ]
-        // } else if (val == 3) {
-        //   this.mainchartItem = {component: 'houseTurnoverRate', title: "房屋周转率", type: "房屋运营分析"}
-        //   this.chartItems = [
-        //     {component: 'vacancyOffsetBalance'},
-        //     {component: "collectHouseInterestIndex"},
-        //   ]
-        // } else if (val == 4) {
-        //   this.mainchartItem = {component: 'intermediaryFeeRingCompare', title: "中介费环比", type: "中介分析"}
-        //   this.chartItems = [
-        //     {component: "agencyFeeAverageDiscount"},
-        //     {component: "agencyOrderNumberRate"},
-        //     {component: "agencyCompanyCostCompare"},
-        //     {component: "excellentEmployee"},
-        //   ]
-        // }
+      detailMeterMsg(val) {
+        // val = 8
+        // this.$http.get(globalConfig.server + "bisys/dashboard/" + val, {
+        //   headers: {"Accept": "application/vnd.boss18+json"}
+        // }).then((res) => {
+        //   // console.log(res)
+        //     if (res.data.code == "20020") {
+        //       this.detailMsg.name= res.data.data.name
+        //       this.mainchartItem = res.data.data.topic
+        //       this.chartItems = res.data.data.cards
+        //     } else {
+        //      this.prompt('error',res.data.msg)
+        //     }
+        //   });
       }
-    }
+    },
+    mounted() {
+      this.getList('city')
+    },
   }
 </script>
 <style scoped lang="scss">
@@ -396,8 +412,8 @@
       .data_picker {
         float: right;
         width: 220px;
-        > > > .dataPicker {
-          width: 200px !important;
+        >>> .el-date-editor {
+          width: 100% !important;
         }
       }
       .radio_city {
@@ -406,7 +422,7 @@
       .form_bottom {
         margin-top: 20px;
         .form_select {
-          width: 90px !important;
+          width: 150px !important;
         }
         .form_searchbtn {
           float: right;

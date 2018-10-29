@@ -7,6 +7,7 @@
       :modal="false"
       @open="showaddMeterDia"
       ref="addMeterDia"
+      modal
       >
       <div>
         <el-button icon="el-icon-close" circle size="mini" style="float:right" @click="addChartToMeterdialogVisible = false"></el-button>
