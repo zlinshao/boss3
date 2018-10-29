@@ -332,6 +332,7 @@
         this.$http.get(this.url + 'hrm/User/lists', {
           params: this.params,
         }).then(res => {
+          console.log(res);
           this.tableLoading = false;
           if (res.data.success) {
             let data = res.data.data.data;
