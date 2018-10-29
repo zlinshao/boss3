@@ -31,7 +31,8 @@
         }
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
-          forceFit: true,
+          // forceFit: true,
+          width:this.chartStyle.width,
           height:this.chartStyle.height,
         });
         chart.source(data);

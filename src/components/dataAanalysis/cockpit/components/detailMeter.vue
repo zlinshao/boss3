@@ -1,10 +1,5 @@
 <template>
   <div v-if="showDetailMeter" id="detailMeter">
-    {{params}}<br>
-    <!-- {{cityOption}}<br> -->
-    {{placeForm}}
-    <!-- {{mainchartItem}}<br>
-    {{chartItems}} -->
     <el-container>
       <el-aside width="482px">
         <header>
@@ -104,7 +99,7 @@
                       :is="item.chart_set[0].type" 
                       :chartData="item" 
                       :chartStyle="chartstyle" 
-                    
+                      :status="true"
                       ref="minor"
                     ></component>
                   </template>
@@ -199,24 +194,7 @@
           },
           ]
         },
-        value7: '', //时间选择器
-        options: [{ //区域
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value4: '' //区域
+        
       }
     },
     filters:{
@@ -284,11 +262,11 @@
             for(var key in this.$refs){
               console.log(key)
               if(key=='mainchart'){
-                this.$refs[key].getChart(this.params)
+                this.$refs[key].getChart(this.params,"default")
               }
               if(key=="minor"){
                 this.$refs[key].forEach(item=>{
-                  item.getChart(this.params)
+                  item.getChart(this.params,"default")
                 })
               }
               // console.log(this.$refs[key])

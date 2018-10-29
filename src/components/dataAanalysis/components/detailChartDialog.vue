@@ -7,8 +7,6 @@
     :modal="false"
     width="65%">
     <div>
-      <!-- {{params}}
-      {{selectDate}} -->
       <div class="detailMsgHead">
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
         <span>{{detailData.name}}</span>
@@ -98,6 +96,7 @@
           :chartStyle="chartstyle" 
           :params="params" 
           ref="chartComp"
+          :status="true"
             ></component>
           <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
@@ -127,7 +126,8 @@
 				return {
           detaildialogVisible : false,
           chartstyle:{
-            height:500
+            height:500,
+            width:1000
           },
           params:{},
           selectDate:'',
@@ -234,11 +234,9 @@
             this.params.group = this.placeForm.group
             this.params.start_date = this.selectDate[0]
             this.params.end_date = this.selectDate[1]
-            if(this.detailData.chart_set[0].type == "tableCard"){
-              this.$refs.chartComp.getData(this.params)
-            }else{
-              this.$refs.chartComp.getChart(this.params)
-            }
+           
+            this.$refs.chartComp.getChart(this.params,"default")
+            
             
         },
         // getNewDate(){

@@ -7,10 +7,12 @@
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
             <template slot="right">
-              <toprightControl :cardData="item"></toprightControl>
+              <toprightControl :cardData="item" :btnstatus="true"></toprightControl>
             </template>
             <template slot="content">
-              <component :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
+              <component 
+                :is="item.chart_set[0].type"  
+                :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
               ></component>
             </template>
           </chartCard>
@@ -107,7 +109,15 @@
           value: '选项5',
           label: '行政'
         }],
-        cardCharts: [],//指标卡片
+        cardCharts: [{
+          "chart_set": [
+                  {
+                      "name": "对比",
+                      "type": "basicColumn"
+                  }
+              ],
+            }
+        ],//指标卡片
         page: 1, //加载页码
         limit: 31, //加载条数
         cardloading: false,//正在加载
@@ -115,7 +125,8 @@
         selectType:"对比",//所选类型
         showDetailChart:false,
         chartstyle:{
-          height:300
+          height:300,
+          width:530
         },
         sendDetailData:{}
       }

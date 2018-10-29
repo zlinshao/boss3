@@ -11,7 +11,7 @@
         2.组织架构维度标签下有三个下拉菜单选择项：城市（有所有以及各个城市选项，所有显示所有城市的数据，各个城市显示选择城市下辖区域的数据）/区域（显示下辖片区的数据）/片区（显示片区组员的数据）<br>
         3.时间维度标签有下拉菜单选择项：日历组件，以一周、一月为一周期，选择本周期（上一周或上一月）和本周期的上一个周期</p> -->
         <p>
-          <!-- {{this.cardData.introduction}} -->
+          {{this.cardData.introduction}}
         </p>
       <el-button icon="el-icon-question" slot="reference" circle
                  style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;" size="mini"
@@ -38,9 +38,13 @@
         <li @click="addCard('topic')"><i class="el-icon-plus"></i>主题指标</li>
         <li @click="addCard('card')"><i class="el-icon-plus"></i>分析指标</li>
       </ul>
-      <el-button slot="reference" icon="el-icon-plus" circle
-                 style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
-                 size="mini" type="text" @click="getMeterNameList" ></el-button>
+      <el-button 
+        slot="reference" icon="el-icon-plus" circle
+        style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
+        size="mini" type="text" 
+        @click="getMeterNameList"
+        v-if="btnstatus"
+         ></el-button>
     </el-popover>
     <el-button 
       icon="el-icon-search" 
@@ -48,6 +52,7 @@
       size="mini" 
       style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
       @click="showDetailChartDialog"
+      v-if="!btnstatus"
       ></el-button>
     <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel"></addChartToMeter>
     <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog>
@@ -58,7 +63,7 @@
   import detailChartDialog from "../components/detailChartDialog.vue"
   export default {
     components: {addChartToMeter,detailChartDialog},
-    props: ['cardData'],
+    props: ['cardData','btnstatus'],
     data() {
       return {
         showSecPop: false,
@@ -96,7 +101,9 @@
         }).then((res) => {
           if (res.data.code === "20000") {
             // console.log(res)
-            this.meterList = res.data.data.data.private
+            // this.meterList = res.data.data.data.private
+            this.meterList = res.data.data.data.public
+            
           } else {
             
           }

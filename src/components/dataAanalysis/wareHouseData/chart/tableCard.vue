@@ -12,7 +12,7 @@
       @click.native ="showDetailChartDialog"
       class="comTable"
       :data="tableData"
-      height="260"
+      :height="chartStyle.height-40"
       size='mini'
       border
       :highlight-current-row='true'
@@ -47,6 +47,8 @@
       :visible.sync="detaildialogVisible"
       width="65%">
       <div>
+        <!-- {{dataParams}}<br>
+        {{diaParams}} -->
         <div class="detailMsgHead">
           <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
           <span>{{chartData.name}}</span>
@@ -112,7 +114,7 @@
               </el-col>
               <el-col :span="4">
                 <div class="detailSelect">
-                  <el-button type="primary" size="small" @click="changChart">查询</el-button>
+                  <el-button type="primary" size="small" @click="changChart('dialog')">查询</el-button>
                 </div>
               </el-col>
             </el-row>
@@ -123,14 +125,19 @@
               :key="index"
               v-if="chartData.name==item.name"
               class="comTable"
-              :data="tableData"
+              :data="tableDataDia"
               height="450"
               size='mini'
               border
               :highlight-current-row='true'
               :cellStyle='colstyle'
               :header-cell-style='headerrowstyle'
-              style="width: 100%">
+              style="width: 100%"
+              v-loading="loadingDia"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0.8)"
+              >
               <el-table-column
                 v-for="(val,index) in item.thData"
                 :key="index"
@@ -142,13 +149,13 @@
             <el-pagination
               small
               style="text-align:center"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="[5, 10, 20]"
-              :page-size="currentlimit"
+              @size-change="handleSizeChangeDia"
+              @current-change="handleCurrentChangeDia"
+              :current-page="currentPageDia"
+              :page-sizes="[10, 15 ,20]"
+              :page-size="currentlimitDia"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="totalPage">
+              :total="totalPageDia">
             </el-pagination>
           </div>
         </div>
@@ -161,15 +168,20 @@
 import toprightControl from "../../components/toprightControl.vue"
   export default {
     components:{toprightControl},
-    props:['chartData'],
+    props:['chartData','status','chartStyle'],
     data(){
       return {
         currentPage:1, //当前页
         currentlimit:5,//选择条数
         totalPage:1, //总页数
+        currentPageDia:1, //当前页
+        currentlimitDia:10,//选择条数
+        totalPageDia:1, //总页数
         detaildialogVisible:false, //模态窗状态
         loading:true,
+        loadingDia:true,
         tableData: [],//表格数据
+        tableDataDia: [],//表格数据
         dataParams:{   //传参
           city:"",
           area:"",
@@ -179,8 +191,17 @@ import toprightControl from "../../components/toprightControl.vue"
           page: 1,
           limit:5
         },
+        diaParams:{   
+          city:"",
+          area:"",
+          group:"",
+          start_date:"",
+          end_date:"",
+          page: 1,
+          limit:10
+        },
         tableTh:[],//表头数据
-        selectDate:'',
+        selectDate:['2018-11-11'],
         cityOption:[],
         areaOption:[],
         groupOption:[],
@@ -231,11 +252,19 @@ import toprightControl from "../../components/toprightControl.vue"
       },
       handleSizeChange(val) {
         this.dataParams.limit = val
-        this.getData(this.dataParams)
+        this.getChart(this.dataParams,'default')
       },
       handleCurrentChange(val) {
         this.dataParams.page = val
-        this.getData(this.dataParams)
+        this.getChart(this.dataParams,'default')
+      },
+      handleSizeChangeDia(val) {
+        this.diaParams.limit = val
+        this.getChart(this.diaParams,'dialog')
+      },
+      handleCurrentChangeDia(val) {
+        this.diaParams.page = val
+        this.getChart(this.diaParams,'dialog')
       },
       choose(val,id){
         if(val=='city'){
@@ -270,65 +299,98 @@ import toprightControl from "../../components/toprightControl.vue"
           });
         }
       },
-      changChart(){
+      changChart(val){
         if(!this.selectDate){
           return this.prompt('warning','请选择时间')
         }
-          this.dataParams.city = this.placeForm.city
-          this.dataParams.area = this.placeForm.area
-          this.dataParams.group = this.placeForm.group
-          this.dataParams.start_date = this.selectDate[0]
-          this.dataParams.end_date = this.selectDate[1]
-          this.getData(this.dataParams)
+          this.diaParams.city = this.placeForm.city
+          this.diaParams.area = this.placeForm.area
+          this.diaParams.group = this.placeForm.group
+          this.diaParams.start_date = this.selectDate[0]
+          this.diaParams.end_date = this.selectDate[1]
+          this.getChart(this.diaParams,val)
       },
-      getNewDate(){
-        var date =  new Date()
-        var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
-        var year = lastdate.getFullYear();
-        var month = lastdate.getMonth()+1;   
-        var day = lastdate.getDate(); 
-        this.dataParams.start_date = year + '-' +month + '-' + day
-        this.dataParams.end_date = year + '-' +month + '-' + day
-      },
-      getData(params){ //获取数据
-        this.loading = true
-        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: params}).then((res) => { 
-          this.loading = false
-          if(res.data.code == "20000"){
-            this.tableData = res.data.data.data
-            this.totalPage = res.data.data.total
-          }else{
-            this.tableData = []
-            this.prompt('error',res.data.msg)
-          }
-        });
-        console.log(this.chartData)
-        // this.tableData = yichangdan
-        // this.tableData = []
+      // getNewDate(){
+      //   var date =  new Date()
+      //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+      //   var year = lastdate.getFullYear();
+      //   var month = lastdate.getMonth()+1;   
+      //   var day = lastdate.getDate(); 
+      //   this.dataParams.start_date = year + '-' +month + '-' + day
+      //   this.dataParams.end_date = year + '-' +month + '-' + day
+      // },
+      getChart(params,val){ //获取数据
+        
+        if(val=="default"){
+          this.dataParams.city = params.city
+          this.dataParams.area=params.area,
+          this.dataParams.group=params.group,
+          this.dataParams.start_date=params.start_date,
+          this.dataParams.end_date=params.end_date
+          this.loading = true
+          this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+            this.loading = false
+            if(res.data.code == "20000"){
+              this.tableData = res.data.data.data
+              this.totalPage = res.data.data.total
+            }else{
+              this.tableData = []
+              this.prompt('error',res.data.msg)
+            }
+          });
 
+        }
+        if(val=="dialog"){
+          this.diaParams.city = params.city
+          this.diaParams.area=params.area,
+          this.diaParams.group=params.group,
+          this.diaParams.start_date=params.start_date,
+          this.diaParams.end_date=params.end_date
+          this.loadingDia = true
+          this.$http.get(this.chartData.data_source,{
+              headers:{"Accept":"application/vnd.boss18+json"},
+              params: this.diaParams
+            }).then((res) => { 
+            this.loadingDia = false
+            if(res.data.code == "20000"){
+              this.tableDataDia = res.data.data.data
+              this.totalPageDia = res.data.data.total
+            }else{
+              this.tableDataDia = []
+              this.prompt('error',res.data.msg)
+            }
+          });
+        }
+        
       },
       showDetailChartDialog(){
         // console.log(111)
-        this.detaildialogVisible = true
+        // console.log(this.status)
+        if(!this.status){
+          
+          this.detaildialogVisible = true
+        }
         // this.sendDetailData = item
       }
     },
     mounted () {
       this.tableTh = tableChartData
-      this.getData(this.dataParams)
+      this.getChartDate(this.dataParams)
+      this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
       this.getList('city')
+      this.getChart(this.dataParams,'default')
     },
     watch:{
       detaildialogVisible(val){
+        this.getChartDate(this.dataParams)
+        this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
+        this.changChart("dialog")
           if(!val){
             this.placeForm ={
               city: '',
               area: '',
               group:''
             }
-            this.getNewDate()
-            this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
-            this.changChart()
           }
         }
     }
