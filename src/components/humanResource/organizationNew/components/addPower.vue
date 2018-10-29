@@ -22,7 +22,7 @@
           <el-col :span="16">
             <el-row>
               <el-col :span="3">
-                <div class="el_col_label"  style="line-height: 30px;">角色名称</div>
+                <div class="el_col_label" style="line-height: 30px;">角色名称</div>
               </el-col>
               <el-col :span="18" class="el_col_option">
                 <el-form-item>
@@ -125,7 +125,7 @@
         this.roleArray = val.role;
         this.userId = val.id;
         setTimeout(() => {
-          if(this.userId){
+          if (this.userId) {
             this.getDefaultData();
             this.getStaffPart();
           }
@@ -136,51 +136,24 @@
     methods: {
       setPart(val) {
         let partNames = this.partNames.join(',');
-        if (val === 'attach') {
-          this.$http.put(globalConfig.server_user + 'powers/withRole/' + this.userId, {
-            with: 'attach',
-            role: partNames
-          }).then((res) => {
-            if (res.data.status === 'success') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message
-              });
-              this.powerVisible = false;
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              })
-            }
-          });
-        } else if (val === 'detach') {
-          this.$http.put(globalConfig.server_user + 'powers/withRole/' + this.userId, {
-              with: 'detach',
-              role: partNames
-          }).then((res) => {
-            if (res.data.status === 'success') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message
-              });
-              this.powerVisible = false;
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              })
-            }
-          });
-        }
-
+        this.$http.put(globalConfig.server + 'organization/user/withRole/' + this.userId, {
+          with: val,
+          role: partNames
+        }).then((res) => {
+          if (res.data.code === '20050') {
+            this.prompt('success', res.data.msg);
+            this.powerVisible = false;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       },
       getStaffPart() {
         this.partNames = [];
         this.$http.get(globalConfig.server_user + 'powers/getRole/' + this.userId).then((res) => {
           if (res.data.status === 'success') {
             let data = res.data.data;
-            for (var i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
               this.partNames.push(data[i].name);
             }
           }
@@ -206,21 +179,21 @@
       },
       allChange(val) {
         if (val) {
-          for (var i = 0; i < this.checkAllPower.length; i++) {
+          for (let i = 0; i < this.checkAllPower.length; i++) {
             if ($.inArray(this.checkAllPower[i], this.checkedPower) === -1) {
               this.checkedPower.push(this.checkAllPower[i]);
             }
           }
         } else {
-          for (var i = 0; i < this.checkAllPower.length; i++) {
-            var index = this.checkedPower.indexOf(this.checkAllPower[i]);
+          for (let i = 0; i < this.checkAllPower.length; i++) {
+            let index = this.checkedPower.indexOf(this.checkAllPower[i]);
             this.checkedPower.splice(index, 1);
           }
         }
         this.isIndeterminate = false;
       },
       powerChange(value) {
-        for (var i = 0; i < this.checkAllPower.length; i++) {
+        for (let i = 0; i < this.checkAllPower.length; i++) {
           if ($.inArray(this.checkAllPower[i], value) === -1) {
             this.checkAll = false;
             this.isIndeterminate = true;
@@ -316,38 +289,24 @@
         })
       },
       empower(val) {
-        let powerIds = this.checkedPower.toString();
+        let powerIds = this.checkedPower.toString(), num;
         if (val === 'position') {
-          this.$http.put(globalConfig.server_user + 'powers/' + this.currentRoleId + '?on=role&permissions=' + powerIds).then((res) => {
-            if (res.data.status === 'success') {
-              this.powerVisible = false;
-              this.$notify.success({
-                title: '成功',
-                message: '授权成功'
-              });
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              });
-            }
-          });
+          num = 2;
         } else {
-          this.$http.put(globalConfig.server_user + 'powers/' + this.userId + '?on=user&permissions=' + powerIds).then((res) => {
-            if (res.data.status === 'success') {
-              this.powerVisible = false;
-              this.$notify.success({
-                title: '成功',
-                message: '授权成功'
-              });
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              });
-            }
-          });
+          num = 1;
         }
+        this.$http.post(globalConfig.server + 'organization/permission/sync', {
+          type: num,
+          permissions: powerIds,
+          ids: this.currentRoleId,
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            this.powerVisible = false;
+            this.prompt('success', '授权成功');
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       }
     },
   }
