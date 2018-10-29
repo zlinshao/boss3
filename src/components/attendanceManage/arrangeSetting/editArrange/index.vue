@@ -49,17 +49,14 @@
         <el-table-column prop="part" label="部门" width="80px"></el-table-column>
         <el-table-column prop="name" label="姓名" width="80px"></el-table-column>
         <el-table-column v-for="(colu,index) in columnList" :key="index" :prop="colu.prop" :label="colu.label">
-          <template slot-scope="scope">
-            
-          </template>
-         </el-table-column>
-        <el-table-column label="操作" width="100px">
+        </el-table-column>
+        <!-- <el-table-column label="操作" width="100px">
           <template slot-scope="scope">
             <div>
               <el-button type="primary" size="mini" @click="outputShow = true ">以此为模板</el-button>
             </div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
 
@@ -87,23 +84,15 @@
     <!-- 修改班次 dialog -->
     <div>
       <el-dialog title="修改班次" :visible.sync="dialogShow" width="25%">
-        <div>
-          <p>
-            <el-radio v-model="currentArrange" label="A">A:早班 09:00-18:00</el-radio>
-          </p>
-          <p>
-            <el-radio v-model="currentArrange" label="B">B:正常班 10:00-19:00</el-radio>
-          </p>
-          <p>
-            <el-radio v-model="currentArrange" label="C">C:晚班 13:00-21:00</el-radio>
-          </p>
-          <p>
-            <el-radio v-model="currentArrange" label="D">休:休息</el-radio>
-          </p>
-        </div>
+        <el-radio-group v-model="currentArrange">
+          <el-radio :label="1">A:早班 09:00-18:00</el-radio>
+          <el-radio :label="2">B:正常班 10:00-19:00</el-radio>
+          <el-radio :label="3">C:晚班 13:00-21:00</el-radio>
+          <el-radio :label="4">休:休息</el-radio>
+        </el-radio-group>
         <span slot="footer" class="dialog-footer">
           <el-button @click="okShow = true" size="mini">取 消</el-button>
-          <el-button type="primary" @click="okEdit" size="mini">确 定</el-button>
+          <el-button type="primary" @click="okEdit(currentArrange)" size="mini">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -122,11 +111,16 @@
     </div>
 
     <!-- 批量导出模板 -->
-    <div>
+    <!-- 暂时不做 -->
+    <!-- <div>
       <el-dialog title="模板设置排班" :visible.sync="outputShow" width="60%">
-        <EditArrange :date="this.currentMonth" />
+        <EditArrange :previousDate="this.currentMonth" />
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="outputShow = false" size="mini">取 消</el-button>
+          <el-button type="primary" @click="outputShow = false" size="mini">确 定</el-button>
+        </span>
       </el-dialog>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -159,6 +153,13 @@ export default {
           day7: "C",
           day8: "A",
           day9: "A"
+          // day: [
+          //   { day1: "休" },
+          //   { day2: "休" },
+          //   { day3: "A" },
+          //   { day4: "B" },
+          //   { day5: "C" }
+          // ]
         },
         {
           part: "研发部",
@@ -182,12 +183,14 @@ export default {
         { date: "休:休息", day1: "0" }
       ],
       dialogShow: false, //修改班次dialog
-      currentArrange: "A", //点击后当前班次
+      currentArrange: 1, //点击后当前班次
       okShow: false,
       outputShow: false, //批量导出模板
-      currentMonth: "2018/10", //当前月份
+      currentMonth: "", //当前月份
       canEdit: false,
-      monthList: [] //月份列表
+      monthList: [], //月份列表
+      row: "", // 点击的行
+      column: "" // 点击的列
     };
   },
   methods: {
@@ -208,10 +211,22 @@ export default {
     },
     dbclickCell(row, column, cell, event) {
       this.dialogShow = true;
+      this.row = row;
+      this.column = column.property;
     },
     cellStyle({ row, column, rowIndex, columnIndex }) {},
-    okEdit() {
+    okEdit(val) {
       this.dialogShow = false;
+      if (val == 1) {
+        val = "A";
+      } else if (val == 2) {
+        val = "B";
+      } else if (val == 3) {
+        val = "C";
+      } else {
+        val = "休";
+      }
+      this.row[this.column] = val;
     },
     rowClass({ row, column, rowIndex, columnIndex }) {
       if (columnIndex == 2 || columnIndex == 3) {
@@ -294,14 +309,15 @@ export default {
       this.canEdit = query.edit;
     },
     ChangeMonth(val) {
-      console.log(val);
+      // console.log(val);
       this.getCurrentMonthDays(val);
     }
   },
   computed: {},
   created() {
     this.getCurrentMonthDays(this.currentMonth);
-    // this.arrangeListData
+    this.currentMonth =
+      new Date().getFullYear() + "-" + (new Date().getMonth() + 1);
   },
   mounted() {
     this.getQuery(this.$route.query);
@@ -334,6 +350,31 @@ export default {
   }
   .colorD {
     background-color: #909399;
+  }
+  // 图标设置
+  .cell {
+    position: relative;
+  }
+  .redmark {
+    width: 10px;
+    height: 10px;
+  }
+  .redmark::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 0;
+    border-color: transparent #ff0022 transparent transparent;
+  }
+  // 修改班次
+  .el-radio {
+    display: block;
+    margin-left: 0;
+    margin-bottom: 10px;
   }
 }
 </style>

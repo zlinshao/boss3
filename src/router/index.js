@@ -72,6 +72,7 @@ const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.v
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
 const WatchArrange = () => import('../components/attendanceManage/arrangeSetting/watchArrange/index.vue');
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
+const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue') //编辑班次
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
@@ -549,10 +550,14 @@ export default new Router({
               children: [
                 {
                   path: '/', component: EditArrange, name: '标记信息'
-                }
+                },    
               ]
-            }
+            },
+            
           ]
+        },
+        {
+          path: '/editAttendanceShift',  component: EditAttendanceShift,name: '编辑班次'
         },
         {
           path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
