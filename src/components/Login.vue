@@ -205,7 +205,6 @@
       };
     },
     mounted() {
-      this.getBackground();
       if (JSON.stringify(this.$route.query) !== '{}') {
         let phone = this.$route.query.phone;
         let code = this.$route.query.code;
@@ -213,8 +212,21 @@
         this.underWay = false;
       }
       document.getElementById('login').style.height = window.innerHeight + 'px';
+      this.loginInfo();
+      this.getBackground();
     },
     methods: {
+      loginInfo() {
+        this.$http.get(globalConfig.server + 'special/special/loginInfo').then((res) => {
+          if (res.data.code === '10090') {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+            let badge = true;
+            this.$store.dispatch('badgeFlag', badge);
+            this.$router.push({path: '/main'});
+          }
+        })
+      },
       // 验证码
       phoneLoginFly() {
         this.$http.get(globalConfig.server + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
@@ -251,13 +263,6 @@
         }).then((res) => {
           if (res.data.code === '20000') {
 
-            this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-              localStorage.setItem('personal', JSON.stringify(res.data.data));
-              globalConfig.personal = res.data.data.data;
-              let badge = true;
-              this.$store.dispatch('badgeFlag', badge);
-              this.$router.push({path: '/main'});
-            });
           } else {
             this.prompt('warning', res.data.msg);
           }
@@ -300,14 +305,7 @@
           localStorage.setItem('myData', JSON.stringify(res.data.data));
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-            let badge = true;
-            this.$store.dispatch('badgeFlag', badge);
-            this.$router.push({path: '/main'});
-          });
+          this.loginInfo();
         });
       },
       sweepCode() {
