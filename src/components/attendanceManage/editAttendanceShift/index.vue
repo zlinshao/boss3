@@ -234,7 +234,9 @@ export default {
     display: inline-block;
   }
   .bigWidth {
+    padding-left: 20px;
     width: 200px;
+    font-size: 14px;
     display: inline-block;
   }
 }
