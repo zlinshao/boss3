@@ -29,7 +29,7 @@
                     </el-popover>
                   </div>
                   <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%"
-                       @click='showDetailMeterEven(index)'>
+                       @click='showDetailMeterEven(item.id)'>
                     <img src="@/assets/images/meter2.png" alt="">
                   </div>
                 </div>
@@ -77,8 +77,8 @@
                       <el-button slot="reference" icon="el-icon-tickets" class="ticbut" type="text"></el-button>
                     </el-popover>
                   </div>
-                  <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%">
-                    <img src="@/assets/images/meter2.png" alt="">
+                  <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click="showDetailMeterEven(item.id)">
+                    <img src="@/assets/images/meter2.png" alt="" >
                   </div>
                 </div>
                 <!-- 仪表盘信息 -->
@@ -97,9 +97,9 @@
                 <div class="titleChange" v-show="index == changeMeterNameIndex">
                   <el-form :inline="true" size="mini" style="text-align: center;">
                     <el-form-item>
-                      <el-input placeholder="请输入名称" size="mini" @keyup.enter.native="updataTitle(item.name)"
+                      <el-input placeholder="请输入名称" size="mini" @keyup.enter.native="updataTitle(item)"
                                 v-model="meterName">
-                        <el-button slot="append" icon="el-icon-check" @click="updataTitle(item.name)" size="mini"
+                        <el-button slot="append" icon="el-icon-check" @click="updataTitle(item)" size="mini"
                                    class="checkbtn"></el-button>
                       </el-input>
                     </el-form-item>
@@ -125,7 +125,7 @@
                     </el-form-item>
                   </el-form>
                 </div>
-                <div @click="showAddmeter=true">
+                <div @click="showadd">
                   <div class="addmeterface">
                     <i class="el-icon-plus"></i>
                   </div>
@@ -143,7 +143,7 @@
     <div>
       <!-- 仪表盘详情页面 -->
       <detailMeter @close="hidedetailMeter" :detailMeterVisible="showDetailMeter"
-                   :detailMeterid="detailMeterId"></detailMeter>
+                   :detailMeterMsg="detailMeterMsg"></detailMeter>
     </div>
     <!-- 仪表盘删除弹窗 -->
     <el-dialog
@@ -181,9 +181,10 @@
         deleteMeterDiaVisible: false,//删除仪表弹出框
         meterName: "",//添加修改仪表盘名称
         showAddmeter: false,//显示添加仪表盘
-        detailMeterId: '',
+        detailMeterMsg: {},
         selectMeterId: "",//所选仪表盘id
         meterparams: {},//仪表盘信息
+
       }
     },
     methods: {
@@ -203,19 +204,37 @@
         this.personalActiveIndex = -1;
         this.meterPopdisabled = false
       },
-      showDetailMeterEven(index) {//仪表详细页面显示
-        this.showDetailMeter = true;
-        this.detailMeterId = index
+      showDetailMeterEven(id) {//仪表详细页面显示
+        this.$http.get(globalConfig.server + "bisys/dashboard/" + id, {
+          headers: {"Accept": "application/vnd.boss18+json"}
+        }).then((res) => {
+          // console.log(res)
+          if (res.data.code == "20020") {
+            
+            if(!res.data.data.topic){
+              return this.prompt('error',"主指标为空")
+            }
+            if(!res.data.data.topic&&res.data.data.cards.length==0){
+              return this.prompt('error',"子指标为空")
+            }
+            this.detailMeterMsg = res.data.data
+            this.showDetailMeter = true;
+          } else {
+            this.prompt('error',res.data.msg)
+          }
+        });
       },
       showInp(val, index, id) {	//显示更改仪表盘名称输入框
         this.meterName = val.name;
         this.selectMeterId = val.id;
-        this.meterparams.is_public = val.is_public;
-        this.meterparams.user_id = val.user_id;
+        this.meterparams = val
+        // this.meterparams.is_public = val.is_public;
+        // this.meterparams.user_id = val.user_id;
         this.changeMeterNameIndex = index
       },
       updataTitle(val) { //更改仪表盘名称
-        if (this.meterName == val) {
+        this.meterparams = val
+        if (this.meterName == val.name) {
           this.changeMeterNameIndex = -1
         } else {
           this.meterparams.name = this.meterName;
@@ -237,6 +256,9 @@
             }
           });
         }
+      },
+      showadd(){
+        this.showAddmeter=true
       },
       addMeter() {//新增仪表盘
         if (!this.meterName) {
@@ -295,6 +317,7 @@
           if (res.data.code === "20000") {
             let data = res.data.data.data;
             this.publicMeter = data.public;
+            console.log(this.publicMeter)
             if (data.private) {
               this.privateMeter = data.private;
             } else {

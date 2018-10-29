@@ -308,7 +308,6 @@
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
       this.loginDay = this.landholder.data.loginday;
-      ;
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();

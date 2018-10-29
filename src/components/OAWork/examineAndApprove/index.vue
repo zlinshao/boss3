@@ -927,6 +927,7 @@
         if (this.reportAllID.includes(row.id)) return 'rowBackground';
       },
       colTag({row, column, rowIndex, columnIndex}){
+        console.log(column)
         if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
           return 'colTag'
         }

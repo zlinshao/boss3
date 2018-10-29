@@ -388,6 +388,7 @@ qipaotu = [{
   HouseNumber: 380
   }]
 
+  //表格类型
   tableChartData = [
     {
       name:"中介费占业绩比最高的前100名员工",
@@ -431,7 +432,7 @@ qipaotu = [{
         },
         {
           label:'房屋地址',
-          prop:'address'
+          prop:'houses_name'
         },
         {
           label:'让价金额',
@@ -440,5 +441,15 @@ qipaotu = [{
       ]
     }
   ]
+
+  //图表参数
+  chartParams = {
+    city: '',
+    area: '',
+    group:'',
+    start_date:"",
+    end_date:"",
+    date:"",
+  }
 
   
