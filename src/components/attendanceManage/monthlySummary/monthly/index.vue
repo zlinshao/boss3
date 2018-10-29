@@ -3,7 +3,7 @@
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
-        <el-button type="primary" @click="collapseClick" size="small">{{collapse}}</el-button>
+        <el-button type="primary" @click="collapseClick" size="mini">{{collapse}}</el-button>
       </div>
       <el-checkbox-group v-model="checkList" v-show="this.collapse == '收起'">
         <el-checkbox :label="item.name" v-for="(item, index) in this.celeckList" :key="index" @change="selecked(item, index)" :disabled="item.disabled" :checked="item.disabled"></el-checkbox>
@@ -11,7 +11,7 @@
     </div>
     <div class="selectTime">
       <span>月份：</span>
-      <el-select v-model="monthValue" placeholder="请选择" size="small">
+      <el-select v-model="monthValue" placeholder="请选择" size="mini">
         <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -22,10 +22,10 @@
     </div>
     <div class="nameInput">
       <span>姓名：</span>
-      <el-input v-model="inputName" placeholder="请输入内容" size="small"></el-input>
+      <el-input v-model="inputName" placeholder="请输入内容" size="mini"></el-input>
     </div>
     <div class="selectTips">
-      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="small">
+      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
     </div>
@@ -33,8 +33,8 @@
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
     </div>
     <div class="btn">
-      <el-button type="primary" size="small">确定</el-button>
-      <el-button type="primary" size="small">导出</el-button>
+      <el-button type="primary" size="mini">确定</el-button>
+      <el-button type="primary" size="mini">导出</el-button>
     </div>
     <div class="table">
       <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width ="auto">
@@ -75,8 +75,8 @@
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="beLate = false">取 消</el-button>
-        <el-button type="primary" @click="beLate = false">确 定</el-button>
+        <el-button @click="beLate = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="beLate = false" size="mini">确 定</el-button>
       </span>
     </el-dialog>
   </div>
