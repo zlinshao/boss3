@@ -24,8 +24,9 @@
         this.$refs.chartId.innerHTML  = ''
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
-          forceFit: true,
+          width:this.chartStyle.width,
           height:this.chartStyle.height, 
+          // forceFit: true,
         });
         chart.source(data);
         chart.interval().position('cate*value');

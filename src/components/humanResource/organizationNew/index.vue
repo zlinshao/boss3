@@ -179,9 +179,9 @@
                     <template slot-scope="scope">
                       <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
                            :src="scope.row.avatar" style="width: 30px;height: 30px;border-radius: 50%;">
-                      <img v-else="" src="../../../assets/images/defaultHead.png" data-card=""
+                      <img src="../../../assets/images/defaultHead.png" data-card=""
                            :data-src="JSON.stringify(scope.row)"
-                           style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
+                           style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);" v-else>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -191,15 +191,15 @@
                   <el-table-column
                     label="部门">
                     <template slot-scope="scope">
-                      <span v-for="item in scope.row.org">{{item.name}}</span>
-                      <span v-if="scope.row.org.length<1">暂无</span>
+                      <span v-if="!scope.row.organizations">暂无</span>
+                      <span v-else v-for="item in scope.row.organizations">{{item.name}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="岗位">
                     <template slot-scope="scope">
-                      <span v-for="item in scope.row.role">{{item.display_name}}</span>
-                      <span v-if="scope.row.role.length<1">暂无</span>
+                      <span v-if="!scope.row.position">暂无</span>
+                      <span v-else v-for="item in scope.row.position">{{item.display_name}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -1031,7 +1031,7 @@
           keywords: '',
           limit: 10,
           page: 1,
-          org_id: '',
+          org_id: 1,
           is_dimission: '',
           forward: '',
           is_recursion: 1,
@@ -1086,7 +1086,7 @@
         menuType: '',    //右键类别
 
         department_id: '',  //y用于监听部门变化
-        department_name: "",
+        department_name: '',
 
         isGetStaff: false,
         isGetOnlyPosition: false,
@@ -1237,7 +1237,7 @@
             this.entry_materials = [];
             //入职材料
             if (detail && detail.entry_materials && detail.entry_materials.length > 0) {
-              for (var i = 0; i < detail.entry_materials.length; i++) {
+              for (let i = 0; i < detail.entry_materials.length; i++) {
                 this.entry_materials.push(Number(detail.entry_materials[i]));
               }
             }
@@ -1287,10 +1287,11 @@
       getDepart() {
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(globalConfig.server + 'manager/department?search&page&limit=500&list_type=tree').then((res) => {
+        this.$http.get(globalConfig.server + 'organization/org/1').then((res) => {
           this.collectLoading = false;
-          if (res.data.code === '20000') {
-            this.setTree = res.data.data;
+          if (res.data.code === '20020') {
+            this.setTree = [];
+            this.setTree.push(res.data.data);
             this.setTree.forEach((item) => {
               if (item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id) < 0) {
                 this.defaultExpandKeys.push(item.id);
@@ -1434,11 +1435,10 @@
         if (!this.params.leave_time) {
           this.params.leave_time = [];
         }
-        this.$http.get(globalConfig.server + 'manager/staff', {params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then((res) => {
           this.userCollectLoading = false;
           this.isHigh = false;
-
-          if (res.data.code === '10000') {
+          if (res.data.code === '70010') {
             this.staffTableData = res.data.data.data;
             this.totalStaffNum = res.data.data.count;
             if (this.staffTableData.length < 1) {

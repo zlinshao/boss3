@@ -20,8 +20,9 @@
         this.$refs.chartId.innerHTML  = ''
         let chart = new this.$G2.Chart({
           container: this.$refs.chartId,
-          forceFit: true,
+          // forceFit: true,
           // width:800,
+          width:this.chartStyle.width,
           height: this.chartStyle.height,
         });
         chart.source(data, {
