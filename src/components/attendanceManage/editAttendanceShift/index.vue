@@ -71,9 +71,9 @@
         <el-form-item class="totalTime">
           <span>工作时长总计</span>
           <el-input v-model="totalTime" size="small"></el-input>
-          <span>小时</span>
+          <span style="margin-left: 10px">时</span>
           <el-input v-model="totalMin" size="small"></el-input>
-          <span>分钟</span>
+          <span style="margin-left: 10px">分钟</span>
           <span>（考勤统计工作时长及请假调休加班统计，以此时间为准）</span>
         </el-form-item>
         <el-from-item class="workingPunch">
@@ -211,13 +211,17 @@ export default {
     }
     span{
       font-size: 12px;
-      margin-left: 10px;
+      // margin-left: 10px;
     }
   }
   .workingPunch {
     text-align: left;
-    padding-left: 24px;
+    padding-left: 20px;
+    .el-checkbox+.el-checkbox {
+      margin-left: 20px;
+    }
   }
+  
   .beLateMin,
   .beLateTotal,
   .beLateSeriousMin,
