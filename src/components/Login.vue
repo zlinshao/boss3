@@ -212,7 +212,6 @@
         this.underWay = false;
       }
       document.getElementById('login').style.height = window.innerHeight + 'px';
-      this.loginInfo();
       this.getBackground();
     },
     methods: {
@@ -224,6 +223,8 @@
             let badge = true;
             this.$store.dispatch('badgeFlag', badge);
             this.$router.push({path: '/main'});
+          } else {
+            this.prompt('warning', res.data.msg);
           }
         })
       },
@@ -262,7 +263,8 @@
           authorization: code,
         }).then((res) => {
           if (res.data.code === '20000') {
-
+            this.loginInfo();
+            this.prompt('success', res.data.msg);
           } else {
             this.prompt('warning', res.data.msg);
           }
