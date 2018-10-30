@@ -754,7 +754,15 @@
     <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName"
                     :addReturnInfo="addReturnInfo"
                     @close="closeModal"></AddReturnvisit>
-
+    <!--增加 收房维修单-->
+    <AddCollectRepair :module="addCollectRepairDialog" :contract="addReturnInfo"
+                      @close="closeModal"></AddCollectRepair>
+    <!--增加 租房维修单-->
+    <AddRentRepair :module="addRentRepairDialog" :contract="addReturnInfo"
+                   @close="closeModal"></AddRentRepair>               
+    <!--增加工单-->
+    <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
+                 :houseData="houseData" @close="closeModal"></AddFollowUp>
     <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId"
                  :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
@@ -769,10 +777,13 @@
   import EditHouseResources from '../../components/editHouseResources'
   import AddReturnvisit from "../../customerService/ReturnVisitManage/addReturnvisit.vue";   //添加回访
   import EditAddress from '../../components/editAddress'
+  import AddCollectRepair from '../../components/addCollectRepair.vue'                 //添加房东维修
+  import AddRentRepair from '../../components/addRentRepair.vue'                       //添加租客维修
+  import AddFollowUp from '../../components/addFollowUp.vue'                           //增加跟进记录
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit, EditAddress},
+    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit, EditAddress, AddCollectRepair, AddRentRepair, AddFollowUp},
     data() {
       return {
         rightMenuX: 0,
@@ -902,16 +913,24 @@
 
         collectNumberArray: [],
         checkContractData: [],
+        addCollectRepairDialog: false,    //房东添加维修
+        addRentRepairDialog: false,       //租客添加维修
+        addFollowUpDialog: false,     //添加工单
         addReturnvisitDialog: false,
         leaseHistoryDialog: false,
         leaseHistoryTableData: [],
 
         collectFeedback: {},
         rentFeedback: {},
+        houseData: {},
+        cities: [],                     //城市
       }
     },
     mounted() {
       this.collectDatafunc();
+    },
+    created() {
+      this.getDictionary()
     },
     watch: {
       memoDialog(val) {
@@ -986,6 +1005,9 @@
         this.editAddressDialog = false;
         this.editHouseResourcesDialog = false;
         this.addReturnvisitDialog = false;
+        this.addCollectRepairDialog = false;
+        this.addRentRepairDialog = false;
+        this.addFollowUpDialog = false;
 
         if (val === 'updateCollect') {
           this.collectDatafunc();
@@ -1164,7 +1186,68 @@
         }
 
       },
-
+      matchDictionary(id) {
+        let dictionary_name = null;
+        this.pay_way_dic.map((item) => {
+          if (item.id == id) {
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
+      },
+      getDictionary() {
+        this.dictionary(443, 1).then((res) => {
+          this.pay_way_dic = res.data;
+        });
+        //城市
+        this.dictionary(306, 1).then((res) => {
+          this.cities = res.data;
+        });
+      },
+      // 城市遍历
+      forCity(cities, city) {
+        let c = {};
+        cities.forEach(res => {
+          if (city.startsWith('500')) {
+            if (res.variable.city_id.startsWith('500')) {
+              c.id = res.id;
+              c.name = res.dictionary_name;
+            }
+            return;
+          }
+          if (res.variable.city_id === city) {
+            c.id = res.id;
+            c.name = res.dictionary_name;
+          }
+        });
+        console.log(c);
+        return c;
+      },
+      // 工单/维修单 参数
+      returnInfo(row) {
+        let city = {};
+        if (row.city) {
+          city = this.forCity(this.cities, row.city);
+        } else {
+          city.id = '';
+          city.name = '';
+        }
+        this.addReturnInfo = row;
+        this.addReturnInfo.city_id = city.id;
+        this.addReturnInfo.city_name = city.name;
+        this.addReturnInfo.cities = this.cities;
+        this.collectHouseId = row.house_id;
+        this.collectContractId = row.contract_id;   //收房id
+        this.contractOperateId = row.contract_id;   //通用合同ID
+        this.houseAddress = row.address;
+        this.houseData = {
+          cities: this.cities,
+          contract_id: row.contract_id,
+          house_name: row.address,
+          city_id: city.id,
+          city_name: city.name,
+        };
+      },
       //房屋右键
       houseMenu(row, event) {
         this.contractModule = !this.is_rent ? 1 : 2;
@@ -1174,6 +1257,7 @@
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.addReturnInfo = row;
         if (this.is_rent) {
+          this.returnInfo(row);
           this.ToActiveName = "second";
           this.lists = [
             {
@@ -1191,9 +1275,12 @@
               label: '查看合同修改记录',
               contract_id: row.contract_id
             },
+            {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
+            {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
             {clickIndex: 'deleteRent', headIcon: 'el-icon-delete', label: '删除',},
           ];
         } else {
+          this.returnInfo(row);
           this.ToActiveName = "first";
           this.lists = [
             {
@@ -1210,6 +1297,8 @@
               label: '查看合同修改记录',
               contract_id: row.contract_id
             },
+            {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
+            {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
             {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
           ];
         }
@@ -1234,6 +1323,15 @@
           case 'addReturnvisitDialog':   //回访记录
             this.addReturnvisitDialog = true;
             break;
+          case 'addCollectRepairDialog':     //房东报修
+            this.addCollectRepairDialog = true;
+            break;
+          case 'addRentRepairDialog':     //租客保修
+            this.addRentRepairDialog = true;
+            break;
+          case 'addFollowUpDialog':     //增加跟进
+          this.addFollowUpDialog = true;
+          break;
           case 'lookLeaseHistory':
             this.leaseHistoryDialog = true;
             this.selectContractId = val.contract_id;

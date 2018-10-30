@@ -3,7 +3,7 @@
     <el-dialog :close-on-click-modal="false" title="编辑房屋信息" :visible.sync="editHouseDialogVisible" width="30%">
       <div>
         <!--<div class="form_border">-->
-        <el-form size="mini" :model="formInline" label-width="80px">
+        <el-form size="mini" :model="formInline" label-width="100px">
           <el-row>
             <el-col :span="12">
               <el-form-item label="房屋评分">
@@ -28,9 +28,25 @@
             <!--</el-col>-->
             <el-col :span="12">
               <el-form-item label="建议价格">
-                <el-input placeholder="请输入内容" v-model="formInline.suggest_price"></el-input>
+                <el-input placeholder="请输入内容" v-model="formInline.suggest_price" ></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="24" v-for="(item,index) in formInline.lords" :key="index">
+             <el-row>
+                <el-col :span="12">
+                  <el-form-item label="合同开始时间">
+                    <el-input placeholder="请输入内容" v-model="item.start_at" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="收房价格">
+                    <el-input placeholder="请输入内容" v-model="item.month_price[0].price_str" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+             </el-row>
+            </el-col>
+            
+            
           </el-row>
         </el-form>
         <!--</div>-->
@@ -54,6 +70,7 @@
           decoration:'',
           house_feature:'',
           suggest_price:'',
+          lords:[]
         },
         FormVisible: false,
         house_feature_dic : [],
@@ -79,6 +96,8 @@
           this.formInline.decoration = val.decoration? val.decoration:'';
           this.formInline.house_feature = val.house_feature? val.house_feature:'';
           this.formInline.suggest_price = val.suggest_price? val.suggest_price:'';
+          this.formInline.lords = val.lords? val.lords:[];
+
         }
       }
     },
@@ -98,6 +117,7 @@
               decoration:'',
               house_feature:'',
               suggest_price:'',
+              lords:[]
             };
             this.$notify.success({
               title:'成功',

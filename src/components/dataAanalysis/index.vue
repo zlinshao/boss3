@@ -26,14 +26,16 @@
       }
     },
     mounted() {
-    
       
     },
     watch: {},
     methods: {
       handleClick(val) {
-
+      },
+      changeActive(){
+        this.activeName = "first"
       }
+
     },
   }
 </script>

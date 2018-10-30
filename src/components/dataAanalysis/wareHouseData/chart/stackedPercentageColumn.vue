@@ -6,17 +6,12 @@
 </template>
 <script>
   export default {
-    props:['chartData'],
+    name:"stackedPercentageColumn",
+    props:['chartData','chartStyle','params'],
     data(){
       return {
         data:[],
-        dataParams:{//传入参数
-          city:"",
-          area:"",
-          group:"",
-          start_date:"2018-9-1",
-          end_date:"2018-10-17",
-        },
+        dataParams:{},
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
         chartReset:{  //图表配置
@@ -30,14 +25,16 @@
     },
     methods:{
       drawChart(data) { //图表绘制
+        this.$refs.chartId.innerHTML  = ''
         var ds = new this.$DataSet();
           var dv = ds.createView().source(data).transform(this.chartReset);
 
           var chart = new G2.Chart({
             container: this.$refs.chartId,
-            forceFit: true,
+            // forceFit: true,
             // width:800,
-            height:300,
+            width:this.chartStyle.width,
+            height:this.chartStyle.height,
           });
           chart.source(dv, {
             percent: {
@@ -50,9 +47,12 @@
           chart.intervalStack().position(this.chartReset.groupBy[0]+'*percent').color(this.chartReset.dimension);
           chart.render();
       },
-      getChart(){ //获取图表
-        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-          console.log(res)
+      getChart(params){ //获取图表
+        this.$http.get(this.chartData.data_source,{
+          headers:{"Accept":"application/vnd.boss18+json"},
+          params: params
+        }).then((res) => { 
+         
           if(res.data.code == "20000"){
             this.chartTextStatus = false
             this.resetChart()
@@ -65,6 +65,15 @@
           }
         });
       },
+      // getNewDate(){
+      //   var date =  new Date()
+      //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+      //   var year = lastdate.getFullYear();
+      //   var month = lastdate.getMonth()+1;   
+      //   var day = lastdate.getDate(); 
+      //   this.dataParams.start_date = year + '-' +month + '-' + day
+      //   this.dataParams.end_date = year + '-' +month + '-' + day
+      // },
       resetChart(){ //配置图表
         switch(this.chartData.name){
           case "房屋周转率":
@@ -72,7 +81,16 @@
             this.chartReset.dimension = "name";
             this.chartReset.groupBy = ["cate"];
           break;
-         
+          case "收房违约率占比":
+            this.chartReset.field = "value"
+            this.chartReset.dimension = "name";
+            this.chartReset.groupBy = ["cate"];
+          break;
+          case "租房违约率占比":
+            this.chartReset.field = "value"
+            this.chartReset.dimension = "name";
+            this.chartReset.groupBy = ["cate"];
+          break;
           default:
           break;
         }
@@ -80,7 +98,10 @@
 
     },
     mounted () {
-      this.getChart()
+      this.dataParams = JSON.parse(JSON.stringify(chartParams))
+      this.getChartDate(this.dataParams)
+      // this.getNewDate()
+      this.getChart(this.dataParams)
     }
   }
 </script>

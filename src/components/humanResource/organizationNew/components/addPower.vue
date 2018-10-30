@@ -22,7 +22,7 @@
           <el-col :span="16">
             <el-row>
               <el-col :span="3">
-                <div class="el_col_label"  style="line-height: 30px;">角色名称</div>
+                <div class="el_col_label" style="line-height: 30px;">角色名称</div>
               </el-col>
               <el-col :span="18" class="el_col_option">
                 <el-form-item>
@@ -82,7 +82,11 @@
     data() {
       return {
         powerVisible: false,
-        urls: globalConfig.server_user,
+        urls: globalConfig.server,
+        params: {
+          limit: 120,
+          page: 1,
+        },
         systemName: '',
         systemData: [],
         moduleName: '',
@@ -102,12 +106,12 @@
     },
     mounted() {
       this.roleArray = this.powerData.role;
-      this.userId = this.powerData.id;
+      this.userId = this.powerData.user_id;
       this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
     },
     activated() {
       this.roleArray = this.powerData.role;
-      this.userId = this.powerData.id;
+      this.userId = this.powerData.user_id;
     },
     watch: {
       module(val) {
@@ -123,9 +127,9 @@
       },
       powerData(val) {
         this.roleArray = val.role;
-        this.userId = val.id;
+        this.userId = val.user_id;
         setTimeout(() => {
-          if(this.userId){
+          if (this.userId) {
             this.getDefaultData();
             this.getStaffPart();
           }
@@ -136,67 +140,45 @@
     methods: {
       setPart(val) {
         let partNames = this.partNames.join(',');
-        if (val === 'attach') {
-          this.$http.put(globalConfig.server_user + 'powers/withRole/' + this.userId, {
-            with: 'attach',
-            role: partNames
-          }).then((res) => {
-            if (res.data.status === 'success') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message
-              });
-              this.powerVisible = false;
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              })
-            }
-          });
-        } else if (val === 'detach') {
-          this.$http.put(globalConfig.server_user + 'powers/withRole/' + this.userId, {
-              with: 'detach',
-              role: partNames
-          }).then((res) => {
-            if (res.data.status === 'success') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message
-              });
-              this.powerVisible = false;
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              })
-            }
-          });
-        }
-
+        this.$http.put(globalConfig.server + 'organization/user/withRole/' + this.userId, {
+          with: val,
+          role: partNames
+        }).then((res) => {
+          if (res.data.code === '20050') {
+            this.prompt('success', res.data.msg);
+            this.powerVisible = false;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       },
       getStaffPart() {
         this.partNames = [];
-        this.$http.get(globalConfig.server_user + 'powers/getRole/' + this.userId).then((res) => {
-          if (res.data.status === 'success') {
+        this.$http.get(globalConfig.server + 'organization/user/getRole/' + this.userId).then((res) => {
+          if (res.data.code === '20060') {
             let data = res.data.data;
-            for (var i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
               this.partNames.push(data[i].name);
             }
           }
         });
       },
       getAllPartData() {
-        this.$http.get(globalConfig.server_user + 'roles?per_page_number=500').then((res) => {
-          if (res.data.status === 'success') {
-            this.partArrCategory = res.data.data;
+        this.$http.get(this.urls + 'organization/role', {
+          params: {
+            limit: 500,
+            page: 1,
+          }
+        }).then((res) => {
+          if (res.data.code === '20000') {
+            this.partArrCategory = res.data.data.data;
           }
         });
       },
       getDefaultData() {
         this.checkedPower = [];
-        this.$http.get(globalConfig.server_user + 'powers/' + this.userId).then((res) => {
-          if (res.data.status === 'success') {
+        this.$http.get(globalConfig.server + 'organization/user/getPermission/' + this.userId).then((res) => {
+          if (res.data.code === '20060') {
             let powers = res.data.data;
             powers.forEach((item) => {
               this.checkedPower.push(item.id);
@@ -206,21 +188,21 @@
       },
       allChange(val) {
         if (val) {
-          for (var i = 0; i < this.checkAllPower.length; i++) {
+          for (let i = 0; i < this.checkAllPower.length; i++) {
             if ($.inArray(this.checkAllPower[i], this.checkedPower) === -1) {
               this.checkedPower.push(this.checkAllPower[i]);
             }
           }
         } else {
-          for (var i = 0; i < this.checkAllPower.length; i++) {
-            var index = this.checkedPower.indexOf(this.checkAllPower[i]);
+          for (let i = 0; i < this.checkAllPower.length; i++) {
+            let index = this.checkedPower.indexOf(this.checkAllPower[i]);
             this.checkedPower.splice(index, 1);
           }
         }
         this.isIndeterminate = false;
       },
       powerChange(value) {
-        for (var i = 0; i < this.checkAllPower.length; i++) {
+        for (let i = 0; i < this.checkAllPower.length; i++) {
           if ($.inArray(this.checkAllPower[i], value) === -1) {
             this.checkAll = false;
             this.isIndeterminate = true;
@@ -275,9 +257,11 @@
       },
       // 系统
       systemList() {
-        this.$http.get(this.urls + 'systems?per_page_number=100&page=1').then((res) => {
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
-            let data = res.data.data;
+        this.$http.get(this.urls + 'organization/system', {
+          params: this.params
+        }).then((res) => {
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
             this.systemData = data;
             this.systemName = data[0].name;
             this.moduleList(data[0].id);
@@ -288,9 +272,11 @@
       },
       // 模块
       moduleList(val) {
-        this.$http.get(this.urls + 'modules?per_page_number=100&page=1&sys_id=' + val).then((res) => {
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
-            let data = res.data.data;
+        this.$http.get(this.urls + 'organization/module?system_id=' + val, {
+          params: this.params
+        }).then((res) => {
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
             this.moduleData = data;
             this.moduleName = data && data[0] && data[0].name;
             this.permissionList(data[0] && data[0].id);
@@ -302,10 +288,12 @@
       },
       // 权限
       permissionList(val) {
-        this.$http.get(this.urls + 'permissions?per_page_number=100&page=1&mod_id=' + val).then((res) => {
+        this.$http.get(this.urls + 'organization/permission?mod_id=' + val, {
+          params: this.params
+        }).then((res) => {
           this.checkAllPower = [];
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
-            let data = res.data.data;
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
             this.permissionData = data;
             for (let i = 0; i < data.length; i++) {
               this.checkAllPower.push(data[i].id);
@@ -316,38 +304,25 @@
         })
       },
       empower(val) {
-        let powerIds = this.checkedPower.toString();
+        let powerIds = this.checkedPower.toString(), str,ids;
         if (val === 'position') {
-          this.$http.put(globalConfig.server_user + 'powers/' + this.currentRoleId + '?on=role&permissions=' + powerIds).then((res) => {
-            if (res.data.status === 'success') {
-              this.powerVisible = false;
-              this.$notify.success({
-                title: '成功',
-                message: '授权成功'
-              });
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              });
-            }
-          });
+          ids = this.currentRoleId;
+          str = 'position';
         } else {
-          this.$http.put(globalConfig.server_user + 'powers/' + this.userId + '?on=user&permissions=' + powerIds).then((res) => {
-            if (res.data.status === 'success') {
-              this.powerVisible = false;
-              this.$notify.success({
-                title: '成功',
-                message: '授权成功'
-              });
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              });
-            }
-          });
+          ids = this.userId;
+          str = 'user';
         }
+        this.$http.put(globalConfig.server + 'organization/permission/setpermissions/' + ids, {
+          on: str,
+          permissions: powerIds,
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            this.powerVisible = false;
+            this.prompt('success', '授权成功');
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       }
     },
   }
