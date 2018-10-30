@@ -254,7 +254,7 @@
         this.currentPage_user = 1;
         this.departmentList = [];
         this.departmentStaff = [];
-        this.$http.get(this.url + 'organizations?parent_id=' + id + '&per_page_number=50').then((res) => {
+        this.$http.get(globalConfig.server + 'organization/other/org-tree?id=' + id).then((res) => {
           if (res.data.status === 'success') {
             this.departmentList = res.data.data;
             this.lastPage_depart = res.data.meta.last_page;

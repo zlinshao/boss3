@@ -41,16 +41,12 @@
         let head = JSON.parse(localStorage.myData);
         globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
       }
+
       if (localStorage.personal !== undefined) {
         globalConfig.personal = JSON.parse(localStorage.personal);
       }
-      this.responses();
-      document.onkeydown = function (e) {//键盘按键控制
-        e = e || window.event;
-        if (e.keyCode == 116) {
 
-        }
-      };
+      this.responses();
     },
     computed: {
       isLoading() {
@@ -60,27 +56,24 @@
     methods: {
       responses() {
         let that = this;
-        if (this.loginIndex === 0) {
-          this.$http.interceptors.response.use(function (response) {
-            return response;
-          }, function (error) {
-            if (error && error.response) {
-              if (error.response.data.status_code === 401) {
-                // that.$alert('登陆超时请重新登陆', '温馨提示', {
-                //   confirmButtonText: '确定',
-                //   callback: action => {
-                //     that.loginIndex++;
-                //     localStorage.removeItem('myData');
-                //     localStorage.removeItem('personal');
-                //     globalConfig.header.Authorization = '';
-                //     that.$router.push({path: '/login'});
-                //   }
-                // });
-              }
+        this.$http.interceptors.response.use(function (response) {
+          return response;
+        }, function (error) {
+          if (error && error.response) {
+            if (error.response.data.status_code === 401) {
+              // that.$alert('登陆超时请重新登陆', '温馨提示', {
+              //   confirmButtonText: '确定',
+              //   callback: action => {
+              //     that.loginIndex++;
+              //     localStorage.removeItem('personal');
+              //     globalConfig.header.Authorization = '';
+              //     that.$router.push({path: '/login'});
+              //   }
+              // });
             }
-            return Promise.reject(error);
-          });
-        }
+          }
+          return Promise.reject(error);
+        });
       },
       prevent(e) {
         e.preventDefault();
