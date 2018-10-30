@@ -47,12 +47,10 @@
       :visible.sync="detaildialogVisible"
       width="65%">
       <div>
-        <!-- {{dataParams}}<br>
-        {{diaParams}} -->
         <div class="detailMsgHead">
           <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
           <span>{{chartData.name}}</span>
-          <toprightControl></toprightControl>
+          <!-- <toprightControl :cardData="chartData" :btnstatus="true" ></toprightControl> -->
         </div>
         <div class="detailcontent">
           <div class="contentTop">
@@ -165,8 +163,9 @@
   </div>
 </template>
 <script>
-import toprightControl from "../../components/toprightControl.vue"
+  import toprightControl from "../../components/toprightControl.vue"
   export default {
+    name:"tableCard",
     components:{toprightControl},
     props:['chartData','status','chartStyle'],
     data(){
@@ -308,6 +307,8 @@ import toprightControl from "../../components/toprightControl.vue"
           this.diaParams.group = this.placeForm.group
           this.diaParams.start_date = this.selectDate[0]
           this.diaParams.end_date = this.selectDate[1]
+          this.diaParams.page = 1
+          this.currentPageDia = 1
           this.getChart(this.diaParams,val)
       },
       // getNewDate(){

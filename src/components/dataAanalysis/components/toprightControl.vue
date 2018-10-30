@@ -10,7 +10,7 @@
         1.分城市/区域/片区展示本期和上期业绩（用同一组的两个柱形图表示），根据组织架构及时间维度变化而变化展示的数值。<br>
         2.组织架构维度标签下有三个下拉菜单选择项：城市（有所有以及各个城市选项，所有显示所有城市的数据，各个城市显示选择城市下辖区域的数据）/区域（显示下辖片区的数据）/片区（显示片区组员的数据）<br>
         3.时间维度标签有下拉菜单选择项：日历组件，以一周、一月为一周期，选择本周期（上一周或上一月）和本周期的上一个周期</p> -->
-        <p>
+        <p v-if="this.cardData.introduction">
           {{this.cardData.introduction}}
         </p>
       <el-button icon="el-icon-question" slot="reference" circle
@@ -62,7 +62,11 @@
   import addChartToMeter from "../components/addChartToMeterDia.vue"
   import detailChartDialog from "../components/detailChartDialog.vue"
   export default {
-    components: {addChartToMeter,detailChartDialog},
+    name:"toprightControl",
+    components: {
+      addChartToMeter,
+      detailChartDialog
+    },
     props: ['cardData','btnstatus'],
     data() {
       return {
@@ -96,13 +100,14 @@
         this.showSecPop = !this.showSecPop
       },
       getMeterNameList(){ //仪表盘名称列表
+        console.log(111)
         this.$http.get(globalConfig.server + "/bisys/dashboard", {
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {
           if (res.data.code === "20000") {
             // console.log(res)
-            // this.meterList = res.data.data.data.private
-            this.meterList = res.data.data.data.public
+            this.meterList = res.data.data.data.private
+            // this.meterList = res.data.data.data.public
             
           } else {
             
@@ -124,7 +129,7 @@
         // console.log(this.currentList)
         console.log(this.cardData)
         this.params.name = this.currentList.name
-        // this.params.introduction = this.currentList.introduction
+        this.params.introduction = this.currentList.introduction
         this.params.is_public  = this.currentList.is_public
         this.params.card_ids = []
         if(this.currentList.cards.length!==0){

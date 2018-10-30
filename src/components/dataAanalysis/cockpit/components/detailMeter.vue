@@ -69,7 +69,7 @@
             <component 
               :is="detailMeterMsg.topic.chart_set[0].type" 
               :chartData="detailMeterMsg.topic" 
-              :chartStyle="chartstyle" 
+              :chartStyle="mainchartstyle" 
               v-if="detailMeterMsg.topic.chart_set"
               ref="mainchart"
             ></component>
@@ -77,10 +77,11 @@
           <div class="instructions">
             <p>
               指标说明：<br>
-              1.x轴按组织架构城市/区域/片区/业务员分别展示，根据组织架构及时间维度变化而变化展示的数值，根据选择维度展示对应数据。<br>
+              <!-- 1.x轴按组织架构城市/区域/片区/业务员分别展示，根据组织架构及时间维度变化而变化展示的数值，根据选择维度展示对应数据。<br>
               2.每个柱形表示某个组织维度的业绩金额<br>
               3.组织架构维度标签下有三个下拉菜单选择项：城市（有全国以及各个城市选项，所有显示所有城市的数据，各个城市显示选择城市下辖区域的数据）/区域（显示下辖片区的数据）/片区（显示片区组员的数据）<br>
-              4.时间维度标签有下拉菜单选择项：日历组件，可选择的任意时间段（除去当天）。<br>
+              4.时间维度标签有下拉菜单选择项：日历组件，可选择的任意时间段（除去当天）。<br> -->
+              {{detailMeterMsg.introduction}}
             </p>
           </div>
         </div>
@@ -115,6 +116,7 @@
 </template>
 
 <script>
+  import toprightControl from "../../components/toprightControl.vue"
   import chartCard from "../../wareHouseData/chartCard.vue" //图表卡片
   import basicColumn from "../../wareHouseData/chart/basicColumn.vue"          //基础柱状图
   import bubblePoint from "../../wareHouseData/chart/bubblePoint.vue"          //气泡图
@@ -127,12 +129,12 @@
   import stackedPercentageColumn from "../../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
   import textCard from "../../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../../wareHouseData/chart/tableCard.vue"            //表格卡片
-
-  import toprightControl from "../../components/toprightControl.vue"
+  
 
   export default {
     props: ['detailMeterVisible', 'detailMeterMsg'],
     components: {
+      toprightControl,
       chartCard,
       basicColumn,
       bubblePoint,
@@ -145,13 +147,17 @@
       stackedPercentageColumn,
       textCard,
       tableCard,
-      toprightControl
     },
     data() {
       return {
         params:{},
         chartstyle:{
-          height:300
+          height:300,
+          width:530
+        },
+        mainchartstyle:{
+          height:260,
+          width:460
         },
         mainchartItem: {},//主指标
         chartItems: {},//侧边指标
@@ -223,7 +229,13 @@
           this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
             // console.log(res)
             if(res.data.status_code == 200){
-              this.cityOption = res.data.data
+              // console.log(res.data.data)
+              res.data.data.forEach(item=>{
+                if(item.name!=="外出考察"){
+                  this.cityOption.push(item)
+                }
+              })
+              // this.cityOption = res.data.data
             }
           });
         }else if(val=="area"){
@@ -260,7 +272,7 @@
             // })
             // console.log(this.$refs)
             for(var key in this.$refs){
-              console.log(key)
+              // console.log(key)
               if(key=='mainchart'){
                 this.$refs[key].getChart(this.params,"default")
               }
@@ -371,6 +383,7 @@
   //侧边主题表单控件部分
   .content {
     padding: 10px;
+    overflow: hidden;
     .content_top {
       padding: 10px;
       span {
@@ -413,7 +426,7 @@
       box-sizing: border-box;
       margin-top: 20px;
       margin-right: 20px;
-      height: 300px;
+      // height: 300px;
     }
     //侧边底部说明
     .instructions {

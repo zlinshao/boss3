@@ -6,6 +6,7 @@
 </template>
 <script>
   export default {
+    name:"stackedPercentageColumn",
     props:['chartData','chartStyle','params'],
     data(){
       return {
