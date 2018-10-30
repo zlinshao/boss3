@@ -13,7 +13,7 @@ const GetDateList = function (){
         if(minusMonth<10){
             minusMonth = '0'+minusMonth;
         }
-        arr.push({sort:j,date:`${minusyear}/${minusMonth}`,edit:false});
+        arr.push({sort:j,date:`${minusyear}-${minusMonth}`,edit:false});
     }
     for(let i=0;i<6;i++){
         var addMonth = parseInt(month) + i;
@@ -25,7 +25,7 @@ const GetDateList = function (){
         if(addMonth<10){
             addMonth = '0'+addMonth;
         }
-        arr.push({sort:i+5,date:`${addyear}/${addMonth}`,edit:true});
+        arr.push({sort:i+5,date:`${addyear}-${addMonth}`,edit:true});
     }
     return arr;
 }

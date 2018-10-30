@@ -69,7 +69,8 @@ const TransferPosition = () => import  ('../components/HRM/teamManage/transferPo
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
 //考勤管理
-const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
+const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //设置排班
+const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 
 //OA办公
@@ -534,9 +535,8 @@ export default new Router({
       name: '考勤管理',
       icon: 'el-icon-document',
       children: [
-        {
-          path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
-        }
+        {path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',},
+        {path: '/punchCard', component: PunchCard , name: '查看打卡'}
       ]
     },
     {
