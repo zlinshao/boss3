@@ -4,7 +4,7 @@
       :visible.sync="addChartToMeterdialogVisible"
       width="30%"
       custom-class="addMeterDia"
-      :modal="false"
+      
       @open="showaddMeterDia"
       ref="addMeterDia"
       >

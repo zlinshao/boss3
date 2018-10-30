@@ -372,7 +372,6 @@
         
       },
       showDetailChartDialog(){
-        // console.log(111)
         // console.log(this.status)
         if(!this.status){
           

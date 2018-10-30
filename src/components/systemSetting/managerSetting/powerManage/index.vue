@@ -182,13 +182,16 @@
 
         showSize: 5,
         firstForm: {
-          page: 1
+          page: 1,
+          limit: 5,
         },
         secondForm: {
-          page: 1
+          page: 1,
+          limit: 5,
         },
         thirdForm: {
-          page: 1
+          page: 1,
+          limit: 5,
         },
         firstPage: 1,
         secondPage: 1,
@@ -249,7 +252,7 @@
         this.emptyContent1 = ' ';
         this.tableLoading1 = true;
         this.firstForm.page = val;
-        this.$http.get(this.urls + 'organization/system?limit=5', {
+        this.$http.get(this.urls + 'organization/system', {
           params: this.firstForm
         }).then((res) => {
           this.tableLoading1 = false;
@@ -280,7 +283,7 @@
         this.emptyContent2 = ' ';
         this.tableLoading2 = true;
         this.secondForm.page = val;
-        this.$http.get(this.urls + 'organization/module?limit=5&system_id=' + this.addID.firstID, {
+        this.$http.get(this.urls + 'organization/module?system_id=' + this.addID.firstID, {
           params: this.secondForm
         }).then((res) => {
           this.tableLoading2 = false;
@@ -309,7 +312,7 @@
         this.emptyContent3 = ' ';
         this.tableLoading3 = true;
         this.thirdForm.page = val;
-        this.$http.get(this.urls + 'organization/permission?limit=5&mod_id=' + this.addID.secondID, {
+        this.$http.get(this.urls + 'organization/permission?mod_id=' + this.addID.secondID, {
           params: this.thirdForm
         }).then((res) => {
           this.tableLoading3 = false;

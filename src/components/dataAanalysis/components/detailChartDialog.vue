@@ -218,7 +218,6 @@
             this.placeForm.area = ''
             this.placeForm.group = ''
             this.getList("area",id)
-            // console.log(this.placeForm)
           }else if(val=='area'){
             this.placeForm.group = ''
             this.getList("group",id)
@@ -227,7 +226,7 @@
         getList(val,id){
           if(val=='city'){
             this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
-              // console.log(res)
+              
               if(res.data.status_code == 200){
                 this.cityOption = res.data.data
               }

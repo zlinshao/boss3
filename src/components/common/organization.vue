@@ -1,90 +1,85 @@
 <template>
-  <div id="organizationId">
+  <div id="organization">
     <el-dialog :close-on-click-modal="false" title="组织架构" :visible.sync="organizationVisible" width="785px" center>
-      <div class="content">
-        <div class="content_left" @click="inputFocus">
-          <div style="display:flex;flex-wrap: wrap;">
-            <div v-for="item in selectMember" style="height: 40px;line-height: 40px">
-              <el-tag type="info" closable size="medium" @close="handleClose(item)" style="margin-left:10px">
-                {{item.name}}
-              </el-tag>
+      <div class="organPadding">
+        <!--搜索-->
+        <div class="searchStaff">
+          <div class="selectItem">
+            <div class="onTags">
+              <div class="outer" v-for="item in form">
+                <el-tag type="info" closable size="medium" @close="handleClose(item)">
+                  {{item.name}}
+                </el-tag>
+              </div>
             </div>
-            <div style="flex-grow:1">
-              <input id="search" placeholder="请输入企业联系人" @keyup="keywordsSearch"
-                     @keydown.8="backSpace" v-model="keywords" type="text" class="inputSearch"
-                     @keydown.down="changeDown" @keydown.up="changeUp" @keydown.13='keyDownAdd'>
+            <!--@keyup.native.8="backSpace"-->
+            <div class="outer" style="flex-grow:1">
+              <el-input v-model="params.keywords" @keyup.native.enter="searchStaff" placeholder="请输入企业联系人"
+                        size="mini"></el-input>
             </div>
           </div>
-          <div class="searchItems">
-            <ul class="scroll_bar" id="searchList" v-if="searchItems.length>0">
-              <li v-for="(item,index) in searchItems" @click="selectSearchItem(item)" :class="{'hov':active_li==index}">
-                <div style="display: flex;">
-                  <div class="head">
+          <div>
+            <ul class="scroll_bar" :style="leftUl" v-if="staffList.length > 0">
+              <li v-for="item in staffList" @click="chooseType(item, staffList)">
+                <div class="search">
+                  <div class="staffData">
                     <img v-if="item.avatar" :src="item.avatar">
-                    <img v-else="" src="../../assets/images/defaultHead.png">
+                    <img src="../../assets/images/head.png" v-else>
+                    <div>
+                      <span>{{item.name}}</span>
+                      <span class="span2" v-for="(str, idx) in item.organizations" v-if="idx === 0">
+                        {{str.name}}
+                      </span>
+                    </div>
                   </div>
-                  <div class="infoBox">
-                    <div class="info">{{item.name}}</div>
-                    <div class="info">{{item.phone}}</div>
-                  </div>
+                  <i v-if="checkData.indexOf(item.id) > -1" class="el-icon-check"></i>
                 </div>
-                <i class="el-icon-check" style="float: right" v-if="selectIdMember.indexOf(item.id)>-1"></i>
               </li>
             </ul>
           </div>
         </div>
-        <div class="content_right">
-          <div class="box">
-            <div class="boxHead">{{highestDepart}}</div>
-            <div class="breadcrumb-wrapper scroll_bar" @scroll="scroll_bar_move" id="scroll_bar">
-              <div class="breadcrumb" id="breadcrumbBox">
-                <a>
-                  <span @click="breadcrumbSearch(1)">{{highestDepart}}</span>
-                </a>
-                <a v-for="(item,index) in breadcrumbList" @click="breadcrumbSearch(item,index)">
-                  <span>&nbsp;&gt;&nbsp;{{item.name}}</span>
-                </a>
-              </div>
-              <div class="box-body">
-                <ul id="memberBox">
-                  <li>
-                    <el-checkbox v-model="dimission">查看离职员工</el-checkbox>
-                  </li>
-                  <li v-for="item in departmentList">
-                    <el-checkbox-group v-model="checkedIdBox" @change="checkDepart(item,$event)">
-                      <el-checkbox :disabled="noDepart" :label="item.id" :key="item.id">{{item.name}}
-                        ({{item.users}}人)
-                      </el-checkbox>
-                    </el-checkbox-group>
-
-                    <el-button type="text" :disabled="checkedIdBox.indexOf(item.id)>-1" class="lowerLevel"
-                               @click="getNextLevel(item,$event)"> 丨下级
-                    </el-button>
-                  </li>
-                  <li v-for="item in departmentStaff" @click="selectStaff(item)">
-                    <div>
-                      <div class="head">
-                        <img v-if="item.avatar" :src="item.avatar">
-                        <img v-else="" src="../../assets/images/head.jpg">
-                        <!--对号-->
-                        <span class="el-icon-check" v-if="selectIdMember.indexOf(item.id)>-1"></span>
-                        <!--遮罩-->
-                        <span class="shade" v-if="selectIdMember.indexOf(item.id)>-1"></span>
-                      </div>
-                      <div class="infoBox">
-                        <div class="info">{{item.name}}</div>
-                        <div class="info" v-if="item.org">{{item.org[0].name}}</div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
+        <!--筛选-->
+        <div class="filterOrgan">
+          <div class="filterTop" @click="filterOrgan(1)">
+            南京乐伽商业管理有限公司
           </div>
+          <div class="pitchOnData" v-show="pitchOnData.length > 0">
+          <span v-for="(item,index) in pitchOnData" @click="removePitch(item.id, index)">
+            <span v-if="pitchOnData.length > 1 && index !== 0">></span>
+            {{item.name}}
+          </span>
+          </div>
+          <ul class="scroll_bar checkDepart" :style="rightUl">
+            <li v-for="item in list.children">
+              <el-checkbox-group v-model="checkDepart" :disabled="organType === 'staff'"
+                                 @change="chooseType(item, list.children)">
+                <el-checkbox :label="item.id" :key="item.id">{{item.name}}</el-checkbox>
+              </el-checkbox-group>
+              <div class="nextLevel" @click="nextLevel(item.id, item)">下级</div>
+            </li>
+            <li class="listUsers" v-for="item in list.users" @click="chooseType(item, list.users)"
+                v-if="organType !== 'depart'">
+              <div class="staffData">
+                <div class="imgData">
+                  <img v-if="item.avatar" :src="item.avatar">
+                  <img src="../../assets/images/head.png" v-else>
+                  <div v-if="checkData.indexOf(item.id) > -1">
+                    <i class="el-icon-check"></i>
+                  </div>
+                </div>
+                <div>
+                  <span>{{item.name}}</span>
+                  <span class="span2" v-for="(str, idx) in item.organizations" v-if="idx === 0">
+                    {{str.name}}
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :disabled="buttonStatus" @click="confirmSelect">确 定</el-button>
+      <div slot="footer">
+        <el-button type="primary" size="small" :disabled="form.length < 1" @click="confirmSelect">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -92,569 +87,380 @@
 
 <script>
   export default {
+    name: "organization",
     props: ['organizationDialog', 'length', 'type'],
     data() {
       return {
-        url: globalConfig.server_user,
         organizationVisible: false,
-        buttonStatus: true,   //确认按钮禁用状态
 
-        searchItems: [],    //搜索到人员
-        keywords: '',
-
-        departmentList: [],    //组织架构部门列表
-        departmentStaff: [],//右侧员工聊表
-        breadcrumbList: [],  //面包屑列表
-
-        selectMember: [],     //已选数组
-        selectIdMember: [],    //左侧选择id
-        checkedIdBox: [],//已选部门id数组
-        //键盘
-        active_li: -1,  //键盘上下被选中li
-        hoverMember: [], //键盘悬浮成员
-        highestDepart: '',   //最高级岗位
-
-        noStaff: false,
-        noDepart: false,
-        memberLength: 0,
-        currentDepartId: '',
-        currentPage_depart: 1,
-        currentPage_user: 1,
-        lastPage_depart: '',
-        lastPage_user: '',
-        is_dimission: 0,
-        dimission: false,
-        firstOpen: true,
+        url: globalConfig.server,
+        list: [],               //所有数据
+        leftUl: {
+          height: '',           //左侧 列表高度
+        },
+        rightUl: {
+          height: '',           //右侧 列表高度
+        },
+        params: {
+          limit: 20,
+          page: 1,
+          keywords: '',
+        },
+        staffList: [],          //员工列表
+        parent_id: '',          //当前层级 id
+        pitchOnData: [],        //面包屑
+        checkDepart: [],        //复选框 部门
+        checkData: [],          //选中员工
+        form: [],
+        lengths: '',
+        organType: '',
       }
     },
     mounted() {
-
+    },
+    activated() {
     },
     watch: {
-      dimission(val) {
-        this.is_dimission = val ? 1 : 0;
-        this.getDepartment(this.currentDepartId);
-      },
       organizationDialog(val) {
         this.organizationVisible = val;
       },
       organizationVisible(val) {
         if (!val) {
           this.$emit('close');
-          this.selectMember = [];       //已选数组
-          this.selectIdMember = [];     //左侧选择id
-          this.checkedIdBox = [];       //已选部门id数组
+          this.close_();
         } else {
-          if (this.firstOpen) {
-            this.currentDepartId = 1;
-            this.getDepartment(1);
-            this.getHighDepart();
-          }
-          setTimeout(() => {
-            this.firstOpen = false;
-          }, 100)
+          this.filterOrgan(1);
+          this.$nextTick(() => {
+            this.leftHeight();
+            this.rightHeight();
+          })
         }
       },
-      type(val) {
-        if (val) {
-          if (val === 'depart') {
-            this.noStaff = true;
-            this.noDepart = false;
-          } else if (val === 'staff') {
-            this.noStaff = false;
-            this.noDepart = true;
-          } else {
-            this.noStaff = false;
-            this.noDepart = false;
-          }
-        }
+      form() {
+        this.$nextTick(() => {
+          this.leftHeight();
+        })
       },
       length(val) {
-        if (val) {
-          this.memberLength = val;
-        }
+        this.lengths = val;
       },
-      selectMember(val) {
-        this.buttonStatus = !val.length;
-        if (val.length > 0) {
-          if (val[val.length - 1].hasOwnProperty("phone") && this.noStaff) {
-            this.selectMember.pop();
-            this.selectIdMember.pop();
-            this.$notify({
-              title: '警告',
-              message: '选择超过限制（不可以选择员工）',
-              type: 'warning'
-            });
-          }
-
-          if (val.length > this.memberLength && this.memberLength) {
-            this.selectMember.pop();
-            this.selectIdMember.pop();
-            this.checkedIdBox.pop();
-            this.$notify({
-              title: '警告',
-              message: '选择超过限制(最多选择' + this.memberLength + '个)',
-              type: 'warning'
-            });
-          }
-        }
+      type(val) {
+        this.organType = val;
       }
     },
+    computed: {},
     methods: {
-      scroll_bar_move() {
-        let div_scrollHeight = $('#memberBox').height() + $('#breadcrumbBox').height() + 10;
-        let div_clientHeight = $('#scroll_bar').height();
-        let div_scropTop = $('#scroll_bar').scrollTop();
-        if (div_scrollHeight - div_clientHeight - div_scropTop < 100) {
-          this.getMoreUser();
-          this.getMoreDepart();
+      // 搜索/员工
+      searchStaff() {
+        if (this.params.keywords === '') {
+          this.staffList = [];
+          return;
         }
-      },
-      //获取更多员工信息
-      getMoreUser() {
-        if (this.currentPage_user < this.lastPage_user) {
-          this.currentPage_user++;
-          this.$http.get(this.url + 'users?org_id=' + this.currentDepartId + '&page=' + this.currentPage_user
-            + '&is_dimission=' + this.is_dimission).then((res) => {
-            if (res.data.status === 'success') {
-              if (res.data.data.length > 0) {
-                res.data.data.forEach((item) => {
-                  this.departmentStaff.push(item);
-                })
-              }
-            }
-          })
-        }
-      },
-      //获取更多部门信息
-      getMoreDepart() {
-        if (this.currentPage_depart < this.lastPage_depart) {
-          this.currentPage_depart++;
-          this.$http.get(this.url + 'organizations?parent_id=' + id + '&page=' + this.currentPage_depart).then((res) => {
-            if (res.data.status === 'success') {
-              if (res.data.data.length > 0) {
-                res.data.data.forEach((item) => {
-                  this.departmentList.push(item);
-                })
-              }
-            }
-          })
-        }
-      },
-      getHighDepart() {
-        this.$http.get(this.url + 'organizations/1').then((res) => {
-          if (res.data.status === 'success') {
-            this.highestDepart = res.data.data.name;
-          }
-        });
-      },
-      getDepartment(id) {
-        //获取顶级部门名称
-        this.currentPage_depart = 1;
-        this.currentPage_user = 1;
-        this.departmentList = [];
-        this.departmentStaff = [];
-        this.$http.get(this.url + 'organizations?parent_id=' + id + '&per_page_number=50').then((res) => {
-          if (res.data.status === 'success') {
-            this.departmentList = res.data.data;
-            this.lastPage_depart = res.data.meta.last_page;
-          }
-        });
-        this.$http.get(this.url + 'users?org_id=' + id + '&is_dimission=' + this.is_dimission).then((res) => {
-          if (res.data.status === 'success') {
-            this.departmentStaff = res.data.data;
-            this.lastPage_user = res.data.meta.last_page;
+        this.$http.get(this.url + 'organization/other/staff-list', {
+          params: this.params
+        }).then(res => {
+          if (res.data.code === '70010') {
+            this.staffList = res.data.data.data;
+          } else {
+            this.staffList = [];
           }
         })
       },
-
-      //*******************左侧********************
-      //搜索列表选择
-      selectSearchItem(item) {
-        let isExist = null;
-        isExist = this.isExist(item, this.selectMember);
-        if (isExist) {
-          this.filterSelectMember(item);
-        } else {
-          this.selectMember.push(item);
-          this.selectIdMember.push(item.id);
-          this.keywords = '';
-          this.keywordsSearch();
-        }
-      },
-
-      //删除标签页
-      handleClose(item) {
-        this.filterSelectMember(item);
-      },
-      //回车删除事件
-      backSpace() {
-        this.hoverMember = [];
-        if (this.keywords === '' && this.selectMember.length > 0) {
-          this.selectMember.pop();
-          this.selectIdMember.pop();
-          this.checkedIdBox.pop();
-
-        }
-      },
-      //键盘向下事件
-      changeDown() {
-        if (this.searchItems.length !== 0) {
-          this.active_li++;
-          if (this.active_li === this.searchItems.length) this.active_li = this.searchItems.length - 1;
-          this.hoverMember = this.searchItems[this.active_li];
-          if (this.active_li > 2) document.getElementById('searchList').scrollTop += 50;
-        }
-      },
-      //键盘向上事件
-      changeUp() {
-        if (this.searchItems.length !== 0) {
-          this.active_li--;
-          if (this.active_li <= -1) {
-            this.active_li = -1;
-            this.hoverMember = [];
-          } else if (this.active_li > -1) {
-            this.hoverMember = this.searchItems[this.active_li];
-          }
-          if (this.active_li < this.searchItems.length - 4) document.getElementById('searchList').scrollTop -= 50;
-        }
-      },
-      //键盘添加事件
-      keyDownAdd() {
-        if (!Array.isArray(this.hoverMember)) {
-          let isExist = null;
-          isExist = this.isExist(this.hoverMember, this.selectMember);
-          if (isExist) {
-            this.filterSelectMember(this.hoverMember);
+      // 部门/员工
+      filterOrgan(id) {
+        if (this.parent_id === id) return;
+        this.list = [];
+        this.pitchOnData = id === 1 ? [] : this.pitchOnData;
+        this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
+          this.parent_id = id;
+          this.rightHeight();
+          if (res.data.code === '70050') {
+            this.list = res.data.data;
+            this.evaluate(this.list.children, this.checkDepart);
           } else {
-            this.selectMember.push(this.hoverMember);
-            this.selectIdMember.push(this.hoverMember.id);
-            this.keywords = '';
+            this.prompt('warning', res.data.msg);
           }
-        }
+        })
       },
-      isExist(select, selectMember) {     //判断该id是否已经被选中
-        for (let i = 0; i < selectMember.length; i++) {
-          if (select.id === selectMember[i].id && select.name === selectMember[i].name) {
-            return true;
-          }
-        }
-        return false;
-      },
-      //filter
-      filterSelectMember(item) {
-        for (let i = 0; i < this.selectMember.length; i++) {
-          if (item.id === this.selectMember[i].id && item.name === this.selectMember[i].name) {
-            this.selectMember.splice(i, 1);
-            this.selectIdMember.splice(i, 1);
-            this.checkedIdBox.splice(i, 1)
-          }
-        }
-      },
-
-      //***************右侧组织架构********************
-      //选取部门
-      checkDepart(item, e) {
-        let isExist = null;
-        isExist = this.isExist(item, this.selectMember);
-        if (isExist) {
-          for (let i = 0; i < this.selectMember.length; i++) {
-            if (item.id === this.selectMember[i].id && item.name === this.selectMember[i].name) {
-              this.selectMember.splice(i, 1)
-            }
-          }
-        } else {
-          this.selectMember.push(item)
-        }
-      },
-      //搜索下级部门
-      getNextLevel(item, event) {
-        if (event.target.className !== 'el-checkbox__inner' && event.target.className !== 'el-checkbox__original') {
-          this.currentDepartId = item.id;
-          this.getDepartment(item.id);
-          let isExist = false;
-          this.breadcrumbList.forEach((x) => {
-            if (item.id === x.id) {
-              isExist = true
-            }
-          });
-          if (!isExist) {
-            this.breadcrumbList.push(item)
-          }
-        }
-      },
-      //面包屑搜索
-      breadcrumbSearch(item, index) {
-        if (item === 1) {
-          this.currentDepartId = 1;
-          this.getDepartment(1);
-          this.breadcrumbList = [];
-        } else {
-          this.currentDepartId = item.id;
-          this.getDepartment(item.id);
-          this.breadcrumbList.splice(index + 1, this.breadcrumbList.length);
-        }
-      },
-      keywordsSearch() {
-        if (this.keywords) {
-          this.$http.get(globalConfig.server + 'organization/other/staff-list', {
-            params: {
-              keywords: this.keywords,
-              page: 1,
-              limit: 20
-            }
-          }).then((res) => {
-            if (res.data.code === '70010') {
-              this.searchItems = res.data.data.data;
-            } else {
-              this.searchItems = [];
+      // 复选框 动态增加选项
+      evaluate(list, check) {
+        list.forEach((res) => {
+          check.forEach((item) => {
+            if (res.id === item) {
+              this.checkDepart.push(res);
             }
           })
-        } else {
-          this.searchItems = [];
+        })
+      },
+      // 删除标签页
+      handleClose(item) {
+        let status = this.isExist(item, this.form);
+        this.form.splice(status, 1);
+        this.checkData.splice(status, 1);
+        this.departStaff(item, this.checkDepart);
+      },
+      //回退删除 标签
+      backSpace() {
+        if (this.params.keywords === '' && this.checkData.length > 0) {
+          this.form.pop();
+          this.checkData.pop();
+          this.checkDepart.pop();
         }
       },
-
-      inputFocus() {
-        let _input = document.getElementById('search');
-        _input.focus();
-      },
-
-      selectStaff(item) {
-        let isExist = null;
-        isExist = this.isExist(item, this.selectMember);
-        if (isExist) {
-          for (let i = 0; i < this.selectMember.length; i++) {
-            if (item.id === this.selectMember[i].id && item.name === this.selectMember[i].name) {
-              this.selectMember.splice(i, 1);
-              this.selectIdMember.splice(i, 1);
-            }
+      // 部门/员工同时存在 删除复选框
+      departStaff(item, data) {
+        data.forEach((res, index) => {
+          if (item.id === res) {
+            this.checkDepart.splice(index, 1);
           }
+        })
+      },
+      // 判断是否存在
+      isExist(item, data) {
+        for (let i = 0; i < data.length; i++) {
+          if (item.id === data[i].id) {
+            return i;
+          }
+        }
+        return -1;
+      },
+      // 部门 / 员工
+      chooseType(item, data) {
+        let status = this.isExist(item, this.form);
+        if (status > -1) {
+          this.form.splice(status, 1);
+          this.checkData.splice(status, 1);
         } else {
-          this.selectMember.push(item);
-          this.selectIdMember.push(item.id);
+          this.chooseData(item, data);
         }
       },
-
-      //确定选择并发送
+      // 选中
+      chooseData(item, data) {
+        this.params.keywords = '';
+        if (this.form.length > this.lengths - 1 && this.lengths !== '') {
+          this.prompt('warning', '超出数量限制!');
+          this.checkDepart.pop();
+          return;
+        }
+        data.forEach(res => {
+          if (item.id === res.id) {
+            this.checkData.push(res.id);
+            this.form.push(res);
+          }
+        });
+      },
+      // 下级 面包屑
+      nextLevel(id, item) {
+        let data = {};
+        data.id = item.id;
+        data.name = item.name;
+        this.pitchOnData.push(data);
+        this.filterOrgan(id);
+      },
+      // 删除 面包屑
+      removePitch(id, index) {
+        this.filterOrgan(id);
+        this.pitchOnData.splice(index + 1);
+      },
+      // 确定
       confirmSelect() {
         this.organizationVisible = false;
-        this.$emit('selectMember', this.selectMember);
-      }
-    }
+        this.$emit('selectMember', this.form);
+      },
+      close_() {
+        this.params.keywords = '';
+        this.staffList = [];          //员工列表
+        this.pitchOnData = [];        //面包屑
+        this.checkDepart = [];        //复选框 部门
+        this.checkData = [];          //选中员工 / 部门
+        this.form = [];               //返回数据
+        this.parent_id = '';          //父级ID
+      },
+      // ul高度
+      leftHeight() {
+        let height = $('.selectItem').height();
+        this.leftUl.height = (420 - height - 16) + 'px';
+      },
+      // ul高度
+      rightHeight() {
+        let height = $('.pitchOnData').height();
+        if (height !== 0) {
+          this.rightUl.height = (420 - height - 72) + 'px';
+        } else {
+          this.rightUl.height = (420 - 53) + 'px';
+        }
+      },
+    },
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped="">
-  .gray {
-    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
-    filter: grayscale(100%);
-  }
+<style lang="scss">
+  @import "../../assets/css/common.scss";
 
-  .hov {
-    background: #f5f7fa;
-  }
-
-  input::-webkit-input-placeholder {
-    color: #999;
-  }
-
-  #organizationId {
-    .el-dialog__wrapper {
-      .el-dialog {
-        .el-dialog__body {
-          .content {
-            height: 442px;
-            font-size: 0;
-            .content_left {
-              font-size: 14px;
-              float: left;
-              width: 440px;
-              height: 440px;
-              background: #fff;
-              margin-right: 15px;
-              border: 1px solid #ddd;
-              border-radius: 4px;
-              box-sizing: border-box;
-              /*overflow: hidden;*/
-              &:hover {
-                border-color: #83c7ff;
-              }
-
-              .inputSearch {
-                border: none;
-                background: #fff;
-                border-radius: 4px;
-                box-sizing: border-box;
-                color: #999;
-                display: inline-block;
-                height: 40px;
-                line-height: 40px;
-                outline: 0;
-                padding: 0 15px;
-                width: 100%;
-              }
-
-              .searchItems {
-                ul {
-                  height: 377px;
-                  overflow: auto;
-                  background: #fff;
-                  border: 1px solid #ccc;
-                  border-radius: 5px;
-                  li {
-                    height: 50px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    cursor: pointer;
-                    padding: 5px 20px;
-                    -webkit-box-sizing: border-box;
-                    box-sizing: border-box;
-                    &:hover {
-                      background: #f5f7fa;
-                    }
-                    .head {
-                      font-size: 12px;
-                      float: left;
-                      height: 35px;
-                      width: 35px;
-                      border-radius: 50%;
-                      margin-right: 5px;
-                      position: relative;
-                      img {
-                        height: 35px;
-                        width: 35px;
-                        border-radius: 50%;
-                      }
-                    }
-                    .infoBox {
-                      height: 36px;
-                      .info {
-                        height: 20px;
-                        line-height: 20px;
-                        font-size: 15px;
-                        &:last-child {
-                          font-size: 12px;
-                          height: 16px;
-                          line-height: 16px;
-                          color: #999;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            .content_right {
-              font-size: 14px;
-              float: right;
-              width: 300px;
-              background: #fff;
-              border: 1px solid #ddd;
-              border-radius: 4px;
-              box-sizing: border-box;
-              div {
-                .boxHead {
-                  text-align: center;
-                  padding: 5px 0;
-                }
-                .breadcrumb-wrapper {
-                  height: 383px;
-                  overflow: auto;
-                  .breadcrumb {
-                    padding: 0 15px;
-                    a:not(last-child) {
-                      color: #409EFF;
-                      cursor: pointer;
-                    }
-                  }
-                }
-                .box-body {
-                  ul {
-                    padding: 0;
-                    li {
-                      padding: 5px 20px;
-                      box-sizing: border-box;
-                      cursor: pointer;
-                      display: flex;
-                      align-items: center;
-                      justify-content: space-between;
-
-                      .lowerLevel {
-                        color: #bbb;
-                        &:hover {
-                          color: #6a8dfb;
-                        }
-                      }
-                      &:hover {
-                        background: rgb(223, 237, 250);;
-                      }
-                      list-style-type: none;
-                      height: 50px;
-                      .head {
-                        font-size: 12px;
-                        float: left;
-                        height: 35px;
-                        width: 35px;
-                        border-radius: 50%;
-                        margin: 4px 5px 0 0;
-                        position: relative;
-                        img {
-                          height: 35px;
-                          width: 35px;
-                          border-radius: 50%;
-                        }
-                        .el-icon-check {
-                          color: #ffffff;
-                          font-size: 20px;
-                          position: absolute;
-                          left: 50%;
-                          top: 50%;
-                          transform: translate(-50%, -50%);
-                          z-index: 1
-                        }
-                        .shade {
-                          width: 35px;
-                          height: 35px;
-                          background: #777777;
-                          position: absolute;
-                          left: 0;
-                          top: 0;
-                          border-radius: 50%;
-                          opacity: .6
-                        }
-                      }
-                      .infoBox {
-                        float: left;
-                        .info {
-                          height: 20px;
-                          font-size: 15px;
-                          &:last-child {
-                            font-size: 12px;
-                            height: 16px;
-                            color: #999;
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+  #organization {
+    .el-dialog__body {
+      background-color: #f8f8f8;
+      padding: 20px;
+    }
+    .organPadding {
+      height: 420px;
+      overflow: hidden;
+      @include flex-items;
+      .searchStaff, .filterOrgan {
+        background-color: #fff;
+        overflow: hidden;
+        height: 99%;
+        border: 1px solid #e0e0e0;
+        @include border_radius(6px);
+        img {
+          width: 38px;
+          height: 38px;
+          margin-right: 12px;
+          @include border_radius(50%);
+        }
+        &:hover {
+          border-color: $themeColor;
+        }
+      }
+      /*左*/
+      .searchStaff {
+        width: 440px;
+        margin-right: 10px;
+        .selectItem, .onTags {
+          @include flex-items;
+          flex-wrap: wrap;
+        }
+        .selectItem {
+          padding-bottom: 2px;
+        }
+        input {
+          border: none;
+          padding-left: 6px;
+        }
+        .outer {
+          margin: 10px 0 0 10px;
+          div {
+            width: 100%;
+          }
+        }
+        ul {
+          border-top: 1px solid #eee;
+          margin: 0 10px;
+          overflow: hidden;
+          overflow-y: auto;
+        }
+      }
+      /*右*/
+      .filterOrgan {
+        width: 300px;
+        .filterTop {
+          text-align: center;
+          padding: 8px 0;
+          cursor: pointer;
+          @include box_shadow(#eee, 10px);
+          &:hover {
+            color: $themeColor;
+          }
+        }
+        .pitchOnData {
+          background-color: #f5f5f5;
+          padding: 10px;
+          color: $themeColor;
+          > span {
+            line-height: 22px;
+            cursor: pointer;
+            &:hover {
+              color: #1D7FFB;
             }
           }
         }
-        .el-dialog__footer {
-          .dialog-footer {
-            .el-button {
-              padding: 10px 20px;
-              width: 150px;
+        .checkDepart {
+          overflow-x: hidden;
+          overflow-y: auto;
+          .listUsers {
+            height: 50px;
+            cursor: pointer;
+          }
+          li {
+            padding: 0 18px;
+            height: 42px;
+            @include flex-items;
+            justify-content: space-between;
+            &:hover {
+              background-color: rgb(223, 237, 250);
+            }
+            .el-checkbox {
+              @include flex-items;
+              .el-checkbox__label {
+                max-width: 160px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+            .nextLevel {
+              cursor: pointer;
+              padding: 0 10px;
+              min-width: 50px;
+              border-left: 1px solid #e0e0e0;
+              color: #bbb;
+              &:hover {
+                color: $themeColor;
+                border-left: 1px solid $themeColor;
+              }
             }
           }
         }
       }
+      .staffData {
+        @include flex-items;
+        .imgData {
+          width: 38px;
+          height: 38px;
+          margin-right: 12px;
+          position: relative;
+          div {
+            position: absolute;
+            top: 0;
+            color: #fff;
+            font-size: 22px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            @include border_radius(50%);
+            @include items-justify;
+          }
+        }
+        div {
+          color: #606266;
+          margin: 0;
+          span{
+            line-height: 18px;
+            display: block;
+          }
+          .span2 {
+            font-size: 12px;
+            color: #999;
+          }
+        }
+      }
+      .search {
+        @include flex-items;
+        justify-content: space-between;
+        height: 50px;
+        cursor: pointer;
+        padding: 0 12px;
+        &:hover {
+          background-color: rgb(223, 237, 250);
+        }
+      }
+    }
+    .el-dialog__footer {
+      .dialog-footer {
+        .el-button {
+          padding: 10px 20px;
+          width: 150px;
+        }
+      }
     }
   }
-
 </style>

@@ -215,7 +215,6 @@
         this.$http.get(globalConfig.server + "bisys/dashboard/" + id, {
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {
-          // console.log(res)
           if (res.data.code == "20020") {
             
             if(!res.data.data.topic){
@@ -324,7 +323,6 @@
           if (res.data.code === "20000") {
             let data = res.data.data.data;
             this.publicMeter = data.public;
-            console.log(this.publicMeter)
             if (data.private) {
               this.privateMeter = data.private;
             } else {

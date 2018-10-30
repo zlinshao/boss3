@@ -220,7 +220,6 @@
           this.placeForm.area = ''
           this.placeForm.group = ''
           this.getList("area",id)
-          // console.log(this.placeForm)
         }else if(val=='area'){
           this.placeForm.group = ''
           this.getList("group",id)
@@ -228,16 +227,13 @@
       },
       getList(val,id){ 
         if(val=='city'){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
-            // console.log(res)
+          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {   
             if(res.data.status_code == 200){
-              // console.log(res.data.data)
               res.data.data.forEach(item=>{
                 if(item.name!=="外出考察"){
                   this.cityOption.push(item)
                 }
               })
-              // this.cityOption = res.data.data
             }
           });
         }else if(val=="area"){
@@ -264,10 +260,6 @@
         }
       },
       changChart(){
-        // console.log(this.params)
-          // if(!this.selectDate){
-          //   return this.prompt('warning','请选择时间')
-          // }
             this.params.city = this.placeForm.city
             this.params.area = this.placeForm.area
             this.params.group = this.placeForm.group
@@ -275,7 +267,6 @@
             this.params.end_date = this.selectDate[1]
             this.params.date = this.selectDate[1]
             for(var key in this.$refs){
-              // console.log(key)
               if(key=='mainchart'){
                 this.$refs[key].getChart(this.params,"default")
               }
@@ -284,7 +275,6 @@
                   item.getChart(this.params,"default")
                 })
               }
-              // console.log(this.$refs[key])
             }
         },
       

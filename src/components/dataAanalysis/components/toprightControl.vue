@@ -61,7 +61,7 @@
       circle  
       size="mini" 
       style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
-      @click="delCard"
+      @click="delConfirm"
       v-if="delstatus"
       ></el-button>
     <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel"></addChartToMeter>
@@ -102,7 +102,6 @@
       showSecondpop(val) {
         this.showSecPop = true
         this.secPopTitle = val.name
-        // console.log(val)
         this.currentList = val
       },
       closeModel(val) {
@@ -110,16 +109,12 @@
         this.showSecPop = !this.showSecPop
       },
       getMeterNameList(){ //仪表盘名称列表
-        // console.log(111)
         this.$http.get(globalConfig.server + "/bisys/dashboard", {
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {
           if (res.data.code === "20000") {
-            // console.log(res)
             this.meterList = res.data.data.data.private
             // this.meterList = res.data.data.data.public
-            
-            
           } else {
             
           }
@@ -129,16 +124,10 @@
         this.showDetailChart = false
       },
       showDetailChartDialog(){
-        // if(this.cardData.chart_set[0].type == 'tableCard'){
-        //   return
-        // }
         this.showDetailChart = true
         this.sendDetailData = this.cardData
       },
       addCard(val){
-        // console.log(val)
-        // console.log(this.currentList)
-        // console.log(this.cardData)
         this.params.name = this.currentList.name
         this.params.introduction = this.currentList.introduction
         this.params.is_public  = this.currentList.is_public
@@ -156,7 +145,6 @@
           this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
             headers: {"Accept": "application/vnd.boss18+json"}
           }).then((res) => {
-            console.log(res)
             if (res.data.code === "20030") {
               this.addChartMrterDialog=true
             } else {
@@ -169,7 +157,6 @@
           this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
             headers: {"Accept": "application/vnd.boss18+json"}
           }).then((res) => {
-            console.log(res)
             if (res.data.code === "20030") {
               this.addChartMrterDialog=true
             } else {
@@ -178,10 +165,21 @@
           });
         }
       },
+      delConfirm(){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.delCard()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
       delCard(){
-        // console.log(111)
-        // console.log(this.meterData.id)
-        // console.log(this.cardData.id)
         this.params.name = this.meterData.name
         this.params.introduction = this.meterData.introduction
         this.params.is_public  = this.meterData.is_public
@@ -192,19 +190,16 @@
           })
         }
         this.params.card_ids.forEach((item,index)=>{
-          // console.log(this.cardData.id)
           if(item == this.cardData.id){
             this.params.card_ids.splice(index,1)
           }
         })
         this.params.user_id = this.meterData.user_id||JSON.parse(localStorage.getItem("personal")).id
         this.params.topic_card_id = this.meterData.topic_card_id
-        console.log(this.params)
         
         this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.meterData.id,this.params, {
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {
-          console.log(res)
           if (res.data.code === "20030") {
             this.prompt('success',res.data.msg)
             this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$children[1].$children[0].showDetailMeterEven(this.meterData.id,'private')

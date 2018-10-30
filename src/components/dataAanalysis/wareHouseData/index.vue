@@ -118,7 +118,7 @@
         }],//指标卡片
         params:{
           page: 1, //加载页码
-          limit: 15, //加载条数
+          limit: 30, //加载条数
           keyword:'',
           tag_id:''
         },
@@ -162,10 +162,8 @@
         }
         this.showDetailChart = true
         this.sendDetailData = item
-        // console.log(item)
       },
       searchCard(){
-        // console.log(111)
         this.loadingText = "";
         this.params.page = 1
         this.cardCharts=[]
