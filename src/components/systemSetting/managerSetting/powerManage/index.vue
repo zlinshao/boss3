@@ -174,7 +174,7 @@
     name: 'hello',
     data() {
       return {
-        urls: globalConfig.server_user,
+        urls: globalConfig.server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -182,13 +182,16 @@
 
         showSize: 5,
         firstForm: {
-          page: 1
+          page: 1,
+          limit: 5,
         },
         secondForm: {
-          page: 1
+          page: 1,
+          limit: 5,
         },
         thirdForm: {
-          page: 1
+          page: 1,
+          limit: 5,
         },
         firstPage: 1,
         secondPage: 1,
@@ -249,14 +252,17 @@
         this.emptyContent1 = ' ';
         this.tableLoading1 = true;
         this.firstForm.page = val;
-        this.$http.get(this.urls + 'systems?per_page_number=5', {
+        this.$http.get(this.urls + 'organization/system', {
           params: this.firstForm
         }).then((res) => {
           this.tableLoading1 = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.tableFirst = data;
-            this.paging1 = res.data.meta.total;
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
+            if (data.length !== 0) {
+              this.tableFirst = data;
+              this.firstClick(data[0]);
+              this.paging1 = res.data.data.count;
+            }
           } else {
             this.paging1 = 0;
             this.emptyContent1 = '暂无数据';
@@ -273,18 +279,21 @@
       },
       // ==============模块=================
       // 模块列表
-      moduleList(val, id) {
+      moduleList(val) {
         this.emptyContent2 = ' ';
         this.tableLoading2 = true;
         this.secondForm.page = val;
-        this.$http.get(this.urls + 'modules?per_page_number=5&sys_id=' + this.addID.firstID, {
+        this.$http.get(this.urls + 'organization/module?system_id=' + this.addID.firstID, {
           params: this.secondForm
         }).then((res) => {
           this.tableLoading2 = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.tableSecond = res.data.data;
-            this.paging2 = res.data.meta.total;
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
+            if (data.length !== 0) {
+              this.tableSecond = data;
+              this.secondClick(data[0]);
+              this.paging2 = res.data.data.count;
+            }
           } else {
             this.paging2 = 0;
             this.emptyContent2 = '暂无数据';
@@ -303,14 +312,16 @@
         this.emptyContent3 = ' ';
         this.tableLoading3 = true;
         this.thirdForm.page = val;
-        this.$http.get(this.urls + 'permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
+        this.$http.get(this.urls + 'organization/permission?mod_id=' + this.addID.secondID, {
           params: this.thirdForm
         }).then((res) => {
           this.tableLoading3 = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.tableThird = res.data.data;
-            this.paging3 = res.data.meta.total;
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
+            if (data.length !== 0) {
+              this.tableThird = data;
+              this.paging3 = res.data.data.count;
+            }
           } else {
             this.paging3 = 0;
             this.emptyContent3 = '暂无数据';
@@ -355,14 +366,14 @@
         }).then(() => {
           let address;
           if (val === 'first') {
-            address = this.urls + 'systems/';
+            address = this.urls + 'organization/System/delete/';
           } else if (val === 'second') {
-            address = this.urls + 'modules/';
+            address = this.urls + 'organization/module/delete/';
           } else {
-            address = this.urls + 'permissions/';
+            address = this.urls + 'organization/permission/delete/';
           }
           this.$http.delete(address + id.id).then((res) => {
-            if (res.data.status === 'success') {
+            if (res.data.code === '20040') {
               this.search(val);
               this.prompt(res.data.message, 1);
             } else {

@@ -889,6 +889,7 @@
       },
       // 确认选择
       selectMember(val) {
+        console.log(val)
         let organ = this.organDivision;
         if (organ === 'org_id') {
           this.resetOrg();

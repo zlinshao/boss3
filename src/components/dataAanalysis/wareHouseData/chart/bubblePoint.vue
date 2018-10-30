@@ -5,29 +5,23 @@
   </div>
 </template>
 <script>
-  export default {
-    props:['chartData'],
+  export default { 
+    props:['chartData','chartStyle','params'],
     data(){
       return {
         data:[],
-        dataParams:{//传入参数
-          city:"",
-          area:"",
-          group:"",
-          start_date:"2018-9-1",
-          end_date:"2018-10-17",
-        },
+        dataParams:{},
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
         chartReset:{  //图表配置
           colorMap:{}, //各地区气泡颜色
           alias:{},    //设置字段别名
-        },
-        city:""
+        }
       }
     },
     methods:{
       drawChart(data) { //绘制图表
+        this.$refs.chartId.innerHTML  = ''
         var _G = this.$G2,
           Global = _G.Global;
 
@@ -37,8 +31,9 @@
         }
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
-          forceFit: true,
-          height:300,
+          // forceFit: true,
+          width:this.chartStyle.width,
+          height:this.chartStyle.height,
         });
         chart.source(data);
         // 为各个字段设置别名
@@ -68,9 +63,11 @@
         });
         chart.render();
       },
-      getChart(){ //获取图表
-        this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
-        
+      getChart(params){ //获取图表
+        this.$http.get(this.chartData.data_source,{
+          headers:{"Accept":"application/vnd.boss18+json"},
+          params: params
+        }).then((res) => { 
           if(res.data.code == "20000"){
             res.data.data.forEach((item,index)=>{
               this.chartReset.colorMap[item.city] = index
@@ -82,9 +79,19 @@
           }else{
             this.chartTextStatus = true
             this.chartText = res.data.msg
+            this.prompt('error',res.data.msg)
           }
         });
       },
+      // getNewDate(){
+      //   var date =  new Date()
+      //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+      //   var year = lastdate.getFullYear();
+      //   var month = lastdate.getMonth()+1;   
+      //   var day = lastdate.getDate(); 
+      //   this.dataParams.start_date = year + '-' +month + '-' + day
+      //   this.dataParams.end_date = year + '-' +month + '-' + day
+      // },
       resetChart(){  //配置图表
         switch(this.chartData.name){
           case "收房利益指数":
@@ -110,7 +117,10 @@
       }
     },
     mounted () {
-      this.getChart()
+      this.dataParams = JSON.parse(JSON.stringify(chartParams))
+      this.getChartDate(this.dataParams)
+      // this.getNewDate()
+      this.getChart(this.dataParams)
     }
   }
 </script>

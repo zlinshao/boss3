@@ -9,7 +9,7 @@
         <span>{{cardData.name}}</span>
         <div>
           <!-- 说明弹出框 -->
-          <toprightControl></toprightControl>
+          <slot name="right"></slot>
         </div>
       </div>
       <div>
@@ -18,7 +18,7 @@
     </div>
     <div> 
       <div  class="chartbox">
-        <slot></slot>
+        <slot name="content"></slot>
       </div>
     </div>
   </el-card>

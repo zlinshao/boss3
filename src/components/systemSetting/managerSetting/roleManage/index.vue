@@ -50,7 +50,7 @@
     data() {
       return {
         reviseRoleDialog: false,
-        tableData:[],
+        tableData: [],
         roleModule: false,
         params: {
           page: 1,
@@ -61,24 +61,26 @@
         totalNum: 0,
       }
     },
-    mounted(){
+    mounted() {
       this.getTableData();
     },
     methods: {
-      getTableData(){
-        this.tableStatus= ' ';
+      getTableData() {
+        this.tableStatus = ' ';
         this.tableLoading = true;
-        this.$http.get(globalConfig.server_user+ 'roles?per_page_number=12&page='+this.params.page).then((res)=>{
+        this.$http.get(globalConfig.server + 'organization/role',{
+          params: this.params,
+        }).then((res) => {
           this.tableLoading = false;
-          if(res.data.status === 'success') {
-            this.tableData = res.data.data;
-            this.totalNum = res.data.meta.total;
-            if(res.data.data<1){
+          if (res.data.code === '20000') {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+            if (res.data.data.data < 1) {
               this.tableData = [];
               this.totalNum = 0;
               this.tableStatus = '暂无数据';
             }
-          }else{
+          } else {
             this.tableData = [];
             this.totalNum = 0;
             this.tableStatus = '暂无数据';
@@ -92,7 +94,7 @@
       //modal 关闭回调
       closeModal(val) {
         this.reviseRoleDialog = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.params.page = 1;
           this.getTableData();
         }

@@ -428,7 +428,7 @@
         }
       },
       editPositionIds(val) {
-        for (var i = 0; i < this.editPositionIds.length; i++) {
+        for (let i = 0; i < this.editPositionIds.length; i++) {
           this.getPositions(this.editPositionIds[i]);
         }
       },
@@ -510,7 +510,7 @@
         this.postArray = [];
         if (this.currentPosition.length > 0) {
           this.postDisabled = false; //岗位可选
-          for (var i = 0; i < this.currentPosition.length; i++) {
+          for (let i = 0; i < this.currentPosition.length; i++) {
             this.getPositions(this.currentPosition[i]);
           }
         }
@@ -522,7 +522,7 @@
           this.currentPosition = [];
           this.params.position_id = [];
           this.positionDisabled = false;  //职位可选
-          for (var i = 0; i < this.params.department_id.length; i++) {
+          for (let i = 0; i < this.params.department_id.length; i++) {
             this.getPosition(this.params.department_id[i]);
           }
         } else {
@@ -536,8 +536,8 @@
       },
       //编辑时获取员工信息
       getStaffInfo() {
-        this.$http.get(globalConfig.server + 'manager/staff/' + this.editId).then((res) => {
-          if (res.data.code === '10020') {
+        this.$http.get(globalConfig.server + 'organization/staff/' + this.editId).then((res) => {
+          if (res.data.code === '710910') {
             this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
@@ -567,7 +567,7 @@
               this.params.salary = detail.salary;
               this.params.entry_materials = [];
               if (detail.entry_materials && detail.entry_materials.length > 0) {
-                for (var i = 0; i < detail.entry_materials.length; i++) {
+                for (let i = 0; i < detail.entry_materials.length; i++) {
                   this.params.entry_materials.push(Number(detail.entry_materials[i]));
                 }
               }
@@ -627,7 +627,7 @@
               this.editPositionIds = [];
               // this.positionArray = [];
               // this.postArray = [];
-              for (var i = 0; i < this.params.department_id.length; i++) {
+              for (let i = 0; i < this.params.department_id.length; i++) {
                 this.getPosition(this.params.department_id[i]);
               }
             }
@@ -706,39 +706,27 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          this.$http.put(globalConfig.server + 'manager/staff/' + this.editId, this.params).then((res) => {
-            if (res.data.code === '10030') {
+          this.$http.put(globalConfig.server + 'organization/staff/' + this.editId, this.params).then((res) => {
+            if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               this.initial();
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg,
-              });
+              this.prompt('success',res.data.msg);
             } else {
               this.disabledBtn = false;
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg,
-              });
+              this.prompt('warning',res.data.msg);
             }
           });
         } else {
           //新增
-          this.$http.post(globalConfig.server + 'manager/staff', this.params).then((res) => {
-            if (res.data.code === '10010') {
+          this.$http.post(globalConfig.server + 'organization/staff', this.params).then((res) => {
+            if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg,
-              });
+              this.prompt('success',res.data.msg);
             } else {
               this.disabledBtn = false;
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg,
-              });
+              this.prompt('warning',res.data.msg);
             }
           });
         }

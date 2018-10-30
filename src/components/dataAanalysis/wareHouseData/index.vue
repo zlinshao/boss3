@@ -3,11 +3,18 @@
     <!-- 图表展示 -->
     <div>
       <el-row :gutter="20" >
-        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.name == '异常单列表'">
+        <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
-            <component :status="item.chart_set[0].type=='tableCard'?true:false" :is="item.chart_set[0].type" :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
-            ></component>
+            <template slot="right">
+              <toprightControl :cardData="item" :btnstatus="true"></toprightControl>
+            </template>
+            <template slot="content">
+              <component 
+                :is="item.chart_set[0].type"  
+                :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
+              ></component>
+            </template>
           </chartCard>
         </el-col>
         <el-col 
@@ -60,6 +67,7 @@
   import tableCard from "./chart/tableCard.vue"            //表格卡片
 
   import detailChartDialog from "../components/detailChartDialog.vue" //指标详情页
+  import toprightControl from "../components/toprightControl.vue"
 
   export default {
     components: {
@@ -75,7 +83,8 @@
       stackedPercentageColumn,
       textCard,
       tableCard,
-      detailChartDialog
+      detailChartDialog,
+      toprightControl
     },
     data() {
       return {
@@ -100,7 +109,15 @@
           value: '选项5',
           label: '行政'
         }],
-        cardCharts: [],//指标卡片
+        cardCharts: [{
+          "chart_set": [
+                  {
+                      "name": "对比",
+                      "type": "basicColumn"
+                  }
+              ],
+            }
+        ],//指标卡片
         page: 1, //加载页码
         limit: 31, //加载条数
         cardloading: false,//正在加载
@@ -108,7 +125,8 @@
         selectType:"对比",//所选类型
         showDetailChart:false,
         chartstyle:{
-          height:300
+          height:300,
+          width:530
         },
         sendDetailData:{}
       }
@@ -158,10 +176,9 @@
   // 筛选框
   .filterBox {
     position: absolute;
-    top: 0;
+    top: -42px;
     right: 0;
     transform: translate(-10%, -60%);
-    height: 100px;
     margin: 5px;
   }
 

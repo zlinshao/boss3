@@ -1,18 +1,15 @@
 <template>
-    <div>
-        <keep-alive>
-            <router-view></router-view>
-        </keep-alive>
-    </div>
+  <div>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+  </div>
 </template>
-
 <script>
 export default {
-    name: 'index'
-}
+  // name: '查看排版'
+};
 </script>
-
-<style>
-    
+<style lang="scss">
 </style>
 
