@@ -96,6 +96,13 @@
           </el-row>
           <el-row>
             <el-col :span="24">
+              <el-form-item label="上传照片">
+                <UpLoad :ID="'add_collect'" @getImg="myGetImg" :isClear="isClear" :editImage="photos"></UpLoad>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
               <el-form-item label="备注">
                 <el-input type="textarea" v-model="form.remark"></el-input>
               </el-form-item>
@@ -116,10 +123,11 @@
 
 <script>
   import Organization from "../../common/organization";
+  import UpLoad from '../../common/UPLOAD.vue';
 
   export default {
     props: ["module", "contract"],
-    components: {Organization},
+    components: {Organization, UpLoad},
     data() {
       return {
         addCollectRepairDialog: false,
@@ -145,6 +153,7 @@
           emergency: "",            //紧急程度
           liable_name: "",          //前租客姓名
           module: 1,                //租房
+          photo: [],                //房屋影像
         },
         follow_name: "",                //跟进人名字
         personCategory: [],
@@ -153,6 +162,8 @@
           {id: 2, value: "紧急"}
         ],
         cities: [],
+        isClear :false,                 //删除照片
+        photos: [],                     //房屋影像
       };
     },
     mounted() {
@@ -221,9 +232,12 @@
           emergency: "",            //紧急程度
           liable_name: "",          //前租客姓名
           module: 1,                //收房
+          photo:[],
         };
         this.address = "";
         this.follow_name = "";
+        this.photos = [];
+        this.isClear = true
       },
       closeOrganization() {
         this.organizationDialog = false;
@@ -242,7 +256,12 @@
       emptyStaff() {
         this.follow_name = "";
         this.form.follow_id = "";
-      }
+      },
+      // 截图
+      myGetImg(val) {
+        this.picStatus = val[2];
+        this.form.album = val[1];
+      },
     }
   };
 </script>
