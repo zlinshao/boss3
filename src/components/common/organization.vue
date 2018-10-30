@@ -52,7 +52,7 @@
           <ul class="scroll_bar checkDepart" :style="rightUl">
             <li v-for="item in list.children">
               <el-checkbox-group v-model="checkDepart" :disabled="organType === 'staff'"
-                                 @change="chooseType(item, list.children)">
+                                 @change="chooseType(item, list.children,  'depart')">
                 <el-checkbox :label="item.id" :key="item.id">{{item.name}}</el-checkbox>
               </el-checkbox-group>
               <div class="nextLevel" @click="nextLevel(item.id, item)">下级</div>
@@ -225,7 +225,16 @@
         return -1;
       },
       // 部门 / 员工
-      chooseType(item, data) {
+      chooseType(item, data, type = 'staff') {
+        this.params.keywords = '';
+        if (type !== this.organType) {
+          if (this.organType === 'staff') {
+            this.prompt('warning', '请选择员工');
+          } else {
+            this.prompt('warning', '请选择部门');
+          }
+          return;
+        }
         let status = this.isExist(item, this.form);
         if (status > -1) {
           this.form.splice(status, 1);
@@ -236,9 +245,8 @@
       },
       // 选中
       chooseData(item, data) {
-        this.params.keywords = '';
         if (this.form.length > this.lengths - 1 && this.lengths !== '') {
-          this.prompt('warning', '超出数量限制!');
+          this.prompt('warning', '超出数量限制');
           this.checkDepart.pop();
           return;
         }
@@ -279,15 +287,15 @@
       // ul高度
       leftHeight() {
         let height = $('.selectItem').height();
-        this.leftUl.height = (420 - height - 16) + 'px';
+        this.leftUl.height = (420 - height - 20) + 'px';
       },
       // ul高度
       rightHeight() {
         let height = $('.pitchOnData').height();
         if (height !== 0) {
-          this.rightUl.height = (420 - height - 72) + 'px';
+          this.rightUl.height = (420 - height - 77) + 'px';
         } else {
-          this.rightUl.height = (420 - 53) + 'px';
+          this.rightUl.height = (420 - 58) + 'px';
         }
       },
     },
@@ -331,7 +339,7 @@
           flex-wrap: wrap;
         }
         .selectItem {
-          padding-bottom: 2px;
+          padding-bottom: 6px;
         }
         input {
           border: none;
@@ -355,7 +363,7 @@
         width: 300px;
         .filterTop {
           text-align: center;
-          padding: 8px 0;
+          padding: 10px 0;
           cursor: pointer;
           @include box_shadow(#eee, 10px);
           &:hover {
@@ -433,7 +441,7 @@
         div {
           color: #606266;
           margin: 0;
-          span{
+          span {
             line-height: 18px;
             display: block;
           }
