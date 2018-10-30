@@ -36,25 +36,28 @@
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡结果"></el-table-column>
+          <el-table-column v-if="showItem.name == '上午下班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '上午下班'" label="打卡结果"></el-table-column>
-          <el-table-column v-if="showItem.name == '上午下班'" label="打卡结果"></el-table-column>
+          <el-table-column v-if="showItem.name == '下午上班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '下午上班'" label="打卡结果"></el-table-column>
-          <el-table-column v-if="showItem.name == '下午上班'" label="打卡结果"></el-table-column>
-          <el-table-column v-if="showItem.name == '下午下班'" label="打卡结果"></el-table-column>
+          <el-table-column v-if="showItem.name == '下午下班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '下午下班'" label="打卡结果"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="正常加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="法定加班（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="事假（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="病假（小时）"></el-table-column>
+          <el-table-column v-if="showItem.name == '请假'"  v-for="(day, index) in aa" :key="index" :label="day.label" :prop="day.num">
+            <!-- <template slot-scope="scope"> </template> -->
+          </el-table-column>
+          <!-- <el-table-column v-if="showItem.name == '请假'" label="事假（小时）" v-for="(day, index) in leaveDay" :key="index">{{day}}</el-table-column> -->
+          <!-- <el-table-column v-if="showItem.name == '请假'" label="病假（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '请假'" label="婚假（天）"></el-table-column>
           <el-table-column v-if="showItem.name == '请假'" label="丧假（天）"></el-table-column>
           <el-table-column v-if="showItem.name == '请假'" label="产假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="陪产假（天）"></el-table-column>
+          <el-table-column v-if="showItem.name == '请假'" label="陪产假（天）"></el-table-column> -->
         </el-table-column>
       </el-table>
     </div>
     <div class="block pages">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 100, 200, 300, 400]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="400">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 100, 200, 300, 400]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <!-- 组织结构 -->
@@ -99,44 +102,49 @@ export default {
       checked: "",
       tableData: [],
       celeckList: [
-        { name: "工号", prop: "jobNumber", state: false, disabled: true },
+        // { name: "工号", prop: "jobNumber", state: false, disabled: true },
         { name: "姓名", prop: "name", state: false, disabled: true },
-        { name: "部门", prop: "department", state: false, disabled: true },
-        { name: "职位", prop: "position", state: false, disabled: true },
-        { name: "班次", prop: "shift", state: false },
-        { name: "日期", prop: "date", state: false },
-        { name: "休息天数", prop: "restDay", state: false },
-        { name: "上午上班", prop: "morningWork", state: false },
-        { name: "上午下班", prop: "morningOffWork", state: false },
-        { name: "下午上班", prop: "afternoonWork", state: false },
-        { name: "下午下班", prop: "afternoonOffWork", state: false },
-        { name: "打卡地址", prop: "punchAddress", state: false },
-        { name: "打卡设备", prop: "PunchCardEquipment", state: false },
-        { name: "数据来源", prop: "dataSources", state: false },
-        { name: "打卡异常次数", prop: "punchAbnormality", state: false },
-        { name: "迟到次数", prop: "lateArrivals", state: false },
-        { name: "迟到时长", prop: "lateArrival", state: false },
-        { name: "严重迟到次数", prop: "seriousLateArrivals", state: false },
-        { name: "早退次数", prop: "earlyRetreat", state: false },
-        { name: "早退时长", prop: "earlyDepartureTime", state: false },
-        { name: "上班缺卡次数", prop: "numberMissedCardsWork", state: false },
-        {
-          name: "下班缺卡次数",
-          prop: "numberMissedCardsOffWork",
-          state: false
-        },
-        { name: "旷工天数", prop: "daysCompletion", state: false },
-        { name: "出差", prop: "travel", state: false },
-        { name: "请假", prop: "leave", state: false }
+        { name: "职位", prop: "roles", state: false, disabled: true },
+        { name: "部门", prop: "org", state: false, disabled: true },
+        { name: "应出勤总天数", prop: "should_attendance_day", state: false },
+        { name: "实出勤总天数", prop: "real_attendance_day", state: false },
+        { name: "休息天数", prop: "rest_attendance_day", state: false },
+        { name: "迟到次数", prop: "late_num", state: false },
+        { name: "迟到时长", prop: "late_minutes", state: false },
+        { name: "严重迟到次数", prop: "serious_late_num", state: false },
+        { name: "早退次数", prop: "early_num", state: false },
+        { name: "早退时长", prop: "early_minutes", state: false },
+        { name: "下班缺卡次数", prop: "pm_not_sign", state: false },
+        { name: "旷工天数", prop: "absenteeism", state: false },
+        { name: "加班存在异常", prop: "work_overtime_exception", state: false },
+        { name: "加班天数", prop: "work_overtime_day", state: false },
+        { name: "出差", prop: "business", state: false },
+        { name: "请假", prop: "vacate", state: false }
+
+        // { name: "上班缺卡次数", prop: "am_not_sign ", state: false },
+        // { name: "打卡异常次数", prop: "punchAbnormality", state: false },
+        // { name: "班次", prop: "shift", state: false },
+        // { name: "日期", prop: "date", state: false },
+        // { name: "上午上班", prop: "morningWork", state: false },
+        // { name: "上午下班", prop: "morningOffWork", state: false },
+        // { name: "下午上班", prop: "afternoonWork", state: false },
+        // { name: "下午下班", prop: "afternoonOffWork", state: false },
+        // { name: "打卡地址", prop: "punchAddress", state: false },
+        // { name: "打卡设备", prop: "PunchCardEquipment", state: false },
+        // { name: "数据来源", prop: "dataSources", state: false },
       ],
       seleckedList: [
-        { name: "工号", prop: "jobNumber", state: true },
+        // { name: "工号", prop: "jobNumber", state: true },
         { name: "姓名", prop: "name", state: true },
-        { name: "部门", prop: "department", state: true },
-        { name: "职位", prop: "position", state: true }
+        { name: "部门", prop: "org", state: true },
+        { name: "职位", prop: "roles", state: true },
+        // { name: "请假", prop: "vacate", state: false }
       ],
       selectValue: "",
-      currentPage: 1
+      currentPage: 1,
+      total: 0, //数据总条数
+      leaveDay: [], // 请假天数
+      aa: [],
     };
   },
   methods: {
@@ -195,8 +203,14 @@ export default {
         this.params.follow_id += item.id + ",";
         this.follow_name += item.name + ",";
       });
-      this.params.follow_id = this.params.follow_id.substring(0, this.params.follow_id.length - 1);
-      this.follow_name = this.follow_name.substring(0, this.follow_name.length - 1);
+      this.params.follow_id = this.params.follow_id.substring(
+        0,
+        this.params.follow_id.length - 1
+      );
+      this.follow_name = this.follow_name.substring(
+        0,
+        this.follow_name.length - 1
+      );
     },
     // 关闭模态框
     closeModal() {
@@ -205,6 +219,74 @@ export default {
     emptyFollowPeople() {
       this.params.follow_id = "";
       this.follow_name = "";
+    },
+    refresh() {
+      this.$http.get(globalConfig.server + "attendance/summary").then(res => {
+        console.log(res, "get11111111");
+        if (res.data.code == "20000") {
+          this.tableData = res.data.data.data;
+          this.total = Number(res.data.data.count);
+          /*
+           seleckedList: [
+              { name: "姓名", prop: "name", state: true },
+              { name: "部门", prop: "org", state: true },
+              { name: "职位", prop: "roles", state: true }
+            ],
+          */
+        //  console.log(res.data.data);
+         
+          let arr = [
+            "事假",
+            "病假",
+            "年假",
+            "调休",
+            "婚假",
+            "产假",
+            "陪产假",
+            "路途假",
+            "丧假"
+          ];
+          let props = [
+            "thingLeave",
+            "sickLeave",
+            "annualLeave",
+            "changeLeave",
+            "maternityLeave",
+            "paternityLeave",
+            "roadLeave",
+            "funeralLeave"
+          ]
+          this.tableData.forEach((item, idx) => {
+             this.tableData[idx].leaves = [];
+            item.vacate.forEach((key, index) => {
+              let obj = {};
+              obj.label = arr[index];
+              obj.prop = props[index];
+              obj.num = key;
+              this.tableData[idx].leaves.push(obj);
+              // this.aa.push(obj)
+            
+            });
+          });
+          console.log(res.data.data, 1111);
+          this.aa = res.data.data.data;
+        }
+      });
+    }
+  },
+  created() {
+    this.refresh();
+    console.log(this.seleckedList, '11111111111');
+  },
+  watch: {
+    seleckedList() {
+      console.log(this.seleckedList, "222222");
+      for(let i=0; i< this.seleckedList.length; i++) {
+        if(this.seleckedList[i].name == '请假') {
+          this.seleckedList[i].arr = this.aa;
+        }
+      }
+      console.log(this.seleckedList, "333333");
     }
   }
 };
