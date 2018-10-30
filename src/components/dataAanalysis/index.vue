@@ -31,9 +31,6 @@
     watch: {},
     methods: {
       handleClick(val) {
-        // // console.log(this)
-        // this.activeName = 'first'
-        // console.log(this.activeName)
       },
       changeActive(){
         this.activeName = "first"

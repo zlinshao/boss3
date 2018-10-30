@@ -1,6 +1,7 @@
 <template>
   <div id="wareHouseData">
     <!-- 图表展示 -->
+    <!-- {{params}} -->
     <div>
       <el-row :gutter="20" >
         <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
@@ -12,7 +13,10 @@
             <template slot="content">
               <component 
                 :is="item.chart_set[0].type"  
-                :chartData="item" :chartStyle="chartstyle" @click.native="showDetailChartDialog(item)"
+                :chartData="item" 
+                :chartStyle="chartstyle" 
+                @click.native="showDetailChartDialog(item)"
+                v-if="item.chart_set"
               ></component>
             </template>
           </chartCard>
@@ -35,14 +39,27 @@
         class="inputFlt"
         placeholder="请输入查询指标"
         suffix-icon="el-icon-search"
-        v-model="searchQuotaVal">
+        @keyup.enter.native="searchCard(params)"
+        v-model="params.keyword">
       </el-input>
-      <el-select placeholder="全部" class="selectFil" v-model="classSelectValue">
+      <el-button 
+        icon="el-icon-search" 
+        circle 
+        size="mini" 
+        class="searchBtn"
+        @click="searchCard"
+      ></el-button>
+      <el-select placeholder="全部" class="selectFil" v-model="params.tag_id" @change="searchCard(params)">
+        <el-option
+          label="全部"
+          value=""
+        >
+        </el-option>
         <el-option
           v-for="item in classSelect"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
         >
         </el-option>
       </el-select>
@@ -90,36 +107,21 @@
       return {
         searchQuotaVal: "",//输入框查询指标
         classSelectValue: "",//选择框选择类型
-        classSelect: [{    //指标类型选择
-          value: '选项0',
-          label: '全部'
-        }, {
-          value: '选项1',
-          label: '业务'
-        }, {
-          value: '选项2',
-          label: '财务'
-        }, {
-          value: '选项3',
-          label: '人力'
-        }, {
-          value: '选项4',
-          label: '客服'
-        }, {
-          value: '选项5',
-          label: '行政'
-        }],
+        classSelect: [], //指标类型选择
         cardCharts: [{
-          "chart_set": [
-                  {
-                      "name": "对比",
-                      "type": "basicColumn"
-                  }
-              ],
+          chart_set: [
+            {
+              name: "对比",
+              type: "basicColumn"
             }
-        ],//指标卡片
-        page: 1, //加载页码
-        limit: 31, //加载条数
+          ],
+        }],//指标卡片
+        params:{
+          page: 1, //加载页码
+          limit: 30, //加载条数
+          keyword:'',
+          tag_id:''
+        },
         cardloading: false,//正在加载
         loadingText: "", //加载文字
         selectType:"对比",//所选类型
@@ -132,13 +134,13 @@
       }
     },
     methods: {
-      getCard(page) {
-        if (this.loadingText !== "已经到底了") {
+      getCard(params) {
+        // if (this.loadingText !== "已经到底了") {
           this.cardloading = true;
-          this.loadingText = "";
+          // this.loadingText = "";
           this.$http.get(globalConfig.server + "bisys/card", {
             headers: {"Accept": "application/vnd.boss18+json"},
-            params: {page: page, limit: this.limit}
+            params: params
           }).then((res) => {
             if (res.data.code === "20000") {
               res.data.data.data.forEach((item) => {
@@ -146,10 +148,10 @@
               });
             } else {
               this.cardloading = false;
-              this.loadingText = "已经到底了"
+              this.loadingText = "没有数据"
             }
           });
-        }
+        // }
       },
       closeModule(val){
         this.showDetailChart = false
@@ -160,11 +162,42 @@
         }
         this.showDetailChart = true
         this.sendDetailData = item
-        // console.log(item)
+      },
+      searchCard(){
+        this.loadingText = "";
+        this.params.page = 1
+        this.cardCharts=[]
+        this.getCard(this.params)
+      },
+      getClassList(){
+        this.$http.get(globalConfig.server + "bisys/Tag", {
+          headers: {"Accept": "application/vnd.boss18+json"}
+        }).then((res) => {
+          if (res.data.code === "20000") {
+            this.classSelect = res.data.data.data
+          } else {
+            this.prompt('error',res.data.msg)
+          }
+        });
+      },
+      scrollLoad(){
+        var self = this
+        $(window).scroll(function(){
+          let scrollTop = $(this).scrollTop()
+          let scrollHeight = $(document).height()
+          let windowHeight = $(this).height()
+
+          if(scrollTop + windowHeight === scrollHeight){
+            self.params.page++
+            self.getCard(self.params)
+          }
+        })
       }
     },
     mounted() {
-      this.getCard(this.page)
+      this.getClassList()
+      this.getCard(this.params)
+      this.scrollLoad()
     }
   }
 </script>
@@ -180,6 +213,12 @@
     right: 0;
     transform: translate(-10%, -60%);
     margin: 5px;
+    .searchBtn{
+      position: absolute;
+      right: 6px;
+      top: 3px;
+      border: none
+    }
   }
 
 </style>

@@ -1453,7 +1453,7 @@
       },
       //右键菜单
       openContextMenu(row, event) {
-        this.editId = row.id;
+        this.editId = row.user_id;
         this.menuType = 'staff';
         //is_enable 有值禁用 is_on_job 离职
         if (row.is_enable && row.is_on_job) {

@@ -68,9 +68,15 @@ const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/i
 const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
+<<<<<<< HEAD
+//考勤管理
+const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //设置排班
+const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
+=======
 //考勤管理 ../components/attendanceManage/arrangeSetting/watchArrange/index.vue
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
 const WatchArrange = () => import('../components/attendanceManage/arrangeSetting/watchArrange/index.vue');
+>>>>>>> fa43922580a7baa0557a95b009d1658da2f7837a
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue') //编辑班次
 
@@ -542,6 +548,10 @@ export default new Router({
       name: '考勤管理',
       icon: 'el-icon-document',
       children: [
+<<<<<<< HEAD
+        {path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',},
+        {path: '/punchCard', component: PunchCard , name: '查看打卡'}
+=======
         {
           path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
           children: [
@@ -565,6 +575,7 @@ export default new Router({
         {
           path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
         }
+>>>>>>> fa43922580a7baa0557a95b009d1658da2f7837a
       ]
     },
     {

@@ -7,10 +7,18 @@
     :modal="false"
     width="65%">
     <div>
+      <!-- {{detailData}} -->
       <div class="detailMsgHead">
+        <div>
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
         <span>{{detailData.name}}</span>
-        <toprightControl></toprightControl>
+        </div>
+        <toprightControl 
+          :cardData="detailData" 
+          :btnstatus="true"
+          v-if="detailData" 
+        ></toprightControl>
+        
       </div>
       <div class="detailcontent">
         <div class="contentTop">
@@ -97,6 +105,7 @@
           :params="params" 
           ref="chartComp"
           :status="true"
+          v-if="detailData.chart_set"
             ></component>
           <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
@@ -105,6 +114,7 @@
   </el-dialog>
 </template>
 <script>
+  import toprightControl from "./toprightControl.vue"
   import basicColumn from "../wareHouseData/chart/basicColumn.vue"          //基础柱状图
   import bubblePoint from "../wareHouseData/chart/bubblePoint.vue"          //气泡图
   import donut from "../wareHouseData/chart/donut.vue"                      //基础环图
@@ -114,12 +124,23 @@
   import seriesLine from "../wareHouseData/chart/seriesLine.vue"            //折线图
   import stackedColumn from "../wareHouseData/chart/stackedColumn.vue"      //堆叠柱状图
   import stackedPercentageColumn from "../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
-  import textCard from "../wareHouseData/chart/textCard.vue"               //文本卡片
+  // import textCard from "../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../wareHouseData/chart/tableCard.vue"            //表格卡片
-  import toprightControl from "./toprightControl.vue"
+  
     export default {
-      components:{toprightControl,
-      basicColumn,bubblePoint,donut,gauge,groupedColumn,pie,seriesLine,stackedColumn,stackedPercentageColumn,tableCard
+      name:"detailChartDialog",
+      components:{
+        toprightControl,
+        basicColumn,
+        bubblePoint,
+        donut,
+        gauge,
+        groupedColumn,
+        pie,
+        seriesLine,
+        stackedColumn,
+        stackedPercentageColumn,
+        tableCard
       },
       props:['modules','detailData'],
       data(){
@@ -197,7 +218,6 @@
             this.placeForm.area = ''
             this.placeForm.group = ''
             this.getList("area",id)
-            // console.log(this.placeForm)
           }else if(val=='area'){
             this.placeForm.group = ''
             this.getList("group",id)
@@ -206,7 +226,7 @@
         getList(val,id){
           if(val=='city'){
             this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
-              // console.log(res)
+              
               if(res.data.status_code == 200){
                 this.cityOption = res.data.data
               }

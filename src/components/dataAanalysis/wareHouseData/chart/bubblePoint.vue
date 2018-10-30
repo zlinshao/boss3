@@ -6,6 +6,7 @@
 </template>
 <script>
   export default { 
+    name:"bubblePoint",
     props:['chartData','chartStyle','params'],
     data(){
       return {
