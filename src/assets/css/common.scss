@@ -1,0 +1,66 @@
+.clearFix:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+$themeColor: #6ca5ff;
+@mixin flex {
+  display: flex;
+  display: -webkit-flex;
+}
+
+@mixin flex-items {
+  @include flex;
+  align-items: center;
+}
+
+@mixin flex-justify {
+  @include flex;
+  justify-content: center;
+}
+
+@mixin items-justify {
+  @include flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin background_img($img) {
+  background: url($img) no-repeat;
+  -webkit-background-size: 100% 100%;
+  background-size: 100% 100%;
+}
+
+@mixin border_radius($p) {
+  -webkit-border-radius: $p;
+  -moz-border-radius: $p;
+  border-radius: $p;
+}
+
+@mixin box_shadow($n, $p) {
+  -webkit-box-shadow: 0 1px $p 0 $n;
+  -moz-box-shadow: 0 1px $p 0 $n;
+  box-shadow: 0 1px $p 0 $n;
+}
+
+@mixin transition {
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}
+
+@mixin bgPic($img) {
+  background: url($img) no-repeat center center;
+  background-size: 100% 100%;
+}
+
+@mixin line-clamp($n) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $n;
+}

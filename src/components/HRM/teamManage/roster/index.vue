@@ -36,7 +36,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="params.org_names"
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'staff')" v-model="params.org_names"
                               size="mini">
                       <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
                     </el-input>
