@@ -3,7 +3,7 @@
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
-        <el-button type="primary" @click="collapseClick" size="small">{{collapse}}</el-button>
+        <el-button type="primary" @click="collapseClick" size="mini">{{collapse}}</el-button>
       </div>
       <el-checkbox-group v-model="checkList" v-show="this.collapse == '收起'">
         <el-checkbox :label="item.name" v-for="(item, index) in this.celeckList" :key="index" @change="selecked(item)" :disabled="item.disabled" :checked="item.disabled"></el-checkbox>
@@ -11,15 +11,15 @@
     </div>
     <div class="selectTime">
       <span>时间：</span>
-      <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small">
+      <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini">
       </el-date-picker>
     </div>
     <div class="nameInput">
       <span>姓名：</span>
-      <el-input v-model="inputName" placeholder="请输入内容" size="small"></el-input>
+      <el-input v-model="inputName" placeholder="请输入内容" size="mini"></el-input>
     </div>
     <div class="selectTips">
-      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="small">
+      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
     </div>
@@ -27,12 +27,12 @@
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
     </div>
     <div class="btn">
-      <el-button type="primary" size="small">确定</el-button>
-      <el-button type="primary" size="small">同步考勤记录</el-button>
-      <el-button type="primary" size="small">导出</el-button>
+      <el-button type="primary" size="mini">确定</el-button>
+      <el-button type="primary" size="mini">同步考勤记录</el-button>
+      <el-button type="primary" size="mini">导出</el-button>
     </div>
     <div class="table">
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: auto;overflow-x:auto;">
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡结果"></el-table-column>

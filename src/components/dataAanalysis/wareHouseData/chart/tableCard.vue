@@ -45,12 +45,17 @@
       custom-class="detailDia"
       :show-close="false"
       :visible.sync="detaildialogVisible"
-      width="65%">
+      width="65%"
+      >
       <div>
+        <!-- {{chartData}} -->
         <div class="detailMsgHead">
+          <div>
           <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
           <span>{{chartData.name}}</span>
-          <!-- <toprightControl :cardData="chartData" :btnstatus="true" ></toprightControl> -->
+          </div>
+          <toprightControl :cardData="chartData" :btnstatus="true" ref="control" v-if="$refs.control"></toprightControl>
+          
         </div>
         <div class="detailcontent">
           <div class="contentTop">
@@ -181,6 +186,7 @@
         loadingDia:true,
         tableData: [],//表格数据
         tableDataDia: [],//表格数据
+        control:'',
         dataParams:{   //传参
           city:"",
           area:"",
@@ -311,6 +317,7 @@
           this.currentPageDia = 1
           this.getChart(this.diaParams,val)
       },
+      
       // getNewDate(){
       //   var date =  new Date()
       //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)

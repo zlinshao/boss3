@@ -43,14 +43,13 @@
         radio: 1,
         reviseRoleDialogVisible: false,
         form: {
-          display_name: '',
           name: '',
           description: '',
+          display_name: '',
         },
       }
     },
     mounted() {
-
     },
     watch: {
       reviseRoleDialog(val) {
@@ -66,17 +65,11 @@
       confirmAdd() {
         this.$http.post(globalConfig.server + 'organization/role', this.form).then((res) => {
           if (res.data.code === '20010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
+            this.prompt('success', res.data.msg);
             this.reviseRoleDialogVisible = false;
             this.$emit('close', 'success');
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
+            this.prompt('warning', res.data.msg);
           }
         });
       }

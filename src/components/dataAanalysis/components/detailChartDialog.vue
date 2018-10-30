@@ -9,13 +9,16 @@
     <div>
       <!-- {{detailData}} -->
       <div class="detailMsgHead">
+        <div>
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
         <span>{{detailData.name}}</span>
-        <rightControl 
+        </div>
+        <toprightControl 
           :cardData="detailData" 
           :btnstatus="true"
           v-if="detailData" 
-        ></rightControl>
+        ></toprightControl>
+        
       </div>
       <div class="detailcontent">
         <div class="contentTop">
@@ -111,7 +114,7 @@
   </el-dialog>
 </template>
 <script>
-  import rightControl from "./toprightControl.vue"
+  import toprightControl from "./toprightControl.vue"
   import basicColumn from "../wareHouseData/chart/basicColumn.vue"          //基础柱状图
   import bubblePoint from "../wareHouseData/chart/bubblePoint.vue"          //气泡图
   import donut from "../wareHouseData/chart/donut.vue"                      //基础环图
@@ -127,7 +130,7 @@
     export default {
       name:"detailChartDialog",
       components:{
-        rightControl,
+        toprightControl,
         basicColumn,
         bubblePoint,
         donut,

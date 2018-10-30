@@ -1,7 +1,7 @@
 <template>
   <div id="wareHouseData">
     <!-- 图表展示 -->
-    {{params}}
+    <!-- {{params}} -->
     <div>
       <el-row :gutter="20" >
         <el-col :span="8" v-for = "(item,index) in cardCharts" :key = "index" v-if="item.data_source">
@@ -39,7 +39,8 @@
         class="inputFlt"
         placeholder="请输入查询指标"
         suffix-icon="el-icon-search"
-        v-model="searchQuotaVal">
+        @keyup.enter.native="searchCard(params)"
+        v-model="params.keyword">
       </el-input>
       <el-button 
         icon="el-icon-search" 
@@ -48,7 +49,7 @@
         class="searchBtn"
         @click="searchCard"
       ></el-button>
-      <el-select placeholder="全部" class="selectFil" v-model="params.tag_id">
+      <el-select placeholder="全部" class="selectFil" v-model="params.tag_id" @change="searchCard(params)">
         <el-option
           label="全部"
           value=""
@@ -117,7 +118,7 @@
         }],//指标卡片
         params:{
           page: 1, //加载页码
-          limit: 31, //加载条数
+          limit: 15, //加载条数
           keyword:'',
           tag_id:''
         },
@@ -134,9 +135,9 @@
     },
     methods: {
       getCard(params) {
-        if (this.loadingText !== "已经到底了") {
+        // if (this.loadingText !== "已经到底了") {
           this.cardloading = true;
-          this.loadingText = "";
+          // this.loadingText = "";
           this.$http.get(globalConfig.server + "bisys/card", {
             headers: {"Accept": "application/vnd.boss18+json"},
             params: params
@@ -147,10 +148,10 @@
               });
             } else {
               this.cardloading = false;
-              this.loadingText = "已经到底了"
+              this.loadingText = "没有数据"
             }
           });
-        }
+        // }
       },
       closeModule(val){
         this.showDetailChart = false
@@ -164,7 +165,11 @@
         // console.log(item)
       },
       searchCard(){
-        console.log(111)
+        // console.log(111)
+        this.loadingText = "";
+        this.params.page = 1
+        this.cardCharts=[]
+        this.getCard(this.params)
       },
       getClassList(){
         this.$http.get(globalConfig.server + "bisys/Tag", {
@@ -176,11 +181,25 @@
             this.prompt('error',res.data.msg)
           }
         });
+      },
+      scrollLoad(){
+        var self = this
+        $(window).scroll(function(){
+          let scrollTop = $(this).scrollTop()
+          let scrollHeight = $(document).height()
+          let windowHeight = $(this).height()
+
+          if(scrollTop + windowHeight === scrollHeight){
+            self.params.page++
+            self.getCard(self.params)
+          }
+        })
       }
     },
     mounted() {
       this.getClassList()
       this.getCard(this.params)
+      this.scrollLoad()
     }
   }
 </script>

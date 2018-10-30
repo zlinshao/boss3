@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!showDetailMeter" id="meterList">
+    <div v-show="!showDetailMeter" id="meterList" >
       <div style="margin-bottom:20px">
         <div class="meterTop publicMeter">
           <div class="fl">预设仪表盘</div>
@@ -29,7 +29,7 @@
                     </el-popover>
                   </div>
                   <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%"
-                       @click='showDetailMeterEven(item.id)'>
+                       @click='showDetailMeterEven(item.id,"public")'>
                     <img src="@/assets/images/meter2.png" alt="">
                   </div>
                 </div>
@@ -77,7 +77,7 @@
                       <el-button slot="reference" icon="el-icon-tickets" class="ticbut" type="text"></el-button>
                     </el-popover>
                   </div>
-                  <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click="showDetailMeterEven(item.id)">
+                  <div class="cockpitContent" style="padding:30px 0;margin-bottom:10%" @click="showDetailMeterEven(item.id,'private')">
                     <img src="@/assets/images/meter2.png" alt="" >
                   </div>
                 </div>
@@ -143,7 +143,7 @@
     <div>
       <!-- 仪表盘详情页面 -->
       <detailMeter @close="hidedetailMeter" :detailMeterVisible="showDetailMeter"
-                   :detailMeterMsg="detailMeterMsg"></detailMeter>
+                   :detailMeterMsg="detailMeterMsg" :editStatus="editFlag"></detailMeter>
     </div>
     <!-- 仪表盘删除弹窗 -->
     <el-dialog
@@ -182,6 +182,7 @@
         meterName: "",//添加修改仪表盘名称
         showAddmeter: false,//显示添加仪表盘
         detailMeterMsg: {},
+        editFlag:false,
         selectMeterId: "",//所选仪表盘id
         meterparams: {},//仪表盘信息
 
@@ -204,7 +205,13 @@
         this.personalActiveIndex = -1;
         this.meterPopdisabled = false
       },
-      showDetailMeterEven(id) {//仪表详细页面显示
+      showDetailMeterEven(id,val) {//仪表详细页面显示
+        if(val=="public"){
+          this.editFlag = false
+        }
+        if(val=="private"){
+          this.editFlag = true
+        }
         this.$http.get(globalConfig.server + "bisys/dashboard/" + id, {
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {

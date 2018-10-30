@@ -1,11 +1,11 @@
 <template>
-  <div v-if="showDetailMeter" id="detailMeter">
+  <div v-if="showDetailMeter" id="detailMeter" >
     <el-container>
       <el-aside width="482px">
         <header>
           <i class="el-icon-arrow-left" @click="showDetailMeter=false"></i>
           <span>{{detailMeterMsg.name}}</span>
-          <el-button type="primary" icon="el-icon-setting" size="mini" style="display:none">编辑模式</el-button>
+          <el-button type="primary" icon="el-icon-setting" size="mini" v-show="editStatus" @click="showDel">{{editText}}</el-button>
         </header>
         <div class="content">
           <div class="content_top">
@@ -93,7 +93,7 @@
               <el-col :span="12" v-for="(item,index) in detailMeterMsg.cards" :key="index"  v-if="item.data_source">
                 <chartCard id="card" :cardData="item" >
                   <template slot="right">
-                    <toprightControl :cardData="item"></toprightControl>
+                    <toprightControl :cardData="item" :delstatus="deleteBtn" :meterData="detailMeterMsg"></toprightControl>
                   </template>
                   <template slot="content">
                     <component 
@@ -132,7 +132,7 @@
   
 
   export default {
-    props: ['detailMeterVisible', 'detailMeterMsg'],
+    props: ['detailMeterVisible', 'detailMeterMsg','editStatus'],
     components: {
       toprightControl,
       chartCard,
@@ -177,6 +177,8 @@
         showDetailMeter: false,//隐藏仪表编辑页
         radioContrast: "同比", //同比环比按钮
         radioCity: "全部",//选择城市按钮
+        deleteBtn:false,
+        editText:"编辑模式",
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -252,6 +254,15 @@
           });
         }
       },
+      showDel(){
+        if(this.deleteBtn){
+          this.deleteBtn = false
+          this.editText = "编辑模式"
+        }else{
+          this.deleteBtn = true
+          this.editText = "退出编辑模式"
+        }
+      },
       changChart(){
         // console.log(this.params)
           // if(!this.selectDate){
@@ -263,14 +274,6 @@
             this.params.start_date = this.selectDate[0]
             this.params.end_date = this.selectDate[1]
             this.params.date = this.selectDate[1]
-            // console.log(this.params)
-            // this.$refs.mainchart.getChart(this.params)
-            // this.$refs.minor.getChart(this.params)
-            // this.chartItems.forEach((item,index)=>{
-            //   let minor = 'minor'+index
-            //   this.$refs.minor.getChart(this.params)
-            // })
-            // console.log(this.$refs)
             for(var key in this.$refs){
               // console.log(key)
               if(key=='mainchart'){
@@ -300,24 +303,11 @@
             area: '',
             group:''
           }
+          this.deleteBtn = false
+          this.editText = "编辑模式"
           // this.changChart()
           this.$emit('close')
         }
-      },
-      detailMeterMsg(val) {
-        // val = 8
-        // this.$http.get(globalConfig.server + "bisys/dashboard/" + val, {
-        //   headers: {"Accept": "application/vnd.boss18+json"}
-        // }).then((res) => {
-        //   // console.log(res)
-        //     if (res.data.code == "20020") {
-        //       this.detailMsg.name= res.data.data.name
-        //       this.mainchartItem = res.data.data.topic
-        //       this.chartItems = res.data.data.cards
-        //     } else {
-        //      this.prompt('error',res.data.msg)
-        //     }
-        //   });
       }
     },
     mounted() {

@@ -95,6 +95,7 @@
     props: ['organizationDialog', 'length', 'type'],
     data() {
       return {
+        url: globalConfig.server_user,
         organizationVisible: false,
         buttonStatus: true,   //确认按钮禁用状态
 
@@ -213,7 +214,7 @@
       getMoreUser() {
         if (this.currentPage_user < this.lastPage_user) {
           this.currentPage_user++;
-          this.$http.get(globalConfig.server_user + 'users?org_id=' + this.currentDepartId + '&page=' + this.currentPage_user
+          this.$http.get(this.url + 'users?org_id=' + this.currentDepartId + '&page=' + this.currentPage_user
             + '&is_dimission=' + this.is_dimission).then((res) => {
             if (res.data.status === 'success') {
               if (res.data.data.length > 0) {
@@ -229,7 +230,7 @@
       getMoreDepart() {
         if (this.currentPage_depart < this.lastPage_depart) {
           this.currentPage_depart++;
-          this.$http.get(globalConfig.server_user + 'organizations?parent_id=' + id + '&page=' + this.currentPage_depart).then((res) => {
+          this.$http.get(this.url + 'organizations?parent_id=' + id + '&page=' + this.currentPage_depart).then((res) => {
             if (res.data.status === 'success') {
               if (res.data.data.length > 0) {
                 res.data.data.forEach((item) => {
@@ -241,7 +242,7 @@
         }
       },
       getHighDepart() {
-        this.$http.get(globalConfig.server_user + 'organizations/1').then((res) => {
+        this.$http.get(this.url + 'organizations/1').then((res) => {
           if (res.data.status === 'success') {
             this.highestDepart = res.data.data.name;
           }
@@ -253,13 +254,13 @@
         this.currentPage_user = 1;
         this.departmentList = [];
         this.departmentStaff = [];
-        this.$http.get(globalConfig.server_user + 'organizations?parent_id=' + id + '&per_page_number=50').then((res) => {
+        this.$http.get(this.url + 'organizations?parent_id=' + id + '&per_page_number=50').then((res) => {
           if (res.data.status === 'success') {
             this.departmentList = res.data.data;
             this.lastPage_depart = res.data.meta.last_page;
           }
         });
-        this.$http.get(globalConfig.server_user + 'users?org_id=' + id + '&is_dimission=' + this.is_dimission).then((res) => {
+        this.$http.get(this.url + 'users?org_id=' + id + '&is_dimission=' + this.is_dimission).then((res) => {
           if (res.data.status === 'success') {
             this.departmentStaff = res.data.data;
             this.lastPage_user = res.data.meta.last_page;
@@ -396,9 +397,17 @@
       },
       keywordsSearch() {
         if (this.keywords) {
-          this.$http.get(globalConfig.server_user + 'users?q=' + this.keywords).then((res) => {
-            if (res.data.status === 'success') {
-              this.searchItems = res.data.data;
+          this.$http.get(globalConfig.server + 'organization/other/staff-list', {
+            params: {
+              keywords: this.keywords,
+              page: 1,
+              limit: 20
+            }
+          }).then((res) => {
+            if (res.data.code === '70010') {
+              this.searchItems = res.data.data.data;
+            } else {
+              this.searchItems = [];
             }
           })
         } else {
