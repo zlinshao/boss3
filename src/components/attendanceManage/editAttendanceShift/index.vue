@@ -25,18 +25,18 @@
         <!-- 表达内容 -->
         <el-form ref="form" :model="form" label-width="80px" :rules="rules">
           <el-form-item label="班次名称" class="shiftName" prop="name">
-            <!-- <el-input v-model="form.shiftName" size="small"></el-input> -->
-            <el-select v-model="form.name" placeholder="请选择班次名称" size="mini">
+            <el-input v-model="form.name" size="small"></el-input>
+            <!-- <el-select v-model="form.name" placeholder="请选择班次名称" size="mini">
               <el-option v-for="item in nameOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item label="班次代号" class="shiftCode" prop="alias">
-            <!-- <el-input v-model="form.shiftCode" size="small"></el-input> -->
-            <el-select v-model="form.alias" placeholder="请选择班次代号" size="mini">
+            <el-input v-model="form.alias" size="small"></el-input>
+            <!-- <el-select v-model="form.alias" placeholder="请选择班次代号" size="mini">
               <el-option v-for="item in  aliasOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <!-- <el-form-item label="打卡方式" class="punchMode" prop="punchMode">
           <div class="punchBorad">

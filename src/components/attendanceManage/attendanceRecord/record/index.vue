@@ -9,31 +9,34 @@
         <el-checkbox :label="item.name" v-for="(item, index) in this.celeckList" :key="index" @change="selecked(item)" :disabled="item.disabled" :checked="item.disabled"></el-checkbox>
       </el-checkbox-group>
     </div>
-    <div class="selectTime">
+    <!-- <div class="selectTime">
       <span>时间：</span>
       <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini">
       </el-date-picker>
-    </div>
-    <div class="nameInput">
+    </div> -->
+    <!-- <div class="nameInput">
       <span>姓名：</span>
       <el-input v-model="inputName" placeholder="请输入内容" size="mini"></el-input>
-    </div>
-    <div class="selectTips">
+    </div> -->
+    <!-- <div class="selectTips">
       <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
-    </div>
-    <div class="resignation">
+    </div> -->
+    <!-- <div class="resignation">
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
-    </div>
-    <div class="btn">
+    </div> -->
+    <!-- <div class="btn">
       <el-button type="primary" size="mini">确定</el-button>
       <el-button type="primary" size="mini">同步考勤记录</el-button>
       <el-button type="primary" size="mini">导出</el-button>
-    </div>
+    </div> -->
     <div class="table">
       <el-table :data="tableData" border style="width: auto;overflow-x:auto;">
-        <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
+        <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index" :cell-class-name="getColor">
+          <!-- <template slot-scope="scope"  v-if="scope.name == '加班存在异常'">
+            <span style="color: #ef4292" >异常</span>
+          </template> -->
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡结果"></el-table-column>
           <el-table-column v-if="showItem.name == '上午下班'" label="打卡时间"></el-table-column>
@@ -44,15 +47,8 @@
           <el-table-column v-if="showItem.name == '下午下班'" label="打卡结果"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="正常加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="法定加班（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'"  v-for="(day, index) in aa" :key="index" :label="day.label" :prop="day.num">
-            <!-- <template slot-scope="scope"> </template> -->
+          <el-table-column v-if="showItem.name == '请假'"  v-for="(day, index) in secondaryMenu" :key="index" :label="day.label" :prop="day.prop">
           </el-table-column>
-          <!-- <el-table-column v-if="showItem.name == '请假'" label="事假（小时）" v-for="(day, index) in leaveDay" :key="index">{{day}}</el-table-column> -->
-          <!-- <el-table-column v-if="showItem.name == '请假'" label="病假（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="婚假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="丧假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="产假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="陪产假（天）"></el-table-column> -->
         </el-table-column>
       </el-table>
     </div>
@@ -140,11 +136,25 @@ export default {
         { name: "职位", prop: "roles", state: true },
         // { name: "请假", prop: "vacate", state: false }
       ],
+      // 请假二级菜单
+      secondaryMenu:[ 
+        {label:"事假", prop: "thingLeave"},
+        {label: "病假", prop: "sickLeave"}, 
+        {label: "年假", prop: "annualLeave"},
+        {label: "调休", prop: "changeLeave"},
+        {label: "婚假", prop: "marriageLeave"},
+        {label: "产假", prop: "maternityLeave"},
+        {label: "陪产假", prop: "paternityLeave"},
+        {label: "路途假", prop: "roadLeave"},
+        {label: "丧假", prop: "funeralLeave"},
+       ],
+       red: "",
+      activeRed: false,
+      workOvertime: '',
       selectValue: "",
       currentPage: 1,
       total: 0, //数据总条数
       leaveDay: [], // 请假天数
-      aa: [],
     };
   },
   methods: {
@@ -226,74 +236,65 @@ export default {
         if (res.data.code == "20000") {
           this.tableData = res.data.data.data;
           this.total = Number(res.data.data.count);
-          /*
-           seleckedList: [
-              { name: "姓名", prop: "name", state: true },
-              { name: "部门", prop: "org", state: true },
-              { name: "职位", prop: "roles", state: true }
-            ],
-          */
-        //  console.log(res.data.data);
-         
-          let arr = [
-            "事假",
-            "病假",
-            "年假",
-            "调休",
-            "婚假",
-            "产假",
-            "陪产假",
-            "路途假",
-            "丧假"
-          ];
+          this.workOvertime = this.tableData.work_overtime_exception 
+          // console.log(this.tableData, '22222222');
+          // console.log(this.tableData.work_overtime_exception, '111111111');
+          // for(let i = 0; i < this.tableData.length; i++) {
+          //   this.workOvertime = this.tableData[i].work_overtime_exception;
+          // }
           let props = [
             "thingLeave",
             "sickLeave",
             "annualLeave",
             "changeLeave",
+            "marriageLeave",
             "maternityLeave",
             "paternityLeave",
             "roadLeave",
             "funeralLeave"
           ]
           this.tableData.forEach((item, idx) => {
-             this.tableData[idx].leaves = [];
+            //  this.tableData[idx].leaves = [];
+            // item.vacate.forEach((key, index) => {
+            //   let obj = {};
+            //   obj.label = arr[index];
+            //   obj.prop = props[index];
+            //   obj.num = key;
+            //   this.tableData[idx].leaves.push(obj);
+            // });
             item.vacate.forEach((key, index) => {
-              let obj = {};
-              obj.label = arr[index];
-              obj.prop = props[index];
-              obj.num = key;
-              this.tableData[idx].leaves.push(obj);
-              // this.aa.push(obj)
-            
-            });
+              this.tableData[idx][props[index]] = key
+            })
           });
-          console.log(res.data.data, 1111);
-          this.aa = res.data.data.data;
         }
       });
+    },
+  },
+  computed: {
+    getColor() {
+      console.log(this.workOvertime);
+      this.seleckedList.forEach(item => {
+        if(item.name == '加班存在异常') {
+          if(!this.workOvertime) {
+            // return 'style="background-color: red;"'
+          }
+        }
+      })
     }
   },
   created() {
     this.refresh();
-    console.log(this.seleckedList, '11111111111');
   },
-  watch: {
-    seleckedList() {
-      console.log(this.seleckedList, "222222");
-      for(let i=0; i< this.seleckedList.length; i++) {
-        if(this.seleckedList[i].name == '请假') {
-          this.seleckedList[i].arr = this.aa;
-        }
-      }
-      console.log(this.seleckedList, "333333");
-    }
-  }
+  watch: {}
 };
 </script>
 
 <style lang="scss">
 #attendanceRecord {
+  .red {
+    border:  1px solid red;
+    background-color: red;
+  }
   .title {
     float: left;
   }
