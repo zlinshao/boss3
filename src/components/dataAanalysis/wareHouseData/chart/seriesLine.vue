@@ -6,6 +6,7 @@
 </template>
 <script>
   export default {
+    name:"seriesLine",
     props: ['chartData','chartStyle','params'],
     data() {
       return {

@@ -1,58 +1,68 @@
 <template>
-  <div style="position: absolute;top:15px;right: 15px;">
-    <el-popover
-      placement="right-start"
-      width="200"
-      trigger="click"
-      title="说明"
-      >
-      <!-- <p>
-        1.分城市/区域/片区展示本期和上期业绩（用同一组的两个柱形图表示），根据组织架构及时间维度变化而变化展示的数值。<br>
-        2.组织架构维度标签下有三个下拉菜单选择项：城市（有所有以及各个城市选项，所有显示所有城市的数据，各个城市显示选择城市下辖区域的数据）/区域（显示下辖片区的数据）/片区（显示片区组员的数据）<br>
-        3.时间维度标签有下拉菜单选择项：日历组件，以一周、一月为一周期，选择本周期（上一周或上一月）和本周期的上一个周期</p> -->
-        <p>
-          {{this.cardData.introduction}}
-        </p>
-      <el-button icon="el-icon-question" slot="reference" circle
-                 style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;" size="mini"
-                 type="text"></el-button>
-    </el-popover>
+  <div id="toprightContorl">
+    <div v-if="!delstatus">
+      <el-popover
+        placement="right-start"
+        width="200"
+        trigger="click"
+        title="说明"
+        >
+        <!-- <p>
+          1.分城市/区域/片区展示本期和上期业绩（用同一组的两个柱形图表示），根据组织架构及时间维度变化而变化展示的数值。<br>
+          2.组织架构维度标签下有三个下拉菜单选择项：城市（有所有以及各个城市选项，所有显示所有城市的数据，各个城市显示选择城市下辖区域的数据）/区域（显示下辖片区的数据）/片区（显示片区组员的数据）<br>
+          3.时间维度标签有下拉菜单选择项：日历组件，以一周、一月为一周期，选择本周期（上一周或上一月）和本周期的上一个周期</p> -->
+          <p v-if="cardData.introduction">
+            {{cardData.introduction}}
+          </p>
+        <el-button icon="el-icon-question" slot="reference" circle
+                  style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;" size="mini"
+                  type="text"></el-button>
+      </el-popover>
 
-    <!-- 仪表弹出框 -->
-    <el-popover
-      @hide="hideMeterpop"
+      <!-- 仪表弹出框 -->
+      <el-popover
+        @hide="hideMeterpop"
 
-      visible-arrow
-      popper-class="meterpop"
-      placement="bottom"
-      width="200"
-      trigger="click">
-      <ul class="pluspop popFirst" v-if="!showSecPop">
-        <li v-for="(item,index) in meterList" :key="index" @click="showSecondpop(item)">
-          <i class="el-icon-arrow-left"></i>{{item.name}}
-        </li>
-        <li @click="addMeter"><i class="el-icon-plus"></i>新建仪表盘</li>
-      </ul>
-      <ul class="pluspop popFirst" v-if="showSecPop">
-        <li @click="showSecPop = false"><i class="el-icon-arrow-left"></i>{{secPopTitle}}</li>
-        <li @click="addCard('topic')"><i class="el-icon-plus"></i>主题指标</li>
-        <li @click="addCard('card')"><i class="el-icon-plus"></i>分析指标</li>
-      </ul>
+        visible-arrow
+        popper-class="meterpop"
+        placement="bottom"
+        width="200"
+        trigger="click">
+        <ul class="pluspop popFirst" v-if="!showSecPop">
+          <li v-for="(item,index) in meterList" :key="index" @click="showSecondpop(item)">
+            <i class="el-icon-arrow-left"></i>{{item.name}}
+          </li>
+          <li @click="addMeter"><i class="el-icon-plus"></i>新建仪表盘</li>
+        </ul>
+        <ul class="pluspop popFirst" v-if="showSecPop">
+          <li @click="showSecPop = false"><i class="el-icon-arrow-left"></i>{{secPopTitle}}</li>
+          <li @click="addCard('topic')"><i class="el-icon-plus"></i>主题指标</li>
+          <li @click="addCard('card')"><i class="el-icon-plus"></i>分析指标</li>
+        </ul>
+        <el-button 
+          slot="reference" icon="el-icon-plus" circle
+          style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
+          size="mini" type="text" 
+          @click="getMeterNameList"
+          v-if="btnstatus"
+          ></el-button>
+      </el-popover>
       <el-button 
-        slot="reference" icon="el-icon-plus" circle
+        icon="el-icon-search" 
+        circle  
+        size="mini" 
         style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
-        size="mini" type="text" 
-        @click="getMeterNameList"
-        v-if="btnstatus"
-         ></el-button>
-    </el-popover>
-    <el-button 
-      icon="el-icon-search" 
+        @click="showDetailChartDialog"
+        v-if="!btnstatus"
+        ></el-button>
+    </div>
+      <el-button 
+      icon="el-icon-close" 
       circle  
       size="mini" 
       style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
-      @click="showDetailChartDialog"
-      v-if="!btnstatus"
+      @click="delConfirm"
+      v-if="delstatus"
       ></el-button>
     <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel"></addChartToMeter>
     <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog>
@@ -62,8 +72,12 @@
   import addChartToMeter from "../components/addChartToMeterDia.vue"
   import detailChartDialog from "../components/detailChartDialog.vue"
   export default {
-    components: {addChartToMeter,detailChartDialog},
-    props: ['cardData','btnstatus'],
+    name:"toprightControl",
+    components: {
+      addChartToMeter,
+      detailChartDialog
+    },
+    props: ['cardData','btnstatus','delstatus','meterData'],
     data() {
       return {
         showSecPop: false,
@@ -88,7 +102,6 @@
       showSecondpop(val) {
         this.showSecPop = true
         this.secPopTitle = val.name
-        // console.log(val)
         this.currentList = val
       },
       closeModel(val) {
@@ -100,10 +113,8 @@
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {
           if (res.data.code === "20000") {
-            // console.log(res)
-            // this.meterList = res.data.data.data.private
-            this.meterList = res.data.data.data.public
-            
+            this.meterList = res.data.data.data.private
+            // this.meterList = res.data.data.data.public
           } else {
             
           }
@@ -113,18 +124,12 @@
         this.showDetailChart = false
       },
       showDetailChartDialog(){
-        // if(this.cardData.chart_set[0].type == 'tableCard'){
-        //   return
-        // }
         this.showDetailChart = true
         this.sendDetailData = this.cardData
       },
       addCard(val){
-        // console.log(val)
-        // console.log(this.currentList)
-        console.log(this.cardData)
         this.params.name = this.currentList.name
-        // this.params.introduction = this.currentList.introduction
+        this.params.introduction = this.currentList.introduction
         this.params.is_public  = this.currentList.is_public
         this.params.card_ids = []
         if(this.currentList.cards.length!==0){
@@ -140,7 +145,6 @@
           this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
             headers: {"Accept": "application/vnd.boss18+json"}
           }).then((res) => {
-            console.log(res)
             if (res.data.code === "20030") {
               this.addChartMrterDialog=true
             } else {
@@ -153,7 +157,6 @@
           this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
             headers: {"Accept": "application/vnd.boss18+json"}
           }).then((res) => {
-            console.log(res)
             if (res.data.code === "20030") {
               this.addChartMrterDialog=true
             } else {
@@ -161,6 +164,49 @@
             }
           });
         }
+      },
+      delConfirm(){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.delCard()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+      delCard(){
+        this.params.name = this.meterData.name
+        this.params.introduction = this.meterData.introduction
+        this.params.is_public  = this.meterData.is_public
+        this.params.card_ids = []
+        if(this.meterData.cards.length!==0){
+          this.meterData.cards.forEach(item => {
+            this.params.card_ids.push(item.id)
+          })
+        }
+        this.params.card_ids.forEach((item,index)=>{
+          if(item == this.cardData.id){
+            this.params.card_ids.splice(index,1)
+          }
+        })
+        this.params.user_id = this.meterData.user_id||JSON.parse(localStorage.getItem("personal")).id
+        this.params.topic_card_id = this.meterData.topic_card_id
+        
+        this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.meterData.id,this.params, {
+          headers: {"Accept": "application/vnd.boss18+json"}
+        }).then((res) => {
+          if (res.data.code === "20030") {
+            this.prompt('success',res.data.msg)
+            this.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$parent.$children[1].$children[0].showDetailMeterEven(this.meterData.id,'private')
+          } else {
+            this.prompt('error',res.data.msg)
+          }
+        });
       }
     },
     mounted() {
@@ -168,8 +214,12 @@
   }
 </script>
 <style scoped lang="scss">
+#toprightContorl{
+  position: absolute;
+  top:15px;
+  right: 15px;
+}
   // 仪表弹出框
-
   .pluspop {
     position: absolute;
     background-color: #fff;

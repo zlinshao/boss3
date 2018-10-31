@@ -6,6 +6,7 @@
 </template>
 <script>
   export default {
+    name:"stackedPercentageColumn",
     props:['chartData','chartStyle','params'],
     data(){
       return {
@@ -80,7 +81,16 @@
             this.chartReset.dimension = "name";
             this.chartReset.groupBy = ["cate"];
           break;
-         
+          case "收房违约率占比":
+            this.chartReset.field = "value"
+            this.chartReset.dimension = "name";
+            this.chartReset.groupBy = ["cate"];
+          break;
+          case "租房违约率占比":
+            this.chartReset.field = "value"
+            this.chartReset.dimension = "name";
+            this.chartReset.groupBy = ["cate"];
+          break;
           default:
           break;
         }
