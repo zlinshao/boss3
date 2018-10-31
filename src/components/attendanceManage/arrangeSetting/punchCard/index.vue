@@ -337,20 +337,26 @@ export default {
           }).then(res => {
               if(res.status ==200){
                   if(res.data.code==20000){
+                      if(res.data.data.data.length<1){
+                        this.emptyData();
+                      }
                       this.punchCardList = res.data.data.data
                       this.punchCount = res.data.data.count;
                       this.gettingList = false;
                       this.isHighPunch = false;
                   }else if(res.data.code == 20001){
-                      this.punchCardList = [];
-                      this.gettingList = false;
-                      this.punchListInfo = "暂无数据";
-                      this.isHighPunch = false;
+                        this.emptyData();
                   }
               }
           }).catch(err => {
               console.log(err);
           })
+      },
+      emptyData (){
+        this.punchCardList = [];
+        this.gettingList = false;
+        this.punchListInfo = "暂无数据";
+        this.isHighPunch = false;
       },
       department (row){
           var name = '';

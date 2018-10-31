@@ -19,7 +19,8 @@
           circle
           style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;" 
           size="mini"
-          type="text"></el-button>
+          type="text">
+        </el-button>
       </el-popover>
 
       <!-- 仪表弹出框 -->
