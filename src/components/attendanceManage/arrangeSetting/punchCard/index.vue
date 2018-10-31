@@ -32,7 +32,7 @@
                 >
                     <template slot-scope="scope">
                         <div>
-                            <img style="width:30%;" :src="scope.row.avatar != null ? scope.row.avatar : ''" alt="">
+                            <img style="width:50px;height:50px;border-radius:50%;" :src="scope.row.avatar != null ? scope.row.avatar : ''" alt="">
                         </div>
                     </template>
                 </el-table-column>
@@ -136,11 +136,14 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div style="width:100%;text-align:right;">
+        <div style="width:100%;text-align:right;margin-top:25px;">
             <el-pagination
+                @size-change="punchSizeChange"
+                @current-change="punchCurrentChange"
                 :page-sizes="[5,10,15]"
-                :pager-count="11"
-                layout="prev, pager, next"
+                :page-size="punchCardParams.limit"
+                :current-page="punchCardParams.page"
+                layout="total,sizes,prev, pager, next ,jumper" 
                 :total="punchCount">
             </el-pagination>
         </div>
@@ -315,6 +318,8 @@ export default {
               is_late: "",//是否迟到
               late_minutes: "",//迟到分钟数
               is_vacate: "",//是否请假
+              page: 1,
+              limit: 5
           },
           punchCardList:[],
           gettingList: false,
@@ -332,7 +337,6 @@ export default {
           }).then(res => {
               if(res.status ==200){
                   if(res.data.code==20000){
-                      console.log(res);
                       this.punchCardList = res.data.data.data
                       this.punchCount = res.data.data.count;
                       this.gettingList = false;
@@ -381,6 +385,14 @@ export default {
       highGrade (){
           this.resetting();
           this.isHighPunch = false;
+      },
+      punchSizeChange (val){
+          this.punchCardParams.limit = val;
+          this.getPunchCardList();
+      },
+      punchCurrentChange (val){
+          this.punchCardParams.page = val;
+          this.getPunchCardList();
       }
   },
   mounted (){
