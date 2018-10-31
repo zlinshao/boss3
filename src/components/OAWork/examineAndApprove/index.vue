@@ -927,7 +927,7 @@
         if (this.reportAllID.includes(row.id)) return 'rowBackground';
       },
       colTag({row, column, rowIndex, columnIndex}){
-        console.log(column)
+        // console.log(column)
         if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
           return 'colTag'
         }
@@ -956,10 +956,10 @@
         this.childActive(this.activeName, key);
       },
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       },
       close_() {
         this.tableData = [];
@@ -1125,7 +1125,7 @@
         }
       },
       dblClickTable(row) {
-        console.log(row)
+        // console.log(row)
         this.reportID = row.id;
         this.reportAllID.push(row.id);
         this.reportAllID = Array.from(new Set(this.reportAllID));

@@ -3,7 +3,7 @@
     id="detailChartDialog"
     custom-class="detailDia"
     :show-close="false"
-    :visible.sync="detaildialogVisible"
+    :visible="detaildialogVisible"
     :modal="false"
     width="65%">
     <div>
@@ -13,11 +13,10 @@
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
         <span>{{detailData.name}}</span>
         </div>
-        <toprightControl 
+        <toprightcontrol 
           :cardData="detailData" 
-          :btnstatus="true"
-          v-if="detailData" 
-        ></toprightControl>
+          :btnstatus="btnstatus">
+        </toprightcontrol>
         
       </div>
       <div class="detailcontent">
@@ -107,14 +106,13 @@
           :status="true"
           v-if="detailData.chart_set"
             ></component>
-          <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
-  import toprightControl from "./toprightControl.vue"
+  import toprightcontrol from "../cockpit/components/toprightControl.vue"
   import basicColumn from "../wareHouseData/chart/basicColumn.vue"          //基础柱状图
   import bubblePoint from "../wareHouseData/chart/bubblePoint.vue"          //气泡图
   import donut from "../wareHouseData/chart/donut.vue"                      //基础环图
@@ -130,7 +128,7 @@
     export default {
       name:"detailChartDialog",
       components:{
-        toprightControl,
+        toprightcontrol,
         basicColumn,
         bubblePoint,
         donut,
@@ -149,6 +147,12 @@
           chartstyle:{
             height:500,
             width:1000
+          },
+          btnstatus:{
+            large:false,//放大和添加按钮SH
+            delete:false,//删除按钮
+            hidemetter:false,//隐藏新建
+            hideAdd:true//隐藏添加
           },
           params:{},
           selectDate:'',
@@ -256,6 +260,8 @@
             this.params.end_date = this.selectDate[1]
            
             this.$refs.chartComp.getChart(this.params,"default")
+            // console.log(this.$refs.topright)
+            // this.$nextTick
             
             
         },

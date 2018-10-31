@@ -8,7 +8,7 @@
           <!-- 图表卡片 -->
           <chartCard id="card" :cardData="item" >
             <template slot="right">
-              <toprightControl :cardData="item" :btnstatus="true"></toprightControl>
+              <toprightControl :cardData="item" :btnstatus="btnstatus" ></toprightControl>
             </template>
             <template slot="content">
               <component 
@@ -49,7 +49,7 @@
         class="searchBtn"
         @click="searchCard"
       ></el-button>
-      <el-select placeholder="全部" class="selectFil" v-model="params.tag_id" @change="searchCard(params)">
+      <!-- <el-select placeholder="全部" class="selectFil" v-model="params.tag_id" @change="searchCard(params)">
         <el-option
           label="全部"
           value=""
@@ -62,7 +62,7 @@
           :value="item.id"
         >
         </el-option>
-      </el-select>
+      </el-select> -->
     </div>
 
     <!-- 详情弹出框 -->
@@ -130,7 +130,13 @@
           height:300,
           width:530
         },
-        sendDetailData:{}
+        sendDetailData:{},
+        btnstatus:{
+          large:false,//放大和添加按钮SH
+          delete:false,//删除按钮
+          hidemetter:true,//隐藏新建
+          hideAdd:true//隐藏添加
+        }
       }
     },
     methods: {
