@@ -279,7 +279,8 @@ export default {
       isFirst: true,
       checkList: [],
       file_id: '',
-      exportBtnShow:true
+      exportBtnShow:true,
+      edited:false
     };
   },
   methods: {
@@ -500,6 +501,7 @@ export default {
       });
       this.currentArrange = "A";
       this.dialogShow = false;
+      this.edited = true;
     },
     resetCurrentSort() {
       this.currentSort = {
@@ -509,7 +511,8 @@ export default {
       };
     },
     saveCurrentArrange() {
-      this.$http
+      if(this.edited){
+        this.$http
         .post(this.url + "attendance/sort", this.currentSort)
         .then(res => {
           if (res.status == 200) {
@@ -517,13 +520,22 @@ export default {
               this.$notify.success({ message: res.data.msg, title: "成功" });
               this.getArrangeList(this.arrangeParams);
               this.isFirst = true;
+              this.edited = false;
               this.resetCurrentSort();
             } else if (res.data.code == 20012) {
               this.$notify.warning({ message: res.data.msg, title: "警告" });
+              this.edited = false;
               return false;
             }
           }
         });
+      }else{
+        this.$notify.warning({
+          title: "警告",
+          message: "尚未作出修改！"
+        });
+        return false;
+      }
     },
     //分页
     handleSizeChange(val) {
