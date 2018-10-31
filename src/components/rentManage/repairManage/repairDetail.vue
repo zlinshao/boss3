@@ -56,7 +56,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="房东电话">
+                <el-form-item :label="customer_type + '电话'">
                   <div class="content">
                     <span v-if="repairDetail.landlord_mobile">{{repairDetail.landlord_mobile}}</span>
                     <span v-if="!repairDetail.landlord_mobile">暂无</span>
@@ -398,6 +398,7 @@
         next_follow_name: '',   //下次跟进人
         state_repair: [],       //维修状态
         states: {},             //维修状态
+        customer_type:''
       };
     },
     watch: {
@@ -437,8 +438,12 @@
           this.repairLoading = false;
           if (res.data.code === "600200") {
             this.isFlag = res.data.data.update;
-            console.log(res.data.data)
             this.repairDetail = res.data.data;
+            if(res.data.data.contract_type.indexOf('Renter') > -1){
+              this.customer_type = '租客';
+            }else{
+              this.customer_type = '房东';
+            }
             this.repairDetail.house_name = this.houseData.house_name;
             if(res.data.data.album){
               this.repairDetail.album = res.data.data.album;
