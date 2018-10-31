@@ -9,52 +9,48 @@
         <el-checkbox :label="item.name" v-for="(item, index) in this.celeckList" :key="index" @change="selecked(item, index)" :disabled="item.disabled" :checked="item.disabled"></el-checkbox>
       </el-checkbox-group>
     </div>
-    <div class="selectTime">
+    <!-- <div class="selectTime">
       <span>月份：</span>
       <el-select v-model="monthValue" placeholder="请选择" size="mini">
         <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-    </div>
-    <div class="disclaimer">
+    </div> -->
+    <!-- <div class="disclaimer">
       <el-checkbox v-model="disclaimerChecked">免除班次允许范围内的迟到次数</el-checkbox>
       <span>( <el-checkbox v-model="resignationChecked">包括离职员工</el-checkbox> )</span>
-    </div>
-    <div class="nameInput">
+    </div> -->
+    <!-- <div class="nameInput">
       <span>姓名：</span>
       <el-input v-model="inputName" placeholder="请输入内容" size="mini"></el-input>
-    </div>
-    <div class="selectTips">
+    </div> -->
+    <!-- <div class="selectTips">
       <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
-    </div>
-    <div class="resignation">
+    </div> -->
+    <!-- <div class="resignation">
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
     </div>
     <div class="btn">
       <el-button type="primary" size="mini">确定</el-button>
       <el-button type="primary" size="mini">导出</el-button>
-    </div>
+    </div> -->
     <div class="table">
-      <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width ="auto">
+      <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width="auto">
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '出勤班次'" label="早班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="中班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="晚班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="正常加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="法定加班（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="事假（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="病假（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="婚假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="丧假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="产假（天）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" label="陪产假（天）"></el-table-column>
+          <el-table-column v-if="showItem.name == '请假'" v-for="(day, index) in secondaryMenu" :key="index" :label="day.label" :prop="day.prop"></el-table-column>
         </el-table-column>
       </el-table>
     </div>
     <div class="block pages">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[20, 100, 200, 300, 400]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="400">
+      <!--  :current-page="" :page-size="params.limit" -->
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[20, 100, 200, 300, 400]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <!-- 组织架构 -->
@@ -116,59 +112,63 @@ export default {
       inputName: "",
       state1: "",
       checked: "",
-      tableData: [
-        {
-          jobNumber: "11111",
-          name: "小米1",
-          department: "web",
-          position: "web"
-        },
-        {
-          jobNumber: "2222",
-          name: "小米2",
-          department: "java",
-          position: "java"
-        }
-      ], // 表格数据
+      tableData: [], // 表格数据
       celeckList: [
-        { name: "工号", prop: "jobNumber", state: false, disabled: true },
+        // { name: "工号", prop: "jobNumber", state: false, disabled: true },
         { name: "姓名", prop: "name", state: false, disabled: true },
-        { name: "部门", prop: "department", state: false, disabled: true },
-        { name: "职位", prop: "position", state: false, disabled: true },
-        { name: "班次", prop: "shift", state: false },
-        { name: "出勤天数", prop: "attendanceDays", state: false },
-        { name: "出勤班次", prop: "attendanceShift", state: false },
-        { name: "休息天数", prop: "restDay", state: false },
-        { name: "迟到次数", prop: "lateArrivals", state: false },
-        { name: "迟到时长", prop: "lateArrival", state: false },
-        { name: "严重迟到次数", prop: "seriousLateArrivals", state: false },
-        { name: "早退次数", prop: "earlyRetreat", state: false },
-        { name: "早退时长", prop: "earlyDepartureTime", state: false },
-        { name: "上班缺卡次数", prop: "numberMissedCardsWork", state: false },
-        {
-          name: "下班缺卡次数",
-          prop: "numberMissedCardsOffWork",
-          state: false
-        },
-        { name: "打卡异常次数", prop: "punchAbnormality", state: false },
-        { name: "旷工天数", prop: "daysCompletion", state: false },
-        { name: "出差", prop: "travel", state: false },
-        { name: "请假", prop: "leave", state: false }
+        { name: "职位", prop: "roles", state: false, disabled: true },
+        { name: "部门", prop: "org", state: false, disabled: true },
+        { name: "应出勤总天数", prop: "should_attendance_day", state: false },
+        { name: "实出勤总天数", prop: "real_attendance_day", state: false },
+        { name: "休息天数", prop: "rest_attendance_day", state: false },
+        { name: "迟到次数", prop: "late_num", state: false },
+        { name: "迟到时长", prop: "late_minutes", state: false },
+        { name: "严重迟到次数", prop: "serious_late_num", state: false },
+        { name: "早退次数", prop: "early_num", state: false },
+        { name: "早退时长", prop: "early_minutes", state: false },
+        { name: "下班缺卡次数", prop: "pm_not_sign", state: false },
+        { name: "旷工天数", prop: "absenteeism", state: false },
+        { name: "加班存在异常", prop: "work_overtime_exception", state: false },
+        { name: "加班天数", prop: "work_overtime_day", state: false },
+        { name: "出差", prop: "business", state: false },
+        { name: "请假", prop: "vacate", state: false }
+        // { name: "出勤天数", prop: "should_attendance_day", state: false },
+        // { name: "出勤班次", prop: "attendanceShift", state: false },
+        // { name: "上班缺卡次数", prop: "numberMissedCardsWork", state: false },
+        // { name: "班次", prop: "shift", state: false },
+        // { name: "打卡异常次数", prop: "punchAbnormality", state: false },
       ],
       seleckedList: [
         // 默认选中状态
-        { name: "工号", prop: "jobNumber", state: true },
+        // { name: "工号", prop: "jobNumber", state: true },
         { name: "姓名", prop: "name", state: true },
-        { name: "部门", prop: "department", state: true },
-        { name: "职位", prop: "position", state: true }
+        { name: "部门", prop: "org", state: true },
+        { name: "职位", prop: "roles", state: true }
       ],
+      // 请假二级菜单
+      secondaryMenu: [
+        { label: "事假", prop: "thingLeave" },
+        { label: "病假", prop: "sickLeave" },
+        { label: "年假", prop: "annualLeave" },
+        { label: "调休", prop: "changeLeave" },
+        { label: "婚假", prop: "marriageLeave" },
+        { label: "产假", prop: "maternityLeave" },
+        { label: "陪产假", prop: "paternityLeave" },
+        { label: "路途假", prop: "roadLeave" },
+        { label: "丧假", prop: "funeralLeave" }
+      ],
+      total: 0, //数据总条数
       selectValue: "",
       monthOptions: [], // 月份
       monthValue: "",
       currentPage: 1,
       beLateData: [], // 迟到汇总
       attendanceTitle: "", //迟到标题
-      attendanceTimeLength: true // 迟到时长
+      attendanceTimeLength: true, // 迟到时长
+       params: {   // 分页
+          limit: 5,
+          page: 1,
+        },
     };
   },
   created() {
@@ -231,9 +231,12 @@ export default {
       }
     },
     handleSizeChange(val) {
+      this.params.limit = val;
+      this.refresh(val);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      this.refresh(val)
       console.log(`当前页: ${val}`);
     },
     //选人组件
@@ -249,8 +252,14 @@ export default {
         this.params.follow_id += item.id + ",";
         this.follow_name += item.name + ",";
       });
-      this.params.follow_id = this.params.follow_id.substring(0, this.params.follow_id.length - 1);
-      this.follow_name = this.follow_name.substring(0, this.follow_name.length - 1);
+      this.params.follow_id = this.params.follow_id.substring(
+        0,
+        this.params.follow_id.length - 1
+      );
+      this.follow_name = this.follow_name.substring(
+        0,
+        this.follow_name.length - 1
+      );
     },
     // 关闭模态框
     closeModal() {
@@ -260,11 +269,12 @@ export default {
       this.params.follow_id = "";
       this.follow_name = "";
     },
+    // 弹窗
     popUps(row, column, cell, event) {
       if (column.label == "迟到次数") {
         this.beLate = true;
-        this.attendanceTitle = true
-          row.name + "(" + row.jobNumber + ") 迟到次数汇总";
+        this.attendanceTitle = true;
+        row.name + "(" + row.jobNumber + ") 迟到次数汇总";
       } else if (column.label == "迟到时长") {
         this.beLate = true;
         this.attendanceTimeLength = false;
@@ -308,7 +318,84 @@ export default {
           done();
         })
         .catch(_ => {});
+    },
+    refresh(page) {
+       this.params.page = page || 1;
+      this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
+        if (res.data.code == "20000") {
+          this.tableData = res.data.data.data;
+          this.total = Number(res.data.data.count);
+          let props = [
+            "thingLeave",
+            "sickLeave",
+            "annualLeave",
+            "changeLeave",
+            "marriageLeave",
+            "maternityLeave",
+            "paternityLeave",
+            "roadLeave",
+            "funeralLeave"
+          ];
+          // 请假
+          this.tableData.forEach((item, idx) => {
+            item.vacate.forEach((key, index) => {
+              this.tableData[idx][props[index]] = key;
+            });
+          });
+          // 部门
+          let orgArr = [];
+          let rolesArr = [];
+          this.tableData.forEach((item, idx) => {
+            if (item.org.length > 0) {
+              item.org.forEach((key, index) => {
+                orgArr.push(key.name);
+              });
+              this.tableData[idx].org = orgArr.join(",");
+              orgArr = [];
+            } else {
+              orgArr.push("/");
+              this.tableData[idx].org = orgArr.join(",");
+              orgArr = [];
+            }
+          });
+          // 职位
+          this.tableData.forEach((item, ind) => {
+            if (item.roles.length > 0) {
+              item.roles.forEach((key, index) => {
+                rolesArr.push(key.description);
+                this.tableData[ind].roles = rolesArr.join(",");
+                rolesArr = [];
+              });
+            } else {
+              rolesArr.push("/");
+              this.tableData[ind].roles = rolesArr.join(",");
+              rolesArr = [];
+            }
+          });
+          // 
+        }
+      });
+    },
+    // 数据处理
+    dataProcessing(val1, val2) {
+      let dataProcessingArr = [];
+      this.tableData.forEach((item, ind) => {
+        if (item.val1.length > 0) {
+          item.val1.forEach((key, index) => {
+            dataProcessingArr.push(key.val2);
+            this.tableData[ind].roles = dataProcessingArr.join(",");
+            dataProcessingArr = [];
+          });
+        } else {
+          dataProcessingArr.push("/");
+          this.tableData[ind].val1 = dataProcessingArr.join(",");
+          dataProcessingArr = [];
+        }
+      });
     }
+  },
+  created() {
+    this.refresh();
   }
 };
 </script>
