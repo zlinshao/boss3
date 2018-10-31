@@ -632,10 +632,7 @@
               }
             }
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('warning', res.data.msg);
           }
         });
       },
@@ -687,16 +684,10 @@
         }).then(() => {
           this.$http.get(globalConfig.server + 'manager/staff/forward?id=' + this.editId).then((res) => {
             if (res.data.code === '10000') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg,
-              });
+              this.prompt('success', res.data.msg);
               this.detailData.send_info = 2;
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg,
-              });
+              this.prompt('warning', res.data.msg);
             }
           });
         }).catch(() => {
@@ -711,10 +702,10 @@
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               this.initial();
-              this.prompt('success',res.data.msg);
+              this.prompt('success', res.data.msg);
             } else {
               this.disabledBtn = false;
-              this.prompt('warning',res.data.msg);
+              this.prompt('warning', res.data.msg);
             }
           });
         } else {
@@ -723,10 +714,10 @@
             if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
-              this.prompt('success',res.data.msg);
+              this.prompt('success', res.data.msg);
             } else {
               this.disabledBtn = false;
-              this.prompt('warning',res.data.msg);
+              this.prompt('warning', res.data.msg);
             }
           });
         }
@@ -777,13 +768,6 @@
       },
       //性别
       getSex() {
-        // this.$http.get(globalConfig.server + 'setting/dictionary/228').then((res) => {
-        //   if (res.data.code === '30010') {
-        //     this.sexCategory = res.data.data;
-        //   } else {
-        //     this.sexCategory = [];
-        //   }
-        // });
         this.dictionary(228).then((res) => {
           if (res.code === '30010') {
             this.sexCategory = res.data;
@@ -882,10 +866,7 @@
               this.params.home_addr = data.origin_addr.result;
             }
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('warning', res.data.msg);
           }
         });
       },
@@ -898,10 +879,7 @@
               this.params.account_bank = res.data.data && res.data.data.bankname;
             }
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('warning', res.data.msg);
           }
         });
       },

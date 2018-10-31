@@ -105,12 +105,12 @@
       }
     },
     mounted() {
-      this.roleArray = this.powerData.role;
+      this.roleArray = this.powerData.roles;
       this.userId = this.powerData.user_id;
-      this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
+      this.currentRoleId = this.powerData.roles && this.powerData.roles[0] && this.powerData.roles[0].id;
     },
     activated() {
-      this.roleArray = this.powerData.role;
+      this.roleArray = this.powerData.roles;
       this.userId = this.powerData.user_id;
     },
     watch: {
@@ -126,15 +126,15 @@
         }
       },
       powerData(val) {
-        this.roleArray = val.role;
-        this.userId = val.user_id;
+        this.roleArray = val.roles;
+        this.userId = val.id;
         setTimeout(() => {
           if (this.userId) {
             this.getDefaultData();
             this.getStaffPart();
           }
         }, 0);
-        this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
+        this.currentRoleId = this.powerData.roles && this.powerData.roles[0] && this.powerData.roles[0].id;
       }
     },
     methods: {
@@ -316,7 +316,7 @@
           on: str,
           permissions: powerIds,
         }).then((res) => {
-          if (res.data.status === 'success') {
+          if (res.data.code === '20000') {
             this.powerVisible = false;
             this.prompt('success', '授权成功');
           } else {
