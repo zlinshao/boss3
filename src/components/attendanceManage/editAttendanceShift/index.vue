@@ -1,7 +1,6 @@
 <template>
   <div @click="show = false" @contextmenu="closeMenu">
     <div id="editAttendanceShift">
-      <!-- @contextmenu="deleteAttendance($event)" -->
       <!-- 添加班次 -->
       <div class="addAttendanceShift">
         <el-button type="primary" size="mini" @click="addAttendanceShift()">添加班次</el-button>
@@ -20,10 +19,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="block pages">
+        <!--  :current-page="" :page-size="params.limit" -->
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[20, 100, 200, 300, 400]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
+        </el-pagination>
+      </div>
       <!-- 编辑考勤班次 -->
       <el-dialog title="编辑考勤班次" :visible.sync="editAttendance" width="34%">
         <!-- 表达内容 -->
-        <el-form ref="form" :model="form" label-width="80px" :rules="rules">
+        <el-form ref="form" :model="form" label-width="80px" :rules="rules" onsubmit="return false">
           <el-form-item label="班次名称" class="shiftName" prop="name">
             <el-input v-model="form.name" size="small"></el-input>
             <!-- <el-select v-model="form.name" placeholder="请选择班次名称" size="mini">
@@ -120,7 +125,9 @@
           </el-form-item>
           <el-form-item class="btn">
             <el-button @click="cancelAttendance()" size="mini">取 消</el-button>
+            <!-- 编辑 -->
             <el-button type="primary" @click="editAttendanceSubmit()" size="mini" v-if="editShow">确 定</el-button>
+            <!-- 新增 -->
             <el-button type="primary" @click="addAttendanceSubmit()" size="mini" v-if="determineShow">确 定</el-button>
           </el-form-item>
         </el-form>
@@ -138,14 +145,14 @@ export default {
   components: { RightMenu },
   data() {
     let checkShiftName = (rule, value, callback) => {
-      if (value == this.judgeName) {
-        callback(new Error("该名称已经存在"));
+      if (value == this.judgeName && !value) {
+        callback(new Error("请填写名称或该名称已经存在"));
       } else {
         callback();
       }
     };
     let checkShiftCode = (rule, value, callback) => {
-      if (value == this.judgeAlias) {
+      if (value == this.judgeAlias && !value) {
         callback(new Error("该班次已经存在"));
       } else {
         callback();
@@ -190,19 +197,19 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入班次名称", trigger: "change" },
-          { validator: checkShiftName, trigger: "change" }
+          { required: true, validator: checkShiftName, trigger: "change" }
         ],
         alias: [
           { required: true, message: "请输入班次代号", trigger: "change" },
-          { validator: checkShiftCode, trigger: "change" }
+          { required: true, validator: checkShiftCode, trigger: "change" }
         ],
         pm_rest_time: [
           { required: true, message: "请选择时间", trigger: "change" },
-          { validator: checkPmTime, trigger: "change" }
+          { required: true, validator: checkPmTime, trigger: "change" }
         ],
         morning_work_time: [
           { required: true, message: "请选择时间", trigger: "change" },
-          { validator: checkAmTime, trigger: "change" }
+          { required: true, validator: checkAmTime, trigger: "change" }
         ],
         relief_late_minute: [
           {
@@ -210,7 +217,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ],
         cheat_half_minute: [
           {
@@ -218,7 +225,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ],
         warring_late_minute: [
           {
@@ -226,7 +233,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ],
         cheat_day_minute: [
           {
@@ -234,7 +241,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ]
       },
       rightMenuX: 0, // 右键Y
@@ -247,8 +254,13 @@ export default {
       judgeAlias: "", //检查班次代号
       editAttendance: false, // 考勤班次
       punchMode: 1, // 打卡方式
-      determineShow: "",
-      editShow: "",
+      determineShow: "", // 新增
+      editShow: "", // 编辑按钮
+      dataTotal: 0, // 总数据
+      params: {
+        limit: 15,
+        page: 1
+      },
       form: {
         name: "", //班次名称
         alias: "", //检查班次代号
@@ -278,12 +290,10 @@ export default {
       this.determineShow = true;
       this.editShow = false;
     },
-    editAttendanceShift(alias, name, id) {
+    editAttendanceShift() {
       this.editAttendance = true;
       this.determineShow = false;
       this.editShow = true;
-      // this.judgeName = name;
-      // this.judgeAlias = alias;
       this.id = id;
       this.$http
         .get(globalConfig.server + "attendance/classes/" + id)
@@ -307,8 +317,10 @@ export default {
       this.editAttendance = false;
       this.$refs.form.resetFields();
     },
-    addAttendanceSubmit() {
+    addAttendanceSubmit(alias, name, id) {
       this.editAttendance = false;
+      //  this.judgeName = name;
+      // this.judgeAlias = alias;
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {
@@ -330,7 +342,6 @@ export default {
         });
     },
     editAttendanceSubmit() {
-      this.editAttendance = false;
       this.$http
         .put(globalConfig.server + "/attendance/classes/" + this.id, this.form)
         .then(res => {
@@ -341,13 +352,12 @@ export default {
             });
             this.tableData = [];
             this.refresh();
-            this.$refs.form.resetFields();
+            this.editAttendance = false;
           } else {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
             });
-            this.$refs.form.resetFields();
           }
         });
     },
@@ -401,9 +411,11 @@ export default {
         this.show = true;
       });
     },
-    refresh() {
-      this.$http.get(globalConfig.server + "attendance/classes").then(res => {
+    refresh(page) {
+      this.params.page = page || 1;
+      this.$http.get(globalConfig.server + "attendance/classes",{params: this.params}).then(res => {
         if (res.data.code == "20000") {
+          this.dataTotal = Number(res.data.data.count);
           let data = res.data.data.data;
           let time1 = "";
           let time2 = "";
@@ -422,10 +434,26 @@ export default {
           }
         }
       });
+    },
+    // 分页
+    handleSizeChange(val) {
+      this.params.limit = val;
+      this.refresh(val);
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.refresh(val);
     }
   },
   created() {
     this.refresh();
+  },
+  watch: {
+    editAttendance(val) {
+      if (!val) {
+        this.$refs.form.resetFields();
+      }
+    }
   }
 };
 </script>

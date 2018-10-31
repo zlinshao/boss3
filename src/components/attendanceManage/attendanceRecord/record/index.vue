@@ -34,9 +34,6 @@
     <div class="table">
       <el-table :data="tableData" border style="width: auto;overflow-x:auto;">
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index" :cell-class-name="getColor">
-          <!-- <template slot-scope="scope"  v-if="scope.name == '加班存在异常'">
-            <span style="color: #ef4292" >异常</span>
-          </template> -->
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡时间"></el-table-column>
           <el-table-column v-if="showItem.name == '上午上班'" label="打卡结果"></el-table-column>
           <el-table-column v-if="showItem.name == '上午下班'" label="打卡时间"></el-table-column>
@@ -154,7 +151,6 @@ export default {
       selectValue: "",
       currentPage: 1,
       total: 0, //数据总条数
-      leaveDay: [], // 请假天数
     };
   },
   methods: {
@@ -235,8 +231,9 @@ export default {
         console.log(res, "get11111111");
         if (res.data.code == "20000") {
           this.tableData = res.data.data.data;
+        console.log(this.tableData, "2222");
           this.total = Number(res.data.data.count);
-          this.workOvertime = this.tableData.work_overtime_exception 
+          this.workOvertime = this.tableData.work_overtime_exception;
           // console.log(this.tableData, '22222222');
           // console.log(this.tableData.work_overtime_exception, '111111111');
           // for(let i = 0; i < this.tableData.length; i++) {
@@ -283,7 +280,7 @@ export default {
     }
   },
   created() {
-    this.refresh();
+    // this.refresh();
   },
   watch: {}
 };
