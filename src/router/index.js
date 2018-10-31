@@ -72,7 +72,7 @@ const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.v
 const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //设置排班
 const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
-const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue') //编辑班次
+const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue'); //编辑班次
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
@@ -383,7 +383,7 @@ export default new Router({
           path: '/editArrange',
           component: EditArrange,
           name: '编辑排班',
-          props:true
+          props: true
         },
         {path: '/clientManage', component: ClientManage, name: ' 客户管理 ', icon: "iconfont icon-kehu"},
         // {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
@@ -542,8 +542,11 @@ export default new Router({
       name: '考勤管理',
       icon: 'el-icon-document',
       children: [
-        {path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',},
-        {path: '/punchCard', component: PunchCard , name: '日统计'}
+        {path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置'},
+        {path: '/punchCard', component: PunchCard, name: '日统计'},
+        {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
+        {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
+        {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
       ]
     },
     {

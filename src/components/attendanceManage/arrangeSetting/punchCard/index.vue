@@ -136,6 +136,14 @@
                 </el-table-column>
             </el-table>
         </div>
+        <div style="width:100%;text-align:right;">
+            <el-pagination
+                :page-sizes="[5,10,15]"
+                :pager-count="11"
+                layout="prev, pager, next"
+                :total="punchCount">
+            </el-pagination>
+        </div>
         <!-- 高级 -->
         <div class="highRanking" style="position:static !important;">
             <div class="filter high_grade" :class="isHighPunch? 'highHide':''">
@@ -311,7 +319,8 @@ export default {
           punchCardList:[],
           gettingList: false,
           punchListInfo: "",
-          isHighPunch: false
+          isHighPunch: false,
+          punchCount:0,
       }
   },
   methods: {
@@ -323,7 +332,9 @@ export default {
           }).then(res => {
               if(res.status ==200){
                   if(res.data.code==20000){
+                      console.log(res);
                       this.punchCardList = res.data.data.data
+                      this.punchCount = res.data.data.count;
                       this.gettingList = false;
                       this.isHighPunch = false;
                   }else if(res.data.code == 20001){

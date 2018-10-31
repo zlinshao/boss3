@@ -15,8 +15,6 @@
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
       }
-      
-      
     },
     watch: {},
     methods:{
@@ -29,6 +27,7 @@
           height:this.chartStyle.height, 
           // forceFit: true,
         });
+        
         chart.source(data);
         chart.interval().position('cate*value');
         chart.render();
