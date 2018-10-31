@@ -26,7 +26,7 @@
         </el-pagination>
       </div>
       <!-- 编辑考勤班次 -->
-      <el-dialog title="编辑考勤班次" :visible.sync="editAttendance" width="34%">
+      <el-dialog :title="checkTitle? '编辑考勤班次' : '添加考勤班次'" :visible.sync="editAttendance" width="34%">
         <!-- 表达内容 -->
         <el-form ref="form" :model="form" label-width="80px" :rules="rules" onsubmit="return false">
           <el-form-item label="班次名称" class="shiftName" prop="name">
@@ -53,9 +53,9 @@
         </el-form-item> -->
           <el-form-item label="上班时间" class="workingHours" prop="morning_work_time" size="mini">
             <el-time-select v-model="form.morning_work_time" :picker-options="{
-              start: '09:00',
+              start: '01:00',
               step: '1:00',
-              end: '13:00'
+              end: '24:00'
             }" placeholder="选择时间" class="workingHours">
             </el-time-select>
             <!-- <span>可提前</span>
@@ -64,9 +64,9 @@
           </el-form-item>
           <el-form-item label="下班时间" class="workingHours" prop="pm_rest_time" size="mini">
             <el-time-select v-model="form.pm_rest_time" :picker-options="{
-              start: '18:00',
+              start: '01:00',
               step: '1:00',
-              end: '21:00'
+              end: '24:00'
             }" placeholder="选择时间" class="workingHours">
             </el-time-select>
             <!-- <span>可延迟</span>
@@ -257,6 +257,7 @@ export default {
       determineShow: "", // 新增
       editShow: "", // 编辑按钮
       dataTotal: 0, // 总数据
+      checkTitle: true, // 编辑头部
       params: {
         limit: 15,
         page: 1
@@ -286,11 +287,13 @@ export default {
   },
   methods: {
     addAttendanceShift() {
+      this.checkTitle = false;
       this.editAttendance = true;
       this.determineShow = true;
       this.editShow = false;
     },
-    editAttendanceShift() {
+    editAttendanceShift(alias, name,id) {
+      this.checkTitle = true;
       this.editAttendance = true;
       this.determineShow = false;
       this.editShow = true;

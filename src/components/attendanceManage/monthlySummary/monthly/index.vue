@@ -31,10 +31,10 @@
     </div> -->
     <!-- <div class="resignation">
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
-    </div>
-    <div class="btn">
-      <el-button type="primary" size="mini">确定</el-button>
-      <el-button type="primary" size="mini">导出</el-button>
+    </div>-->
+    <!--<div class="btn">
+      <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
+       <el-button type="primary" size="mini">导出</el-button> 
     </div> -->
     <div class="table">
       <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width="auto">
