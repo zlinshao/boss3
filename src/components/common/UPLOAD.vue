@@ -214,7 +214,7 @@
                 name: url.key,
                 raw_name: file.name,
                 type: file.type,
-                size: file.size
+                 size: file.size
               }).then((res) => {
                 _this.$http.defaults.timeout = null;
                 if (res.data.status === "success") {
