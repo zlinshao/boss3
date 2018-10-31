@@ -134,6 +134,16 @@
                         </div>
                     </template>
                 </el-table-column>
+                 <el-table-column
+                    label="是否旷工"  
+                    prop="is_absenteeism"
+                >
+                    <template slot-scope="scope">
+                        <div>
+                            {{ scope.row.is_absenteeism ? '是' : '否'}}
+                        </div>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
         <div style="width:100%;text-align:right;margin-top:25px;">
@@ -286,6 +296,19 @@
                         </el-col>
                     </el-row>
                     </el-col>
+                    <el-col :span="12">
+                    <el-row>
+                        <el-col :span="8">
+                        <div class="el_col_label">是否旷工</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                            <el-select v-model="punchCardParams.is_absenteeism" placeholder="请选择">
+                                <el-option label="是" :value="1"></el-option>
+                                <el-option label="否" :value="0"></el-option>
+                            </el-select>
+                        </el-col>
+                    </el-row>
+                    </el-col>
                 </el-row>
                 <div class="btnOperate">
                     <el-button size="mini" type="primary" @click="goSearch">搜索</el-button>
@@ -318,6 +341,7 @@ export default {
               is_late: "",//是否迟到
               late_minutes: "",//迟到分钟数
               is_vacate: "",//是否请假
+              is_absenteeism: "",//是否旷工
               page: 1,
               limit: 5
           },
@@ -386,6 +410,7 @@ export default {
               is_late: "",//是否迟到
               late_minutes: "",//迟到分钟数
               is_vacate: "",//是否请假
+              is_absenteeism: "",//是否旷工
           }
       },
       highGrade (){

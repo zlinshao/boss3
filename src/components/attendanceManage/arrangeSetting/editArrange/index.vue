@@ -7,7 +7,7 @@
           <div>
             班次说明
             <el-tag 
-              style="margin-right:15px;"
+              style="margin-right:15px;margin-bottom:20px;"
               v-for="tmp in checkList" 
               :type="tmp.alias == 'A' ? 'danger': tmp.alias == 'B' ? 'warning' : tmp.alias == 'C' ? 'success' : tmp.alias == 'D' ? '' : 'info'"
               :key="tmp.id" 
@@ -27,6 +27,7 @@
                       size="mini" 
                       style="width:250px;dispaly:inline-block;margin-left:20px;"
                       clearable
+                      @keyup.enter.native="goSearch"
                       >
                         <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                       </el-input>
@@ -515,18 +516,14 @@ export default {
         });
         return false;
       }
-      if (row["oa_sort"] != null) {
-        if (row["oa_sort"]["arrange"][column.label]) {
-          this.currentArrange = row["oa_sort"]["arrange"][column.label];
-        }
-      }
+      // if (row["oa_sort"] != null) {
+      //   if (row["oa_sort"]["arrange"][column.label]) {
+      //     this.currentArrange = row["oa_sort"]["arrange"][column.label];
+      //   }
+      // }
       this.row = "";
       this.column = "";
       if (column.label == "部门" || column.label == "姓名") {
-        this.$notify.warning({
-          message: "请选择正确的日期进行排班！",
-          title: "警告"
-        });
         return false;
       } else if (column.label != "操作") {
         this.row = row;
@@ -557,8 +554,7 @@ export default {
         this.currentSort["user_id"] = this.row.id;
       }
       if (this.row.id != this.currentSort["user_id"]) {
-        this.$notify.warning({ message: "尚未保存前一个，请先保存", title: "警告" });
-        return false;
+        this.currentSort = [];
       }
       this.currentSort["user_id"] = this.row.id;
       var label = this.column.label;
@@ -600,7 +596,6 @@ export default {
     },
     saveCurrentArrange(row) {
       if(this.edited){
-        console.log(this.currentSort);
       if(row.id != this.currentSort.user_id){
         this.$notify.warning({
           title:"警告",
@@ -609,7 +604,11 @@ export default {
         return false;
       }
         this.$http
-        .post(this.url + "attendance/sort", this.currentSort)
+        .post(this.url + "attendance/sort", {
+            user_id: this.currentSort.user_id,
+            arrange: this.currentSort.arrange,
+            arrange_month: this.currentSort.arrange_month
+        })
         .then(res => {
           if (res.status == 200) {
             if (res.data.code == 20010) {
@@ -618,7 +617,7 @@ export default {
               this.isFirst = true;
               this.edited = false;
               this.resetCurrentSort();
-            } else if (res.data.code == 20012) {
+            } else {
               this.$notify.warning({ message: res.data.msg, title: "警告" });
               this.edited = false;
               return false;
@@ -724,7 +723,6 @@ export default {
     },
     ChangeMonth(val) {
       this.arrangeParams.arrange_month = val;
-      // this.getCurrentMonthDays(val);
     },
     //判断是否可编辑
     estimateMonth() {
@@ -763,12 +761,7 @@ export default {
     //导出排班表
     outArrange (){
       var cMonth = this.arrangeParams.arrange_month;
-      this.$http.post(this.url + "attendance/sort-excel/sort-out",{
-        arrange_month: cMonth,
-        org_id: this.arrangeParams.org_id,
-        position_id: this.arrangeParams.position_id,
-        duty_id: this.arrangeParams.duty_id
-      }).then(res =>{
+      this.$http.post(this.url + "attendance/sort-excel/sort-out",this.arrangeParams).then(res =>{
         if(res.status ==200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
@@ -779,12 +772,7 @@ export default {
     //导出排班模板
     outTemplet (){
       var cMonth = this.arrangeParams.arrange_month;
-      this.$http.post(this.url + "attendance/sort-excel/templet-out",{
-        arrange_month: cMonth,
-        org_id: this.arrangeParams.org_id,
-        position_id: this.arrangeParams.position_id,
-        duty_id: this.arrangeParams.duty_id
-      }).then(res =>{
+      this.$http.post(this.url + "attendance/sort-excel/templet-out",this.arrangeParams).then(res =>{
         if(res.status == 200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
