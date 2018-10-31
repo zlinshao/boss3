@@ -93,7 +93,11 @@
               <el-col :span="12" v-for="(item,index) in detailMeterMsg.cards" :key="index"  v-if="item.data_source">
                 <chartCard id="card" :cardData="item" >
                   <template slot="right">
-                    <toprightControl :cardData="item" :delstatus="deleteBtn" :meterData="detailMeterMsg"></toprightControl>
+                    <toprightControl 
+                      :cardData="item" 
+                      :btnstatus="btnstatus" 
+                      :meterData="detailMeterMsg">
+                    </toprightControl>
                   </template>
                   <template slot="content">
                     <component 
@@ -165,6 +169,12 @@
           name:'',
           title:'',
         },
+        btnstatus:{
+          large:true,//放大和添加按钮SH
+          delete:false,//删除按钮
+          hidemetter:true,//隐藏新建
+          hideAdd:false//隐藏添加
+        },
         cityOption:[],
         areaOption:[],
         groupOption:[],
@@ -177,7 +187,6 @@
         showDetailMeter: false,//隐藏仪表编辑页
         radioContrast: "同比", //同比环比按钮
         radioCity: "全部",//选择城市按钮
-        deleteBtn:false,
         editText:"编辑模式",
         pickerOptions: {
           disabledDate(time) {
@@ -251,11 +260,11 @@
         }
       },
       showDel(){
-        if(this.deleteBtn){
-          this.deleteBtn = false
+        if(this.btnstatus.delete){
+          this.btnstatus.delete = false
           this.editText = "编辑模式"
         }else{
-          this.deleteBtn = true
+          this.btnstatus.delete = true
           this.editText = "退出编辑模式"
         }
       },

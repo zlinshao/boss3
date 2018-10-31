@@ -51,14 +51,17 @@
         <!-- {{chartData}} -->
         <div class="detailMsgHead">
           <div>
-          <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
-          <span>{{chartData.name}}</span>
+            <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
+            <span>{{chartData.name}}</span>
           </div>
-          <toprightControl :cardData="chartData" :btnstatus="true" ref="control" v-if="$refs.control"></toprightControl>
-          
+          <toprightcontrol 
+            :cardData="chartData" 
+            :btnstatus="btnstatus" >
+          </toprightcontrol>
         </div>
         <div class="detailcontent">
           <div class="contentTop">
+            
             <el-row :gutter="20">
               <el-col :span="4">
                 <div class="detailSelect">
@@ -168,10 +171,10 @@
   </div>
 </template>
 <script>
-  import toprightControl from "../../components/toprightControl.vue"
+  import toprightcontrol from "../../cockpit//components/toprightControl.vue"
   export default {
     name:"tableCard",
-    components:{toprightControl},
+    components:{toprightcontrol},
     props:['chartData','status','chartStyle'],
     data(){
       return {
@@ -186,7 +189,13 @@
         loadingDia:true,
         tableData: [],//表格数据
         tableDataDia: [],//表格数据
-        control:'',
+        toprightStatus:false,
+        btnstatus:{
+          large:false,//放大和添加按钮SH
+          delete:false,//删除按钮
+          hidemetter:false,//隐藏新建
+          hideAdd:true//隐藏添加
+        },
         dataParams:{   //传参
           city:"",
           area:"",
@@ -316,6 +325,7 @@
           this.diaParams.page = 1
           this.currentPageDia = 1
           this.getChart(this.diaParams,val)
+          // console.log(this.$refs.control)
       },
       
       // getNewDate(){
@@ -392,6 +402,9 @@
         this.getChartDate(this.dataParams)
         this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
         this.changChart("dialog")
+        // setTimeout(()=>{
+        //   this.toprightStatus = true
+        // },1000)
           if(!val){
             this.placeForm ={
               city: '',

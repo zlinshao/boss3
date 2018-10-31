@@ -42,12 +42,14 @@
           <li @click="addCard('card')"><i class="el-icon-plus"></i>分析指标</li>
         </ul>
         <el-button 
-          slot="reference" icon="el-icon-plus" circle
+          slot="reference" 
+          icon="el-icon-plus" 
+          circle
           style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
           size="mini" type="text" 
           @click="getMeterNameList"
-          v-if="btnstatus.hideAdd"
-          ></el-button>
+          v-if="btnstatus.hideAdd">
+        </el-button>
       </el-popover>
       <el-button 
         icon="el-icon-search" 
@@ -67,12 +69,12 @@
       v-if="btnstatus.delete"
       ></el-button>
     <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel"></addChartToMeter>
-    <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog>
+    <!-- <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog> -->
   </div>
 </template>
 <script>
-  import addChartToMeter from "../components/addChartToMeterDia.vue"
-  import detailChartDialog from "../components/detailChartDialog.vue"
+  import addChartToMeter from "../../components/addChartToMeterDia.vue"
+  import detailChartDialog from "../../components/detailChartDialog.vue"
   export default {
     name:"toprightcontrol",
     components: {
