@@ -1092,7 +1092,7 @@
         isGetOnlyPosition: false,
         isGetPosition: false,
         post_position: '', //  职位或岗位
-        addPositionParams: [],
+        addPositionParams: {},
         entryMaterialsCategory: [],
         entry_materials: [],
         department: '',  //部门
@@ -1336,19 +1336,13 @@
       },
       selectMember(val) {
         if (val) {
-          this.$http.put(globalConfig.server_user + 'organizations/' + this.setManageDepartId, {leader_id: val[0].id}).then((res) => {
-            if (res.data.status === 'success') {
-              this.$notify.success({
-                title: '成功',
-                message: '设置负责人成功'
-              });
+          this.$http.put(globalConfig.server + 'organization/org/leader/' + this.setManageDepartId, {leader_id: val[0].id}).then((res) => {
+            if (res.data.code === '20070') {
+              this.prompt('success', res.data.msg);
               this.getDepart();
               this.getDefaultData();
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message
-              })
+              this.prompt('warning', res.data.msg);
             }
           });
         }
@@ -1366,15 +1360,11 @@
           type: 'warning'
         }).then(() => {
           this.deleteDpr(d.id);
-        }).catch(() => {
-          this.$notify.info({
-            title: '消息',
-            message: '已取消删除'
-          });
-        });
+        }).catch(() => {});
       },
       //新建部门
       addDepart(data) {
+        console.log(data);
         this.parentId = data.id;
         this.parentName = data.name;
         this.addDepartDialog = true;
@@ -1391,16 +1381,10 @@
       deleteDpr(id) {
         this.$http.get(globalConfig.server + 'manager/department/delete/' + id).then((res) => {
           if (res.data.code === '20050') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg,
-            });
+            this.prompt('success', res.data.msg);
             this.getDepart();
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('warning', res.data.msg);
           }
         })
       },
@@ -1512,17 +1496,11 @@
             date: this.sendLeaveMsgForm.date
           }).then((res) => {
             if (res.data.code === '10050') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
+              this.prompt('success', res.data.msg);
               this.sendLeaveMsgDialog = false;
               this.selectLeaveDateDialog = false;
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              })
+              this.prompt('warning', res.data.msg);
             }
           });
         }).catch(() => {
@@ -1542,17 +1520,11 @@
             dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '10040') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
+              this.prompt('success', res.data.msg);
               this.getStaffData();
               this.selectLeaveDateDialog = false;
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              })
+              this.prompt('warning', res.data.msg);
             }
           });
         }).catch(() => {
@@ -1572,10 +1544,7 @@
             dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '10040') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
+              this.prompt('success', res.data.msg);
               this.getStaffData();
               let id = [];
               id.push(this.editId);
@@ -1587,17 +1556,11 @@
                 date: this.sendLeaveMsgForm.date
               }).then((res) => {
                 if (res.data.code === '10050') {
-                  this.$notify.success({
-                    title: '成功',
-                    message: res.data.msg
-                  });
+                  this.prompt('success', res.data.msg);
                   // this.sendLeaveMsgDialog = false;
                   this.selectLeaveDateDialog = false;
                 } else {
-                  this.$notify.warning({
-                    title: '警告',
-                    message: res.data.msg
-                  })
+                  this.prompt('warning', res.data.msg);
                 }
               });
             } else {
@@ -1623,23 +1586,15 @@
             level: this.levelForm.level
           }).then((res) => {
             if (res.data.code === '10040') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
+              this.prompt('success', res.data.msg);
               this.getStaffData();
               this.selectLevelDialog = false;
               this.editId = '';
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              })
+              this.prompt('warning', res.data.msg);
             }
           });
-        }).catch(() => {
-
-        });
+        }).catch(() => {});
       },
       //员工右键回调
       openModalDialog(val) {
@@ -1679,16 +1634,10 @@
         }).then(() => {
           this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.editId, {type: 'is_enable'}).then((res) => {
             if (res.data.code === '10040') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
+              this.prompt('success', res.data.msg);
               this.getStaffData();
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              })
+              this.prompt('warning', res.data.msg);
             }
           });
         }).catch(() => {
@@ -1706,24 +1655,12 @@
           this.$http.get(globalConfig.server + 'manager/staff/delete/' + this.editId).then((res) => {
             if (res.data.code === '10060') {
               this.getStaffData();
-              this.$notify.success({
-                title: '成功',
-                message: '删除成功',
-              });
+              this.prompt('success', res.data.msg);
             } else {
-              this.$notify.info({
-                title: '消息',
-                message: res.data.msg
-              });
+              this.prompt('warning', res.data.msg);
             }
           });
-        }).catch(() => {
-          this.$notify.info({
-            title: '消息',
-            message: '已取消删除',
-          });
-        });
-
+        }).catch(() => {});
       },
       //新建员工
       addStaff() {
@@ -1765,10 +1702,7 @@
                 this.postStaffStatus = '暂无数据';
               }
             } else {
-              this.$notify.info({
-                title: '消息',
-                message: res.data.msg,
-              });
+              this.prompt('warning', res.data.msg);
               this.positionCollectStatus = '暂无数据';
               this.postCollectStatus = '暂无数据';
               this.postStaffStatus = '暂无数据';
@@ -1818,12 +1752,7 @@
             type: 'warning'
           }).then(() => {
             this.deleteOnlyPosition();
-          }).catch(() => {
-            this.$notify.info({
-              title: '消息',
-              message: '已取消删除'
-            });
-          });
+          }).catch(() => {});
         } else if (val.clickIndex === 'addPost') {
           this.addPosition('post');
         }
@@ -1846,16 +1775,10 @@
       deleteOnlyPosition() {
         this.$http.get(globalConfig.server + 'manager/position/delete/' + this.onlyPositionId).then((res) => {
           if (res.data.code === '20050') {
-            this.$notify.success({
-              title: '消息',
-              message: '删除成功',
-            });
+            this.prompt('success', res.data.msg);
             this.getOnlyPosition();
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('warning', res.data.msg);
           }
         })
       },
@@ -1921,10 +1844,6 @@
           }).then(() => {
             this.deletePosition();
           }).catch(() => {
-            this.$notify.info({
-              title: '消息',
-              message: '已取消删除',
-            });
           });
         }
       },
@@ -1939,16 +1858,10 @@
       deletePosition() {
         this.$http.get(globalConfig.server + 'manager/positions/delete/' + this.positionId).then((res) => {
           if (res.data.code === '20050') {
-            this.$notify.success({
-              title: '成功',
-              message: '删除成功',
-            });
+            this.prompt('success', res.data.msg);
             this.getPosition();
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('warning', res.data.msg);
           }
         })
       },
@@ -1959,8 +1872,7 @@
           this.addPositionParams = Object.assign({}, this.addPositionParams,
             {depart_id: this.params.org_id, depart_name: this.department_name, post_position: 'position'})
         } else {
-          this.addPositionParams = Object.assign({}, this.addPositionParams,
-            {
+          this.addPositionParams = Object.assign({}, this.addPositionParams, {
               depart_id: this.params.org_id, depart_name: this.department_name, post_position: 'post',
               position_id: this.onlyPositionId, position_name: this.onlyPositionName
             })
@@ -2056,16 +1968,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$notify.success({
-            title: '成功',
-            message: '保存成功',
-          });
-        }).catch(() => {
-          this.$notify.info({
-            title: '消息',
-            message: '已取消',
-          });
-        });
+          this.prompt('success', '保存成功');
+        }).catch(() => {});
       },
       //****************搜索*************
       search() {

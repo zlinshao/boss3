@@ -35,7 +35,7 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" :disabled="!operateArray.length" @click="openOrganizationModal('dispatch')">分配
+              <el-button type="primary" :disabled="!operateArray.length" @click="openOrganizationModal('')">分配
               </el-button>
             </el-form-item>
             <!--<el-form-item>-->
@@ -75,8 +75,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name"
+                      <el-input readonly="" @focus="openOrganizationModal('depart')" v-model="department_name"
                                 placeholder="点击选择部门">
+                        <el-button slot="append" @click="emptyOrganization">清空</el-button>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -100,17 +101,17 @@
                 </el-row>
               </el-col>
               <!--<el-col :span="12">-->
-                <!--<el-row>-->
-                  <!--<el-col :span="8">-->
-                    <!--<div class="el_col_label">当前控制时长</div>-->
-                  <!--</el-col>-->
-                  <!--<el-col :span="16" class="el_col_option">-->
-                    <!--<el-form-item>-->
-                      <!--<el-input v-model="formInline.current_ready_days" placeholder="请输入天数">-->
-                      <!--</el-input>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                <!--</el-row>-->
+              <!--<el-row>-->
+              <!--<el-col :span="8">-->
+              <!--<div class="el_col_label">当前控制时长</div>-->
+              <!--</el-col>-->
+              <!--<el-col :span="16" class="el_col_option">-->
+              <!--<el-form-item>-->
+              <!--<el-input v-model="formInline.current_ready_days" placeholder="请输入天数">-->
+              <!--</el-input>-->
+              <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--</el-row>-->
               <!--</el-col>-->
             </el-row>
             <div class="btnOperate">
@@ -366,7 +367,7 @@
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="organizationType"
                   @selectMember="selectMember" @close="closeModal"></Organization>
 
     <EditHouseInfo :editHouseDialog="editHouseDialog" :houseDetail="houseDetail" :houseId="houseId"
@@ -455,7 +456,6 @@
         ],
         department_name: '',
         length: '',
-        type: '',
 
         tableData: [],
         totalNumber: 0,
@@ -611,10 +611,13 @@
         this.organizationType = val;
         this.length = 1;
       },
-
+      emptyOrganization() {
+        this.formInline.org_id = '';
+        this.department_name = '';
+      },
       selectMember(val) {
         this.organizationDialog = false;
-        if (this.organizationType === 'dispatch') {
+        if (this.organizationType === '') {
           this.$confirm('分配后将不可撤回, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',

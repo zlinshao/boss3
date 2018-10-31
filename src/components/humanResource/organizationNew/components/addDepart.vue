@@ -15,6 +15,19 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
+              <el-form-item label="是否为公司">
+                <el-switch
+                  v-model="params.is_corp"
+                  active-color="#409EFF">
+                </el-switch>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-if="!params.is_corp">
+              <el-form-item label="企业微信id">
+                <el-input placeholder="请输入企业微信id" v-model="params.corp_wx"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
               <el-form-item label='排序'>
                 <el-input-number v-model="params.order"></el-input-number>
                 <span style="color: #fb435e;margin-left: 15px">注意：数值越大，排序越靠前！</span>
@@ -33,70 +46,69 @@
 
 <script>
   export default {
-    props:['addDepartDialog','parentId','parentName'],
+    props: ['addDepartDialog', 'parentId', 'parentName'],
     data() {
       return {
-        addDepartDialogVisible:false,
-        params:{
-          parent_id:'',
-          name:'',
-          order:''
+        addDepartDialogVisible: false,
+        params: {
+          parent_id: '',
+          name: '',
+          order: '',
+          is_corp: false,
+          corp_wx: ''
         },
-        parent_name:'',
+        parent_name: '',
       };
     },
-    watch:{
-      addDepartDialog(val){
+    watch: {
+      addDepartDialog(val) {
         this.addDepartDialogVisible = val
       },
-      addDepartDialogVisible(val){
-        if(!val){
+      addDepartDialogVisible(val) {
+        if (!val) {
           this.$emit('close')
         }
       },
-      parentId(val){
-          if(val){
-              this.params.parent_id = val;
-          }
+      'params.is_corp'(val) {
+        this.params.corp_wx = '';
       },
-      parentName(val){
-          if(val){
-              this.parent_name = val;
-          }
+      parentId(val) {
+        if (val) {
+          this.params.parent_id = val;
+        }
+      },
+      parentName(val) {
+        if (val) {
+          this.parent_name = val;
+        }
       }
     },
-    methods:{
-      confirmEdit(){
-        this.$http.post(globalConfig.server+'/manager/department',this.params).then((res) => {
-          if(res.data.code === '20010'){
-            this.$emit('close','success');
+    methods: {
+      confirmEdit() {
+        this.$http.post(globalConfig.server + 'organization/org', this.params).then((res) => {
+          if (res.data.code === '20010') {
+            this.$emit('close', 'success');
             this.closeModal();
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg,
-            });
-          }else {
-            this.$notify({
-              title: '警告',
-              message: res.data.message,
-              type:'warning'
-            });
+            this.prompt('success', res.data.msg);
+          } else {
+            this.prompt('warning', res.data.msg);
           }
         });
       },
-      closeModal(){
+      closeModal() {
         this.addDepartDialogVisible = false;
         this.params = {
-          parent_id:'',
-          name:'',
-          order:''
+          parent_id: '',
+          name: '',
+          order: '',
+          is_corp: false,
+          corp_wx: ''
         }
       }
     }
   };
 </script>
+
 <style lang="scss" scoped="">
-  #addRentRepair{
-  }
 
 </style>
