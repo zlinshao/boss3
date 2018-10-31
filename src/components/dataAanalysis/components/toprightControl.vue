@@ -253,13 +253,13 @@
       }
       .el-button--text {
         display: block;
-        color: #D2D2D2
+        color: rgb(19, 18, 18)
       }
       width: 150px;
       padding: 3px 0;
       margin: 6px 10px;
       cursor: pointer;
-      color: #D2D2D2;
+      color: rgb(19, 18, 18);
 
     }
   }
