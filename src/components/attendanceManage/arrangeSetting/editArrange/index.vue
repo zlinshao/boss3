@@ -91,7 +91,7 @@
         <el-table-column label="操作" width="100px">
           <template slot-scope="scope">
             <div>
-              <el-button type="primary" size="mini" @click="saveCurrentArrange">保存</el-button>
+              <el-button type="primary" size="mini" @click="saveCurrentArrange(scope.row)">保存</el-button>
             </div>
           </template>
         </el-table-column>
@@ -172,7 +172,7 @@
                   <div class="el_col_label">月份</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
-                  <el-select v-model="arrangeParams.arrange_month" placeholder="请选择" size="mini" @change="ChangeMonth">
+                  <el-select v-model="arrangeParams.arrange_month" style="width:300px" placeholder="请选择" size="mini" @change="ChangeMonth">
                     <el-option 
                       v-for="(item,index) in monthList" 
                       :key="index" 
@@ -190,10 +190,48 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;margin-left:20px;" v-model="arrangeParams.org_name"
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:300px;" v-model="arrangeParams.org_name"
                               size="mini">
                         <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">职位</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-select @visible-change="dutyChange" style="width:300px" size="mini" :disabled ="canDuty" v-model="arrangeParams.duty_id" multiple placeholder="请选择">
+                    <el-option
+                      v-for="(item,index) in duty"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">岗位</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select style="width:300px" size="mini" :disabled ="canPosition" v-model="arrangeParams.position_id" multiple placeholder="请选择">
+                      <el-option
+                        v-for="(item,idx) in position"
+                        :key="idx"
+                        :label="item.name"
+                        :value="item.id">
+                      </el-option>
+                   </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -245,15 +283,17 @@ export default {
         page: 1,
         limit: 5,
         user_id: null,
-        org_id: null,
+        org_id: [],
         search: "",
         arrange_month: "",
-        org_name: ""
+        org_name: "",
+        position_id: [],
+        duty_id: [],
       },
       isHigh: false, //高级
       organModule: false,
       organizeType: "",
-      lengths: 1,
+      lengths: 0,
       organDivision: "",
       //第一个表格
       columnList: [],
@@ -280,7 +320,11 @@ export default {
       checkList: [],
       file_id: '',
       exportBtnShow:true,
-      edited:false
+      edited:false,
+      duty: [],//职位列表
+      position:[],
+      canDuty:true,
+      canPosition:true
     };
   },
   methods: {
@@ -317,12 +361,17 @@ export default {
       this.organDivision = val;
       this.organModule = true;
       this.organizeType = type;
-      this.lengths = 1;
+      this.lengths = '';
     },
     // 清空部门
     emptyDepart(val) {
-      this.arrangeParams["org_name"] = "";
-      this.arrangeParams["org_id"] = "";
+      this.arrangeParams.org_name = "";
+      this.arrangeParams.org_id = [];
+      this.arrangeParams.position_id = [];
+      this.arrangeParams.duty_id = [];
+      this.canPosition = true;
+      this.canDuty = true;
+      
     },
     // 关闭组织架构
     closeOrgan() {
@@ -333,9 +382,48 @@ export default {
     },
     // 确认部门
     selectMember(val) {
-      this.arrangeParams.org_id = val[0].id;
-      this.arrangeParams.org_name = val[0].name;
+      var names = "";
+      for (var item of val){
+        this.arrangeParams.org_id.push(item.id);
+        this.duties(item.id);
+        names += item.name + "," 
+      }
+      this.arrangeParams.org_name = names.substring(0, names.length - 1);
     },
+    // 职务
+    duties(id) {
+        this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
+          if (res.data.code === '20000') {
+            res.data.data.data.forEach(item => {
+              this.duty.push(item);
+            });
+            this.canDuty = false;
+          } else {
+            this.duty = [];
+            this.prompt('warning', res.data.msg);
+          }
+        })
+    },
+    dutyChange (status){
+      if(!status){
+        var arr = this.arrangeParams.duty_id;
+        this.canPosition = false;
+        for (var id of arr){
+          this.quarters(id);
+        }
+      }
+    },
+     quarters(id) {
+        this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
+          if (res.data.code === '20000') {
+            for (let item of res.data.data.data) {
+              this.position.push(item);
+            }
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        })
+      },
     // -------------分割线 高级搜索部分----------------
     //排班列表
     getArrangeList(arrangeParams) {
@@ -510,8 +598,16 @@ export default {
         arrange_month: ""
       };
     },
-    saveCurrentArrange() {
+    saveCurrentArrange(row) {
       if(this.edited){
+        console.log(this.currentSort);
+      if(row.id != this.currentSort.user_id){
+        this.$notify.warning({
+          title:"警告",
+          message: "请点击正确的保存按钮"
+        });
+        return false;
+      }
         this.$http
         .post(this.url + "attendance/sort", this.currentSort)
         .then(res => {
@@ -655,7 +751,11 @@ export default {
     resetting() {
       this.getQuery();
       this.arrangeParams.org_name = "";
-      this.arrangeParams.org_id = "";
+      this.arrangeParams.org_id = [];
+      this.arrangeParams.position_id = [];
+      this.arrangeParams.duty_id = [];
+      this.canPosition = true;
+      this.canDuty = true;
     },
     highGrade() {
       this.isHigh = !this.isHigh;
