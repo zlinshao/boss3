@@ -764,9 +764,11 @@ export default {
     outArrange (){
       var cMonth = this.arrangeParams.arrange_month;
       this.$http.post(this.url + "attendance/sort-excel/sort-out",{
-        arrange_month: cMonth
+        arrange_month: cMonth,
+        org_id: this.arrangeParams.org_id,
+        position_id: this.arrangeParams.position_id,
+        duty_id: this.arrangeParams.duty_id
       }).then(res =>{
-        console.log(res);
         if(res.status ==200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
@@ -778,9 +780,11 @@ export default {
     outTemplet (){
       var cMonth = this.arrangeParams.arrange_month;
       this.$http.post(this.url + "attendance/sort-excel/templet-out",{
-        arrange_month: cMonth
+        arrange_month: cMonth,
+        org_id: this.arrangeParams.org_id,
+        position_id: this.arrangeParams.position_id,
+        duty_id: this.arrangeParams.duty_id
       }).then(res =>{
-        console.log(res);
         if(res.status == 200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
