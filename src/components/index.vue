@@ -151,13 +151,15 @@
           <i style="font-size:26px; margin-right:4px;" class="iconfont icon-gantanhaodefuben"></i>
           功能说明
         </div>
-        <div  class="guide" style="cursor: pointer">
+        <div class="guide" style="cursor: pointer">
           <el-popover
             placement="bottom"
             width="200"
             trigger="hover"
             content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-            <div slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;" class="iconfont el-icon-mobile-phone"></i> app下载</div>
+            <div slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;"
+                                     class="iconfont el-icon-mobile-phone"></i> app下载
+            </div>
           </el-popover>
         </div>
         <!--个人信息-->
@@ -751,7 +753,7 @@
           }
         } else {
           this.setLockPwdDialog = true;
-            // this.setLockPwdDialog = false;
+          // this.setLockPwdDialog = false;
         }
       },
       //定时器 轮巡获取最新消息
@@ -769,7 +771,7 @@
       openBadge(key) {
         if (!eval(this.unlockFlagpart)) {
           for (let chi in this.chinese) {
-            if (this.chinese[chi] == key) {
+            if (this.chinese[chi] === key) {
               this.unLockName = key;
               this.unlockSecondPWDialog = true;
             }
@@ -781,7 +783,7 @@
         this.$http.interceptors.response.use(response => {
             //配置请求回来的信息
             if (this.$route.path !== '/lock') {
-              if (response.data.code == "7777") {
+              if (response.data.code === "7777") {
                 clearInterval(this.interval);
                 this.interval = null;
                 clearInterval(this.messageInterval);
@@ -834,7 +836,7 @@
       },
 
       showOtherDetail(val) {
-        if (val == 'unread') {
+        if (val === 'unread') {
           this.$router.push({
             path: "/messageCenter",
             query: {
@@ -876,24 +878,22 @@
       //二级密码回调
       unlockFlag(val) {
         this.unlockFlagpart = val;
-        var millisecondx = new Date().getTime();
-        var expiresTimex = new Date(millisecondx + 60 * 1000 * 60 * 18); //设置18小时缓存
+        let millisecondx = new Date().getTime();
+        let expiresTimex = new Date(millisecondx + 60 * 1000 * 60 * 18); //设置18小时缓存
         cookie.set("unlockFlagpart", val, {expires: expiresTimex});
         if (this.unlockFlagpart) {
           this.chinese = []
         }
       },
-
       //获取未读消息
       getUnReadMessage() {
-        this.$http.get(globalConfig.server_user + "messages?unread=1").then(res => {
-          if (res.data.status === "success") {
-            this.unReadMessageData = res.data.data;
-            this.messageTotal = res.data.meta.total;
-          }
-        });
+        // this.$http.get(globalConfig.server_user + "messages?unread=1").then(res => {
+        //   if (res.data.status === "success") {
+        //     this.unReadMessageData = res.data.data;
+        //     this.messageTotal = res.data.meta.total;
+        //   }
+        // });
       },
-
       //二级密码
       getDictionary2() {
         this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
@@ -914,12 +914,10 @@
       fullScreen(val) {
         screenFull.toggle();
       },
-
       clickScreen() {
         this.screenStatus = true;
         localStorage.setItem("initCount", 1);
       },
-
       countTime() {
         let countDown = [];
         this.$http.get(globalConfig.server + "setting/dictionary/203").then(res => {
@@ -943,7 +941,6 @@
           }
         });
       },
-
       startCount() {
         clearInterval(this.interval);
         new Promise((resolve, reject) => {
@@ -957,21 +954,17 @@
               resolve("锁屏");
             }
           }, 1000);
+        }).then(data => {
+          this.lockScreen();
+        }).catch(err => {
+          this.Countdown = this.defaultTime;
+          this.startCount();
+          this.screenStatus = false;
         })
-          .then(data => {
-            this.lockScreen();
-          })
-          .catch(data => {
-            this.Countdown = this.defaultTime;
-            this.startCount();
-            this.screenStatus = false;
-          })
       },
-
       changeCollapse() {
         this.isCollapse = !this.isCollapse;
       },
-
       lockScreen() {
         clearInterval(this.interval);
         this.interval = null;
@@ -995,7 +988,6 @@
           }
         })
       },
-
       //获取积分总数
       getCredit() {
         this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
@@ -1004,7 +996,6 @@
           }
         })
       },
-
       //喜报关闭
       glad_close() {
         this.gladFlag = false;
