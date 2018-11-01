@@ -49,7 +49,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="角色"
+                    label="日期"
                 >
                   <template slot-scope="scope">
                     <div>
@@ -409,7 +409,7 @@ export default {
               user_id: '',
               org_id: '',
               search: '',//模糊搜索
-              arrange_day: new Date().toLocaleDateString(),//搜索日期 格式 2018-10-31
+              arrange_day: new Date().toLocaleDateString().split("/").join("-"),//搜索日期 格式 2018-10-31
               is_am_sign: "",//是否上班缺卡
               is_pm_sign: "",//是否下班缺卡
               is_rest: "",//是否休息
