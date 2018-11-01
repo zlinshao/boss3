@@ -1,6 +1,6 @@
 <template>
   <div id="monthlySummary">
-    {{params}}
+    <!-- {{params}} -->
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
