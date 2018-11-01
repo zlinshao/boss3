@@ -87,31 +87,26 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="部门" required>
-                    <!--<el-input placeholder="请选择" @focus="openOrgan('org_id', 'depart')" v-model="orgData.org_id"-->
-                              <!--size="mini" v-if="assist === 'new'">-->
-                      <!--<el-button slot="append" @click="emptyDepart('org_id')">清空</el-button>-->
-                    <!--</el-input>-->
-                    <el-input placeholder="请选择部门" readonly v-model="department" @focus="selectDepart">
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="emptyDepart">清空</div>
-                      </template>
+                    <el-input placeholder="请选择" @focus="openOrgan('department_id', 'depart')"
+                              v-model="orgData.department_id"
+                              size="mini">
+                      <el-button slot="append" @click="emptyDepart('department_id')">清空</el-button>
                     </el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="职位" required>
-                    <el-select v-model="currentPosition" @change="positionSelect" :disabled="positionDisabled" multiple>
-                      <el-option v-for="item in positionArray" :value="item.id" :key="item.id"
-                                 :label="item.name">{{item.name}}
+                    <el-select v-model="params.duty_id" @change="positionSelect" clearable multiple
+                               :disabled="duty.length < 1">
+                      <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="岗位" required>
-                    <el-select v-model="params.position_id" :disabled="postDisabled" multiple>
-                      <el-option v-for="item in postArray" :value="item.id" :key="item.id"
-                                 :label="item.name">{{item.name}}
+                    <el-select v-model="params.position_id" clearable multiple :disabled="position.length < 1">
+                      <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -158,10 +153,9 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="推荐人">
-                    <el-input placeholder="请填写推荐人" readonly v-model="recommenderName" @focus="selectStaff">
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
-                      </template>
+                    <el-input placeholder="请填写推荐人" @focus="openOrgan('recommender', 'staff')"
+                              v-model="orgData.recommender" size="mini">
+                      <el-button slot="append" @click="emptyDepart('recommender')">清空</el-button>
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -302,7 +296,7 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" :type="type" :length="length" @close="closeOrganization"
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths" @close="closeOrgan"
                   @selectMember="selectMember"></Organization>
   </div>
 </template>
@@ -315,15 +309,16 @@
     components: {Organization},
     data() {
       return {
+        url: globalConfig.server,
         disabledBtn: false,
         addStaffDialogVisible: false,
         activeName: 'first',
-        recommenderName: '',
         currentPosition: [],
         positionDisabled: true,
         postDisabled: true,
         detailData: {},
         params: {
+          duty_id: [],
           position_id: [],
           department_id: [],
           phone: '',
@@ -368,12 +363,15 @@
           },
         },
         title: '新建用户',
+
         organizationDialog: false,
-        department: '',
-        type: null,
-        length: null,
-        positionArray: [],  //职位
-        postArray: [],  //岗位
+        organizeType: '',
+        lengths: 0,
+        organDivision: '',  //组织架构字段
+        orgData: {},
+
+        duty: [],               //职务
+        position: [],           //岗位
         postArrayIds: [],
         sexCategory: [],
         fertilityStatusCategory: [],
@@ -414,7 +412,7 @@
         if (!val) {
           this.initial(); //关闭弹框时清除
           this.$emit('close');
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+          this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
           this.disabledBtn = false;
@@ -510,41 +508,54 @@
         this.positionDisabled = true;
         this.postDisabled = true;
       },
-      positionSelect() {
-        this.postArray = [];
-        if (this.currentPosition.length > 0) {
-          this.postDisabled = false; //岗位可选
-          for (let i = 0; i < this.currentPosition.length; i++) {
-            this.getPositions(this.currentPosition[i]);
-          }
-        }
-      },
-      selectDepartment() {
-        if (this.department) {
-          this.positionArray = [];
-          this.postArray = [];
-          this.currentPosition = [];
-          this.params.position_id = [];
-          this.positionDisabled = false;  //职位可选
-          for (let i = 0; i < this.params.department_id.length; i++) {
-            this.getPosition(this.params.department_id[i]);
-          }
-        } else {
-          this.positionArray = [];
-          this.currentPosition = [];
-          this.params.position_id = [];
-          this.postArray = [];
-          this.positionDisabled = true;
-          this.postDisabled = true;
-        }
-      },
+      // positionSelect() {
+      //   this.postArray = [];
+      //   if (this.currentPosition.length > 0) {
+      //     this.postDisabled = false; //岗位可选
+      //     for (let i = 0; i < this.currentPosition.length; i++) {
+      //       this.getPositions(this.currentPosition[i]);
+      //     }
+      //   }
+      // },
+      // selectDepartment() {
+      //   if (this.department) {
+      //     this.positionArray = [];
+      //     this.postArray = [];
+      //     this.currentPosition = [];
+      //     this.params.position_id = [];
+      //     this.positionDisabled = false;  //职位可选
+      //     for (let i = 0; i < this.params.department_id.length; i++) {
+      //       this.getPosition(this.params.department_id[i]);
+      //     }
+      //   } else {
+      //     this.positionArray = [];
+      //     this.currentPosition = [];
+      //     this.params.position_id = [];
+      //     this.postArray = [];
+      //     this.positionDisabled = true;
+      //     this.postDisabled = true;
+      //   }
+      // },
       //编辑时获取员工信息
       getStaffInfo() {
-        this.$http.get(globalConfig.server + 'organization/staff/' + this.editId).then((res) => {
+        this.$http.get(this.url + 'organization/staff/' + this.editId).then((res) => {
           if (res.data.code === '710910') {
             this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
+            let val = res.data.data;
+            if (val.duties) {// 职务
+              for (let item of val.duties) {
+                this.params.duty_id.push(item.id);
+              }
+              this.positionSelect(this.params.duty_id);
+            }
+            if (val.positions) {// 岗位
+              for (let item of val.positions) {
+                this.params.position_id.push(item.id);
+              }
+            }
+            console.log(this.params.position_id);
             let detail = res.data.data.detail;
             if (detail) {
               if (detail.entry_way && detail.entry_way.entry_type) {
@@ -552,7 +563,6 @@
               } else {
                 this.params.entry_way = {entry_type: '', entry_mess: '',};
               }
-              // this.params.entry_way = detail.entry_way || {entry_type: [], entry_mess: '',};
               this.params.dismiss_reason = detail.dismiss_reason || {dismiss_type: '', dismiss_mess: '',};
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
@@ -560,7 +570,7 @@
               this.params.id_num = detail.id_num;
               this.params.birthday = detail.birthday;
               this.params.recommender = detail.recommender;
-              this.recommenderName = detail.recommender_name;
+              this.orgData.recommender = detail.recommender_name;
               this.params.bank_num = detail.bank_num;
               this.params.account_bank = detail.account_bank;
               this.params.branch_bank = detail.branch_bank;
@@ -570,7 +580,7 @@
               this.params.enroll = detail.enroll;
               this.params.salary = detail.salary;
               this.params.entry_materials = [];
-              if (detail.entry_materials && detail.entry_materials.length > 0) {
+              if (detail.entry_materials && detail.entry_materials !== 'null' && detail.entry_materials.length > 0) {
                 for (let i = 0; i < detail.entry_materials.length; i++) {
                   this.params.entry_materials.push(Number(detail.entry_materials[i]));
                 }
@@ -596,36 +606,37 @@
               res.data.data.org.forEach((item) => {
                 this.params.department_id.push(item.id);
                 departNameArray.push(item.name);
+                this.duties(item.id);
               });
             }
-            this.department = departNameArray.join(',');
+            this.orgData.department_id = departNameArray.join(',');
             let postArr = res && res.data && res.data.data && res.data.data.role;
             this.postArray = [];
             this.positionArray = [];
             this.currentPosition = [];
-            this.params.position_id = [];
-            if (postArr && postArr.length > 0) {
-              postArr.forEach((item) => {
-                //职位
-                let arr = {};
-                arr.id = item.positions.id;
-                arr.name = item.positions.name;
-                if (this.currentPosition.indexOf(item.positions.id) < 0) {
-                  this.positionArray.push(arr);
-                  this.currentPosition.push(item.positions.id);
-                }
-                //岗位
-                let data = {};
-                data.id = item.position_id;
-                data.name = item.display_name;
-                if (this.params.position_id.indexOf(item.position_id) < 0) {
-                  this.postArray.push(data);
-                  this.params.position_id.push(item.position_id);
-                }
-              });
-              this.postDisabled = false;
-              this.positionDisabled = false;
-            }
+            // this.params.position_id = [];
+            // if (postArr && postArr.length > 0) {
+            //   postArr.forEach((item) => {
+            //     //职位
+            //     let arr = {};
+            //     arr.id = item.positions.id;
+            //     arr.name = item.positions.name;
+            //     if (this.currentPosition.indexOf(item.positions.id) < 0) {
+            //       this.positionArray.push(arr);
+            //       this.currentPosition.push(item.positions.id);
+            //     }
+            //     //岗位
+            //     let data = {};
+            //     data.id = item.position_id;
+            //     data.name = item.display_name;
+            //     if (this.params.position_id.indexOf(item.position_id) < 0) {
+            //       this.postArray.push(data);
+            //       this.params.position_id.push(item.position_id);
+            //     }
+            //   });
+            //   this.postDisabled = false;
+            //   this.positionDisabled = false;
+            // }
             //列出该部门下的所有职位
             if (this.params.department_id.length > 0) {
               this.editPositionIds = [];
@@ -642,7 +653,7 @@
       },
       //获取职位
       getPosition(id) {
-        this.$http.get(globalConfig.server + 'manager/position?department_id=' + id).then((res) => {
+        this.$http.get(this.url + 'manager/position?department_id=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let position = {};
@@ -659,7 +670,7 @@
       //获取岗位
       getPositions(id) {
         this.postArrayIds = [];
-        this.$http.get(globalConfig.server + 'manager/positions?type=' + id).then((res) => {
+        this.$http.get(this.url + 'manager/positions?type=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let data = {};
@@ -686,7 +697,7 @@
           closeOnClickModal: false,
           type: 'warning',
         }).then(() => {
-          this.$http.get(globalConfig.server + 'manager/staff/forward?id=' + this.editId).then((res) => {
+          this.$http.get(this.url + 'manager/staff/forward?id=' + this.editId).then((res) => {
             if (res.data.code === '10000') {
               this.prompt('success', res.data.msg);
               this.detailData.send_info = 2;
@@ -701,7 +712,7 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          this.$http.put(globalConfig.server + 'organization/staff/' + this.editId, this.params).then((res) => {
+          this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
@@ -714,7 +725,7 @@
           });
         } else {
           //新增
-          this.$http.post(globalConfig.server + 'organization/staff', this.params).then((res) => {
+          this.$http.post(this.url + 'organization/staff', this.params).then((res) => {
             if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
@@ -730,45 +741,97 @@
         this.organizationDialog = true;
         this.type = 'depart';
       },
-      selectStaff() {
+      // 组织架构
+      openOrgan(val, type) {
+        this.organDivision = val;
         this.organizationDialog = true;
-        this.type = 'staff';
-      },
-      emptyRecommender() {
-        this.recommenderName = '';
-        this.params.recommender = '';
-      },
-      emptyDepart() {
-        this.department = '';
-        this.params.department_id = [];
-      },
-      //关闭选人框回调
-      closeOrganization() {
-        this.organizationDialog = false;
-        this.type = null;
-        this.length = null;
-      },
-      selectMember(val) {
-        if (this.type === 'depart') {
-          this.params.department_id = [];
-          this.postArrayIds = [];
-          this.editPositionIds = [];
-          let departNameArray = [];
-          if (val.length > 0) {
-            val.forEach((item) => {
-              this.params.department_id.push(item.id);
-              departNameArray.push(item.name);
-            });
-          }
-          this.department = departNameArray.join(',');
-          this.selectDepartment();
-          this.type = null;
-          this.length = null;
-        } else if (this.type === 'staff') {
-          this.params.recommender = val[0].id;
-          this.recommenderName = val[0].name;
+        this.organizeType = type;
+        if (val === 'department_id') {
+          this.params[val] = [];
+          this.lengths = '';
+        } else {
+          this.lengths = 1;
         }
+      },
+      // 清空 部门
+      emptyDepart(val) {
+        this.params[val] = '';
+        this.orgData[val] = '';
+        this.orgData = Object.assign({}, this.orgData);
+        if (val === 'department_id') {
+          this.resetOrg();
+        }
+      },
+      // 关闭组织架构
+      closeOrgan() {
+        this.organDivision = '';
         this.organizationDialog = false;
+        this.organizeType = '';
+        this.lengths = 0;
+      },
+      // 确认选择
+      selectMember(val) {
+        let organ = this.organDivision;
+        if (organ === 'department_id') {
+          this.resetOrg();
+          let arr = [];
+          this.params[organ] = [];
+          for (let item of val) {
+            arr.push(item.name);
+            this.duties(item.id);
+            this.params[organ].push(item.id);
+          }
+          this.departName(arr, organ);
+        } else {
+          this.params[organ] = val[0].id;
+          this.orgData[organ] = val[0].name;
+        }
+      },
+      // 数组名称去重 拼接
+      departName(arr, organ) {
+        this.orgData[organ] = this.montage(arr);
+      },
+      // 职务
+      duties(id) {
+        this.$http.get(this.url + 'organization/duty?org_id=' + id).then(res => {
+          if (res.data.code === '20000') {
+            res.data.data.data.forEach(item => {
+              this.duty.push(item);
+            });
+          } else {
+            this.duty = [];
+            this.prompt('warning', res.data.msg);
+          }
+        })
+      },
+      // 多职务
+      positionSelect(val) {
+        this.resetOrg('position');
+        if (val.length > 0) {
+          for (let item of val) {
+            this.quarters(item);
+          }
+        }
+      },
+      // 岗位
+      quarters(id) {
+        this.$http.get(this.url + 'organization/position?duty_id=' + id).then(res => {
+          if (res.data.code === '20000') {
+            for (let item of res.data.data.data) {
+              this.position.push(item);
+            }
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        })
+      },
+      // 重置职位 岗位
+      resetOrg(val) {
+        this.position = [];
+        this.params.position_id = [];
+        if (val === 'position') return;
+        this.duty = [];
+        this.params.duty_id = [];
       },
       //性别
       getSex() {
@@ -780,7 +843,7 @@
       },
       //生育状况
       getFertilityStatus() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/231').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/231').then((res) => {
           if (res.data.code === '30010') {
             this.fertilityStatusCategory = res.data.data;
           } else {
@@ -790,7 +853,7 @@
       },
       //在职状态
       getOnJobStatus() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/559').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/559').then((res) => {
           if (res.data.code === '30010') {
             this.jobStatusCategory = res.data.data;
           } else {
@@ -800,7 +863,7 @@
       },
       //账号状态
       getAccountStatus() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/40').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/40').then((res) => {
           if (res.data.code === '30010') {
             this.accountStatusCategory = res.data.data;
           } else {
@@ -810,7 +873,7 @@
       },
       //入职材料
       getEntryMaterials() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/515').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/515').then((res) => {
           if (res.data.code === '30010') {
             this.entryMaterialsCategory = res.data.data;
           } else {
@@ -820,7 +883,7 @@
       },
       //婚姻状况
       getMaritalStatus() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/33').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/33').then((res) => {
           if (res.data.code === '30010') {
             this.maritalStatusCategory = res.data.data;
           } else {
@@ -830,7 +893,7 @@
       },
       //政治面貌
       getPoliticalStatus() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/38').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/38').then((res) => {
           if (res.data.code === '30010') {
             this.politicalStatusCategoey = res.data.data;
           } else {
@@ -840,7 +903,7 @@
       },
       //学历
       getEducation() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/39').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/39').then((res) => {
           if (res.data.code === '30010') {
             this.educationCategory = res.data.data;
           } else {
@@ -850,7 +913,7 @@
       },
       //等级
       getBranchBank() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
+        this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
           } else {
@@ -860,7 +923,7 @@
       },
       //校验身份证号
       checkIDNumData() {
-        this.$http.get(globalConfig.server + 'manager/staff/info?id_num=' + this.params.id_num).then((res) => {
+        this.$http.get(this.url + 'manager/staff/info?id_num=' + this.params.id_num).then((res) => {
           if (res.data.code === '10050') {
             let data = res && res.data && res.data.data;
             if (data.birthday && !this.params.birthday) {
@@ -876,7 +939,7 @@
       },
       //校验银行卡号
       checkBankData() {
-        this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
+        this.$http.get(this.url + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
           if (res.data.code === '10050') {
             let data = res && res.data && res.data.data;
             if (data.bankname && !this.params.account_bank) {
