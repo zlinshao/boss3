@@ -105,7 +105,7 @@
         this.editImg = imgObject;
       },
       getToken() {
-        this.$http.get(globalConfig.server_user + 'files').then((res) => {
+        this.$http.get(globalConfig.server + 'api/v1/token').then((res) => {
           this.token = res.data.data;
           if (!this.uploader && !this.disabled) {
             this.uploaderReady();
@@ -114,7 +114,7 @@
       },
 
       getTokenMessage() {
-        this.$http.get(globalConfig.server_user + 'files').then((res) => {
+        this.$http.get(globalConfig.server + 'api/v1/token').then((res) => {
           this.token = res.data.data;
           if (!this.disabled) {
             this.uploaderReady();
@@ -209,7 +209,7 @@
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
               _this.$http.defaults.timeout = 5000;
-              _this.$http.post(globalConfig.server_user + 'files', {
+              _this.$http.post(globalConfig.server + 'api/v1/upload-direct', {
                 url: sourceLink,
                 name: url.key,
                 raw_name: file.name,
@@ -217,7 +217,7 @@
                  size: file.size
               }).then((res) => {
                 _this.$http.defaults.timeout = null;
-                if (res.data.status === "success") {
+                if (res.data.code === "110100") {
                   _this.imgId.push(res.data.data.id);
                   let object = {};
                   object.id = res.data.data.id;
@@ -257,7 +257,7 @@
               // 该配置必须要在unique_names: false，save_key: false时才生效
               let key = "";
               // do something with key here
-              return key
+              return key;
             }
           }
         });
