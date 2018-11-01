@@ -37,30 +37,46 @@ $(document).on('click', '[data-card]', function (e) {
 });
 
 function insertHtml(offsetTop, offsetLeft, personal) {
-  let man;
+  console.log(personal);
+  let man = personal;
   if (personal.detail) {
-
+    man.enroll = personal.detail.enroll;
+    man.enroll = personal.detail.birthday;
+  }
+  if (personal.role) {
+    man.display_name = man.role[0].display_name;
+  } else {
+    if (man.roles.length) {
+      man.display_name = man.roles[0].name;
+    } else {
+      man.display_name = '';
+    }
+  }
+  if (personal.org) {
+    man.depart = man.org[0].name;
+  } else {
+    man.depart = man.organizations[0].name;
   }
   let contentHtml = `<div id="personalCard" style="position: fixed;left: ${offsetLeft}px;top: ${offsetTop}px;">
                          <div class="personalCard_left">
                               <div class="header">
-                                  <img src="${personal.avatar}" alt="">
+                                  <img src="${man.avatar}" alt="">
                               </div>
-                              <div class="name">${personal.name}</div>
-                              <div class="name">${personal.phone}</div>
+                              <div class="name">${man.name}</div>
+                              <div class="name">${man.phone}</div>
                          </div>
                          <div class="personalCard_right">
                               <div>
                                  <div>员工职务</div>
-                                 <div>${personal.role[0].display_name}</div>
+                                 <div>${man.display_name}</div>
                               </div>
                               <div>
                                  <div>部门</div>
-                                 <div>${personal.org[0].name}</div>
+                                 <div>${man.depart}</div>
                               </div>
                                <div>
                                  <div>入职时间</div>
-                                 <div>${personal.detail.enroll}</div>
+                                 <div>${man.enroll}</div>
                               </div>
                               <div>
                                  <div>员工状态</div>
@@ -68,7 +84,7 @@ function insertHtml(offsetTop, offsetLeft, personal) {
                               </div>
                                <div>
                                  <div>生日</div>
-                                 <div>${personal.detail.birthday}</div>
+                                 <div>${man.birthday}</div>
                               </div>
                          </div>
                      </div>`;

@@ -19,7 +19,8 @@
 </template>
 
 <script>
-  import fileImage from '../../assets/images/file.png'
+  import fileImage from '../../assets/images/file.png';
+  import {md5} from '../../assets/js/MD5.js';
 
   export default {
     name: 'hello',
@@ -128,7 +129,8 @@
           browse_button: _this.ID,            //上传按钮的ID
           uptoken: _this.token,               // uptoken是上传凭证，由其他程序生成
           get_new_uptoken: true,              // 设置上传文件的时候是否每次都重新获取新的uptoken
-          unique_names: true,                 // 默认false，key为文件
+          unique_names: false,                 // 默认false，key为文件
+          save_key: false,                 // 默认false，key为文件
           domain: globalConfig.domain,        // bucket域名，下载资源时用到，必需
           // multi_selection: _this.noMulti,
 
@@ -214,7 +216,7 @@
                 name: url.key,
                 raw_name: file.name,
                 type: file.type,
-                 size: file.size
+                size: file.size
               }).then((res) => {
                 _this.$http.defaults.timeout = null;
                 if (res.data.code === "110100") {
@@ -253,6 +255,12 @@
               // })
             },
             'Key': function (up, file) {
+              console.log(file);
+              let fileName = file.name.lastIndexOf(".");//取到文件名开始到最后一个点的长度z
+              let fileNameLength = file.name.length;//取到文件名长度
+              let name = file.name.substring(0, fileName);//取到文件名长度
+              let fileFormat = file.name.substring(fileName + 1, fileNameLength);//截
+              file.name = md5(name).toLowerCase() + '.' + fileFormat;
               // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
               // 该配置必须要在unique_names: false，save_key: false时才生效
               let key = "";
