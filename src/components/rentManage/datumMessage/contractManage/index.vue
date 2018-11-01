@@ -1096,7 +1096,7 @@
             this.checkHandIn();
             this.getReturnNumber(collectIdArray, 1);
 
-            if (res.data.data.length) {
+            if (!res.data.data.length) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
               this.totalNumbers = 0;
@@ -1142,7 +1142,7 @@
         this.rentLoading = true;
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
           this.rentLoading = false;
-          if (res.data.code === '61110') {
+          if (res.data.code === '61010') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
 
