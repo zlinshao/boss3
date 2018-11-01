@@ -49,7 +49,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="角色"
+                    label="日期"
                 >
                   <template slot-scope="scope">
                     <div>
@@ -397,7 +397,7 @@ export default {
           return name.substring(0, name.length - 1);
       },
       changeDate (val){
-          this.punchCardParams.arrange_day = new Date(val).toLocaleDateString().split("/").join("-");
+          this.getCurrentDate(val);
       },
       goSearch (){
         this.punchCardParams.page = 1;
@@ -409,7 +409,7 @@ export default {
               user_id: '',
               org_id: '',
               search: '',//模糊搜索
-              arrange_day: new Date().toLocaleDateString(),//搜索日期 格式 2018-10-31
+              arrange_day: '',//搜索日期 格式 2018-10-31
               is_am_sign: "",//是否上班缺卡
               is_pm_sign: "",//是否下班缺卡
               is_rest: "",//是否休息
@@ -421,6 +421,7 @@ export default {
               is_vacate: "",//是否请假
               is_absenteeism: "",//是否旷工
           }
+          this.getCurrentDate(new Date());
       },
       highGrade (){
           this.resetting();
@@ -434,13 +435,23 @@ export default {
           this.punchCardParams.page = val;
           this.getPunchCardList();
       },
-      getCurrentDate (){
-        var date = new Date().toLocaleDateString();
+      getCurrentDate (date){
+        var dates = new Date(date).toLocaleDateString().split("/");
+        var month = dates[1];
+        if(parseInt(month)<10){
+          month = "0" + month;
+        }
+        var day = dates[2];
+        if(parseInt(day)<10){
+          day = "0" + day;
+        }
+        var date = dates[0] + "-" + month + "-" + day;
         this.punchCardParams.arrange_day = date;
       }
   },
   mounted (){
-      this.getCurrentDate();
+    var date = new Date();
+      this.getCurrentDate(date);
       this.getPunchCardList();
   }
 };

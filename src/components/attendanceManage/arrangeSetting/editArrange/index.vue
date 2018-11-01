@@ -758,6 +758,7 @@ export default {
         return true;
       }
     },
+    //搜索
     goSearch() {
       this.getArrangeList(this.arrangeParams);
       this.getCurrentMonthDays(this.arrangeParams.arrange_month);
@@ -824,29 +825,32 @@ export default {
   .tableInfo {
     text-align: center;
   }
+  .colorRed,
+  .colorA,
+  .colorB,
+  .colorGray,
+  .colorC,
+  .colorD,
+  .colorGray{
+    color: white;
+  }
   .colorRed {
     background-color: #f56c6c;
-    color: white;
   }
   .colorGray {
     background-color: #3B3B3B;
-    color: white;
   }
   .colorA {
     background-color: #409eff;
-    color: white;
   }
   .colorB {
     background-color: #e6a23c;
-    color: white;
   }
   .colorC {
     background-color: #67c23a;
-    color: white;
   }
   .colorD {
     background-color: #c4c4c4;
-    color: white;
   }
 }
 </style>
