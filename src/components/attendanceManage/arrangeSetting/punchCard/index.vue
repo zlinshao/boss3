@@ -400,7 +400,9 @@ export default {
           this.punchCardParams.arrange_day = new Date(val).toLocaleDateString().split("/").join("-");
       },
       goSearch (){
-          this.getPunchCardList();
+        this.punchCardParams.page = 1;
+        this.punchCardParams.limit = 5;
+        this.getPunchCardList();
       },
       resetting (){
           this.punchCardParams = {
