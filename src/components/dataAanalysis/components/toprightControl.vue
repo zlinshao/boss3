@@ -143,16 +143,42 @@
         this.params.topic_card_id = this.currentList.topic_card_id
 
         if(val === "topic"){
-          this.params.topic_card_id = this.cardData.id
-          this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
-            headers: {"Accept": "application/vnd.boss18+json"}
-          }).then((res) => {
-            if (res.data.code === "20030") {
-              this.addChartMrterDialog=true
-            } else {
-              this.promot('error',res.data.msg)
-            }
-          });
+          if(this.params.topic_card_id){
+            this.$confirm('该指标已有主题指标, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.params.topic_card_id = this.cardData.id
+              this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
+                headers: {"Accept": "application/vnd.boss18+json"}
+              }).then((res) => {
+                if (res.data.code === "20030") {
+                  this.addChartMrterDialog=true
+                } else {
+                  this.promot('error',res.data.msg)
+                }
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消添加'
+              });          
+            });
+      
+          }else{
+            this.params.topic_card_id = this.cardData.id
+            this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
+              headers: {"Accept": "application/vnd.boss18+json"}
+            }).then((res) => {
+              if (res.data.code === "20030") {
+                this.addChartMrterDialog=true
+              } else {
+                this.promot('error',res.data.msg)
+              }
+            });
+          }
+          
         }
         if(val === "card"){
           this.params.card_ids.push(this.cardData.id)

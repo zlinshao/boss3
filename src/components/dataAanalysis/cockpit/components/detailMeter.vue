@@ -5,7 +5,7 @@
         <header>
           <i class="el-icon-arrow-left" @click="showDetailMeter=false"></i>
           <span>{{detailMeterMsg.name}}</span>
-          <el-button type="primary" icon="el-icon-setting" size="mini" v-show="editStatus" @click="showDel">{{editText}}</el-button>
+          <el-button :type="editTextBgc" icon="el-icon-setting" size="mini" v-show="editStatus" @click="showDel">{{editText}}</el-button>
         </header>
         <div class="content">
           <div class="content_top">
@@ -188,6 +188,7 @@
         radioContrast: "同比", //同比环比按钮
         radioCity: "全部",//选择城市按钮
         editText:"编辑模式",
+        editTextBgc:'primary',
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -263,9 +264,13 @@
         if(this.btnstatus.delete){
           this.btnstatus.delete = false
           this.editText = "编辑模式"
+          this.editTextBgc = 'primary'
+
         }else{
           this.btnstatus.delete = true
           this.editText = "退出编辑模式"
+          this.editTextBgc = 'danger'
+
         }
       },
       changChart(){
@@ -304,6 +309,7 @@
           }
           this.deleteBtn = false
           this.editText = "编辑模式"
+          this.editTextBgc = 'primary'
           // this.changChart()
           this.$emit('close')
         }
