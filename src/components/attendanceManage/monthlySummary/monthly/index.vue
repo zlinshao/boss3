@@ -42,15 +42,17 @@
       <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
        <!-- <el-button type="primary" size="mini">导出</el-button>  -->
     </div> 
+    <!--  -->
     <div class="table">
-      <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width="auto">
+      <!-- <el-table :data="tableData" border  @cell-click="popUps" > -->
+      <el-table :data="tableData" border ref="table" >
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '出勤班次'" label="早班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="中班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="晚班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="正常加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="法定加班（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" v-for="(day, index) in secondaryMenu" :key="index" :label="day.label" :prop="day.prop"></el-table-column>
+          <el-table-column v-if="showItem.name == '请假'" v-for="(day, ind) in secondaryMenu" :key="ind" :label="day.label" :prop="day.prop"></el-table-column>
         </el-table-column>
       </el-table>
     </div>
@@ -177,6 +179,7 @@ export default {
     this.params.arrange_month =
       new Date().getFullYear() + "-" + (new Date().getMonth() + 1);
     this.refresh();
+    // 回车事件
     let _this = this;
     document.onkeydown = e => {
       let key = window.event.keyCode;
@@ -184,6 +187,8 @@ export default {
         _this.refresh();
       }
     }
+    // table
+    console.log(this.$ref.table, '11111');
   },
   methods: {
     searchRecord() {
@@ -226,13 +231,14 @@ export default {
       // 调用 callback 返回建议列表的数据
       cb(results);
     },
-    handleSelect(item) {
-      console.log(item);
-    },
     selecked(val, index) {
       val.state = !val.state;
       if (val.state) {
-        this.seleckedList.push(val);
+        if(val.name == "请假") {
+          this.seleckedList.push(val);
+        } else {
+          this.seleckedList.splice(3, 0,val);
+        }
       } else {
         this.seleckedList.forEach(item => {
           if (!item.state) {
@@ -244,18 +250,19 @@ export default {
     },
     handleSizeChange(val) {
       this.params.limit = val;
-      this.refresh(val);
+      this.refresh(this.params.limit);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      this.refresh(val)
+      this.params.page = val;
+      this.refresh(this.params.page)
       console.log(`当前页: ${val}`);
     },
     //选人组件
     openOrganizeModal() {
       this.organizationDialog = true;
       this.type = "depart";
-      this.length = 5;
+      this.length = 1;
     },
     selectMember(val) {
       this.type = "";
@@ -264,7 +271,7 @@ export default {
         this.follow_id += item.id + ",";
         this.follow_name += item.name + ",";
       });
-       this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
       this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
     },
     // 关闭模态框
@@ -273,6 +280,7 @@ export default {
       // this.params.org_id = this.follow_id
     },
     emptyFollowPeople() {
+      this.follow_id = "";
       this.params.org_id = "";
       this.follow_name = "";
     },
@@ -411,6 +419,7 @@ export default {
 </script>
 
 <style lang="scss">
+// @import '../../../../assets/css/common.scss';
 #monthlySummary {
   .title {
     float: left;
