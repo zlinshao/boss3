@@ -1,6 +1,6 @@
 <template>
   <div id="monthlySummary">
-    <!-- {{params}} -->
+    {{params}}
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
@@ -242,13 +242,14 @@ export default {
       }
     },
     handleSizeChange(val) {
+      console.log(val, "11111");
       this.params.limit = val;
       this.refresh(this.params.limit);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.params.page = val;
-      this.refresh(this.params.page)
+      this.refresh( this.params.page)
       console.log(`当前页: ${val}`);
     },
     //选人组件
@@ -333,7 +334,7 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
-       this.params.page = page || 1;
+      //  this.params.page = page || 1;
       this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
         if (res.data.code == "20000") {
           this.tableData = res.data.data.data;
