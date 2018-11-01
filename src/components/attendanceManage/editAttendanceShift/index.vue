@@ -321,7 +321,6 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
-      this.editAttendance = false;
       //  this.judgeName = name;
       // this.judgeAlias = alias;
       this.$http
@@ -334,6 +333,7 @@ export default {
             });
             this.tableData = [];
             this.refresh();
+            this.editAttendance = false;
             this.$refs.form.resetFields();
           } else {
             this.$notify.warning({

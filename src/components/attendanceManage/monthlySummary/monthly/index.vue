@@ -9,33 +9,39 @@
         <el-checkbox :label="item.name" v-for="(item, index) in this.celeckList" :key="index" @change="selecked(item, index)" :disabled="item.disabled" :checked="item.disabled"></el-checkbox>
       </el-checkbox-group>
     </div>
-    <!-- <div class="selectTime">
+    <div class="selectTime">
       <span>月份：</span>
-      <el-select v-model="monthValue" placeholder="请选择" size="mini">
+      <el-select v-model="params.arrange_month" placeholder="请选择" size="mini">
         <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-    </div> -->
-    <!-- <div class="disclaimer">
+    </div> 
+     <!-- <div class="disclaimer">
       <el-checkbox v-model="disclaimerChecked">免除班次允许范围内的迟到次数</el-checkbox>
       <span>( <el-checkbox v-model="resignationChecked">包括离职员工</el-checkbox> )</span>
     </div> -->
-    <!-- <div class="nameInput">
+     <!-- <div class="nameInput">
       <span>姓名：</span>
-      <el-input v-model="inputName" placeholder="请输入内容" size="mini"></el-input>
-    </div> -->
-    <!-- <div class="selectTips">
+      <el-input v-model="params.org_id" placeholder="请输入内容" size="mini"></el-input>
+    </div>  -->
+     <div class="selectTips">
+       <span>部门：</span>
       <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
-    </div> -->
-    <!-- <div class="resignation">
+    </div> 
+     <!-- <div class="resignation">
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
-    </div>-->
-    <!--<div class="btn">
-      <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
-       <el-button type="primary" size="mini">导出</el-button> 
     </div> -->
+    <!-- 搜索 -->
+    <div class="search" >
+      <span>搜索：</span>
+      <el-input v-model="params.search" placeholder="请输入搜索内容" size="mini"></el-input>
+    </div>
+    <div class="btn">
+      <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
+       <!-- <el-button type="primary" size="mini">导出</el-button>  -->
+    </div> 
     <div class="table">
       <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width="auto">
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
@@ -87,19 +93,23 @@ export default {
       beLate: false,
       params: {
         // 传递参数
-        pages: 1,
-        limit: 12,
-        keywords: "",
-        follow_status: "",
-        follow_id: "",
-        create_time: [],
-        follow_time: "",
-        update_time: "",
-        finish_time: "",
-        type: "",
-        module: 1
+        limit: 5,
+        page: 1,
+        org_id: "",
+        search: "",
+        arrange_month: "",
+        // follow_id: "",
+        // keywords: "",
+        // follow_status: "",
+        // create_time: [],
+        // follow_time: "",
+        // update_time: "",
+        // finish_time: "",
+        // type: "",
+        // module: 1
       },
       follow_name: "", //跟进人
+      follow_id: "", // 部门ID
       //模态框
       organizationDialog: false,
       length: 0,
@@ -160,23 +170,23 @@ export default {
       total: 0, //数据总条数
       selectValue: "",
       monthOptions: [], // 月份
-      monthValue: "",
+      // monthValue: "", 
       currentPage: 1,
       beLateData: [], // 迟到汇总
       attendanceTitle: "", //迟到标题
       attendanceTimeLength: true, // 迟到时长
-       params: {   // 分页
-          limit: 5,
-          page: 1,
-        },
     };
   },
   created() {
     this.monthOptions = this.getCurrentDate();
-    this.monthValue =
+    this.params.arrange_month =
       new Date().getFullYear() + "-" + (new Date().getMonth() + 1);
+    this.refresh();
   },
   methods: {
+    searchRecord() {
+      this.refresh();
+    },
     getCurrentDate() {
       let currentDate = new Date();
       let Y = currentDate.getFullYear();
@@ -242,28 +252,23 @@ export default {
     //选人组件
     openOrganizeModal() {
       this.organizationDialog = true;
-      this.type = "staff";
+      this.type = "depart";
       this.length = 5;
     },
     selectMember(val) {
       this.type = "";
       this.length = "";
       val.forEach(item => {
-        this.params.follow_id += item.id + ",";
+        this.follow_id += item.id + ",";
         this.follow_name += item.name + ",";
       });
-      this.params.follow_id = this.params.follow_id.substring(
-        0,
-        this.params.follow_id.length - 1
-      );
-      this.follow_name = this.follow_name.substring(
-        0,
-        this.follow_name.length - 1
-      );
+       this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
     },
     // 关闭模态框
     closeModal() {
       this.organizationDialog = false;
+      // this.params.org_id = this.follow_id
     },
     emptyFollowPeople() {
       this.params.follow_id = "";
@@ -373,6 +378,11 @@ export default {
             }
           });
           // 
+        }else if( res.data.code == "20001") {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          });
         }
       });
     },
@@ -394,9 +404,7 @@ export default {
       });
     }
   },
-  created() {
-    this.refresh();
-  }
+  
 };
 </script>
 
@@ -422,9 +430,24 @@ export default {
   .selectTips,
   .resignation,
   .btn,
-  .disclaimer {
+  .disclaimer,
+  .search {
     display: inline-block;
     vertical-align: top;
+    margin-right: 10px;
+  }
+  .search {
+    padding-top: 0;
+  }
+  .selectTips {
+      span {
+        display: inline-block;
+        margin-top: 2px;
+      }
+     .el-input-group {
+       width: 84%;
+       float: right;
+    }
   }
   .disclaimer {
     margin-left: 10px;
@@ -434,6 +457,9 @@ export default {
   }
   .nameInput .el-input {
     width: auto;
+  }
+  .search .el-input {
+    width:  auto;
   }
   .resignation {
     margin-left: 10px;
