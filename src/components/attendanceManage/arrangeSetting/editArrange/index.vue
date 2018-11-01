@@ -18,7 +18,7 @@
           <!-- 搜索 -->
           <div style="text-align:right;padding-right:50px">
             <el-row :gutter="20">
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px">
                   <el-form-item>
                       <el-input 
@@ -32,34 +32,15 @@
                         <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                       </el-input>
                   </el-form-item>
-                  <!-- <el-form-item>
-                      <span>部门：</span>
-                      <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;margin-left:20px;" v-model="arrangeParams.org_name"
-                                      size="mini">
-                          <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
-                      </el-input>
-                  </el-form-item> -->
-                  <!-- <el-form-item>
-                      <span>职位：</span>
-                      <el-input v-model="form.post" placeholder="请输入" size="mini" style="width:180px;dispaly:inline-block;margin-left:20px;"></el-input>
-                  </el-form-item> -->
                   <el-form-item>
                     <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
                   </el-form-item>
-                </el-form>
-              </el-col>
-              <el-col :span="10">
-                <el-row :gutter="20">
-                  <el-col :span="8">
+                  <el-form-item>
                     <el-button type="primary" size="mini" @click="outArrange" v-show="!exportBtnShow">导出排班表<i class="el-icon-download el-icon--right"></i></el-button>
-                  </el-col>
-                  <el-col :span="8">
                     <el-button type="primary" size="mini" @click="outTemplet" v-show="exportBtnShow">导出排班模板<i class="el-icon-download el-icon--right"></i></el-button>
-                  </el-col>
-                  <el-col :span="8">
                     <el-button type="primary" size="mini" @click="importShow = true" v-show="exportBtnShow">导入排班表<i class="el-icon-upload el-icon--right"></i></el-button>
-                  </el-col>
-                </el-row>
+                  </el-form-item>
+                </el-form>
               </el-col>
             </el-row>        
           </div>
@@ -207,7 +188,7 @@
                   <div class="el_col_label">职位</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
-                  <el-select @visible-change="dutyChange" style="width:300px" size="mini" :disabled ="canDuty" v-model="arrangeParams.duty_id" multiple placeholder="请选择">
+                  <el-select @visible-change="visibleChange" @change="changeDuty" @remove-tag="dutyRemove" style="width:300px" size="mini" :disabled ="canDuty" v-model="arrangeParams.duty_id" multiple placeholder="请选择">
                     <el-option
                       v-for="(item,index) in duty"
                       :key="index"
@@ -255,7 +236,7 @@
       >
         <Upload :ID="'uploadExcel'" :isClear="isClear" @getImg="getImg"></Upload>
         <div style="width:100%;text-align:right;">
-          <el-button size="mini" @click="importShow = false">取消</el-button>
+          <el-button size="mini" @click="cencelUpload">取消</el-button>
           <el-button size="mini" type="primary" @click="importExl">确定</el-button>
         </div>
       </el-dialog>
@@ -331,6 +312,14 @@ export default {
   },
   methods: {
     getImg (val){
+      console.log(val);
+      if(val[1].length>1){
+       this.$notify.warning({
+         title: '警告',
+         message: '仅支持单个文件上传'
+       });
+        return false;
+      }
       this.file_id = val[1][0];
     },
     importExl (){
@@ -343,19 +332,21 @@ export default {
               title:"成功",
               message: res.data.msg
             });
-            this.isClear = true;
-            this.importShow = false;
+            this.cencelUpload();
             this.getArrangeList();
           }else{
             this.$notify.warning({
               title:"警告",
               message: res.data.msg
             });
-            this.importShow = false;
-            this.isClear = true;
+            this.cencelUpload();
           }
         }
       })
+    },
+    cencelUpload (){
+      this.importShow = false;
+      this.isClear = true;
     },
     // -------------分割线 高级搜索部分----------------
     // 打开组织架构
@@ -364,16 +355,22 @@ export default {
       this.organModule = true;
       this.organizeType = type;
       this.lengths = '';
+      this.emptyDutyPosition();
     },
     // 清空部门
     emptyDepart(val) {
+      this.emptyDutyPosition();
       this.arrangeParams.org_name = "";
-      this.arrangeParams.org_id = [];
-      this.arrangeParams.position_id = [];
-      this.arrangeParams.duty_id = [];
       this.canPosition = true;
       this.canDuty = true;
       
+    },
+    emptyDutyPosition (){
+      this.arrangeParams.org_id = [];
+      this.arrangeParams.position_id = [];
+      this.arrangeParams.duty_id = [];
+      this.duty = [];
+      this.position = [];
     },
     // 关闭组织架构
     closeOrgan() {
@@ -406,16 +403,35 @@ export default {
           }
         })
     },
-    dutyChange (status){
+    changeDuty (){
+      this.position = [];
+      this.arrangeParams.position_id = [];
+      var arr = this.arrangeParams.duty_id;
+      if(arr.length<1) {
+        this.canPosition = true;
+      }else {
+        this.canPosition = false;
+      }
+    },
+    visibleChange (status){
       if(!status){
         var arr = this.arrangeParams.duty_id;
-        this.canPosition = false;
         for (var id of arr){
           this.quarters(id);
         }
+      }else{
+        this.position = [];
+        this.arrangeParams.position_id = [];
       }
     },
-     quarters(id) {
+    dutyRemove (){
+      this.changeDuty();
+      var arr = this.arrangeParams.duty_id;
+      for (var id of arr){
+        this.quarters(id);
+      }
+    },
+    quarters(id) {
         this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
           if (res.data.code === '20000') {
             for (let item of res.data.data.data) {
@@ -619,7 +635,7 @@ export default {
         })
         .then(res => {
           if (res.status == 200) {
-            if (res.data.code == 20010) {
+            if (res.data.code == 20010 || res.data.code == 20000) {
               this.$notify.success({ message: res.data.msg, title: "成功" });
               this.getArrangeList(this.arrangeParams);
               this.isFirst = true;

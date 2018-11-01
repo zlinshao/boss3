@@ -144,7 +144,7 @@
         }
         this.params.user_id = this.currentList.user_id||JSON.parse(localStorage.getItem("personal")).id
         this.params.topic_card_id = this.currentList.topic_card_id
-
+        console.log(this.params)
         if(val === "topic"){
           this.params.topic_card_id = this.cardData.id
           this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
