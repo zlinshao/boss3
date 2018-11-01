@@ -36,7 +36,7 @@
     <!-- 搜索 -->
     <div class="search" >
       <span>搜索：</span>
-      <el-input v-model="params.search" placeholder="请输入搜索内容" size="mini"></el-input>
+      <el-input v-model="params.search" placeholder="请输入搜索内容" size="mini" @keydown.enter="refresh()"></el-input>
     </div>
     <div class="btn">
       <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
@@ -142,11 +142,6 @@ export default {
         { name: "加班天数", prop: "work_overtime_day", state: false },
         { name: "出差", prop: "business", state: false },
         { name: "请假", prop: "vacate", state: false }
-        // { name: "出勤天数", prop: "should_attendance_day", state: false },
-        // { name: "出勤班次", prop: "attendanceShift", state: false },
-        // { name: "上班缺卡次数", prop: "numberMissedCardsWork", state: false },
-        // { name: "班次", prop: "shift", state: false },
-        // { name: "打卡异常次数", prop: "punchAbnormality", state: false },
       ],
       seleckedList: [
         // 默认选中状态
@@ -182,6 +177,13 @@ export default {
     this.params.arrange_month =
       new Date().getFullYear() + "-" + (new Date().getMonth() + 1);
     this.refresh();
+    let _this = this;
+    document.onkeydown = e => {
+      let key = window.event.keyCode;
+      if(key == 13) {
+        _this.refresh();
+      }
+    }
   },
   methods: {
     searchRecord() {
@@ -271,7 +273,7 @@ export default {
       // this.params.org_id = this.follow_id
     },
     emptyFollowPeople() {
-      this.params.follow_id = "";
+      this.params.org_id = "";
       this.follow_name = "";
     },
     // 弹窗
