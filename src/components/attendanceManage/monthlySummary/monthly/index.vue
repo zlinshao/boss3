@@ -1,5 +1,6 @@
 <template>
   <div id="monthlySummary">
+    <!-- {{params}} -->
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
@@ -26,7 +27,7 @@
     </div>  -->
      <div class="selectTips">
        <span>部门：</span>
-      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
+      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
     </div> 
@@ -58,7 +59,7 @@
     </div>
     <div class="block pages">
       <!--  :current-page="" :page-size="params.limit" -->
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[20, 100, 200, 300, 400]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[5,10,15]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <!-- 组织架构 -->
@@ -100,15 +101,6 @@ export default {
         org_id: "",
         search: "",
         arrange_month: "",
-        // follow_id: "",
-        // keywords: "",
-        // follow_status: "",
-        // create_time: [],
-        // follow_time: "",
-        // update_time: "",
-        // finish_time: "",
-        // type: "",
-        // module: 1
       },
       follow_name: "", //跟进人
       follow_id: "", // 部门ID
@@ -259,7 +251,9 @@ export default {
       console.log(`当前页: ${val}`);
     },
     //选人组件
-    openOrganizeModal() {
+    openOrganizeModal(id) {
+      this.params.org_id = id;
+      // this.follow_name = '';
       this.organizationDialog = true;
       this.type = "depart";
       this.length = 1;
@@ -267,11 +261,14 @@ export default {
     selectMember(val) {
       this.type = "";
       this.length = "";
+      this.follow_id = "";
+      this.follow_name = '';
       val.forEach(item => {
         this.follow_id += item.id + ",";
-        this.follow_name += item.name + ",";
+        this.follow_name = item.name + ",";
       });
       this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      // this.params.org_id = this.follow_id;
       this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
     },
     // 关闭模态框
