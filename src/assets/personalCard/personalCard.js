@@ -2,14 +2,15 @@
  * Created by AigLe on 2018/3/11 0011.
  */
 import img from '../images/defaultHead.png'
+
 let is_on_job = null;
 let isClickHead = false;
 $(document).on('click', '[data-card]', function (e) {
   let personal = JSON.parse($(e.target).attr('data-src'));
-  if(!personal.avatar){
+  if (!personal.avatar) {
     personal.avatar = img;
   }
-  is_on_job = personal.is_on_job?'离职':'在职';
+  is_on_job = personal.is_on_job ? '离职' : '在职';
   let offsetLeft = e.clientX;
   let offsetTop = e.clientY;
 
@@ -17,15 +18,15 @@ $(document).on('click', '[data-card]', function (e) {
   let inner_height = window.innerHeight;
 
   //定位名片顯示位置
-  if(offsetLeft+294>window.innerWidth){
+  if (offsetLeft + 294 > window.innerWidth) {
     offsetLeft = window.innerWidth - 334
   }
-  if(offsetTop+194>window.innerHeight){
+  if (offsetTop + 194 > window.innerHeight) {
     offsetTop = window.innerHeight - 194 - e.target.width;
-  }else {
-    offsetTop =offsetTop + e.target.width;
+  } else {
+    offsetTop = offsetTop + e.target.width;
   }
-  insertHtml(offsetTop,offsetLeft,personal);
+  insertHtml(offsetTop, offsetLeft, personal);
   e.stopPropagation();
   isClickHead = true;
 
@@ -35,30 +36,47 @@ $(document).on('click', '[data-card]', function (e) {
   })
 });
 
-
-
-
-function insertHtml(offsetTop,offsetLeft,personal) {
+function insertHtml(offsetTop, offsetLeft, personal) {
+  console.log(personal);
+  let man = personal;
+  if (personal.detail) {
+    man.enroll = personal.detail.enroll;
+    man.enroll = personal.detail.birthday;
+  }
+  if (personal.role) {
+    man.display_name = man.role[0].display_name;
+  } else {
+    if (man.roles.length) {
+      man.display_name = man.roles[0].name;
+    } else {
+      man.display_name = '';
+    }
+  }
+  if (personal.org) {
+    man.depart = man.org[0].name;
+  } else {
+    man.depart = man.organizations[0].name;
+  }
   let contentHtml = `<div id="personalCard" style="position: fixed;left: ${offsetLeft}px;top: ${offsetTop}px;">
                          <div class="personalCard_left">
                               <div class="header">
-                                  <img src="${personal.avatar}" alt="">
+                                  <img src="${man.avatar}" alt="">
                               </div>
-                              <div class="name">${personal.name}</div>
-                              <div class="name">${personal.phone}</div>
+                              <div class="name">${man.name}</div>
+                              <div class="name">${man.phone}</div>
                          </div>
                          <div class="personalCard_right">
                               <div>
                                  <div>员工职务</div>
-                                 <div>${personal.role[0].display_name}</div>
+                                 <div>${man.display_name}</div>
                               </div>
                               <div>
                                  <div>部门</div>
-                                 <div>${personal.org[0].name}</div>
+                                 <div>${man.depart}</div>
                               </div>
                                <div>
                                  <div>入职时间</div>
-                                 <div>${personal.detail.enroll}</div>
+                                 <div>${man.enroll}</div>
                               </div>
                               <div>
                                  <div>员工状态</div>
@@ -66,7 +84,7 @@ function insertHtml(offsetTop,offsetLeft,personal) {
                               </div>
                                <div>
                                  <div>生日</div>
-                                 <div>${personal.detail.birthday}</div>
+                                 <div>${man.birthday}</div>
                               </div>
                          </div>
                      </div>`;
@@ -74,18 +92,19 @@ function insertHtml(offsetTop,offsetLeft,personal) {
   let personalCard = $('#personalCard');
 
 
-  if(personalCard.length<1){
+  if (personalCard.length < 1) {
     $('body').append(contentHtml);
     isClickHead = false;
-  }else {
+  } else {
     personalCard.remove();
     $('body').append(contentHtml);
     isClickHead = false;
   }
 }
-$(document).click(function(e){
+
+$(document).click(function (e) {
   let personalCard = $('#personalCard');
-  if(!personalCard.is(e.target) && personalCard.has(e.target).length === 0){
+  if (!personalCard.is(e.target) && personalCard.has(e.target).length === 0) {
     personalCard.remove();
   }
 });

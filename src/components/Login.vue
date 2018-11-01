@@ -208,7 +208,11 @@
       if (JSON.stringify(this.$route.query) !== '{}') {
         let phone = this.$route.query.phone;
         let code = this.$route.query.code;
-        this.sureLogin(phone, code);
+        // let sess = 'PHPSESSID=' + this.$route.query.sess;
+        // localStorage.setItem('PHPSESSID', JSON.stringify(sess));
+        // globalConfig.header.Cookie = sess;
+        this.loginInfo();
+        // this.sureLogin(phone, code);
         this.underWay = false;
       }
       document.getElementById('login').style.height = window.innerHeight + 'px';

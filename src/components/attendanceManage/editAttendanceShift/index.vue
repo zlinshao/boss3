@@ -1,7 +1,6 @@
 <template>
   <div @click="show = false" @contextmenu="closeMenu">
     <div id="editAttendanceShift">
-      <!-- @contextmenu="deleteAttendance($event)" -->
       <!-- 添加班次 -->
       <div class="addAttendanceShift">
         <el-button type="primary" size="mini" @click="addAttendanceShift()">添加班次</el-button>
@@ -16,14 +15,20 @@
         </el-table-column>
         <el-table-column label="操作" width="200%">
           <template slot-scope="scope">
-            <el-button type="primary" @click="editAttendanceShift(scope.row.alias, scope.row.name, scope.row.id)" size="mini">编辑</el-button>
+            <el-button type="primary" :disabled="scope.row.name == '休'" @click="editAttendanceShift(scope.row.alias, scope.row.name, scope.row.id)" size="mini">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="block pages">
+        <!--  :current-page="" :page-size="params.limit" -->
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[10, 20, 30,40]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
+        </el-pagination>
+      </div>
       <!-- 编辑考勤班次 -->
-      <el-dialog title="编辑考勤班次" :visible.sync="editAttendance" width="34%">
+      <el-dialog :title="checkTitle? '编辑考勤班次' : '添加考勤班次'" :visible.sync="editAttendance" width="34%">
         <!-- 表达内容 -->
-        <el-form ref="form" :model="form" label-width="80px" :rules="rules">
+        <el-form ref="form" :model="form" label-width="80px" :rules="rules" onsubmit="return false">
           <el-form-item label="班次名称" class="shiftName" prop="name">
             <el-input v-model="form.name" size="small"></el-input>
             <!-- <el-select v-model="form.name" placeholder="请选择班次名称" size="mini">
@@ -48,9 +53,9 @@
         </el-form-item> -->
           <el-form-item label="上班时间" class="workingHours" prop="morning_work_time" size="mini">
             <el-time-select v-model="form.morning_work_time" :picker-options="{
-              start: '09:00',
+              start: '01:00',
               step: '1:00',
-              end: '13:00'
+              end: '24:00'
             }" placeholder="选择时间" class="workingHours">
             </el-time-select>
             <!-- <span>可提前</span>
@@ -59,9 +64,9 @@
           </el-form-item>
           <el-form-item label="下班时间" class="workingHours" prop="pm_rest_time" size="mini">
             <el-time-select v-model="form.pm_rest_time" :picker-options="{
-              start: '18:00',
+              start: '01:00',
               step: '1:00',
-              end: '21:00'
+              end: '24:00'
             }" placeholder="选择时间" class="workingHours">
             </el-time-select>
             <!-- <span>可延迟</span>
@@ -120,13 +125,15 @@
           </el-form-item>
           <el-form-item class="btn">
             <el-button @click="cancelAttendance()" size="mini">取 消</el-button>
+            <!-- 编辑 -->
             <el-button type="primary" @click="editAttendanceSubmit()" size="mini" v-if="editShow">确 定</el-button>
+            <!-- 新增 -->
             <el-button type="primary" @click="addAttendanceSubmit()" size="mini" v-if="determineShow">确 定</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
       <!-- 右键删除 -->
-      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
+      <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu> -->
     </div>
   </div>
 </template>
@@ -138,14 +145,14 @@ export default {
   components: { RightMenu },
   data() {
     let checkShiftName = (rule, value, callback) => {
-      if (value == this.judgeName) {
-        callback(new Error("该名称已经存在"));
+      if (value == this.judgeName && !value) {
+        callback(new Error("请填写名称或该名称已经存在"));
       } else {
         callback();
       }
     };
     let checkShiftCode = (rule, value, callback) => {
-      if (value == this.judgeAlias) {
+      if (value == this.judgeAlias && !value) {
         callback(new Error("该班次已经存在"));
       } else {
         callback();
@@ -190,19 +197,19 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入班次名称", trigger: "change" },
-          { validator: checkShiftName, trigger: "change" }
+          { required: true, validator: checkShiftName, trigger: "change" }
         ],
         alias: [
           { required: true, message: "请输入班次代号", trigger: "change" },
-          { validator: checkShiftCode, trigger: "change" }
+          { required: true, validator: checkShiftCode, trigger: "change" }
         ],
         pm_rest_time: [
           { required: true, message: "请选择时间", trigger: "change" },
-          { validator: checkPmTime, trigger: "change" }
+          { required: true, validator: checkPmTime, trigger: "change" }
         ],
         morning_work_time: [
           { required: true, message: "请选择时间", trigger: "change" },
-          { validator: checkAmTime, trigger: "change" }
+          { required: true, validator: checkAmTime, trigger: "change" }
         ],
         relief_late_minute: [
           {
@@ -210,7 +217,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ],
         cheat_half_minute: [
           {
@@ -218,7 +225,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ],
         warring_late_minute: [
           {
@@ -226,7 +233,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ],
         cheat_day_minute: [
           {
@@ -234,7 +241,7 @@ export default {
             message: "请输入数字或者有效数字",
             trigger: "blur"
           },
-          { validator: checkRelief, trigger: "blur" }
+          { required: true, validator: checkRelief, trigger: "blur" }
         ]
       },
       rightMenuX: 0, // 右键Y
@@ -247,8 +254,14 @@ export default {
       judgeAlias: "", //检查班次代号
       editAttendance: false, // 考勤班次
       punchMode: 1, // 打卡方式
-      determineShow: "",
-      editShow: "",
+      determineShow: "", // 新增
+      editShow: "", // 编辑按钮
+      dataTotal: 0, // 总数据
+      checkTitle: true, // 编辑头部
+      params: {
+        limit: 15,
+        page: 1
+      },
       form: {
         name: "", //班次名称
         alias: "", //检查班次代号
@@ -258,32 +271,21 @@ export default {
         cheat_half_minute: "", //旷工半天
         cheat_day_minute: "", //旷工一天
         relief_late_minute: "" // 免责迟到分钟数
-
-        // workingOffTimeAfter: "", //下班延迟时间
-        // workingTimeBefore: "",  // 上班可延迟
-        // workingRest1: "",  // 休息时间
-        // workingRest2: "",  // 休息时间
-        // totalTime: "",   //工作总时长
-        // totalMin: "", //工作总分钟
-        // workingPunch: "", // 上班不用打卡
-        // workingOffPunch: "", //下班不用打卡
-        // beLateMin: "", //迟到分钟
-        // beLateTotal: "", //迟到次数
       }
     };
   },
   methods: {
     addAttendanceShift() {
+      this.checkTitle = false;
       this.editAttendance = true;
       this.determineShow = true;
       this.editShow = false;
     },
-    editAttendanceShift(alias, name, id) {
+    editAttendanceShift(alias, name,id) {
+      this.checkTitle = true;
       this.editAttendance = true;
       this.determineShow = false;
       this.editShow = true;
-      // this.judgeName = name;
-      // this.judgeAlias = alias;
       this.id = id;
       this.$http
         .get(globalConfig.server + "attendance/classes/" + id)
@@ -307,8 +309,7 @@ export default {
       this.editAttendance = false;
       this.$refs.form.resetFields();
     },
-    addAttendanceSubmit() {
-      this.editAttendance = false;
+    addAttendanceSubmit(alias, name, id) {
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {
@@ -319,18 +320,16 @@ export default {
             });
             this.tableData = [];
             this.refresh();
-            this.$refs.form.resetFields();
+            this.editAttendance = false;
           } else {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
             });
-            this.$refs.form.resetFields();
           }
         });
     },
     editAttendanceSubmit() {
-      this.editAttendance = false;
       this.$http
         .put(globalConfig.server + "/attendance/classes/" + this.id, this.form)
         .then(res => {
@@ -341,13 +340,12 @@ export default {
             });
             this.tableData = [];
             this.refresh();
-            this.$refs.form.resetFields();
+            this.editAttendance = false;
           } else {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
             });
-            this.$refs.form.resetFields();
           }
         });
     },
@@ -401,9 +399,11 @@ export default {
         this.show = true;
       });
     },
-    refresh() {
-      this.$http.get(globalConfig.server + "attendance/classes").then(res => {
+    refresh(page) {
+      this.params.page = page || 1;
+      this.$http.get(globalConfig.server + "attendance/classes",{params: this.params}).then(res => {
         if (res.data.code == "20000") {
+          this.dataTotal = Number(res.data.data.count);
           let data = res.data.data.data;
           let time1 = "";
           let time2 = "";
@@ -422,10 +422,26 @@ export default {
           }
         }
       });
+    },
+    // 分页
+    handleSizeChange(val) {
+      this.params.limit = val;
+      this.refresh(val);
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.refresh(val);
     }
   },
   created() {
     this.refresh();
+  },
+  watch: {
+    editAttendance(val) {
+      if (!val) {
+        this.$refs.form.resetFields();
+      }
+    }
   }
 };
 </script>

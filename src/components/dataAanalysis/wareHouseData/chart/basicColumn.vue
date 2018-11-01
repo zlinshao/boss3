@@ -15,8 +15,6 @@
         chartText:"暂无数据",//显示文本
         chartTextStatus:true,//文本状态
       }
-      
-      
     },
     watch: {},
     methods:{
@@ -29,6 +27,7 @@
           height:this.chartStyle.height, 
           // forceFit: true,
         });
+        
         chart.source(data);
         chart.interval().position('cate*value');
         chart.render();
@@ -50,15 +49,6 @@
           }
         });
       },
-      // getNewDate(){
-      //   var date =  new Date()
-      //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
-      //   var year = lastdate.getFullYear();
-      //   var month = lastdate.getMonth()+1;   
-      //   var day = lastdate.getDate(); 
-      //   this.dataParams.start_date = year + '-' +month + '-' + day
-      //   this.dataParams.end_date = year + '-' +month + '-' + day
-      // }
     },
     mounted () {
       // console.log(this.params)

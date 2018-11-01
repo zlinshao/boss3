@@ -7,7 +7,7 @@
           <div>
             班次说明
             <el-tag 
-              style="margin-right:15px;"
+              style="margin-right:15px;margin-bottom:20px;"
               v-for="tmp in checkList" 
               :type="tmp.alias == 'A' ? 'danger': tmp.alias == 'B' ? 'warning' : tmp.alias == 'C' ? 'success' : tmp.alias == 'D' ? '' : 'info'"
               :key="tmp.id" 
@@ -17,8 +17,8 @@
         <el-col :span="14">
           <!-- 搜索 -->
           <div style="text-align:right;padding-right:50px">
-            <el-row>
-              <el-col :span="14">
+            <el-row :gutter="20">
+              <el-col :span="24">
                 <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px">
                   <el-form-item>
                       <el-input 
@@ -26,34 +26,21 @@
                       placeholder="请输入需要搜索的员工姓名" 
                       size="mini" 
                       style="width:250px;dispaly:inline-block;margin-left:20px;"
+                      clearable
+                      @keyup.enter.native="goSearch"
                       >
                         <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                       </el-input>
                   </el-form-item>
-                  <!-- <el-form-item>
-                      <span>部门：</span>
-                      <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;margin-left:20px;" v-model="arrangeParams.org_name"
-                                      size="mini">
-                          <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
-                      </el-input>
-                  </el-form-item> -->
-                  <!-- <el-form-item>
-                      <span>职位：</span>
-                      <el-input v-model="form.post" placeholder="请输入" size="mini" style="width:180px;dispaly:inline-block;margin-left:20px;"></el-input>
-                  </el-form-item> -->
-                  <el-form-item>
-                      <el-button type="primary" size="mini" @click="handleSubmit">确定</el-button>
-                  </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
                   </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="mini" @click="outArrange" v-show="!exportBtnShow">导出排班表<i class="el-icon-download el-icon--right"></i></el-button>
+                    <el-button type="primary" size="mini" @click="outTemplet" v-show="exportBtnShow">导出排班模板<i class="el-icon-download el-icon--right"></i></el-button>
+                    <el-button type="primary" size="mini" @click="importShow = true" v-show="exportBtnShow">导入排班表<i class="el-icon-upload el-icon--right"></i></el-button>
+                  </el-form-item>
                 </el-form>
-              </el-col>
-              <el-col :span="3">
-                  <el-button type="primary" size="mini" @click="importShow = true">导入排班表<i class="el-icon-upload el-icon--right"></i></el-button>
-              </el-col>
-              <el-col :span="3">
-                <el-button type="primary" size="mini" @click="outArrange">导出排班表<i class="el-icon-download el-icon--right"></i></el-button>
               </el-col>
             </el-row>        
           </div>
@@ -66,7 +53,6 @@
       :data="arrangeListData" 
       :header-cell-style="headerCellStyle" 
       @cell-click="clickCell" 
-      :cell-class-name="rowClass"
       v-loading="arrangeLoading"
       :empty-text="arrangeInfo"
       element-loading-text="拼命加载中"
@@ -79,25 +65,23 @@
         </el-table-column>
         <el-table-column prop="name" label="姓名" width="80px"></el-table-column>
 
-         <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label" width="50%;">
+         <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label" width="48%">
            <template slot-scope="scope">
             <div v-text="showArrange(scope.row,colu.label)" :class="bg(scope.row,colu.label)" style="cursor:pointer;"></div>
           </template>
         </el-table-column>
-
         <el-table-column label="操作" width="100px">
           <template slot-scope="scope">
             <div>
-              <el-button type="primary" size="mini" @click="saveCurrentArrange">保存</el-button>
+              <el-button type="primary" size="mini" @click="saveCurrentArrange(scope.row)">保存</el-button>
             </div>
           </template>
         </el-table-column>
-      
       </el-table>
     </div>
 
     <!-- 分页 -->
-    <div style="text-align:right;padding-right:30px;">
+    <div style="margin-top:20px;text-align:right;padding-right:30px;">
       <el-pagination 
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -157,7 +141,7 @@
     <!--组织架构-->
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths" @close="closeOrgan" @selectMember="selectMember"></Organization>
 
-    <div class="highRanking" style="top:-400px;">
+    <div class="highRanking" style="position:static !important;">
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" onsubmit="return false" :model="arrangeParams" size="mini" label-width="100px">
           <div class="filterTitle">
@@ -170,7 +154,7 @@
                   <div class="el_col_label">月份</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
-                  <el-select v-model="arrangeParams.arrange_month" placeholder="请选择" size="mini" @change="ChangeMonth">
+                  <el-select v-model="arrangeParams.arrange_month" style="width:300px" placeholder="请选择" size="mini" @change="ChangeMonth">
                     <el-option 
                       v-for="(item,index) in monthList" 
                       :key="index" 
@@ -188,10 +172,48 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;margin-left:20px;" v-model="arrangeParams.org_name"
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:300px;" v-model="arrangeParams.org_name"
                               size="mini">
                         <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">职位</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-select @visible-change="visibleChange" @change="changeDuty" @remove-tag="dutyRemove" style="width:300px" size="mini" :disabled ="canDuty" v-model="arrangeParams.duty_id" multiple placeholder="请选择">
+                    <el-option
+                      v-for="(item,index) in duty"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">岗位</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select style="width:300px" size="mini" :disabled ="canPosition" v-model="arrangeParams.position_id" multiple placeholder="请选择">
+                      <el-option
+                        v-for="(item,idx) in position"
+                        :key="idx"
+                        :label="item.name"
+                        :value="item.id">
+                      </el-option>
+                   </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -205,15 +227,16 @@
         </el-form>
       </div>
     </div>
+    <!-- 导入排班表 -->
     <div>
       <el-dialog
         title="导入"
         :visible.sync="importShow"
-        width="30%"
+        width="20%"
       >
         <Upload :ID="'uploadExcel'" :isClear="isClear" @getImg="getImg"></Upload>
         <div style="width:100%;text-align:right;">
-          <el-button size="mini">取消</el-button>
+          <el-button size="mini" @click="cencelUpload">取消</el-button>
           <el-button size="mini" type="primary" @click="importExl">确定</el-button>
         </div>
       </el-dialog>
@@ -242,15 +265,17 @@ export default {
         page: 1,
         limit: 5,
         user_id: null,
-        org_id: null,
+        org_id: [],
         search: "",
         arrange_month: "",
-        org_name: ""
+        org_name: "",
+        position_id: [],
+        duty_id: [],
       },
       isHigh: false, //高级
       organModule: false,
       organizeType: "",
-      lengths: 1,
+      lengths: 0,
       organDivision: "",
       //第一个表格
       columnList: [],
@@ -276,47 +301,76 @@ export default {
       isFirst: true,
       checkList: [],
       file_id: '',
+      exportBtnShow:true,
+      edited:false,
+      duty: [],//职位列表
+      position:[],
+      canDuty:true,
+      canPosition:true,
+      currentDay: '',
     };
   },
   methods: {
     getImg (val){
       console.log(val);
+      if(val[1].length>1){
+       this.$notify.warning({
+         title: '警告',
+         message: '仅支持单个文件上传'
+       });
+        return false;
+      }
       this.file_id = val[1][0];
     },
     importExl (){
       this.$http.post(this.url + "attendance/sort-excel/templet-enter",{
         file_id:this.file_id
       }).then(res =>{
-        console.log(res);
         if(res.status == 200){
           if(res.data.code ==10000){
-            this.$message({message:res.data.msg,type:'success'});
-            this.isClear = true;
-            this.importShow = false;
+            this.$notify.success({
+              title:"成功",
+              message: res.data.msg
+            });
+            this.cencelUpload();
+            this.getArrangeList();
           }else{
-            this.$message({message:res.data.msg,type:'warning'});
-            this.importShow = false;
-            this.isClear = true;
+            this.$notify.warning({
+              title:"警告",
+              message: res.data.msg
+            });
+            this.cencelUpload();
           }
         }
       })
     },
-    // -------------分割线 高级搜索部分----------------
-    //表单确认
-    handleSubmit() {
-      this.getArrangeList(this.arrangeParams);
+    cencelUpload (){
+      this.importShow = false;
+      this.isClear = true;
     },
+    // -------------分割线 高级搜索部分----------------
     // 打开组织架构
     openOrgan(val, type) {
       this.organDivision = val;
       this.organModule = true;
       this.organizeType = type;
-      this.lengths = "";
+      this.lengths = '';
+      this.emptyDutyPosition();
     },
     // 清空部门
     emptyDepart(val) {
-      this.arrangeParams["org_name"] = "";
-      this.arrangeParams["org_id"] = "";
+      this.emptyDutyPosition();
+      this.arrangeParams.org_name = "";
+      this.canPosition = true;
+      this.canDuty = true;
+      
+    },
+    emptyDutyPosition (){
+      this.arrangeParams.org_id = [];
+      this.arrangeParams.position_id = [];
+      this.arrangeParams.duty_id = [];
+      this.duty = [];
+      this.position = [];
     },
     // 关闭组织架构
     closeOrgan() {
@@ -327,9 +381,67 @@ export default {
     },
     // 确认部门
     selectMember(val) {
-      this.arrangeParams.org_id = val[0].id;
-      this.arrangeParams.org_name = val[0].name;
+      var names = "";
+      for (var item of val){
+        this.arrangeParams.org_id.push(item.id);
+        this.duties(item.id);
+        names += item.name + "," 
+      }
+      this.arrangeParams.org_name = names.substring(0, names.length - 1);
     },
+    // 职务
+    duties(id) {
+        this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
+          if (res.data.code === '20000') {
+            res.data.data.data.forEach(item => {
+              this.duty.push(item);
+            });
+            this.canDuty = false;
+          } else {
+            this.duty = [];
+            this.prompt('warning', res.data.msg);
+          }
+        })
+    },
+    changeDuty (){
+      this.position = [];
+      this.arrangeParams.position_id = [];
+      var arr = this.arrangeParams.duty_id;
+      if(arr.length<1) {
+        this.canPosition = true;
+      }else {
+        this.canPosition = false;
+      }
+    },
+    visibleChange (status){
+      if(!status){
+        var arr = this.arrangeParams.duty_id;
+        for (var id of arr){
+          this.quarters(id);
+        }
+      }else{
+        this.position = [];
+        this.arrangeParams.position_id = [];
+      }
+    },
+    dutyRemove (){
+      this.changeDuty();
+      var arr = this.arrangeParams.duty_id;
+      for (var id of arr){
+        this.quarters(id);
+      }
+    },
+    quarters(id) {
+        this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
+          if (res.data.code === '20000') {
+            for (let item of res.data.data.data) {
+              this.position.push(item);
+            }
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        })
+      },
     // -------------分割线 高级搜索部分----------------
     //排班列表
     getArrangeList(arrangeParams) {
@@ -337,14 +449,7 @@ export default {
       this.arrangeInfo = " ";
       this.$http
         .get(this.url + "attendance/sort", {
-          params: {
-            page: arrangeParams.page,
-            limit: arrangeParams.limit,
-            user_id: arrangeParams.user_id,
-            org_id: arrangeParams.org_id,
-            search: arrangeParams.search,
-            arrange_month: arrangeParams.arrange_month
-          }
+          params: arrangeParams
         })
         .then(res => {
           if (res.status == 200) {
@@ -375,7 +480,10 @@ export default {
             if (res.data.code == 20000) {
               this.checkList = res.data.data.data;
             } else {
-              this.$message({ message: "获取失败", type: "warning" });
+              this.$notify.warning({
+                title: '警告',
+                message: "获取失败"
+              })
             }
           }
         });
@@ -417,26 +525,23 @@ export default {
     },
     //编辑排班
     clickCell(row, column, cell, event) {
+      this.currentDay = column.label;
       var res = this.estimateMonth();
       if (!res) {
-        this.$message({
-          message: "不能编辑小于当前月份的排班",
-          type: "warning"
+        this.$notify.warning({
+          message: "不能编辑小于或等于当前日期的排班",
+          title: "警告"
         });
         return false;
       }
-      if (row["oa_sort"] != null) {
-        if (row["oa_sort"]["arrange"][column.label]) {
-          this.currentArrange = row["oa_sort"]["arrange"][column.label];
-        }
-      }
+      // if (row["oa_sort"] != null) {
+      //   if (row["oa_sort"]["arrange"][column.label]) {
+      //     this.currentArrange = row["oa_sort"]["arrange"][column.label];
+      //   }
+      // }
       this.row = "";
       this.column = "";
       if (column.label == "部门" || column.label == "姓名") {
-        this.$message({
-          message: "请选择正确的日期进行排班！",
-          type: "warning"
-        });
         return false;
       } else if (column.label != "操作") {
         this.row = row;
@@ -446,29 +551,34 @@ export default {
     },
     //单元格背景颜色
     bg(row, label) {
+      var date = new Date().toLocaleDateString();
+      var currentDate = this.arrangeParams.arrange_month + "-" + label;
+      
       if (row["oa_sort"] != null && row["oa_sort"]["arrange"][label]) {
-        var arrange = row["oa_sort"]["arrange"][label];
-        if (arrange == "A") {
-          return "colorRed";
-        } else if (arrange == "B") {
-          return "colorB";
-        } else if (arrange == "C") {
-          return "colorC";
-        } else if (arrange == "D") {
-          return "colorA";
-        } else {
-          return "colorD";
+          var arrange = row["oa_sort"]["arrange"][label];
+          if (arrange == "A") {
+            return "colorRed";
+          } else if (arrange == "B") {
+            return "colorB";
+          } else if (arrange == "C") {
+            return "colorC";
+          } else if (arrange == "D") {
+            return "colorA";
+          } else {
+            return "colorD";
+          }
         }
-      }
+        if(new Date(currentDate).getTime() <= new Date(date)){
+          return "colorGray";
+        }
     },
+    //编辑确定
     okEdit() {
       if (this.isFirst) {
         this.currentSort["user_id"] = this.row.id;
       }
       if (this.row.id != this.currentSort["user_id"]) {
-        // this.resetCurrentSort();
-        this.$message({ message: "尚未保存前一个，请先保存", type: "warning" });
-        return false;
+        this.currentSort = [];
       }
       this.currentSort["user_id"] = this.row.id;
       var label = this.column.label;
@@ -499,6 +609,7 @@ export default {
       });
       this.currentArrange = "A";
       this.dialogShow = false;
+      this.edited = true;
     },
     resetCurrentSort() {
       this.currentSort = {
@@ -507,22 +618,43 @@ export default {
         arrange_month: ""
       };
     },
-    saveCurrentArrange() {
-      this.$http
-        .post(this.url + "attendance/sort", this.currentSort)
+    saveCurrentArrange(row) {
+      if(this.edited){
+      if(row.id != this.currentSort.user_id){
+        this.$notify.warning({
+          title:"警告",
+          message: "请点击正确的保存按钮"
+        });
+        return false;
+      }
+        this.$http
+        .post(this.url + "attendance/sort", {
+            user_id: this.currentSort.user_id,
+            arrange: this.currentSort.arrange,
+            arrange_month: this.currentSort.arrange_month
+        })
         .then(res => {
           if (res.status == 200) {
-            if (res.data.code == 20010) {
-              this.$message({ message: res.data.msg, type: "success" });
+            if (res.data.code == 20010 || res.data.code == 20000) {
+              this.$notify.success({ message: res.data.msg, title: "成功" });
               this.getArrangeList(this.arrangeParams);
               this.isFirst = true;
+              this.edited = false;
               this.resetCurrentSort();
-            } else if (res.data.code == 20012) {
-              this.$message({ message: res.data.msg, type: "warning" });
+            } else {
+              this.$notify.warning({ message: res.data.msg, title: "警告" });
+              this.edited = false;
               return false;
             }
           }
         });
+      }else{
+        this.$notify.warning({
+          title: "警告",
+          message: "尚未作出修改！"
+        });
+        return false;
+      }
     },
     //分页
     handleSizeChange(val) {
@@ -533,11 +665,7 @@ export default {
       this.arrangeParams.page = val;
       this.getArrangeList(this.arrangeParams);
     },
-    rowClass({ row, column, rowIndex, columnIndex }) {
-      // if (columnIndex == 2 || columnIndex == 3) {
-      //   return "colorGray";
-      // }
-    },
+    //获取月份天数
     getCurrentMonthDays(currentDate) {
       this.columnList = [];
       this.columnListLook = [];
@@ -618,47 +746,69 @@ export default {
       this.arrangeParams.arrange_month = date[0] + "-" + date[1];
     },
     ChangeMonth(val) {
-      this.getCurrentMonthDays(val);
+      // this.arrangeParams.arrange_month = val;
+      // console.log(val);
     },
     //判断是否可编辑
     estimateMonth() {
-      var months = new Date().toLocaleDateString().split("/");
-      var month = months[0] + "-" + months[1];
-      var currentMonth = this.arrangeParams.arrange_month;
-      if (new Date(currentMonth).getTime() < new Date(month).getTime()) {
+      var date = new Date().toLocaleDateString();
+      var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
+      if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
         return false;
       } else {
         return true;
       }
     },
-    beforeUpload (file) {
-      console.log(file);
-      return false;
-    },
+    //搜索
     goSearch() {
       this.getArrangeList(this.arrangeParams);
+      this.getCurrentMonthDays(this.arrangeParams.arrange_month);
+      var date = new Date().toLocaleDateString().split("/");
+      var cMonth = date[0] + "-" + date[1];
+      if(new Date(cMonth).getTime() <= new Date(this.arrangeParams.arrange_month).getTime()){
+        this.exportBtnShow = true;
+      }else{
+        this.exportBtnShow = false;
+      }
     },
     resetting() {
       this.getQuery();
       this.arrangeParams.org_name = "";
-      this.arrangeParams.org_id = "";
+      this.arrangeParams.org_id = [];
+      this.arrangeParams.position_id = [];
+      this.arrangeParams.duty_id = [];
+      this.canPosition = true;
+      this.canDuty = true;
     },
     highGrade() {
       this.isHigh = !this.isHigh;
     },
+    //导出排班表
     outArrange (){
-      var cMonth = this.arrangeParams.arrange_month;
-      this.$http.post(this.url + "attendance/sort-excel/sort-out",{
-        arrange_month: cMonth
-      }).then(res =>{
-        console.log(res);
+      this.$http.post(this.url + "attendance/sort-excel/sort-out",this.arrangeParams).then(res =>{
         if(res.status ==200){
+          if(res.data.code == 10000){
+            window.location.href = res.data.data.uri;
+          }else if(res.data.code == 10001){
+            this.$notify.warning({
+              title: '警告',
+              message:res.data.msg
+            })
+          }
+        }
+      })
+    },
+    //导出排班模板
+    outTemplet (){
+      var cMonth = this.arrangeParams.arrange_month;
+      this.$http.post(this.url + "attendance/sort-excel/templet-out",this.arrangeParams).then(res =>{
+        if(res.status == 200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
           }
         }
       })
-    }
+    }  
   },
   created() {
     this.getQuery();
@@ -676,14 +826,24 @@ export default {
 <style lang="scss">
 #markInfo {
   width: 100%;
+  position: relative;
   .tableInfo {
     text-align: center;
+  }
+  .colorRed,
+  .colorA,
+  .colorB,
+  .colorGray,
+  .colorC,
+  .colorD,
+  .colorGray{
+    color: white;
   }
   .colorRed {
     background-color: #f56c6c;
   }
   .colorGray {
-    background-color: #c4c4c4;
+    background-color: #3B3B3B;
   }
   .colorA {
     background-color: #409eff;
@@ -695,7 +855,7 @@ export default {
     background-color: #67c23a;
   }
   .colorD {
-    background-color: #909399;
+    background-color: #c4c4c4;
   }
 }
 </style>

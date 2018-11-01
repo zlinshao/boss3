@@ -450,12 +450,14 @@
         dialogVisible: false,
         fullLoading: false,
         activeName: 'first',
+
         organModule: false,
         organizeType: '',
-        getStaffDetail: '', //员工详情
         lengths: 0,
         organDivision: '',  //组织架构字段
         organIndex: '',     //组织架构 下标
+
+        getStaffDetail: '', //员工详情
         // 奖惩记录
         form3: [{
           uid: '',
@@ -809,7 +811,7 @@
       },
       // 职务
       duties(id) {
-        this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
+        this.$http.get(this.url + 'organization/position?org_id=' + id).then(res => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach(item => {
               this.duty.push(item);
@@ -831,7 +833,7 @@
       },
       // 岗位
       quarters(id) {
-        this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
+        this.$http.get(this.url + 'organization/position?duty=' + id).then(res => {
           if (res.data.code === '20000') {
             for (let item of res.data.data.data) {
               this.position.push(item);
@@ -889,7 +891,6 @@
       },
       // 确认选择
       selectMember(val) {
-        console.log(val)
         let organ = this.organDivision;
         if (organ === 'org_id') {
           this.resetOrg();

@@ -5,7 +5,7 @@
         <header>
           <i class="el-icon-arrow-left" @click="showDetailMeter=false"></i>
           <span>{{detailMeterMsg.name}}</span>
-          <el-button type="primary" icon="el-icon-setting" size="mini" v-show="editStatus" @click="showDel">{{editText}}</el-button>
+          <el-button :type="editTextBgc" icon="el-icon-setting" size="mini" v-show="editStatus" @click="showDel">{{editText}}</el-button>
         </header>
         <div class="content">
           <div class="content_top">
@@ -93,7 +93,11 @@
               <el-col :span="12" v-for="(item,index) in detailMeterMsg.cards" :key="index"  v-if="item.data_source">
                 <chartCard id="card" :cardData="item" >
                   <template slot="right">
-                    <toprightControl :cardData="item" :delstatus="deleteBtn" :meterData="detailMeterMsg"></toprightControl>
+                    <toprightControl 
+                      :cardData="item" 
+                      :btnstatus="btnstatus" 
+                      :meterData="detailMeterMsg">
+                    </toprightControl>
                   </template>
                   <template slot="content">
                     <component 
@@ -165,6 +169,12 @@
           name:'',
           title:'',
         },
+        btnstatus:{
+          large:true,//放大和添加按钮SH
+          delete:false,//删除按钮
+          hidemetter:true,//隐藏新建
+          hideAdd:false//隐藏添加
+        },
         cityOption:[],
         areaOption:[],
         groupOption:[],
@@ -177,8 +187,8 @@
         showDetailMeter: false,//隐藏仪表编辑页
         radioContrast: "同比", //同比环比按钮
         radioCity: "全部",//选择城市按钮
-        deleteBtn:false,
         editText:"编辑模式",
+        editTextBgc:'primary',
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -251,12 +261,16 @@
         }
       },
       showDel(){
-        if(this.deleteBtn){
-          this.deleteBtn = false
+        if(this.btnstatus.delete){
+          this.btnstatus.delete = false
           this.editText = "编辑模式"
+          this.editTextBgc = 'primary'
+
         }else{
-          this.deleteBtn = true
+          this.btnstatus.delete = true
           this.editText = "退出编辑模式"
+          this.editTextBgc = 'danger'
+
         }
       },
       changChart(){
@@ -295,6 +309,7 @@
           }
           this.deleteBtn = false
           this.editText = "编辑模式"
+          this.editTextBgc = 'primary'
           // this.changChart()
           this.$emit('close')
         }
@@ -383,6 +398,7 @@
       .data_picker {
         float: right;
         width: 220px;
+        margin-right: 20px;
         >>> .el-date-editor {
           width: 100% !important;
         }

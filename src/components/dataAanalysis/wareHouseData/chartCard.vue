@@ -13,7 +13,7 @@
         </div>
       </div>
       <div>
-        <el-tag type="success" v-for="(item,index) in cardData.tags" :key="index">{{item.name}}</el-tag>
+        <!-- <el-tag type="success" v-for="(item,index) in cardData.tags" :key="index">{{item.name}}</el-tag> -->
       </div>
     </div>
     <div> 

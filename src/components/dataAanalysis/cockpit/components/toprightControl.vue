@@ -19,7 +19,8 @@
           circle
           style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;" 
           size="mini"
-          type="text"></el-button>
+          type="text">
+        </el-button>
       </el-popover>
 
       <!-- 仪表弹出框 -->
@@ -42,12 +43,14 @@
           <li @click="addCard('card')"><i class="el-icon-plus"></i>分析指标</li>
         </ul>
         <el-button 
-          slot="reference" icon="el-icon-plus" circle
+          slot="reference" 
+          icon="el-icon-plus" 
+          circle
           style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
           size="mini" type="text" 
           @click="getMeterNameList"
-          v-if="btnstatus.hideAdd"
-          ></el-button>
+          v-if="btnstatus.hideAdd">
+        </el-button>
       </el-popover>
       <el-button 
         icon="el-icon-search" 
@@ -67,12 +70,12 @@
       v-if="btnstatus.delete"
       ></el-button>
     <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel"></addChartToMeter>
-    <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog>
+    <!-- <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog> -->
   </div>
 </template>
 <script>
-  import addChartToMeter from "../components/addChartToMeterDia.vue"
-  import detailChartDialog from "../components/detailChartDialog.vue"
+  import addChartToMeter from "../../components/addChartToMeterDia.vue"
+  import detailChartDialog from "../../components/detailChartDialog.vue"
   export default {
     name:"toprightcontrol",
     components: {
@@ -141,44 +144,18 @@
         }
         this.params.user_id = this.currentList.user_id||JSON.parse(localStorage.getItem("personal")).id
         this.params.topic_card_id = this.currentList.topic_card_id
-
+        console.log(this.params)
         if(val === "topic"){
-          if(this.params.topic_card_id){
-            this.$confirm('该指标已有主题指标, 是否继续?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.params.topic_card_id = this.cardData.id
-              this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
-                headers: {"Accept": "application/vnd.boss18+json"}
-              }).then((res) => {
-                if (res.data.code === "20030") {
-                  this.addChartMrterDialog=true
-                } else {
-                  this.promot('error',res.data.msg)
-                }
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消添加'
-              });          
-            });
-      
-          }else{
-            this.params.topic_card_id = this.cardData.id
-            this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
-              headers: {"Accept": "application/vnd.boss18+json"}
-            }).then((res) => {
-              if (res.data.code === "20030") {
-                this.addChartMrterDialog=true
-              } else {
-                this.promot('error',res.data.msg)
-              }
-            });
-          }
-          
+          this.params.topic_card_id = this.cardData.id
+          this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
+            headers: {"Accept": "application/vnd.boss18+json"}
+          }).then((res) => {
+            if (res.data.code === "20030") {
+              this.addChartMrterDialog=true
+            } else {
+              this.promot('error',res.data.msg)
+            }
+          });
         }
         if(val === "card"){
           this.params.card_ids.push(this.cardData.id)

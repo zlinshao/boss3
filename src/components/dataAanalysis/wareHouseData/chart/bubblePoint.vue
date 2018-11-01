@@ -118,6 +118,7 @@
       }
     },
     mounted () {
+      this.resetChart()
       this.dataParams = JSON.parse(JSON.stringify(chartParams))
       this.getChartDate(this.dataParams)
       // this.getNewDate()
