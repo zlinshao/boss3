@@ -46,7 +46,7 @@
     <!--  -->
     <div class="table">
       <!-- <el-table :data="tableData" border  @cell-click="popUps" > -->
-      <el-table :data="tableData" border ref="table" >
+      <el-table :data="tableData" border  ref="crayTable" >
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '出勤班次'" label="早班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="中班" height="auto"></el-table-column>
@@ -180,7 +180,7 @@ export default {
       }
     }
     // table
-    console.log(this.$ref.table, '11111');
+    console.log(this.$refs.$el, '11111');
   },
   methods: {
     searchRecord() {
@@ -226,11 +226,12 @@ export default {
     selecked(val, index) {
       val.state = !val.state;
       if (val.state) {
-        if(val.name == "请假") {
-          this.seleckedList.push(val);
-        } else {
-          this.seleckedList.splice(3, 0,val);
-        }
+        // if(val.name == "请假") {
+        //   this.seleckedList.push(val);
+        // } else {
+        //   this.seleckedList.splice(3, 0,val);
+        // }
+        this.seleckedList.push(val);
       } else {
         this.seleckedList.forEach(item => {
           if (!item.state) {

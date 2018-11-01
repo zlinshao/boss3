@@ -15,14 +15,14 @@
         </el-table-column>
         <el-table-column label="操作" width="200%">
           <template slot-scope="scope">
-            <el-button type="primary" @click="editAttendanceShift(scope.row.alias, scope.row.name, scope.row.id)" size="mini">编辑</el-button>
+            <el-button type="primary" :disabled="scope.row.name == '休'" @click="editAttendanceShift(scope.row.alias, scope.row.name, scope.row.id)" size="mini">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
       <div class="block pages">
         <!--  :current-page="" :page-size="params.limit" -->
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[20, 100, 200, 300, 400]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[10, 20, 30,40]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
         </el-pagination>
       </div>
       <!-- 编辑考勤班次 -->
@@ -133,7 +133,7 @@
         </el-form>
       </el-dialog>
       <!-- 右键删除 -->
-      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
+      <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu> -->
     </div>
   </div>
 </template>
