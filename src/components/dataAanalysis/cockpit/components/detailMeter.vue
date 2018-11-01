@@ -392,6 +392,7 @@
       .data_picker {
         float: right;
         width: 220px;
+        margin-right: 20px;
         >>> .el-date-editor {
           width: 100% !important;
         }

@@ -271,17 +271,6 @@ export default {
         cheat_half_minute: "", //旷工半天
         cheat_day_minute: "", //旷工一天
         relief_late_minute: "" // 免责迟到分钟数
-
-        // workingOffTimeAfter: "", //下班延迟时间
-        // workingTimeBefore: "",  // 上班可延迟
-        // workingRest1: "",  // 休息时间
-        // workingRest2: "",  // 休息时间
-        // totalTime: "",   //工作总时长
-        // totalMin: "", //工作总分钟
-        // workingPunch: "", // 上班不用打卡
-        // workingOffPunch: "", //下班不用打卡
-        // beLateMin: "", //迟到分钟
-        // beLateTotal: "", //迟到次数
       }
     };
   },
@@ -321,8 +310,6 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
-      //  this.judgeName = name;
-      // this.judgeAlias = alias;
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {
@@ -334,13 +321,11 @@ export default {
             this.tableData = [];
             this.refresh();
             this.editAttendance = false;
-            this.$refs.form.resetFields();
           } else {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
             });
-            this.$refs.form.resetFields();
           }
         });
     },

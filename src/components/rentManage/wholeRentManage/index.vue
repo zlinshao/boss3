@@ -1149,7 +1149,7 @@
         this.rentStatus = ' ';
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.rentParams}).then((res) => {
           this.rentLoading = false;
-          if (res.data.code === '61110') {
+          if (res.data.code === '61010') {
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
             let collectIdArray = '';
