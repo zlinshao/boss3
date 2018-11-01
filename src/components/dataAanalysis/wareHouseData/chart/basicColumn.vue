@@ -49,15 +49,6 @@
           }
         });
       },
-      // getNewDate(){
-      //   var date =  new Date()
-      //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
-      //   var year = lastdate.getFullYear();
-      //   var month = lastdate.getMonth()+1;   
-      //   var day = lastdate.getDate(); 
-      //   this.dataParams.start_date = year + '-' +month + '-' + day
-      //   this.dataParams.end_date = year + '-' +month + '-' + day
-      // }
     },
     mounted () {
       // console.log(this.params)
