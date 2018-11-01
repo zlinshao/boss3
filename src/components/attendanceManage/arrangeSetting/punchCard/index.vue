@@ -9,6 +9,7 @@
                         v-model="punchCardParams.search"
                         size="mini"
                         style="width:250px;"
+                        @keyup.enter.native="goSearch"
                     >
                         <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                     </el-input>
@@ -47,9 +48,15 @@
                         <div v-text="department(scope.row)"></div>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column
+                <el-table-column
                     label="角色"
-                ></el-table-column> -->
+                >
+                  <template slot-scope="scope">
+                    <div>
+                      {{ punchCardParams.arrange_day }}
+                    </div>
+                  </template>
+                </el-table-column>
                 <el-table-column
                     label="是否上班缺卡"  
                     prop="is_am_sign"
@@ -343,7 +350,7 @@ export default {
               is_vacate: "",//是否请假
               is_absenteeism: "",//是否旷工
               page: 1,
-              limit: 5
+              limit: 5,
           },
           punchCardList:[],
           gettingList: false,
@@ -400,7 +407,7 @@ export default {
               user_id: '',
               org_id: '',
               search: '',//模糊搜索
-              arrange_day: '',//搜索日期 格式 2018-10-31
+              arrange_day: new Date().toLocaleDateString(),//搜索日期 格式 2018-10-31
               is_am_sign: "",//是否上班缺卡
               is_pm_sign: "",//是否下班缺卡
               is_rest: "",//是否休息
@@ -424,9 +431,14 @@ export default {
       punchCurrentChange (val){
           this.punchCardParams.page = val;
           this.getPunchCardList();
+      },
+      getCurrentDate (){
+        var date = new Date().toLocaleDateString();
+        this.punchCardParams.arrange_day = date;
       }
   },
   mounted (){
+      this.getCurrentDate();
       this.getPunchCardList();
   }
 };
