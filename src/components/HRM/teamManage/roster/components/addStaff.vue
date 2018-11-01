@@ -450,12 +450,14 @@
         dialogVisible: false,
         fullLoading: false,
         activeName: 'first',
+
         organModule: false,
         organizeType: '',
-        getStaffDetail: '', //员工详情
         lengths: 0,
         organDivision: '',  //组织架构字段
         organIndex: '',     //组织架构 下标
+
+        getStaffDetail: '', //员工详情
         // 奖惩记录
         form3: [{
           uid: '',
@@ -889,7 +891,6 @@
       },
       // 确认选择
       selectMember(val) {
-        console.log(val)
         let organ = this.organDivision;
         if (organ === 'org_id') {
           this.resetOrg();

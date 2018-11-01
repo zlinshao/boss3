@@ -7,7 +7,7 @@
           <div>
             班次说明
             <el-tag 
-              style="margin-right:15px;"
+              style="margin-right:15px;margin-bottom:20px;"
               v-for="tmp in checkList" 
               :type="tmp.alias == 'A' ? 'danger': tmp.alias == 'B' ? 'warning' : tmp.alias == 'C' ? 'success' : tmp.alias == 'D' ? '' : 'info'"
               :key="tmp.id" 
@@ -27,6 +27,7 @@
                       size="mini" 
                       style="width:250px;dispaly:inline-block;margin-left:20px;"
                       clearable
+                      @keyup.enter.native="goSearch"
                       >
                         <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                       </el-input>
@@ -324,7 +325,8 @@ export default {
       duty: [],//职位列表
       position:[],
       canDuty:true,
-      canPosition:true
+      canPosition:true,
+      currentDay: '',
     };
   },
   methods: {
@@ -507,26 +509,23 @@ export default {
     },
     //编辑排班
     clickCell(row, column, cell, event) {
+      this.currentDay = column.label;
       var res = this.estimateMonth();
       if (!res) {
         this.$notify.warning({
-          message: "不能编辑小于当前月份的排班",
+          message: "不能编辑小于或等于当前日期的排班",
           title: "警告"
         });
         return false;
       }
-      if (row["oa_sort"] != null) {
-        if (row["oa_sort"]["arrange"][column.label]) {
-          this.currentArrange = row["oa_sort"]["arrange"][column.label];
-        }
-      }
+      // if (row["oa_sort"] != null) {
+      //   if (row["oa_sort"]["arrange"][column.label]) {
+      //     this.currentArrange = row["oa_sort"]["arrange"][column.label];
+      //   }
+      // }
       this.row = "";
       this.column = "";
       if (column.label == "部门" || column.label == "姓名") {
-        this.$notify.warning({
-          message: "请选择正确的日期进行排班！",
-          title: "警告"
-        });
         return false;
       } else if (column.label != "操作") {
         this.row = row;
@@ -536,20 +535,26 @@ export default {
     },
     //单元格背景颜色
     bg(row, label) {
+      var date = new Date().toLocaleDateString();
+      var currentDate = this.arrangeParams.arrange_month + "-" + label;
+      
       if (row["oa_sort"] != null && row["oa_sort"]["arrange"][label]) {
-        var arrange = row["oa_sort"]["arrange"][label];
-        if (arrange == "A") {
-          return "colorRed";
-        } else if (arrange == "B") {
-          return "colorB";
-        } else if (arrange == "C") {
-          return "colorC";
-        } else if (arrange == "D") {
-          return "colorA";
-        } else {
-          return "colorD";
+          var arrange = row["oa_sort"]["arrange"][label];
+          if (arrange == "A") {
+            return "colorRed";
+          } else if (arrange == "B") {
+            return "colorB";
+          } else if (arrange == "C") {
+            return "colorC";
+          } else if (arrange == "D") {
+            return "colorA";
+          } else {
+            return "colorD";
+          }
         }
-      }
+        if(new Date(currentDate).getTime() <= new Date(date)){
+          return "colorGray";
+        }
     },
     //编辑确定
     okEdit() {
@@ -557,8 +562,7 @@ export default {
         this.currentSort["user_id"] = this.row.id;
       }
       if (this.row.id != this.currentSort["user_id"]) {
-        this.$notify.warning({ message: "尚未保存前一个，请先保存", title: "警告" });
-        return false;
+        this.currentSort = [];
       }
       this.currentSort["user_id"] = this.row.id;
       var label = this.column.label;
@@ -600,7 +604,6 @@ export default {
     },
     saveCurrentArrange(row) {
       if(this.edited){
-        console.log(this.currentSort);
       if(row.id != this.currentSort.user_id){
         this.$notify.warning({
           title:"警告",
@@ -609,7 +612,11 @@ export default {
         return false;
       }
         this.$http
-        .post(this.url + "attendance/sort", this.currentSort)
+        .post(this.url + "attendance/sort", {
+            user_id: this.currentSort.user_id,
+            arrange: this.currentSort.arrange,
+            arrange_month: this.currentSort.arrange_month
+        })
         .then(res => {
           if (res.status == 200) {
             if (res.data.code == 20010) {
@@ -618,7 +625,7 @@ export default {
               this.isFirst = true;
               this.edited = false;
               this.resetCurrentSort();
-            } else if (res.data.code == 20012) {
+            } else {
               this.$notify.warning({ message: res.data.msg, title: "警告" });
               this.edited = false;
               return false;
@@ -724,14 +731,12 @@ export default {
     },
     ChangeMonth(val) {
       this.arrangeParams.arrange_month = val;
-      // this.getCurrentMonthDays(val);
     },
     //判断是否可编辑
     estimateMonth() {
-      var months = new Date().toLocaleDateString().split("/");
-      var month = months[0] + "-" + months[1];
-      var currentMonth = this.arrangeParams.arrange_month;
-      if (new Date(currentMonth).getTime() < new Date(month).getTime()) {
+      var date = new Date().toLocaleDateString();
+      var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
+      if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
         return false;
       } else {
         return true;
@@ -763,10 +768,7 @@ export default {
     //导出排班表
     outArrange (){
       var cMonth = this.arrangeParams.arrange_month;
-      this.$http.post(this.url + "attendance/sort-excel/sort-out",{
-        arrange_month: cMonth
-      }).then(res =>{
-        console.log(res);
+      this.$http.post(this.url + "attendance/sort-excel/sort-out",this.arrangeParams).then(res =>{
         if(res.status ==200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
@@ -777,10 +779,7 @@ export default {
     //导出排班模板
     outTemplet (){
       var cMonth = this.arrangeParams.arrange_month;
-      this.$http.post(this.url + "attendance/sort-excel/templet-out",{
-        arrange_month: cMonth
-      }).then(res =>{
-        console.log(res);
+      this.$http.post(this.url + "attendance/sort-excel/templet-out",this.arrangeParams).then(res =>{
         if(res.status == 200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
@@ -814,7 +813,8 @@ export default {
     color: white;
   }
   .colorGray {
-    background-color: #c4c4c4;
+    background-color: #3B3B3B;
+    color: white;
   }
   .colorA {
     background-color: #409eff;
@@ -829,7 +829,7 @@ export default {
     color: white;
   }
   .colorD {
-    background-color: #909399;
+    background-color: #c4c4c4;
     color: white;
   }
 }

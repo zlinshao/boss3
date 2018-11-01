@@ -1096,7 +1096,7 @@
             this.checkHandIn();
             this.getReturnNumber(collectIdArray, 1);
 
-            if (res.data.data.length) {
+            if (!res.data.data.length) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
               this.totalNumbers = 0;
@@ -1142,7 +1142,7 @@
         this.rentLoading = true;
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
           this.rentLoading = false;
-          if (res.data.code === '61110') {
+          if (res.data.code === '61010') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
 
@@ -1169,10 +1169,10 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.params.page = val;
-        if (this.activeName == "first") {
+        if (this.activeName === "first") {
           this.collectDatafunc();
         }
-        else if (this.activeName == "second") {
+        else if (this.activeName === "second") {
           this.rentDatafunc();
         }
       },
@@ -1296,7 +1296,7 @@
               clickIndex: 'editHouseResourcesDialog',
               headIcon: 'el-icons-fa-home',
               label: '修改房源',
-              disabled: row.doc_status.id > 3
+              disabled: row.doc_status.id > 3,
             },
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
             {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
@@ -1304,11 +1304,11 @@
               clickIndex: 'lookLeaseHistory',
               headIcon: 'el-icons-fa-eye',
               label: '查看合同修改记录',
-              contract_id: row.contract_id
+              contract_id: row.contract_id,
             },
-            {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
-            {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
-            {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
+            {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单'},
+            {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单'},
+            {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除'},
           ];
         }
         this.contextMenuParam(event);

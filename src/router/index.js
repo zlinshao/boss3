@@ -545,7 +545,7 @@ export default new Router({
         {path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置'},
         {path: '/punchCard', component: PunchCard, name: '日统计'},
         {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
-        {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
+        // {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
         {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
       ]
     },
