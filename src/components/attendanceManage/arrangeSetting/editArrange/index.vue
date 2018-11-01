@@ -635,7 +635,7 @@ export default {
         })
         .then(res => {
           if (res.status == 200) {
-            if (res.data.code == 20010) {
+            if (res.data.code == 20010 || res.data.code == 20000) {
               this.$notify.success({ message: res.data.msg, title: "成功" });
               this.getArrangeList(this.arrangeParams);
               this.isFirst = true;
