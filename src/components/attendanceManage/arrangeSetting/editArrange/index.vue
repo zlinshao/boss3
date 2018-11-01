@@ -746,7 +746,8 @@ export default {
       this.arrangeParams.arrange_month = date[0] + "-" + date[1];
     },
     ChangeMonth(val) {
-      this.arrangeParams.arrange_month = val;
+      // this.arrangeParams.arrange_month = val;
+      // console.log(val);
     },
     //判断是否可编辑
     estimateMonth() {
@@ -784,11 +785,15 @@ export default {
     },
     //导出排班表
     outArrange (){
-      var cMonth = this.arrangeParams.arrange_month;
       this.$http.post(this.url + "attendance/sort-excel/sort-out",this.arrangeParams).then(res =>{
         if(res.status ==200){
           if(res.data.code == 10000){
             window.location.href = res.data.data.uri;
+          }else if(res.data.code == 10001){
+            this.$notify.warning({
+              title: '警告',
+              message:res.data.msg
+            })
           }
         }
       })
