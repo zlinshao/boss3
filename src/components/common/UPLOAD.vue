@@ -113,7 +113,6 @@
           }
         })
       },
-
       getTokenMessage() {
         this.$http.get(globalConfig.server + 'api/v1/token').then((res) => {
           this.token = res.data.data;
@@ -125,29 +124,27 @@
       uploaderReady() {
         let _this = this;
         _this.uploader = Qiniu.uploader({
-          runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-          browse_button: _this.ID,            //上传按钮的ID
-          uptoken: _this.token,               // uptoken是上传凭证，由其他程序生成
-          get_new_uptoken: true,              // 设置上传文件的时候是否每次都重新获取新的uptoken
-          unique_names: false,                 // 默认false，key为文件
-          save_key: false,                 // 默认false，key为文件
-          domain: globalConfig.domain,        // bucket域名，下载资源时用到，必需
+          runtimes: 'html5,flash,html4',                // 上传模式，依次退化
+          browse_button: _this.ID,                      //上传按钮的ID
+          uptoken: _this.token,                         // uptoken是上传凭证，由其他程序生成
+          get_new_uptoken: true,                        // 设置上传文件的时候是否每次都重新获取新的uptoken
+          unique_names: false,                          // 默认false，key为文件
+          save_key: false,                              // 默认false，key为文件
+          domain: globalConfig.domain,                  // bucket域名，下载资源时用到，必需
           // multi_selection: _this.noMulti,
-
-//          pictureContainer: 'pictureContainer',             // 上传区域DOM ID，默认是browser_button的父元素
-          max_file_size: '100mb',             // 最大文件体积限制
+          // pictureContainer: 'pictureContainer',       // 上传区域DOM ID，默认是browser_button的父元素
+          max_file_size: '100mb',                       // 最大文件体积限制
           flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
-          max_retries: 1,                     // 上传失败最大重试次数
-          dragdrop: true,                     // 开启可拖曳上传
-          drop_element: 'pickfiles' + _this.ID,          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-          chunk_size: '4mb',                  // 分块上传时，每块的体积
-          auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+          max_retries: 1,                               // 上传失败最大重试次数
+          dragdrop: true,                               // 开启可拖曳上传
+          drop_element: 'pickfiles' + _this.ID,         // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+          chunk_size: '4mb',                            // 分块上传时，每块的体积
+          auto_start: true,                             // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
 
           init: {
             'PostInit': function () {
 //              document.getElementById(_this.ID).innerHTML = '';
             },
-
             'FilesAdded': function (up, files) {
               _this.isUploading = true;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
@@ -166,7 +163,6 @@
                    `);
                 } else {
                   let fr = new mOxie.FileReader();
-
                   fr.onload = function () {
                     // 文件添加进队列后，处理相关的事情
                     $('#pickfiles' + _this.ID).prepend(`
@@ -184,8 +180,6 @@
                 }
               });
             },
-
-
             'BeforeUpload': function (up, file) {
               // 每个文件上传前，处理相关的事情
               up.setOption('multipart_params', {
@@ -237,8 +231,6 @@
             'FilesRemoved': function (uploader, files) {
 
             },
-
-//              console.log(errTip);
             'Error': function (up, err, errTip) {
               _this.$notify.warning({
                 title: '警告',
@@ -249,10 +241,6 @@
               //队列文件处理完毕后，处理相关的事情
               _this.isUploading = false;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
-              // _this.$notify.success({
-              //   title: '成功',
-              //   message: '文件已全部上传成功！'
-              // })
             },
             'Key': function (up, file) {
               console.log(file);
@@ -270,10 +258,8 @@
           }
         });
       },
-
     }
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
