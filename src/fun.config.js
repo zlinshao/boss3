@@ -84,6 +84,30 @@ export default {
 
       return form.money_sum;
     };
+    Vue.prototype.getChartDate = function (params) {
+      let endDate = new Date();
+      let startDate = new Date(endDate.getTime() - 3600 * 1000 * 24 * 30);
+      let date = new Date(endDate.getTime() - 3600 * 1000 * 24);
+
+      let startY = startDate.getFullYear();
+      let endY = endDate.getFullYear();
+      let dateY = date.getFullYear();
+
+      let startM = startDate.getMonth() + 1;
+      let endM = endDate.getMonth() + 1;
+      let dateM = date.getMonth() + 1;
+
+      let startD = startDate.getDate();
+      let endD = endDate.getDate();
+      let dateD = date.getDate();
+
+
+      params.start_date = startY + '-' + startM + '-' + startD;
+      params.end_date = endY + '-' + endM + '-' + endD;
+      params.date = dateY + '-' + dateM + '-' + dateD;
+
+      return params;
+    };
     Vue.prototype.prompt = function (val, msg) {
       switch (val) {
         case 'success':

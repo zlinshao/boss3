@@ -661,7 +661,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-        // {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
+        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {

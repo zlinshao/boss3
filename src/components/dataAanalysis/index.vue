@@ -6,7 +6,7 @@
         <cockpit></cockpit>
       </el-tab-pane>
       <el-tab-pane name="second">
-        <span slot="label"><i class="el-icon-date comicon"></i> 指标仓库</span>
+        <span slot="label"><i class="bi-icon-theme comicon"></i> 指标仓库</span>
         <wareHouseData></wareHouseData>
       </el-tab-pane>
     </el-tabs>
@@ -26,14 +26,16 @@
       }
     },
     mounted() {
-    
       
     },
     watch: {},
     methods: {
       handleClick(val) {
-
+      },
+      changeActive(){
+        this.activeName = "first"
       }
+
     },
   }
 </script>

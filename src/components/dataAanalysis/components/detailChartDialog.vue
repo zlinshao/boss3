@@ -3,16 +3,21 @@
     id="detailChartDialog"
     custom-class="detailDia"
     :show-close="false"
-    :visible.sync="detaildialogVisible"
+    :visible="detaildialogVisible"
     :modal="false"
     width="65%">
     <div>
-      {{params}}
-      {{selectDate}}
+      <!-- {{detailData}} -->
       <div class="detailMsgHead">
+        <div>
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
         <span>{{detailData.name}}</span>
-        <toprightControl></toprightControl>
+        </div>
+        <toprightcontrol 
+          :cardData="detailData" 
+          :btnstatus="btnstatus">
+        </toprightcontrol>
+        
       </div>
       <div class="detailcontent">
         <div class="contentTop">
@@ -54,10 +59,10 @@
                     :value="item.id">
                   </el-option>
                 </el-select>
-              </div>
+              </div>   
             </el-col>
               <!-- 开始日期 -->
-            <el-col :span="8">
+            <el-col :span="8" v-if="detailData.name=='空置期抵消差额'?false:true">
               <div class="detailSelect" >
                 <el-date-picker
                   size="small"
@@ -71,6 +76,19 @@
                 </el-date-picker>
               </div>
             </el-col>
+            <el-col :span="4" v-if="detailData.name=='空置期抵消差额'?true:false">
+              <div class="detailSelect" >
+                <el-date-picker
+                  size="small"
+                  value-format="yyyy-MM-dd"
+                  v-model="params.date"
+                  align="right"
+                  type="date"
+                  placeholder="选择日期"
+                  :picker-options="pickerOptions1">
+                </el-date-picker>
+              </div>
+            </el-col>
             <el-col :span="4">
               <div class="detailSelect">
                 <el-button type="primary" size="small" @click="changChart">查询</el-button>
@@ -79,15 +97,22 @@
           </el-row>
         </div>
         <div class="content">
-         <component :is="detailData.chart_set[0].type" :chartData="detailData" :chartStyle="chartstyle" :params="params"
+         <component 
+          :is="detailData.chart_set[0].type" 
+          :chartData="detailData" 
+          :chartStyle="chartstyle" 
+          :params="params" 
+          ref="chartComp"
+          :status="true"
+          v-if="detailData.chart_set"
             ></component>
-          <!-- <basicColumn :chartData="detailData" :chartStyle="chartstyle" :params="params"></basicColumn> -->
         </div>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
+  import toprightcontrol from "../cockpit/components/toprightControl.vue"
   import basicColumn from "../wareHouseData/chart/basicColumn.vue"          //基础柱状图
   import bubblePoint from "../wareHouseData/chart/bubblePoint.vue"          //气泡图
   import donut from "../wareHouseData/chart/donut.vue"                      //基础环图
@@ -97,28 +122,39 @@
   import seriesLine from "../wareHouseData/chart/seriesLine.vue"            //折线图
   import stackedColumn from "../wareHouseData/chart/stackedColumn.vue"      //堆叠柱状图
   import stackedPercentageColumn from "../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
-  import textCard from "../wareHouseData/chart/textCard.vue"               //文本卡片
+  // import textCard from "../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../wareHouseData/chart/tableCard.vue"            //表格卡片
-
-  import toprightControl from "./toprightControl.vue"
+  
     export default {
-      components:{toprightControl,
-      basicColumn,bubblePoint,donut,gauge,groupedColumn,pie,seriesLine,stackedColumn,stackedPercentageColumn,tableCard
+      name:"detailChartDialog",
+      components:{
+        toprightcontrol,
+        basicColumn,
+        bubblePoint,
+        donut,
+        gauge,
+        groupedColumn,
+        pie,
+        seriesLine,
+        stackedColumn,
+        stackedPercentageColumn,
+        tableCard
       },
       props:['modules','detailData'],
       data(){
 				return {
           detaildialogVisible : false,
           chartstyle:{
-            height:500
+            height:500,
+            width:1000
           },
-          params:{
-            city: '',
-            area: '',
-            group:'',
-            start_date:"",
-            end_date:"",
+          btnstatus:{
+            large:false,//放大和添加按钮SH
+            delete:false,//删除按钮
+            hidemetter:false,//隐藏新建
+            hideAdd:true//隐藏添加
           },
+          params:{},
           selectDate:'',
           cityOption:[],
           areaOption:[],
@@ -151,6 +187,33 @@
             },
             ]
           },
+          pickerOptions1: {
+            disabledDate(time) {
+              return time.getTime() > Date.now();
+            },
+            shortcuts: [{
+              text: '昨天',
+              onClick(picker) {
+                const date = new Date();
+                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                picker.$emit('pick', date);
+              }
+            }, {
+              text: '一周前',
+              onClick(picker) {
+                const date = new Date();
+                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                picker.$emit('pick', date);
+              }
+            },{
+              text: '一月前',
+              onClick(picker) {
+                const date = new Date();
+                date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
+                picker.$emit('pick', date);
+              }
+            }]
+          },
 		    }
       },
 			methods:{
@@ -159,7 +222,6 @@
             this.placeForm.area = ''
             this.placeForm.group = ''
             this.getList("area",id)
-            // console.log(this.placeForm)
           }else if(val=='area'){
             this.placeForm.group = ''
             this.getList("group",id)
@@ -167,20 +229,20 @@
         },
         getList(val,id){
           if(val=='city'){
-            this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id=331&per_page_number=50").then((res) => {          
-              // console.log(res)
+            this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
+              
               if(res.data.status_code == 200){
                 this.cityOption = res.data.data
               }
             });
           }else if(val=="area"){
-            this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+            this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
               if(res.data.status_code == 200){
                 this.areaOption = res.data.data
               }
             });
           }else if(val=="group"){
-            this.$http.get("http://test.boss-support.lejias.cn/api/s1/organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
+            this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
               if(res.data.status_code == 200){
                 this.groupOption = res.data.data
               }
@@ -188,24 +250,31 @@
           }
         },
         changChart(){
-          if(!this.selectDate){
-            return this.prompt('warning','请选择时间')
-          }
+          // if(!this.selectDate){
+          //   return this.prompt('warning','请选择时间')
+          // }
             this.params.city = this.placeForm.city
             this.params.area = this.placeForm.area
             this.params.group = this.placeForm.group
             this.params.start_date = this.selectDate[0]
             this.params.end_date = this.selectDate[1]
+           
+            this.$refs.chartComp.getChart(this.params,"default")
+            // console.log(this.$refs.topright)
+            // this.$nextTick
+            
+            
         },
-        getNewDate(){
-          var date =  new Date()
-          var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
-          var year = lastdate.getFullYear();
-          var month = lastdate.getMonth()+1;   //js从0开始取 
-          var day = lastdate.getDate(); 
-          this.params.start_date = year + '-' +month + '-' + day
-          this.params.end_date = year + '-' +month + '-' + day
-        }
+        // getNewDate(){
+        //   var date =  new Date()
+        //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
+        //   var year = lastdate.getFullYear();
+        //   var month = lastdate.getMonth()+1;   
+        //   var day = lastdate.getDate(); 
+        //   this.params.start_date = year + '-' +month + '-' + day
+        //   this.params.end_date = year + '-' +month + '-' + day
+        //   this.params.date = year + '-' +month + '-' + day
+        // }
       },
       watch:{
         modules(val){
@@ -213,21 +282,27 @@
           
         },
         detaildialogVisible(val){
+          this.params = JSON.parse(JSON.stringify(chartParams))
+          this.getChartDate(this.params)
+          this.selectDate = [this.params.start_date,this.params.end_date]
           if(!val){
             this.placeForm ={
               city: '',
               area: '',
               group:''
             }
-
-            this.params={
-              city: '',
-              area: '',
-              group:''
-            },
-            this.getNewDate()
-            this.selectDate = ''
+            // this.params={
+            //   city: '',
+            //   area: '',
+            //   group:'',
+            //   start_date:"",
+            //   end_date:"",
+            //   date:""
+            // },
+            // this.getNewDate()
             this.$emit('close')
+          }else{
+            setTimeout(()=>{this.changChart()},500)
           }
         }
       },
