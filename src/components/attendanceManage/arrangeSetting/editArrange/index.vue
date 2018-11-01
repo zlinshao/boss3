@@ -325,7 +325,8 @@ export default {
       duty: [],//职位列表
       position:[],
       canDuty:true,
-      canPosition:true
+      canPosition:true,
+      currentDay: '',
     };
   },
   methods: {
@@ -508,10 +509,11 @@ export default {
     },
     //编辑排班
     clickCell(row, column, cell, event) {
+      this.currentDay = column.label;
       var res = this.estimateMonth();
       if (!res) {
         this.$notify.warning({
-          message: "不能编辑小于当前月份的排班",
+          message: "不能编辑小于或等于当前日期的排班",
           title: "警告"
         });
         return false;
@@ -533,20 +535,26 @@ export default {
     },
     //单元格背景颜色
     bg(row, label) {
+      var date = new Date().toLocaleDateString();
+      var currentDate = this.arrangeParams.arrange_month + "-" + label;
+      
       if (row["oa_sort"] != null && row["oa_sort"]["arrange"][label]) {
-        var arrange = row["oa_sort"]["arrange"][label];
-        if (arrange == "A") {
-          return "colorRed";
-        } else if (arrange == "B") {
-          return "colorB";
-        } else if (arrange == "C") {
-          return "colorC";
-        } else if (arrange == "D") {
-          return "colorA";
-        } else {
-          return "colorD";
+          var arrange = row["oa_sort"]["arrange"][label];
+          if (arrange == "A") {
+            return "colorRed";
+          } else if (arrange == "B") {
+            return "colorB";
+          } else if (arrange == "C") {
+            return "colorC";
+          } else if (arrange == "D") {
+            return "colorA";
+          } else {
+            return "colorD";
+          }
         }
-      }
+        if(new Date(currentDate).getTime() <= new Date(date)){
+          return "colorGray";
+        }
     },
     //编辑确定
     okEdit() {
@@ -726,10 +734,9 @@ export default {
     },
     //判断是否可编辑
     estimateMonth() {
-      var months = new Date().toLocaleDateString().split("/");
-      var month = months[0] + "-" + months[1];
-      var currentMonth = this.arrangeParams.arrange_month;
-      if (new Date(currentMonth).getTime() < new Date(month).getTime()) {
+      var date = new Date().toLocaleDateString();
+      var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
+      if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
         return false;
       } else {
         return true;
@@ -806,7 +813,8 @@ export default {
     color: white;
   }
   .colorGray {
-    background-color: #c4c4c4;
+    background-color: #3B3B3B;
+    color: white;
   }
   .colorA {
     background-color: #409eff;
@@ -821,7 +829,7 @@ export default {
     color: white;
   }
   .colorD {
-    background-color: #909399;
+    background-color: #c4c4c4;
     color: white;
   }
 }
