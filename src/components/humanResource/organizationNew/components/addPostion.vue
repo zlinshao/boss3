@@ -77,7 +77,7 @@
         params: {
           org_id: '',    //部门id
           name: '',      //名字
-          type: '',       //所属职位
+          duty_id: '',       //所属职位
           parent_id: '',   //上级岗位id
           display_name: '',
           description: ''
@@ -106,7 +106,7 @@
         }
       },
       type(val) {
-        this.title = val === 'post' ? '新建岗位' : '新建职位111';
+        this.title = val === 'post' ? '新建岗位' : '新建职位';
       },
       'addPositionParams': {
         deep: true,
@@ -115,14 +115,14 @@
           this.department = val.depart_name;
           this.positionName = val.position_name;
           this.params.org_id = val.depart_id;
-          this.params.type = val.position_id;
+          this.params.duty_id = val.position_id;
         }
       }
     },
     methods: {
       confirmAdd() {
         if (this.type === 'position') {
-          this.$http.post(globalConfig.server + 'manager/position', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/position', this.params).then((res) => {
             if (res.data.code === '20010') {
               this.$emit('close', 'success');
               this.prompt('success', res.data.msg);
@@ -132,7 +132,7 @@
             }
           });
         } else if (this.type === 'post') {
-          this.$http.post(globalConfig.server + 'manager/positions', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/position', this.params).then((res) => {
             if (res.data.code === '20010') {
               this.$emit('close', 'success');
               this.closeModal();
