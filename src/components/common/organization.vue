@@ -44,10 +44,17 @@
             南京乐伽商业管理有限公司
           </div>
           <div class="pitchOnData" v-show="pitchOnData.length > 0">
-          <span v-for="(item,index) in pitchOnData" @click="removePitch(item.id, index)">
-            <span v-if="pitchOnData.length > 1 && index !== 0">></span>
-            {{item.name}}
-          </span>
+            <span v-for="(item,index) in pitchOnData" @click="removePitch(item.id, index)">
+              <span v-if="pitchOnData.length > 1 && index !== 0">></span>
+              {{item.name}}
+            </span>
+          </div>
+          <div
+            style="width: 90%;"
+            v-loading="fullLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)">
           </div>
           <ul class="scroll_bar checkDepart" :style="rightUl">
             <li v-for="item in list.children">
@@ -92,7 +99,7 @@
     data() {
       return {
         organizationVisible: false,
-
+        fullLoading: false,
         url: globalConfig.server,
         list: [],               //所有数据
         leftUl: {
@@ -168,10 +175,12 @@
       },
       // 部门/员工
       filterOrgan(id) {
+        this.fullLoading = true;
         if (this.parent_id === id) return;
         this.list = [];
         this.pitchOnData = id === 1 ? [] : this.pitchOnData;
         this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
+          this.fullLoading = false;
           this.parent_id = id;
           this.rightHeight();
           if (res.data.code === '70050') {
