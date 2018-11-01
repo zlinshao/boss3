@@ -1,5 +1,5 @@
 <template>
-  <div id="addRentRepair">
+  <div id="addCollectRepair">
     <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addCollectRepairDialog" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
@@ -168,6 +168,7 @@
     },
     mounted() {
       this.getDictionary();
+      console.log(this.form)
     },
     watch: {
       module(val) {
@@ -199,6 +200,7 @@
       },
       confirmAdd() {
         this.forbidden = true;
+        console.log(this.form)
         this.$http.post(globalConfig.server + "repaire/insert", this.form).then(res => {
           this.forbidden = false;
           if (res.data.code === "600200") {
