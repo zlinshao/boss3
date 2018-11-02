@@ -122,6 +122,7 @@ export default {
         { name: "姓名", prop: "name", state: false, disabled: true },
         { name: "职位", prop: "roles", state: false, disabled: true },
         { name: "部门", prop: "org", state: false, disabled: true },
+        { name: "请假", prop: "vacate", state: true, disabled: true },
         { name: "应出勤总天数", prop: "should_attendance_day", state: false },
         { name: "实出勤总天数", prop: "real_attendance_day", state: false },
         { name: "休息天数", prop: "rest_attendance_day", state: false },
@@ -135,14 +136,14 @@ export default {
         { name: "加班存在异常", prop: "work_overtime_exception", state: false },
         { name: "加班天数", prop: "work_overtime_day", state: false },
         { name: "出差", prop: "business", state: false },
-        { name: "请假", prop: "vacate", state: false }
       ],
       seleckedList: [
         // 默认选中状态
         // { name: "工号", prop: "jobNumber", state: true },
         { name: "姓名", prop: "name", state: true },
         { name: "部门", prop: "org", state: true },
-        { name: "职位", prop: "roles", state: true }
+        { name: "职位", prop: "roles", state: true },
+        { name: "请假", prop: "vacate", state: true },
       ],
       // 请假二级菜单
       secondaryMenu: [
@@ -215,14 +216,14 @@ export default {
     collapseClick() {
       return (this.collapse = this.collapse == "收起" ? "展示" : "收起");
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
+    // querySearch(queryString, cb) {
+    //   var restaurants = this.restaurants;
+    //   var results = queryString
+    //     ? restaurants.filter(this.createFilter(queryString))
+    //     : restaurants;
+    //   // 调用 callback 返回建议列表的数据
+    //   cb(results);
+    // },
     selecked(val, index) {
       val.state = !val.state;
       if (val.state) {
