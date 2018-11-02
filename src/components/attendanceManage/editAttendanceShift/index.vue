@@ -15,14 +15,14 @@
         </el-table-column>
         <el-table-column label="操作" width="200%">
           <template slot-scope="scope">
-            <el-button type="primary" @click="editAttendanceShift(scope.row.alias, scope.row.name, scope.row.id)" size="mini">编辑</el-button>
+            <el-button type="primary" :disabled="scope.row.name == '休'" @click="editAttendanceShift(scope.row.alias, scope.row.name, scope.row.id)" size="mini">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
       <div class="block pages">
         <!--  :current-page="" :page-size="params.limit" -->
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[20, 100, 200, 300, 400]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[10, 20, 30,40]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
         </el-pagination>
       </div>
       <!-- 编辑考勤班次 -->
@@ -126,14 +126,14 @@
           <el-form-item class="btn">
             <el-button @click="cancelAttendance()" size="mini">取 消</el-button>
             <!-- 编辑 -->
-            <el-button type="primary" @click="editAttendanceSubmit()" size="mini" v-if="editShow">确 定</el-button>
+            <el-button type="primary" @click="editAttendanceSubmit()" size="mini" v-if="editShow" ref="editButton">确 定</el-button>
             <!-- 新增 -->
             <el-button type="primary" @click="addAttendanceSubmit()" size="mini" v-if="determineShow">确 定</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
       <!-- 右键删除 -->
-      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
+      <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu> -->
     </div>
   </div>
 </template>
@@ -310,6 +310,7 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
+      
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {
@@ -330,6 +331,9 @@ export default {
         });
     },
     editAttendanceSubmit() {
+      console.log(this.$refs.editButton.$el, 11111);
+      // this.$refs.editButton.$el.onclick()
+      // return
       this.$http
         .put(globalConfig.server + "/attendance/classes/" + this.id, this.form)
         .then(res => {
@@ -400,7 +404,7 @@ export default {
       });
     },
     refresh(page) {
-      this.params.page = page || 1;
+      // this.params.page = page || 1;
       this.$http.get(globalConfig.server + "attendance/classes",{params: this.params}).then(res => {
         if (res.data.code == "20000") {
           this.dataTotal = Number(res.data.data.count);
@@ -425,11 +429,13 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
+      this.tableData = [];
       this.params.limit = val;
       this.refresh(val);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      this.tableData = [];
       this.refresh(val);
     }
   },

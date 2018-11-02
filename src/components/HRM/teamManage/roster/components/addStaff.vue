@@ -356,7 +356,7 @@
               <div class="formList list3">
                 <el-form-item :label="item.formTitle" v-for="(item, index) in ImgInfo" :key="index">
                   <UpLoad :ID="item.formKey" :isClear="isClear" @getImg="getImg"
-                          :editImage="image_info[item.formKey]"></UpLoad>
+                          :editImage="image_info[item.formKey]" :noMulti="'one'"></UpLoad>
                 </el-form-item>
               </div>
             </div>

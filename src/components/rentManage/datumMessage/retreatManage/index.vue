@@ -154,6 +154,10 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="client"
+                  label="房东姓名">
+                </el-table-column>
+                <el-table-column
                   prop="check_time"
                   label="退房时间">
                 </el-table-column>
@@ -284,6 +288,10 @@
                     </span>
                     <span v-else="">/</span>
                   </template>
+                </el-table-column>
+                <el-table-column
+                  prop="client"
+                  label="租客姓名">
                 </el-table-column>
                 <el-table-column
                   prop="check_time"
@@ -476,6 +484,7 @@
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
             this.tableData = res.data.data.data;
+            console.log(tableData)
             this.totalNumber = res.data.data.count;
           } else {
             this.superAuthority = false;

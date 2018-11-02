@@ -1,5 +1,6 @@
 <template>
   <div id="monthlySummary">
+    <!-- {{params}} -->
     <div class="topShow">
       <div class="title">
         <span>展示列：</span>
@@ -26,7 +27,7 @@
     </div>  -->
      <div class="selectTips">
        <span>部门：</span>
-      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal" size="mini">
+      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
     </div> 
@@ -42,21 +43,23 @@
       <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
        <!-- <el-button type="primary" size="mini">导出</el-button>  -->
     </div> 
+    <!--  -->
     <div class="table">
-      <el-table :data="tableData" border style="width: 100%" @cell-click="popUps" width="auto">
+      <!-- <el-table :data="tableData" border  @cell-click="popUps" > -->
+      <el-table :data="tableData" border  ref="crayTable" >
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '出勤班次'" label="早班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="中班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="晚班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="正常加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="法定加班（小时）"></el-table-column>
-          <el-table-column v-if="showItem.name == '请假'" v-for="(day, index) in secondaryMenu" :key="index" :label="day.label" :prop="day.prop"></el-table-column>
+          <el-table-column v-if="showItem.name == '请假'" v-for="(day, ind) in secondaryMenu" :key="ind" :label="day.label" :prop="day.prop"></el-table-column>
         </el-table-column>
       </el-table>
     </div>
     <div class="block pages">
       <!--  :current-page="" :page-size="params.limit" -->
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[20, 100, 200, 300, 400]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[5,10,15]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <!-- 组织架构 -->
@@ -98,15 +101,6 @@ export default {
         org_id: "",
         search: "",
         arrange_month: "",
-        // follow_id: "",
-        // keywords: "",
-        // follow_status: "",
-        // create_time: [],
-        // follow_time: "",
-        // update_time: "",
-        // finish_time: "",
-        // type: "",
-        // module: 1
       },
       follow_name: "", //跟进人
       follow_id: "", // 部门ID
@@ -128,6 +122,7 @@ export default {
         { name: "姓名", prop: "name", state: false, disabled: true },
         { name: "职位", prop: "roles", state: false, disabled: true },
         { name: "部门", prop: "org", state: false, disabled: true },
+        { name: "请假", prop: "vacate", state: true, disabled: true },
         { name: "应出勤总天数", prop: "should_attendance_day", state: false },
         { name: "实出勤总天数", prop: "real_attendance_day", state: false },
         { name: "休息天数", prop: "rest_attendance_day", state: false },
@@ -141,14 +136,14 @@ export default {
         { name: "加班存在异常", prop: "work_overtime_exception", state: false },
         { name: "加班天数", prop: "work_overtime_day", state: false },
         { name: "出差", prop: "business", state: false },
-        { name: "请假", prop: "vacate", state: false }
       ],
       seleckedList: [
         // 默认选中状态
         // { name: "工号", prop: "jobNumber", state: true },
         { name: "姓名", prop: "name", state: true },
         { name: "部门", prop: "org", state: true },
-        { name: "职位", prop: "roles", state: true }
+        { name: "职位", prop: "roles", state: true },
+        { name: "请假", prop: "vacate", state: true },
       ],
       // 请假二级菜单
       secondaryMenu: [
@@ -177,6 +172,7 @@ export default {
     this.params.arrange_month =
       new Date().getFullYear() + "-" + (new Date().getMonth() + 1);
     this.refresh();
+    // 回车事件
     let _this = this;
     document.onkeydown = e => {
       let key = window.event.keyCode;
@@ -184,6 +180,8 @@ export default {
         _this.refresh();
       }
     }
+    // table
+    console.log(this.$refs.$el, '11111');
   },
   methods: {
     searchRecord() {
@@ -218,20 +216,22 @@ export default {
     collapseClick() {
       return (this.collapse = this.collapse == "收起" ? "展示" : "收起");
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    handleSelect(item) {
-      console.log(item);
-    },
+    // querySearch(queryString, cb) {
+    //   var restaurants = this.restaurants;
+    //   var results = queryString
+    //     ? restaurants.filter(this.createFilter(queryString))
+    //     : restaurants;
+    //   // 调用 callback 返回建议列表的数据
+    //   cb(results);
+    // },
     selecked(val, index) {
       val.state = !val.state;
       if (val.state) {
+        // if(val.name == "请假") {
+        //   this.seleckedList.push(val);
+        // } else {
+        //   this.seleckedList.splice(3, 0,val);
+        // }
         this.seleckedList.push(val);
       } else {
         this.seleckedList.forEach(item => {
@@ -243,28 +243,35 @@ export default {
       }
     },
     handleSizeChange(val) {
+      console.log(val, "11111");
       this.params.limit = val;
-      this.refresh(val);
+      this.refresh(this.params.limit);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      this.refresh(val)
+      this.params.page = val;
+      this.refresh( this.params.page)
       console.log(`当前页: ${val}`);
     },
     //选人组件
-    openOrganizeModal() {
+    openOrganizeModal(id) {
+      this.params.org_id = id;
+      // this.follow_name = '';
       this.organizationDialog = true;
       this.type = "depart";
-      this.length = 5;
+      this.length = 1;
     },
     selectMember(val) {
       this.type = "";
       this.length = "";
+      this.follow_id = "";
+      this.follow_name = '';
       val.forEach(item => {
         this.follow_id += item.id + ",";
-        this.follow_name += item.name + ",";
+        this.follow_name = item.name + ",";
       });
-       this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      // this.params.org_id = this.follow_id;
       this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
     },
     // 关闭模态框
@@ -273,6 +280,7 @@ export default {
       // this.params.org_id = this.follow_id
     },
     emptyFollowPeople() {
+      this.follow_id = "";
       this.params.org_id = "";
       this.follow_name = "";
     },
@@ -327,7 +335,7 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
-       this.params.page = page || 1;
+      //  this.params.page = page || 1;
       this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
         if (res.data.code == "20000") {
           this.tableData = res.data.data.data;
@@ -411,6 +419,7 @@ export default {
 </script>
 
 <style lang="scss">
+// @import '../../../../assets/css/common.scss';
 #monthlySummary {
   .title {
     float: left;

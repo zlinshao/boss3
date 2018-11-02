@@ -1284,7 +1284,7 @@
               label: '查看合同修改记录',
               contract_id: row.contract_id
             },
-            {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
+            {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
             {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
             {clickIndex: 'deleteRent', headIcon: 'el-icon-delete', label: '删除',},
           ];
@@ -1306,9 +1306,9 @@
               label: '查看合同修改记录',
               contract_id: row.contract_id,
             },
-            {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单'},
-            {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单'},
-            {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除'},
+            {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
+            {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
+            {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
           ];
         }
         this.contextMenuParam(event);

@@ -15,15 +15,15 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="是否为公司">
+              <el-form-item label="是否为公司" required>
                 <el-switch
-                  v-model="params.is_corp"
+                  v-model="is_corp"
                   active-color="#409EFF">
                 </el-switch>
               </el-form-item>
             </el-col>
-            <el-col :span="24" v-if="!params.is_corp">
-              <el-form-item label="企业微信id">
+            <el-col :span="24" v-if="is_corp">
+              <el-form-item label="企业微信id" required>
                 <el-input placeholder="请输入企业微信id" v-model="params.corp_wx"></el-input>
               </el-form-item>
             </el-col>
@@ -54,9 +54,10 @@
           parent_id: '',
           name: '',
           order: '',
-          is_corp: false,
+          is_corp: '0',
           corp_wx: ''
         },
+        is_corp: false,
         parent_name: '',
       };
     },
@@ -66,11 +67,13 @@
       },
       addDepartDialogVisible(val) {
         if (!val) {
-          this.$emit('close')
+          this.closeModal();
+          this.$emit('close');
         }
       },
-      'params.is_corp'(val) {
+      is_corp(val) {
         this.params.corp_wx = '';
+        this.params.is_corp = val ? '1' : '0';
       },
       parentId(val) {
         if (val) {
@@ -96,14 +99,14 @@
         });
       },
       closeModal() {
-        this.addDepartDialogVisible = false;
         this.params = {
           parent_id: '',
           name: '',
           order: '',
-          is_corp: false,
+          is_corp: '0',
           corp_wx: ''
-        }
+        };
+        this.is_corp = false;
       }
     }
   };

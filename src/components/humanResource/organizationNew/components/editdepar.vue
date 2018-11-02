@@ -15,6 +15,19 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
+              <el-form-item label="是否为公司" required>
+                <el-switch
+                  v-model="is_corp"
+                  active-color="#409EFF">
+                </el-switch>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-if="is_corp">
+              <el-form-item label="企业微信id" required>
+                <el-input placeholder="请输入企业微信id" v-model="params.corp_wx"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
               <el-form-item label='排序'>
                 <el-input-number v-model="params.order"></el-input-number>
                 <span style="color: #fb435e;margin-left: 15px">注意：数值越大，排序越靠前！</span>
@@ -28,106 +41,113 @@
         <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
   import Organization from '../../../common/organization.vue'
+
   export default {
-    props:['editDepartDialog','departId'],
-    components:{Organization},
+    props: ['editDepartDialog', 'departId'],
+    components: {Organization},
     data() {
       return {
-        editDepartDialogVisible:false,
-        params:{
-          parent_id:'',
-          name:'',
-          order:''
+        editDepartDialogVisible: false,
+        params: {
+          parent_id: '',
+          name: '',
+          order: '',
+          is_corp: '',
+          corp_wx: ''
         },
-        organizationDialog:false,
-        department:'',
+        is_corp: false,
+        organizationDialog: false,
+        department: '',
       };
     },
-    watch:{
-      editDepartDialog(val){
+    watch: {
+      editDepartDialog(val) {
         this.editDepartDialogVisible = val
       },
-      editDepartDialogVisible(val){
-        if(!val){
+      editDepartDialogVisible(val) {
+        if (!val) {
           this.$emit('close')
         }
       },
-      departId(val){
-          if(val){
-              this.getDepartInfo();
-          }
+      departId(val) {
+        if (val) {
+          this.getDepartInfo(val);
+        }
       }
     },
-    methods:{
-      getDepartInfo(){
-        this.$http.get(globalConfig.server+'manager/department/'+this.departId).then((res) => {
-          if(res.data.code === '20020'){
-            this.params.name = res.data.data.name;
-            this.params.order = res.data.data.order;
-            this.params.parent_id = res.data.data.parent_id;
+    methods: {
+      getDepartInfo(id) {
+        this.$http.get(globalConfig.server + 'organization/org/' + id).then((res) => {
+          if (res.data.code === '20020') {
+            let data = res.data.data;
+            this.params.name = data.name;
+            this.params.order = data.order;
+            this.params.parent_id = data.parent_id;
+            this.params.is_corp = data.is_corp;
+            this.is_corp = Number(data.is_corp) === 0 ? false : true;
+            if (data.corp_wx) {
+              this.params.corp_wx = data.corp_wx;
+            } else {
+              this.params.corp_wx = '';
+            }
             this.department = '';
-            this.$http.get(globalConfig.server+'manager/department/'+this.params.parent_id).then((res) => {
-              if(res.data.code === '20020'){
+            this.$http.get(globalConfig.server + 'organization/org/' + this.params.parent_id).then((res) => {
+              if (res.data.code === '20020') {
                 this.department = res.data.data.name;
               }
             });
-          }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+          } else {
+            this.prompt('warning', res.data.msg);
           }
         });
       },
-      confirmEdit(){
-        this.$http.put(globalConfig.server+'manager/department/'+this.departId,this.params).then((res) => {
-          if(res.data.code === '20030'){
-            this.$emit('close','success');
+      confirmEdit() {
+        this.$http.put(globalConfig.server + 'organization/org/' + this.departId, this.params).then((res) => {
+          if (res.data.code === '20030') {
+            this.$emit('close', 'success');
             this.closeModal();
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg,
-            });
-          }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            this.prompt('success', res.data.msg);
+          } else {
+            this.prompt('warning', res.data.msg);
           }
         });
       },
-      selectDepart(){
+      selectDepart() {
         this.organizationDialog = true
       },
       //关闭选人框回调
-      closeOrganization(){
+      closeOrganization() {
         this.organizationDialog = false;
       },
-      selectMember(val){
+      selectMember(val) {
         this.params.parent_id = val[0].id;
         this.department = val[0].name;
         this.organizationDialog = false;
       },
-      closeModal(){
+      closeModal() {
         this.editDepartDialogVisible = false;
         this.params = {
-          parent_id:'',
-          name:'',
-          order:''
+          parent_id: '',
+          name: '',
+          order: '',
+          is_corp: '',
+          corp_wx: ''
         };
+        this.is_corp = '';
         this.department = '';
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair{
+  #addRentRepair {
   }
 
 </style>
