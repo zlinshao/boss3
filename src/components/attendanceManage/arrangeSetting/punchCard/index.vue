@@ -182,8 +182,9 @@
                                 v-model="punchCardParams.arrange_day"
                                 type="date"
                                 format="yyyy-MM-dd"
-                                style="width:220px;"
+                                style="width:195px;"
                                 @change = "changeDate"
+                                size="mini"
                                 placeholder="选择月">
                             </el-date-picker>
                         </el-col>
@@ -195,7 +196,7 @@
                         <div class="el_col_label">是否上班缺卡</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_am_sign" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_am_sign" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -211,7 +212,7 @@
                         <div class="el_col_label">是否下班缺卡</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_pm_sign" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_pm_sign" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -224,7 +225,7 @@
                         <div class="el_col_label">是否休息</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_rest" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_rest" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -240,7 +241,7 @@
                         <div class="el_col_label">是否加班</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_work_overtime" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_work_overtime" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -253,7 +254,7 @@
                         <div class="el_col_label">是否排班</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_arrange" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_arrange" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -268,7 +269,7 @@
                         <div class="el_col_label">是否出差</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_business" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_business" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -281,7 +282,7 @@
                         <div class="el_col_label">是否迟到</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_late" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_late" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -296,7 +297,7 @@
                         <div class="el_col_label">是否请假</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_vacate" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_vacate" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -309,7 +310,7 @@
                         <div class="el_col_label">是否旷工</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-select v-model="punchCardParams.is_absenteeism" placeholder="请选择">
+                            <el-select size="mini" v-model="punchCardParams.is_absenteeism" placeholder="请选择">
                                 <el-option label="是" :value="1"></el-option>
                                 <el-option label="否" :value="0"></el-option>
                             </el-select>
@@ -317,6 +318,21 @@
                     </el-row>
                     </el-col>
                 </el-row>
+                  <el-row class="el_row_border">
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">部门</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-input size="mini" placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:260px;"
+                                    v-model="org_name">
+                            <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                          </el-input>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                  </el-row>
                 <div class="btnOperate">
                     <el-button size="mini" type="primary" @click="goSearch">搜索</el-button>
                     <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -325,15 +341,22 @@
                 </el-form>
             </div>
         </div>
+
+      <!--部门-->
+      <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths" @close="closeOrgan"
+                    @selectMember="selectMember"></Organization>
     </div>    
 </template>
 
 <script>
+  import Organization from "../../../common/organization";
 export default {
   name: "index",
+  components: { Organization },
   data (){
       return {
           url: globalConfig.server, //url
+          org_name: "",
           punchCardParams: {
               user_id: '',
               org_id: '',
@@ -357,6 +380,10 @@ export default {
           punchListInfo: "",
           isHighPunch: false,
           punchCount:0,
+          organModule:false,
+          organizeType: "",
+          lengths: 0,
+          organDivision: "",
       }
   },
   methods: {
@@ -405,6 +432,7 @@ export default {
         this.getPunchCardList();
       },
       resetting (){
+        this.org_name = "";
           this.punchCardParams = {
               user_id: '',
               org_id: '',
@@ -447,7 +475,30 @@ export default {
         }
         var date = dates[0] + "-" + month + "-" + day;
         this.punchCardParams.arrange_day = date;
-      }
+      },
+    openOrgan(val, type) {
+      this.organDivision = val;
+      this.organModule = true;
+      this.organizeType = type;
+      this.lengths = 1;
+    },
+    // 清空部门
+    emptyDepart(val) {
+      this.org_name = "";
+      this.punchCardParams.org_id = "";
+    },
+    // 关闭组织架构
+    closeOrgan() {
+      this.organDivision = "";
+      this.organModule = false;
+      this.organizeType = "";
+      this.lengths = 0;
+    },
+    // 确认部门
+    selectMember(val) {
+      this.punchCardParams.org_id = val[0].id;
+      this.org_name = val[0].name;
+    },
   },
   mounted (){
     var date = new Date();
