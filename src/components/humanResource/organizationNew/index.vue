@@ -1109,6 +1109,7 @@
         setManageDepartId: '',
         departManageName: '',
         selectPostID: '',
+        selectOrgID: '',
         growthData: '',
       }
     },
@@ -1419,7 +1420,6 @@
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData() {
-        console.log(1111111)
         this.userCollectLoading = true;
         this.userCollectStatus = ' ';
         if (!this.params.entry_time) {
@@ -1557,6 +1557,7 @@
             if (res.data.code === '710418') {
               this.prompt('success', res.data.msg);
               this.getPostStaffData();
+              this.getStaffData();
               if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
                 this.sendLeaveMsgForm.date = this.form.dismiss_time;
               }
@@ -1591,6 +1592,7 @@
             if (res.data.code === '710166') {
               this.prompt('success', res.data.msg);
               this.getPostStaffData();
+              this.getStaffData();
               this.selectLevelDialog = false;
               this.editId = '';
             } else {
@@ -1639,6 +1641,7 @@
             if (res.data.code === '71018') {
               this.prompt('success', res.data.msg);
               this.getPostStaffData();
+              this.getStaffData();
             } else {
               this.prompt('warning', res.data.msg);
             }
@@ -1656,6 +1659,7 @@
           this.$http.get(globalConfig.server + 'manager/staff/delete/' + this.editId).then((res) => {
             if (res.data.code === '10060') {
               this.getPostStaffData();
+              this.getStaffData();
               this.prompt('success', res.data.msg);
             } else {
               this.prompt('warning', res.data.msg);
@@ -1741,8 +1745,10 @@
       clickPostMenu(row, event) {
         if (row.roles.length) {
           this.selectPostID = row.roles[0].id;
+          this.selectOrgID = row.duty.org_id;
         } else {
-          this.selectPostID = ''
+          this.selectPostID = '';
+          this.selectOrgID = ''
         }
         this.getPostStaffData();
       },
@@ -1763,7 +1769,6 @@
           this.addPosition('post');
         }
       },
-
       //修改职位完成回调
       closeEditOnlyPosition(val) {
         this.editOnlyPositionDialog = false;
@@ -1771,12 +1776,10 @@
           this.getOnlyPosition();
         }
       },
-
       //关闭可见范围模态框
       closeViewRange() {
         this.viewRangeDialog = false;
       },
-
       //删除职位
       deleteOnlyPosition() {
         this.$http.get(globalConfig.server + 'organization/duty/delete/' + this.onlyPositionId).then((res) => {
@@ -1788,7 +1791,6 @@
           }
         })
       },
-
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition() {
@@ -1813,7 +1815,13 @@
             this.positionTableData = res.data.data.data;
             this.totalPostNum = res.data.data.count;
             if (arr.length > 0) {
-              this.selectPostID = arr[0].roles && res.data.data.data[0].roles[0].id;
+              console.log(arr[0]);
+              if (arr[0].roles.length) {
+                this.selectPostID = arr[0].roles && arr[0].roles[0].id;
+              } else {
+                this.selectPostID = '';
+              }
+              this.selectOrgID = arr[0].duty.org_id;
               this.getPostStaffData();
             } else {
               this.postCollectStatus = '暂无数据';
@@ -1926,8 +1934,8 @@
           this.postStaffLoading = true;
           this.postStaffStatus = ' ';
         }
-        this.$http.get(globalConfig.server + 'organization/other/staff-list?role=' + this.selectPostID + '&page=' + this.postStaffParams.page
-          + '&limit=' + this.postStaffParams.limit).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/other/staff-list?org_id=' + this.selectOrgID + '&role_id=' + this.selectPostID
+          + '&page=' + this.postStaffParams.page + '&limit=' + this.postStaffParams.limit).then((res) => {
           this.postStaffLoading = false;
           if (res.data.code === '70010') {
             let data = res.data.data;
