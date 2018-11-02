@@ -68,6 +68,7 @@
                 <el-date-picker
                   size="small"
                   v-model="selectDate"
+                  unlink-panels
                   :picker-options="pickerOptions"
                   type="daterange"
                   value-format="yyyy-MM-dd"
