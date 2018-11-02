@@ -130,7 +130,7 @@
       </div>
     </div>
 
- <el-table
+     <el-table
       :data="tableData"
       :empty-text='emptyContent'
       v-loading="villageLoading"
@@ -186,7 +186,7 @@
         <div class="grid-content bg-purple">
           <el-table :data="tableData" :empty-text='emptyContent' v-loading="villageLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0)" style="width: 100%;" @row-contextmenu='houseMenu' @row-dblclick='dblMenu' @selection-change="handleSelectionChange">
             <transition name="fade">
-              <el-table-column type="selection" width="55" v-if="selectionShow">
+              <el-table-column type="selection" width="55" v-show="selectionShow">
               </el-table-column>
             </transition>
             <el-table-column prop="village_name" label="小区名称">

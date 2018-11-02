@@ -177,6 +177,8 @@ export default {
     document.onkeydown = e => {
       let key = window.event.keyCode;
       if(key == 13) {
+         _this.params.page = 1;
+        _this.params.limit = 5;
         _this.refresh();
       }
     }
