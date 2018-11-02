@@ -37,9 +37,9 @@
                     <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" size="mini" @click="outArrange" v-show="!exportBtnShow">导出排班表<i
+                    <el-button type="primary" size="mini" @click="outArrange" v-show="!exportBtnShow" :loading="exprotLoading">导出排班表<i
                       class="el-icon-download el-icon--right"></i></el-button>
-                    <el-button type="primary" size="mini" @click="outTemplet" v-show="exportBtnShow">导出排班模板<i
+                    <el-button type="primary" size="mini" @click="outTemplet" v-show="exportBtnShow" :loading="exprotTemp">导出排班模板<i
                       class="el-icon-download el-icon--right"></i></el-button>
                     <el-button type="primary" size="mini" @click="importShow = true" v-show="exportBtnShow">导入排班表<i
                       class="el-icon-upload el-icon--right"></i></el-button>
@@ -250,7 +250,7 @@
         <Upload :ID="'uploadExcel'" :isClear="isClear" @getImg="getImg"></Upload>
         <div style="width:100%;text-align:right;">
           <el-button size="mini" @click="cencelUpload">取消</el-button>
-          <el-button size="mini" type="primary" @click="importExl">确定</el-button>
+          <el-button size="mini" type="primary" @click="importExl" :loading="importTmp">确定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -321,6 +321,9 @@
         canDuty: true,
         canPosition: true,
         currentDay: '',
+        exprotLoading: false,
+        exprotTemp: false,
+        importTmp: false
       };
     },
     methods: {
@@ -336,11 +339,13 @@
         this.file_id = val[1][0];
       },
       importExl() {
+        this.importTmp = true;
         this.$http.post(this.url + "attendance/sort-excel/templet-enter", {
           file_id: this.file_id
         }).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
+              this.importTmp = false;
               this.$notify.success({
                 title: "成功",
                 message: res.data.msg
@@ -348,6 +353,7 @@
               this.cencelUpload();
               this.getArrangeList();
             } else {
+              this.importTmp = false;
               this.$notify.warning({
                 title: "警告",
                 message: res.data.msg
@@ -814,11 +820,18 @@
       },
       //导出排班表
       outArrange() {
+        this.exprotLoading = true;
         this.$http.post(this.url + "attendance/sort-excel/sort-out", this.arrangeParams).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
+              this.exprotLoading = false;
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
               window.location.href = res.data.data.uri;
-            } else if (res.data.code == 10001) {
+            } else {
+              this.exprotLoading = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -829,11 +842,23 @@
       },
       //导出排班模板
       outTemplet() {
-        var cMonth = this.arrangeParams.arrange_month;
+        this.exprotTemp = true;
         this.$http.post(this.url + "attendance/sort-excel/templet-out", this.arrangeParams).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
+              this.exprotTemp = false;
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
               window.location.href = res.data.data.uri;
+
+            }else {
+              this.exprotTemp = false;
+              this.$notify.warning({
+                title: '警告',
+                message:res.data.msg
+              })
             }
           }
         })
