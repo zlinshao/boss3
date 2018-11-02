@@ -345,6 +345,7 @@
         }).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
+              this.isClear = true;
               this.importTmp = false;
               this.$notify.success({
                 title: "成功",
