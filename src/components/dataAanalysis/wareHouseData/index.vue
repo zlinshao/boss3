@@ -108,6 +108,7 @@
         searchQuotaVal: "",//输入框查询指标
         classSelectValue: "",//选择框选择类型
         classSelect: [], //指标类型选择
+        loadFlag:true,
         cardCharts: [{
           chart_set: [
             {
@@ -149,12 +150,14 @@
             params: params
           }).then((res) => {
             if (res.data.code === "20000") {
+              this.loadFlag = true
               res.data.data.data.forEach((item) => {
                 this.cardCharts.push(item)
               });
             } else {
               this.cardloading = false;
               this.loadingText = "没有数据"
+              this.loadFlag = false
             }
           });
         // }
@@ -193,7 +196,7 @@
           let scrollHeight = $(document).height()
           let windowHeight = $(this).height()
 
-          if(scrollTop + windowHeight === scrollHeight){
+          if(scrollTop + windowHeight === scrollHeight && self.loadFlag){
             self.params.page++
             self.getCard(self.params)
           }

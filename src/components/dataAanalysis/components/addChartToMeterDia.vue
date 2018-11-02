@@ -10,7 +10,6 @@
       >
       <div>
         <el-button icon="el-icon-close" circle size="mini" style="float:right" @click="addChartToMeterdialogVisible = false"></el-button>
-
         <div class="addMeterCont">
           <i class="el-icon-bell successicon" ></i>
           <span> 添加成功</span><br>

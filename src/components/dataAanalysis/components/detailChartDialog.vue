@@ -15,7 +15,8 @@
         </div>
         <toprightcontrol 
           :cardData="detailData" 
-          :btnstatus="btnstatus">
+          :btnstatus="btnstatus"
+          :diaStatus="true">
         </toprightcontrol>
         
       </div>
@@ -269,7 +270,7 @@
         //   var date =  new Date()
         //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
         //   var year = lastdate.getFullYear();
-        //   var month = lastdate.getMonth()+1;   
+        //   var month = lastdate.getMonth()+1; 
         //   var day = lastdate.getDate(); 
         //   this.params.start_date = year + '-' +month + '-' + day
         //   this.params.end_date = year + '-' +month + '-' + day

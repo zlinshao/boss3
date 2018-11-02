@@ -66,20 +66,20 @@
       @click="delConfirm"
       v-if="btnstatus.delete"
       ></el-button>
-    <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel"></addChartToMeter>
-    <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData"></detailChartDialog>
+    <addChartToMeter :addChartMrterDialog="addChartMrterDialog" @close="closeModel" ></addChartToMeter>
+    <detailChartDialog :modules="showDetailChart" @close="closeModule" :detailData="sendDetailData" v-if="!diaStatus"></detailChartDialog>
   </div>
 </template>
 <script>
   import addChartToMeter from "../components/addChartToMeterDia.vue"
-  import detailChartDialog from "../components/detailChartDialog.vue"
+  import detailChartDialog from "./detailChartDialog.vue"
   export default {
     name:"toprightcontrol",
     components: {
       addChartToMeter,
       detailChartDialog
     },
-    props: ['cardData','btnstatus','meterData'],
+    props: ['cardData','btnstatus','meterData',"diaStatus"],
     data() {
       return {
         showSecPop: false,
