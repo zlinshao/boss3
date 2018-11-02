@@ -1419,6 +1419,7 @@
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData() {
+        console.log(1111111)
         this.userCollectLoading = true;
         this.userCollectStatus = ' ';
         if (!this.params.entry_time) {
@@ -1528,9 +1529,9 @@
               dismiss_reason: this.form.dismiss_reason,
             }
           }).then((res) => {
-            if (res.data.code === '10040') {
+            if (res.data.code === '710418') {
               this.prompt('success', res.data.msg);
-              this.getStaffData();
+              this.getPostStaffData();
               this.selectLeaveDateDialog = false;
             } else {
               this.prompt('warning', res.data.msg);
@@ -1555,7 +1556,7 @@
           }).then((res) => {
             if (res.data.code === '710418') {
               this.prompt('success', res.data.msg);
-              this.getStaffData();
+              this.getPostStaffData();
               if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
                 this.sendLeaveMsgForm.date = this.form.dismiss_time;
               }
@@ -1589,7 +1590,7 @@
           this.$http.get(globalConfig.server + 'organization/staff/rehab/' + this.editId + '&level=' + this.levelForm.level).then((res) => {
             if (res.data.code === '710166') {
               this.prompt('success', res.data.msg);
-              this.getStaffData();
+              this.getPostStaffData();
               this.selectLevelDialog = false;
               this.editId = '';
             } else {
