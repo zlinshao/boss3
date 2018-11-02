@@ -100,7 +100,7 @@
           this.$emit('close');
         }
       },
-      'params.type': {
+      'params.duty_id': {
         handler(val, oldVal) {
           this.getPost(val);
         }
@@ -132,7 +132,7 @@
             }
           });
         } else if (this.type === 'post') {
-          this.$http.post(globalConfig.server + 'organization/duty', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/position', this.params).then((res) => {
             if (res.data.code === '20010') {
               this.$emit('close', 'success');
               this.closeModal();
@@ -183,7 +183,7 @@
 
       //获取职位
       getPosition() {
-        this.$http.get(globalConfig.server + 'manager/position/type?org_id=' + this.params.org_id).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/duty?org_id=' + this.params.org_id).then((res) => {
           if (res.data.code === '20010') {
             this.positionData = res.data.data;
           } else {
@@ -194,7 +194,7 @@
       },
       //获取岗位
       getPost(val) {
-        this.$http.get(globalConfig.server + 'manager/positions?type=' + val).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + val).then((res) => {
           if (res.data.code === '20000') {
             this.postData = res.data.data.data;
           } else {
