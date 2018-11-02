@@ -69,15 +69,16 @@ const TransferPosition = () => import  ('../components/HRM/teamManage/transferPo
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
 
 //考勤管理
-const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/index.vue'); //设置排班
-const WatchArrange = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/index.vue'); //查看排班
-const MarkInfo = () => import ('../components/attendanceManage/arrangeSetting/watchArrange/markInfo/index.vue'); //标记信息
+const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //设置排班
+const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
+const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
+const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue'); //编辑班次
 
 // 考勤记录
-const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue')
+const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
 
 // 月度总汇
-const monthlySummary = () => import('../components/attendanceManage/monthlySummary/monthly/index.vue')
+const monthlySummary = () => import('../components/attendanceManage/monthlySummary/monthly/index.vue');
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
@@ -512,7 +513,20 @@ export default new Router({
     //     {path: '/feedback', component: Feedback, name: '意见 反馈',},
     //   ]
     // },
-
+    //write by shuisheng 2018-10-24
+    {
+      path: '/',
+      component: Index,
+      name: '考勤管理',
+      icon: 'el-icon-document',
+      children: [
+        {path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置'},
+        {path: '/punchCard', component: PunchCard, name: '日统计'},
+        {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
+        // {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
+        {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
+      ]
+    },
     {
       path: '/',
       component: Index,
