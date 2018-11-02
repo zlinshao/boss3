@@ -122,7 +122,7 @@
     methods: {
       confirmAdd() {
         if (this.type === 'position') {
-          this.$http.post(globalConfig.server + 'organization/position', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/duty', this.params).then((res) => {
             if (res.data.code === '20010') {
               this.$emit('close', 'success');
               this.prompt('success', res.data.msg);
@@ -132,7 +132,7 @@
             }
           });
         } else if (this.type === 'post') {
-          this.$http.post(globalConfig.server + 'organization/position', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/duty', this.params).then((res) => {
             if (res.data.code === '20010') {
               this.$emit('close', 'success');
               this.closeModal();
