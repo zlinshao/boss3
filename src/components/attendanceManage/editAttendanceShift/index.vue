@@ -140,6 +140,7 @@
 
 <script>
 import RightMenu from "../../common/rightMenu.vue";
+import { clearTimeout, setTimeout } from 'timers';
 export default {
   // name: '编辑班次',
   components: { RightMenu },
@@ -331,9 +332,6 @@ export default {
         });
     },
     editAttendanceSubmit() {
-      console.log(this.$refs.editButton.$el, 11111);
-      // this.$refs.editButton.$el.onclick()
-      // return
       this.$http
         .put(globalConfig.server + "/attendance/classes/" + this.id, this.form)
         .then(res => {
