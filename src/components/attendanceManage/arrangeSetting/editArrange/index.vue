@@ -351,22 +351,25 @@
                 title: "成功",
                 message: res.data.msg
               });
+              // this.resetting();
               this.cencelUpload();
-              this.getArrangeList();
+              this.getArrangeList(this.arrangeParams);
             } else {
+              this.isClear = true;
               this.importTmp = false;
               this.$notify.warning({
                 title: "警告",
                 message: res.data.msg
               });
+              this.resetting();
               this.cencelUpload();
             }
           }
         })
       },
       cencelUpload() {
+        this.importTmp = false;
         this.importShow = false;
-        this.isClear = true;
       },
       // -------------分割线 高级搜索部分----------------
       // 打开组织架构
@@ -797,6 +800,8 @@
       },
       //搜索
       goSearch() {
+        this.arrangeParams.page = 1;
+        this.arrangeParams.limit = 5;
         this.getArrangeList(this.arrangeParams);
         this.getCurrentMonthDays(this.arrangeParams.arrange_month);
         var date = new Date().toLocaleDateString().split("/");
