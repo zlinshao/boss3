@@ -355,6 +355,11 @@
           this.workOrderLoading = false;
           if (res.data.code === "10020") {
             this.workOrderDetail = res.data.data;
+            for(var item in this.workOrderDetail.album.image_pic){
+              if(!this.workOrderDetail.album.image_pic[item].length){
+                delete this.workOrderDetail.album.image_pic[item]
+              }
+            }
           }
         });
       },
