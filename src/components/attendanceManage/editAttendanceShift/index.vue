@@ -332,8 +332,8 @@ export default {
     },
     editAttendanceSubmit() {
       console.log(this.$refs.editButton.$el, 11111);
-      
-      return
+      // this.$refs.editButton.$el.onclick()
+      // return
       this.$http
         .put(globalConfig.server + "/attendance/classes/" + this.id, this.form)
         .then(res => {
