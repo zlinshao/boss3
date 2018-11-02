@@ -18,50 +18,52 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 
 <script>
   import Organization from '../../../common/organization.vue'
+
   export default {
-    props:['editOnlyPositionDialog','onlyPositionId','onlyPositionName'],
-    components:{Organization},
+    props: ['editOnlyPositionDialog', 'onlyPositionId', 'onlyPositionName'],
+    components: {Organization},
     data() {
       return {
-        editOnlyPositionDialogVisible:false,
-        params:{
-          name:'',
+        editOnlyPositionDialogVisible: false,
+        params: {
+          name: '',
         },
-        organizationDialog:false,
+        organizationDialog: false,
       };
     },
-    watch:{
-      editOnlyPositionDialog(val){
+    watch: {
+      editOnlyPositionDialog(val) {
         this.editOnlyPositionDialogVisible = val;
         this.params.name = this.onlyPositionName;
       },
-      editOnlyPositionDialogVisible(val){
-        if(!val){
+      editOnlyPositionDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
         }
       },
-      onlyPositionName(val){
-          this.params.name = val;
+      onlyPositionName(val) {
+        this.params.name = val;
       }
     },
-    methods:{
-      confirmAdd(){
-        this.$http.put(globalConfig.server+'manager/position/'+this.onlyPositionId,this.params).then((res) => {
-          if(res.data.code === '20030'){
-            this.$emit('close','success');
+    methods: {
+      confirmAdd() {
+        this.$http.put(globalConfig.server + 'organization/duty/' + this.onlyPositionId, this.params).then((res) => {
+          if (res.data.code === '20030') {
+            this.$emit('close', 'success');
             this.closeModal();
             this.$notify.success({
               title: '成功',
               message: res.data.msg,
             });
-          }else {
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
@@ -69,29 +71,29 @@
           }
         });
       },
-      selectDepart(){
+      selectDepart() {
         this.organizationDialog = true
       },
       //关闭选人框回调
-      closeOrganization(){
+      closeOrganization() {
         this.organizationDialog = false;
       },
-      selectMember(val){
+      selectMember(val) {
         this.params.org_id = val[0].id;
         this.department = val[0].name;
         this.organizationDialog = false;
       },
-      closeModal(){
+      closeModal() {
         this.editOnlyPositionDialogVisible = false;
         this.params = {
-          name:'',
+          name: '',
         };
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair{
+  #addRentRepair {
   }
 
 </style>

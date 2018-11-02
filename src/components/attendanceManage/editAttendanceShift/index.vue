@@ -126,7 +126,7 @@
           <el-form-item class="btn">
             <el-button @click="cancelAttendance()" size="mini">取 消</el-button>
             <!-- 编辑 -->
-            <el-button type="primary" @click="editAttendanceSubmit()" size="mini" v-if="editShow">确 定</el-button>
+            <el-button type="primary" @click="editAttendanceSubmit()" size="mini" v-if="editShow" ref="editButton">确 定</el-button>
             <!-- 新增 -->
             <el-button type="primary" @click="addAttendanceSubmit()" size="mini" v-if="determineShow">确 定</el-button>
           </el-form-item>
@@ -310,6 +310,7 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
+      
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {
@@ -330,6 +331,9 @@ export default {
         });
     },
     editAttendanceSubmit() {
+      console.log(this.$refs.editButton.$el, 11111);
+      // this.$refs.editButton.$el.onclick()
+      // return
       this.$http
         .put(globalConfig.server + "/attendance/classes/" + this.id, this.form)
         .then(res => {
@@ -400,7 +404,7 @@ export default {
       });
     },
     refresh(page) {
-      this.params.page = page || 1;
+      // this.params.page = page || 1;
       this.$http.get(globalConfig.server + "attendance/classes",{params: this.params}).then(res => {
         if (res.data.code == "20000") {
           this.dataTotal = Number(res.data.data.count);
@@ -425,11 +429,13 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
+      this.tableData = [];
       this.params.limit = val;
       this.refresh(val);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      this.tableData = [];
       this.refresh(val);
     }
   },

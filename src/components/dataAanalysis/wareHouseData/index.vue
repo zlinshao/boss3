@@ -122,6 +122,7 @@
           keyword:'',
           tag_id:''
         },
+        loadFlag:true,
         cardloading: false,//正在加载
         loadingText: "", //加载文字
         selectType:"对比",//所选类型
@@ -149,10 +150,12 @@
             params: params
           }).then((res) => {
             if (res.data.code === "20000") {
+              this.loadFlag = true
               res.data.data.data.forEach((item) => {
                 this.cardCharts.push(item)
               });
             } else {
+              this.loadFlag = false
               this.cardloading = false;
               this.loadingText = "没有数据"
             }
@@ -193,7 +196,7 @@
           let scrollHeight = $(document).height()
           let windowHeight = $(this).height()
 
-          if(scrollTop + windowHeight === scrollHeight){
+          if(scrollTop + windowHeight === scrollHeight && self.loadFlag){
             self.params.page++
             self.getCard(self.params)
           }

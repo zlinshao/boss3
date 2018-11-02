@@ -18,90 +18,83 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 
 <script>
   import Organization from '../../../common/organization.vue'
+
   export default {
-    props:['editPositionDialog','positionId','positionName'],
-    components:{Organization},
+    props: ['editPositionDialog', 'positionId', 'positionName'],
+    components: {Organization},
     data() {
       return {
-        editPositionDialogVisible:false,
-        params:{
-          name:'',
+        editPositionDialogVisible: false,
+        params: {
+          name: '',
         },
-        organizationDialog:false,
+        organizationDialog: false,
       };
     },
-    watch:{
-      editPositionDialog(val){
-        this.editPositionDialogVisible = val
+    watch: {
+      editPositionDialog(val) {
+        this.editPositionDialogVisible = val;
         this.params.name = this.positionName;
       },
-      editPositionDialogVisible(val){
-        if(!val){
-          this.$emit('close')
+      editPositionDialogVisible(val) {
+        if (!val) {
+          this.$emit('close');
         }
       },
-      positionName(val){
-          this.params.name = val;
+      positionName(val) {
+        this.params.name = val;
       }
     },
-    methods:{
-      confirmAdd(){
-        this.$http.put(globalConfig.server+'manager/positions/'+this.positionId,this.params).then((res) => {
-          if(res.data.code === '20030'){
-            this.$emit('close','success');
+    methods: {
+      confirmAdd() {
+        this.$http.put(globalConfig.server + 'organization/position/' + this.positionId, this.params).then((res) => {
+          if (res.data.code === '20030') {
+            this.$emit('close', 'success');
             this.closeModal();
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg,
-            });
-          }else {
-            if(typeof res.data.msg=== 'object'){
-                res.data.msg.name.forEach((item)=>{
-                  this.$notify.warning({
-                    title: '警告',
-                    message: item,
-                  });
-                })
-            }else{
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg,
-              });
+            this.prompt('success', res.data.msg)
+          } else {
+            if (typeof res.data.msg === 'object') {
+              res.data.msg.name.forEach((item) => {
+                this.prompt('warning', item)
+              })
+            } else {
+              this.prompt('warning', item)
             }
           }
         });
       },
-      selectDepart(){
+      selectDepart() {
         this.organizationDialog = true
       },
       //关闭选人框回调
-      closeOrganization(){
+      closeOrganization() {
         this.organizationDialog = false;
       },
-      selectMember(val){
+      selectMember(val) {
         this.params.org_id = val[0].id;
         this.getPosition();
         this.department = val[0].name;
         this.organizationDialog = false;
       },
-      closeModal(){
+      closeModal() {
         this.editPositionDialogVisible = false;
         this.params = {
-          name:'',
+          name: '',
         };
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair{
+  #addRentRepair {
   }
 
 </style>

@@ -4,8 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
-            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="search()" size="mini"
-                      clearable>
+            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="search()" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
@@ -34,8 +33,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.house_type" clearable>
-                      <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id"
-                                 :key="index"></el-option>
+                      <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -50,8 +48,7 @@
                   <el-form-item>
                     <el-form-item>
                       <el-select v-model="form.built_year" clearable>
-                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969"
-                                   :key="index"></el-option>
+                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-form-item>
@@ -68,8 +65,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.province" clearable @change="choose('city',form.province)">
-                      <el-option v-for="(item,index) in provinceList" :label="item.province_name"
-                                 :value="item.province_id" :key="index"></el-option>
+                      <el-option v-for="(item,index) in provinceList" :label="item.province_name" :value="item.province_id" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -83,8 +79,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.city" clearable @change="choose('area',form.city)">
-                      <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
-                                 :key="index"></el-option>
+                      <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -100,8 +95,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.area" clearable @change="choose('region',form.area)">
-                      <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
-                                 :key="index"></el-option>
+                      <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -115,8 +109,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.region" clearable>
-                      <el-option v-for="(item,index) in regionList" :label="item.region_name" :value="item.id"
-                                 :key="index"></el-option>
+                      <el-option v-for="(item,index) in regionList" :label="item.region_name" :value="item.id" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -175,15 +168,18 @@
         label="房屋栋数">
       </el-table-column>
     </el-table>
-
+    <!-- 新布局 -->
+    <!-- <el-row :gutter="20">
+      <el-col :span="8">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="16">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row> -->
+    <!-- 分页 -->
     <div class="block pages">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="myData"
-        :current-page="currentPage"
-        :page-size="12"
-        layout="total, prev, pager, next, jumper"
-        :total="paging">
+      <el-pagination @size-change="handleSizeChange" @current-change="myData" :current-page="currentPage" :page-size="12" layout="total, prev, pager, next, jumper" :total="paging">
       </el-pagination>
     </div>
 
@@ -201,103 +197,103 @@
     </el-dialog>
 
     <!--右键-->
-    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
 
-    <VillageModule :module="addVisible" @close="closeVillage" :formList="formList"
-                   :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
+    <VillageModule :module="addVisible" @close="closeVillage" :formList="formList" :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
 
     <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../../common/rightMenu.vue'    //右键
-  import VillageModule from './villageModule'
-  import VillageSearch from '../../../common/villageSearch'
+import RightMenu from "../../../common/rightMenu.vue"; //右键
+import VillageModule from "./villageModule";
+import VillageSearch from "../../../common/villageSearch";
 
-  export default {
-    name: 'hello',
-    components: {RightMenu, VillageModule,VillageSearch},
-    data() {
-      return {
-        urls: globalConfig.server,
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
+export default {
+  name: "hello",
+  components: { RightMenu, VillageModule, VillageSearch },
+  data() {
+    return {
+      urls: globalConfig.server,
+      rightMenuX: 0,
+      rightMenuY: 0,
+      show: false,
+      lists: [],
 
-        dict: [],
-        pitch: '',
-        formList: {},
-        currentPage: 1,
-        paging: 0,
+      dict: [],
+      pitch: "",
+      formList: {},
+      currentPage: 1,
+      paging: 0,
 
-        isHigh: false,
-        addVisible: false,
-        mergeDialog: false,
-        villageDialog: false,
-        form: {
-          pages: 1,
-          house_type: '',
-          built_year: '',
-          keywords: '',
-          province: '',
-          city: '',
-          area: '',
-          region: '',
-          a : 'list',
-        },
-        tableData: [],
+      isHigh: false,
+      addVisible: false,
+      mergeDialog: false,
+      villageDialog: false,
+      form: {
+        pages: 1,
+        house_type: "",
+        built_year: "",
+        keywords: "",
+        province: "",
+        city: "",
+        area: "",
+        region: "",
+        a: "list"
+      },
+      tableData: [],
 
-        provinceList: [],
-        cityList: [],
-        areaList: [],
-        regionList: [],
+      provinceList: [],
+      cityList: [],
+      areaList: [],
+      regionList: [],
 
-        emptyContent: ' ',
-        villageLoading: false,
-        mergeParams:{id:''},
-        mergeName : '',
-        oldVillageName : '',
-      }
-    },
-    mounted() {
-      this.villageLoading = true;
-      this.emptyContent = ' ';
-      this.$http.get(this.urls + 'setting/others/province').then((res) => {
-        this.provinceList = res.data.data;
-      });
-      this.$http.get(this.urls + 'setting/dictionary/10').then((res) => {
-        this.dict = res.data.data;
-        if (this.$route.query.status === 1) {
-          let term = this.$route.query.term;
-          this.form = term;
-          this.myData(term.pages);
-          if (term.province !== '') {
-            this.chooseList('city', term.province);
-          }
-          if (term.city !== '') {
-            this.chooseList('area', term.city);
-          }
-          if (term.area !== '') {
-            this.chooseList('region', term.area);
-          }
-        } else {
-          this.myData(1);
+      emptyContent: " ",
+      villageLoading: false,
+      mergeParams: { id: "" },
+      mergeName: "",
+      oldVillageName: ""
+    };
+  },
+  mounted() {
+    this.villageLoading = true;
+    this.emptyContent = " ";
+    this.$http.get(this.urls + "setting/others/province").then(res => {
+      this.provinceList = res.data.data;
+    });
+    this.$http.get(this.urls + "setting/dictionary/10").then(res => {
+      this.dict = res.data.data;
+      if (this.$route.query.status === 1) {
+        let term = this.$route.query.term;
+        this.form = term;
+        this.myData(term.pages);
+        if (term.province !== "") {
+          this.chooseList("city", term.province);
         }
-      });
-    },
-    methods: {
-      myData(val) {
-        this.villageLoading = true;
-        this.emptyContent = ' ';
-        this.form.pages = val;
-        this.$http.get(this.urls + 'setting/community/', {
-          params: this.form,
-        }).then((res) => {
+        if (term.city !== "") {
+          this.chooseList("area", term.city);
+        }
+        if (term.area !== "") {
+          this.chooseList("region", term.area);
+        }
+      } else {
+        this.myData(1);
+      }
+    });
+  },
+  methods: {
+    myData(val) {
+      this.villageLoading = true;
+      this.emptyContent = " ";
+      this.form.pages = val;
+      this.$http
+        .get(this.urls + "setting/community/", {
+          params: this.form
+        })
+        .then(res => {
           this.villageLoading = false;
-          if (res.data.code === '10000') {
+          if (res.data.code === "10000") {
             // this.currentPage = val;
             // this.tableData = res.data.data.list;
             let data = res.data.data.list;
@@ -311,226 +307,274 @@
               list.area_name = data[i].area.area_name;
               list.region_name = data[i].region.region_name;
               list.address = data[i].address;
-              list.village_alias = data[i].village_alias?data[i].village_alias: '暂无信息';
-              list.house_types = data[i].house_types?data[i].house_types: '暂无信息';
+              list.village_alias = data[i].village_alias
+                ? data[i].village_alias
+                : "暂无信息";
+              list.house_types = data[i].house_types
+                ? data[i].house_types
+                : "暂无信息";
               list.built_year = data[i].built_year;
-              list.total_buildings = data[i].total_buildings?data[i].total_buildings: '暂无信息';
+              list.total_buildings = data[i].total_buildings
+                ? data[i].total_buildings
+                : "暂无信息";
               this.tableData.push(list);
             }
             this.paging = res.data.data.count;
           } else {
             this.tableData = [];
             this.paging = 0;
-            this.emptyContent = '暂无数据';
+            this.emptyContent = "暂无数据";
           }
-        })
-      },
+        });
+    },
 
-      choose(val, id) {
-        if (val === 'city') {
-          this.form.city = '';
-          this.form.area = '';
-          this.form.region = '';
-          this.chooseList(val, id);
-        }
-        if (val === 'area') {
-          this.form.area = '';
-          this.form.region = '';
-          this.chooseList(val, id);
-        }
-        if (val === 'region') {
-          this.form.region = '';
-          this.chooseList(val, id);
-        }
-      },
+    choose(val, id) {
+      if (val === "city") {
+        this.form.city = "";
+        this.form.area = "";
+        this.form.region = "";
+        this.chooseList(val, id);
+      }
+      if (val === "area") {
+        this.form.area = "";
+        this.form.region = "";
+        this.chooseList(val, id);
+      }
+      if (val === "region") {
+        this.form.region = "";
+        this.chooseList(val, id);
+      }
+    },
 
-      chooseList(val, id) {
-        if (val === 'city') {
-          this.$http.get(this.urls + 'setting/others/city?city_parent=' + id).then((res) => {
-            if (res.data.code === '100050') {
+    chooseList(val, id) {
+      if (val === "city") {
+        this.$http
+          .get(this.urls + "setting/others/city?city_parent=" + id)
+          .then(res => {
+            if (res.data.code === "100050") {
               this.cityList = res.data.data;
             }
-          })
-        }
-        if (val === 'area') {
-          this.$http.get(this.urls + 'setting/others/area?area_parent=' + id).then((res) => {
-            if (res.data.code === '100060') {
+          });
+      }
+      if (val === "area") {
+        this.$http
+          .get(this.urls + "setting/others/area?area_parent=" + id)
+          .then(res => {
+            if (res.data.code === "100060") {
               this.areaList = res.data.data;
             }
-          })
-        }
-        if (val === 'region') {
-          this.$http.get(this.urls + 'setting/others/region?region_parent=' + id).then((res) => {
-            if (res.data.code === '100070') {
+          });
+      }
+      if (val === "region") {
+        this.$http
+          .get(this.urls + "setting/others/region?region_parent=" + id)
+          .then(res => {
+            if (res.data.code === "100070") {
               this.regionList = res.data.data;
             }
-          })
-        }
-      },
-      search() {
-        this.myData(1);
-        this.isHigh = false;
-      },
-      // 重置
-      resetting() {
-        this.form.pages = 1;
-        this.form.house_type = '';
-        this.form.built_year = '';
-        this.form.keywords = '';
-        this.form.province = '';
-        this.form.city = '';
-        this.form.area = '';
-        this.form.region = '';
-        this.isHigh = false;
-        this.myData(1);
-      },
-      // 高级筛选
-      highGrade() {
-        this.isHigh = !this.isHigh;
-      },
+          });
+      }
+    },
+    search() {
+      this.myData(1);
+      this.isHigh = false;
+    },
+    // 重置
+    resetting() {
+      this.form.pages = 1;
+      this.form.house_type = "";
+      this.form.built_year = "";
+      this.form.keywords = "";
+      this.form.province = "";
+      this.form.city = "";
+      this.form.area = "";
+      this.form.region = "";
+      this.isHigh = false;
+      this.myData(1);
+    },
+    // 高级筛选
+    highGrade() {
+      this.isHigh = !this.isHigh;
+    },
 
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      // handleCurrentChange(val) {
-      //   console.log(`当前页: ${val}`);
-      // },
-      openVillage(val) {
-        this.addVisible = true;
-        if (val === '修改小区') {
-          this.$http.get(this.urls + 'setting/community/' + this.pitch).then((res) => {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    // handleCurrentChange(val) {
+    //   console.log(`当前页: ${val}`);
+    // },
+    openVillage(val) {
+      this.addVisible = true;
+      if (val === "修改小区") {
+        this.$http
+          .get(this.urls + "setting/community/" + this.pitch)
+          .then(res => {
             this.formList = res.data.data;
             this.formList.status = val;
           });
-        } else {
-          this.formList.status = val;
-        }
-      },
-      closeVillage() {
-        this.addVisible = false;
-      },
-      // 双击
-      dblMenu(row) {
-        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id}});
-      },
+      } else {
+        this.formList.status = val;
+      }
+    },
+    closeVillage() {
+      this.addVisible = false;
+    },
+    // 双击
+    dblMenu(row) {
+      this.$router.push({
+        path: "/villageManage/villageDetail",
+        query: { ids: row.id }
+      });
+    },
 
-      // 右键
-      houseMenu(row, event) {
-        this.pitch = row.id;
-        this.oldVillageName = row.village_name;
-        this.lists = [
-          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
-          {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
-        ];
-        this.contextMenuParam(event);
-      },
-      // 右键回调
-      clickEvent(val) {
-        if (val === 'delete') {
-          this.openDelete();
-        } else if(val === 'revise') {
-          this.openVillage('修改小区');
-        }else {
-          this.mergeDialog = true;
-        }
-      },
-      //关闭右键菜单
-      closeMenu() {
-        this.show = false;
-      },
-      //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
+    // 右键
+    houseMenu(row, event) {
+      this.pitch = row.id;
+      this.oldVillageName = row.village_name;
+      this.lists = [
+        {
+          clickIndex: "revise",
+          headIcon: "el-icon-edit-outline",
+          label: "编辑"
+        },
+        {
+          clickIndex: "delete",
+          headIcon: "el-icon-circle-close-outline",
+          label: "删除"
+        },
+        { clickIndex: "merge", headIcon: "el-icons-fa-magic", label: "合并" }
+      ];
+      this.contextMenuParam(event);
+    },
+    // 右键回调
+    clickEvent(val) {
+      if (val === "delete") {
+        this.openDelete();
+      } else if (val === "revise") {
+        this.openVillage("修改小区");
+      } else {
+        this.mergeDialog = true;
+      }
+    },
+    //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
+    //右键参数
+    contextMenuParam(event) {
+      let e = event || window.event;
+      this.show = false;
+      this.rightMenuX =
+        e.clientX +
+        document.documentElement.scrollLeft -
+        document.documentElement.clientLeft;
+      this.rightMenuY =
+        e.clientY +
+        document.documentElement.scrollTop -
+        document.documentElement.clientTop;
+      event.preventDefault();
+      event.stopPropagation();
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+
+    // 删除
+    openDelete() {
+      this.$confirm("此操作将删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http
+            .get(this.urls + "setting/community/delete/" + this.pitch)
+            .then(res => {
+              if (res.data.code === "10040") {
+                this.$message({
+                  type: "success",
+                  message: res.data.msg + "!"
+                });
+                this.myData(this.form.pages);
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.data.msg + "!"
+                });
+              }
+            });
         })
-      },
-
-      // 删除
-      openDelete() {
-        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(this.urls + 'setting/community/delete/' + this.pitch).then((res) => {
-            if (res.data.code === '10040') {
-              this.$message({
-                type: 'success',
-                message: res.data.msg + '!'
-              });
-              this.myData(this.form.pages);
-            } else {
-              this.$message({
-                type: 'error',
-                message: res.data.msg + '!'
-              });
-            }
-          });
-
-        }).catch(() => {
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
+            type: "info",
+            message: "已取消删除"
           });
         });
-      },
+    },
 
-      //*************************合并小区**************************
-      getVillage(val){
-        this.villageDialog = false;
-        if(val){
-          this.mergeName = val.village_name;
-          this.mergeParams.id = val.id;
-        }
-      },
-      isConfirmMerge(){
-        let msg = `<div>
-                      此操作将会将<b style="color: #e4393c">${this.oldVillageName}</b>合并到<b style="color: #e4393c">${this.mergeName}</b>,
-                      <b style="color: #e4393c">${this.oldVillageName}</b>下的所有房屋以及合同将会转移到<b style="color: #e4393c">${this.mergeName}</b>下,是否继续?
+    //*************************合并小区**************************
+    getVillage(val) {
+      this.villageDialog = false;
+      if (val) {
+        this.mergeName = val.village_name;
+        this.mergeParams.id = val.id;
+      }
+    },
+    isConfirmMerge() {
+      let msg = `<div>
+                      此操作将会将<b style="color: #e4393c">${
+                        this.oldVillageName
+                      }</b>合并到<b style="color: #e4393c">${
+        this.mergeName
+      }</b>,
+                      <b style="color: #e4393c">${
+                        this.oldVillageName
+                      }</b>下的所有房屋以及合同将会转移到<b style="color: #e4393c">${
+        this.mergeName
+      }</b>下,是否继续?
                   </div>`;
-        this.$confirm( msg, '提示', {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.confirmMerge()
-        }).catch(() => {
+      this.$confirm(msg, "提示", {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.confirmMerge();
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消合并'
+            type: "info",
+            message: "已取消合并"
           });
         });
-      },
-      confirmMerge(){
-        this.$http.put(globalConfig.server+'setting/community/merge/'+this.pitch,this.mergeParams).then(res=>{
-          if(res.data.code === '10000'){
+    },
+    confirmMerge() {
+      this.$http
+        .put(
+          globalConfig.server + "setting/community/merge/" + this.pitch,
+          this.mergeParams
+        )
+        .then(res => {
+          if (res.data.code === "10000") {
             this.$notify.success({
-              title:'成功',
-              message : res.data.msg,
+              title: "成功",
+              message: res.data.msg
             });
             this.mergeDialog = false;
             this.myData(1);
-          }else {
+          } else {
             this.$notify.warning({
-              title:'警告',
-              message : res.data.msg,
-            })
+              title: "警告",
+              message: res.data.msg
+            });
           }
-        })
-      },
+        });
     }
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-
 </style>

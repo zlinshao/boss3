@@ -82,7 +82,7 @@
         form: {
           radio: 1,
           ids: '',
-          sys_id: '',            //所属系统
+          system_id: '',            //所属系统
           mod_id: '',            //所属模块
           name: '',
           display_name: '',
@@ -179,7 +179,7 @@
           })
         } else {
           this.$http.post(this.urls + 'organization/module', {
-            sys_id: this.addID.firstID,
+            system_id: this.addID.firstID,
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
@@ -214,7 +214,7 @@
         } else {
           this.$http.post(this.urls + 'organization/permission', {
             type: this.form.radio,
-            sys_id: this.addID.firstID,
+            system_id: this.addID.firstID,
             mod_id: this.addID.secondID,
             name: this.form.name,
             display_name: this.form.display_name,
@@ -239,7 +239,7 @@
       close_() {
         this.form.radio = 1;
         this.form.ids = '';
-        this.form.sys_id = '';
+        this.form.system_id = '';
         this.form.mod_id = '';
         this.form.sys_name = '';
         this.form.name = '';
