@@ -300,7 +300,7 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths" :depart="9"
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
   </div>
 </template>
@@ -547,6 +547,9 @@
             this.params.real_name = res.data.data.name;
             let val = res.data.data;
             this.params.duty_id = [];
+            this.params.position_id = [];
+            this.duty = [];
+            this.position = [];
             if (val.duties) {// 职务
               for (let item of val.duties) {
                 this.params.duty_id.push(item.id);
