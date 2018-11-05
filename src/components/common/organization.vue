@@ -36,11 +36,17 @@
                 </div>
               </li>
             </ul>
+            <ul v-if="staffListStatus">
+              <li class="notAvailable ">暂无相关数据</li>
+            </ul>
           </div>
         </div>
         <!--筛选-->
         <div class="filterOrgan">
-          <div class="filterTop" @click="filterOrgan(1)">
+          <div class="filterTop noBtn" v-if="depart > 1">
+            南京乐伽商业管理有限公司
+          </div>
+          <div class="filterTop" @click="filterOrgan(depart)" v-else>
             南京乐伽商业管理有限公司
           </div>
           <div class="pitchOnData" v-show="pitchOnData.length > 0">
@@ -95,7 +101,7 @@
 <script>
   export default {
     name: "organization",
-    props: ['organizationDialog', 'length', 'type'],
+    props: ['organizationDialog', 'length', 'type', 'depart'],
     data() {
       return {
         organizationVisible: false,
@@ -112,8 +118,10 @@
           limit: 20,
           page: 1,
           keywords: '',
+          org_id: this.depart,
         },
         staffList: [],          //员工列表
+        staffListStatus: false, //员工列表 状态
         parent_id: '',          //当前层级 id
         pitchOnData: [],        //面包屑
         checkDepart: [],        //复选框 部门
@@ -136,7 +144,7 @@
           this.$emit('close');
           this.close_();
         } else {
-          this.filterOrgan(1);
+          this.filterOrgan(this.depart);
           this.$nextTick(() => {
             this.leftHeight();
             this.rightHeight();
@@ -153,6 +161,11 @@
       },
       type(val) {
         this.organType = val;
+      },
+      'params.keywords'(val) {
+        if (!val) {
+          this.closeStaff();
+        }
       }
     },
     computed: {},
@@ -160,7 +173,7 @@
       // 搜索/员工
       searchStaff() {
         if (this.params.keywords === '') {
-          this.staffList = [];
+          this.closeStaff();
           return;
         }
         this.$http.get(this.url + 'organization/other/staff-list', {
@@ -170,13 +183,18 @@
             this.staffList = res.data.data.data;
           } else {
             this.staffList = [];
+            this.staffListStatus = true;
           }
         })
       },
+      closeStaff() {
+        this.staffList = [];
+        this.staffListStatus = false;
+      },
       // 部门/员工
-      filterOrgan(id) {
-        this.fullLoading = true;
+      filterOrgan(id = 1) {
         if (this.parent_id === id) return;
+        this.fullLoading = true;
         this.list = [];
         this.pitchOnData = id === 1 ? [] : this.pitchOnData;
         this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
@@ -367,6 +385,12 @@
           overflow-y: auto;
         }
       }
+      .notAvailable {
+        text-align: center;
+        padding: 18px;
+        color: #aaa;
+        font-size: 14px;
+      }
       /*右*/
       .filterOrgan {
         width: 300px;
@@ -375,9 +399,10 @@
           padding: 10px 0;
           cursor: pointer;
           @include box_shadow(#eee, 10px);
-          &:hover {
-            color: $themeColor;
-          }
+          color: $themeColor;
+        }
+        .noBtn {
+          color: #aaa;
         }
         .pitchOnData {
           background-color: #f5f5f5;

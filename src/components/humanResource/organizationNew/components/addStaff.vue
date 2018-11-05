@@ -300,8 +300,8 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths" @close="closeOrgan"
-                  @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths" :depart="9"
+                  @close="closeOrgan" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -703,8 +703,8 @@
           closeOnClickModal: false,
           type: 'warning',
         }).then(() => {
-          this.$http.get(this.url + 'manager/staff/forward?id=' + this.editId).then((res) => {
-            if (res.data.code === '10000') {
+          this.$http.get(this.url + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
+            if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
               this.detailData.send_info = 2;
             } else {

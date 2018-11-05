@@ -105,12 +105,12 @@
       }
     },
     mounted() {
-      this.roleArray = this.powerData.roles;
+      this.roleArray = this.powerData.positions;
       this.userId = this.powerData.user_id;
-      this.currentRoleId = this.powerData.roles && this.powerData.roles[0] && this.powerData.roles[0].id;
+      this.currentRoleId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
     },
     activated() {
-      this.roleArray = this.powerData.roles;
+      this.roleArray = this.powerData.positions;
       this.userId = this.powerData.user_id;
     },
     watch: {
@@ -126,7 +126,7 @@
         }
       },
       powerData(val) {
-        this.roleArray = val.roles;
+        this.roleArray = val.positions;
         this.userId = val.id;
         setTimeout(() => {
           if (this.userId) {
@@ -134,7 +134,7 @@
             this.getStaffPart();
           }
         }, 0);
-        this.currentRoleId = this.powerData.roles && this.powerData.roles[0] && this.powerData.roles[0].id;
+        this.currentRoleId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
       }
     },
     methods: {
