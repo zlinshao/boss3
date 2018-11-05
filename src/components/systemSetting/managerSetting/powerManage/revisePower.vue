@@ -152,7 +152,7 @@
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.code === '20030') {
+            if (res.data.code === '20010') {
               this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
             } else {
@@ -184,7 +184,7 @@
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.code === '20030') {
+            if (res.data.code === '20010') {
               this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
             } else {
@@ -220,7 +220,7 @@
             display_name: this.form.display_name,
             description: this.form.content,
           }).then((res) => {
-            if (res.data.code === '20030') {
+            if (res.data.code === '20010') {
               this.prompt(res.data.msg, 1);
               this.$emit('sure', this.names);
               if (this.checked) {

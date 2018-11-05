@@ -100,9 +100,11 @@
           this.$emit('close');
         }
       },
-      'params.type': {
+      'params.duty_id': {
         handler(val, oldVal) {
-          this.getPost(val);
+          if (this.type === 'post') {
+            this.getPost();
+          }
         }
       },
       type(val) {
@@ -122,7 +124,7 @@
     methods: {
       confirmAdd() {
         if (this.type === 'position') {
-          this.$http.post(globalConfig.server + 'organization/position', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/duty', this.params).then((res) => {
             if (res.data.code === '20010') {
               this.$emit('close', 'success');
               this.prompt('success', res.data.msg);
@@ -180,10 +182,9 @@
         this.department = val[0].name;
         this.organizationDialog = false;
       },
-
       //获取职位
       getPosition() {
-        this.$http.get(globalConfig.server + 'manager/position/type?org_id=' + this.params.org_id).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/duty?org_id=' + this.params.org_id).then((res) => {
           if (res.data.code === '20010') {
             this.positionData = res.data.data;
           } else {
@@ -193,22 +194,23 @@
         })
       },
       //获取岗位
-      getPost(val) {
-        this.$http.get(globalConfig.server + 'manager/positions?type=' + val).then((res) => {
+      getPost() {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + this.params.duty_id).then((res) => {
           if (res.data.code === '20000') {
             this.postData = res.data.data.data;
           } else {
             this.prompt('warning', res.data.msg);
             this.postData = [];
           }
-        })
+        });
       },
       closeModal() {
         this.addPositionDialogVisible = false;
         this.params = {
-          org_id: '',
-          name: '',
-          type: '',
+          org_id: '',         //部门id
+          name: '',           //名字
+          duty_id: '',        //所属职位
+          parent_id: '',      //上级岗位id
           display_name: '',
           description: ''
         };

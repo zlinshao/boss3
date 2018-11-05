@@ -223,6 +223,9 @@ const OfficeManage = () => import ('../components/officeManage/index');
 // B端管理
 const UntiePhone = () => import ('../components/B-manage/untiePhone/index');
 
+//业绩详情
+const DetailAcievement = () => import('../components/meritPay/achievement/achievementDetails/index');
+
 Vue.use(Router);
 
 export default new Router({
@@ -369,6 +372,9 @@ export default new Router({
 
         {path: '/pendingSettle', component: PendingSettle, name: "结算"},
         {path: '/leaveOffice', component: LeaveOffice, name: '离职短信'},
+        //业绩详情
+        {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
+        },
       ]
     },
     //快捷入口
