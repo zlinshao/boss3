@@ -102,7 +102,9 @@
       },
       'params.duty_id': {
         handler(val, oldVal) {
-          this.getPost(val);
+          if (this.type === 'post') {
+            this.getPost();
+          }
         }
       },
       type(val) {
@@ -180,7 +182,6 @@
         this.department = val[0].name;
         this.organizationDialog = false;
       },
-
       //获取职位
       getPosition() {
         this.$http.get(globalConfig.server + 'organization/duty?org_id=' + this.params.org_id).then((res) => {
@@ -193,15 +194,15 @@
         })
       },
       //获取岗位
-      getPost(val) {
-        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + val).then((res) => {
+      getPost() {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + this.params.duty_id).then((res) => {
           if (res.data.code === '20000') {
             this.postData = res.data.data.data;
           } else {
             this.prompt('warning', res.data.msg);
             this.postData = [];
           }
-        })
+        });
       },
       closeModal() {
         this.addPositionDialogVisible = false;

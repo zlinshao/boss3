@@ -1890,6 +1890,7 @@
             position_id: this.onlyPositionId, position_name: this.onlyPositionName
           })
         }
+        console.log(this.addPositionParams)
       },
       closeAddPosition(val) {
         this.addPositionDialog = false;
