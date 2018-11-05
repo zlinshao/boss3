@@ -92,7 +92,7 @@
         </div>
       </div>
       <div slot="footer">
-        <el-button type="primary" size="small" :disabled="form.length < 1" @click="confirmSelect">确 定</el-button>
+        <el-button type="primary" size="small" :disabled="form.length < 1" @click="confirmSelect">确 定{{ids}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -101,7 +101,7 @@
 <script>
   export default {
     name: "organization",
-    props: ['organizationDialog', 'length', 'type', 'depart'],
+    props: ['organizationDialog', 'length', 'type', 'depart', 'ids'],
     data() {
       return {
         organizationVisible: false,
@@ -166,6 +166,10 @@
         if (!val) {
           this.closeStaff();
         }
+      },
+      ids(val) {
+        console.log(val);
+        this.checkDepart = val;
       }
     },
     computed: {},
@@ -253,6 +257,8 @@
       },
       // 部门 / 员工
       chooseType(item, data, type = 'staff') {
+        console.log(item);
+        console.log(data);
         this.params.keywords = '';
         if (type !== this.organType) {
           if (this.organType === 'staff') {

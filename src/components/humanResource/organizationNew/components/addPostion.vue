@@ -207,9 +207,10 @@
       closeModal() {
         this.addPositionDialogVisible = false;
         this.params = {
-          org_id: '',
-          name: '',
-          type: '',
+          org_id: '',         //部门id
+          name: '',           //名字
+          duty_id: '',        //所属职位
+          parent_id: '',      //上级岗位id
           display_name: '',
           description: ''
         };
