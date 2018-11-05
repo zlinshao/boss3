@@ -151,7 +151,7 @@
               <el-col :span="24">
                 <el-form-item label="截图">
                   <div>
-                    <img v-if="repairDetail.album" v-for="item in repairDetail.album" :src="item.uri"></img>
+                    <img v-if="repairDetail.album" v-for="item in repairDetail.album" :data-src="item.uri" :src="item.uri" data-magnify=""></img>
                   </div>
                 </el-form-item>
               </el-col>
