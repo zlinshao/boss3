@@ -300,8 +300,8 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths" @close="closeOrgan"
-                  @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
+                  @close="closeOrgan" @selectMember="selectMember" :ids="params.department_id"></Organization>
   </div>
 </template>
 
@@ -546,6 +546,10 @@
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
             let val = res.data.data;
+            this.params.duty_id = [];
+            this.params.position_id = [];
+            this.duty = [];
+            this.position = [];
             if (val.duties) {// 职务
               for (let item of val.duties) {
                 this.params.duty_id.push(item.id);
@@ -557,7 +561,6 @@
                 this.params.position_id.push(item.id);
               }
             }
-            console.log(this.params.position_id);
             let detail = res.data.data.detail;
             if (detail) {
               if (detail.entry_way && detail.entry_way !== 'null' && detail.entry_way.entry_type) {
@@ -659,7 +662,7 @@
       },
       //获取职位
       getPosition(id) {
-        this.$http.get(this.url + 'manager/position?department_id=' + id).then((res) => {
+        this.$http.get(this.url + 'organization/duty?org_id=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let position = {};
@@ -676,7 +679,7 @@
       //获取岗位
       getPositions(id) {
         this.postArrayIds = [];
-        this.$http.get(this.url + 'manager/positions?type=' + id).then((res) => {
+        this.$http.get(this.url + 'organization/position?duty_id=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let data = {};
@@ -703,8 +706,8 @@
           closeOnClickModal: false,
           type: 'warning',
         }).then(() => {
-          this.$http.get(this.url + 'manager/staff/forward?id=' + this.editId).then((res) => {
-            if (res.data.code === '10000') {
+          this.$http.get(this.url + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
+            if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
               this.detailData.send_info = 2;
             } else {

@@ -122,7 +122,7 @@ export default {
         { name: "姓名", prop: "name", state: false, disabled: true },
         { name: "职位", prop: "roles", state: false, disabled: true },
         { name: "部门", prop: "org", state: false, disabled: true },
-        { name: "请假", prop: "vacate", state: true, disabled: true },
+        { name: "请假", prop: "vacate", state: false },
         { name: "应出勤总天数", prop: "should_attendance_day", state: false },
         { name: "实出勤总天数", prop: "real_attendance_day", state: false },
         { name: "休息天数", prop: "rest_attendance_day", state: false },
@@ -143,7 +143,7 @@ export default {
         { name: "姓名", prop: "name", state: true },
         { name: "部门", prop: "org", state: true },
         { name: "职位", prop: "roles", state: true },
-        { name: "请假", prop: "vacate", state: true },
+        // { name: "请假", prop: "vacate", state: true },
       ],
       // 请假二级菜单
       secondaryMenu: [
@@ -177,14 +177,16 @@ export default {
     document.onkeydown = e => {
       let key = window.event.keyCode;
       if(key == 13) {
+         _this.params.page = 1;
+        _this.params.limit = 5;
         _this.refresh();
       }
     }
-    // table
-    console.log(this.$refs.$el, '11111');
   },
   methods: {
     searchRecord() {
+      this.params.page = 1;
+      this.params.limit = 5;
       this.refresh();
     },
     getCurrentDate() {
@@ -216,23 +218,15 @@ export default {
     collapseClick() {
       return (this.collapse = this.collapse == "收起" ? "展示" : "收起");
     },
-    // querySearch(queryString, cb) {
-    //   var restaurants = this.restaurants;
-    //   var results = queryString
-    //     ? restaurants.filter(this.createFilter(queryString))
-    //     : restaurants;
-    //   // 调用 callback 返回建议列表的数据
-    //   cb(results);
-    // },
     selecked(val, index) {
       val.state = !val.state;
       if (val.state) {
         // if(val.name == "请假") {
         //   this.seleckedList.push(val);
         // } else {
-        //   this.seleckedList.splice(3, 0,val);
+          //   this.seleckedList.splice(3, 0, val)
         // }
-        this.seleckedList.push(val);
+          this.seleckedList.push(val);
       } else {
         this.seleckedList.forEach(item => {
           if (!item.state) {
@@ -241,9 +235,11 @@ export default {
           }
         });
       }
+      this.$refs.crayTable.updateScrollY();
+      // this.$refs.crayTable.doLayout();
+      // this.$refs.crayTable.resizeListener();
     },
     handleSizeChange(val) {
-      console.log(val, "11111");
       this.params.limit = val;
       this.refresh(this.params.limit);
       console.log(`每页 ${val} 条`);
@@ -335,7 +331,6 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
-      //  this.params.page = page || 1;
       this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
         if (res.data.code == "20000") {
           this.tableData = res.data.data.data;

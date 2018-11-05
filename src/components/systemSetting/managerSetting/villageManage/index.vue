@@ -1,7 +1,11 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
+  <div @click="show=false" @contextmenu="closeMenu" id="community">
     <div class="highRanking">
       <div class="highSearch">
+        <!-- <div class="managementBtn">
+          <el-button type="primary" size="mini" @click="selectionBox">管理</el-button>
+          <el-button type="primary" size="mini" :disabled="btnDisable" @click="distribution = true">分配</el-button>
+        </div> -->
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
             <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="search()" size="mini" clearable>
@@ -126,7 +130,7 @@
       </div>
     </div>
 
-    <el-table
+     <el-table
       :data="tableData"
       :empty-text='emptyContent'
       v-loading="villageLoading"
@@ -167,14 +171,44 @@
         prop="total_buildings"
         label="房屋栋数">
       </el-table-column>
-    </el-table>
+    </el-table> 
     <!-- 新布局 -->
     <!-- <el-row :gutter="20">
-      <el-col :span="8">
-        <div class="grid-content bg-purple"></div>
+      <el-col :span="6">
+        <div class="grid-content bg-purple">
+          <el-table class="city">
+            <el-table-column label="城市"></el-table-column>
+          </el-table>
+          <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        </div>
       </el-col>
-      <el-col :span="16">
-        <div class="grid-content bg-purple"></div>
+      <el-col :span="18">
+        <div class="grid-content bg-purple">
+          <el-table :data="tableData" :empty-text='emptyContent' v-loading="villageLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0)" style="width: 100%;" @row-contextmenu='houseMenu' @row-dblclick='dblMenu' @selection-change="handleSelectionChange">
+            <transition name="fade">
+              <el-table-column type="selection" width="55" v-show="selectionShow">
+              </el-table-column>
+            </transition>
+            <el-table-column prop="village_name" label="小区名称">
+            </el-table-column>
+            <el-table-column prop="address" label="地址">
+            </el-table-column>
+            <el-table-column label="地域">
+              <template slot-scope="scope">
+                {{scope.row.province_name}}&nbsp;-&nbsp;{{scope.row.city_name}}
+                &nbsp;-&nbsp;{{scope.row.area_name}}&nbsp;-&nbsp;{{scope.row.region_name}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="village_alias" label="产权地址">
+            </el-table-column>
+            <el-table-column prop="house_types" label="房屋类型">
+            </el-table-column>
+            <el-table-column prop="built_year" label="建造年限">
+            </el-table-column>
+            <el-table-column prop="total_buildings" label="房屋栋数">
+            </el-table-column>
+          </el-table>
+        </div>
       </el-col>
     </el-row> -->
     <!-- 分页 -->
@@ -182,6 +216,20 @@
       <el-pagination @size-change="handleSizeChange" @current-change="myData" :current-page="currentPage" :page-size="12" layout="total, prev, pager, next, jumper" :total="paging">
       </el-pagination>
     </div>
+
+    <!-- 分配 -->
+    <!-- <el-dialog title="分配到" :visible.sync="distribution" width="30%" :before-close="distributionClose">
+      <el-collapse v-model="activeNames" @change="subordinate">
+        <el-collapse-item title="南京市（220）" name="1">
+          <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+          <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+      </el-collapse-item>
+      </el-collapse>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="distribution = false">取 消</el-button>
+        <el-button type="primary" @click="distribution = false">确 定</el-button>
+      </span>
+    </el-dialog> -->
 
     <!--模态框-->
     <el-dialog title="合并小区" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
@@ -209,12 +257,79 @@
 import RightMenu from "../../../common/rightMenu.vue"; //右键
 import VillageModule from "./villageModule";
 import VillageSearch from "../../../common/villageSearch";
+import { setTimeout, clearTimeout } from "timers";
 
 export default {
   name: "hello",
   components: { RightMenu, VillageModule, VillageSearch },
   data() {
     return {
+      data: [
+        {
+          label: "一级 1",
+          children: [
+            {
+              label: "二级 1-1",
+              children: [
+                {
+                  label: "三级 1-1-1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          label: "一级 2",
+          children: [
+            {
+              label: "二级 2-1",
+              children: [
+                {
+                  label: "三级 2-1-1"
+                }
+              ]
+            },
+            {
+              label: "二级 2-2",
+              children: [
+                {
+                  label: "三级 2-2-1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          label: "一级 3",
+          children: [
+            {
+              label: "二级 3-1",
+              children: [
+                {
+                  label: "三级 3-1-1"
+                }
+              ]
+            },
+            {
+              label: "二级 3-2",
+              children: [
+                {
+                  label: "三级 3-2-1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
+      selectionShow: false, // 多选框
+      multipleSelection: [], //计数多选框
+      btnDisable: true, // 分配按钮
+      activeNames: ['1'],  // 折叠面板
+      distribution: false,  //折叠面板
       urls: globalConfig.server,
       rightMenuX: 0,
       rightMenuY: 0,
@@ -283,6 +398,36 @@ export default {
     });
   },
   methods: {
+    selectionBox() {
+      clearTimeout(timer);
+      var timer = setTimeout(() => {
+        this.selectionShow = !this.selectionShow;
+      }, 500);
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      if (!this.multipleSelection.length) {
+        this.btnDisable = true;
+      } else {
+        this.btnDisable = false;
+      }
+    },
+    handleNodeClick(data) {
+      console.log(data);
+    },
+    subordinate(val) {
+        console.log(val);
+    },
+    distributionShow() {
+      this.distribution = true;
+    },
+    distributionClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+    },
     myData(val) {
       this.villageLoading = true;
       this.emptyContent = " ";
@@ -577,4 +722,27 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+#community {
+  .city {
+    .el-table__body-wrapper {
+      display: none;
+    }
+  }
+  .highSearch {
+    position: relative;
+    .managementBtn {
+      position: absolute;
+      top: 0;
+      left: 27%;
+    }
+  }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.8s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
