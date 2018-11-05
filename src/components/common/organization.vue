@@ -92,7 +92,7 @@
         </div>
       </div>
       <div slot="footer">
-        <el-button type="primary" size="small" :disabled="form.length < 1" @click="confirmSelect">确 定{{ids}}</el-button>
+        <el-button type="primary" size="small" :disabled="form.length < 1" @click="confirmSelect">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -101,18 +101,18 @@
 <script>
   export default {
     name: "organization",
-    props: ['organizationDialog', 'length', 'type', 'depart', 'ids'],
+    props: ['organizationDialog', 'length', 'type', 'depart'],
     data() {
       return {
         organizationVisible: false,
         fullLoading: false,
         url: globalConfig.server,
-        list: [],               //所有数据
+        list: [],                 // 所有数据
         leftUl: {
-          height: '',           //左侧 列表高度
+          height: '',             // 左侧 列表高度
         },
         rightUl: {
-          height: '',           //右侧 列表高度
+          height: '',             // 右侧 列表高度
         },
         params: {
           limit: 20,
@@ -120,12 +120,12 @@
           keywords: '',
           org_id: this.depart,
         },
-        staffList: [],          //员工列表
-        staffListStatus: false, //员工列表 状态
-        parent_id: '',          //当前层级 id
-        pitchOnData: [],        //面包屑
-        checkDepart: [],        //复选框 部门
-        checkData: [],          //选中员工
+        staffList: [],            // 员工列表
+        staffListStatus: false,   // 员工列表 状态
+        parent_id: '',            // 当前层级 id
+        pitchOnData: [],          // 面包屑
+        checkDepart: [],          // 复选框 部门
+        checkData: [],            // 选中员工
         form: [],
         lengths: '',
         organType: '',
@@ -167,10 +167,6 @@
           this.closeStaff();
         }
       },
-      ids(val) {
-        console.log(val);
-        this.checkDepart = val;
-      }
     },
     computed: {},
     methods: {
