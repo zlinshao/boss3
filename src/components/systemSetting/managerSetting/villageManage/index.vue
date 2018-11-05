@@ -2,10 +2,12 @@
   <div @click="show=false" @contextmenu="closeMenu" id="community">
     <div class="highRanking">
       <div class="highSearch">
-        <!-- <div class="managementBtn">
-          <el-button type="primary" size="mini" @click="selectionBox">管理</el-button>
-          <el-button type="primary" size="mini" :disabled="btnDisable" @click="distribution = true">分配</el-button>
-        </div> -->
+        <div class="managementBtn">
+          <el-button type="primary" size="mini" :disabled="btnDisable" @click="openOrganizeModal">分配</el-button>
+          <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
+          <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
+          <el-button type="primary" size="mini" :disabled="btnDisable" @click="mergeBtn" >合并</el-button>
+        </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
             <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="search()" size="mini" clearable>
@@ -60,7 +62,7 @@
               </el-row>
             </el-col>
           </el-row>
-          <el-row class="el_row_border">
+          <!-- <el-row class="el_row_border">
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
@@ -119,7 +121,7 @@
                 </el-col>
               </el-row>
             </el-col>
-          </el-row>
+          </el-row> -->
           <div class="btnOperate">
 
             <el-button size="mini" type="primary" @click="search()">搜索</el-button>
@@ -130,7 +132,7 @@
       </div>
     </div>
 
-     <el-table
+    <!-- <el-table
       :data="tableData"
       :empty-text='emptyContent'
       v-loading="villageLoading"
@@ -171,22 +173,40 @@
         prop="total_buildings"
         label="房屋栋数">
       </el-table-column>
-    </el-table> 
+    </el-table> -->
     <!-- 新布局 -->
-    <!-- <el-row :gutter="20">
+    <el-row :gutter="20">
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-table class="city">
-            <el-table-column label="城市"></el-table-column>
+          <el-table :data="cityDate" style="width: 100%" class="urban-division">
+            <el-table-column prop="province" label="省">
+              <template slot-scope="scope">
+                <div v-for="(province, index) in newProvinceList" :key="index" @click="newChooseCity(province.province_id)">{{province.province_name}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="city" label="城市">
+              <template slot-scope="scope">
+                <div v-for="(city, index) in newCityList" :key="index" @click="newChooseCountry(city.city_id)">{{city.city_name}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="country" label="区/县">
+              <template slot-scope="scope">
+                <div v-for="(country, index) in newCountryList" :key="index"  @click="newAreaChoose(country.area_id)">{{country.area_name}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="area" label="区域">
+              <template slot-scope="scope">
+                <div v-for="(region, index) in newAreaList" :key="index" @click="newSreach(region.id)">{{region.region_name}}</div>
+              </template>
+            </el-table-column>
           </el-table>
-          <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
         </div>
       </el-col>
       <el-col :span="18">
         <div class="grid-content bg-purple">
           <el-table :data="tableData" :empty-text='emptyContent' v-loading="villageLoading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0)" style="width: 100%;" @row-contextmenu='houseMenu' @row-dblclick='dblMenu' @selection-change="handleSelectionChange">
             <transition name="fade">
-              <el-table-column type="selection" width="55" v-show="selectionShow">
+              <el-table-column type="selection" width="55">
               </el-table-column>
             </transition>
             <el-table-column prop="village_name" label="小区名称">
@@ -207,10 +227,11 @@
             </el-table-column>
             <el-table-column prop="total_buildings" label="房屋栋数">
             </el-table-column>
+            <el-table-column prop="" label="所属部门"></el-table-column>
           </el-table>
         </div>
       </el-col>
-    </el-row> -->
+    </el-row>
     <!-- 分页 -->
     <div class="block pages">
       <el-pagination @size-change="handleSizeChange" @current-change="myData" :current-page="currentPage" :page-size="12" layout="total, prev, pager, next, jumper" :total="paging">
@@ -219,15 +240,14 @@
 
     <!-- 分配 -->
     <!-- <el-dialog title="分配到" :visible.sync="distribution" width="30%" :before-close="distributionClose">
-      <el-collapse v-model="activeNames" @change="subordinate">
-        <el-collapse-item title="南京市（220）" name="1">
-          <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-          <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-      </el-collapse-item>
-      </el-collapse>
+      <el-checkbox-group v-model="checkList">
+        <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
+        <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
+      </el-input>
+      </el-checkbox-group>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="distribution = false">取 消</el-button>
-        <el-button type="primary" @click="distribution = false">确 定</el-button>
+        <el-button @click="distribution = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="distribution = false" size="mini">确 定</el-button>
       </span>
     </el-dialog> -->
 
@@ -245,11 +265,14 @@
     </el-dialog>
 
     <!--右键-->
-    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
+    <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>-->
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList" :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
 
-    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
+    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch> 
+
+     <!-- 组织架构 -->
+        <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></organization>
   </div>
 </template>
 
@@ -258,78 +281,35 @@ import RightMenu from "../../../common/rightMenu.vue"; //右键
 import VillageModule from "./villageModule";
 import VillageSearch from "../../../common/villageSearch";
 import { setTimeout, clearTimeout } from "timers";
+import organization from "../../../common/organization"; //组织架构 
 
 export default {
   name: "hello",
-  components: { RightMenu, VillageModule, VillageSearch },
+  components: { RightMenu, VillageModule, VillageSearch, organization },
   data() {
     return {
-      data: [
-        {
-          label: "一级 1",
-          children: [
-            {
-              label: "二级 1-1",
-              children: [
-                {
-                  label: "三级 1-1-1"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: "一级 2",
-          children: [
-            {
-              label: "二级 2-1",
-              children: [
-                {
-                  label: "三级 2-1-1"
-                }
-              ]
-            },
-            {
-              label: "二级 2-2",
-              children: [
-                {
-                  label: "三级 2-2-1"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: "一级 3",
-          children: [
-            {
-              label: "二级 3-1",
-              children: [
-                {
-                  label: "三级 3-1-1"
-                }
-              ]
-            },
-            {
-              label: "二级 3-2",
-              children: [
-                {
-                  label: "三级 3-2-1"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
-      selectionShow: false, // 多选框
+      distribution: false, // 分配框
       multipleSelection: [], //计数多选框
       btnDisable: true, // 分配按钮
-      activeNames: ['1'],  // 折叠面板
-      distribution: false,  //折叠面板
+      deletedBtn: true, // 删除按钮
+      checkList: [],
+      cityDate: [
+       { 
+          city: [],
+          country: []
+       }
+      ],
+      newProvinceList: [], // 省
+      newCityList: [], // 市
+      newCountryList: [], // 县区
+      newAreaList: [], // 区域
+      deletedId: "", // 删除ID
+      organizationDialog: false,  // 组织架构
+      length: 0,
+      type: "",
+      organizeVisible: false, // 组织架构
+      follow_name: "",
+      follow_id: "",
       urls: globalConfig.server,
       rightMenuX: 0,
       rightMenuY: 0,
@@ -398,35 +378,33 @@ export default {
     });
   },
   methods: {
-    selectionBox() {
-      clearTimeout(timer);
-      var timer = setTimeout(() => {
-        this.selectionShow = !this.selectionShow;
-      }, 500);
-    },
     handleSelectionChange(val) {
+    //  只支持删除一个
       this.multipleSelection = val;
+      this.pitch = val[0].id
+      if(val.length == 1) {
+        this.deletedBtn = false;
+      } else {
+        this.deletedBtn = true;
+      }
       if (!this.multipleSelection.length) {
         this.btnDisable = true;
       } else {
         this.btnDisable = false;
       }
     },
-    handleNodeClick(data) {
-      console.log(data);
-    },
     subordinate(val) {
-        console.log(val);
+      console.log(val);
     },
     distributionShow() {
       this.distribution = true;
     },
     distributionClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     },
     myData(val) {
       this.villageLoading = true;
@@ -472,7 +450,89 @@ export default {
           }
         });
     },
-
+    // 新的省搜索
+    newChooseProvince() {
+      this.$http.get(this.urls + "setting/others/province").then(res => {
+        if(res.data.code == "100040") {
+          this.newProvinceList = res.data.data;
+        }
+      })
+    },
+    // 新的市搜索
+    newChooseCity(id) {
+      this.form.province = id;
+      this.newCountryList = [];
+      this.newAreaList = [];
+      let province_id = id || "320000";
+      this.$http.get(this.urls + "setting/others/city?city_parent=" + province_id).then(res => {
+        if(res.data.code == "100050") {
+          this.newCityList = res.data.data;
+        }
+      })
+    },
+    // 新的区县搜索
+    newChooseCountry(id) {
+      this.form.city = id;
+      this.newCountryList = [];
+      this.newAreaList = [];
+      let city_id = id || "320100";
+      this.$http.get(this.urls + "setting/others/area?area_parent=" + city_id).then(res => {
+        if(res.data.code == "100060") {
+          this.newCountryList = res.data.data;
+        }
+      })
+    },
+    //  新的区域搜索
+    newAreaChoose(id) {
+      this.form.area = id;
+      let area_id = id || "320102";
+      this.$http.get(this.urls + "setting/others/region?region_parent=" + area_id).then(res => {
+        if(res.data.code == "100070") {
+          this.newAreaList = res.data.data;
+        }
+      })
+    },
+    // 搜索
+    newSreach(id) {
+      this.form.region = id;
+      this.myData(1)
+      this.isHigh = false;
+    },
+    // 合并
+    mergeBtn() {
+      this.mergeDialog = true;
+    },
+     //选人组件
+    openOrganizeModal(id) {
+      // this.params.org_id = id;
+      // this.follow_name = '';
+      this.organizationDialog = true;
+      this.type = "depart";
+      this.length = 1;
+    },
+    selectMember(val) {
+      this.type = "";
+      this.length = "";
+      // this.follow_id = "";
+      // this.follow_name = '';
+      val.forEach(item => {
+        // this.follow_id += item.id + ",";
+        // this.follow_name = item.name + ",";
+      });
+      // this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      // this.params.org_id = this.follow_id;
+      // this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
+    },
+    // 清除
+    emptyFollowPeople() {
+      this.follow_id = "";
+      // this.params.org_id = "";
+      this.follow_name = "";
+    },
+     // 关闭模态框
+    closeModal() {
+      this.organizationDialog = false;
+    },
     choose(val, id) {
       if (val === "city") {
         this.form.city = "";
@@ -716,6 +776,9 @@ export default {
           }
         });
     }
+  },
+  created() {
+    this.newChooseProvince();
   }
 };
 </script>
@@ -723,9 +786,38 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 #community {
+  .urban-division {
+    // position: relative;
+    // overflow: hidden;
+    height: 710px;
+    table:first-of-type {
+      th {
+        height: 37px;
+        line-height: 37px;
+        .cell {
+          height: 37px;
+          line-height: 37px;
+        }
+      }
+    }
+    table:last-of-type {
+      height: 710px;
+      th {
+        padding: 12px;
+      }
+    .cell {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+    }
+      }
+  }
   .city {
     .el-table__body-wrapper {
-      display: none;
+      // display: none;
     }
   }
   .highSearch {
