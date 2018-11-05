@@ -373,7 +373,7 @@
                         label="岗位">
                         <template slot-scope="scope">
                           <span v-if="!scope.row.roles.length"></span>
-                          <span v-else v-for="item in scope.row.roles">{{item.name}}</span>
+                          <span v-else v-for="item in scope.row.positions">{{item.name}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column
@@ -1743,13 +1743,8 @@
         this.getPosition();
       },
       clickPostMenu(row, event) {
-        if (row.roles.length) {
-          this.selectPostID = row.roles[0].id;
-          this.selectOrgID = row.duty.org_id;
-        } else {
-          this.selectPostID = '';
-          this.selectOrgID = ''
-        }
+        this.selectPostID = row.id;
+        this.selectOrgID = row.duty.org_id;
         this.getPostStaffData();
       },
       //右键职位回调
@@ -1816,11 +1811,7 @@
             this.totalPostNum = res.data.data.count;
             if (arr.length > 0) {
               console.log(arr[0]);
-              if (arr[0].roles.length) {
-                this.selectPostID = arr[0].roles && arr[0].roles[0].id;
-              } else {
-                this.selectPostID = '';
-              }
+              this.selectPostID = arr.id;
               this.selectOrgID = arr[0].duty.org_id;
               this.getPostStaffData();
             } else {
@@ -1935,7 +1926,7 @@
           this.postStaffLoading = true;
           this.postStaffStatus = ' ';
         }
-        this.$http.get(globalConfig.server + 'organization/other/staff-list?org_id=' + this.selectOrgID + '&role_id=' + this.selectPostID
+        this.$http.get(globalConfig.server + 'organization/other/staff-list?org_id=' + this.selectOrgID + '&position_id=' + this.selectPostID
           + '&page=' + this.postStaffParams.page + '&limit=' + this.postStaffParams.limit).then((res) => {
           this.postStaffLoading = false;
           if (res.data.code === '70010') {

@@ -546,6 +546,7 @@
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
             let val = res.data.data;
+            this.params.duty_id = [];
             if (val.duties) {// 职务
               for (let item of val.duties) {
                 this.params.duty_id.push(item.id);
@@ -557,7 +558,6 @@
                 this.params.position_id.push(item.id);
               }
             }
-            console.log(this.params.position_id);
             let detail = res.data.data.detail;
             if (detail) {
               if (detail.entry_way && detail.entry_way !== 'null' && detail.entry_way.entry_type) {
