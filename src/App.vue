@@ -10,6 +10,22 @@
       <back-to-top transitionName="fade" :customStyle="myBackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>
     </el-tooltip>
+    <el-tooltip placement="left" content="乐伽大学 视频教程">
+      <div class="lookVideo" @click="playVideo">
+        <img style="width: 100%;" src="./assets/images/乐伽大学弹框.png" alt="">
+      </div>
+    </el-tooltip>
+
+    <!--视频dialog-->
+    <el-dialog
+      :visible.sync="showVideo"
+      width="30%"
+      title="视频教程"
+    >
+      <div style="width: 100%;height: 400px;text-align: center;">
+        <video :src="videoUri" controls height="400px"></video>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,6 +50,8 @@
           background: '#ecf5ffe8'// 按钮的背景颜色
         },
         loginIndex: 0,
+        showVideo: false,
+        videoUri: "http://s.lejias.cn/FsRxrfzXAuatjr-78vBYNg0YkoT9"
       }
     },
     created() {
@@ -81,6 +99,9 @@
       },
       closeMenu() {
         this.$store.dispatch('closeMenu')
+      },
+      playVideo() {
+        this.showVideo = true;
       }
     }
   }
@@ -114,6 +135,14 @@
     background-color: #f4f3f6;
     #app {
       height: 100%;
+      .lookVideo{
+        width: 100px;
+        height: 100px;
+        position: fixed;
+        right: 100px;
+        bottom: 20px;
+        cursor: pointer;
+      }
     }
     a {
       text-decoration: none;
