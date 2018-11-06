@@ -295,7 +295,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addStaffDialogVisible=false" :disabled="disabledBtn">取 消</el-button>
+        <el-button size="small" @click="addStaffDialogVisible = false" :disabled="disabledBtn">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
@@ -589,9 +589,10 @@
               this.params.enroll = detail.enroll;
               this.params.salary = detail.salary;
               this.params.entry_materials = [];
-              if (detail.entry_materials && detail.entry_materials !== 'null' && detail.entry_materials.length > 0) {
-                for (let i = 0; i < detail.entry_materials.length; i++) {
-                  this.params.entry_materials.push(Number(detail.entry_materials[i]));
+              let mate = detail.entry_materials;
+              if (mate && mate !== 'null' && mate.length > 0) {
+                for (let i = 0; i < mate.length; i++) {
+                  this.params.entry_materials.push(Number(mate[i]));
                 }
               }
               this.params.salary = detail.salary;

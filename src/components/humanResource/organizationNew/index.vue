@@ -1236,10 +1236,10 @@
       openDetail(row) {
         this.staffDetail = true;
         //员工详情
-        this.$http.get(globalConfig.server + 'manager/staff/' + row.id).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
           this.staffDetailData = {};
           this.currentPost = this.currentPosition = '';
-          if (res.data.code === '10020') {
+          if (res.data.code === '710910') {
             let detail = res.data.data.detail;
             this.staffDetailData = res.data.data;
             this.entry_materials = [];
