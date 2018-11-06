@@ -546,7 +546,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '考勤管理',
-      icon: 'el-icon-document',
+      icon: 'iconfont icon-buqia',
       children: [
         {path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置'},
         {path: '/punchCard', component: PunchCard, name: '日统计'},
@@ -667,7 +667,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: 'APP管理',
-      icon: 'el-icon-mobile-phone',
+      icon: 'iconfont icon-wupinzengjia',
       children: [
         {path: '/application', component: Application, name: '申请管理'},
         {path: '/houses', component: Houses, name: '房源管理'},
