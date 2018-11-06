@@ -207,7 +207,7 @@ const BeforeExam = () => import  ('../components/lejiaCollege/OnlineExam/beforeE
 const BeforeNaire = () => import  ('../components/lejiaCollege/OnlineExam/beforeNaire.vue');  //开考之前
 const MyNaire = () => import  ('../components/OAWork/questionnaire/myNaire/myNaire.vue');  //我的调查列表
 
-const DataMove = () => import  ('../components/dataMove.vue');//数据迁移
+// const DataMove = () => import  ('../components/dataMove.vue');//数据迁移
 
 const BatchEnter = () => import  ('../components/batchEnter/index'); //批量入账
 
@@ -291,15 +291,15 @@ export default new Router({
       name: '',
       hidden: true
     },
-    {
-      path: '/',
-      component: Index,
-      hidden: true,
-      name: '',
-      children: [
-        {path: '/dataMove', component: DataMove, name: '数据迁移', icon: 'iconfont icon-daoru'},
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   hidden: true,
+    //   name: '',
+    //   children: [
+    //     {path: '/dataMove', component: DataMove, name: '数据迁移', icon: 'iconfont icon-daoru'},
+    //   ]
+    // },
     {
       path: '/',
       component: Index,
@@ -666,6 +666,17 @@ export default new Router({
     {
       path: '/',
       component: Index,
+      name: 'APP管理',
+      icon: 'el-icon-mobile-phone',
+      children: [
+        {path: '/application', component: Application, name: '申请管理'},
+        {path: '/houses', component: Houses, name: '房源管理'},
+        {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
       name: '系统设置',
       icon: 'iconfont icon-shezhi1',
       children: [
@@ -681,25 +692,6 @@ export default new Router({
         // {path: '/recycle', component: Recycle, name: '回收站'},
         // {path: '/contractModule', component: ContractModule, name: '合同模板'},
         // {path: '/exportManage', component: ExportManage, name: '导出管理'},
-      ]
-    },
-    {
-      path: '/',
-      component: Index,
-      name: 'C端管理',
-      icon: 'iconfont icon-c-',
-      children: [
-        {path: '/application', component: Application, name: '申请管理'},
-        {path: '/houses', component: Houses, name: '房源管理'},
-      ]
-    },
-    {
-      path: '/',
-      component: Index,
-      name: 'B端管理',
-      icon: 'iconfont icon-b',
-      children: [
-        {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
       ]
     },
   ]

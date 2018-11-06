@@ -156,8 +156,8 @@
             placement="bottom"
             width="200"
             trigger="hover"
-            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-            <div slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;"
+            content="下载乐伽管理APP，随时随地管理你的房源~">
+            <div @click="downLoadApp" slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;"
                                      class="iconfont el-icon-mobile-phone"></i> app下载
             </div>
           </el-popover>
@@ -423,6 +423,16 @@
     <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
     <ReadingView :ReadingDialog="ReadingDialog" :yanFirstInfo="yanFirstInfo" @close="readcloseModal"></ReadingView>
+
+    <!--下载dialog-->
+    <el-dialog
+      :visible.sync="downShow"
+      width="25%"
+    >
+      <div style="width: 400px;height: 400px;text-align: center;margin: 0 auto;">
+        <img style="width: 90%;" :src="imgUrl" alt="">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -501,6 +511,10 @@
         quesNaireDialog: false,
         examData: {},
         questionnaireData: {},
+
+        //下载
+        downShow: false,
+        imgUrl: ''
       };
     },
     computed: {
@@ -656,6 +670,25 @@
       this.getUnreadTermly();
     },
     methods: {
+      //下载app
+      downLoadApp (){
+        this.downShow = true;
+        this.$http.get(globalConfig.server + 'api/qrcode/app').then(res =>{
+          if(res.status == 200){
+            if(res.data.code == 10000){
+              this.imgUrl = res.data.data;
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: '获取失败！'
+              });
+              this.downShow = false;
+            }
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       downChange() {
         this.getExamNaireRedCircle();
       },

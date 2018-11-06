@@ -3,9 +3,15 @@
     <!--搜索-->
     <div class="nav-search">
       <el-select size="mini" v-model="searchList.selectValue">
-        <el-option label="1" value="1"></el-option>
-        <el-option label="2" value="2"></el-option>
-        <el-option label="3" value="3"></el-option>
+        <el-option value="0" label="全部"></el-option>
+        <el-option value="1" label="出租"></el-option>
+        <el-option value="2" label="提前一个月续租"></el-option>
+        <el-option value="3" label="提前两个月以上续租"></el-option>
+        <el-option value="4" label="公司转租"></el-option>
+        <el-option value="5" label="个人转租"></el-option>
+        <el-option value="6" label="调组"></el-option>
+        <el-option value="7" label="续租"></el-option>
+        <el-option value="8" label="收房"></el-option>
       </el-select>
       <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:300px;"
                 v-model="searchList.org_name"
@@ -46,7 +52,7 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
-        @selection-change = "selectRow"
+        @selection-change="selectRow"
       >
         <el-table-column
           type="selection"
@@ -70,7 +76,8 @@
           prop="pay_type"
         >
           <template slot-scope="scope">
-            {{ scope.row.pay_type == 1 ? '月付' : scope.row.pay_type == 3 ? '季付' : scope.row.pay_type == 6 ? '半年付' : '年付'}}
+            {{ scope.row.pay_type === 1 ? '月付' : scope.row.pay_type === 3 ? '季付' : scope.row.pay_type === 6 ? '半年付' :
+            '年付'}}
           </template>
         </el-table-column>
         <el-table-column
@@ -80,10 +87,6 @@
         <el-table-column
           label="单价"
           prop="month_price"
-        ></el-table-column>
-        <el-table-column
-          label="总金额"
-          prop="achv"
         ></el-table-column>
         <el-table-column
           label="空置期"
@@ -100,6 +103,14 @@
         <el-table-column
           label="溢出业绩"
           prop="achv_overflow"
+        ></el-table-column>
+        <el-table-column
+          label="提成"
+          prop="amount_due"
+        ></el-table-column>
+        <el-table-column
+          label="维护费"
+          prop="services_fee"
         ></el-table-column>
         <el-table-column
           label="名称"
@@ -168,7 +179,7 @@
       getListData() {
         this.getShow = true;
         this.TableInfo = " ";
-        this.$http.get(this.url + 'salary/achv/commission/',{
+        this.$http.get(this.url + 'salary/achv/commission/', {
           params: {
             start_time: this.searchList.startTime,
             end_time: this.searchList.end_time,
@@ -176,14 +187,14 @@
             limit: this.searchList.limit,
             page: this.searchList.page
           }
-        }).then(res =>{
+        }).then(res => {
           console.log(res);
-          if(res.status ==200){
-            if(res.data.code == 88800){
+          if (res.status == 200) {
+            if (res.data.code == 88800) {
               this.detailData = res.data.data.data;
               this.totalPage = res.data.data.count;
               this.getShow = false;
-            }else{
+            } else {
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -193,7 +204,7 @@
               this.getShow = false;
             }
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
