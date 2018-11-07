@@ -138,6 +138,7 @@
     watch: {
       organizationDialog(val) {
         this.organizationVisible = val;
+        this.depart_id = this.depart;
       },
       organizationVisible(val) {
         if (!val) {
