@@ -384,14 +384,14 @@ export default {
   methods: {
     handleSelectionChange(val) {
     //  只支持删除一个
+    this.communityArr = [];
       this.multipleSelection = val;
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
           this.communityArr.push(item.id)
-        } else if(index == 0) {
-          this.pitch = val[index].id;
-        }
+        } 
       })
+      this.pitch = val[0].id;
       if(val.length == 1) {
         this.deletedBtn = false;
       } else {
@@ -503,8 +503,11 @@ export default {
     },
     // 新的区县搜索
     newChooseCountry(val,id, index) {
+      this.ind3 = "";
       this.organization = val.org_id;  
       this.ind2 = index;                    // 样式切换
+      this.form.region = "";
+      this.form.area = "";
       this.form.city = val.city_id;    // 城市id
       this.form.province = val.province_id   // 省ID
       this.newCountryList = [];
@@ -519,7 +522,9 @@ export default {
     },
     //  新的区域搜索
     newAreaChoose(val,id, index) {
+      this.ind4 = "";
       this.ind3 = index;
+      this.form.region = "";
       this.form.area = id;    // 县区ID
       let area_id = id || "320102";
       this.$http.get(this.urls + "setting/others/region?region_parent=" + area_id).then(res => {
@@ -585,12 +590,6 @@ export default {
         }
       })
     },
-    // 清除
-    emptyFollowPeople() {
-      this.follow_id = "";
-      // this.params.org_id = "";
-      this.follow_name = "";
-    },
      // 关闭模态框
     closeModal() {
       this.organizationDialog = false;
@@ -643,7 +642,9 @@ export default {
       }
     },
     search() {
-      this.form.built_year = Number(this.form.built_year) + 1;
+      if(this.form.built_year) {
+        this.form.built_year = Number(this.form.built_year + 1) ;
+      }
       this.myData(1);
       this.isHigh = false;
     },
@@ -855,6 +856,7 @@ export default {
     color:  #409eff;
   }
   .activeHeght {
+    width: 84%;
     height: 48px;
     overflow: hidden;
     text-overflow: ellipsis;
