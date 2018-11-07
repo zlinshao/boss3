@@ -321,6 +321,16 @@
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
+                  <el-table-column width="40" align="center">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
+                        scope.row.department.name === '南京仙林一' ||
+                        scope.row.department.name === '南京仙林二')">
+                        <b style="color: red;">新</b>
+                      </span>
+                    </template>
+                  </el-table-column>
                   <el-table-column width="40">
                     <template slot-scope="scope">
                   <span v-if="scope.row.contract_number&&checkContractData[scope.row.contract_number.toUpperCase()]">
@@ -475,6 +485,16 @@
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
+                  <el-table-column width="40" align="center">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
+                        scope.row.department.name === '南京仙林一' ||
+                        scope.row.department.name === '南京仙林二')">
+                        <b style="color: red;">新</b>
+                      </span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     width="136px"
                     label="合同上传时间">

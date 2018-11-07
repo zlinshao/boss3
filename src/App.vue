@@ -11,7 +11,7 @@
                    :backPosition="50"></back-to-top>
     </el-tooltip>
     <el-tooltip placement="left" content="乐伽大学 视频教程">
-      <div class="lookVideo" @click="playVideo">
+      <div v-if="$route.path === '/' || $route.path === '/main'" class="lookVideo" @click="playVideo">
         <img style="width: 100%;" src="./assets/images/乐伽大学弹框.png" alt="">
       </div>
     </el-tooltip>
