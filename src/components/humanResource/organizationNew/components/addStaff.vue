@@ -301,7 +301,7 @@
     </el-dialog>
 
     <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
-                  @close="closeOrgan" @selectMember="selectMember" :depart="9"></Organization>
+                  @close="closeOrgan" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
