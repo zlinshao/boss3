@@ -62,10 +62,23 @@ const PersonnelStatement = () => import  ('../components/humanResource/organizat
 // 人员信息管理
 const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
 const Roster = () => import  ('../components/HRM/teamManage/roster/index.vue');                       // 花名册
-const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 花名册
+const StaffDetail = () => import  ('../components/HRM/teamManage/roster/components/staffDetail.vue'); // 花名册 详情
+// const EntryManage = () => import  ('../components/HRM/teamManage/entryManage/index.vue');             // 入职管理
 const BecomeFormal = () => import  ('../components/HRM/teamManage/becomeFormal/index.vue');           // 转正管理
 const TransferPosition = () => import  ('../components/HRM/teamManage/transferPosition/index.vue');   // 调岗管理
 const Dimission = () => import  ('../components/HRM/teamManage/dimission/index.vue');                 // 离职管理
+
+//考勤管理
+const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //设置排班
+const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
+const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
+const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue'); //编辑班次
+
+// 考勤记录
+const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
+
+// 月度总汇
+const monthlySummary = () => import('../components/attendanceManage/monthlySummary/monthly/index.vue');
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue')                 //通讯管理
@@ -199,7 +212,7 @@ const DataMove = () => import  ('../components/dataMove.vue');//数据迁移
 const BatchEnter = () => import  ('../components/batchEnter/index'); //批量入账
 
 const AchievementData = () => import ('../components/dataCenter/index'); //业绩数据
-const dataAanalysis = () => import ('../components/dataAanalysis/index');
+const dataAanalysis = () => import ('../components/dataAanalysis/index'); //数据分析
 const ReportingData = () => import ('../components/reportManage/reportingData/index'); //报备数据
 
 const Application = () => import ('../components/C-manage/applicationManage/index');
@@ -237,7 +250,8 @@ export default new Router({
       name: '',
       hidden: true,
       meta: {
-        keepAlive: true // 不需要缓存
+        keepAlive: true, // 不需要缓存
+        title: '乐伽公寓'
       }
     },
 
@@ -250,7 +264,6 @@ export default new Router({
         keepAlive: true // 不需要缓存
       }
     },
-
     {
       path: '/rentingDetail',
       component: RentingDetail,
@@ -500,7 +513,20 @@ export default new Router({
     //     {path: '/feedback', component: Feedback, name: '意见 反馈',},
     //   ]
     // },
-
+    //write by shuisheng 2018-10-24
+    {
+      path: '/',
+      component: Index,
+      name: '考勤管理',
+      icon: 'el-icon-document',
+      children: [
+        {path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置'},
+        {path: '/punchCard', component: PunchCard, name: '日统计'},
+        {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
+        // {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
+        {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
+      ]
+    },
     {
       path: '/',
       component: Index,
@@ -516,6 +542,34 @@ export default new Router({
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
+    //write by shuisheng 2018-10-24
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '考勤管理',
+    //   icon: 'el-icon-document',
+    //   children: [
+    //     {
+    //       path: '/arrangeSetting',component: ArrangeSetting, name: '排班设置',
+    //       children: [
+    //         {
+    //           path: '/watchArrange',component: WatchArrange, name: '查看排班',
+    //           children: [
+    //             {
+    //               path: '/',component: MarkInfo, name: '标记信息'
+    //             }
+    //           ]
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       path: '/attendanceRecord',component: attendanceRecord,name: '考勤记录',
+    //     },
+    //     {
+    //       path: '/monthlySummary', component: monthlySummary, name: '月度总汇'
+    //     }
+    //   ]
+    // },
     // {
     //   path: '/',
     //   component: Index,
@@ -534,6 +588,12 @@ export default new Router({
     //     },
     //   ]
     // },
+    {
+      path: '/staffDetail',
+      component: StaffDetail,
+      name: '',
+      hidden: true
+    },
     // {
     //   path: '/',
     //   component: Index,
@@ -615,7 +675,7 @@ export default new Router({
       icon: 'iconfont icon-shuju',
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-        // {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
+        {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台',},
       ]
     },
     {

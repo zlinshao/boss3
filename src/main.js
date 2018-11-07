@@ -38,6 +38,7 @@ import './assets/bifonts/bifont.css'
 import './assets/js/drag.js'
 import './assets/js/formData.js'
 
+import "./assets/js/chartData.js"
 // import './directives.js';  //弹框拖拽
 
 // 地图
@@ -105,6 +106,23 @@ router.beforeEach((to, from, next) => {
     console.log(from.path)
   } else {
     next();
+  }
+});
+
+router.afterEach(route => {
+  // 从路由的元信息中获取 title 属性
+  if (route.meta.title) {
+    document.title = route.meta.title;
+    // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
+    if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+      const hackIframe = document.createElement('iframe');
+      hackIframe.style.display = 'none';
+      hackIframe.src = '/static/html/fixIosTitle.html?r=' + Math.random();
+      document.body.appendChild(hackIframe);
+      setTimeout(_ => {
+        document.body.removeChild(hackIframe);
+      }, 300)
+    }
   }
 });
 

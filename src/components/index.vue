@@ -151,6 +151,15 @@
           <i style="font-size:26px; margin-right:4px;" class="iconfont icon-gantanhaodefuben"></i>
           功能说明
         </div>
+        <div  class="guide" style="cursor: pointer">
+          <el-popover
+            placement="bottom"
+            width="200"
+            trigger="hover"
+            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+            <div slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;" class="iconfont el-icon-mobile-phone"></i> app下载</div>
+          </el-popover>
+        </div>
         <!--个人信息-->
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
@@ -466,7 +475,7 @@
         loginPercent: 0,
         creditTotal: 0, // 积分总数
 
-        setLockPwdDialog: false,
+        setLockPwdDialog: true,
         instructionDialog: false, //功能说明
         ReadingDialog: false,  //导读
         dictionary2: [], //二级密码所需模块

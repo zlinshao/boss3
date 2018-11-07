@@ -6,7 +6,7 @@
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="维修单编号" required>
+              <el-form-item label="报销单编号" required>
                 <el-input v-model="form.reimbursement_number" disabled></el-input>
               </el-form-item>
             </el-col>

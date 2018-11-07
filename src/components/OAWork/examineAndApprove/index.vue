@@ -438,6 +438,9 @@
             <el-table-column
               prop="place"
               label="状态">
+              <template slot-scope="scope">
+                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+              </template>
             </el-table-column>
             <el-table-column
               prop="finish_at"
@@ -482,6 +485,9 @@
           <el-table-column
             prop="place"
             label="状态">
+            <template slot-scope="scope">
+              <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             prop="finish_at"
@@ -545,6 +551,9 @@
               <el-table-column
                 prop="place"
                 label="状态">
+                <template slot-scope="scope">
+                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="finish_at"
@@ -654,6 +663,9 @@
               <el-table-column
                 prop="place"
                 label="状态">
+                <template slot-scope="scope">
+                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="finish_at"
@@ -918,6 +930,26 @@
         if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
           return 'colTag'
         }
+        if(row.status=="published"&&columnIndex==5){
+          return "greenCol"
+        }
+      },
+      statusStyle(val){
+        if(val.status=="review"){
+          if(val.place=="片区经理审批中"){
+            return ""
+          }
+          return "warning"
+        }
+        if(val.status=="rejected"){
+          return "danger"
+        }
+        if(val.status=="published"){
+          return "success"
+        }
+        if(val.status=="cancelled"){
+          return "info"
+        }
       },
       onSelect(key) {
         this.childActive(this.activeName, key);
@@ -1092,6 +1124,7 @@
         }
       },
       dblClickTable(row) {
+        console.log(row)
         this.reportID = row.id;
         this.reportAllID.push(row.id);
         this.reportAllID = Array.from(new Set(this.reportAllID));
@@ -1245,6 +1278,9 @@
       padding: 6px;
       background:url("../../../assets/images/info.jpg") no-repeat 20px 10px;
       background-size: 20px 20px;
+    }
+    .greenCol{
+      color: green
     }
     .myApplication {
       padding: 0 20px;

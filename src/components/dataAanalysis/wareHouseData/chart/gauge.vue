@@ -1,4 +1,5 @@
 <template>
+<!-- 仪表盘 -->
     <div ref="chartId">
 
     </div>

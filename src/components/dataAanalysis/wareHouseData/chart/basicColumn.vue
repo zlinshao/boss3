@@ -1,68 +1,61 @@
 <template>
 <!-- 基础柱状图 -->
-    <div ref="chartId">
-
+    <div ref="chartId" >
+      <div v-if="chartTextStatus">{{chartText}}</div>
     </div>
 </template>
 <script>
   export default {
-    props:['chartheight','chartData'],
+    name:"basicColumn",
+    props:['chartData','chartStyle','params'],
     data(){
       return {
-        data:[{
-          city: '南京',
-          salary: 38 
-        }, {
-          city: '杭州',
-          salary: 52
-        }, {
-          city: '苏州',
-          salary: 61
-        }, {
-          city: '合肥',
-          salary: 145
-        }, {
-          city: '西安',
-          salary: 200
-        },{
-          city: '成都',
-          salary: 150
-        },{
-          city: '重庆',
-          salary: 210
-        }]
+        data:[],
+        dataParams:{},
+        chartText:"暂无数据",//显示文本
+        chartTextStatus:true,//文本状态
       }
     },
+    watch: {},
     methods:{
       drawChart(data) {
+        // console.log(this.dataParams)
+        this.$refs.chartId.innerHTML  = ''
         var chart = new this.$G2.Chart({
           container: this.$refs.chartId,
-          forceFit: true,
-          // width:300,
-          height:this.chartheight+50,
+          width:this.chartStyle.width,
+          height:this.chartStyle.height, 
+          // forceFit: true,
         });
+        
         chart.source(data);
-        chart.scale('salary', {
-          tickInterval: 20
-        });
-       
-        chart.interval().position('city*salary');
+        chart.interval().position('cate*value');
         chart.render();
       },
-      
-
+      getChart(params){
+        this.$http.get(this.chartData.data_source,{
+          headers:{"Accept":"application/vnd.boss18+json"},
+          params: params
+        }).then((res) => { 
+          if(res.data.code == "20000"){
+            this.chartTextStatus = false
+            this.data = res.data.data
+            this.chartText = ''
+            this.drawChart(this.data)
+          }else{
+            this.chartTextStatus = true
+            this.chartText = res.data.msg
+            this.prompt('error',res.data.msg)
+          }
+        });
+      },
     },
     mounted () {
-      if(this.chartData){
-        this.drawChart(this.chartData)
-      }
-     
-    },
-    watch:{
-      chartData(val){
-        this.$refs.chartId.innerHTML = ""
-        this.drawChart(val)
-      }
+      // console.log(this.params)
+      this.dataParams = JSON.parse(JSON.stringify(chartParams))
+      this.getChartDate(this.dataParams)
+      this.getChart(this.dataParams)
+      
     }
   }
 </script>

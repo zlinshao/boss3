@@ -58,43 +58,27 @@
         @row-contextmenu='openContextMenu'
         style="width: 100%">
         <el-table-column
-          prop="name"
+          prop="real_name"
           label="姓名">
         </el-table-column>
         <el-table-column
+          prop="organizationInfo"
           label="部门">
-          <template slot-scope="scope">
-            <div class="departPosition">
-              <span v-for="(item,index) in scope.row.org">
-                <b v-if="index !== 0">,</b>
-                {{item.name}}
-              </span>
-            </div>
-          </template>
         </el-table-column>
         <el-table-column
+          prop="positionInfo"
           label="职位">
-          <template slot-scope="scope">
-            <div class="departPosition">
-              <span v-for="(item,index) in scope.row.position">
-                <b v-if="index !== 0">,</b>
-                {{item.name}}
-              </span>
-            </div>
-          </template>
         </el-table-column>
         <el-table-column
-          prop="staff_extend.enroll"
+          prop="enroll"
           label="入职时间">
         </el-table-column>
         <el-table-column
+          prop="try_out_time"
           label="试用期">
-          <template slot-scope="scope">
-            {{scope.row.staff_extend.try_out_time}}个月
-          </template>
         </el-table-column>
         <el-table-column
-          prop="staff_extend.expected_formal"
+          prop="expected_formal"
           label="预计转正日期">
         </el-table-column>
         <el-table-column
@@ -159,7 +143,7 @@
         totalNum: 0,
         tableData: [],
         params: {
-          limit: 12,
+          limit: 15,
           page: 1,
           org_id: '',
           keywords: '',
@@ -201,13 +185,13 @@
       },
       // 转正
       becomeFull(row) {
-        this.$confirm('是否转正员工 ' + row.name + ' 不可逆转操作，是否继续?', '提示', {
+        this.$confirm('是否转正员工 ' + row.real_name + ' 不可逆转操作，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http.put(this.url + 'hrm/User/affirm', {
-            id: row.id
+            id: row.user_id
           }).then(res => {
             if (res.data.success) {
               this.prompt('success', res.data.msg);
@@ -231,7 +215,7 @@
       // 重置
       resetting() {
         this.params = {
-          limit: 12,
+          limit: 15,
           page: 1,
           org_id: '',
           keywords: '',

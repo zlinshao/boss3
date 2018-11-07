@@ -14,8 +14,9 @@ rosterParams = {
   position_names: '',       //职位
 };
 
-// 新增花名册员工
+// 花名册 form
 rosterAddStaff = {
+  id: '',
   name: '',               //姓名
   gender: '',             //性别
   phone: '',              //手机号
@@ -28,8 +29,8 @@ rosterAddStaff = {
   home_addr: '',          //家庭住址
   political_status: '',   //政治面貌
   org_id: '',             //部门
-  duty_id: [],            //职位
-  position_id: [],        //岗位
+  duty_id: [],            //职务
+  position_id: [],        //职位
   recommender: '',        //推荐人
   enroll: '',             //入职日期
   try_out_time: '',       //试用期
@@ -53,8 +54,44 @@ rosterAddStaff = {
   level: '',              //级别
   entry_way: '',          //入职途径
 };
-
-// 新增辅助信息
+rosterBasicInfo = {
+  name: '姓名',
+  gender: '性别',
+  phone: '手机',
+  archive_number: '档案编号',
+  birthday: '出生日期',
+  fertility_status: '生育状况',
+  job_number: '工号',
+  marital_status: '婚姻状况',
+  id_num: '身份证',
+  home_addr: '家庭住址',
+  political_status: '政治面貌',
+  organizationNames: '部门',
+  dutyInfoNames: '职务',
+  positionInfoNames: '职位',
+  recommender: '推荐人',
+  enroll: '入职日期',
+  try_out_time: '试用期',
+  expected_formal: '预计转正日期',
+  formal_status: '转正类型',
+  position_status: '当前在职状态',
+  job_type: '员工类型',
+  job_status: '员工状态',
+  bank_num: '银行卡号',
+  account_bank: '开户行',
+  branch_bank_code: '支行行号',
+  account_name: '开户名',
+  branch_bank: '支行',
+  city: '城市',
+  area: '区域',
+  education: '学历',
+  email: '个人邮箱',
+  salary: '薪资',
+  level: '级别',
+  entry_type: '入职途径',
+  entry_mess: '入职描述',
+};
+// 辅助信息 form
 rosterAddAssist = {
   origin_addr: '',                //籍贯
   emergency_call: '',             //紧急联系电话+与该员工关系
@@ -65,6 +102,20 @@ rosterAddAssist = {
   agreement_first_end_time: '',   //第一次合同到期时间
   agreement_second_time: '',      //第二次签合同时间
   image_info: {},                 //第二次签合同时间
+};
+
+// 调岗信息 form
+rosterTransfer = {
+  id: '',
+  new_org_id: [],
+  new_position_id: [],
+  new_duty_id: [],
+  org_id: [],
+  position_id: [],
+  duty_id: [],
+  transfer_type: '',
+  remark_transfer: '',
+  transfer_time: '',
 };
 
 // 花名册 图片上传
@@ -100,8 +151,8 @@ rosterImgInfo = [
 ];
 // 当前在职状态
 position_status = [
-  {id: 1, name: '待调岗'},
-  {id: 2, name: '无异动'},
+  {id: 1, name: '无异动'},
+  {id: 2, name: '待调岗'},
   {id: 3, name: '待转正'},
   {id: 4, name: '待离职'},
 ];
@@ -149,5 +200,12 @@ typeCategory = [
 transfer_type = [
   {id: 1, name: '平行调岗'},
   {id: 2, name: '升职调岗'},
-  {id: 3, name: '降至调岗'},
+  {id: 3, name: '降职调岗'},
+];
+// 离职类型
+resignation_type = [
+  {id: 1, name: '主动离职'},
+  {id: 2, name: '旷工离职'},
+  {id: 3, name: '劝退'},
+  {id: 4, name: '开除'},
 ];

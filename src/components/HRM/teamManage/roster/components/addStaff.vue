@@ -9,7 +9,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)">
       </div>
-      <el-form :inline="true" size="mini" label-width="100px" v-if="!fullLoading">
+      <el-form :inline="true" size="mini" label-width="100px" v-show="!fullLoading">
         <el-tabs v-model="activeName">
           <el-tab-pane v-if="(assist === 'new' || assist === 'first') && this.assist !== 'record'" class="scroll_bar"
                        label="基本信息" name="first">
@@ -37,14 +37,11 @@
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="出生日期">
-                  <el-date-picker
-                    v-model="form.birthday"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="请选择日期"
-                    clearable>
-                  </el-date-picker>
+                <el-form-item label="婚姻状况">
+                  <el-select v-model="form.marital_status" size="mini" placeholde="请选择" clearable>
+                    <el-option v-for="key in marital_status" :label="key.dictionary_name" :value="key.id"
+                               :key="key.id"></el-option>
+                  </el-select>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -61,16 +58,20 @@
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="婚姻状况">
-                  <el-select v-model="form.marital_status" size="mini" placeholde="请选择" clearable>
-                    <el-option v-for="key in marital_status" :label="key.dictionary_name" :value="key.id"
-                               :key="key.id"></el-option>
-                  </el-select>
+                <el-form-item label="身份证" required>
+                  <el-input placeholder="请输入身份证" @blur="checkIDNumData(form.id_num)" v-model="form.id_num"
+                            clearable></el-input>
                 </el-form-item>
               </div>
               <div class='formList'>
-                <el-form-item label="身份证" required>
-                  <el-input placeholder="请输入身份证" v-model="form.id_num" clearable></el-input>
+                <el-form-item label="出生日期">
+                  <el-date-picker
+                    v-model="form.birthday"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="请选择日期"
+                    clearable>
+                  </el-date-picker>
                 </el-form-item>
               </div>
               <div class='formList list2'>
@@ -89,27 +90,30 @@
               <div class='formList'>
                 <el-form-item label="部门" required>
                   <el-input placeholder="请选择" @focus="openOrgan('org_id', 'depart')" v-model="orgData.org_id"
-                            size="mini">
-                    <el-button slot="append" @click="emptyDepart('org_id')">清空</el-button>
+                            size="mini" v-if="assist === 'new'">
+                    <el-button slot="append" @click="emptyDepart('org_id')" v-if="assist === 'new'">清空</el-button>
                   </el-input>
+                  <div class="showTitles" v-else>{{orgData.org_id}}</div>
+                </el-form-item>
+              </div>
+              <div class='formList'>
+                <el-form-item label="职务" required>
+                  <el-select v-model="form.duty_id" @change="positionSelect" clearable multiple
+                             :disabled="duty.length < 1" v-if="assist === 'new'">
+                    <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
+                    </el-option>
+                  </el-select>
+                  <div class="showTitles" v-else>{{orgData.duty_id}}</div>
                 </el-form-item>
               </div>
               <div class='formList'>
                 <el-form-item label="职位" required>
-                  <el-select v-model="form.duty_id" @change="positionSelect" clearable multiple>
-                    <el-option v-for="item in duty" :value="item.id" :key="item.id"
-                               :label="item.name">
+                  <el-select v-model="form.position_id" clearable multiple :disabled="position.length < 1"
+                             v-if="assist === 'new'">
+                    <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
                     </el-option>
                   </el-select>
-                </el-form-item>
-              </div>
-              <div class='formList'>
-                <el-form-item label="岗位" required>
-                  <el-select v-model="form.position_id" clearable multiple>
-                    <el-option v-for="item in position" :value="item.id" :key="item.id"
-                               :label="item.name">
-                    </el-option>
-                  </el-select>
+                  <div class="showTitles" v-else>{{orgData.position_id}}</div>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -168,10 +172,13 @@
               </div>
               <div class='formList'>
                 <el-form-item label="当前在职状态" required>
-                  <el-select v-model="form.position_status" clearable :disabled="assist === 'new'">
-                    <el-option v-for="item in position_status" :value="item.id" :key="item.id" :label="item.name">
+                  <el-select v-model="form.position_status" clearable :disabled="assist === 'new'"
+                             v-if="form.position_status !== 5">
+                    <el-option v-for="item in position_status" v-if="item.id !== 2" :value="item.id" :key="item.id"
+                               :label="item.name">
                     </el-option>
                   </el-select>
+                  <div class="showTitles" v-else>已离职</div>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -192,12 +199,13 @@
               </div>
               <div class='formList'>
                 <el-form-item label="银行卡号" required>
-                  <el-input placeholder="请输入银行卡号" v-model="form.bank_num" clearable></el-input>
+                  <el-input placeholder="请输入银行卡号" @blur="checkBankData(form.bank_num)" v-model="form.bank_num"
+                            clearable></el-input>
                 </el-form-item>
               </div>
               <div class='formList'>
                 <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入银行卡号" v-model="form.account_bank" clearable></el-input>
+                  <el-input placeholder="请输入开户行" v-model="form.account_bank" clearable></el-input>
                 </el-form-item>
               </div>
               <div class='formList'>
@@ -458,7 +466,7 @@
             images: '',
           }]
         }],
-        recordName:'',
+        recordName: '',
         //辅助信息
         form2: {},
         emergency_call: {},     //紧急联系
@@ -515,23 +523,6 @@
     activated() {
     },
     watch: {
-      detail(val) {
-        this.getStaffDetail = val;
-        switch (this.assist) {
-          case 'first':
-            this.personalInfo(val);
-            break;
-          case 'second':
-            this.personalAssist(val);
-            break;
-          case 'record':
-            this.personalRecord(val);
-            break;
-        }
-      },
-      'form.formal'(val) {  //实际转正日期
-        this.form.forward_time = val;
-      },
       // 模态框
       module(val) {
         if (this.assist !== 'new') {
@@ -555,6 +546,23 @@
           this.isClear = false;
         }
       },
+      detail(val) {
+        this.getStaffDetail = val;
+        switch (this.assist) {
+          case 'first':
+            this.personalInfo(val);
+            break;
+          case 'second':
+            this.personalAssist(val);
+            break;
+          case 'record':
+            this.personalRecord(val);
+            break;
+        }
+      },
+      'form.formal'(val) {  //实际转正日期
+        this.form.forward_time = val;
+      },
     },
     computed: {},
     methods: {
@@ -562,6 +570,7 @@
       closeModule() {
         this.isClear = true;
         this.form = {};
+        this.form = JSON.parse(JSON.stringify(rosterAddStaff));
         this.form.position_status = 3;
         this.orgData = {};      //部门显示
         this.entry_way = {      //入职途径
@@ -602,6 +611,7 @@
       },
       // 获取个人信息
       personalInfo(val) {
+        this.personalRecord(val);
         this.form = JSON.parse(JSON.stringify(rosterAddStaff));
         let keys = Object.keys(this.form);
         for (let key of keys) {
@@ -610,42 +620,56 @@
               if (val.entry_way && val.entry_way !== 'null') {
                 this.entry_way = JSON.parse(val.entry_way);
               } else {
-                this.entry_way = {};
+                this.entry_way = {
+                  entry_type: '',
+                  entry_mess: '',
+                };
               }
               break;
             case 'city':              //城市
               this.form.city = Number(val.city);
               break;
-            case 'duty_id':           //职务
-              val.org_id.forEach(res => {
-                this.duties(res, 'duty_id');
-              });
-              break;
-            case 'position_id':       //岗位
-              if (val.duty_id) {
-                this.positionSelect(val.duty_id, 'position_id');
-              } else {
-                this.resetOrg('position');
-              }
-              break;
             case 'org_id':            //部门
               let organ = JSON.parse(val.organizationInfo);
-              let arr = [];
-              organ.forEach(res => {
-                arr.push(res.name);
+              let org_id = [];
+              this.form[key] = [];
+              organ.forEach(item => {
+                org_id.push(item.name);
+                this.form[key].push(item.id);
+                this.duties(item.id);
               });
-              this.departName(arr, key);
+              this.departName(org_id, key);
+              break;
+            case 'duty_id':           //职务
+              if (val.dutyInfo) {
+                let dutyInfo = [];
+                for (let item of val.dutyInfo) {
+                  dutyInfo.push(item.duty_name);
+                  this.form[key].push(item.duty_id);
+                }
+                this.departName(dutyInfo, key);
+              }
+              break;
+            case 'position_id':       //岗位
+              if (val.positionInfo) {
+                let pos = [];
+                for (let item of val.positionInfo) {
+                  pos.push(item.position_name);
+                  this.form[key].push(item.position_id);
+                }
+                this.departName(pos, key);
+              }
               break;
             case 'recommender':        //推荐人
               if (val.recommender && val.recommender !== 'null') {
                 this.$http.get(this.url + 'hrm/User/getName?id=' + val.recommender).then(res => {
                   this.orgData[key] = res.data.name;
+                  this.orgData = Object.assign({}, this.orgData);
                 });
               }
               break;
-            case 'user_id':
+            case 'id':
               this.form.id = val.user_id;
-              this.form3.id = val.user_id;
               break;
             default:
               if (val[key] && val[key] !== 'null') {
@@ -659,6 +683,7 @@
       },
       // 获取辅助信息
       personalAssist(val) {
+        this.personalRecord(val);
         this.form2 = JSON.parse(JSON.stringify(rosterAddAssist));
         this.initForm();
         let keys = Object.keys(this.form2);
@@ -688,7 +713,6 @@
           }
         }
         this.form2.id = val.user_id;
-        this.form3.id = val.user_id;
         this.fullLoading = false;
       },
       // 获取奖惩记录部门
@@ -745,6 +769,7 @@
       },
       // 修改个人信息
       reviseStaff() {
+        this.form.entry_way = JSON.stringify(this.entry_way);
         this.$http.put(this.url + 'hrm/User/editDetail', this.form).then(res => {
           if (res.data.success) {
             this.$emit('close', 'success');
@@ -783,21 +808,12 @@
         this.isUpload = val[2];
       },
       // 职务
-      duties(id, type) {
+      duties(id) {
         this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach(item => {
               this.duty.push(item);
             });
-            if (type === 'duty_id') {
-              if (this.getStaffDetail[type] && this.getStaffDetail[type] !== 'null') {
-                this.form[type] = this.getStaffDetail[type];
-              } else {
-                this.form[type] = [];
-              }
-            } else {
-              this.resetOrg('position');
-            }
           } else {
             this.duty = [];
             this.prompt('warning', res.data.msg);
@@ -805,30 +821,33 @@
         })
       },
       // 多职务
-      positionSelect(val, type) {
+      positionSelect(val) {
         this.resetOrg('position');
         if (val.length > 0) {
           for (let item of val) {
-            this.quarters(item, type);
+            this.quarters(item);
           }
-        } else {
-
         }
       },
       // 岗位
-      quarters(id, type) {
+      quarters(id) {
         this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
           if (res.data.code === '20000') {
-            res.data.data.data.forEach(item => {
+            for (let item of res.data.data.data) {
               this.position.push(item);
-            });
-            if (type === 'position_id') {
-              this.form[type] = this.getStaffDetail[type];
             }
           } else {
             this.prompt('warning', res.data.msg);
           }
         })
+      },
+      // 重置职位 岗位
+      resetOrg(val) {
+        this.position = [];
+        this.form.position_id = [];
+        if (val === 'position') return;
+        this.duty = [];
+        this.form.duty_id = [];
       },
       // 多条记录 选择员工
       openUid(val, type, index) {
@@ -861,14 +880,6 @@
           this.resetOrg();
         }
       },
-      // 重置职位 岗位
-      resetOrg(val) {
-        this.position = [];
-        this.form.position_id = [];
-        if (val === 'position') return;
-        this.duty = [];
-        this.form.duty_id = [];
-      },
       // 关闭组织架构
       closeOrgan() {
         this.organDivision = '';
@@ -878,8 +889,10 @@
       },
       // 确认选择
       selectMember(val) {
+        console.log(val)
         let organ = this.organDivision;
         if (organ === 'org_id') {
+          this.resetOrg();
           let arr = [];
           this.form[organ] = [];
           for (let item of val) {
@@ -899,14 +912,9 @@
           this.orgData[organ] = val[0].name;
         }
       },
-      // 部门名称去重
+      // 数组名称去重 拼接
       departName(arr, organ) {
-        let str = '';
-        arr = Array.from(new Set(arr));
-        for (let key of arr) {
-          str = key + ',' + str;
-        }
-        this.orgData[organ] = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
+        this.orgData[organ] = this.montage(arr);
       },
       // 增加多条奖惩记录
       addRecord() {
@@ -938,6 +946,37 @@
       remBtnRecord(index, idx) {
         this.form3[index].remarks.splice(idx, 1);
       },
+      //校验身份证号
+      checkIDNumData(val) {
+        this.$http.get(this.url + 'manager/staff/info?id_num=' + val).then((res) => {
+          if (res.data.code === '10050') {
+            let data = res && res.data && res.data.data;
+            if (data.birthday && !this.form.birthday) {
+              this.form.birthday = data.birthday;
+            }
+            if (data.origin_addr && !this.form.home_addr) {
+              this.form.home_addr = data.origin_addr.result;
+            }
+            this.form = Object.assign({}, this.form);
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
+      },
+      //校验银行卡号
+      checkBankData(val) {
+        this.$http.get(this.url + 'manager/staff/info?bank_num=' + val).then((res) => {
+          if (res.data.code === '10050') {
+            let data = res.data.data;
+            if (data.bankname && !this.form.account_bank) {
+              this.form.account_bank = data.bankname;
+            }
+            this.form = Object.assign({}, this.form);
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
+      },
     },
   }
 </script>
@@ -965,16 +1004,19 @@
         width: 99%;
       }
     }
-    .el-form-item__content {
-      label {
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-      }
-    }
     .addForm {
       label {
         min-width: 100px;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      .showTitles {
+        width: 100%;
+        background-color: #F5F7FA;
+        padding: 3px 12px;
+        border-radius: 6px;
       }
     }
     .supplementary {

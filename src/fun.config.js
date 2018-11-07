@@ -15,7 +15,7 @@ export default {
       });
     };
     // 字典
-    Vue.prototype.dictionary = function (data, flag) {
+    Vue.prototype.dictionary = function (data, flag = 1) {
       return new Promise((resolve, reject) => {
         this.$http.get(globalConfig.server + 'setting/dictionary/' +data,{params:{status:flag}}).then( (res) => {
           if(res.data.code === '30010'){
@@ -24,7 +24,15 @@ export default {
         })
       })
     };
-
+    // 数组拼接
+    Vue.prototype.montage = function (arr) {
+      let str = '';
+      arr = Array.from(new Set(arr));
+      for (let key of arr) {
+        str = key + ',' + str;
+      }
+      return (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str;
+    };
     Vue.prototype.$exportData = function (data) {
       let url =  window.URL.createObjectURL(new Blob([data]));
       let link = document.createElement('a');
@@ -75,6 +83,30 @@ export default {
       form.money_sum = Number(deposit)+Number(front_money)+Number(rent_money);
 
       return form.money_sum;
+    };
+    Vue.prototype.getChartDate = function (params) {
+      let endDate = new Date();
+      let startDate = new Date(endDate.getTime() - 3600 * 1000 * 24 * 30);
+      let date = new Date(endDate.getTime() - 3600 * 1000 * 24);
+
+      let startY = startDate.getFullYear();
+      let endY = endDate.getFullYear();
+      let dateY = date.getFullYear();
+
+      let startM = startDate.getMonth() + 1;
+      let endM = endDate.getMonth() + 1;
+      let dateM = date.getMonth() + 1;
+
+      let startD = startDate.getDate();
+      let endD = endDate.getDate();
+      let dateD = date.getDate();
+
+
+      params.start_date = startY + '-' + startM + '-' + startD;
+      params.end_date = endY + '-' + endM + '-' + endD;
+      params.date = dateY + '-' + dateM + '-' + dateD;
+
+      return params;
     };
     Vue.prototype.prompt = function (val, msg) {
       switch (val) {

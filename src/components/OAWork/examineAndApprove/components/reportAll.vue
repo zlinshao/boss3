@@ -99,6 +99,7 @@
       <div class="main">
         <div>
           <el-table
+            :cell-style="changeStyle"
             :empty-text='tableStatus'
             v-loading="tableLoading"
             element-loading-text="拼命加载中"
@@ -132,6 +133,9 @@
             <el-table-column
               prop="place"
               label="状态">
+              <template slot-scope="scope">
+                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+              </template>
             </el-table-column>
             <el-table-column
               prop="finish_at"
@@ -221,6 +225,7 @@
         tableLoading: false,
         reportModule: false,
         reportID: '',
+        approveStatus:''
       }
     },
     watch: {
@@ -239,6 +244,23 @@
       colTag({row, column, rowIndex, columnIndex}){
         if(row.is_receipt&&row.is_receipt.id==1&&columnIndex==0){
           return 'colTag'
+        }
+      },
+      statusStyle(val){
+        if(val.status=="review"){
+          if(val.place=="片区经理审批中"){
+            return ""
+          }
+          return "warning"
+        }
+        if(val.status=="rejected"){
+          return "danger"
+        }
+        if(val.status=="published"){
+          return "success"
+        }
+        if(val.status=="cancelled"){
+          return "info"
         }
       },
       //获取列表数据
@@ -395,6 +417,29 @@
       closeFrame(val) {
         this.reportModule = false;
       },
+      changeStyle({row, column, rowIndex, columnIndex}) {
+        // console.log(row) //表头行标号为0
+        // console.log(columnIndex)
+        // console.log(1111111111111)
+        if(columnIndex === 5){
+          if(row.status === 'review'){
+            if(row.place === '片区经理审批中'){
+              return 'color:blue'
+            }else{
+              return 'color:orange'
+            }
+          }
+          if(row.status === 'published'){
+            return 'color:green'
+          }
+          if(row.status === 'cancelled'){
+            return 'color:gray'
+          }
+          if(row.status === 'rejected'){
+            return 'color:red'
+          }
+        }
+      }
     }
   }
 </script>
