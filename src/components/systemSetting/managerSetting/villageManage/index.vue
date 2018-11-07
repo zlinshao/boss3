@@ -532,7 +532,6 @@ export default {
     },
     // 展示全部
     collapseShow(val,id,event) {
-      console.log(val, id, "4444");
       if(this.collapse == "收起") {
         this.isHeight = null;
         this.collapse = "全部"
@@ -645,6 +644,7 @@ export default {
       }
     },
     search() {
+      this.form.built_year = Number(this.form.built_year) + 1;
       this.myData(1);
       this.isHigh = false;
     },
