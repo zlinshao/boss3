@@ -16,6 +16,10 @@
             </el-input>
           </el-form-item>
           <el-form-item>
+            <el-radio v-model="form.keyword_type" label="1">部门</el-radio>
+            <el-radio v-model="form.keyword_type" label="0">小区</el-radio>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
@@ -54,7 +58,7 @@
                   <el-form-item>
                     <el-form-item>
                       <el-select v-model="form.built_year" clearable>
-                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969" :key="index"></el-option>
+                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1970" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-form-item>
@@ -339,7 +343,8 @@ export default {
         city: "",
         area: "",
         region: "",
-        a: "list"
+        a: "list",
+        keyword_type: '1',
       },
       tableData: [],
 
@@ -642,9 +647,6 @@ export default {
       }
     },
     search() {
-      if(this.form.built_year) {
-        this.form.built_year = Number(this.form.built_year + 1) ;
-      }
       this.myData(1);
       this.isHigh = false;
     },
