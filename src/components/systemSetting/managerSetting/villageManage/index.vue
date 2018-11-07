@@ -229,8 +229,7 @@
             </el-table-column>
             <el-table-column prop="department" label="所属部门">
               <template slot-scope="scope">
-                <!-- <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? (collapse = "全部") : (collapse ="收起")}}</span></span> -->
-                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{collapse}}</span></span>
+                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
               </template>
             </el-table-column>
           </el-table>
