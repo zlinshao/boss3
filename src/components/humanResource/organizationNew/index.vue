@@ -943,6 +943,7 @@
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
     <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
+    <RemovePower :module="RemovePowerModule" @close="closeRemovePower" :powerData="RemovePowerData"></RemovePower>
 
     <ViewRange :viewRangeDialog="viewRangeDialog" :editId="editId" @close="closeViewRange"></ViewRange>
   </div>
@@ -959,6 +960,7 @@
   import EditPosition from './components/editPostion.vue'
   import EditOnlyPosition from './components/editOnlyPostion.vue'
   import AddPower from './components/addPower.vue'   //权限
+  import RemovePower from './components/removePower.vue'   //权限
   import ViewRange from './components/addViewRange'
 
   export default {
@@ -973,6 +975,7 @@
       EditPosition,
       EditOnlyPosition,
       AddPower,
+      RemovePower,
       ViewRange
     },
     data() {
@@ -1006,6 +1009,7 @@
         branchBankCategory: [],
         isHigh: false,
         powerData: [],
+        RemovePowerData: [],
         collectStatus: ' ',
         collectLoading: false,
         userCollectStatus: ' ',
@@ -1074,6 +1078,7 @@
         editPositionDialog: false,    //修改岗位
         editOnlyPositionDialog: false, //修改职位
         powerModule: false,        //权限
+        RemovePowerModule: false,        //权限黑名单
         isEdit: false,
         editId: null,
         totalStaffNum: 0,
@@ -1416,7 +1421,11 @@
         this.powerModule = false;
         this.powerData = [];
       },
-
+      //================权限====================
+      closeRemovePower() {
+        this.RemovePowerModule = false;
+        this.RemovePowerData = [];
+      },
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData() {
@@ -1452,6 +1461,7 @@
         if (row.is_enable && row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1461,6 +1471,7 @@
         } else if (!row.is_enable && row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1470,6 +1481,7 @@
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1479,6 +1491,7 @@
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1628,6 +1641,9 @@
           this.sendLeaveMsgDialog = true;
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
+        }else if ( val.clickIndex ==='remove_power'){
+          this.RemovePowerModule = true;
+          this.RemovePowerData = val.data;
         }
       },
       //禁用，启用
