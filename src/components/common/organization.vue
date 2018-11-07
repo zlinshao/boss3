@@ -43,13 +43,11 @@
         </div>
         <!--筛选-->
         <div class="filterOrgan">
-          <div class="filterTop noBtn" v-if="depart > 1">
-            南京乐伽商业管理有限公司
+          <div class="filterTop" @click="filterOrgan(depart)">
+            {{department_name}}
           </div>
-          <div class="filterTop" @click="filterOrgan(depart)" v-else>
-            南京乐伽商业管理有限公司
-          </div>
-          <div class="pitchOnData" v-show="pitchOnData.length > 0">
+          <!--面包屑-->
+          <div class="pitchOnData" v-show="pitchOnData.length > 0 && depart !== parent_id">
             <span v-for="(item,index) in pitchOnData" @click="removePitch(item.id, index)">
               <span v-if="pitchOnData.length > 1 && index !== 0">></span>
               {{item.name}}
@@ -129,6 +127,7 @@
         form: [],
         lengths: '',
         organType: '',
+        department_name: '',
       }
     },
     mounted() {
@@ -197,13 +196,16 @@
         if (this.parent_id === id) return;
         this.fullLoading = true;
         this.list = [];
-        this.pitchOnData = id === 1 ? [] : this.pitchOnData;
+        this.pitchOnData = id === this.depart ? [] : this.pitchOnData;
         this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
           this.fullLoading = false;
           this.parent_id = id;
           this.rightHeight();
           if (res.data.code === '70050') {
             this.list = res.data.data;
+            if (this.depart === id) {
+              this.department_name = res.data.data.name;
+            }
             this.evaluate(this.list.children, this.checkDepart);
           } else {
             this.prompt('warning', res.data.msg);
@@ -254,16 +256,16 @@
       },
       // 部门 / 员工
       chooseType(item, data, type = 'staff') {
-        console.log(item);
-        console.log(data);
         this.params.keywords = '';
-        if (type !== this.organType) {
-          if (this.organType === 'staff') {
-            this.prompt('warning', '请选择员工');
-          } else {
-            this.prompt('warning', '请选择部门');
+        if (this.organType) {
+          if (type !== this.organType) {
+            if (this.organType === 'staff') {
+              this.prompt('warning', '请选择员工');
+            } else {
+              this.prompt('warning', '请选择部门');
+            }
+            return;
           }
-          return;
         }
         let status = this.isExist(item, this.form);
         if (status > -1) {
