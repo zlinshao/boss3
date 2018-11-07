@@ -745,9 +745,7 @@
                   <el-col :span="8">
                     <el-form-item label="学历">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.education">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.education}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{ education }}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -1115,6 +1113,7 @@
         marital_status: '',
         political_status: '',
         recommender: '',
+        education: '',//学历
       }
     },
     mounted() {
@@ -1315,32 +1314,59 @@
       dict (res){
         this.dictionary(228, 1).then(result => {// 性别
           result.data.map((item,index)=>{
-            if(item.id === res.data.data.gender){
-              this.gender = result.data[index].dictionary_name;
+            if(res.data.data.gender){
+              if(item.id === res.data.data.gender){
+                this.gender = result.data[index].dictionary_name;
+              }
+            }else{
+              this.gender = "暂无";
             }
           })
         });
         this.dictionary(231, 1).then(result => {// 生育状况
           result.data.map((item,index)=>{
-            if(item.id == res.data.data.fertility_status){
-              this.fertility_status = result.data[index].dictionary_name;
+            if(res.data.data.fertility_status){
+              if(item.id == res.data.data.fertility_status){
+                this.fertility_status = result.data[index].dictionary_name;
+              }
+            }else{
+              this.fertility_status = "暂无";
             }
           })
         });
         this.dictionary(33, 1).then(result => {// 婚姻状况
           result.data.map((item,index)=>{
-            if(item.id == res.data.data.marital_status){
-              this.marital_status = result.data[index].dictionary_name;
+            if(res.data.data.marital_status){
+              if(item.id == res.data.data.marital_status){
+                this.marital_status = result.data[index].dictionary_name;
+              }
+            }else{
+              this.marital_status = "暂无";
             }
           })
         });
         this.dictionary(38, 1).then(result => {// 政治面貌
           result.data.map((item,index)=>{
-            if(item.id == res.data.data.political_status){
-              this.political_status = result.data[index].dictionary_name;
+            if(res.data.data.political_status){
+              if(item.id == res.data.data.political_status){
+                this.political_status = result.data[index].dictionary_name;
+              }
+            }else{
+              this.political_status = "暂无";
             }
           })
         });
+        this.dictionary(39, 1).then(result => {
+          result.data.map((item,index)=>{
+            if(res.data.data.education){
+              if(item.id == res.data.data.education){
+                this.education = result.data[index].dictionary_name;
+              }
+            }else{
+              this.education = "暂无";
+            }
+          })
+        })
       },
       getDefaultData() {
         this.$http.get(globalConfig.server + 'manager/department/1').then((res) => {
