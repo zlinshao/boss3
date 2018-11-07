@@ -191,7 +191,7 @@
             </el-table-column>
             <el-table-column prop="country" label="区/县">
               <template slot-scope="scope">
-                <div v-for="(country, index) in newCountryList" :key="index"  @click="newAreaChoose(country.area_id, index)"  :class="{blue: ind3 === index}">{{country.area_name}}</div>
+                <div v-for="(country, index) in newCountryList" :key="index"  @click="newAreaChoose(country,country.area_id, index)"  :class="{blue: ind3 === index}">{{country.area_name}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="area" label="区域">
@@ -229,7 +229,8 @@
             </el-table-column>
             <el-table-column prop="department" label="所属部门">
               <template slot-scope="scope">
-                <span :class="{activeHeght: isHeight !== scope.row.id}">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部" : "收起"}}</span></span>
+                <!-- <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? (collapse = "全部") : (collapse ="收起")}}</span></span> -->
+                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{collapse}}</span></span>
               </template>
             </el-table-column>
           </el-table>
@@ -305,12 +306,13 @@ export default {
       },
       ind1: 0,
       ind2: 0,
-      ind3: 0,
-      ind4: 0,
-      isHeight: false,  // 类名添加
+      ind3: "",
+      ind4: "",
+      isHeight: 0,  // 类名添加
+      lengthStr: '',
       collapse: "全部", // 收起
       // provinceIdArr: [],
-      organization: '',  // 组织架构
+      organization: '142',  // 组织架构
       follow_name: "",
       follow_id: "",
       urls: globalConfig.server,
@@ -384,10 +386,11 @@ export default {
     handleSelectionChange(val) {
     //  只支持删除一个
       this.multipleSelection = val;
-      // this.pitch = val[0].id;
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
           this.communityArr.push(item.id)
+        } else if(index == 0) {
+          this.pitch = val[index].id;
         }
       })
       if(val.length == 1) {
@@ -436,6 +439,7 @@ export default {
                 departStr += item.name + '，';
               })
               list.department = departStr.substring(0, departStr.length - 1);
+              this.lengthStr = list.department;
               list.id = data[i].id;
               list.village_name = data[i].village_name;
               list.province_name = data[i].province.province_name;
@@ -496,13 +500,14 @@ export default {
           this.newCityList = res.data.data;
         }
       })
+      
     },
     // 新的区县搜索
     newChooseCountry(val,id, index) {
-      console.log(val, "11111");
-      this.organization = val.org_id
-      this.ind2 = index;
-      this.form.city = id;
+      this.organization = val.org_id;  
+      this.ind2 = index;                    // 样式切换
+      this.form.city = val.city_id;    // 城市id
+      this.form.province = val.province_id   // 省ID
       this.newCountryList = [];
       this.newAreaList = [];
       let city_id = id || "320100";
@@ -511,21 +516,30 @@ export default {
           this.newCountryList = res.data.data;
         }
       })
+      this.myData(1);
     },
     //  新的区域搜索
-    newAreaChoose(id, index) {
+    newAreaChoose(val,id, index) {
       this.ind3 = index;
-      this.form.area = id;
+      this.form.area = id;    // 县区ID
       let area_id = id || "320102";
       this.$http.get(this.urls + "setting/others/region?region_parent=" + area_id).then(res => {
         if(res.data.code == "100070") {
           this.newAreaList = res.data.data;
         }
       })
+      this.myData(1)
     },
     // 展示全部
-    collapseShow(val,id) {
-      this.isHeight = val.id;
+    collapseShow(val,id,event) {
+      console.log(val, id, "4444");
+      if(this.collapse == "收起") {
+        this.isHeight = null;
+        this.collapse = "全部"
+        } else {
+        this.collapse = "收起"
+        this.isHeight = val.id;
+      }
     },
     // 搜索
     newSreach(id, index) {
@@ -537,7 +551,7 @@ export default {
     // 所属部门
     getDepartment(id) {
       this.$http.get(this.urls + "distribution/community/" +  this.pitch).then(res => {
-        console.log(res, "1111");
+        // console.log(res, "1111");
       })
     },
     // 合并
