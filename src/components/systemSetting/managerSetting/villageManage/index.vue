@@ -16,6 +16,10 @@
             </el-input>
           </el-form-item>
           <el-form-item>
+            <el-radio v-model="form.keyword_type" label="1">部门</el-radio>
+            <el-radio v-model="form.keyword_type" label="0">小区</el-radio>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
@@ -54,7 +58,7 @@
                   <el-form-item>
                     <el-form-item>
                       <el-select v-model="form.built_year" clearable>
-                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969" :key="index"></el-option>
+                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1970" :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-form-item>
@@ -229,8 +233,7 @@
             </el-table-column>
             <el-table-column prop="department" label="所属部门">
               <template slot-scope="scope">
-                <!-- <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? (collapse = "全部") : (collapse ="收起")}}</span></span> -->
-                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{collapse}}</span></span>
+                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
               </template>
             </el-table-column>
           </el-table>
@@ -340,7 +343,8 @@ export default {
         city: "",
         area: "",
         region: "",
-        a: "list"
+        a: "list",
+        keyword_type: '1',
       },
       tableData: [],
 
@@ -385,14 +389,14 @@ export default {
   methods: {
     handleSelectionChange(val) {
     //  只支持删除一个
+    this.communityArr = [];
       this.multipleSelection = val;
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
           this.communityArr.push(item.id)
-        } else if(index == 0) {
-          this.pitch = val[index].id;
-        }
+        } 
       })
+      this.pitch = val[0].id;
       if(val.length == 1) {
         this.deletedBtn = false;
       } else {
@@ -504,8 +508,11 @@ export default {
     },
     // 新的区县搜索
     newChooseCountry(val,id, index) {
+      this.ind3 = "";
       this.organization = val.org_id;  
       this.ind2 = index;                    // 样式切换
+      this.form.region = "";
+      this.form.area = "";
       this.form.city = val.city_id;    // 城市id
       this.form.province = val.province_id   // 省ID
       this.newCountryList = [];
@@ -520,7 +527,9 @@ export default {
     },
     //  新的区域搜索
     newAreaChoose(val,id, index) {
+      this.ind4 = "";
       this.ind3 = index;
+      this.form.region = "";
       this.form.area = id;    // 县区ID
       let area_id = id || "320102";
       this.$http.get(this.urls + "setting/others/region?region_parent=" + area_id).then(res => {
@@ -532,7 +541,6 @@ export default {
     },
     // 展示全部
     collapseShow(val,id,event) {
-      console.log(val, id, "4444");
       if(this.collapse == "收起") {
         this.isHeight = null;
         this.collapse = "全部"
@@ -586,12 +594,6 @@ export default {
           });
         }
       })
-    },
-    // 清除
-    emptyFollowPeople() {
-      this.follow_id = "";
-      // this.params.org_id = "";
-      this.follow_name = "";
     },
      // 关闭模态框
     closeModal() {
@@ -856,6 +858,7 @@ export default {
     color:  #409eff;
   }
   .activeHeght {
+    width: 84%;
     height: 48px;
     overflow: hidden;
     text-overflow: ellipsis;

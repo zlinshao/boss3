@@ -203,7 +203,7 @@
           this.rightHeight();
           if (res.data.code === '70050') {
             this.list = res.data.data;
-            if (this.depart === id) {
+            if (this.depart === id || id === 1) {
               this.department_name = res.data.data.name;
             }
             this.evaluate(this.list.children, this.checkDepart);

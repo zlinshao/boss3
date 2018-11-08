@@ -588,7 +588,7 @@
       bg(row, label) {
         var date = new Date().toLocaleDateString();
         var currentDate = this.arrangeParams.arrange_month + "-" + label;
-        console.log(row,label, "11111");
+        console.log(row, label, "111111");
         
         if (row["oa_sort"] != null) {
           if(row["oa_sort"]["arrange"] != null ){
@@ -829,6 +829,8 @@
       outArrange() {
         this.exprotLoading = true;
         this.$http.post(this.url + "attendance/sort-excel/sort-out", this.arrangeParams).then(res => {
+          console.log(res);
+          return false;
           if (res.status == 200) {
             if (res.data.code == 10000) {
               this.exprotLoading = false;
