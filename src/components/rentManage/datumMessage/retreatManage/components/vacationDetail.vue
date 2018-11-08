@@ -768,8 +768,8 @@
 
       <span slot="footer" class="dialog-footer">
         <div class='edit-time'>
-          <span>提交审核时间 ： {{audited_time}}</span>
-          <span>驳回时间 ： {{reject_time}}</span>
+          <span v-if="show_audited_time">提交审核时间 ： {{audited_time}}</span>
+          <span v-if="show_reject_time">驳回时间 ： {{reject_time}}</span>
         </div>
         <div>
           <el-button v-if="params.status_type == 1" size="small" type="warning" @click="reject">驳 回</el-button>
@@ -945,6 +945,8 @@
         realTotal : '',    //应退还
         audited_time:'',       //提交审核时间
         reject_time:'',        //驳回时间
+        show_audited_time:false,
+        show_reject_time:false,
       };
     },
 
@@ -1003,6 +1005,17 @@
           this.isLoading = false;
           if (res.data.code === '20020') {
             let data = res.data.data;
+            //展示提交审核时间和驳回时间
+            if(data.status === 2){
+              this.show_audited_time = true;
+              this.show_reject_time = true;
+            }else if(data.status === 1){
+              this.show_audited_time = true;
+              this.show_reject_time = false;
+            }else{
+              this.show_audited_time = false;
+              this.show_reject_time = false;
+            }
             if (data.financial_info) {
               if(Object.prototype.toString.call(data.financial_info) === '[object Array]'){
                 this.financialReceiptsLength = data.financial_info.length || 1;
@@ -1164,6 +1177,7 @@
           this.$http.get(globalConfig.server + 'lease/collect/' + id).then((res) => {
             if (res.data.code === '61010') {
               let resData = res.data.data;
+              console.log(resData)
               this.contractInfo = resData;
               this.audited_time = resData.record_time.audited;
               this.reject_time = resData.record_time.reject;
@@ -1173,6 +1187,7 @@
           this.$http.get(globalConfig.server + 'lease/rent/' + id).then((res) => {
             if (res.data.code === '61110') {
               let resData = res.data.data;
+              console.log(resData)
               this.contractInfo = resData;
               this.audited_time = resData.record_time.audited;
               this.reject_time = resData.record_time.reject;
@@ -1492,9 +1507,11 @@
         .dialog-footer{
           display:flex;
           justify-content: space-between;
+          align-items: center;
           color:#409EFF;
           span{
             margin-right: 30px;
+            font-size: 12px
           }
         }
       }
