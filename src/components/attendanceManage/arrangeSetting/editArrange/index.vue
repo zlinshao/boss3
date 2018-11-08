@@ -588,7 +588,8 @@
       bg(row, label) {
         var date = new Date().toLocaleDateString();
         var currentDate = this.arrangeParams.arrange_month + "-" + label;
-
+        console.log(row,label, "11111");
+        
         if (row["oa_sort"] != null) {
           if(row["oa_sort"]["arrange"] != null ){
             if(row["oa_sort"]["arrange"][label]){
