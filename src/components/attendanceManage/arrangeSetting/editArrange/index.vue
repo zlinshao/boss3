@@ -28,7 +28,7 @@
                       size="mini"
                       style="width:250px;dispaly:inline-block;margin-left:20px;"
                       clearable
-                      @keyup.enter.native="goSearch"
+                      @keyup.enter.prevent.native="goSearch"
                     >
                       <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                     </el-input>

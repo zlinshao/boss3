@@ -1,6 +1,6 @@
 <template>
-  <div id="addPower">
-    <el-dialog :close-on-click-modal="false" title="权限" :visible.sync="powerVisible" width="60%">
+  <div id="removePower">
+    <el-dialog :close-on-click-modal="false" title="权限黑名单" :visible.sync="powerVisible" width="60%">
       <el-form size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;">
         <el-row>
           <el-col :span="8">
@@ -12,6 +12,7 @@
                 <el-form-item>
                   <el-select v-model="currentRoleId" clearable placeholder="请选择">
                     <el-option v-for="item in roleArray" :key="item.id" :label="item.name" :value="item.id">
+                      {{item.name}}
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -63,10 +64,10 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <el-button size="small" type="primary" @click="setPart('attach')">关联角色</el-button>
-        <el-button size="small" type="primary" @click="setPart('detach')">解除角色关联</el-button>
-        <el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>
-        <el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>
+        <!--<el-button size="small" type="primary" @click="setPart('attach')">关联角色</el-button>-->
+        <!--<el-button size="small" type="primary" @click="setPart('detach')">解除角色关联</el-button>-->
+        <!--<el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>-->
+        <el-button size="small" type="primary" @click="empower('person')">同步权限黑名单</el-button>
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
     </el-dialog>
@@ -76,7 +77,7 @@
 
 <script>
   export default {
-    name: "add-power",
+    name: "remove-power",
     props: ['module', 'powerData'],
     data() {
       return {
@@ -176,7 +177,7 @@
       },
       getDefaultData() {
         this.checkedPower = [];
-        this.$http.get(globalConfig.server + 'organization/user/getPermission/' + this.userId).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/user/getPermissionBan/' + this.userId).then((res) => {
           if (res.data.code === '20060') {
             let powers = res.data.data;
             powers.forEach((item) => {
@@ -311,13 +312,13 @@
           ids = this.userId;
           str = 'user';
         }
-        this.$http.put(globalConfig.server + 'organization/permission/setpermissions/' + ids, {
-          on: str,
+        this.$http.put(globalConfig.server + 'organization/permission/ban/' + ids, {
+//          on: str,
           permissions: powerIds,
         }).then((res) => {
           if (res.data.code === '20000') {
             this.powerVisible = false;
-            this.prompt('success', '授权成功');
+            this.prompt('success', '黑名单权限同步成功');
           } else {
             this.prompt('warning', res.data.msg);
           }

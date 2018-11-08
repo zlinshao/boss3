@@ -302,7 +302,7 @@
       },
       openOrganizationModal() {
         this.organizationDialog = true;
-        // this.typex = "depart";
+        this.typex = "";
       },
       closeOrganization() {
         this.organizationDialog = false;

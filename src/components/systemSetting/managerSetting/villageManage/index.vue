@@ -6,7 +6,7 @@
           <el-button type="primary" size="mini" :disabled="btnDisable" @click="openOrganizeModal">分配</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
-          <el-button type="primary" size="mini" :disabled="btnDisable" @click="mergeBtn" >合并</el-button>
+          <!-- <el-button type="primary" size="mini" :disabled="btnDisable" @click="mergeBtn" >合并</el-button> -->
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -179,24 +179,24 @@
       <el-col :span="6">
         <div class="grid-content bg-purple">
           <el-table :data="cityDate" style="width: 100%" class="urban-division">
-            <el-table-column prop="province" label="省">
+            <!-- <el-table-column prop="province" label="省">
               <template slot-scope="scope">
-                <div v-for="(province, index) in newProvinceList" :key="index" @click="newChooseCity(province.province_id)">{{province.province_name}}</div>
+                <div v-for="(province, index) in newProvinceList" :key="index" @click="newChooseCity(province.province_id, index)" :class="{blue: ind1 === index}">{{province.province_name}}</div>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="city" label="城市">
               <template slot-scope="scope">
-                <div v-for="(city, index) in newCityList" :key="index" @click="newChooseCountry(city.city_id)">{{city.city_name}}</div>
+                <div v-for="(city, index) in newCityList" :key="index" @click="newChooseCountry(city,city.city_id, index)"  :class="{blue: ind2 === index}">{{city.city_name}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="country" label="区/县">
               <template slot-scope="scope">
-                <div v-for="(country, index) in newCountryList" :key="index"  @click="newAreaChoose(country.area_id)">{{country.area_name}}</div>
+                <div v-for="(country, index) in newCountryList" :key="index"  @click="newAreaChoose(country,country.area_id, index)"  :class="{blue: ind3 === index}">{{country.area_name}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="area" label="区域">
               <template slot-scope="scope">
-                <div v-for="(region, index) in newAreaList" :key="index" @click="newSreach(region.id)">{{region.region_name}}</div>
+                <div v-for="(region, index) in newAreaList" :key="index" @click="newSreach(region.id, index)"  :class="{blue: ind4 === index}">{{region.region_name}}</div>
               </template>
             </el-table-column>
           </el-table>
@@ -227,7 +227,11 @@
             </el-table-column>
             <el-table-column prop="total_buildings" label="房屋栋数">
             </el-table-column>
-            <el-table-column prop="" label="所属部门"></el-table-column>
+            <el-table-column prop="department" label="所属部门">
+              <template slot-scope="scope">
+                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </el-col>
@@ -237,20 +241,6 @@
       <el-pagination @size-change="handleSizeChange" @current-change="myData" :current-page="currentPage" :page-size="12" layout="total, prev, pager, next, jumper" :total="paging">
       </el-pagination>
     </div>
-
-    <!-- 分配 -->
-    <!-- <el-dialog title="分配到" :visible.sync="distribution" width="30%" :before-close="distributionClose">
-      <el-checkbox-group v-model="checkList">
-        <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
-        <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
-      </el-input>
-      </el-checkbox-group>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="distribution = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="distribution = false" size="mini">确 定</el-button>
-      </span>
-    </el-dialog> -->
-
     <!--模态框-->
     <el-dialog title="合并小区" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
       <el-form size="mini" label-width="80px">
@@ -265,14 +255,14 @@
     </el-dialog>
 
     <!--右键-->
-    <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>-->
+    <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu> -->
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList" :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
 
     <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch> 
 
      <!-- 组织架构 -->
-        <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></organization>
+    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization"></organization>
   </div>
 </template>
 
@@ -308,6 +298,20 @@ export default {
       length: 0,
       type: "",
       organizeVisible: false, // 组织架构
+      communityArr: [],  // 小区数组
+      distributionForm: {
+        org_id: [],  // 部门ID
+        community_id: [] // 小区ID
+      },
+      ind1: 0,
+      ind2: 0,
+      ind3: "",
+      ind4: "",
+      isHeight: 0,  // 类名添加
+      lengthStr: '',
+      collapse: "全部", // 收起
+      // provinceIdArr: [],
+      organization: '142',  // 组织架构
       follow_name: "",
       follow_id: "",
       urls: globalConfig.server,
@@ -380,8 +384,14 @@ export default {
   methods: {
     handleSelectionChange(val) {
     //  只支持删除一个
+    this.communityArr = [];
       this.multipleSelection = val;
-      this.pitch = val[0].id
+      val.forEach((item, index) => {
+        if(this.communityArr.indexOf(item.id) == -1) {
+          this.communityArr.push(item.id)
+        } 
+      })
+      this.pitch = val[0].id;
       if(val.length == 1) {
         this.deletedBtn = false;
       } else {
@@ -423,6 +433,12 @@ export default {
             this.tableData = [];
             for (let i = 0; i < data.length; i++) {
               let list = {};
+              let departStr = ""
+              data[i].orgs.forEach((item, index) => {
+                departStr += item.name + '，';
+              })
+              list.department = departStr.substring(0, departStr.length - 1);
+              this.lengthStr = list.department;
               list.id = data[i].id;
               list.village_name = data[i].village_name;
               list.province_name = data[i].province.province_name;
@@ -451,52 +467,95 @@ export default {
         });
     },
     // 新的省搜索
-    newChooseProvince() {
-      this.$http.get(this.urls + "setting/others/province").then(res => {
-        if(res.data.code == "100040") {
-          this.newProvinceList = res.data.data;
-        }
-      })
-    },
+    // newChooseProvince() {
+    //   this.$http.get(this.urls + "setting/others/province").then(res => {
+    //     if(res.data.code == "100040") {
+    //       this.newProvinceList = res.data.data;
+    //     }
+    //     this.newProvinceList.forEach(item => {
+    //       this.provinceIdArr.push(item.province_id);
+    //       this.$http.get(this.urls + "setting/others/city?city_parent=" + item.province_id).then(res => {
+    //         if(res.data.code == "100050") {
+    //           res.data.data.forEach((data, key) => {
+    //             if(data.city_name == "市辖区" || data.city_name == "县" || data.city_name == "市") {
+    //               data.city_name = "重庆" + data.city_name;
+    //             }
+    //             this.newCityList.push(data)
+    //           })
+    //         }
+    //       })
+    //     })
+    //   })
+    // },
     // 新的市搜索
-    newChooseCity(id) {
+    newChooseCity(id, index) {
+      this.ind1 = index;
       this.form.province = id;
       this.newCountryList = [];
       this.newAreaList = [];
-      let province_id = id || "320000";
-      this.$http.get(this.urls + "setting/others/city?city_parent=" + province_id).then(res => {
+      // let province_id = id || "320000";
+      this.$http.get(this.urls + "setting/others/companyCity").then(res => {
         if(res.data.code == "100050") {
           this.newCityList = res.data.data;
         }
       })
+      
     },
     // 新的区县搜索
-    newChooseCountry(id) {
-      this.form.city = id;
+    newChooseCountry(val,id, index) {
+      this.ind3 = "";
+      this.organization = val.org_id;  
+      this.ind2 = index;                    // 样式切换
+      this.form.region = "";
+      this.form.area = "";
+      this.form.city = val.city_id;    // 城市id
+      this.form.province = val.province_id   // 省ID
       this.newCountryList = [];
       this.newAreaList = [];
       let city_id = id || "320100";
-      this.$http.get(this.urls + "setting/others/area?area_parent=" + city_id).then(res => {
+      this.$http.post(this.urls + "setting/others/companyArea", {area_parent: city_id}).then(res => {
         if(res.data.code == "100060") {
           this.newCountryList = res.data.data;
         }
       })
+      this.myData(1);
     },
     //  新的区域搜索
-    newAreaChoose(id) {
-      this.form.area = id;
+    newAreaChoose(val,id, index) {
+      this.ind4 = "";
+      this.ind3 = index;
+      this.form.region = "";
+      this.form.area = id;    // 县区ID
       let area_id = id || "320102";
       this.$http.get(this.urls + "setting/others/region?region_parent=" + area_id).then(res => {
         if(res.data.code == "100070") {
           this.newAreaList = res.data.data;
         }
       })
+      this.myData(1)
+    },
+    // 展示全部
+    collapseShow(val,id,event) {
+      if(this.collapse == "收起") {
+        this.isHeight = null;
+        this.collapse = "全部"
+        } else {
+        this.collapse = "收起"
+        this.isHeight = val.id;
+      }
     },
     // 搜索
-    newSreach(id) {
+    newSreach(id, index) {
+      this.ind4 = index
       this.form.region = id;
       this.myData(1)
       this.isHigh = false;
+    },
+    // 所属部门
+    getDepartment(id) {
+      this.$http.get(this.urls + "distribution/community/" +  this.pitch).then(res => {
+        // console.log(res, "1111");
+      })
     },
     // 合并
     mergeBtn() {
@@ -504,30 +563,32 @@ export default {
     },
      //选人组件
     openOrganizeModal(id) {
-      // this.params.org_id = id;
-      // this.follow_name = '';
       this.organizationDialog = true;
       this.type = "depart";
-      this.length = 1;
+      this.length = 20;
     },
     selectMember(val) {
       this.type = "";
       this.length = "";
-      // this.follow_id = "";
-      // this.follow_name = '';
-      val.forEach(item => {
-        // this.follow_id += item.id + ",";
-        // this.follow_name = item.name + ",";
+      this.distributionForm = {org_id: [], community_id: ""};
+      val.forEach((item, index) => {
+       this.distributionForm.org_id.push(item.id)
       });
-      // this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
-      // this.params.org_id = this.follow_id;
-      // this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
-    },
-    // 清除
-    emptyFollowPeople() {
-      this.follow_id = "";
-      // this.params.org_id = "";
-      this.follow_name = "";
+      this.distributionForm.community_id = this.communityArr;
+      this.$http.post(this.urls + "distribution/community", this.distributionForm).then(res => {
+        if(res.data.code == "10000") {
+          this.$notify.success({
+            title: "成功",
+            message: res.data.msg
+          });
+          this.myData(1);
+        } else {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          });
+        }
+      })
     },
      // 关闭模态框
     closeModal() {
@@ -581,6 +642,9 @@ export default {
       }
     },
     search() {
+      if(this.form.built_year) {
+        this.form.built_year = Number(this.form.built_year + 1) ;
+      }
       this.myData(1);
       this.isHigh = false;
     },
@@ -778,7 +842,9 @@ export default {
     }
   },
   created() {
-    this.newChooseProvince();
+    // this.newChooseProvince();
+    this.newChooseCity();
+    this.getDepartment();
   }
 };
 </script>
@@ -786,6 +852,27 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 #community {
+  .blue {
+    color:  #409eff;
+  }
+  .activeHeght {
+    width: 84%;
+    height: 48px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    .collapse {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+     
+    }
+  }
+  .el-table .cell {
+    position: relative;
+  }
   .urban-division {
     // position: relative;
     // overflow: hidden;

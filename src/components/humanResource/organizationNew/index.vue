@@ -435,7 +435,7 @@
                   <el-col :span="8">
                     <el-form-item label="真实姓名">
                       <div class="content">
-                    <span v-if="staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.real_name">
                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.real_name}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -444,9 +444,9 @@
                   <el-col :span="8">
                     <el-form-item label="性别">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.genders">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.genders}}</span>
-                        <span v-else>暂无</span>
+                        <span>
+                          {{ gender }}
+                        </span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -482,9 +482,7 @@
                   <el-col :span="8">
                     <el-form-item label="生育状况">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{ fertility_status }}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -561,7 +559,7 @@
                   <el-col :span="8">
                     <el-form-item label="职位">
                       <div class="content">
-                        <span v-if="currentPosition">{{currentPosition}}</span>
+                        <span v-if="currentDuty">{{currentDuty}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -569,7 +567,7 @@
                   <el-col :span="8">
                     <el-form-item label="岗位">
                       <div class="content">
-                        <span v-if="currentPost">{{currentPost}}</span>
+                        <span v-if="currentPosi">{{currentPosi}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -647,9 +645,7 @@
                   <el-col :span="8">
                     <el-form-item label="推荐人">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{ recommender }}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -715,18 +711,14 @@
                   <el-col :span="8">
                     <el-form-item label="婚姻状况">
                       <div class="content">
-                   <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss">
-                     {{staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{ marital_status }}</span>
                       </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="政治面貌">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss">
-                     {{staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{ political_status }}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -753,9 +745,7 @@
                   <el-col :span="8">
                     <el-form-item label="学历">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.educations">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.educations}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{ education }}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -943,6 +933,7 @@
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
     <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
+    <RemovePower :module="RemovePowerModule" @close="closeRemovePower" :powerData="RemovePowerData"></RemovePower>
 
     <ViewRange :viewRangeDialog="viewRangeDialog" :editId="editId" @close="closeViewRange"></ViewRange>
   </div>
@@ -959,6 +950,7 @@
   import EditPosition from './components/editPostion.vue'
   import EditOnlyPosition from './components/editOnlyPostion.vue'
   import AddPower from './components/addPower.vue'   //权限
+  import RemovePower from './components/removePower.vue'   //权限
   import ViewRange from './components/addViewRange'
 
   export default {
@@ -973,6 +965,7 @@
       EditPosition,
       EditOnlyPosition,
       AddPower,
+      RemovePower,
       ViewRange
     },
     data() {
@@ -1006,6 +999,7 @@
         branchBankCategory: [],
         isHigh: false,
         powerData: [],
+        RemovePowerData: [],
         collectStatus: ' ',
         collectLoading: false,
         userCollectStatus: ' ',
@@ -1074,6 +1068,7 @@
         editPositionDialog: false,    //修改岗位
         editOnlyPositionDialog: false, //修改职位
         powerModule: false,        //权限
+        RemovePowerModule: false,        //权限黑名单
         isEdit: false,
         editId: null,
         totalStaffNum: 0,
@@ -1111,6 +1106,14 @@
         selectPostID: '',
         selectOrgID: '',
         growthData: '',
+        currentDuty: '',
+        currentPosi: '',
+        gender: '',
+        fertility_status: '',
+        marital_status: '',
+        political_status: '',
+        recommender: '',
+        education: '',//学历
       }
     },
     mounted() {
@@ -1237,6 +1240,13 @@
         this.staffDetail = true;
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
+          console.log(res);
+          this.getDuty(res.data.data.id,true);
+          if(res.data.data.detail.recommender){
+            this.getDuty(res.data.data.detail.recommender,false);
+          }else{
+            this.recommender = "暂无";
+          }
           this.staffDetailData = {};
           this.currentPost = this.currentPosition = '';
           if (res.data.code === '710910') {
@@ -1278,6 +1288,85 @@
         this.$http.get(globalConfig.server + 'manager/staff/growth/' + row.id).then((res) => {
           this.growthData = res.data.data;
         });
+      },
+      //获取职位岗位
+      getDuty (user_id,status){
+        this.$http.get(globalConfig.server + 'hrm/User/userInfo',{
+          params:{
+            user_id
+          }
+        }).then(res =>{
+          if(res.status === 200){
+            if(res.data.code == 90010){
+              if(status){
+                this.currentDuty = res.data.data.dutyInfoNames;
+                this.currentPosi = res.data.data.positionInfoNames;
+                this.dict(res);
+              }else{
+                this.recommender = res.data.data.name;
+              }
+            }
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
+      },
+      dict (res){
+        this.dictionary(228, 1).then(result => {// 性别
+          result.data.map((item,index)=>{
+            if(res.data.data.gender){
+              if(item.id === res.data.data.gender){
+                this.gender = result.data[index].dictionary_name;
+              }
+            }else{
+              this.gender = "暂无";
+            }
+          })
+        });
+        this.dictionary(231, 1).then(result => {// 生育状况
+          result.data.map((item,index)=>{
+            if(res.data.data.fertility_status){
+              if(item.id == res.data.data.fertility_status){
+                this.fertility_status = result.data[index].dictionary_name;
+              }
+            }else{
+              this.fertility_status = "暂无";
+            }
+          })
+        });
+        this.dictionary(33, 1).then(result => {// 婚姻状况
+          result.data.map((item,index)=>{
+            if(res.data.data.marital_status){
+              if(item.id == res.data.data.marital_status){
+                this.marital_status = result.data[index].dictionary_name;
+              }
+            }else{
+              this.marital_status = "暂无";
+            }
+          })
+        });
+        this.dictionary(38, 1).then(result => {// 政治面貌
+          result.data.map((item,index)=>{
+            if(res.data.data.political_status){
+              if(item.id == res.data.data.political_status){
+                this.political_status = result.data[index].dictionary_name;
+              }
+            }else{
+              this.political_status = "暂无";
+            }
+          })
+        });
+        this.dictionary(39, 1).then(result => {
+          result.data.map((item,index)=>{
+            if(res.data.data.education){
+              if(item.id == res.data.data.education){
+                this.education = result.data[index].dictionary_name;
+              }
+            }else{
+              this.education = "暂无";
+            }
+          })
+        })
       },
       getDefaultData() {
         this.$http.get(globalConfig.server + 'manager/department/1').then((res) => {
@@ -1416,7 +1505,11 @@
         this.powerModule = false;
         this.powerData = [];
       },
-
+      //================权限====================
+      closeRemovePower() {
+        this.RemovePowerModule = false;
+        this.RemovePowerData = [];
+      },
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData() {
@@ -1452,6 +1545,7 @@
         if (row.is_enable && row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1461,6 +1555,7 @@
         } else if (!row.is_enable && row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1470,6 +1565,7 @@
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1479,6 +1575,7 @@
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1628,6 +1725,9 @@
           this.sendLeaveMsgDialog = true;
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
+        }else if ( val.clickIndex ==='remove_power'){
+          this.RemovePowerModule = true;
+          this.RemovePowerData = val.data;
         }
       },
       //禁用，启用
