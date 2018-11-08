@@ -828,6 +828,8 @@
       outArrange() {
         this.exprotLoading = true;
         this.$http.post(this.url + "attendance/sort-excel/sort-out", this.arrangeParams).then(res => {
+          console.log(res);
+          return false;
           if (res.status == 200) {
             if (res.data.code == 10000) {
               this.exprotLoading = false;
