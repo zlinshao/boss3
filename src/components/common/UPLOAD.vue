@@ -27,6 +27,7 @@
     props: ['ID', 'editImage', 'isClear', 'onlyShow', 'noMulti', 'disabled'],
     data() {
       return {
+        urls: globalConfig.server,
         imgArray: [],
         imgId: [],
         isUploading: false,
@@ -106,7 +107,7 @@
         this.editImg = imgObject;
       },
       getToken() {
-        this.$http.get(globalConfig.server + 'api/v1/token').then((res) => {
+        this.$http.get(this.urls + 'api/v1/token').then((res) => {
           this.token = res.data.data;
           if (!this.uploader && !this.disabled) {
             this.uploaderReady();
@@ -114,7 +115,7 @@
         })
       },
       getTokenMessage() {
-        this.$http.get(globalConfig.server + 'api/v1/token').then((res) => {
+        this.$http.get(this.urls + 'api/v1/token').then((res) => {
           this.token = res.data.data;
           if (!this.disabled) {
             this.uploaderReady();
@@ -205,7 +206,7 @@
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
               _this.$http.defaults.timeout = 5000;
-              _this.$http.post(globalConfig.server + 'api/v1/upload-direct', {
+              _this.$http.post(this.urls + 'api/v1/upload-direct', {
                 url: sourceLink,
                 name: url.key,
                 raw_name: file.name,
