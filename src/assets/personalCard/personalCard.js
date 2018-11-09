@@ -55,7 +55,7 @@ function insertHtml(offsetTop, offsetLeft, personal) {
   if (personal.org) {
     man.depart = man.org[0].name;
   } else {
-    man.depart = man.organizations[0].name;
+    man.depart = '---';
   }
   let contentHtml = `<div id="personalCard" style="position: fixed;left: ${offsetLeft}px;top: ${offsetTop}px;">
                          <div class="personalCard_left">

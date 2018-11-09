@@ -192,8 +192,8 @@
                   <el-table-column
                     label="部门">
                     <template slot-scope="scope">
-                      <span v-if="!scope.row.organizations">暂无</span>
-                      <span v-else v-for="item in scope.row.organizations">{{item.name}}</span>
+                      <span v-if="!scope.row.org">暂无</span>
+                      <span v-else v-for="item in scope.row.org">{{item.name}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -366,7 +366,7 @@
                       <el-table-column
                         label="部门">
                         <template slot-scope="scope">
-                          <span v-for="item in scope.row.organizations">{{item.name}}</span>
+                          <span v-for="item in scope.row.org">{{item.name}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column

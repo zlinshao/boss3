@@ -27,7 +27,7 @@
                     <img src="../../assets/images/head.png" v-else>
                     <div>
                       <span>{{item.name}}</span>
-                      <span class="span2" v-for="(str, idx) in item.organizations" v-if="idx === 0">
+                      <span class="span2" v-for="(str, idx) in item.org" v-if="idx === 0">
                         {{str.name}}
                       </span>
                     </div>
@@ -80,7 +80,7 @@
                 </div>
                 <div>
                   <span>{{item.name}}</span>
-                  <span class="span2" v-for="(str, idx) in item.organizations" v-if="idx === 0">
+                  <span class="span2" v-for="(str, idx) in item.org" v-if="idx === 0">
                     {{str.name}}
                   </span>
                 </div>
