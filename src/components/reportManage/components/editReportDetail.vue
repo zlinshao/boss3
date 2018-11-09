@@ -155,7 +155,7 @@
                       </div>
                       <div class="commentC">
                           <span>
-                            {{value.body}}
+                            {{value.content}}
                           </span>
                         <div>
                           <p v-for="(p,index) in value.album">
@@ -695,14 +695,14 @@
         this.suggestpriceStatus = false
         this.fullLoading = true;
         this.approvedStatus = false;
-        // this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
-        this.$http.get( this.address + 'workflow/process/1').then((res) => {
+        this.$http.get( this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
+            console.log(this.operation);
             this.deal = res.data.data.deal;
             this.process = res.data.data.process;
 
@@ -808,13 +808,7 @@
         this.comments(this.reportId, val);
       },
       comments(val, page) {
-        // this.$http.get(this.address + 'comments', {
-        this.$http.get(this.address + 'workflow/process/comment/1', {
-          params: {
-            id: val,
-            page: page,
-          }
-        }).then((res) => {
+        this.$http.get(this.address + `workflow/process/comment/${this.reportId}?process_id = ${val}`).then((res) => {
           if (res.data.code === '20000' && res.data.data.length !== 0) {
             console.log(res,'comments');
             this.commentList = res.data.data.data;
@@ -854,7 +848,6 @@
 
       sureComment(val) {
         if (this.picStatus) {
-          // this.$http.put(this.address + 'process/' + this.reportId, this.form).then((res) => {
           this.$http.post(this.address + 'process/' + this.reportId, this.form).then((res) => {
             if (res.data.status === 'success') {
               this.commentVisible = false;

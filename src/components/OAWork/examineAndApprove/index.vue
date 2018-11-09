@@ -791,7 +791,8 @@
                                    @close='closeFrame'></MiscellaneousExpensesOfficial>
 
     <!--报备详情-->
-    <ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>
+    <!--<ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>-->
+    <ReportDetail :module="reportModule" :reportId="1" @close="closeFrame"></ReportDetail>
 
     <el-button @click="dblClickTable">详情</el-button>
   </div>
