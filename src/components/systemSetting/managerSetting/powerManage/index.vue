@@ -372,7 +372,7 @@
           } else {
             address = this.urls + 'organization/permission/delete/';
           }
-          this.$http.delete(address + id.id).then((res) => {
+          this.$http.get(address + id.id).then((res) => {
             if (res.data.code === '20040') {
               this.search(val);
               this.prompt(res.data.message, 1);

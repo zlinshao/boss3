@@ -75,9 +75,9 @@
       <el-table :data="newAttendanceData" height="250" border style="width: auto">
         <el-table-column prop="date" label="日期">
         </el-table-column>
-        <el-table-column prop="workShift" label="上班排版">
+        <el-table-column prop="workShift" label="上班排班">
         </el-table-column>
-        <el-table-column prop="workOffShift" label="下班排版">
+        <el-table-column prop="workOffShift" label="下班排班">
         </el-table-column>
         <el-table-column prop="hugh" label="休息">
         </el-table-column>
@@ -464,7 +464,7 @@ export default {
                     }
                     attendanceObj.goOffWork = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班时间
                   } else if(a.event_attribute == 3) {
-                    attendanceObj.workShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 上班排版时间
+                    attendanceObj.workShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 上班排班时间
                   } else if(a.event_attribute == 4) {
                     attendanceObj.workOffShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班班排版时间
                   } else if(a.event_attribute == 5) {

@@ -111,6 +111,7 @@ const LineCollege = () => import  ('../components/lejiaCollege/LineCollege/index
 const StaffRegistration = () => import  ('../components/lejiaCollege/StaffRegistration/index.vue');
 const College = () => import  ('../components/lejiaCollege/college/index.vue'); //乐伽大学
 const OnlineExam = () => import  ('../components/lejiaCollege/OnlineExam/index.vue');    //在线考试
+const VideoTeaching = () => import('../components/lejiaCollege/VideoTeaching/index.vue')  //教学视频
 
 const ConfigExam = () => import  ('../components/lejiaCollege/OnlineExam/configExam/index.vue');  //管理试卷
 const BatchQuestions = () => import  ('../components/lejiaCollege/OnlineExam/batchQuestions/index.vue');  //批量导入试题
@@ -638,7 +639,8 @@ export default new Router({
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
-
+        // { path: '/videoTeaching', component: VideoTeaching, name: '教学视频'},
+        
       ]
     },
     {
