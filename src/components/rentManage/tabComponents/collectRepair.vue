@@ -69,7 +69,7 @@
         prop="repair_money"
         label="跟进人">
         <template slot-scope="scope">
-          <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+          <span v-if="scope.row.followor">{{scope.row.followor.name}}</span>
           <span v-if="!scope.row.followor">暂无</span>
         </template>
       </el-table-column>
