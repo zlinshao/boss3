@@ -293,21 +293,20 @@
       },
       getList(val,id){
         if(val=='city'){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
-            // console.log(res)
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id=331").then((res) => {
+            if(res.data.code == "70050"){
               this.cityOption = res.data.data
             }
           });
         }else if(val=="area"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) => {
+            if(res.data.code == "70050"){
               this.areaOption = res.data.data
             }
           });
         }else if(val=="group"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) => {
+            if(res.data.code == "70050"){
               this.groupOption = res.data.data
             }
           });
@@ -346,7 +345,7 @@
           this.dataParams.start_date=params.start_date,
           this.dataParams.end_date=params.end_date
           this.loading = true
-          this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+          this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => {
             this.loading = false
             if(res.data.code == "20000"){
               this.tableData = res.data.data.data
@@ -368,7 +367,7 @@
           this.$http.get(this.chartData.data_source,{
               headers:{"Accept":"application/vnd.boss18+json"},
               params: this.diaParams
-            }).then((res) => { 
+            }).then((res) => {
             this.loadingDia = false
             if(res.data.code == "20000"){
               this.tableDataDia = res.data.data.data
@@ -394,7 +393,7 @@
       this.tableTh = tableChartData
       this.getChartDate(this.dataParams)
       this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
-      this.getList('city')
+      // this.getList('city');
       this.getChart(this.dataParams,'default')
     },
     watch:{

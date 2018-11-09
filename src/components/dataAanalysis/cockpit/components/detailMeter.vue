@@ -237,8 +237,8 @@
       },
       getList(val,id){ 
         if(val=='city'){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {   
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id=331").then((res) => {
+            if(res.data.code == "20000"){
               res.data.data.forEach(item=>{
                 if(item.name!=="外出考察"){
                   this.cityOption.push(item)
@@ -247,14 +247,14 @@
             }
           });
         }else if(val=="area"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) => {
+            if(res.data.code == "20000"){
               this.areaOption = res.data.data
             }
           });
         }else if(val=="group"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) =>{
+            if(res.data.code == "20000"){
               this.groupOption = res.data.data
             }
           });
