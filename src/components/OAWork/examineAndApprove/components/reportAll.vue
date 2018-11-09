@@ -131,10 +131,10 @@
               label="房屋地址">
             </el-table-column>
             <el-table-column
-              prop="place"
+              prop="places"
               label="状态">
               <template slot-scope="scope">
-                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.place }}</el-tag>
+                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -248,7 +248,7 @@
       },
       statusStyle(val){
         if(val.status=="review"){
-          if(val.place=="片区经理审批中"){
+          if(val.places=="片区经理审批中"){
             return ""
           }
           return "warning"
@@ -291,8 +291,8 @@
                   } else {
                     user.house_name = '/';
                   }
-                  user.place = data[i].place.display_name;
-                  user.status = data[i].place.status;
+                  user.places = data[i].places.display_name;
+                  user.status = data[i].places.status;
                 } else {
                   user.bulletin = data[i].flow.content.staff_name + '的' + data[i].flow.content.bulletin_name || '/';
                   user.name = data[i].flow.content.staff_name || '';
@@ -303,11 +303,11 @@
                   } else {
                     user.house_name = '/';
                   }
-                  user.place = data[i].flow.place.display_name;
-                  user.status = data[i].flow.place.status;
+                  user.places = data[i].flow.places.display_name;
+                  user.status = data[i].flow.places.status;
                 }
               } else {
-                user.place = '/';
+                user.places = '/';
                 user.status = '/';
               }
               dataList.push(user);
@@ -423,7 +423,7 @@
         // console.log(1111111111111)
         if(columnIndex === 5){
           if(row.status === 'review'){
-            if(row.place === '片区经理审批中'){
+            if(row.places === '片区经理审批中'){
               return 'color:blue'
             }else{
               return 'color:orange'
