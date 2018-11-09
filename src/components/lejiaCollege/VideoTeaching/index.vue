@@ -9,13 +9,13 @@
         </div>
       </el-header>
       <el-main>
-        <!-- <div class="videoList" v-for="(item, index) in videoData" :key="index">
-          <video ref="video" controls>
-            <source :src="item.src"  type="video/mp4">
-          </video>
-          <el-checkbox  v-model="videoChecked" :value="1"></el-checkbox>
-          <input type="checkbox" v-model="videoChecked" :>
-        </div> -->
+        <div class="videoList" v-for="(item, index) in videoData" :key="index">
+          <!-- <video ref="video" controls> -->
+            <!-- <source src="http://www.runoob.com/try/demo_source/movie.mp4"  type="video/mp4"> -->
+          <!-- </video> -->
+          <!-- <el-checkbox  v-model="videoChecked" :value="1"></el-checkbox> -->
+          <!-- <input type="checkbox" v-model="videoChecked" :> -->
+        </div>
       </el-main>
     </el-container>
   </div>
