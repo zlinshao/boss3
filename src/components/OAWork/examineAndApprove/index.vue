@@ -439,7 +439,7 @@
               prop="place"
               label="状态">
               <template slot-scope="scope">
-                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.place }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -486,7 +486,7 @@
             prop="place"
             label="状态">
             <template slot-scope="scope">
-              <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+              <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.place }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -552,7 +552,7 @@
                 prop="place"
                 label="状态">
                 <template slot-scope="scope">
-                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                  <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.place }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column
@@ -664,7 +664,7 @@
                 prop="place"
                 label="状态">
                 <template slot-scope="scope">
-                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                  <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.place }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1029,7 +1029,7 @@
           params: val,
         }).then((res) => {
           this.examineLoading = false;
-          if (res.data.code === '20000' && data.length !== 0) {
+          if (res.data.code === '20000' && res.data.data.data.length !== 0) {
             let data = res.data.data.data;
             // if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
             //   this.amount = res.data.meta.total;

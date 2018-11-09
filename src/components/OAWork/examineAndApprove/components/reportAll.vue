@@ -134,7 +134,7 @@
               prop="place"
               label="状态">
               <template slot-scope="scope">
-                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.place }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -268,9 +268,8 @@
         this.tableLoading = true;
         this.tableStatus = ' ';
         this.$http.get(globalConfig.server + 'workflow/process', {params: this.params}).then((res) => {
-          console.log(res);
           this.tableLoading = false;
-          if (res.data.code === '20000' && data.length !== 0) {
+          if (res.data.code === '20000' && res.data.data.data.length !== 0) {
             let data = res.data.data.data;
             this.totalNum = res.data.data.count;
             let dataList = [];
