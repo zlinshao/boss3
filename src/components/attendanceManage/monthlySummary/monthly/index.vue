@@ -17,10 +17,10 @@
         </el-option>
       </el-select>
     </div>
-    <!-- <div class="disclaimer">
-      <el-checkbox v-model="disclaimerChecked">免除班次允许范围内的迟到次数</el-checkbox>
-      <span>( <el-checkbox v-model="resignationChecked">包括离职员工</el-checkbox> )</span>
-    </div> -->
+    <div class="disclaimer">
+      <!-- <el-checkbox v-model="is_dimissionNum" @change="retired">免除班次允许范围内的迟到次数</el-checkbox> -->
+      <el-checkbox v-model="is_dimissionNum" @change="retired">包括离职员工</el-checkbox>
+    </div>
     <!-- <div class="nameInput">
       <span>姓名：</span>
       <el-input v-model="params.org_id" placeholder="请输入内容" size="mini"></el-input>
@@ -72,10 +72,14 @@
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></organization>
     <!-- 查看当月考勤 -->
     <el-dialog :title="attendanceName+ params.arrange_month +'的考勤记录'" :visible.sync="attendanceMonth" width="50%" :before-close="attendanceDialog">
-      <el-table :data="newAttendanceData" height="250" border style="width: 100%">
+      <el-table :data="newAttendanceData" height="250" border style="width: auto">
         <el-table-column prop="date" label="日期">
         </el-table-column>
-        <el-table-column prop="attendance" label="班次">
+        <el-table-column prop="workShift" label="上班排版">
+        </el-table-column>
+        <el-table-column prop="workOffShift" label="下班排版">
+        </el-table-column>
+        <el-table-column prop="hugh" label="休息">
         </el-table-column>
         <el-table-column prop="goWork" label="上班打卡">
         </el-table-column>
@@ -121,13 +125,15 @@ export default {
   data() {
     return {
       beLate: false,
+      is_dimissionNum: false,
       params: {
         // 传递参数
         limit: 12,
         page: 1,
         org_id: "",
         search: "",
-        arrange_month: ""
+        arrange_month: "",
+        is_dimission: '0'    // 离职人员
       },
       follow_name: "", //跟进人
       follow_id: "", // 部门ID
@@ -138,7 +144,6 @@ export default {
       organizeVisible: false, // 组织架构
       collapse: "收起",
       disclaimerChecked: false, // 免责次数
-      resignationChecked: false, // 离职
       checkList: [],
       inputName: "",
       state1: "",
@@ -214,6 +219,13 @@ export default {
     };
   },
   methods: {
+    retired(val) {
+      if(this.is_dimissionNum) {
+        this.params.is_dimission = "1";
+      } else {
+        this.params.is_dimission = '0';
+      }
+    },
     //当月考勤
     getAttendance(val) {
       this.newAttendanceData = val.attendanceData;
@@ -222,7 +234,7 @@ export default {
     },
     searchRecord() {
       this.params.page = 1;
-      this.params.limit = 5;
+      this.params.limit = 12;
       this.refresh();
     },
     getCurrentDate() {
@@ -428,7 +440,7 @@ export default {
                 rolesArr = [];
               }
             });
-            // [{date: "2018-11-8", attendance: "早班", goWork: "8:45", resultWork: "正常", goOffWork: "6:30", resultOffWork: "正常", supplementary: "补卡",field: "外勤"}]
+            // [{date: "2018-11-8", attendance: "早班", goWork: "8:45", resultWork: "正常", goOffWork: "6:30", resultOffWork: "正常", supplementary: "补卡",field: "外勤", "workShift": 9:00, "workOffShift": 18:00}]
             let attendanceObj = null;
             let attendanceArr = null;
             this.tableData.forEach((item, index) => {
@@ -452,11 +464,11 @@ export default {
                     }
                     attendanceObj.goOffWork = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班时间
                   } else if(a.event_attribute == 3) {
-                    attendanceObj.attendance = "早班（09:00 - 18:00）"
+                    attendanceObj.workShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 上班排版时间
                   } else if(a.event_attribute == 4) {
-                    attendanceObj.attendance = "晚班（13:00 - 21:00）"
+                    attendanceObj.workOffShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班班排版时间
                   } else if(a.event_attribute == 5) {
-                    attendanceObj.attendance = "休息"
+                    attendanceObj.hugh = "休息"
                   }
                   if(a.status == 3) {
                     attendanceObj.supplementary = "补卡"

@@ -90,7 +90,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-sizes="[5,10,15]"
+        :page-sizes="[12,24,36]"
         :page-size="arrangeParams.limit"
         :current-page="arrangeParams.page"
         layout="total,sizes,prev, pager, next ,jumper"
@@ -276,7 +276,7 @@
         arrangePageTotal: 0,
         arrangeParams: {
           page: 1,
-          limit: 5,
+          limit: 12,
           user_id: null,
           org_id: [],
           search: "",
@@ -802,7 +802,7 @@
       //搜索
       goSearch() {
         this.arrangeParams.page = 1;
-        this.arrangeParams.limit = 5;
+        this.arrangeParams.limit = 12;
         this.getArrangeList(this.arrangeParams);
         this.getCurrentMonthDays(this.arrangeParams.arrange_month);
         var date = new Date().toLocaleDateString().split("/");
