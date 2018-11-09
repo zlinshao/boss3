@@ -3,7 +3,8 @@
     <el-container>
       <el-header>
         <div class="videoTop">
-          <el-button type="primary" size="mini" @click="selectAllCheck" v-model="videoCheckedAll">全选</el-button>
+          <input id="quan" type="checkbox" @click="checkAll($event)"> 全选
+          <!-- <el-button type="primary" size="mini" @click="checkAll($event)" >全选</el-button> -->
           <el-button type="primary" size="mini">删除</el-button>
           <el-button type="primary" size="mini">上传</el-button>
         </div>
@@ -11,7 +12,7 @@
       <el-main>
         <div class="videoList" v-for="(item, index) in videoData" :key="index">
           <video ref="video" controls :src="item.src"></video>
-          <input type="checkbox" v-model="a" :value="item.name">
+          <input type="checkbox" :value="item.value" v-model="checkData">
         </div>
       </el-main>
     </el-container>
@@ -23,39 +24,57 @@ export default {
   data() {
     return {
       videoData: [
-        {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
-        {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
-        {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
-        {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
-        {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
-      ],  // 视屏数据
-      videoCheckedAll: false , // 全选
-      a: [], //不全选
-    }
+        {
+          src: "http://www.runoob.com/try/demo_source/movie.mp4",
+          value: "视屏1",
+          duration: "00:08"
+        },
+        {
+          src: "http://www.runoob.com/try/demo_source/movie.mp4",
+          value: "视屏2",
+          duration: "00:08"
+        },
+        {
+          src: "http://www.runoob.com/try/demo_source/movie.mp4",
+          value: "视屏3",
+          duration: "00:08"
+        },
+        {
+          src: "http://www.runoob.com/try/demo_source/movie.mp4",
+          value: "视屏4",
+          duration: "00:08"
+        },
+        {
+          src: "http://www.runoob.com/try/demo_source/movie.mp4",
+          value: "视屏5",
+          duration: "00:08"
+        }
+      ], // 视屏数据
+      checkData: [] // 双向数据绑定的数组
+    };
   },
   watch: {
-    // 全选
-    a: {
+    checkData: {
       handler() {
-        if(this.a.length == this.videoData.length) {
-          this.videoCheckedAll = true;
+        if (this.checkData.length == this.videoData.length) {
+          document.querySelector("#quan").checked = true;
         } else {
-          this.videoCheckedAll = false;
+          document.querySelector("#quan").checked = false;
         }
-      }, 
+      },
       deep: true
     }
   },
   methods: {
-    // 取消全选
-    selectAllCheck() {
-      this.a = [];
-      if(this.videoCheckedAll == true) {
-        this.videoData.forEach((item, index) => {
-          console.log(item, "1111");
-          
-          this.a.push(item.name)
-        })
+    checkAll(e) {
+      if (e.target.checked) {
+        this.videoData.forEach((el, i) => {
+          if (this.checkData.indexOf(el.value) == "-1") {
+            this.checkData.push(el.value);
+          }
+        });
+      } else {
+        this.checkData = [];
       }
     }
   }
