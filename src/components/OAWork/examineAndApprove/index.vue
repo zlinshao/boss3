@@ -436,10 +436,10 @@
               label="房屋地址">
             </el-table-column>
             <el-table-column
-              prop="place"
+              prop="places"
               label="状态">
               <template slot-scope="scope">
-                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -483,10 +483,10 @@
             label="房屋地址">
           </el-table-column>
           <el-table-column
-            prop="place"
+            prop="places"
             label="状态">
             <template slot-scope="scope">
-              <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+              <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -549,10 +549,10 @@
                 label="房屋地址">
               </el-table-column>
               <el-table-column
-                prop="place"
+                prop="places"
                 label="状态">
                 <template slot-scope="scope">
-                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                  <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column
@@ -661,10 +661,10 @@
                 label="房屋地址">
               </el-table-column>
               <el-table-column
-                prop="place"
+                prop="places"
                 label="状态">
                 <template slot-scope="scope">
-                  <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                  <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column
@@ -937,7 +937,7 @@
       },
       statusStyle(val){
         if(val.status=="review"){
-          if(val.place=="片区经理审批中"){
+          if(val.places=="片区经理审批中"){
             return ""
           }
           return "warning"
@@ -1029,7 +1029,7 @@
           params: val,
         }).then((res) => {
           this.examineLoading = false;
-          if (res.data.code === '20000' && data.length !== 0) {
+          if (res.data.code === '20000' && res.data.data.data.length !== 0) {
             let data = res.data.data.data;
             // if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
             //   this.amount = res.data.meta.total;
@@ -1059,8 +1059,8 @@
                   user.staff = '/';
                 }
                 user.id = data[i].id;
-                user.place = data[i].place.display_name;
-                user.status = data[i].place.status;
+                user.places = data[i].places.display_name;
+                user.status = data[i].places.status;
                 user.bulletin = '我的' + data[i].content.bulletin_name;
               }
               if (val.type === 1 || val.type === 2 || val.type === 4) {
@@ -1086,10 +1086,10 @@
                     user.staff = '';
                   }
                   user.id = data[i].id;
-                  user.place = data[i].place.display_name;
-                  user.status = data[i].place.status;
+                  user.places = data[i].places.display_name;
+                  user.status = data[i].places.status;
                 } else {
-                  user.place = '/';
+                  user.places = '/';
                   user.status = '/';
                   user.bulletin = '/';
                 }

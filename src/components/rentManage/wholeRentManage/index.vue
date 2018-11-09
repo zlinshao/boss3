@@ -137,9 +137,9 @@
               <el-table-column width="40" align="center">
                 <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="scope.row.department_name && (scope.row.department_name === '南京马群组' ||
+                        scope.row.department_name === '南京仙林一' ||
+                        scope.row.department_name === '南京仙林二')">
                         <b style="color: red;">新</b>
                       </span>
                 </template>
@@ -288,7 +288,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                  <span v-if="scope.row.department_name && scope.row.department_name">{{scope.row.department_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -365,9 +365,9 @@
               <el-table-column width="40" align="center">
                 <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="scope.row.department_name && (scope.row.department_name === '南京马群组' ||
+                        scope.row.department_name === '南京仙林一' ||
+                        scope.row.department_name === '南京仙林二')">
                         <b style="color: red;">新</b>
                       </span>
                 </template>
@@ -489,7 +489,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
