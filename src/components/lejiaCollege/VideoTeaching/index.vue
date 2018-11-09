@@ -3,18 +3,15 @@
     <el-container>
       <el-header>
         <div class="videoTop">
-          <el-button type="primary" size="mini" @click="selectAllCheck">全选</el-button>
+          <el-button type="primary" size="mini" @click="selectAllCheck" v-model="videoCheckedAll">全选</el-button>
           <el-button type="primary" size="mini">删除</el-button>
           <el-button type="primary" size="mini">上传</el-button>
         </div>
       </el-header>
       <el-main>
         <div class="videoList" v-for="(item, index) in videoData" :key="index">
-          <!-- <video ref="video" controls> -->
-            <!-- <source src="http://www.runoob.com/try/demo_source/movie.mp4"  type="video/mp4"> -->
-          <!-- </video> -->
-          <!-- <el-checkbox  v-model="videoChecked" :value="1"></el-checkbox> -->
-          <!-- <input type="checkbox" v-model="videoChecked" :> -->
+          <video ref="video" controls :src="item.src"></video>
+          <input type="checkbox" v-model="a" :value="item.name">
         </div>
       </el-main>
     </el-container>
@@ -32,18 +29,18 @@ export default {
         {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
         {src: "http://www.runoob.com/try/demo_source/movie.mp4", name: "视屏1", duration: "00:08"},
       ],  // 视屏数据
-      videoChecked: false , // 视屏选中
-      videoCheckedAll: [], //全选
+      videoCheckedAll: false , // 全选
+      a: [], //不全选
     }
   },
   watch: {
     // 全选
-    videoCheckedAll: {
+    a: {
       handler() {
-        if(this.videoCheckedAll.length == 4) {
-          this.videoChecked = true;
+        if(this.a.length == this.videoData.length) {
+          this.videoCheckedAll = true;
         } else {
-          this.videoChecked = false;
+          this.videoCheckedAll = false;
         }
       }, 
       deep: true
@@ -52,12 +49,13 @@ export default {
   methods: {
     // 取消全选
     selectAllCheck() {
-      // this.videoChecked = true;
-      this.videoCheckedAll = [];
-      if(this.videoChecked) {
-        for(let i = 0; i <= 4; i++) {
-          this.videoCheckedAll.push(i)
-        }
+      this.a = [];
+      if(this.videoCheckedAll == true) {
+        this.videoData.forEach((item, index) => {
+          console.log(item, "1111");
+          
+          this.a.push(item.name)
+        })
       }
     }
   }
