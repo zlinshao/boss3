@@ -131,7 +131,6 @@
           this.isLoading = false;
           if (res.data.code === '20020' && res.data.data) {
             this.aboutReportData = JSON.parse(res.data.data.process.content.show_content_compress);
-            console.log(this.aboutReportData);
           } else {
             this.aboutReportData = {};
           }
