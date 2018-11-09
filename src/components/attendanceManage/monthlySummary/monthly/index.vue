@@ -16,37 +16,37 @@
         <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-    </div> 
-     <!-- <div class="disclaimer">
-      <el-checkbox v-model="disclaimerChecked">免除班次允许范围内的迟到次数</el-checkbox>
-      <span>( <el-checkbox v-model="resignationChecked">包括离职员工</el-checkbox> )</span>
-    </div> -->
-     <!-- <div class="nameInput">
+    </div>
+    <div class="disclaimer">
+      <!-- <el-checkbox v-model="is_dimissionNum" @change="retired">免除班次允许范围内的迟到次数</el-checkbox> -->
+      <el-checkbox v-model="is_dimissionNum" @change="retired">包括离职员工</el-checkbox>
+    </div>
+    <!-- <div class="nameInput">
       <span>姓名：</span>
       <el-input v-model="params.org_id" placeholder="请输入内容" size="mini"></el-input>
     </div>  -->
-     <div class="selectTips">
-       <span>部门：</span>
+    <div class="selectTips">
+      <span>部门：</span>
       <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
       </el-input>
-    </div> 
-     <!-- <div class="resignation">
+    </div>
+    <!-- <div class="resignation">
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
     </div> -->
     <!-- 搜索 -->
-    <div class="search" >
+    <div class="search">
       <span>搜索：</span>
       <el-input v-model="params.search" placeholder="请输入搜索内容" size="mini" @keydown.enter="refresh()"></el-input>
     </div>
     <div class="btn">
       <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
-       <!-- <el-button type="primary" size="mini">导出</el-button>  -->
-    </div> 
+      <!-- <el-button type="primary" size="mini">导出</el-button>  -->
+    </div>
     <!--  -->
     <div class="table">
       <!-- <el-table :data="tableData" border  @cell-click="popUps" > -->
-      <el-table :data="tableData" border  ref="crayTable" >
+      <el-table :data="tableData" border ref="crayTable">
         <el-table-column :prop="showItem.prop" :label="showItem.name" v-for="(showItem, index) in this.seleckedList" :key="index">
           <el-table-column v-if="showItem.name == '出勤班次'" label="早班" height="auto"></el-table-column>
           <el-table-column v-if="showItem.name == '出勤班次'" label="中班" height="auto"></el-table-column>
@@ -54,16 +54,47 @@
           <el-table-column v-if="showItem.name == '加班'" label="正常加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '加班'" label="法定加班（小时）"></el-table-column>
           <el-table-column v-if="showItem.name == '请假'" v-for="(day, ind) in secondaryMenu" :key="ind" :label="day.label" :prop="day.prop"></el-table-column>
+
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="getAttendance(scope.row)">查看当月考勤</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="block pages">
       <!--  :current-page="" :page-size="params.limit" -->
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[5,10,15]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
     <!-- 组织架构 -->
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></organization>
+    <!-- 查看当月考勤 -->
+    <el-dialog :title="attendanceName+ params.arrange_month +'的考勤记录'" :visible.sync="attendanceMonth" width="50%" :before-close="attendanceDialog">
+      <el-table :data="newAttendanceData" height="250" border style="width: auto">
+        <el-table-column prop="date" label="日期">
+        </el-table-column>
+        <el-table-column prop="workShift" label="上班排版">
+        </el-table-column>
+        <el-table-column prop="workOffShift" label="下班排版">
+        </el-table-column>
+        <el-table-column prop="hugh" label="休息">
+        </el-table-column>
+        <el-table-column prop="goWork" label="上班打卡">
+        </el-table-column>
+        <el-table-column prop="resultWork" label="打卡结果">
+        </el-table-column>
+        <el-table-column prop="goOffWork" label="下班打卡">
+        </el-table-column>
+        <el-table-column prop="resultOffWork" label="打卡结果">
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <!-- <el-button @click="attendanceMonth = false" size="mini">取 消</el-button> -->
+        <el-button type="primary" @click="attendanceMonth = false" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- 迟到次数 -->
     <el-dialog :title="attendanceTitle" :visible.sync="beLate" width="30%" :before-close="handleClose">
       <el-table :data="beLateData" border style="width: 100%">
@@ -94,13 +125,15 @@ export default {
   data() {
     return {
       beLate: false,
+      is_dimissionNum: false,
       params: {
         // 传递参数
-        limit: 5,
+        limit: 12,
         page: 1,
         org_id: "",
         search: "",
         arrange_month: "",
+        is_dimission: '0'    // 离职人员
       },
       follow_name: "", //跟进人
       follow_id: "", // 部门ID
@@ -111,7 +144,6 @@ export default {
       organizeVisible: false, // 组织架构
       collapse: "收起",
       disclaimerChecked: false, // 免责次数
-      resignationChecked: false, // 离职
       checkList: [],
       inputName: "",
       state1: "",
@@ -135,14 +167,14 @@ export default {
         { name: "旷工天数", prop: "absenteeism", state: false },
         { name: "加班存在异常", prop: "work_overtime_exception", state: false },
         { name: "加班天数", prop: "work_overtime_day", state: false },
-        { name: "出差", prop: "business", state: false },
+        { name: "出差", prop: "business", state: false }
       ],
       seleckedList: [
         // 默认选中状态
         // { name: "工号", prop: "jobNumber", state: true },
         { name: "姓名", prop: "name", state: true },
         { name: "部门", prop: "org", state: true },
-        { name: "职位", prop: "roles", state: true },
+        { name: "职位", prop: "roles", state: true }
         // { name: "请假", prop: "vacate", state: true },
       ],
       // 请假二级菜单
@@ -160,11 +192,14 @@ export default {
       total: 0, //数据总条数
       selectValue: "",
       monthOptions: [], // 月份
-      // monthValue: "", 
+      // monthValue: "",
       currentPage: 1,
       beLateData: [], // 迟到汇总
       attendanceTitle: "", //迟到标题
       attendanceTimeLength: true, // 迟到时长
+      attendanceMonth: false, // 当月考勤
+      newAttendanceData: [], // 考勤数据
+      attendanceName: "",   // 考勤名字
     };
   },
   created() {
@@ -176,17 +211,30 @@ export default {
     let _this = this;
     document.onkeydown = e => {
       let key = window.event.keyCode;
-      if(key == 13) {
-         _this.params.page = 1;
+      if (key == 13) {
+        _this.params.page = 1;
         _this.params.limit = 5;
         _this.refresh();
       }
-    }
+    };
   },
   methods: {
+    retired(val) {
+      if(this.is_dimissionNum) {
+        this.params.is_dimission = "1";
+      } else {
+        this.params.is_dimission = '0';
+      }
+    },
+    //当月考勤
+    getAttendance(val) {
+      this.newAttendanceData = val.attendanceData;
+      this.attendanceName = val.name;
+      this.attendanceMonth = true
+    },
     searchRecord() {
       this.params.page = 1;
-      this.params.limit = 5;
+      this.params.limit = 12;
       this.refresh();
     },
     getCurrentDate() {
@@ -224,9 +272,9 @@ export default {
         // if(val.name == "请假") {
         //   this.seleckedList.push(val);
         // } else {
-          //   this.seleckedList.splice(3, 0, val)
+        //   this.seleckedList.splice(3, 0, val)
         // }
-          this.seleckedList.push(val);
+        this.seleckedList.push(val);
       } else {
         this.seleckedList.forEach(item => {
           if (!item.state) {
@@ -246,7 +294,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.params.page = val;
-      this.refresh( this.params.page)
+      this.refresh(this.params.page);
       console.log(`当前页: ${val}`);
     },
     //选人组件
@@ -261,14 +309,20 @@ export default {
       this.type = "";
       this.length = "";
       this.follow_id = "";
-      this.follow_name = '';
+      this.follow_name = "";
       val.forEach(item => {
         this.follow_id += item.id + ",";
         this.follow_name = item.name + ",";
       });
-      this.params.org_id = this.follow_id.substring( 0, this.follow_id.length - 1 );
+      this.params.org_id = this.follow_id.substring(
+        0,
+        this.follow_id.length - 1
+      );
       // this.params.org_id = this.follow_id;
-      this.follow_name = this.follow_name.substring( 0,this.follow_name.length - 1 );
+      this.follow_name = this.follow_name.substring(
+        0,
+        this.follow_name.length - 1
+      );
     },
     // 关闭模态框
     closeModal() {
@@ -331,85 +385,114 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
-      this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
-        if (res.data.code == "20000") {
-          this.tableData = res.data.data.data;
-          this.total = Number(res.data.data.count);
-          let props = [
-            "thingLeave",
-            "sickLeave",
-            "annualLeave",
-            "changeLeave",
-            "marriageLeave",
-            "maternityLeave",
-            "paternityLeave",
-            "roadLeave",
-            "funeralLeave"
-          ];
-          // 请假
-          this.tableData.forEach((item, idx) => {
-            item.vacate.forEach((key, index) => {
-              this.tableData[idx][props[index]] = key;
-            });
-          });
-          // 部门
-          let orgArr = [];
-          let rolesArr = [];
-          this.tableData.forEach((item, idx) => {
-            if (item.org.length > 0) {
-              item.org.forEach((key, index) => {
-                orgArr.push(key.name);
+      this.$http
+        .get(globalConfig.server + "attendance/summary", {
+          params: this.params
+        })
+        .then(res => {
+          if (res.data.code == "20000") {
+            this.tableData = res.data.data.data;
+            this.total = Number(res.data.data.count);
+            let props = [
+              "thingLeave",
+              "sickLeave",
+              "annualLeave",
+              "changeLeave",
+              "marriageLeave",
+              "maternityLeave",
+              "paternityLeave",
+              "roadLeave",
+              "funeralLeave"
+            ];
+            // 请假
+            this.tableData.forEach((item, idx) => {
+              item.vacate.forEach((key, index) => {
+                this.tableData[idx][props[index]] = key;
               });
-              this.tableData[idx].org = orgArr.join(",");
-              orgArr = [];
-            } else {
-              orgArr.push("/");
-              this.tableData[idx].org = orgArr.join(",");
-              orgArr = [];
-            }
-          });
-          // 职位
-          this.tableData.forEach((item, ind) => {
-            if (item.roles.length > 0) {
-              item.roles.forEach((key, index) => {
-                rolesArr.push(key.description);
+            });
+            // 部门
+            let orgArr = [];
+            let rolesArr = [];
+            this.tableData.forEach((item, idx) => {
+              if (item.org.length > 0) {
+                item.org.forEach((key, index) => {
+                  orgArr.push(key.name);
+                });
+                this.tableData[idx].org = orgArr.join(",");
+                orgArr = [];
+              } else {
+                orgArr.push("/");
+                this.tableData[idx].org = orgArr.join(",");
+                orgArr = [];
+              }
+            });
+            // 职位
+            this.tableData.forEach((item, ind) => {
+              if (item.roles.length > 0) {
+                item.roles.forEach((key, index) => {
+                  rolesArr.push(key.description);
+                  this.tableData[ind].roles = rolesArr.join(",");
+                  rolesArr = [];
+                });
+              } else {
+                rolesArr.push("/");
                 this.tableData[ind].roles = rolesArr.join(",");
                 rolesArr = [];
+              }
+            });
+            // [{date: "2018-11-8", attendance: "早班", goWork: "8:45", resultWork: "正常", goOffWork: "6:30", resultOffWork: "正常", supplementary: "补卡",field: "外勤", "workShift": 9:00, "workOffShift": 18:00}]
+            let attendanceObj = null;
+            let attendanceArr = null;
+            this.tableData.forEach((item, index) => {
+              attendanceArr = [];
+              item.sort_dimension.forEach((key, ind) => {
+                attendanceObj = {};
+                key.forEach((a, b) => {
+                  attendanceObj.date = a.sign_date;
+                  if(a.event_attribute == 1) {
+                    if(a.status == 0)  {
+                      attendanceObj.resultWork = "正常"  // 上班打卡正常
+                    } else if(a.status == 1) {
+                       attendanceObj.resultWork = "迟到"
+                    }
+                    attendanceObj.goWork = a.dimensions.hour + ":" + a.dimensions.minute;       // 上班时间
+                  } else if(a.event_attribute == 2) { 
+                    if(a.status == 0)  {
+                      attendanceObj.resultOffWork = "正常"   // 下班打卡正常
+                    }else if(a.status == 2) {
+                       attendanceObj.resultWork = "早退"
+                    }
+                    attendanceObj.goOffWork = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班时间
+                  } else if(a.event_attribute == 3) {
+                    attendanceObj.workShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 上班排版时间
+                  } else if(a.event_attribute == 4) {
+                    attendanceObj.workOffShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班班排版时间
+                  } else if(a.event_attribute == 5) {
+                    attendanceObj.hugh = "休息"
+                  }
+                  if(a.status == 3) {
+                    attendanceObj.supplementary = "补卡"
+                  } else if(a.status == 4) {
+                    attendanceObj.field = "外勤"
+                  }
+                })
+                  attendanceArr.push(attendanceObj)
+                  this.tableData[index].attendanceData =  attendanceArr
               });
-            } else {
-              rolesArr.push("/");
-              this.tableData[ind].roles = rolesArr.join(",");
-              rolesArr = [];
-            }
-          });
-          // 
-        }else if( res.data.code == "20001") {
-          this.$notify.warning({
-            title: "警告",
-            message: res.data.msg
-          });
-        }
-      });
+            });
+          } else if (res.data.code == "20001") {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        });
     },
-    // 数据处理
-    dataProcessing(val1, val2) {
-      let dataProcessingArr = [];
-      this.tableData.forEach((item, ind) => {
-        if (item.val1.length > 0) {
-          item.val1.forEach((key, index) => {
-            dataProcessingArr.push(key.val2);
-            this.tableData[ind].roles = dataProcessingArr.join(",");
-            dataProcessingArr = [];
-          });
-        } else {
-          dataProcessingArr.push("/");
-          this.tableData[ind].val1 = dataProcessingArr.join(",");
-          dataProcessingArr = [];
-        }
-      });
+    // 当月考勤
+    attendanceDialog() {
+      this.attendanceMonth = false;
     }
-  },
-  
+  }
 };
 </script>
 
@@ -446,13 +529,13 @@ export default {
     padding-top: 0;
   }
   .selectTips {
-      span {
-        display: inline-block;
-        margin-top: 2px;
-      }
-     .el-input-group {
-       width: 84%;
-       float: right;
+    span {
+      display: inline-block;
+      margin-top: 2px;
+    }
+    .el-input-group {
+      width: 84%;
+      float: right;
     }
   }
   .disclaimer {
@@ -465,7 +548,7 @@ export default {
     width: auto;
   }
   .search .el-input {
-    width:  auto;
+    width: auto;
   }
   .resignation {
     margin-left: 10px;

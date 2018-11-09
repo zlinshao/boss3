@@ -157,7 +157,7 @@
             <el-pagination
                 @size-change="punchSizeChange"
                 @current-change="punchCurrentChange"
-                :page-sizes="[5,10,15]"
+                :page-sizes="[12,24,36]"
                 :page-size="punchCardParams.limit"
                 :current-page="punchCardParams.page"
                 layout="total,sizes,prev, pager, next ,jumper" 
@@ -332,6 +332,16 @@
                         </el-col>
                       </el-row>
                     </el-col>
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">离职人员</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-checkbox v-model="is_dimissionNum" @change="retired">包括离职员工</el-checkbox>
+                        </el-col>
+                      </el-row>
+                    </el-col>
                   </el-row>
                 <div class="btnOperate">
                     <el-button size="mini" type="primary" @click="goSearch">搜索</el-button>
@@ -373,7 +383,8 @@ export default {
               is_vacate: "",//是否请假
               is_absenteeism: "",//是否旷工
               page: 1,
-              limit: 5,
+              limit: 12,
+              is_dimission: "0",   // 离职人员
           },
           punchCardList:[],
           gettingList: false,
@@ -384,9 +395,18 @@ export default {
           organizeType: "",
           lengths: 0,
           organDivision: "",
+          is_dimissionNum: false,  // 离职人员
       }
   },
   methods: {
+    //   离职人员
+       retired(val) {
+        if(this.is_dimissionNum) {
+            this.punchCardParams.is_dimission = "1";
+        } else {
+            this.punchCardParams.is_dimission = '0';
+        }
+      },
       getPunchCardList (){
           this.gettingList = true;
           this.punchListInfo = " ";
@@ -428,7 +448,7 @@ export default {
       },
       goSearch (){
         this.punchCardParams.page = 1;
-        this.punchCardParams.limit = 5;
+        this.punchCardParams.limit = 12;
         this.getPunchCardList();
       },
       resetting (){
