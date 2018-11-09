@@ -148,8 +148,8 @@
                 prop="finish_at"
                 label="部门">
               <template slot-scope="scope">
-                <span v-if="scope.row.organizations && scope.row.organizations.name">
-                  {{scope.row.organizations.name}}
+                <span v-if="scope.row.org && scope.row.org.name">
+                  {{scope.row.org.name}}
                 </span>
                 <span v-else>
                  /
