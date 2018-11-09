@@ -206,7 +206,7 @@
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
               _this.$http.defaults.timeout = 5000;
-              _this.$http.post(this.urls + 'api/v1/upload-direct', {
+              _this.$http.post(_this.urls + 'api/v1/upload-direct', {
                 url: sourceLink,
                 name: url.key,
                 raw_name: file.name,
