@@ -115,15 +115,15 @@
                     </div>
                     <div>
                       <span class="itemLabel">审批状态 : </span>
-                      <span class="itemContent">{{item.place.display_name}}</span>
+                      <!--<span class="itemContent">{{item.place.display_name}}</span>-->
                     </div>
                     <div>
                       <span class="itemLabel">报备人 : </span>
-                      <span class="itemContent">{{item.content.department_name}}</span>
+                      <span class="itemContent">{{item.content.staff_name}}</span>
                     </div>
                     <div>
                       <span class="itemLabel">所属部门 : </span>
-                      <span class="itemContent">{{item.user.name}}</span>
+                      <span class="itemContent">{{item.content.department_name}}</span>
                     </div>
                     <div>
                       <span class="itemLabel">报备时间 : </span>
@@ -150,17 +150,16 @@
                           <span v-for="(item,index) in value.user.org" v-if="index === 0">-{{item.name}}</span>
                         </div>
                         <div class="commentB">
-                          {{value.created_at}}
+                          {{value.create_time}}
                         </div>
                       </div>
                       <div class="commentC">
                           <span>
-                            {{value.body}}
+                            {{value.content}}
                           </span>
-                        <div>
-                          <p v-for="(p,index) in value.album">
-                            <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri"
-                                 v-if="!p.is_video">
+                        <div v-if="value.album && value.album['image_pic']">
+                          <p v-for="(p,index) in value.album['image_pic']">
+                            <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri">
                           </p>
                         </div>
                       </div>
@@ -438,7 +437,8 @@
         is_receipt: "",//是否电子收据
         radioCity: "南京市",
         sendElectronicReceiptNumber: '',
-        address: globalConfig.server_user,
+        // address: globalConfig.server_user,
+        address: globalConfig.server,
         fullLoading: false,
         reportVisible: false,
         rentReport: false,
@@ -694,10 +694,9 @@
         this.suggestpriceStatus = false
         this.fullLoading = true;
         this.approvedStatus = false;
-        this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
+        this.$http.get( this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
-          console.log(res)
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
+          if (res.data.code === '20020' && res.data.data) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
@@ -807,15 +806,10 @@
         this.comments(this.reportId, val);
       },
       comments(val, page) {
-        this.$http.get(this.address + 'comments', {
-          params: {
-            id: val,
-            page: page,
-          }
-        }).then((res) => {
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
-            this.commentList = res.data.data;
-            this.paging = res.data.meta.total;
+        this.$http.get(this.address + `workflow/process/comment/${this.reportId}?process_id = ${val}`).then((res) => {
+          if (res.data.code === '20000' && res.data.data.length !== 0) {
+            this.commentList = res.data.data.data;
+            this.paging = res.data.data.count;
           } else {
             this.commentList = [];
             this.paging = 0;
@@ -835,9 +829,13 @@
       // 确认评论
       manager() {
         if (this.form.operation !== 'to_comment') {
-          this.sureComment(this.form.operation);
+          if(this.form.comment !== '' || this.form.album.length !== 0){
+            this.sureComment(this.form.operation);
+            this.antherControl(this.form.operation);
+          }else{
+            this.antherControl(this.form.operation);
+          }
         } else {
-
           if (this.form.comment !== '' || this.form.album.length !== 0) {
             this.sureComment(this.form.operation);
           } else {
@@ -851,8 +849,15 @@
 
       sureComment(val) {
         if (this.picStatus) {
-          this.$http.put(this.address + 'process/' + this.reportId, this.form).then((res) => {
-            if (res.data.status === 'success') {
+          this.$http.post(this.address + `workflow/process/comment/${this.reportId}`,{
+            content: this.form.comment,
+            obj_id: this.reportId,
+            parent_id: 0,
+            video_file: [],
+            image_pic: this.form.album,
+            process_id: this.reportId
+          }).then((res) => {
+            if (res.data.code === '20000') {
               this.commentVisible = false;
               if (val === 'to_comment') {
                 this.comments(this.reportId, 1);
@@ -863,9 +868,7 @@
               this.$notify.success({
                 title: '成功',
                 message: res.data.message,
-              })
-
-
+              });
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -879,6 +882,29 @@
             message: '图片上传中...',
           })
         }
+      },
+      antherControl(val) {
+        this.$http.post(this.address + `workflow/process/trans/${this.reportId}`,{
+            operation: val
+        }).then(res =>{
+          if(res.data.code == '20000'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.commentVisible = false;
+            this.getProcess();
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+            this.commentVisible = false;
+            this.getProcess();
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
       },
       close_() {
         this.isClear = true;
@@ -897,10 +923,11 @@
       //获取报备相关信息
       getReportAboutInfo() {
         this.isLoading = true;
-        this.$http.get(globalConfig.server_user + 'process?house_id=' + this.houseId).then((res) => {
+        this.$http.get(this.address + 'workflow/process?house=' + this.houseId).then((res) => {
+          console.log(res);
           this.isLoading = false;
-          if (res.data.status === 'success') {
-            this.reportAboutData = res.data.data;
+          if (res.data.code === '20000') {
+            this.reportAboutData = res.data.data.data;
           } else {
             this.reportAboutData = [];
           }
@@ -923,7 +950,8 @@
       // 获取相关修改记录
       getReportEditInfo() {
         this.changeLoading = true;
-        this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=' + this.reportId).then((res) => {
+        // this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=' + this.reportId).then((res) => {
+        this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=1').then((res) => {
           this.changeLoading = false;
           if (res.data.code === '20000') {
             this.editReportData = res.data.data.data;

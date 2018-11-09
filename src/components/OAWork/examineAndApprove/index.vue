@@ -861,7 +861,7 @@
     },
     data() {
       return {
-        address: globalConfig.server_user,
+        address: globalConfig.server,
         amount: 0,
         paging: 0,
         params: {},
@@ -1021,19 +1021,21 @@
       },
       // 待办事项
       myData(val, page) {
+        console.log(val);
         this.emptyContent = ' ';
         this.examineLoading = true;
         this.params.page = page;
-        this.$http.get(this.address + 'process', {
+        this.params.limit = 10;
+        this.$http.get(this.address + 'workflow/process', {
           params: val,
         }).then((res) => {
           this.examineLoading = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
+          let data = res.data.data.data;
+          if (res.data.code === '20000' && data.length !== 0) {
             // if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
             //   this.amount = res.data.meta.total;
             // }
-            this.paging = res.data.meta.total;
+            this.paging = res.data.data.count;
             let dataList = [];
             for (let i = 0; i < data.length; i++) {
               let user = {};
@@ -1064,29 +1066,29 @@
               }
               if (val.type === 1 || val.type === 2 || val.type === 4) {
                 user.bulletin = data[i].title;
-                if (data[i].flow) {
-                  user.is_receipt = data[i].flow.content.is_receipt
-                  user.created_at = data[i].flow.created_at;
-                  user.finish_at = data[i].flow.finish_at !== null ? data[i].finish_at : '/';
-                  if (user.house_name = data[i].flow.content.house) {
-                    user.house_name = data[i].flow.content.house.name;
-                  } else if (data[i].flow.content.address) {
-                    user.house_name = data[i].flow.content.address;
+                if (data[i]) {
+                  user.is_receipt = data[i].content.is_receipt;
+                  user.created_at = data[i].created_at;
+                  user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
+                  if (user.house_name = data[i].content.house) {
+                    user.house_name = data[i].content.house.name;
+                  } else if (data[i].content.address) {
+                    user.house_name = data[i].content.address;
                   } else {
                     user.house_name = '/';
                   }
                   if (data[i].user) {
-                    user.avatar = data[i].flow.user.avatar;
-                    user.name = data[i].flow.user.name;
-                    user.depart = data[i].flow.user.org[0].name;
+                    user.avatar = data[i].user.avatar;
+                    user.name = data[i].user.name;
+                    user.depart = data[i].user.org[0].name;
                   } else {
                     user.avatar = '';
                     user.name = '';
                     user.staff = '';
                   }
-                  user.id = data[i].flow.id;
-                  user.place = data[i].flow.place.display_name;
-                  user.status = data[i].flow.place.status;
+                  user.id = data[i].id;
+                  user.place = data[i].place.display_name;
+                  user.status = data[i].place.status;
                 } else {
                   user.place = '/';
                   user.status = '/';

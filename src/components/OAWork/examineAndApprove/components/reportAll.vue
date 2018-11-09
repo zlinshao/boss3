@@ -267,11 +267,11 @@
       getTableData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
-        this.$http.get(globalConfig.server_user + 'process', {params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'workflow/process', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.totalNum = res.data.meta.total;
+          let data = res.data.data.data;
+          if (res.data.code === '20000' && data.length !== 0) {
+            this.totalNum = res.data.data.count;
             let dataList = [];
             for (let i = 0; i < data.length; i++) {
               let user = {};
