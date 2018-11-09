@@ -1,5 +1,5 @@
 <template>
-  <div id="staffManage"  @click="show=false" @contextmenu="closeMenu">
+  <div id="staffManage" @click="show=false" @contextmenu="closeMenu">
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="border left">
@@ -34,8 +34,8 @@
           <div class="top">
             <div>{{department_name}}</div>
             <!--<div @click="sortDepartment">-->
-              <!--<el-button size="mini">部门排序</el-button>-->
-              <!--&lt;!&ndash;<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>&ndash;&gt;-->
+            <!--<el-button size="mini">部门排序</el-button>-->
+            <!--&lt;!&ndash;<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>&ndash;&gt;-->
             <!--</div>-->
           </div>
 
@@ -59,7 +59,7 @@
             </div>
           </div>
 
-          <div  v-show="!isDepartment" style="padding: 10px;">
+          <div v-show="!isDepartment" style="padding: 10px;">
             <div class="highRanking">
               <div class="tabsSearch">
                 <el-form onsubmit="return false;" :inline="true" size="mini" class="demo-form-inline">
@@ -68,7 +68,8 @@
                   <!--</el-form-item>-->
                   <el-form-item style="float: right">
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
-                    <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位</el-button>
+                    <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位
+                    </el-button>
                   </el-form-item>
                   <el-form-item style="float: right">
                     <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.prevent.native="search">
@@ -89,7 +90,8 @@
                     <template slot-scope="scope">
                       <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
                            :src="scope.row.avatar" style="width: 30px;height: 30px;border-radius: 50%;">
-                      <img v-else="" src="../../../assets/images/defaultHead.png" data-card="" :data-src="JSON.stringify(scope.row)"
+                      <img v-else="" src="../../../assets/images/defaultHead.png" data-card=""
+                           :data-src="JSON.stringify(scope.row)"
                            style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
                     </template>
                   </el-table-column>
@@ -205,34 +207,33 @@
               </el-tab-pane>
 
               <!--<el-tab-pane label="岗位管理" name="third">-->
-                <!--<el-table-->
-                  <!--:data="positionTableData"-->
-                  <!--@row-contextmenu="openPositionMenu"-->
-                  <!--style="width: 100%">-->
-                  <!--<el-table-column-->
-                    <!--prop="name"-->
-                    <!--label="岗位">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="上级岗位">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
-                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="pName"-->
-                    <!--label="职位">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="orgName"-->
-                    <!--label="部门">-->
-                  <!--</el-table-column>-->
-                <!--</el-table>-->
+              <!--<el-table-->
+              <!--:data="positionTableData"-->
+              <!--@row-contextmenu="openPositionMenu"-->
+              <!--style="width: 100%">-->
+              <!--<el-table-column-->
+              <!--prop="name"-->
+              <!--label="岗位">-->
+              <!--</el-table-column>-->
+              <!--<el-table-column-->
+              <!--label="上级岗位">-->
+              <!--<template slot-scope="scope">-->
+              <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
+              <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
+              <!--</template>-->
+              <!--</el-table-column>-->
+              <!--<el-table-column-->
+              <!--prop="pName"-->
+              <!--label="职位">-->
+              <!--</el-table-column>-->
+              <!--<el-table-column-->
+              <!--prop="orgName"-->
+              <!--label="部门">-->
+              <!--</el-table-column>-->
+              <!--</el-table>-->
               <!--</el-tab-pane>-->
 
             </el-tabs>
-
 
 
           </div>
@@ -242,13 +243,17 @@
     </el-row>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-    <AddStaff :addStaffDialog="addStaffDialog" :addStaffParams="addStaffParams" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
+    <AddStaff :addStaffDialog="addStaffDialog" :addStaffParams="addStaffParams" :isEdit="isEdit" :editId="editId"
+              @close="closeAddStaff"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
+    <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName"
+               @close="closeAddDepart"></AddDepart>
 
-    <AddPosition :addPositionDialog="addPositionDialog" :addPositionParams="addPositionParams" @close="closeAddPosition"></AddPosition>
-    <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName" @close="closeEditPosition"></EditPosition>
+    <AddPosition :addPositionDialog="addPositionDialog" :addPositionParams="addPositionParams"
+                 @close="closeAddPosition"></AddPosition>
+    <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName"
+                  @close="closeEditPosition"></EditPosition>
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
 
@@ -267,81 +272,82 @@
   import AddPosition from './components/addPostion.vue'
   import EditPosition from './components/editPostion.vue'
   import EditOnlyPosition from './components/editOnlyPostion.vue'
-  export default{
+
+  export default {
     name: 'tree',
-    components:{Organization,AddStaff,RightMenu,EditDepart,AddDepart,AddPosition,EditPosition,EditOnlyPosition},
-    data(){
-      return{
+    components: {Organization, AddStaff, RightMenu, EditDepart, AddDepart, AddPosition, EditPosition, EditOnlyPosition},
+    data() {
+      return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
         /***********/
-        arrList:[],
-        setTree:  [],
+        arrList: [],
+        setTree: [],
         defaultProps: {
           children: 'children',
           label: 'name'
         },
         defaultExpandKeys: [],//默认展开节点列表
 
-        params:{
-          keywords:'',
-          pageNum:10,
-          page:1,
-          org_id:'',
+        params: {
+          keywords: '',
+          pageNum: 10,
+          page: 1,
+          org_id: '',
         },
-        staffTableData:[],    //员工列表
-        positionTableData:[], //岗位列表
-        positionList:[],      //职位列表
-        organizationDialog:false,
+        staffTableData: [],    //员工列表
+        positionTableData: [], //岗位列表
+        positionList: [],      //职位列表
+        organizationDialog: false,
         sortable: null,
-        currentPage:1,
-        isDepartment : false,
+        currentPage: 1,
+        isDepartment: false,
         //......................
 
-        addStaffDialog:false, //新增用户模态框
-        editDepartDialog:false, //编辑部门模态框
-        addDepartDialog:false, //新建部门模态框
-        addPositionDialog : false, //新建岗位
-        editPositionDialog:false,    //修改岗位
-        editOnlyPositionDialog:false, //修改职位
-        isEdit:false,
-        editId : null,
-        totalStaffNum : 0,
-        totalOnlyPositionNum : 0,
-        totalPositionNum : 0,
-        departId:null,
-        parentId:null,
-        parentName:null,
+        addStaffDialog: false, //新增用户模态框
+        editDepartDialog: false, //编辑部门模态框
+        addDepartDialog: false, //新建部门模态框
+        addPositionDialog: false, //新建岗位
+        editPositionDialog: false,    //修改岗位
+        editOnlyPositionDialog: false, //修改职位
+        isEdit: false,
+        editId: null,
+        totalStaffNum: 0,
+        totalOnlyPositionNum: 0,
+        totalPositionNum: 0,
+        departId: null,
+        parentId: null,
+        parentName: null,
 
 
-        loading:true,
-        activeName:'',      //当前tab名
-        positionId:'',      //岗位id
-        positionName:'',
-        onlyPositionId:'',  //职位id
-        onlyPositionName:'',
-        menuType:'',    //右键类别
+        loading: true,
+        activeName: '',      //当前tab名
+        positionId: '',      //岗位id
+        positionName: '',
+        onlyPositionId: '',  //职位id
+        onlyPositionName: '',
+        menuType: '',    //右键类别
 
-        department_id:'',  //y用于监听部门变化
-        department_name:"",
+        department_id: '',  //y用于监听部门变化
+        department_name: "",
 
-        isGetStaff:false,
-        isGetOnlyPosition:false,
-        isGetPosition:false,
-        post_position:'', //  职位或岗位
-        addPositionParams:[],
-        addStaffParams:[],      //新建员工参数
+        isGetStaff: false,
+        isGetOnlyPosition: false,
+        isGetPosition: false,
+        post_position: '', //  职位或岗位
+        addPositionParams: [],
+        addStaffParams: [],      //新建员工参数
       }
     },
-    mounted(){
+    mounted() {
       this.initExpand();
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getDepart();
       this.activeName = 'first';
-      this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
-        if(res.data.status === 'success'){
+      this.$http.get(globalConfig.server_user + 'organizations/1').then((res) => {
+        if (res.data.status === 'success') {
           let data = res.data.data;
           this.params.org_id = data.id;
           this.department_id = data.id;
@@ -349,33 +355,33 @@
         }
       });
     },
-    watch:{
-      department_id(val){
-        this.isGetStaff=false;
-        this.isGetOnlyPosition=false;
-        this.isGetPosition=false;
+    watch: {
+      department_id(val) {
+        this.isGetStaff = false;
+        this.isGetOnlyPosition = false;
+        this.isGetPosition = false;
         this.onlyPositionId = '';
         this.onlyPositionName = '';
-        if(this.activeName === 'first'){
+        if (this.activeName === 'first') {
           this.getStaffData();
-          this.isGetStaff=true;
-        }else if(this.activeName === 'second'){
+          this.isGetStaff = true;
+        } else if (this.activeName === 'second') {
           this.getOnlyPosition();
-          this.isGetOnlyPosition=true;
+          this.isGetOnlyPosition = true;
         }
       },
-      activeName(val){
-        if(val==='first'){
+      activeName(val) {
+        if (val === 'first') {
           this.params.pageNum = 10;
-        }else if(val==='second'){
+        } else if (val === 'second') {
           this.params.pageNum = 5;
         }
-        if(val==='first'&& !this.isGetStaff){
+        if (val === 'first' && !this.isGetStaff) {
           this.getStaffData();
-          this.isGetStaff=true;
-        }else if(val==='second'&& !this.isGetOnlyPosition){
+          this.isGetStaff = true;
+        } else if (val === 'second' && !this.isGetOnlyPosition) {
           this.getOnlyPosition();
-          this.isGetOnlyPosition=true;
+          this.isGetOnlyPosition = true;
         }
       }
     },
@@ -383,12 +389,12 @@
 
       //**************部门操作函数********************
       //获取部门数据
-      getDepart(){
-        this.$http.get(globalConfig.server_user+'organizations?per_page_number=500').then((res) => {
+      getDepart() {
+        this.$http.get(globalConfig.server_user + 'organizations?per_page_number=500').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
           this.arrList.forEach((item) => {
-            if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id)<0){
+            if (item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id) < 0) {
               this.defaultExpandKeys.push(item.id);
             }
           });
@@ -396,12 +402,12 @@
         })
       },
       //把数据转化为树形数据结构
-      recurrence(num){
+      recurrence(num) {
         let list = [];
         this.arrList.forEach((item) => {
-          if(item.parent_id === num){
+          if (item.parent_id === num) {
             let tmp = this.recurrence(item.id);
-            if(tmp){
+            if (tmp) {
               item['children'] = tmp;
             }
             list.push(item);
@@ -410,28 +416,28 @@
         return list
       },
       //点击节点
-      nodeClick(data,node,store){
+      nodeClick(data, node, store) {
         this.params.org_id = data.id;
         this.department_id = data.id;
         this.department_name = data.name;
       },
-      nodeExpand(data,node,store){
-        if(this.defaultExpandKeys.indexOf(data.id)<0){
+      nodeExpand(data, node, store) {
+        if (this.defaultExpandKeys.indexOf(data.id) < 0) {
           this.defaultExpandKeys.push(data.id)
         }
       },
-      nodeCollapse(data,node,store){
-        this.defaultExpandKeys.filter((x)=>{
-          return x!==data.id;
+      nodeCollapse(data, node, store) {
+        this.defaultExpandKeys.filter((x) => {
+          return x !== data.id;
         })
       },
-      handleAdd(s,d,n){//增加节点
+      handleAdd(s, d, n) {//增加节点
         this.addDepart(d);
       },
-      handleEdit(s,d,n){//编辑节点
+      handleEdit(s, d, n) {//编辑节点
         this.editDepart(d.id);
       },
-      handleDelete(s,d,n){//删除节点
+      handleDelete(s, d, n) {//删除节点
         this.$confirm('您确定删除吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -446,71 +452,69 @@
         });
       },
       //新建部门
-      addDepart(data){
+      addDepart(data) {
         this.parentId = data.id;
         this.parentName = data.name;
         this.addDepartDialog = true
       },
-      closeAddDepart(val){
+      closeAddDepart(val) {
         this.addDepartDialog = false;
         this.parentId = null;
         this.parentName = null;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getDepart();
         }
       },
       //删除部门
-      deleteDpr(id){
-        this.$http.delete(globalConfig.server_user+'organizations/'+id).then((res) =>{
-          if(res.data.status === 'success'){
+      deleteDpr(id) {
+        this.$http.delete(globalConfig.server_user + 'organizations/' + id).then((res) => {
+          if (res.data.status === 'success') {
             this.$notify({
               title: '成功',
               message: '删除成功',
-              type:'success'
+              type: 'success'
             });
             this.getDepart();
-          }else {
+          } else {
             this.$notify({
               title: '警告',
               message: res.data.message,
-              type:'warning'
+              type: 'warning'
             });
           }
         })
       },
       //编辑部门
-      editDepart(id){
+      editDepart(id) {
         this.departId = id;
         this.editDepartDialog = true;
       },
       //编辑部门回调
-      closeEditDepart(val){
+      closeEditDepart(val) {
         this.editDepartDialog = false;
         this.departId = null;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getDepart();
         }
       },
 
 
-
-
       //********************员工操作函数****************
       //获取员工数据列表
-      getStaffData(){
-        this.$http.get(globalConfig.server_user+'users?q='+this.params.keywords+'&page='+this.params.page
-          +'&per_page_number='+this.params.pageNum+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
-          if(res.data.status === 'success'){
+      getStaffData() {
+        this.$http.get(globalConfig.server_user + 'users?q=' + this.params.keywords + '&page=' + this.params.page
+          + '&per_page_number=' + this.params.pageNum + '&org_id=' + this.params.org_id + '&is_recursion=1').then((res) => {
+          if (res.data.status === 'success') {
             this.staffTableData = res.data.data;
             this.totalStaffNum = res.data.meta.total;
-          }else {
+          } else {
             this.staffTableData = [];
             this.totalStaffNum = 0;
           }
         })
       },
       //右键菜单
-      openContextMenu(row, event){
+      openContextMenu(row, event) {
         this.editId = row.id;
         this.menuType = 'staff';
         this.lists = [
@@ -520,11 +524,11 @@
         this.contextParams(event);
       },
       //员工右键回调
-      openModalDialog(type){
-        if(type === 'edit'){
+      openModalDialog(type) {
+        if (type === 'edit') {
           this.addStaffDialog = true;
           this.isEdit = true;
-        }else if(type === 'delete'){
+        } else if (type === 'delete') {
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -541,16 +545,16 @@
         }
       },
       //删除员工
-      deleteStaff(){
-        this.$http.delete(globalConfig.server_user+'users/'+this.editId).then((res) => {
-          if(res.data.status === 'success'){
+      deleteStaff() {
+        this.$http.delete(globalConfig.server_user + 'users/' + this.editId).then((res) => {
+          if (res.data.status === 'success') {
             this.getStaffData();
             this.$notify({
               title: '成功',
               message: '删除成功',
-              type:'success'
+              type: 'success'
             });
-          }else {
+          } else {
             this.$notify.info({
               title: '消息',
               message: res.data.message
@@ -559,49 +563,51 @@
         })
       },
       //新建员工
-      addStaff(){
+      addStaff() {
         this.addStaffDialog = true;
         this.isEdit = false;
-        this.addStaffParams = Object.assign({},this.addStaffParams, {depart_id:this.params.org_id,depart_name:this.department_name})
+        this.addStaffParams = Object.assign({}, this.addStaffParams, {
+          depart_id: this.params.org_id,
+          depart_name: this.department_name
+        })
       },
-      closeAddStaff(val){
+      closeAddStaff(val) {
         this.addStaffDialog = false;
         this.isEdit = false;
         this.editId = '';
-        if(val === 'success'){
+        if (val === 'success') {
           this.getStaffData();
         }
       },
 
 
-
       //********************职位操作函数****************
       //获取单独职位列表
-      getOnlyPosition(){
+      getOnlyPosition() {
         this.positionTableData = [];
-        if(this.params.org_id){
-          this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id+'&page='+this.params.page
-            +'&per_page_number='+this.params.pageNum).then((res) => {
-            if(res.data.status === 'success'){
+        if (this.params.org_id) {
+          this.$http.get(globalConfig.server_user + 'position/type?org_id=' + this.params.org_id + '&page=' + this.params.page
+            + '&per_page_number=' + this.params.pageNum).then((res) => {
+            if (res.data.status === 'success') {
               let tableData = res.data.data;
               this.positionList = [];
               this.totalOnlyPositionNum = res.data.meta.total;
-              if(tableData.length>0){
+              if (tableData.length > 0) {
                 this.onlyPositionId = tableData[0].id;
                 this.getPosition();
                 tableData.forEach((data) => {
                   let org_id = data.org_id;
                   let org_name = null;
                   //遍历部门部门数组 根据org_id获取部门名称
-                  this.arrList.forEach((x)=>{
-                    if(x.id === org_id){
+                  this.arrList.forEach((x) => {
+                    if (x.id === org_id) {
                       org_name = x.name
                     }
                   });
-                  this.positionList.push(Object.assign({},data,{orgName:org_name}));
+                  this.positionList.push(Object.assign({}, data, {orgName: org_name}));
                 });
               }
-            }else {
+            } else {
               this.$notify.info({
                 title: '消息',
                 message: res.data.message,
@@ -613,7 +619,7 @@
         }
       },
       //职位右键菜单
-      openOnlyPositionMenu(row, event){
+      openOnlyPositionMenu(row, event) {
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
@@ -628,7 +634,7 @@
         this.contextParams(event);
       },
       //职位单击
-      clickOnlyPositionMenu(row,event){
+      clickOnlyPositionMenu(row, event) {
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
@@ -637,10 +643,10 @@
         this.getPosition();
       },
       //右键职位回调
-      openOnlyPositionDialog(type){
-        if(type === 'edit'){
+      openOnlyPositionDialog(type) {
+        if (type === 'edit') {
           this.editOnlyPositionDialog = true;
-        }else if(type === 'delete'){
+        } else if (type === 'delete') {
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -653,33 +659,33 @@
               message: '已取消删除'
             });
           });
-        }else if(type === 'addPost'){
-            this.addPosition('post');
+        } else if (type === 'addPost') {
+          this.addPosition('post');
         }
       },
 
       //修改职位完成回调
-      closeEditOnlyPosition(val){
+      closeEditOnlyPosition(val) {
         this.editOnlyPositionDialog = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getOnlyPosition();
         }
       },
       //删除职位
-      deleteOnlyPosition(){
-        this.$http.delete(globalConfig.server_user+'position/type/'+this.onlyPositionId).then((res) =>{
-          if(res.data.status === 'success'){
+      deleteOnlyPosition() {
+        this.$http.delete(globalConfig.server_user + 'position/type/' + this.onlyPositionId).then((res) => {
+          if (res.data.status === 'success') {
             this.$notify({
               title: '消息',
               message: '删除成功',
-              type:'success'
+              type: 'success'
             });
             this.getOnlyPosition();
-          }else {
+          } else {
             this.$notify({
               title: '警告',
               message: res.data.message,
-              type:'warning'
+              type: 'warning'
             });
           }
         })
@@ -687,15 +693,15 @@
 
       //********************岗位操作函数****************
       //根据职位获取岗位
-      getPosition(){
-        this.$http.get(globalConfig.server_user+'positions?type=' + this.onlyPositionId+'&page='+this.params.page
-          +'&per_page_number='+this.params.pageNum).then((res) => {
-          if(res.data.status === 'success'){
+      getPosition() {
+        this.$http.get(globalConfig.server_user + 'positions?type=' + this.onlyPositionId + '&page=' + this.params.page
+          + '&per_page_number=' + this.params.pageNum).then((res) => {
+          if (res.data.status === 'success') {
             let arr = res.data.data;
 
-            for(let i=0;i<arr.length;i++){
+            for (let i = 0; i < arr.length; i++) {
               arr.forEach((item) => {
-                if(item.parent_id === arr[i].id){
+                if (item.parent_id === arr[i].id) {
                   item.parent_name = arr[i].name;
                 }
               })
@@ -708,7 +714,7 @@
             });
             this.totalPositionNum = res.data.meta.total;
             this.positionTableData = arr;
-          }else {
+          } else {
             this.totalPositionNum = 0;
             this.positionTableData = [];
           }
@@ -771,7 +777,7 @@
 //
 //      },
       //岗位右键菜单
-      openPositionMenu(row, event){
+      openPositionMenu(row, event) {
         this.positionId = row.id;
         this.positionName = row.name;
         this.menuType = 'position';
@@ -781,10 +787,10 @@
         ];
         this.contextParams(event);
       },
-      openPositionDialog(type){     //g岗位右键回调函数
-        if(type === 'edit'){
+      openPositionDialog(type) {     //g岗位右键回调函数
+        if (type === 'edit') {
           this.editPositionDialog = true;
-        }else if(type === 'delete'){
+        } else if (type === 'delete') {
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -801,59 +807,60 @@
       },
 
       //修改岗位完成回调
-      closeEditPosition(val){
+      closeEditPosition(val) {
         this.editPositionDialog = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getPosition();
         }
       },
       //删除岗位
-      deletePosition(){
-        this.$http.delete(globalConfig.server_user+'positions/'+this.positionId).then((res) =>{
-          if(res.data.status === 'success'){
+      deletePosition() {
+        this.$http.delete(globalConfig.server_user + 'positions/' + this.positionId).then((res) => {
+          if (res.data.status === 'success') {
             this.$notify({
               title: '成功',
               message: '删除成功',
-              type:'success'
+              type: 'success'
             });
             this.getPosition();
-          }else {
+          } else {
             this.$notify({
               title: '警告',
               message: res.data.message,
-              type:'warning'
+              type: 'warning'
             });
           }
         })
       },
 
       //新建岗位
-      addPosition(val){
+      addPosition(val) {
         this.addPositionDialog = true;
-        if(val ==='position'){
-          this.addPositionParams = Object.assign({},this.addPositionParams,
-            {depart_id:this.params.org_id,depart_name:this.department_name,post_position:'position'})
-        }else {
-          this.addPositionParams = Object.assign({},this.addPositionParams,
-            {depart_id:this.params.org_id,depart_name:this.department_name,post_position:'post',
-              position_id:this.onlyPositionId,position_name:this.onlyPositionName})
+        if (val === 'position') {
+          this.addPositionParams = Object.assign({}, this.addPositionParams,
+            {depart_id: this.params.org_id, depart_name: this.department_name, post_position: 'position'})
+        } else {
+          this.addPositionParams = Object.assign({}, this.addPositionParams,
+            {
+              depart_id: this.params.org_id, depart_name: this.department_name, post_position: 'post',
+              position_id: this.onlyPositionId, position_name: this.onlyPositionName
+            })
         }
       },
-      closeAddPosition(val){
+      closeAddPosition(val) {
         this.addPositionDialog = false;
-        if(val === 'success'){
-          if(this.addPositionParams.post_position=== 'position'){
+        if (val === 'success') {
+          if (this.addPositionParams.post_position === 'position') {
             this.getOnlyPosition();
-          }else if(this.addPositionParams.post_position=== 'post'){
+          } else if (this.addPositionParams.post_position === 'post') {
             this.getPosition();
           }
         }
       },
 
 
-
       //********************右键配置操作函数****************
-      contextParams(event){
+      contextParams(event) {
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
@@ -865,34 +872,34 @@
         })
       },
       //右键回调时间
-      clickEvent (index) {
-        if(this.menuType === 'staff'){
+      clickEvent(index) {
+        if (this.menuType === 'staff') {
           this.openModalDialog(index);
-        }else if(this.menuType === 'position'){
+        } else if (this.menuType === 'position') {
           this.openPositionDialog(index);
-        }else if(this.menuType==='onlyPosition'){
+        } else if (this.menuType === 'onlyPosition') {
           this.openOnlyPositionDialog(index);
         }
       },
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
 
 
       //********************树配置操作函数****************
-      renderContent(h,{node,data,store}){//加载节点
+      renderContent(h, {node, data, store}) {//加载节点
         let that = this;
-        return h(TreeRender,{
+        return h(TreeRender, {
           props: {
             DATA: data,
             NODE: node,
             STORE: store,
           },
           on: {
-            nodeAdd: ((s,d,n) => that.handleAdd(s,d,n)),
-            nodeEdit: ((s,d,n) => that.handleEdit(s,d,n)),
-            nodeDel: ((s,d,n) => that.handleDelete(s,d,n))
+            nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
+            nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
+            nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
           }
         });
       },
@@ -900,13 +907,13 @@
 
       //*************选人框**********************
       //关闭回调
-      closeOrganization(){
+      closeOrganization() {
         this.organizationDialog = false;
       },
 
 
       //确定排序
-      confirmSave(){
+      confirmSave() {
         this.$confirm('您确定保存吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -915,7 +922,7 @@
           this.$notify({
             title: '成功',
             message: '保存成功',
-            type:'success'
+            type: 'success'
           });
         }).catch(() => {
           this.$notify.info({
@@ -926,12 +933,12 @@
       },
 
       //****************搜索*************
-      search(){
-        if(this.activeName=== 'first'){
+      search() {
+        if (this.activeName === 'first') {
           this.getStaffData()
-        }else if(this.activeName=== 'second'){
+        } else if (this.activeName === 'second') {
           this.getOnlyPosition();
-        }else if(this.activeName=== 'third'){
+        } else if (this.activeName === 'third') {
           this.getPosition();
         }
       },
@@ -946,10 +953,10 @@
         this.search();
       },
       //---------------部门排序--------------------
-      sortDepartment(){
+      sortDepartment() {
         this.isDepartment = !this.isDepartment;
       },
-      initExpand(){
+      initExpand() {
         this.setTree.map((a) => {
 //          this.defaultExpandKeys.push(a.id)
         });
@@ -981,14 +988,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped="" lang="scss">
-  #staffManage{
+  #staffManage {
     min-height: 790px;
-    .border{
+    .border {
       /*border: 1px solid #6a8dfb;*/
       border-radius: 4px;
       min-height: 790px;
-      .top{
-        padding:0 10px;
+      .top {
+        padding: 0 10px;
         height: 40px;
         background: #6a8dfb;
         color: #ffffff;
@@ -997,43 +1004,43 @@
         align-items: center;
         justify-content: space-between;
       }
-      #sortTable{
+      #sortTable {
         user-select: none;
         padding: 10px;
-        .ul_header{
+        .ul_header {
           background: #ecf5ff;
           cursor: default;
           padding: 8px;
           border-bottom: 1px solid #ebeef5;
           text-align: center;
-          &:hover{
+          &:hover {
             background: #ecf5ff;
           }
         }
-        li{
+        li {
           padding: 8px;
           background: #ffffff;
           border-bottom: 1px solid #ebeef5;
           cursor: move;
-          &:hover{
+          &:hover {
             background: #f5f7fa;
           }
         }
       }
     }
 
-    .left{
+    .left {
 
     }
-    .right{
-      .top{
+    .right {
+      .top {
         display: flex;
         justify-content: space-between;
       }
-      .filter{
+      .filter {
         padding: 10px 10px 0 10px;
       }
-      .staffTable{
+      .staffTable {
         padding: 0 10px;
       }
       .tableBox {
@@ -1046,7 +1053,7 @@
           justify-content: flex-end;
         }
       }
-      .tableBottom{
+      .tableBottom {
         padding: 8px;
         display: flex;
         justify-content: flex-end;
