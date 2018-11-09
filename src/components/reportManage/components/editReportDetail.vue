@@ -150,7 +150,7 @@
                           <span v-for="(item,index) in value.user.org" v-if="index === 0">-{{item.name}}</span>
                         </div>
                         <div class="commentB">
-                          {{value.created_at}}
+                          {{value.create_time}}
                         </div>
                       </div>
                       <div class="commentC">
@@ -438,7 +438,8 @@
         is_receipt: "",//是否电子收据
         radioCity: "南京市",
         sendElectronicReceiptNumber: '',
-        address: globalConfig.server_user,
+        // address: globalConfig.server_user,
+        address: globalConfig.server,
         fullLoading: false,
         reportVisible: false,
         rentReport: false,
@@ -694,10 +695,10 @@
         this.suggestpriceStatus = false
         this.fullLoading = true;
         this.approvedStatus = false;
-        this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
+        // this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
+        this.$http.get( this.address + 'workflow/process/1').then((res) => {
           this.fullLoading = false;
-          console.log(res)
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
+          if (res.data.code === '20020' && res.data.data) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
@@ -807,15 +808,17 @@
         this.comments(this.reportId, val);
       },
       comments(val, page) {
-        this.$http.get(this.address + 'comments', {
+        // this.$http.get(this.address + 'comments', {
+        this.$http.get(this.address + 'workflow/process/comment/1', {
           params: {
             id: val,
             page: page,
           }
         }).then((res) => {
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
-            this.commentList = res.data.data;
-            this.paging = res.data.meta.total;
+          if (res.data.code === '20000' && res.data.data.length !== 0) {
+            console.log(res,'comments');
+            this.commentList = res.data.data.data;
+            this.paging = res.data.data.count;
           } else {
             this.commentList = [];
             this.paging = 0;
@@ -851,7 +854,8 @@
 
       sureComment(val) {
         if (this.picStatus) {
-          this.$http.put(this.address + 'process/' + this.reportId, this.form).then((res) => {
+          // this.$http.put(this.address + 'process/' + this.reportId, this.form).then((res) => {
+          this.$http.post(this.address + 'process/' + this.reportId, this.form).then((res) => {
             if (res.data.status === 'success') {
               this.commentVisible = false;
               if (val === 'to_comment') {
@@ -923,7 +927,8 @@
       // 获取相关修改记录
       getReportEditInfo() {
         this.changeLoading = true;
-        this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=' + this.reportId).then((res) => {
+        // this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=' + this.reportId).then((res) => {
+        this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=1').then((res) => {
           this.changeLoading = false;
           if (res.data.code === '20000') {
             this.editReportData = res.data.data.data;

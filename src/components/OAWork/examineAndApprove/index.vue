@@ -792,6 +792,8 @@
 
     <!--报备详情-->
     <ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>
+
+    <el-button @click="dblClickTable">详情</el-button>
   </div>
 </template>
 
