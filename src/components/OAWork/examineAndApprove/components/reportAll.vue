@@ -268,9 +268,10 @@
         this.tableLoading = true;
         this.tableStatus = ' ';
         this.$http.get(globalConfig.server + 'workflow/process', {params: this.params}).then((res) => {
+          console.log(res);
           this.tableLoading = false;
-          let data = res.data.data.data;
           if (res.data.code === '20000' && data.length !== 0) {
+            let data = res.data.data.data;
             this.totalNum = res.data.data.count;
             let dataList = [];
             for (let i = 0; i < data.length; i++) {

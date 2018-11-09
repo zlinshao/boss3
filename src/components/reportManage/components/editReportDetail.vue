@@ -924,7 +924,6 @@
       getReportAboutInfo() {
         this.isLoading = true;
         this.$http.get(this.address + 'workflow/process?house=' + this.houseId).then((res) => {
-          console.log(res);
           this.isLoading = false;
           if (res.data.code === '20000') {
             this.reportAboutData = res.data.data.data;

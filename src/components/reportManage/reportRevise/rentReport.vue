@@ -143,7 +143,6 @@
               </el-button>
             </div>
           </div>
-          {{}}
           <div class="title">金额+支付方式</div>
           <div class="form_border">
             <div v-for="item in moneyTableChangeAmount">

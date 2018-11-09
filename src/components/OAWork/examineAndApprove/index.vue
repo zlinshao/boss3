@@ -1021,7 +1021,6 @@
       },
       // 待办事项
       myData(val, page) {
-        console.log(val);
         this.emptyContent = ' ';
         this.examineLoading = true;
         this.params.page = page;
@@ -1030,8 +1029,8 @@
           params: val,
         }).then((res) => {
           this.examineLoading = false;
-          let data = res.data.data.data;
           if (res.data.code === '20000' && data.length !== 0) {
+            let data = res.data.data.data;
             // if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
             //   this.amount = res.data.meta.total;
             // }
