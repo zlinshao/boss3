@@ -19,11 +19,13 @@
     <!--视频dialog-->
     <el-dialog
       :visible.sync="showVideo"
-      width="30%"
+      width="45%"
       title="视频教程"
+      @open="openVideo"
+      @close="closeVideo"
     >
       <div style="width: 100%;height: 400px;text-align: center;">
-        <video :src="videoUri" controls height="400px"></video>
+        <video :src="videoUri" width="100%" controls height="400px"></video>
       </div>
     </el-dialog>
   </div>
@@ -51,7 +53,7 @@
         },
         loginIndex: 0,
         showVideo: false,
-        videoUri: "http://s.lejias.cn/FsRxrfzXAuatjr-78vBYNg0YkoT9"
+        videoUri: ""
       }
     },
     created() {
@@ -72,6 +74,12 @@
       }
     },
     methods: {
+      openVideo() {
+        this.videoUri = "http://s.lejias.cn/peixun.mp4";
+      },
+      closeVideo() {
+        this.videoUri = "";
+      },
       responses() {
         let that = this;
         this.$http.interceptors.response.use(function (response) {
