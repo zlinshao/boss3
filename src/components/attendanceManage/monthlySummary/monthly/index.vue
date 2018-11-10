@@ -448,6 +448,8 @@ export default {
               item.sort_dimension.forEach((key, ind) => {
                 attendanceObj = {};
                 key.forEach((a, b) => {
+                  
+                  
                   attendanceObj.date = a.sign_date;
                   if(a.event_attribute == 1) {
                     if(a.status == 0)  {
@@ -471,9 +473,13 @@ export default {
                     attendanceObj.hugh = "休息"
                   }
                   if(a.status == 3) {
-                    attendanceObj.supplementary = "补卡"
+                    attendanceObj.resultOffWork = "补卡"
                   } else if(a.status == 4) {
-                    attendanceObj.field = "外勤"
+                    if(a.event_attribute == 3) {
+                      attendanceObj.resultWork = "外勤"
+                    } else if(a.event_attribute == 4) {
+                      attendanceObj.resultOffWork = "外勤"
+                    }
                   }
                 })
                   attendanceArr.push(attendanceObj)

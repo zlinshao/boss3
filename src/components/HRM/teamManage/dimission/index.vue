@@ -265,6 +265,18 @@
         this.organizeType = type;
         this.lengths = '';
       },
+      // openOrganOrg(val, type) {
+      //   this.organDivision = val;
+      //   this.organModule = true;
+      //   this.organizeType = type;
+      //   this.lengths = '';
+      // },
+      // openOrganName(val, type) {
+      //   this.organDivision = val;
+      //   this.organModule = true;
+      //   this.organizeType = type;
+      //   this.lengths = '';
+      // },
       // 清空部门
       emptyDepart(val) {
         this.params[val] = '';

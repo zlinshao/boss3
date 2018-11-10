@@ -366,8 +366,6 @@
           this.tableLoading = false;
           if (res.data.code === '60012') {
             this.tableData = res.data.info.data;
-            console.log(this.tableData, "2222");
-            
             this.totalNum = res.data.info.total;
           } else {
             this.tableStatus = '暂无数据';
