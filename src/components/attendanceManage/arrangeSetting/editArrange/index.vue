@@ -94,7 +94,7 @@
         </el-table-column>
         <el-table-column prop="name" label="姓名" width="80px"></el-table-column>
 
-        <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label" width="48%">
+        <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label" width="50%">
           <template slot-scope="scope">
             <div v-text="showArrange(scope.row,colu.label)" :class="bg(scope.row,colu.label)"
                  style="cursor:pointer;"></div>
@@ -103,7 +103,7 @@
         <el-table-column label="操作" width="100px">
           <template slot-scope="scope">
             <div>
-              <el-button type="primary" size="mini" @click="saveCurrentArrange(scope.row)">保存</el-button>
+              <el-button type="primary" size="mini" @click="saveCurrentArrange(scope.row)">保&nbsp;&nbsp; 存</el-button>
             </div>
           </template>
         </el-table-column>
