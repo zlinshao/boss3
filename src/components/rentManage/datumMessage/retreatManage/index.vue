@@ -564,7 +564,6 @@
         this.emptyStatus_second = ' ';
         this.isLoading_second = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params_second}).then((res) => {
-          console.log(res);
           this.isLoading_second = false;
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
