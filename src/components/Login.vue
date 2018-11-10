@@ -604,7 +604,7 @@
       background: #FFFFFF;
       position: absolute;
       box-sizing: border-box;
-      top: 30%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       /*border: 1px solid rgba(106, 141, 251, .12);*/
