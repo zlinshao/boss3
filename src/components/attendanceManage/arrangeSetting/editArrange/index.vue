@@ -15,10 +15,11 @@
             </el-tag>
           </div>
         </el-col>
-        <el-col :span="2">
-          未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}</span>
+        <el-col :span="4">
+          未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}人</span>
+          <el-button type="text" style="color: #14e731;margin-left: 15px;" @click="searchAll">全部</el-button>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <!-- 搜索 -->
           <div style="text-align:right;padding-right:50px">
             <el-row :gutter="20">
@@ -333,6 +334,10 @@
       };
     },
     methods: {
+      searchAll() {
+        this.arrangeParams.user_id = null;
+        this.getArrangeList(this.arrangeParams);
+      },
       searchUnSort() {
         this.getArrangeList(this.arrangeParams,this.unSortIds);
       },
@@ -477,7 +482,6 @@
       // -------------分割线 高级搜索部分----------------
       //排班列表
       getArrangeList(arrangeParams,sort) {
-        console.log(arrangeParams);
         this.arrangeLoading = true;
         this.arrangeInfo = " ";
         if(sort){
@@ -487,7 +491,6 @@
           .get(this.url + "attendance/sort", {
             params: arrangeParams
           }).then(res => {
-            console.log(res);
             if (res.status == 200) {
               if (res.data.code == 20000) {
                 this.arrangeLoading = false;
