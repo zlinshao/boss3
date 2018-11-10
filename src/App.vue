@@ -10,6 +10,24 @@
       <back-to-top transitionName="fade" :customStyle="myBackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>
     </el-tooltip>
+    <el-tooltip placement="left" content="乐伽大学 视频教程">
+      <div v-if="$route.path === '/' || $route.path === '/main'" class="lookVideo" @click="playVideo">
+        <img style="width: 100%;" src="./assets/images/乐伽大学弹框.png" alt="">
+      </div>
+    </el-tooltip>
+
+    <!--视频dialog-->
+    <el-dialog
+      :visible.sync="showVideo"
+      width="45%"
+      title="视频教程"
+      @open="openVideo"
+      @close="closeVideo"
+    >
+      <div style="width: 100%;height: 400px;text-align: center;">
+        <video :src="videoUri" width="100%" controls height="400px"></video>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,6 +52,8 @@
           background: '#ecf5ffe8'// 按钮的背景颜色
         },
         loginIndex: 0,
+        showVideo: false,
+        videoUri: ""
       }
     },
     created() {
@@ -47,43 +67,39 @@
       }
 
       this.responses();
-      document.onkeydown = function (e) {//键盘按键控制
-        e = e || window.event;
-        if (e.keyCode == 116) {
-
-        }
-      };
     },
     computed: {
       isLoading() {
         return this.$store.state.app.isLoading;
       }
     },
-
     methods: {
+      openVideo() {
+        this.videoUri = "http://s.lejias.cn/peixun.mp4";
+      },
+      closeVideo() {
+        this.videoUri = "";
+      },
       responses() {
         let that = this;
-        if (this.loginIndex === 0) {
-          this.$http.interceptors.response.use(function (response) {
-            return response;
-          }, function (error) {
-            if (error && error.response) {
-              if (error.response.data.status_code === 401) {
-                that.$alert('登陆超时请重新登陆', '温馨提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                    that.loginIndex++;
-                    localStorage.removeItem('myData');
-                    localStorage.removeItem('personal');
-                    globalConfig.header.Authorization = '';
-                    that.$router.push({path: '/login'});
-                  }
-                });
-              }
+        this.$http.interceptors.response.use(function (response) {
+          return response;
+        }, function (error) {
+          if (error && error.response) {
+            if (error.response.data.status_code === 401) {
+              // that.$alert('登陆超时请重新登陆', '温馨提示', {
+              //   confirmButtonText: '确定',
+              //   callback: action => {
+              //     that.loginIndex++;
+              //     localStorage.removeItem('personal');
+              //     globalConfig.header.Authorization = '';
+              //     that.$router.push({path: '/login'});
+              //   }
+              // });
             }
-            return Promise.reject(error);
-          });
-        }
+          }
+          return Promise.reject(error);
+        });
       },
       prevent(e) {
         e.preventDefault();
@@ -91,6 +107,9 @@
       },
       closeMenu() {
         this.$store.dispatch('closeMenu')
+      },
+      playVideo() {
+        this.showVideo = true;
       }
     }
   }
@@ -124,6 +143,14 @@
     background-color: #f4f3f6;
     #app {
       height: 100%;
+      .lookVideo{
+        width: 100px;
+        height: 100px;
+        position: fixed;
+        right: 100px;
+        bottom: 20px;
+        cursor: pointer;
+      }
     }
     a {
       text-decoration: none;
