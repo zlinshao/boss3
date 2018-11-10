@@ -15,7 +15,10 @@
             </el-tag>
           </div>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="2">
+          未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}</span>
+        </el-col>
+        <el-col :span="12">
           <!-- 搜索 -->
           <div style="text-align:right;padding-right:50px">
             <el-row :gutter="20">
@@ -28,7 +31,7 @@
                       size="mini"
                       style="width:250px;dispaly:inline-block;margin-left:20px;"
                       clearable
-                      @keyup.enter.prevent.native="goSearch"
+                      @keyup.enter.native.prevent="goSearch"
                     >
                       <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                     </el-input>
@@ -323,10 +326,16 @@
         currentDay: '',
         exprotLoading: false,
         exprotTemp: false,
-        importTmp: false
+        importTmp: false,
+      //  没有排班的接口
+        unSortCount: '',
+        unSortIds: [],
       };
     },
     methods: {
+      searchUnSort() {
+        this.getArrangeList(this.arrangeParams,this.unSortIds);
+      },
       getImg(val) {
         console.log(val);
         if (val[1].length > 1) {
@@ -467,17 +476,25 @@
       },
       // -------------分割线 高级搜索部分----------------
       //排班列表
-      getArrangeList(arrangeParams) {
+      getArrangeList(arrangeParams,sort) {
+        console.log(arrangeParams);
         this.arrangeLoading = true;
         this.arrangeInfo = " ";
+        if(sort){
+          arrangeParams.user_id = sort;
+        }
         this.$http
           .get(this.url + "attendance/sort", {
             params: arrangeParams
-          })
-          .then(res => {
+          }).then(res => {
+            console.log(res);
             if (res.status == 200) {
               if (res.data.code == 20000) {
                 this.arrangeLoading = false;
+                if(res.data.data.unSort.count && res.data.data.unSort.user_id){
+                  this.unSortCount = res.data.data.unSort.count;
+                  this.unSortIds = res.data.data.unSort.user_id;
+                }
                 if (res.data.data.data.length < 1) {
                   this.getArrangeEmpty();
                 } else {
@@ -811,6 +828,7 @@
         } else {
           this.exportBtnShow = false;
         }
+        return false;
       },
       resetting() {
         this.getQuery();

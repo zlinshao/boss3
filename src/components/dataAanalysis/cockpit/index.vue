@@ -51,9 +51,9 @@
         </div>
       </div>
       <div>
-        <div class="meterTop private">
-          <div class="fl">个人仪表盘</div>
-        </div>
+        <!--<div class="meterTop private">-->
+          <!--<div class="fl">个人仪表盘</div>-->
+        <!--</div>-->
         <div style="padding:0 66px">
           <el-row>
             <el-col :span="4" v-for="(item,index) in privateMeter" :key="index" :offset="index%5==0?0:1">
@@ -245,7 +245,7 @@
         } else {
           this.meterparams.name = this.meterName;
           this.$http.put(globalConfig.server + "bisys/dashboard/" + this.selectMeterId, this.meterparams, {headers: {"Accept": "application/vnd.boss18+json"}}).then((res) => {
-            if (res.data.code === "20030") {
+            if (res.data.code === "20020") {
               this.$message({
                 message: res.data.msg,
                 type: 'success'
@@ -280,7 +280,7 @@
             user_id: JSON.parse(localStorage.getItem("personal")).id
           };
           this.$http.post(globalConfig.server + "bisys/dashboard", params, {headers: {"Accept": "application/vnd.boss18+json"}}).then((res) => {
-            if (res.data.code === "20010") {
+            if (res.data.code === "20020") {
               this.$message({
                 message: res.data.msg,
                 type: 'success'
@@ -303,7 +303,7 @@
       },
       confirmdeleteMeter() { //确认删除仪表盘
         this.$http.get(globalConfig.server + "/bisys/dashboard/delete/" + this.selectMeterId, {headers: {"Accept": "application/vnd.boss18+json"}}).then((res) => {
-          if (res.data.code === "20040") {
+          if (res.data.code === "20020") {
             this.$message({
               message: res.data.msg,
               type: 'success'
