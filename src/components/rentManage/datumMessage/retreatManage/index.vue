@@ -113,6 +113,24 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;"
+                                v-model="org_name"
+                                size="mini">
+                        <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -412,6 +430,9 @@
 
 
     <UploadPic :upLoadDialog="upLoadDialog" :status="status" :vacationId="operateId" @close="closeModal"></UploadPic>
+    <!--组织架构-->
+    <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths" @close="closeOrgan"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -420,10 +441,11 @@
   import EditCollectVacation from './components/editVacation.vue'
   import VacationDetail from './components/vacationDetail.vue'
   import UploadPic from './components/upScreenshot'
+  import Organization from "../../../common/organization";
 
   export default {
     name: 'hello',
-    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic},
+    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic,Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -444,7 +466,9 @@
           search: '',
           check_time: [],
           status: '',
+          org_id: '',
         },
+        org_name: '',
         params_second: {
           page: 1,
           limit: 12,
@@ -470,6 +494,10 @@
         address: '',
         status: '',
         superAuthority : false,
+        organDivision: '',
+        organModule: false,
+        organizeType: '',
+        lengths: 0,
       }
     },
     created() {
@@ -477,6 +505,27 @@
       this.getData_rent();
     },
     methods: {
+      openOrgan(val,type) {
+        // 打开组织架构
+        this.organDivision = val;
+        this.organModule = true;
+        this.organizeType = type;
+        this.lengths = 1;
+      },
+      emptyDepart() {
+        this.org_name = "";
+        this.params.org_id = '';
+      },
+      closeOrgan() {
+        this.organDivision = "";
+        this.organModule = false;
+        this.organizeType = "";
+        this.lengths = 0;
+      },
+      selectMember(val) {
+        this.params.org_id = val[0].id;
+        this.org_name = val[0].name;
+      },
       creators_show(scope) {
         var name = '';
         var org = '';
@@ -498,7 +547,6 @@
         this.emptyStatus = ' ';
         this.isLoading = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
-          console.log(res);
           this.isLoading = false;
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
@@ -602,9 +650,13 @@
         if(this.activeName === 'first'){
           this.params.check_time = [];
           this.params.status = '';
+          this.org_name = '';
+          this.params.org_id = '';
         }else {
           this.params_second.check_time = [];
           this.params_second.status = '';
+          this.org_name = '';
+          this.params.org_id = '';
         }
 
       },
