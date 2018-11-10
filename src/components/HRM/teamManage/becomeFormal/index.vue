@@ -147,6 +147,7 @@
           page: 1,
           org_names: '',
           // keywords: '',
+          position_status: ''
         },
         organData: {},
       }
@@ -191,7 +192,8 @@
           type: 'warning'
         }).then(() => {
           this.$http.put(this.url + 'hrm/User/affirm', {
-            id: row.user_id
+            id: row.user_id,
+            position_status: 3
           }).then(res => {
             if (res.data.success) {
               this.prompt('success', res.data.msg);

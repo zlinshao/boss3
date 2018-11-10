@@ -651,7 +651,7 @@ export default new Router({
       children: [
         {path: '/periodicTable', component: PeriodicTable, name: '周期表'},
         {path: '/achievement', component: Achievement, name: '业绩'},
-        {path: '/personalSalary', component: PersonalSalary, name: '工资'},
+        // {path: '/personalSalary', component: PersonalSalary, name: '工资'},
 
       ]
     },
