@@ -503,7 +503,6 @@
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
             this.tableData = res.data.data.data;
-            console.log(tableData)
             this.totalNumber = res.data.data.count;
           } else {
             this.superAuthority = false;

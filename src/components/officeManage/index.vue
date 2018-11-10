@@ -181,7 +181,7 @@
           <el-table-column
             label="部门人数">
             <template slot-scope="scope">
-              <span v-if="scope.row.depart">{{scope.row.depart.users}}</span>
+              <span v-if="scope.row.depart">{{scope.row.office_num}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>
@@ -366,6 +366,8 @@
           this.tableLoading = false;
           if (res.data.code === '60012') {
             this.tableData = res.data.info.data;
+            console.log(this.tableData, "2222");
+            
             this.totalNum = res.data.info.total;
           } else {
             this.tableStatus = '暂无数据';

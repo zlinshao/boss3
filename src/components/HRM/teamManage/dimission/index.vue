@@ -187,9 +187,13 @@
         this.tableStatus = ' ';
         this.tableLoading = true;
         this.params.page = page || 1;
+        console.log(this.params, "11111");
+        
         this.$http.get(this.url + 'hrm/User/dismissList', {
           params: this.params,
         }).then(res => {
+          console.log(res, "2222");
+          
           this.tableLoading = false;
           if (res.data.success) {
             if (res.data.data.data.length < 1) {

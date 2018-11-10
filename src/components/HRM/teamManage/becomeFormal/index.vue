@@ -4,10 +4,10 @@
       <div class="highSearch">
         <el-form :model="params" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入员工姓名" v-model="params.keywords" size="mini" @keyup.enter.native="search"
+            <!-- <el-input placeholder="请输入员工姓名" v-model="params.keywords" size="mini" @keyup.enter.native="search"
                       clearable>
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-            </el-input>
+            </el-input> -->
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
@@ -29,9 +29,9 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_id', 'depart')" v-model="organData.org_id"
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" v-model="params.org_names"
                               size="mini">
-                      <el-button slot="append" @click="emptyDepart('org_id')">清空</el-button>
+                      <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -145,8 +145,8 @@
         params: {
           limit: 15,
           page: 1,
-          org_id: '',
-          keywords: '',
+          org_names: '',
+          // keywords: '',
         },
         organData: {},
       }
@@ -168,7 +168,7 @@
           params: this.params,
         }).then(res => {
           this.tableLoading = false;
-          if (res.data.success) {
+          if (res.data.code == "90000") {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
           } else {
@@ -254,8 +254,17 @@
       // 确认部门
       selectMember(val) {
         let organ = this.organDivision;
-        this.params[organ] = val[0].id;
-        this.organData[organ] = val[0].name;
+        // this.params[organ] = val[0].id;
+        // this.organData[organ] = val[0].name;
+        let str = [];
+        for (let item of val) {
+          str.push(item.name);
+        }
+        this.departName(str, organ);
+      },
+           // 数组名称去重 拼接
+      departName(arr, organ) {
+        this.params[organ] = this.montage(arr);
       },
       // 双击
       dblClickTable() {
