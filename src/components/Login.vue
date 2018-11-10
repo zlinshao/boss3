@@ -6,102 +6,101 @@
       <div class="loadingBoss"></div>
       <div class="loadingTitle">Loading.....</div>
     </div>
-    <div class="container" v-if="underWay">
+    <!--<div class="container" v-if="underWay">-->
 
-      <div class="login_main" v-if="!isMessage">
-        <div class="beijing"></div>
-        <div class="logo">
-          <img src="../assets/images/maotou.png" alt="">
-        </div>
-        <div class="slogan">
-          <img src="../assets/images/slogan.png" style="width: 100%" alt="">
-        </div>
-        <div class="login_type">
-          <div @click="sweepCode">
-            <div>
-              <img src="../assets/images/dd1.png" alt="">
-            </div>
-            <div style="color:#6a8dfb;">钉钉 - 扫码</div>
-            <div>一键登录</div>
-          </div>
-          <div @click="messageLogin">
-            <div><img src="../assets/images/sj.png" alt=""></div>
-            <div style="color:#fb4699;">手机号</div>
-            <div>快速登录</div>
-          </div>
-          <div>
-            <div><img src="../assets/images/weixin2.png" alt=""></div>
-            <div style="color: #58d788">微信 - 扫码</div>
-            <div>一键登录</div>
-          </div>
-        </div>
-      </div>
+      <!--<div class="login_main" v-if="!isMessage">-->
+        <!--<div class="beijing"></div>-->
+        <!--<div class="logo">-->
+          <!--<img src="../assets/images/maotou.png" alt="">-->
+        <!--</div>-->
+        <!--<div class="slogan">-->
+          <!--<img src="../assets/images/slogan.png" style="width: 100%" alt="">-->
+        <!--</div>-->
+        <!--<div class="login_type">-->
+          <!--<div @click="sweepCode">-->
+            <!--<div>-->
+              <!--<img src="../assets/images/dd1.png" alt="">-->
+            <!--</div>-->
+            <!--<div style="color:#6a8dfb;">钉钉 - 扫码</div>-->
+            <!--<div>一键登录</div>-->
+          <!--</div>-->
+          <!--<div @click="messageLogin">-->
+            <!--<div><img src="../assets/images/sj.png" alt=""></div>-->
+            <!--<div style="color:#fb4699;">手机号</div>-->
+            <!--<div>快速登录</div>-->
+          <!--</div>-->
+          <!--<div>-->
+            <!--<div><img src="../assets/images/weixin2.png" alt=""></div>-->
+            <!--<div style="color: #58d788">微信 - 扫码</div>-->
+            <!--<div>一键登录</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <div v-if="isMessage" class="messageLogin">
-        <div class="top">
-          <div class="beijing"></div>
-          <div class="logo">
-            <img src="../assets/images/maotou.png" alt="">
-          </div>
-          <div class="slogan">
-            <img src="../assets/images/slogan.png" style="width: 100%" alt="">
-          </div>
-        </div>
-        <div class="formItem" v-if="loginModel==2">
-          <el-input placeholder="请输入手机号" v-model="phone">
-            <template slot="append">
-              <span class="china">中国</span> +86
-            </template>
-          </el-input>
-          <el-input placeholder="请输入4位短信验证码" @keyup.enter.native="sureLogin(phone, identifyingCode)"
-                    v-model="identifyingCode">
+      <!--<div v-if="isMessage" class="messageLogin">-->
+        <!--<div class="top">-->
+          <!--<div class="beijing"></div>-->
+          <!--<div class="logo">-->
+            <!--<img src="../assets/images/maotou.png" alt="">-->
+          <!--</div>-->
+          <!--<div class="slogan">-->
+            <!--<img src="../assets/images/slogan.png" style="width: 100%" alt="">-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="formItem" v-if="loginModel==2">-->
+          <!--<el-input placeholder="请输入手机号" v-model="phone">-->
+            <!--<template slot="append">-->
+              <!--<span class="china">中国</span> +86-->
+            <!--</template>-->
+          <!--</el-input>-->
+          <!--<el-input placeholder="请输入4位短信验证码" @keyup.enter.native="sureLogin(phone, identifyingCode)"-->
+                    <!--v-model="identifyingCode">-->
 
-            <el-button slot="append" style="width: 102px;" size="small" v-if="!loading" type="success"
-                       @click.native="phoneLogin()">
-              获取验证码
-            </el-button>
+            <!--<el-button slot="append" style="width: 102px;" size="small" v-if="!loading" type="success"-->
+                       <!--@click.native="phoneLogin()">-->
+              <!--获取验证码-->
+            <!--</el-button>-->
 
-            <el-button slot="append" style="width: 102px;" size="small" v-if="loading" :disabled="loading"
-                       type="success">发送中({{loadingNum}})
-            </el-button>
-          </el-input>
+            <!--<el-button slot="append" style="width: 102px;" size="small" v-if="loading" :disabled="loading"-->
+                       <!--type="success">发送中({{loadingNum}})-->
+            <!--</el-button>-->
+          <!--</el-input>-->
 
-          <div style="display: flex;justify-content: flex-end;margin-top: 20px">
-            <el-button type="text" @click="isMessage=false">更换登录方式</el-button>
-          </div>
+          <!--<div style="display: flex;justify-content: flex-end;margin-top: 20px">-->
+            <!--<el-button type="text" @click="isMessage=false">更换登录方式</el-button>-->
+          <!--</div>-->
 
-          <div class="confirmLogin">
-            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)">登 录
-            </el-button>
-          </div>
-        </div>
-        <div v-if="loginModel == 1">
-          <div class="dingLogin">
-            <div><img src="../assets/images/dd1.png" alt=""></div>
-            <div style="color:#6a8dfb;">钉钉 - 扫码</div>
-            <div>一键登录</div>
-          </div>
-        </div>
+          <!--<div class="confirmLogin">-->
+            <!--<el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)">登 录-->
+            <!--</el-button>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div v-if="loginModel == 1">-->
+          <!--<div class="dingLogin">-->
+            <!--<div><img src="../assets/images/dd1.png" alt=""></div>-->
+            <!--<div style="color:#6a8dfb;">钉钉 - 扫码</div>-->
+            <!--<div>一键登录</div>-->
+          <!--</div>-->
+        <!--</div>-->
 
-        <div v-if="loginModel == 3">
-          <div class="dingLogin">
-            <div><img src="../assets/images/weixin2.png" alt=""></div>
-            <div style="color: #58d788">微信 - 扫码</div>
-            <div>一键登录</div>
-          </div>
-        </div>
+        <!--<div v-if="loginModel == 3">-->
+          <!--<div class="dingLogin">-->
+            <!--<div><img src="../assets/images/weixin2.png" alt=""></div>-->
+            <!--<div style="color: #58d788">微信 - 扫码</div>-->
+            <!--<div>一键登录</div>-->
+          <!--</div>-->
+        <!--</div>-->
 
-      </div>
-    </div>
+      <!--</div>-->
+    <!--</div>-->
 
     <!--小飞-->
-    <div class="container" style="margin-top: 500px;" v-if="underWay">
+    <div class="container" v-if="underWay">
       <div class="login_main" v-if="!isMessage">
         <div class="beijing"></div>
         <div class="logo">
           <img src="../assets/images/maotou.png" alt="">
         </div>
-        <div style="text-align: center;color: red;">小飞</div>
         <div class="slogan">
           <img src="../assets/images/slogan.png" style="width: 100%" alt="">
         </div>
