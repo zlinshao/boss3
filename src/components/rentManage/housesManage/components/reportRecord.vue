@@ -84,7 +84,7 @@
       return {
         tableData:[],
         reprotParams:{
-          per_page_number:3,
+          limit:3,
           page:1,
         },
         totalNumber:0,
@@ -147,12 +147,12 @@
         this.emptyContent = ' ';
         this.tableLoading = true;
         this.tableData = [];
-        this.$http.get(globalConfig.server_user + 'process?house_id='+this.houseId,{params:this.reprotParams}).then((res) => {
+        this.$http.get(globalConfig.server + 'workflow/process?house='+this.houseId,{params:this.reprotParams}).then((res) => {
           this.tableLoading = false;
-          if(res.data.status === 'success'){
-            this.tableData = res.data.data;
-            this.totalNumber = res.data.meta.total;
-            if(res.data.data.length<1){
+          if(res.data.code === '20000'){
+            this.tableData = res.data.data.data;
+            this.totalNumber = res.data.data.count;
+            if(res.data.data.data.length<1){
               this.emptyContent = '暂无数据';
               this.totalNumber = 0;
             }
