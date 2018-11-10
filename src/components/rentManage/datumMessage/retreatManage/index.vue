@@ -113,7 +113,7 @@
                 </el-row>
               </el-col>
             </el-row>
-            <el-row class="el_row_border">
+            <el-row class="el_row_border" v-if="activeName !== 'first'">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -466,7 +466,6 @@
           search: '',
           check_time: [],
           status: '',
-          org_id: '',
         },
         org_name: '',
         params_second: {
@@ -477,6 +476,7 @@
           search: '',
           check_time: [],
           status: '',
+          org_id: '',
         },
 
 
@@ -514,7 +514,7 @@
       },
       emptyDepart() {
         this.org_name = "";
-        this.params.org_id = '';
+        this.params_second.org_id = '';
       },
       closeOrgan() {
         this.organDivision = "";
@@ -523,7 +523,7 @@
         this.lengths = 0;
       },
       selectMember(val) {
-        this.params.org_id = val[0].id;
+        this.params_second.org_id = val[0].id;
         this.org_name = val[0].name;
       },
       creators_show(scope) {
@@ -649,13 +649,11 @@
         if(this.activeName === 'first'){
           this.params.check_time = [];
           this.params.status = '';
-          this.org_name = '';
-          this.params.org_id = '';
         }else {
           this.params_second.check_time = [];
           this.params_second.status = '';
           this.org_name = '';
-          this.params.org_id = '';
+          this.params_second.org_id = '';
         }
 
       },
