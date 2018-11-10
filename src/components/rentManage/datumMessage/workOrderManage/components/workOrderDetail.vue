@@ -265,8 +265,9 @@
                   </el-col>
                   <el-col :span="24" v-if="item.img">
                     <el-form-item label="截图">
-                      <img v-if="val.length > 0 && item.img.image_pic.length > 0 " data-magnify
+                      <img v-if="Object.keys(item.img.image_pic)[0] !== '' && val.length > 0" data-magnify
                            v-for="val in item.img.image_pic" :data-src="val[0].uri" :src="val[0].uri">
+                           <span v-else>没有上传图片</span>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -285,7 +286,7 @@
             </div>
             <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks"> -->
                 <el-row v-for="(item,index) in workOrderDetail.remarks" :key="item.id"
-                        v-if="index !== workOrderDetail.remarks.length - 1"
+                        v-if="index == workOrderDetail.remarks.length - 1"
                         class="remarks">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
@@ -337,7 +338,7 @@
                   </el-col>
                 </el-row>
               </el-form>
-          </el-form>
+          <!-- </el-form> -->
         </div>
       </div>
     </el-dialog>
@@ -455,6 +456,8 @@
         this.$http.get(globalConfig.server + 'customer/work_order/' + this.wordData.id).then((res) => {
           this.workOrderLoading = false;
           if (res.data.code === "10020") {
+           
+            
             if(res.data.data.type === 699){
               this.isComplainOrder = true;
             }else{
@@ -463,6 +466,7 @@
               this.complainChannel = '';
             }
             this.workOrderDetail = res.data.data;
+             console.log(this.workOrderDetail, "22222");
             for(var item in this.workOrderDetail.album.image_pic){
               if(!this.workOrderDetail.album.image_pic[item].length){
                 delete this.workOrderDetail.album.image_pic[item]
