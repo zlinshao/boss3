@@ -41,112 +41,111 @@
           </el-dropdown>
         </div>
         <!--消息-->
-        <div class="message" style="position: relative;margin-right: 15px">
-          <el-dropdown>
-            <el-badge v-if="messageTotal>0" :max="99" :value="messageTotal" class="item">
-              <i class="el-icons-fa-comment-o"></i>
-              消 息
-            </el-badge>
-            <el-badge v-else class="item">
-              <i class="el-icons-fa-comment-o"></i>
-              消 息
-            </el-badge>
-            <el-dropdown-menu slot="dropdown" class="menuLists">
-              <!--消息图标-->
-              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0"
-                                :key="index">
-                <div class="first">
-                  <el-row @click.native="showMessageDetail(item)">
-                    <el-col :span="4">
-                      <div class="picSign">
-                        <i class="el-icon-bell"></i>
-                      </div>
-                    </el-col>
-                    <el-col :span="20">
-                      <div class="public">
-                        <div class="signOne">系统公告</div>
-                        <div class="limits">{{item.content.content}}</div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">
-                  <el-col :span="24">
-                    <div style="display:block; margin:5px 0; text-align:center; color:#409EFF">查看全部<span
-                      style="color:#f00">{{messageTotal}}条</span>未读
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-dropdown-item>
-              <el-dropdown-item class="not" v-if="unReadMessageData.length <=0">
-                <el-row style="cursor:default; ">
-                  <el-col :span="24">
-                    <i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>
-                    <div
-                      style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">
-                      您当前还没有消息提醒
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="unReadMessageData.length <=0">
-                <el-row @click.native="showOtherDetail('read')">
-                  <el-col :span="24">
-                    <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+        <!--<div class="message" style="position: relative;margin-right: 15px">-->
+          <!--<el-dropdown>-->
+            <!--<el-badge v-if="messageTotal>0" :max="99" :value="messageTotal" class="item">-->
+              <!--<i class="el-icons-fa-comment-o"></i>-->
+              <!--消 息-->
+            <!--</el-badge>-->
+            <!--<el-badge v-else class="item">-->
+              <!--<i class="el-icons-fa-comment-o"></i>-->
+              <!--消 息-->
+            <!--</el-badge>-->
+            <!--<el-dropdown-menu slot="dropdown" class="menuLists">-->
+              <!--&lt;!&ndash;消息图标&ndash;&gt;-->
+              <!--<el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0"-->
+                                <!--:key="index">-->
+                <!--<div class="first">-->
+                  <!--<el-row @click.native="showMessageDetail(item)">-->
+                    <!--<el-col :span="4">-->
+                      <!--<div class="picSign">-->
+                        <!--<i class="el-icon-bell"></i>-->
+                      <!--</div>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="20">-->
+                      <!--<div class="public">-->
+                        <!--<div class="signOne">系统公告</div>-->
+                        <!--<div class="limits">{{item.content.content}}</div>-->
+                      <!--</div>-->
+                    <!--</el-col>-->
+                  <!--</el-row>-->
+                <!--</div>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item>-->
+                <!--<el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">-->
+                  <!--<el-col :span="24">-->
+                    <!--<div style="display:block; margin:5px 0; text-align:center; color:#409EFF">查看全部<span-->
+                      <!--style="color:#f00">{{messageTotal}}条</span>未读-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item class="not" v-if="unReadMessageData.length <=0">-->
+                <!--<el-row style="cursor:default; ">-->
+                  <!--<el-col :span="24">-->
+                    <!--<i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>-->
+                    <!--<div-->
+                      <!--style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">-->
+                      <!--您当前还没有消息提醒-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item v-if="unReadMessageData.length <=0">-->
+                <!--<el-row @click.native="showOtherDetail('read')">-->
+                  <!--<el-col :span="24">-->
+                    <!--<div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-dropdown-item>-->
+            <!--</el-dropdown-menu>-->
+          <!--</el-dropdown>-->
 
+          <!--&lt;!&ndash;//喜报名片&ndash;&gt;-->
+          <!--<div v-if="gladFlag">-->
+            <!--<div class="gladBulletin">-->
+              <!--<div class="gladTop"></div>-->
+              <!--<div class="gladContent">-->
+                <!--<div class="title">-->
+                  <!--<img src="../assets/images/daosui_left.png" alt="">-->
+                  <!--<span class="words">-->
+                  <!--<span style="color: #e8468e;margin-right: 5px">恭喜</span>南京一区一组王彪出租租房-->
+                <!--</span>-->
+                  <!--<img src="../assets/images/daosui_right.png" alt="">-->
+                <!--</div>-->
 
-          <!--//喜报名片-->
-          <div v-if="gladFlag">
-            <div class="gladBulletin">
-              <div class="gladTop"></div>
-              <div class="gladContent">
-                <div class="title">
-                  <img src="../assets/images/daosui_left.png" alt="">
-                  <span class="words">
-                  <span style="color: #e8468e;margin-right: 5px">恭喜</span>南京一区一组王彪出租租房
-                </span>
-                  <img src="../assets/images/daosui_right.png" alt="">
-                </div>
-
-                <div class="glad_card">
-                  <div class="glad_card_head">
-                    <img src="../assets/images/head.jpg" alt="">
-                  </div>
-                  <div class="glad_card_info">
-                    <div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>
-                    <div style="width: 100%;margin: 15px 0">
-                      <div style="border: 1px solid #fb4699;width:25px"></div>
-                    </div>
-                    <div style="width: 100%;height: 20px;font-size: 14px;">
-                      <span style="color: #abadae">签约时长：</span>3年3个月（租）
-                    </div>
-                    <div style="width: 100%;height: 20px;font-size: 14px;">
-                      <span style="color: #abadae">签约时长：</span>3年3个月（租）
-                    </div>
-                    <div class="glad_card_right">
-                      <span class="gladsp1"><span>￥</span>2600</span>
-                      <span class="gladsp2">月单价</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="gladBottom">
-                <div class="glad_close" @click="glad_close">
-                  <span>关闭</span>
-                </div>
-              </div>
-            </div>
-            <div class="gladBackground"></div>
-          </div>
-        </div>
+                <!--<div class="glad_card">-->
+                  <!--<div class="glad_card_head">-->
+                    <!--<img src="../assets/images/head.jpg" alt="">-->
+                  <!--</div>-->
+                  <!--<div class="glad_card_info">-->
+                    <!--<div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>-->
+                    <!--<div style="width: 100%;margin: 15px 0">-->
+                      <!--<div style="border: 1px solid #fb4699;width:25px"></div>-->
+                    <!--</div>-->
+                    <!--<div style="width: 100%;height: 20px;font-size: 14px;">-->
+                      <!--<span style="color: #abadae">签约时长：</span>3年3个月（租）-->
+                    <!--</div>-->
+                    <!--<div style="width: 100%;height: 20px;font-size: 14px;">-->
+                      <!--<span style="color: #abadae">签约时长：</span>3年3个月（租）-->
+                    <!--</div>-->
+                    <!--<div class="glad_card_right">-->
+                      <!--<span class="gladsp1"><span>￥</span>2600</span>-->
+                      <!--<span class="gladsp2">月单价</span>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="gladBottom">-->
+                <!--<div class="glad_close" @click="glad_close">-->
+                  <!--<span>关闭</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="gladBackground"></div>-->
+          <!--</div>-->
+        <!--</div>-->
         <div @click="openModalDialog('instructionDialog')" class="guide" style="cursor: pointer">
           <i style="font-size:26px; margin-right:4px;" class="iconfont icon-gantanhaodefuben"></i>
           功能说明

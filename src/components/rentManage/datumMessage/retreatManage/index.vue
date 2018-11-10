@@ -205,8 +205,9 @@
                 <el-table-column
                   label="创建人">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
-                    <span v-else="">/</span>
+                    <span v-text="creators_show(scope)"></span>
+                    <!--<span v-if="scope.row.creators&&scope.row.creators.name && scope.row.creators.org">{{scope.row.creators.name}}({{ scope.row.creators.org[0].name}})</span>-->
+                    <!--<span v-else="">/</span>-->
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -341,8 +342,9 @@
                 <el-table-column
                   label="创建人">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
-                    <span v-else="">/</span>
+                    <span v-text="creators_show(scope)"></span>
+                    <!--<span v-if="scope.row.creators&&scope.row.creators.name && scope.row.creators.org">{{scope.row.creators.name}}({{ scope.row.creators.org[0].name}})</span>-->
+                    <!--<span v-else="">/</span>-->
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -475,11 +477,28 @@
       this.getData_rent();
     },
     methods: {
+      creators_show(scope) {
+        var name = '';
+        var org = '';
+        if(scope.row.creators.length !== 0 && scope.row.creators.name){
+          name = scope.row.creators.name;
+          if(scope.row.creators.length !== 0 && scope.row.creators.org){
+            scope.row.creators.org.map((item,index)=>{
+              org += `${item.name},`;
+            });
+            org = org.substring(0,org.length - 1);
+          }
+          return `${name}(${org})`;
+        }else{
+          return '/';
+        }
+      },
       //获取退租列表
       getData_collect() {
         this.emptyStatus = ' ';
         this.isLoading = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
+          console.log(res);
           this.isLoading = false;
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
@@ -497,6 +516,7 @@
         this.emptyStatus_second = ' ';
         this.isLoading_second = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params_second}).then((res) => {
+          console.log(res);
           this.isLoading_second = false;
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
