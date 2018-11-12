@@ -465,7 +465,7 @@
           setTimeout(() => {
             this.preloadData();
           }, 50);
-
+          this.getPic();
         }
       },
     },
@@ -473,6 +473,22 @@
       // this.getDictionary();
     },
     methods: {
+      getPic() {
+        this.getPics('bulletin/rent_without_collect/',this.processableId,res=>{
+          console.log(res);
+          if(res.data.code == '50120'){
+            let data = res.data.data;
+            this.photo = this.getImgObject(data.photo);
+            this.params.photo = this.getImgIdArray(data.photo);
+            this.screenshot = this.getImgObject(data.screenshot);
+            this.params.screenshot = this.getImgIdArray(data.screenshot);
+            this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+            this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
+            this.deposit_photo = this.getImgObject(data.deposit_photo);
+            this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
+          }
+        })
+      },
       getDictionary() {
         let department_id = this.reportDetailData.department_id;
         this.$http.get(globalConfig.server + "financial/account_alloc/map?org_id=" + department_id).then((res) => {
@@ -569,17 +585,17 @@
         this.params.name = data.name;
         this.params.phone = data.phone;
 
-        this.screenshot = this.getImgObject(data.screenshot);
-        this.params.screenshot = this.getImgIdArray(data.screenshot);
-
-        this.photo = this.getImgObject(data.photo);
-        this.params.photo = this.getImgIdArray(data.photo);
-
-        this.screenshot_leader = this.getImgObject(data.screenshot_leader);
-        this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
-
-        this.deposit_photo = this.getImgObject(data.deposit_photo);
-        this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
+        // this.screenshot = this.getImgObject(data.screenshot);
+        // this.params.screenshot = this.getImgIdArray(data.screenshot);
+        //
+        // this.photo = this.getImgObject(data.photo);
+        // this.params.photo = this.getImgIdArray(data.photo);
+        //
+        // this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+        // this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
+        //
+        // this.deposit_photo = this.getImgObject(data.deposit_photo);
+        // this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
 
         this.params.remark = data.remark;
 
@@ -609,10 +625,9 @@
       //详情照片展示
       getImgObject(data) {
         let img = {};
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
+        if (data && data.constructor === Array) {
+          if (data.length > 0) {
+            data.forEach((item) => {
               this.$set(img, item.id, item.uri)
             });
           }
@@ -621,10 +636,9 @@
       },
       getImgIdArray(data) {
         let img = [];
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
+        if (data && data.constructor === Array) {
+          if (data.length > 0) {
+            data.forEach((item) => {
               img.push(item.id);
             });
           }

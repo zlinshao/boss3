@@ -422,6 +422,7 @@
           setTimeout(() => {
             this.preloadData();
           }, 100);
+          this.getPic();
         }
       },
     },
@@ -429,6 +430,21 @@
       this.getDictionary();
     },
     methods: {
+      getPic() {
+        this.getPics('bulletin/collect/',this.processableId,res=>{
+          if(res.data.code == '50120'){
+            let data = res.data.data;
+            this.photo = this.getImgObject(data.photo);
+            this.params.photo = this.getImgIdArray(data.photo);
+            this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+            this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
+            this.identity_photos = this.getImgObject(data.identity_photo);
+            this.params.identity_photo = this.getImgIdArray(data.identity_photo);
+            this.property_photos = this.getImgObject(data.property_photo);
+            this.params.property_photo = this.getImgIdArray(data.property_photo);
+          }
+        })
+      },
       getDictionary() {
         this.dictionary(508, 1).then((res) => {
           this.purchase_way_dic = res.data;
@@ -523,17 +539,16 @@
         this.params.pay_way_arr = data.pay_way_arr;
         this.params.period_pay_arr = data.period_pay_arr;
 
-        this.photo = this.getImgObject(data.photo);
-        this.params.photo = this.getImgIdArray(data.photo);
+        // this.photo = this.getImgObject(data.photo);
+        // this.params.photo = this.getImgIdArray(data.photo);
+        // this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+        // this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
 
-        this.screenshot_leader = this.getImgObject(data.screenshot_leader);
-        this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
-
-        this.identity_photos = this.getImgObject(data.identity_photo);
-        this.params.identity_photo = this.getImgIdArray(data.identity_photo);
-
-        this.property_photos = this.getImgObject(data.property_photo);
-        this.params.property_photo = this.getImgIdArray(data.property_photo);
+        // this.identity_photos = this.getImgObject(data.identity_photo);
+        // this.params.identity_photo = this.getImgIdArray(data.identity_photo);
+        //
+        // this.property_photos = this.getImgObject(data.property_photo);
+        // this.params.property_photo = this.getImgIdArray(data.property_photo);
 
         this.params.staff_id = data.staff_id;
         this.params.staff_name = data.staff_name;
@@ -546,10 +561,9 @@
       //详情照片展示
       getImgObject(data) {
         let img = {};
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
+        if (data && data.constructor === Array) {
+          if (data.length > 0) {
+              data.forEach((item) => {
               this.$set(img, item.id, item.uri)
             });
           }
@@ -558,10 +572,9 @@
       },
       getImgIdArray(data) {
         let img = [];
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
+        if (data && data.constructor === Array) {
+          if (data.length > 0) {
+              data.forEach((item) => {
               img.push(item.id);
             });
           }

@@ -433,7 +433,8 @@
           setTimeout(() => {
             this.preloadData();
           }, 50);
-
+          alert('aaa');
+          this.getPic();
         }
       },
     },
@@ -441,6 +442,12 @@
       // this.getDictionary();
     },
     methods: {
+      getPic() {
+        this.getPics('bulletin/collect/',this.processableId,res=>{
+          console.log(res);
+          // if()
+        })
+      },
       getDictionary() {
         let department_id = this.reportDetailData.department_id;
         this.$http.get(globalConfig.server + "financial/account_alloc/map?org_id=" + department_id).then((res) => {

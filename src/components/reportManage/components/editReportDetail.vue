@@ -10,7 +10,7 @@
           <el-row v-if="JSON.stringify(show_content) !== '{}'">
             <el-col :span="18">
               <div class="personalInfo">
-                <div class="personalA">
+                <div class="personalA" v-if="personal">
                   <p @click="staffDetailDialog=true">
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
