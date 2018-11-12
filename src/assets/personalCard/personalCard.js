@@ -39,11 +39,12 @@ $(document).on('click', '[data-card]', function (e) {
 function insertHtml(offsetTop, offsetLeft, personal) {
   console.log(personal);
   let man = personal;
-  if (personal.detail) {
-    man.enroll = personal.detail.enroll;
-    man.enroll = personal.detail.birthday;
+  console.log(man);
+  if (man.detail) {
+    man.enroll = man.detail.enroll;
+    man.birthday = man.detail.birthday;
   }
-  if (personal.role) {
+  if (man.role) {
     man.display_name = man.role[0].display_name;
   } else {
     if (man.roles.length) {
@@ -52,7 +53,7 @@ function insertHtml(offsetTop, offsetLeft, personal) {
       man.display_name = '';
     }
   }
-  if (personal.org) {
+  if (man.org) {
     man.depart = man.org[0].name;
   } else {
     man.depart = '---';
