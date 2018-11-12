@@ -7,15 +7,16 @@
     <div class="videoClassification">
       <!-- 相册列表 -->
       <el-row>
-        <el-col :span="3" v-for="(o, index) in 2" :key="o" :offset="index" style="margin-bottom: 20px">
+        <el-col :span="3" v-for="(item, index) in videoAlbumlist" :key="index" :offset="index" style="margin-bottom: 20px">
           <el-card :body-style="{ padding: '0px', height: '255px'}">
-            <img src="../../../assets/images/university/caia412-34427.png" class="image">
+            <img :src="item.cover" v-if="item.cover" class="image" @click="toVideoAlbumDetail(item.id)">
+            <img src="../../../assets/images/university/caia412-34427.png" class="image" @click="toVideoAlbumDetail(item.id)" v-else>
             <div style="padding: 14px;">
-              <span>好吃的汉堡</span>
+              <span>{{item.name}}</span>
               <div class="bottom clearfix">
-                <!-- <time class="time">{{ currentDate }}</time> -->
+                <!-- <time class="time">{{ item.num }}</time> -->
                 <el-tooltip content="删除" placement="bottom" effect="light">
-                  <el-button type="text" class="button" >
+                  <el-button type="text" class="button">
                     <i class="el-icon-delete"></i>
                   </el-button>
                 </el-tooltip>
@@ -56,18 +57,52 @@
 export default {
   data() {
     return {
-      createAlbum: false,  //创建视屏册
-      videoForm: {    //
-         name: '',
-        description: '',
+      createAlbum: false, //创建视屏册
+      videoAlbumlist:[],  //视屏册列表
+      videoForm: {
+        name: "",
+        description: ""
       }
     };
   },
   methods: {
     // 创建视屏相册
     createVideo() {
-      this.createAlbum = false;
+      this.$http
+        .post(globalConfig.server + "video/create", this.videoForm)
+        .then(res => {
+          console.log(res, "1111");
+          if (res.data.code == "10000") {
+            this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            });
+            this.createAlbum = false;
+            this.getVideoAlbum();
+            this.videoForm = {};
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        });
+    },
+    // 视屏相册分类
+    getVideoAlbum() {
+      this.$http.get(globalConfig.server + "video/list").then(res => {
+        if(res.data.code == "10000") {
+          this.videoAlbumlist = res.data.data;
+        }
+      })
+    },
+    // 跳转视屏详情页
+    toVideoAlbumDetail(id) {
+      this.$router.push({path: '/VideoTeaching',query:{classify_id: id}})
     }
+  },
+  created() {
+    this.getVideoAlbum();
   }
 };
 </script>
@@ -106,7 +141,7 @@ export default {
       width: 80%;
     }
     .el-textarea {
-      // margin-left: 10px;
+      margin-left: 10px;
     }
   }
 }
