@@ -265,6 +265,7 @@
     name: 'exam-manage',
     data() {
       return {
+        urls: globalConfig.server,
         loading: false,
         activeName: 'first',
         organizationDialog: false,
@@ -351,7 +352,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(globalConfig.server + 'questionnaire/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+          this.$http.post(this.urls + 'questionnaire/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
             if (res.data.code === '30010') {
               this.$notify.success({
                 title: '成功',
@@ -376,7 +377,7 @@
         this.$router.push({path: '/lookNaire', query: {id: id}});
       },
       getPaperData() {
-        this.$http.get(globalConfig.server + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
+        this.$http.get(this.urls + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code === '36000') {
@@ -420,7 +421,7 @@
             }
           } else {
             //选的部门
-            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
+            this.$http.get(this.urls + 'organization/other/staff-list?page=1&limit=500&org_id=' + item.id).then((res) => {
               if (res.data.code === '10000') {
                 let data = res.data.data.data;
                 data.forEach((value) => {
@@ -456,7 +457,7 @@
         this.formExam.examinees = [];
       },
       addExaminees(error) {
-        this.$http.post(globalConfig.server + 'questionnaire/batch_enroll/' + this.examId, {examinees: this.formExam.examinees}).then((res) => {
+        this.$http.post(this.urls + 'questionnaire/batch_enroll/' + this.examId, {examinees: this.formExam.examinees}).then((res) => {
           this.loading = false;
           if (res.data.code === '30010') {
             this.$notify.success({
@@ -475,7 +476,7 @@
       },
       //考试详情
       getExamDetail() {
-        this.$http.get(globalConfig.server + 'questionnaire/' + this.examId).then((res) => {
+        this.$http.get(this.urls + 'questionnaire/' + this.examId).then((res) => {
           if (res.data.code === '30000') {
             let detail = res.data.data;
             if (detail) {
@@ -505,7 +506,7 @@
       getExamData() {
         this.tableStatus = " ";
         this.tableLoading = true;
-        this.$http.get(globalConfig.server + 'questionnaire', {params: this.params}).then((res) => {
+        this.$http.get(this.urls + 'questionnaire', {params: this.params}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code === '30000') {
@@ -527,9 +528,9 @@
         this.btnDisabled = true;
         let header = '';
         if (this.examId) {
-          header = this.$http.put(globalConfig.server + 'questionnaire/' + this.examId, this.formExam);
+          header = this.$http.put(this.urls + 'questionnaire/' + this.examId, this.formExam);
         } else {
-          header = this.$http.post(globalConfig.server + 'questionnaire', this.formExam);
+          header = this.$http.post(this.urls + 'questionnaire', this.formExam);
         }
         header.then((res) => {
           if (res.data.code === '30010') {
@@ -609,7 +610,7 @@
               cancelButtonText: "取消",
               type: "warning"
             }).then(() => {
-              this.$http.post(globalConfig.server + 'questionnaire/delete/' + this.examId).then((res) => {
+              this.$http.post(this.urls + 'questionnaire/delete/' + this.examId).then((res) => {
                 if (res.data.code === "30010") {
                   this.$notify.success({
                     title: '成功',
