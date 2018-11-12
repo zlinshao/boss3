@@ -75,21 +75,33 @@
               <el-col :span="6">
                 <el-form-item label="省" required>
                   <div class="content">
-                    <span v-if="detailData.community">{{detailData.community.province.province_name}}</span>
+                    <span v-if="detailData.community">
+                      <span v-if="detailData.community.province">
+                        {{detailData.community.province.province_name}}
+                      </span>
+                    </span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="市" required>
                   <div class="content">
-                    <span v-if="detailData.community">{{detailData.community.city.city_name}}</span>
+                    <span v-if="detailData.community">
+                      <span v-if="detailData.community.city">
+                        {{detailData.community.city.city_name}}
+                      </span>
+                    </span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="区/县" required>
                   <div class="content">
-                    <span v-if="detailData.community">{{detailData.community.area.area_name}}</span>
+                    <span v-if="detailData.community">
+                      <span v-if="detailData.community.area">
+                        {{detailData.community.area.area_name}}
+                      </span>
+                    </span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -224,26 +236,27 @@
 
 <script>
   import UpLoad from '../../../common/UPLOAD.vue'
+
   export default {
-    props:['addWebInfoDialog','houseId'],
-    components:{UpLoad},
+    props: ['addWebInfoDialog', 'houseId'],
+    components: {UpLoad},
     data() {
       return {
-        addWebInfoDialogVisible:false,
-        isClear:false,
-        params:{
-          house_id:'',            //房屋id
-          house_type:[],          //房型
+        addWebInfoDialogVisible: false,
+        isClear: false,
+        params: {
+          house_id: '',            //房屋id
+          house_type: [],          //房型
           region: '',             //热门区域
           area: '',               //面积
           decorate: '',           //装修类型
           direction: '',          //朝向
           house_feature: '',      //房屋特色
-          furniture:[],           //房屋配置
-          price:'',               //价格
+          furniture: [],           //房屋配置
+          price: '',               //价格
           photo: [],              //照片
-          photo_v3 : [],
-          title:'',               //标题
+          photo_v3: [],
+          title: '',               //标题
           type_intro: '',         //房型介绍
           decorate_descript: '',  //装修描述
           is_share: '',           //合租-整租
@@ -251,51 +264,51 @@
         },
 
         detailData: {},
-        albumData : [],
+        albumData: [],
         allDictionary: [],
         property_type_dic: [],   //房屋类型
         house_feature_dic: [],   //房屋特色
         decorate_dic: [],        //装修
 
-        isDictionary : false,
+        isDictionary: false,
 
-        imgArray : [],
-        selectPic : [],
-        newUpPic : [],
-        direction:['东', '南', '西', '北', '东南', '东北', '西南', '西北','南北','东西'],
-        furniture:{
-          1 : '床',
-          2 : '衣柜',
-          3 : '桌椅',
-          4 : '电视',
-          5 : '冰箱',
-          6 : '洗衣机',
-          7 : '空调',
-          8 : '热水器',
-          9 : '微波炉',
+        imgArray: [],
+        selectPic: [],
+        newUpPic: [],
+        direction: ['东', '南', '西', '北', '东南', '东北', '西南', '西北', '南北', '东西'],
+        furniture: {
+          1: '床',
+          2: '衣柜',
+          3: '桌椅',
+          4: '电视',
+          5: '冰箱',
+          6: '洗衣机',
+          7: '空调',
+          8: '热水器',
+          9: '微波炉',
           10: '暖气',
           11: '宽带',
           12: '天然气',
         },
 
-        regionList : [],
+        regionList: [],
 
-        isUp : false,
-        isLoading : false,
+        isUp: false,
+        isLoading: false,
       };
     },
-    mounted(){
+    mounted() {
 
     },
-    watch:{
-      addWebInfoDialog(val){
+    watch: {
+      addWebInfoDialog(val) {
         this.addWebInfoDialogVisible = val
       },
-      addWebInfoDialogVisible(val){
-        if(!val){
+      addWebInfoDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
           this.clearData();
-        }else {
+        } else {
           this.isClear = true;
           if (!this.isDictionary) {
             this.getDictionary();
@@ -309,21 +322,21 @@
         this.allDictionary = val;
       },
 
-      houseId(val){
+      houseId(val) {
         this.params.house_id = val;
       },
 
-      totalPic(val){
+      totalPic(val) {
         this.params.photo_v3 = val;
       }
     },
-    computed :{
-      totalPic(){
+    computed: {
+      totalPic() {
         return this.selectPic.concat(this.newUpPic)
       }
     },
-    methods:{
-      getDictionary(){
+    methods: {
+      getDictionary() {
         this.dictionary(410, 1).then((res) => {
           this.property_type_dic = res.data;
           this.isDictionary = true
@@ -337,7 +350,7 @@
           this.isDictionary = true
         });
       },
-      chooseList(id) {
+      chooseList(id = '') {
         this.regionList = [];
         this.$http.get(globalConfig.server + 'setting/others/region?region_parent=' + id).then((res) => {
           if (res.data.code === '100070') {
@@ -345,10 +358,10 @@
           }
         })
       },
-      getImg(val){
-        if(val[0] === 'cover_photo'){
+      getImg(val) {
+        if (val[0] === 'cover_photo') {
           this.params.cover_photo = val[1];
-        }else {
+        } else {
           this.newUpPic = val[1];
         }
       },
@@ -359,74 +372,78 @@
           if (res.data.code === '30070') {
             this.detailData = res.data.data.detail;
             this.albumData = res.data.data.album;
-            if(this.detailData.house_type){
+            if (this.detailData.house_type) {
               this.detailData.house_type.forEach((item) => {
-                if(item){
+                if (item) {
                   this.params.house_type.push(String(item));
-                }else {
+                } else {
                   this.params.house_type.push('');
                 }
               });
             }
 
             //获取区域列表
-            this.chooseList(this.detailData.community.area.area_id)
+            if (this.detailData.community.area) {
+              this.chooseList(this.detailData.community.area.area_id);
+            } else {
+              this.chooseList();
+            }
 
-            this.params.area =  this.detailData.area.replace(/[^(0-9).]+/,'');
+            this.params.area = this.detailData.area.replace(/[^(0-9).]+/, '');
             this.params.decorate = this.detailData.decorate;
             this.params.direction = this.detailData.direction && this.detailData.direction.id;
 
-            this.params.price = this.detailData.price.replace(/[^(0-9).]+/,'');
+            this.params.price = this.detailData.price.replace(/[^(0-9).]+/, '');
 
-            if(this.detailData.house_goods){
+            if (this.detailData.house_goods) {
               let goods = this.detailData.house_goods;
-              if(goods.bed && goods.bed!=='无'){
+              if (goods.bed && goods.bed !== '无') {
                 this.params.furniture.push('1');
               }
-              if(goods.wardrobe && goods.wardrobe!=='无'){
+              if (goods.wardrobe && goods.wardrobe !== '无') {
                 this.params.furniture.push('2');
               }
-              if(goods.chair && goods.chair!=='无'){
+              if (goods.chair && goods.chair !== '无') {
                 this.params.furniture.push('3');
               }
-              if(goods.television && goods.television!=='无'){
+              if (goods.television && goods.television !== '无') {
                 this.params.furniture.push('4');
               }
-              if(goods.fridge && goods.fridge!=='无'){
+              if (goods.fridge && goods.fridge !== '无') {
                 this.params.furniture.push('5');
               }
-              if(goods.wash_machine && goods.wash_machine!=='无'){
+              if (goods.wash_machine && goods.wash_machine !== '无') {
                 this.params.furniture.push('6');
               }
-              if(goods.air_condition && goods.air_condition!=='无'){
+              if (goods.air_condition && goods.air_condition !== '无') {
                 this.params.furniture.push('7');
               }
-              if(goods.water_heater && goods.water_heater!=='无'){
+              if (goods.water_heater && goods.water_heater !== '无') {
                 this.params.furniture.push('8');
               }
-              if(goods.microwave && goods.microwave!=='无'){
+              if (goods.microwave && goods.microwave !== '无') {
                 this.params.furniture.push('9');
               }
-              if(goods.heater && goods.heater!=='无'){
+              if (goods.heater && goods.heater !== '无') {
                 this.params.furniture.push('10');
               }
 
-              if(goods.gas && goods.gas!=='无'){
+              if (goods.gas && goods.gas !== '无') {
                 this.params.furniture.push('12');
               }
             }
 
             this.imgArray = [];
-            if(this.albumData.length>0){
+            if (this.albumData.length > 0) {
               this.albumData.forEach((item) => {
-                item.album.album_file.forEach((img)=>{
+                item.album.album_file.forEach((img) => {
                   let isExist = false;
                   this.imgArray.forEach((x) => {
-                    if(x.id === img.id){
+                    if (x.id === img.id) {
                       isExist = true;
                     }
                   });
-                  if(!isExist){
+                  if (!isExist) {
                     let imgItem = {};
                     imgItem['id'] = img.id;
                     imgItem['uri'] = img.uri;
@@ -435,15 +452,15 @@
                 })
               })
             }
-            if(this.detailData.house_goods&&this.detailData.house_goods.photo.length>0){
-              this.detailData.house_goods.photo.forEach((img)=>{
+            if (this.detailData.house_goods && this.detailData.house_goods.photo.length > 0) {
+              this.detailData.house_goods.photo.forEach((img) => {
                 let isExist = false;
                 this.imgArray.forEach((x) => {
-                  if(x.id === img.id){
+                  if (x.id === img.id) {
                     isExist = true;
                   }
                 });
-                if(!isExist){
+                if (!isExist) {
                   let imgItem = {};
                   imgItem['id'] = img.id;
                   imgItem['uri'] = img.uri;
@@ -469,18 +486,18 @@
         });
         return dictionary_name;
       },
-      confirmAdd(){
+      confirmAdd() {
         this.isUp = true;
         this.params.region = this.params.region || '0';
-        this.$http.post(globalConfig.server+'web/house/save',this.params).then((res)=>{
+        this.$http.post(globalConfig.server + 'web/house/save', this.params).then((res) => {
           this.isUp = false;
-          if(res.data.code === '90010'){
+          if (res.data.code === '90010') {
             this.$notify.success({
               title: "成功",
               message: res.data.msg,
             });
             this.addWebInfoDialogVisible = false;
-          }else {
+          } else {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg,
@@ -488,21 +505,21 @@
           }
         })
       },
-      clearData(){
+      clearData() {
         this.isClear = false;
         this.params = {
-          house_id:this.houseId,            //房屋id
-          house_type:[],          //房型
+          house_id: this.houseId,            //房屋id
+          house_type: [],          //房型
           region: '',             //热门区域
           area: '',               //面积
           decorate: '',           //装修类型
           direction: '',          //朝向
           house_feature: '',      //房屋特色
-          furniture:[],           //房屋配置
-          price:'',               //价格
+          furniture: [],           //房屋配置
+          price: '',               //价格
           photo: [],              //照片
-          photo_v3 : [],
-          title:'',               //标题
+          photo_v3: [],
+          title: '',               //标题
           type_intro: '',         //房型介绍
           decorate_descript: '',  //装修描述
           is_share: '',           //合租-整租
@@ -511,10 +528,10 @@
         this.detailData = {};
         this.albumData = [];
 
-        this.imgArray  = [];
-        this.selectPic  = [];
-        this.newUpPic  = [];
-        this.regionList  = [];
+        this.imgArray = [];
+        this.selectPic = [];
+        this.newUpPic = [];
+        this.regionList = [];
 
         this.isUp = false;
       },
@@ -530,12 +547,14 @@
     font-size: 12px;
     color: #727479;
   }
+
   img {
     width: 120px;
-    height : 120px;
+    height: 120px;
     border-radius: 5px;
   }
-  .el-checkbox{
+
+  .el-checkbox {
     margin-left: 30px !important;
   }
 </style>
