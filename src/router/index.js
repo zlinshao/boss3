@@ -175,7 +175,7 @@ const RentingDetail = () => import  ('../components/rentManage/rentingDetail.vue
 const HistoryCollectDetail = () => import  ('../components/rentManage/datumMessage/contractManage/components/historyCollectDetail.vue');
 const HistoryRentingDetail = () => import  ('../components/rentManage/datumMessage/contractManage/components/historyRentingDetail.vue');
 
-const MessageCenter = () => import  ('../components/messageCenter/index.vue');                         //消息中心
+// const MessageCenter = () => import  ('../components/messageCenter/index.vue');                         //消息中心
 const SthToDoDetail = () => import  ('../components/OAWork/sthToDo/components/detail_1.vue');          //喜报详情
 const SthToDoDetail_2 = () => import  ('../components/OAWork/sthToDo/components/detail_2.vue');        //喜报
 const PersonalSetting = () => import  ('../components/personalSetting/index.vue');                     //个人设置
@@ -321,7 +321,7 @@ export default new Router({
       children: [
         {path: '/compony', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
         {path: '/personnelStatement', component: PersonnelStatement, name: '人事报表'},
-        {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
+        // {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/personalSetting', component: PersonalSetting, name: '个人设置'},
@@ -640,7 +640,7 @@ export default new Router({
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
         // { path: '/videoTeaching', component: VideoTeaching, name: '教学视频'},
-        
+
       ]
     },
     {

@@ -191,17 +191,29 @@
               </div>
               <div class="navigation">
                 <el-row>
+                  <!--<el-col :span="10" class="checkUp">-->
+                    <!--<div class="navigationLeft">-->
+                      <!--<el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">-->
+                        <!--<div class="msgCenter">-->
+                          <!--<i class="el-icon-bell"></i>-->
+                          <!--<div class="msgTitle">消息中心</div>-->
+                        <!--</div>-->
+                      <!--</el-dropdown-item>-->
+                    <!--</div>-->
+                  <!--</el-col>-->
                   <el-col :span="10" class="checkUp">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">
-                        <div class="msgCenter">
-                          <i class="el-icon-bell"></i>
-                          <div class="msgTitle">消息中心</div>
+                      <el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">
+                        <div class="msgCenter" style="display: -webkit-box;">
+                          <i class="el-icon-document" style="color: #58D788;"></i>
+                          <div class="msgTitle">
+                            <span>问卷调查</span>
+                            <span v-if="questionnaireData && questionnaireData.available" class="circle_red"></span>
+                          </div>
                         </div>
                       </el-dropdown-item>
                     </div>
                   </el-col>
-
                   <el-col :span="10" class="checkUp" :offset="4">
                     <div class="navigationLeft">
                       <el-dropdown-item @click.native="routers('checkWork')" style="padding: 0">
@@ -270,19 +282,6 @@
                           <div class="msgTitle">
                             <span>在线考试</span>
                             <span v-if="examData && examData.available" class="circle_red"></span>
-                          </div>
-                        </div>
-                      </el-dropdown-item>
-                    </div>
-                  </el-col>
-                  <el-col :span="10" class="checkUp" :offset="4">
-                    <div class="navigationLeft">
-                      <el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">
-                        <div class="msgCenter" style="display: -webkit-box;">
-                          <i class="el-icon-document" style="color: #58D788;"></i>
-                          <div class="msgTitle">
-                            <span>问卷调查</span>
-                            <span v-if="questionnaireData && questionnaireData.available" class="circle_red"></span>
                           </div>
                         </div>
                       </el-dropdown-item>
