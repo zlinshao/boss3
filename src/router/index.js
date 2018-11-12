@@ -223,7 +223,7 @@ const DormManage = () => import ('../components/dormManage/index');
 const OfficeManage = () => import ('../components/officeManage/index');
 
 // B端管理
-const UntiePhone = () => import ('../components/B-manage/untiePhone/index');
+// const UntiePhone = () => import ('../components/B-manage/untiePhone/index');//手机解绑
 
 //业绩详情
 const DetailAcievement = () => import('../components/meritPay/achievement/achievementDetails/index');
@@ -411,7 +411,7 @@ export default new Router({
         },
         {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
-        {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
+        // {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
         {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
 
       ]
@@ -640,7 +640,7 @@ export default new Router({
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
         // { path: '/videoDetails', component: videoDetails, name: '教学视频'},
-        
+
       ]
     },
     {
@@ -673,7 +673,7 @@ export default new Router({
       children: [
         {path: '/application', component: Application, name: '申请管理'},
         {path: '/houses', component: Houses, name: '房源管理'},
-        {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
+        // {path: '/untiePhone', component: UntiePhone, name: '手机解绑'},
       ]
     },
     {

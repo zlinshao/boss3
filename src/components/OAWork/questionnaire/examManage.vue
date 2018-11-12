@@ -422,7 +422,7 @@
           } else {
             //选的部门
             this.$http.get(this.urls + 'organization/other/staff-list?page=1&limit=500&org_id=' + item.id).then((res) => {
-              if (res.data.code === '10000') {
+              if (res.data.code === '70010') {
                 let data = res.data.data.data;
                 data.forEach((value) => {
                   this.formExam.examinees.push(value.id);
@@ -456,7 +456,7 @@
         this.examiness_name = '';
         this.formExam.examinees = [];
       },
-      addExaminees(error) {
+      addExaminees() {
         this.$http.post(this.urls + 'questionnaire/batch_enroll/' + this.examId, {examinees: this.formExam.examinees}).then((res) => {
           this.loading = false;
           if (res.data.code === '30010') {
