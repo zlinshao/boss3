@@ -79,9 +79,12 @@
         prop="status"
         label="维修状态">
         <template slot-scope="scope">
-          <span v-text="repair_status(scope.row)"></span>
-          <!--<span v-if="scope.row.status">{{scope.row.status}}</span>-->
-          <!--<span v-if="!scope.row.status">暂无</span>-->
+          <div v-if="scope.row.status">
+            <span v-for="(item,index) in dirData">
+              {{ item.id == scope.row.status ? dirData[index].dictionary_name : ''}}
+            </span>
+          </div>
+          <span v-else>/</span>
         </template>
       </el-table-column>
     </el-table>
@@ -160,19 +163,6 @@
       },
     },
     methods: {
-      repair_status(row) {
-        if(!row.status){
-          return '/';
-        }else{
-          if(this.dirData.length>0){
-            this.dirData.map((item,index)=>{
-              if(item.id == row.status){
-                return '*';
-              }
-            })
-          }
-        }
-      },
       getDir() {
         this.dictionary(595,1).then(res=>{
           this.dirData = res.data;
@@ -210,7 +200,6 @@
         this.tableStatus = " ";
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'repaire/list', {params: this.params}).then((res) => {
-          console.log(res);
           this.tableLoading = false;
           if (res.data.code === '600200') {
             this.tableData = res.data.data.data;
