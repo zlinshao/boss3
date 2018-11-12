@@ -188,7 +188,7 @@
   export default {
     data() {
       return {
-        urls: globalConfig.server_user,
+        urls: this.urls,
         phone: '',
         identifyingCode: '',
         loading: false,
@@ -219,7 +219,7 @@
     },
     methods: {
       loginInfo() {
-        this.$http.get(globalConfig.server + 'special/special/loginInfo').then((res) => {
+        this.$http.get(this.urls + 'special/special/loginInfo').then((res) => {
           if (res.data.code === '10090') {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
@@ -233,7 +233,7 @@
       },
       // 验证码
       phoneLoginFly() {
-        this.$http.get(globalConfig.server + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
+        this.$http.get(this.urls + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
           let msg = res.data.message;
           if (res.data.code === '20000') {
             this.countDown();
@@ -261,7 +261,7 @@
       },
       // 短信登录
       sureLoginFly(code) {
-        this.$http.post(globalConfig.server + 'organization/user_authorize/login', {
+        this.$http.post(this.urls + 'organization/user_authorize/login', {
           channel: 'sms',
           authorization: code,
         }).then((res) => {
@@ -281,41 +281,41 @@
           window.location.href = 'http://test.v3.api.boss.lejias.cn/organization/user_authorize/qrcode?channel=ding'
         }
       },
-      phoneLogin() {
-        this.$http.post(globalConfig.server_token + 'api/v1/sms', {
-          phone: this.phone,
-        }).then((res) => {
-          let msg = res.data.message;
-          if (res.data.status === 'success') {
-            this.countDown();
-            this.loading = true;
-            this.prompt('success', res.data.message);
-          } else {
-            if (typeof msg !== 'string') {
-              this.prompt('warning', res.data.message.phone[0]);
-            } else {
-              this.prompt('warning', res.data.message);
-            }
-          }
-        })
-      },
-      sureLogin(a, b) {
-        this.$http.post(globalConfig.server_token + 'oauth/token', {
-          client_secret: globalConfig.client_secret,
-          client_id: globalConfig.client_id,
-          grant_type: 'password',
-          username: a,
-          password: b,
-        }).then((res) => {
-          localStorage.setItem('myData', JSON.stringify(res.data.data));
-          let head = res.data.data;
-          globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-          this.loginInfo();
-        });
-      },
-      sweepCode() {
-        window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
-      },
+      // phoneLogin() {
+      //   this.$http.post(globalConfig.server_token + 'api/v1/sms', {
+      //     phone: this.phone,
+      //   }).then((res) => {
+      //     let msg = res.data.message;
+      //     if (res.data.status === 'success') {
+      //       this.countDown();
+      //       this.loading = true;
+      //       this.prompt('success', res.data.message);
+      //     } else {
+      //       if (typeof msg !== 'string') {
+      //         this.prompt('warning', res.data.message.phone[0]);
+      //       } else {
+      //         this.prompt('warning', res.data.message);
+      //       }
+      //     }
+      //   })
+      // },
+      // sureLogin(a, b) {
+      //   this.$http.post(globalConfig.server_token + 'oauth/token', {
+      //     client_secret: globalConfig.client_secret,
+      //     client_id: globalConfig.client_id,
+      //     grant_type: 'password',
+      //     username: a,
+      //     password: b,
+      //   }).then((res) => {
+      //     localStorage.setItem('myData', JSON.stringify(res.data.data));
+      //     let head = res.data.data;
+      //     globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+      //     this.loginInfo();
+      //   });
+      // },
+      // sweepCode() {
+      //   window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
+      // },
       //背景特效
       getBackground() {
         let canvas = document.getElementById('canvas'),

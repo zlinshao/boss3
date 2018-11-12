@@ -338,7 +338,7 @@
             message: '只能上传jpg/png文件，且不超过2M'
           })
         } else {
-          this.$http.post(globalConfig.server_user + 'files', formData, config).then((res) => {
+          this.$http.post(globalConfig.server + 'api/v1/upload-direct', formData, config).then((res) => {
             if (res.data.status === 'success') {
               Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
             }
