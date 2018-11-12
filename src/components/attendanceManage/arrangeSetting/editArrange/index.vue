@@ -87,12 +87,12 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)">
-        <el-table-column label="部门" align="center" width="60px">
+        <el-table-column label="部门" align="center" width="100px">
           <template slot-scope="scope">
             <span v-text="partInfo(scope.row)"></span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" width="60px"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center" width="100px"></el-table-column>
 
         <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label">
           <template slot-scope="scope" align="center">
