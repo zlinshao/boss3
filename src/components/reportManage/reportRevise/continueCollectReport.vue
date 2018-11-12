@@ -240,19 +240,23 @@
           </el-row>
 
           <el-form-item label="领导同意截图">
+            {{screenshot_leader}}
             <UpLoad :ID="'collect_report_leader'" :isClear="isClear" :editImage="screenshot_leader"
                     @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-form-item label="合同照片" required="">
+            {{photo}}
             <UpLoad :ID="'collect_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-form-item label="房产证照片" required="">
+            {{property_photos}}
             <UpLoad :ID="'property_photo'" :isClear="isClear" :editImage="property_photos" @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-form-item label="证件照片" required="">
+            {{identity_photos}}
             <UpLoad :ID="'identity_photo'" :isClear="isClear" :editImage="identity_photos" @getImg="getImg"></UpLoad>
           </el-form-item>
 
@@ -359,7 +363,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id:'',            
+          account_id:'',
           real_pay_at:''
         },
         screenshot_leader: {},
@@ -413,7 +417,6 @@
       //预填报备数据
       preloadData() {
         let data = this.reportDetailData;
-        console.log(data);
         this.params.purchase_way = 509;
 
         this.params.processable_id = this.reportId;

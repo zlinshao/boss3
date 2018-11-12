@@ -566,6 +566,7 @@
         this.$http
           .get(globalConfig.server + "contract/feedback", {params: this.form})
           .then(res => {
+            console.log(res);
             this.isHigh = false;
             this.rentLoading = false;
             if (res.data.code === "1212200") {

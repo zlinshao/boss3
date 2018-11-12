@@ -28,7 +28,7 @@
       <el-table-column
         label="审批状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.place">{{scope.row.place.display_name}}</span>
+          <span v-if="scope.row.places">{{scope.row.places.display_name}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>

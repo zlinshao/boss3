@@ -341,7 +341,7 @@
     components: {Warning},
     data() {
       return {
-        urls: globalConfig.server_user,
+        urls: globalConfig.server,
         person_ranking: 5,
         achieve_ranking: 9,
         region_ranking: 5,
@@ -435,7 +435,7 @@
       },
       //获取banner
       getBanners() {
-        this.$http.get(globalConfig.server + "oa/portal/?dict_id=378&pages=1").then((res) => {
+        this.$http.get(this.urls + "oa/portal/?dict_id=378&pages=1").then((res) => {
           let bannerData = res && res.data && res.data.data && res.data.data.data;
           this.banners = [];
           if (typeof bannerData === "undefined") {
@@ -461,7 +461,7 @@
         });
       },
       getStaffSquare() {
-        this.$http.get(globalConfig.server + "oa/portal/?dict_id=137&pages=1").then((res) => {
+        this.$http.get(this.urls + "oa/portal/?dict_id=137&pages=1").then((res) => {
           let staffData = res && res.data && res.data.data && res.data.data.data;
           this.staffSquares = [];
           this.staffSquareTop = [];
@@ -498,7 +498,7 @@
         });
       },
       getNews() {
-        this.$http.get(globalConfig.server + "oa/portal/?dict_id=379&pages=1").then((res) => {
+        this.$http.get(this.urls + "oa/portal/?dict_id=379&pages=1").then((res) => {
           let newsData = res && res.data && res.data.data && res.data.data.data;
           this.externalNews = [];
           if (typeof newsData === "undefined") {
@@ -527,7 +527,7 @@
         });
       },
       getLejiaCollege() {
-        this.$http.get(globalConfig.server + "oa/portal/?dict_id=362&pages=1").then((res) => {
+        this.$http.get(this.urls + "oa/portal/?dict_id=362&pages=1").then((res) => {
           let lejiaData = res && res.data && res.data.data && res.data.data.data;
           this.lejiaCollege = [];
           this.lejiaCollegeTop = [];
@@ -567,7 +567,7 @@
         });
       },
       getPerWeeklyReport() {
-        this.$http.get(globalConfig.server + "oa/portal/?dict_id=383&pages=1").then((res) => {
+        this.$http.get(this.urls + "oa/portal/?dict_id=383&pages=1").then((res) => {
           let reportData = res && res.data && res.data.data && res.data.data.data;
           this.weeklyReport = [];
           this.weeklyReportTop = [];
@@ -605,7 +605,7 @@
         });
       },
       getnotice() {
-        this.$http.get(globalConfig.server + "announcement?stage=1&not_draft=1&all=1").then((res) => {
+        this.$http.get(this.urls + "announcement?stage=1&not_draft=1&all=1").then((res) => {
           this.noticeInfo = res.data.data;
           this.noticeInfofirst = res.data.data[0];
         });

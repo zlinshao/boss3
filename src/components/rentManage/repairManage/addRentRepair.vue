@@ -151,7 +151,6 @@
     },
     mounted() {
       this.getDictionary();
-      console.log(22222222)
     },
     watch: {
       module(val) {
