@@ -22,8 +22,7 @@
       width="45%"
       title="视频教程"
       @open="openVideo"
-      @close="closeVideo"
-    >
+      @close="closeVideo">
       <div style="width: 100%;height: 400px;text-align: center;">
         <video :src="videoUri" width="100%" controls height="400px"></video>
       </div>
@@ -141,11 +140,21 @@
     color: #787a7e;
     font-size: 14px;
     background-color: #f4f3f6;
+    video::-internal-media-controls-download-button {
+      display: none;
+    }
+    video::-webkit-media-controls {
+      overflow: hidden !important;
+    }
+    video::-webkit-media-controls-enclosure {
+      width: calc(100% + 100px);
+      margin-left: auto;
+    }
     #app {
       height: 100%;
       .lookVideo{
-        width: 100px;
-        height: 100px;
+        width: 300px;
+        height: 300px;
         position: fixed;
         right: 100px;
         bottom: 20px;
