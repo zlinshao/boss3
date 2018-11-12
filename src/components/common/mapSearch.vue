@@ -192,8 +192,8 @@
       },
 
       search() { //关键词 搜索线上高德数据
-        // this.$http.defaults.withCredentials = false;
-        // this.$http.defaults.headers = {};
+        this.$http.defaults.withCredentials = false;
+        this.$http.defaults.headers = {};
         this.$http.get(addr + '&keywords=' + this.searchInfo + '&city=' + this.chooseCity).then((res) => {
           if (res.data.tips.length > 0) {
             //过滤掉没有地址的数据
