@@ -266,16 +266,16 @@
         this.createAlbumDialog = true;
       },
       getAlbumDetail() {
-      //   this.$http.get(globalConfig.server + 'album/' + this.albumId).then((res) => {
-      //     if (res.data.code === '20110') {
-      //       this.albumDetail = res.data.data;
-      //     } else {
-      //       this.$notify.warning({
-      //         title: "警告",
-      //         message: res.data.msg
-      //       });
-      //     }
-      //   });
+        this.$http.get(globalConfig.server + 'album/' + this.albumId).then((res) => {
+          if (res.data.code === '20110') {
+            this.albumDetail = res.data.data;
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        });
       },
       getAlbumId() {
         //刷新保存
