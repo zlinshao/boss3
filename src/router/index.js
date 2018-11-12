@@ -392,12 +392,7 @@ export default new Router({
       abnormal: true,
       isShortcut: true,
       children: [
-        {
-          path: '/editArrange',
-          component: EditArrange,
-          name: '编辑排班',
-          props: true
-        },
+        {path: '/editArrange', component: EditArrange, name: '编辑排班', props: true, icon: "head-icon el-icon-edit"},
         {path: '/clientManage', component: ClientManage, name: ' 客户管理 ', icon: "iconfont icon-kehu"},
         // {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon: "iconfont icon-guizhangzhidu"},

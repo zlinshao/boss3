@@ -170,16 +170,16 @@
       },
       repair_time(scope) {
         if(scope.row.follow && scope.row.follow.length>0){
-          return scope.row.follow[scope.row.follow.length - 1].repair_time;
+          return scope.row.follow[0].repair_time;
         }else{
-          return '/';
+          return '暂无';
         }
       },
       repair_master(scope) {
         if(scope.row.follow && scope.row.follow.length>0){
-          return scope.row.follow[scope.row.follow.length - 1].repair_master;
+          return scope.row.follow[0].repair_master;
         }else{
-          return '/';
+          return '暂无';
         }
       },
       dblClickTable(row) {
@@ -202,6 +202,7 @@
         this.$http.get(globalConfig.server + 'repaire/list', {params: this.params}).then((res) => {
           this.tableLoading = false;
           if (res.data.code === '600200') {
+            console.log(res);
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
             if (res.data.data.data.length < 1) {

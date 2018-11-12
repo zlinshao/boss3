@@ -144,8 +144,8 @@
     #app {
       height: 100%;
       .lookVideo{
-        width: 100px;
-        height: 100px;
+        width: 300px;
+        height: 300px;
         position: fixed;
         right: 100px;
         bottom: 20px;
