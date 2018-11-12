@@ -188,7 +188,7 @@
   export default {
     data() {
       return {
-        urls: this.urls,
+        urls: globalConfig.server,
         phone: '',
         identifyingCode: '',
         loading: false,
@@ -210,12 +210,12 @@
         // let sess = 'PHPSESSID=' + this.$route.query.sess;
         // localStorage.setItem('PHPSESSID', JSON.stringify(sess));
         // globalConfig.header.Cookie = sess;
-        this.loginInfo();
         // this.sureLogin(phone, code);
+        this.loginInfo();
         this.underWay = false;
       }
       document.getElementById('login').style.height = window.innerHeight + 'px';
-      this.getBackground();
+      // this.getBackground();
     },
     methods: {
       loginInfo() {
@@ -234,7 +234,6 @@
       // 验证码
       phoneLoginFly() {
         this.$http.get(this.urls + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
-          let msg = res.data.message;
           if (res.data.code === '20000') {
             this.countDown();
             this.loading = true;
@@ -276,9 +275,9 @@
       // 二维码登录
       sweepCodeFly(val) {
         if (val === 'wei') {
-          window.location.href = 'http://test.v3.api.boss.lejias.cn/organization/user_authorize/qrcode?channel=wechat'
+          window.location.href = this.urls + 'organization/user_authorize/qrcode?channel=wechat';
         } else {
-          window.location.href = 'http://test.v3.api.boss.lejias.cn/organization/user_authorize/qrcode?channel=ding'
+          window.location.href = this.urls + 'organization/user_authorize/qrcode?channel=ding';
         }
       },
       // phoneLogin() {
