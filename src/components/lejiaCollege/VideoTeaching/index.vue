@@ -17,6 +17,7 @@
           <!-- <span>播放时长：{{item.duration}}</span> -->
           <span class="num">播放次数：{{item.play_count}}</span>
         </div>
+        <div class="noNum" v-if="videoData.length==0">暂无数据</div>
         <!-- 分页 -->
         <div class="block pages">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="form.page" :page-sizes="[12,24, 36,48]" :page-size="form.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
@@ -95,8 +96,6 @@ export default {
     },
     // 渲染
     rendering() {
-      console.log(this.videoAlbumId, "55555");
-      
       this.$http
         .get(
           globalConfig.server +
@@ -104,7 +103,6 @@ export default {
             this.videoAlbumId
         )
         .then(res => {
-          console.log(res, "11111");
           if (res.data.code == "10000") {
             this.videoData = res.data.data;
             this.total = res.data.num;
@@ -138,6 +136,7 @@ export default {
             });
             this.rendering();
             this.uploadVideo = false;
+            this.isClear = true;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -150,7 +149,6 @@ export default {
     deletedVideo() {
       this.form.classify_id = this.videoAlbumId;
       this.form.file_id = this.checkData;
-      console.log(this.form, "3333");
       this.$http
         .post(globalConfig.server + "video/delete-video", this.form)
         .then(res => {
@@ -213,6 +211,10 @@ export default {
     span {
       text-align: center;
     }
+  }
+  .noNum {
+    text-align: center;
+    font-size: 16px;
   }
 }
 </style>
