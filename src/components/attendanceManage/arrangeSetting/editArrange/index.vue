@@ -22,9 +22,9 @@
           <div style="text-align:right;">
             <el-row :gutter="20">
               <el-col :span="24">
-                <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px">
+                <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px" @submit.native.prevent="">
                   <el-form-item>
-                    <el-label>月份</el-label>
+                    <span>月份:</span>
                     <el-select v-model="arrangeParams.arrange_month" style="width:180px" placeholder="请选择" size="mini"
                                @change="ChangeMonth">
                       <el-option
@@ -36,7 +36,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item>
-                    <el-label>部门</el-label>
+                    <span>部门:</span>
                     <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:180px;"
                               v-model="arrangeParams.org_name"
                               size="mini">
@@ -87,24 +87,22 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)">
-        <el-table-column label="部门" width="80px">
+        <el-table-column label="部门" align="center" width="100px">
           <template slot-scope="scope">
             <span v-text="partInfo(scope.row)"></span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="80px"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center" width="100px"></el-table-column>
 
-        <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label" width="50%">
-          <template slot-scope="scope">
+        <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label">
+          <template slot-scope="scope" align="center">
             <div v-text="showArrange(scope.row,colu.label)" :class="bg(scope.row,colu.label)"
                  style="cursor:pointer;"></div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100px">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <div>
-              <el-button type="primary" size="mini" @click="saveCurrentArrange(scope.row)">保&nbsp;&nbsp; 存</el-button>
-            </div>
+            <el-button type="primary" size="mini" icon="el-icon-check" circle @click="saveCurrentArrange(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -538,14 +536,14 @@
       //编辑排班
       clickCell(row, column, cell, event) {
         this.currentDay = column.label;
-        var res = this.estimateMonth();
-        if (!res) {
-          this.$notify.warning({
-            message: "不能编辑小于或等于当前日期的排班",
-            title: "警告"
-          });
-          return false;
-        }
+        // var res = this.estimateMonth();
+        // if (!res) {
+        //   this.$notify.warning({
+        //     message: "不能编辑小于或等于当前日期的排班",
+        //     title: "警告"
+        //   });
+        //   return false;
+        // }
         // if (row["oa_sort"] != null) {
         //   if (row["oa_sort"]["arrange"][column.label]) {
         //     this.currentArrange = row["oa_sort"]["arrange"][column.label];
@@ -765,16 +763,16 @@
         // this.arrangeParams.arrange_month = val;
         // console.log(val);
       },
-      //判断是否可编辑
-      estimateMonth() {
-        var date = new Date().toLocaleDateString();
-        var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
-        if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
-          return false;
-        } else {
-          return true;
-        }
-      },
+      // //判断是否可编辑
+      // estimateMonth() {
+      //   var date = new Date().toLocaleDateString();
+      //   var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
+      //   if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
+      //     return false;
+      //   } else {
+      //     return true;
+      //   }
+      // },
       //搜索
       goSearch() {
         this.arrangeParams.page = 1;
@@ -832,13 +830,21 @@
         this.$http.post(this.url + "attendance/sort-excel/templet-out", this.arrangeParams).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
-              this.exprotTemp = false;
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-              window.location.href = res.data.data.uri;
-
+              console.log(res);
+              if(res.data.data.uri){
+                this.exprotTemp = false;
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                window.location.href = res.data.data.uri;
+              }else{
+                this.$notify.warning({
+                  title: '警告',
+                  message:'导出失败'
+                })
+                return false;
+              }
             }else {
               this.exprotTemp = false;
               this.$notify.warning({
@@ -865,8 +871,11 @@
 
 <style lang="scss">
   #markInfo {
-    width: 100%;
+    width: 100% !important;
     position: relative;
+    .el-table__header-wrapper table.el-table__header,table.el-table__body{
+      width: auto !important;
+    }
     .tableInfo {
       text-align: center;
     }

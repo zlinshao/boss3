@@ -17,6 +17,10 @@
           <!-- <span>播放时长：{{item.duration}}</span> -->
           <span class="num">播放次数：{{item.num}}</span>
         </div>
+        <!-- 分页 -->
+        <div class="block pages">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="form.page" :page-sizes="[12,24, 36,48]" :page-size="form.limit" layout="total, sizes, prev, pager, next, jumper" :total="total" ></el-pagination>
+        </div>
         <!-- 删除 -->
         <div class="deletedInfo">
           <el-dialog :visible.sync="deletedDialog" width="30%" center>
@@ -30,11 +34,9 @@
         <!-- 上传 -->
         <div class="uploadVideo">
           <el-dialog title="上传视屏" :visible.sync="uploadVideo" width="30%">
-            <el-upload  ref="upload" action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" multiple :auto-upload="false" >
-              <i class="el-icon-plus"></i>
-            </el-upload>
+            <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="uploadVideo" size="mini">发布</el-button>
+              <el-button type="primary" @click="release" size="mini" >发布</el-button>
               <el-button @click="uploadVideo = false" size="mini">取 消</el-button>
             </span>
           </el-dialog>
@@ -45,11 +47,15 @@
 </template>
 
 <script>
+import UpLoad from '../../common/UPLOAD.vue' 
 export default {
+  components: {UpLoad},
   data() {
     return {
       deletedDialog: false,
       uploadVideo: false,
+      isClear: false,   //上传组件
+      total: 0, //数据总条数
       videoData: [
         {
           id: 1,
@@ -65,32 +71,13 @@ export default {
           duration: "00:08",
           num: 2
         },
-        {
-          id: 3,
-          src: "http://www.runoob.com/try/demo_source/movie.mp4",
-          value: "视屏3",
-          duration: "00:08",
-          num: 3
-        },
-        {
-          id: 4,
-          src: "http://www.runoob.com/try/demo_source/movie.mp4",
-          value: "视屏4",
-          duration: "00:08",
-          num: 4
-        },
-        {
-          id: 5,
-          src: "http://www.runoob.com/try/demo_source/movie.mp4",
-          value: "视屏5",
-          duration: "00:08",
-          num: 5
-        }
       ], // 视屏数据
       checkData: [], // 双向数据绑定的数组
       dialogImageUrl: "",  //
       form: {
-
+        page: 1,
+        limit: 12,
+        id: ""
       }
     };
   },
@@ -119,26 +106,60 @@ export default {
         this.checkData = [];
       }
     },
-    // 删除
-    deletedVideo() {
-      this.checkData.forEach((item, index) => {
-        if (this.videoData[index].id == item) {
-          this.videoData[this.videoData.indexOf(item)] = null;
+    // 渲染
+    rendering() {
+      this.$http.get(globalConfig.server + '/video/list').then(res => {
+        console.log(res, "2222");
+        if(res.data.code == "10001") {
+          this.videoData = res.data.data;
+        } else {
+          this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
         }
-      });
-      this.videoData.splice(this.videoData.indexOf(null), 1);
-      this.deletedDialog = true;
+      })
     },
     // 上传
-    handleRemove(file, fileList) {
-        console.log(file, fileList);
+      getImg(val) {
+        console.log(val, "11111")
+        this.form.id = val[1];
+        this.picStatus = !val[2];
       },
-      handlePictureCardPreview(file) {
-        console.log(file, "33333");
-        
-        this.form.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      }
+      // 发布
+      release() {
+        this.$http.post(globalConfig.server + "video/VideoUpload/uploadVideo", this.form).then(res => {
+          console.log(res, "3333");
+          
+        })
+      },
+       // 删除
+    deletedVideo(id) {
+      // this.checkData.forEach((item, index) => {
+      //   if (this.videoData[index].id == item) {
+      //     this.videoData[this.videoData.indexOf(item)] = null;
+      //   }
+      // });
+      // this.videoData.splice(this.videoData.indexOf(null), 1);
+      // this.deletedDialog = true
+      this.$http.put(globalConfig.server + 'album/delete/' + id).then(res => {
+
+      })
+    },
+      // 分页
+      handleSizeChange(val) {
+      this.form.limit = val;
+      this.refresh(this.params.limit);
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.form.page = val;
+      this.refresh(this.params.page);
+      console.log(`当前页: ${val}`);
+    },
+    },
+    created() {
+      this.rendering();
     }
 };
 </script>
