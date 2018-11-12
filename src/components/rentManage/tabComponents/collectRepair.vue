@@ -172,14 +172,14 @@
         if(scope.row.follow && scope.row.follow.length>0){
           return scope.row.follow[scope.row.follow.length - 1].repair_time;
         }else{
-          return '/';
+          return '暂无';
         }
       },
       repair_master(scope) {
         if(scope.row.follow && scope.row.follow.length>0){
           return scope.row.follow[scope.row.follow.length - 1].repair_master;
         }else{
-          return '/';
+          return '暂无';
         }
       },
       dblClickTable(row) {
