@@ -45,8 +45,9 @@
         prop="repair_time"
         label="预计维修时间">
         <template slot-scope="scope">
-          <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-          <span v-if="!scope.row.repair_time">暂无</span>
+          <!--<span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>-->
+          <!--<span v-if="!scope.row.repair_time">暂无</span>-->
+          <span v-text="repair_time(scope)"></span>
         </template>
       </el-table-column>
       <el-table-column
@@ -161,9 +162,16 @@
       },
     },
     methods: {
+      repair_time(scope) {
+        if(scope.row.follow && scope.row.follow.length>0){
+          return scope.row.follow[0].repair_time;
+        }else{
+          return '暂无';
+        }
+      },
       repair_master(scope) {
         if(scope.row.follow && scope.row.follow.length>0){
-          return scope.row.follow[scope.row.follow.length - 1].repair_master;
+          return scope.row.follow[0].repair_master;
         }else{
           return '暂无';
         }
