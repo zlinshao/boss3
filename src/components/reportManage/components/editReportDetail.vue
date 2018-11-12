@@ -503,7 +503,7 @@
       place: {
         handler(newval, oldval) {
           // if (newval.name == "fund-master_review" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
-          if (newval.status == "published" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
+          if (newval.status === "published" && oldval.name === "market-marketing-manager_review" && this.is_receipt.id === "1") {
             if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" || this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
               this.createElectronicReceipt()
             }
@@ -618,7 +618,7 @@
           if (res.data.code === "20000") {
             this.electronicReceiptId = res.data.data.id;
             this.pdfUrl = res.data.data.shorten_uri;
-            this.signature = true
+            this.signature = true;
             this.pdfLoadingStatus = false
           } else {
             this.$notify.error({
