@@ -13,8 +13,10 @@
               :key="tmp.id"
               size="mini">{{tmp.alias}}: {{tmp.name}}{{tmp.morning_work_time}}-{{tmp.pm_rest_time}}
             </el-tag>
-            未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}人</span>
-            <el-button type="text" style="color: #14e731;margin-left: 15px;" @click="searchAll">全部</el-button>
+            <div>
+              未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}人</span>
+              <el-button type="text" style="color: #14e731;margin-left: 15px;" @click="searchAll">全部</el-button>
+            </div>
           </div>
         </el-col>
         <el-col :span="13">
@@ -22,7 +24,7 @@
           <div style="text-align:right;">
             <el-row :gutter="20">
               <el-col :span="24">
-                <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px" @submit.native.prevent="">
+                <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px" onsubmit="return false">
                   <el-form-item>
                     <span>月份:</span>
                     <el-select v-model="arrangeParams.arrange_month" style="width:180px" placeholder="请选择" size="mini"
@@ -443,9 +445,7 @@
           arrangeParams.user_id = sort;
         }
         this.$http
-          .get(this.url + "attendance/sort", {
-            params: arrangeParams
-          }).then(res => {
+          .post(this.url + "attendance/sort/list",arrangeParams).then(res => {
             if (res.status == 200) {
               if (res.data.code == 20000) {
                 this.arrangeLoading = false;
