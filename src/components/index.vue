@@ -634,8 +634,8 @@
         }
       });
       //定时器 轮巡获取最新消息
-      this.getUnreadTermly();
-      this.getUnReadMessage();
+      // this.getUnreadTermly();
+      // this.getUnReadMessage();
       //调查问卷
       this.getQuesNaireData();
       //个人门户下的考试和调查1分钟轮询一次
@@ -665,7 +665,7 @@
       //获取积分明细
       this.getCredit();
       //定时器 轮巡获取最新消息
-      this.getUnreadTermly();
+      // this.getUnreadTermly();
     },
     methods: {
       //下载app
@@ -788,15 +788,15 @@
         }
       },
       //定时器 轮巡获取最新消息
-      getUnreadTermly() {
-        clearInterval(this.messageInterval);
-        this.messageInterval = null;
-        this.messageInterval = setInterval(() => {
-          if (localStorage.personal) {
-            this.getUnReadMessage();
-          }
-        }, 100000);
-      },
+      // getUnreadTermly() {
+      //   clearInterval(this.messageInterval);
+      //   this.messageInterval = null;
+      //   this.messageInterval = setInterval(() => {
+      //     if (localStorage.personal) {
+      //       this.getUnReadMessage();
+      //     }
+      //   }, 100000);
+      // },
 
       //验证二级密码弹框
       openBadge(key) {
