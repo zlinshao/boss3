@@ -457,7 +457,6 @@
       getPic() {
         this.getPics('bulletin/change/',this.processableId,res=>{
           if(res.data.code == '50520'){
-            console.log(res);
             this.isShow = true;
             let data = res.data.data;
             this.screenshot = this.getImgObject(data.screenshot);
