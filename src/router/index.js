@@ -379,7 +379,7 @@ export default new Router({
         { path: '/VideoTeaching', component: VideoTeaching, name: '视屏管理', meta: { keepAlive: true }},
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
-        
+
         },
       ]
     },
@@ -556,24 +556,24 @@ export default new Router({
         {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
       ]
     },
-    {
-      path: '/',
-      component: Index,
-      name: 'HRM',
-      icon: 'iconfont icon-renzi',
-      children: [
-        {
-          path: '/teamManage', component: TeamManage, name: '人员信息管理',
-          children: [
-            {path: '/teamManage/roster', component: Roster, name: '花名册'},
-            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-            {path: '/dimission', component: Dimission, name: '离职管理'},
-          ],
-        },
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: 'HRM',
+    //   icon: 'iconfont icon-renzi',
+    //   children: [
+    //     {
+    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
+    //       children: [
+    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
+    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+    //         {path: '/dimission', component: Dimission, name: '离职管理'},
+    //       ],
+    //     },
+    //   ]
+    // },
     {
       path: '/staffDetail',
       component: StaffDetail,
