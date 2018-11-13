@@ -80,7 +80,7 @@
           return response;
         }, function (error) {
           if (error && error.response) {
-            if (error.response.data.status_code === 401) {
+            if (error.response.status === 401) {
               that.$alert('登陆超时请重新登陆', '温馨提示', {
                 confirmButtonText: '确定',
                 callback: action => {
