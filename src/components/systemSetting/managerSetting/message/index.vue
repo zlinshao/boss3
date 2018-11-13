@@ -168,10 +168,6 @@
           } else {
             this.tableLoading = false;
             this.emptyContent = '暂无数据';
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
           }
         })
       },
