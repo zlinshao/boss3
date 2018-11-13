@@ -477,8 +477,8 @@
     },
     methods: {
       getPic() {
-        this.getPics('bulletin/rent_without_collect/',this.processableId,res=>{
-          if(res.data.code == '50120'){
+        this.getPics('bulletin/rent/',this.processableId,res=>{
+          if(res.data.code == '50220'){
             this.isShow = true;
             let data = res.data.data;
             this.photo = this.getImgObject(data.photo);
@@ -508,7 +508,6 @@
       //预填报备数据
       preloadData() {
         let data = this.reportDetailData;
-        console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
 

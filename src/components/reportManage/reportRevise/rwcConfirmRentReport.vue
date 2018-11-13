@@ -461,8 +461,9 @@
     methods: {
       getPic() {
         this.getPics('bulletin/rent_without_collect/',this.processableId,res=>{
-          if(res.data.code == '50120'){
+          if(res.data.code == '51320'){
             this.isShow = true;
+            let data = res.data.data;
             this.photo = this.getImgObject(data.photo);
             this.params.photo = this.getImgIdArray(data.photo);
             this.screenshot = this.getImgObject(data.screenshot);
