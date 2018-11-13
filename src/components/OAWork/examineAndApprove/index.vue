@@ -756,7 +756,7 @@
       <el-pagination
         @current-change="search"
         :current-page="params.page"
-        :page-size="15"
+        :page-size="12"
         layout="total, prev, pager, next, jumper"
         :total="paging">
       </el-pagination>
@@ -1024,7 +1024,7 @@
         this.emptyContent = ' ';
         this.examineLoading = true;
         this.params.page = page;
-        this.params.limit = 10;
+        this.params.limit = 12;
         this.$http.get(this.address + 'workflow/process', {
           params: val,
         }).then((res) => {
