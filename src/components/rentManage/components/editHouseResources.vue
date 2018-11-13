@@ -3,7 +3,7 @@
     <el-dialog :close-on-click-modal="false" title="修改房源" :visible.sync="editHouseResourcesDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
-          <el-tab-pane label="房源信息" name="first">
+          <el-tab-pane label="房源信息11" name="first">
             <div class="form_border">
               <el-form size="mini" :model="params" label-width="100px">
                 <el-row>
@@ -1053,74 +1053,53 @@
             this.params.remark_terms = data.remark_terms;
             this.params.remark = data.remark;
             //照片
-            this.identity_photo = data.identity_photo;
-            this.bank_photo = data.bank_photo;
-            this.photo = data.photo;
-            this.water_photo = data.water_photo;
-            this.electricity_photo = data.electricity_photo;
-            this.gas_photo = data.gas_photo;
+            this.identity_photo = data.identity_photo || {};
+            this.bank_photo = data.bank_photo || {};
+            this.photo = data.photo || {};
+            this.water_photo = data.water_photo || {};
+            this.electricity_photo = data.electricity_photo || {};
+            this.gas_photo = data.gas_photo || {};
 
-            this.property_photo = data.property_photo;
-            this.water_card_photo = data.water_card_photo;
-            this.electricity_card_photo = data.electricity_card_photo;
-            this.gas_card_photo = data.gas_card_photo;
+            this.property_photo = data.property_photo || {};
+            this.water_card_photo = data.water_card_photo || {};
+            this.electricity_card_photo = data.electricity_card_photo || {};
+            this.gas_card_photo = data.gas_card_photo || {};
 
-            this.checkin_photo = data.checkin_photo;
-            this.auth_photo = data.auth_photo;
-            this.deposit_photo = data.deposit_photo;
-            this.promise = data.promise;
-            this.other_photo = data.other_photo;
-            this.checkout_photo = data.checkout_photo;
-            this.checkout_settle_photo = data.checkout_settle_photo;
+            this.checkin_photo = data.checkin_photo || {};
+            this.auth_photo = data.auth_photo || {};
+            this.deposit_photo = data.deposit_photo || {};
+            this.promise = data.promise || {};
+            this.other_photo = data.other_photo || {};
+            this.checkout_photo = data.checkout_photo || {};
+            this.checkout_settle_photo = data.checkout_settle_photo || {};
 
-            //先清空图片数组id
-            this.params.identity_photo = [];
-            this.params.bank_photo = [];
-            this.params.photo = [];
-            this.params.water_photo = [];
-            this.params.electricity_photo = [];
-            this.params.gas_photo = [];
+            this.imageArray(data.identity_photo, 'identity_photo');
+            this.imageArray(data.bank_photo, 'bank_photo');
+            this.imageArray(data.photo, 'photo');
+            this.imageArray(data.water_photo, 'water_photo');
+            this.imageArray(data.electricity_photo, 'electricity_photo');
+            this.imageArray(data.gas_photo, 'gas_photo');
 
-            this.params.property_photo = [];
-            this.params.water_card_photo = [];
-            this.params.electricity_card_photo = [];
-            this.params.gas_card_photo = [];
+            this.imageArray(data.property_photo, 'property_photo');
+            this.imageArray(data.water_card_photo, 'water_card_photo');
+            this.imageArray(data.electricity_card_photo, 'electricity_card_photo');
+            this.imageArray(data.gas_card_photo, 'gas_card_photo');
 
-            this.params.checkin_photo = [];
-            this.params.auth_photo = [];
-            this.params.deposit_photo = [];
-            this.params.promise = [];
-            this.params.other_photo = [];
-            this.params.checkout_photo = [];
-            this.params.checkout_settle_photo = [];
-            this.imageArray(data.identity_photo, this.params.identity_photo);
-            this.imageArray(data.bank_photo, this.params.bank_photo);
-            this.imageArray(data.photo, this.params.photo);
-            this.imageArray(data.water_photo, this.params.water_photo);
-            this.imageArray(data.electricity_photo, this.params.electricity_photo);
-            this.imageArray(data.gas_photo, this.params.gas_photo);
-
-            this.imageArray(data.property_photo, this.params.property_photo);
-            this.imageArray(data.water_card_photo, this.params.water_card_photo);
-            this.imageArray(data.electricity_card_photo, this.params.electricity_card_photo);
-            this.imageArray(data.gas_card_photo, this.params.gas_card_photo);
-
-            this.imageArray(data.checkin_photo, this.params.checkin_photo);
-            this.imageArray(data.auth_photo, this.params.auth_photo);
-            this.imageArray(data.deposit_photo, this.params.deposit_photo);
-            this.imageArray(data.promise, this.params.promise);
-            this.imageArray(data.other_photo, this.params.other_photo);
-            this.imageArray(data.checkout_photo, this.params.checkout_photo);
-            this.imageArray(data.checkout_settle_photo, this.params.checkout_settle_photo);
+            this.imageArray(data.checkin_photo, 'checkin_photo');
+            this.imageArray(data.auth_photo, 'auth_photo');
+            this.imageArray(data.deposit_photo, 'deposit_photo');
+            this.imageArray(data.promise, 'promise');
+            this.imageArray(data.other_photo, 'other_photo');
+            this.imageArray(data.checkout_photo, 'checkout_photo');
+            this.imageArray(data.checkout_settle_photo, 'checkout_settle_photo');
           }
         })
       },
 
       imageArray(data, array) {
-        if (!Array.isArray(data)) {
-          for (let key in data) {
-            array.push(key)
-          }
+        this.params[array] = [];
+        if (data) {
+          this.params[array] = Object.keys(data);
         }
       },
 

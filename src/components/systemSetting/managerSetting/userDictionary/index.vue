@@ -228,10 +228,12 @@
         this.treeModule = false;
         if (val === 2) {
           this.$http.get(this.urls + 'setting/dictionary/').then((res) => {
-            this.setTree = res.data.data;
-            res.data.data.map((a) => {
-              this.defaultExpandKeys.push(a.id);
-            });
+            if (res.data.data) {
+              this.setTree = res.data.data;
+              res.data.data.map((a) => {
+                this.defaultExpandKeys.push(a.id);
+              });
+            }
           });
           this.isLoadingTree = true;
         }
