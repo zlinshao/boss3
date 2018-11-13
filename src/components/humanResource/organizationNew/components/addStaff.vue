@@ -786,6 +786,7 @@
           this.resetOrg();
           let arr = [];
           this.params[organ] = [];
+          this.duty = [];
           for (let item of val) {
             arr.push(item.name);
             this.duties(item.id);
