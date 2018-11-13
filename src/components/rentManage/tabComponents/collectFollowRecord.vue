@@ -157,7 +157,6 @@
             this.emptyContent = ' ';
             this.tableData = [];
             this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
-              console.log(res,'收工单');
               this.tableLoading = false;
               if(res.data.code === '100200'){
                 this.tableData = res.data.data.data;
