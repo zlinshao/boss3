@@ -360,7 +360,9 @@
       },
       getBackNum() {
         this.$http.get(this.urls + 'workflow/process?type=2&only_count=1').then((res) => {
-          this.backLogNum = res.data.data.count;
+          if(res.data.code == "20000") {
+            this.backLogNum = res.data.data.count;
+          } 
         });
       },
       //显示个人签名的input

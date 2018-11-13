@@ -859,7 +859,6 @@
             image_pic: this.form.album,
             process_id: this.reportId
           }).then((res) => {
-            this.btnStatus();
             if (res.data.code === '20000') {
               this.commentVisible = false;
               if (val === 'to_comment') {
@@ -871,6 +870,7 @@
             } else {
               this.prompt('warning', res.data.msg);
             }
+            this.btnStatus();
           }).catch(_ => {
             this.btnStatus();
           })
@@ -883,15 +883,16 @@
         this.$http.post(this.address + `workflow/process/trans/${this.reportId}`, {
           operation: val
         }).then(res => {
-          this.btnStatus();
           if (res.data.code === '20000') {
             this.prompt('success', res.data.msg);
             this.commentVisible = false;
             this.getProcess();
+            this.btnStatus();
           } else {
             this.prompt('warning', res.data.msg);
             this.commentVisible = false;
             this.getProcess();
+            this.btnStatus();
           }
         }).catch(err => {
           this.btnStatus();

@@ -16,8 +16,8 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-radio v-model="form.keyword_type" label="1">部门</el-radio>
             <el-radio v-model="form.keyword_type" label="0">小区</el-radio>
+            <el-radio v-model="form.keyword_type" label="1">部门</el-radio>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
@@ -344,7 +344,7 @@ export default {
         area: "",
         region: "",
         a: "list",
-        keyword_type: '1',
+        keyword_type: '0',
       },
       tableData: [],
 

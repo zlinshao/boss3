@@ -86,7 +86,9 @@ Vue.config.productionTip = false;
 //重定向router
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
+    localStorage.removeItem('myData');
     localStorage.removeItem('personal');
+    globalConfig.header.Authorization = '';
   }
   let data = localStorage.getItem("personal");
   if (to.path === '/download') {

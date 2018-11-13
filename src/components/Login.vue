@@ -267,6 +267,8 @@
           if (res.data.code === '20000') {
             this.loginInfo();
             this.prompt('success', res.data.msg);
+            console.log(this.getCookie("PHPSESSID"), "111111")
+            console.log(document.cookie, "22222")
           } else {
             this.prompt('warning', res.data.msg);
           }
