@@ -440,7 +440,7 @@
             <el-row>
               <el-col>
                 <el-form-item label="截图">
-                  <Upload :ID="'jieTu_create_task'" @getImg="getImg"></Upload>
+                  <Upload :ID="'jieTu_create_task'" :isClear = "isClear" @getImg="getImg"></Upload>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -474,6 +474,7 @@
     props: ['createTaskDialog', 'selectFlag'],
     data() {
       return {
+        isClear: false, 
         createTaskDialogVisible: false,
         params: {
           city_code: '',
@@ -684,8 +685,8 @@
 
       selectCity() {
         if (this.taskType === '1') {
+          }
           this.params.version = this.version[this.version_name];
-        }
         this.$http.get(globalConfig.server + 'contract/max/' + this.params.city_code + "?version=" + this.params.version).then((res) => {
           this.params.collect_start = res.data.data.collect;
           this.params.rent_start = res.data.data.rent;
@@ -815,6 +816,7 @@
                   });
                   this.closeAddModal();
                   this.$emit('close', 'success');
+                  this.isClear = true;
                 } else {
                   this.$notify.warning({
                     title: '警告',
@@ -1004,7 +1006,7 @@
           medi_contracts: [],//s上缴中介合同
           personal_contracts: [],//s上缴个人合同
         };
-        this.version_name = '2-LJGY';
+        this.version_name = '2-LJGY';   
         this.cityDictionary = [];
         this.length = '';
         this.type = '';
