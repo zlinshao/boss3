@@ -433,8 +433,6 @@
           setTimeout(() => {
             this.preloadData();
           }, 50);
-          alert('aaa');
-          this.getPic();
         }
       },
     },
@@ -442,12 +440,6 @@
       // this.getDictionary();
     },
     methods: {
-      getPic() {
-        this.getPics('bulletin/collect/',this.processableId,res=>{
-          console.log(res);
-          // if()
-        })
-      },
       getDictionary() {
         let department_id = this.reportDetailData.department_id;
         this.$http.get(globalConfig.server + "financial/account_alloc/map?org_id=" + department_id).then((res) => {
@@ -462,7 +454,6 @@
       //预填报备数据
       preloadData() {
         let data = this.reportDetailData;
-        console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;

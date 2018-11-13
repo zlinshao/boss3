@@ -500,9 +500,7 @@
             this.params.photo = this.getImgIdArray(data.photo);
 
             this.screenshot_leader = this.getImgObject(data.screenshot_leader);
-            this.params.screenshot_leader = this.getImgIdArray(
-              data.screenshot_leader
-            );
+            this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
             this.deposit_photo = this.getImgObject(data.deposit_photo);
             this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
           }else {
@@ -524,7 +522,6 @@
       //预填报备数据
       preloadData() {
         let data = this.reportDetailData;
-        console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
         if (data.trans_type.id) {
@@ -616,17 +613,17 @@
         this.params.name = data.name;
         this.params.phone = data.phone;
 
-        this.screenshot = this.getImgObject(data.screenshot);
-        this.params.screenshot = this.getImgIdArray(data.screenshot);
-
-        this.photo = this.getImgObject(data.photo);
-        this.params.photo = this.getImgIdArray(data.photo);
-
-        this.screenshot_leader = this.getImgObject(data.screenshot_leader);
-        this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
-
-        this.deposit_photo = this.getImgObject(data.deposit_photo);
-        this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
+        // this.screenshot = this.getImgObject(data.screenshot);
+        // this.params.screenshot = this.getImgIdArray(data.screenshot);
+        //
+        // this.photo = this.getImgObject(data.photo);
+        // this.params.photo = this.getImgIdArray(data.photo);
+        //
+        // this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+        // this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
+        //
+        // this.deposit_photo = this.getImgObject(data.deposit_photo);
+        // this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
 
         this.params.remark = data.remark;
 
@@ -653,10 +650,9 @@
       //详情照片展示
       getImgObject(data) {
         let img = {};
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
+        if (data && data.constructor === Array) {
+          if (data.length > 0) {
+            data.forEach((item) => {
               this.$set(img, item.id, item.uri)
             });
           }
@@ -665,10 +661,9 @@
       },
       getImgIdArray(data) {
         let img = [];
-        if (data && data.constructor === Object) {
-          let imgArray = data.pic_addresses;
-          if (imgArray.length > 0) {
-            imgArray.forEach((item) => {
+        if (data && data.constructor === Array) {
+          if (data.length > 0) {
+            data.forEach((item) => {
               img.push(item.id);
             });
           }

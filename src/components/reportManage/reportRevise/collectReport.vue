@@ -266,7 +266,7 @@
             </el-col>
           </el-row>
 
-          <el-form-item label="领导同意截图">
+          <el-form-item label="特殊情况截图">
             <UpLoad :ID="'collect_report_leader'" :isClear="isClear" :editImage="screenshot_leader"
                     @getImg="getImg"></UpLoad>
           </el-form-item>
