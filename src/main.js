@@ -68,7 +68,28 @@ Vue.config.productionTip = false;
 //   mode: 'history',
 //   router
 // });
+// 全局获取cookie值
+Vue.prototype.getCookie = function (c_name) {
+  if (document.cookie.length > 0) {
+    var c_start = document.cookie.indexOf(c_name + "=")
+    if (c_start != -1) {
+      c_start = c_start + c_name.length + 1
+      var c_end = document.cookie.indexOf(";", c_start)
+      if (c_end == -1) c_end = document.cookie.length
+      return unescape(document.cookie.substring(c_start, c_end))
+    }
+  }
+  return ""
+};
 
+// 全局设置cookie值
+Vue.prototype.setCookie = function (c_name, value, expiredays) {
+  var exdate = new Date()
+  exdate.setDate(exdate.getDate() + expiredays)
+  document.cookie = c_name + "=" + escape(value) +
+    ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+};
+ console.log(Vue.prototype.getCookie("PHPSESSID"), "2222")
 //axios全局配置
 // let i = 0;
 // axios.interceptors.request.use((config) => {  //配置发送请求的信息

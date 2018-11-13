@@ -138,6 +138,8 @@
         }
         this.$http.get(this.urls + 'setting/community/' + this.$route.query.ids).then((res) => {
           this.myData = res.data.data;
+          console.log(this.myData, '1111111');
+          
           this.house_pic = res.data.data.album.house_pic;
 
           this.location = [];
