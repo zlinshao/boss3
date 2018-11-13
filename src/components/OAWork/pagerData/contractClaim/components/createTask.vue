@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="contractNo">
     <el-dialog :close-on-click-modal="false" title="创建任务" :visible.sync="createTaskDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
@@ -498,7 +498,7 @@
           personal_contracts: [],//s上缴个人合同
           version: 2,
         },
-        version: {'1-LJ': 1, '2-LJGY': 2},
+        version: {'1-LJ': 1, '2-LJGY': 2,'3-LC': 3,' 4-LP':4, '5- LQ':5},  
         version_name: '2-LJGY',
         taskType: '1',
         cityDictionary: [],
@@ -1083,6 +1083,11 @@
     &:hover {
       color: #6a8dfb;
 
+    }
+  }
+  #contractNo {
+    .el-col-12 {
+      width: 62%;
     }
   }
 </style>
