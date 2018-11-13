@@ -59,7 +59,7 @@
           parent_id: '',
           name: '',
           order: '',
-          is_corp: '',
+          is_corp: '0',
           corp_wx: ''
         },
         is_corp: false,
@@ -91,7 +91,7 @@
             this.params.order = data.order;
             this.params.parent_id = data.parent_id;
             this.params.is_corp = data.is_corp;
-            this.is_corp = Number(data.is_corp) === 0 ? false : true;
+            this.is_corp = String(data.is_corp) !== '0';
             if (data.corp_wx) {
               this.params.corp_wx = data.corp_wx;
             } else {
@@ -109,6 +109,7 @@
         });
       },
       confirmEdit() {
+        this.params.is_corp = this.is_corp ? '1' : '0';
         this.$http.put(globalConfig.server + 'organization/org/' + this.departId, this.params).then((res) => {
           if (res.data.code === '20030') {
             this.$emit('close', 'success');
@@ -137,10 +138,10 @@
           parent_id: '',
           name: '',
           order: '',
-          is_corp: '',
+          is_corp: '0',
           corp_wx: ''
         };
-        this.is_corp = '';
+        this.is_corp = false;
         this.department = '';
       }
     }

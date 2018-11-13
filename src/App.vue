@@ -56,11 +56,6 @@
       }
     },
     created() {
-      if (localStorage.myData !== undefined) {
-        let head = JSON.parse(localStorage.myData);
-        globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-      }
-
       if (localStorage.personal !== undefined) {
         globalConfig.personal = JSON.parse(localStorage.personal);
       }
@@ -85,16 +80,15 @@
           return response;
         }, function (error) {
           if (error && error.response) {
-            if (error.response.data.status_code === 401) {
-              // that.$alert('登陆超时请重新登陆', '温馨提示', {
-              //   confirmButtonText: '确定',
-              //   callback: action => {
-              //     that.loginIndex++;
-              //     localStorage.removeItem('personal');
-              //     globalConfig.header.Authorization = '';
-              //     that.$router.push({path: '/login'});
-              //   }
-              // });
+            if (error.response.status === 401) {
+              that.$alert('登陆超时请重新登陆', '温馨提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  that.loginIndex++;
+                  localStorage.removeItem('personal');
+                  that.$router.push({path: '/login'});
+                }
+              });
             }
           }
           return Promise.reject(error);

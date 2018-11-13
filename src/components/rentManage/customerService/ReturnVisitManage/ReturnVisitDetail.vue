@@ -506,6 +506,7 @@
               this.agency_user_name = res.data.data.agency_user_name;
               this.agency_phone = res.data.data.agency_phone;
               this.repairDetail = res.data.data;
+              this.album=res.data.data.album;
               this.audited_fields.address = res.data.data.audited_fields.address == "1" ? true : false;
               this.audited_fields.contract_month = res.data.data.audited_fields.contract_month == "1" ? true : false;
               this.audited_fields.contract_day = res.data.data.audited_fields.contract_day == "1" ? true : false;
