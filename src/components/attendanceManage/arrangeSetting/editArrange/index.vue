@@ -14,7 +14,7 @@
               size="mini">{{tmp.alias}}: {{tmp.name}}{{tmp.morning_work_time}}-{{tmp.pm_rest_time}}
             </el-tag>
             <div>
-              未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}人</span>
+              本月未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}人</span>
               <el-button type="text" style="color: #14e731;margin-left: 15px;" @click="searchAll">全部</el-button>
             </div>
           </div>
@@ -46,9 +46,6 @@
                     </el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" size="mini" @click="goSearch">搜索</el-button>
-                  </el-form-item>
-                  <el-form-item>
                     <el-input
                       v-model="arrangeParams.search"
                       placeholder="请输入需要搜索的员工姓名"
@@ -59,6 +56,9 @@
                     >
                       <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                     </el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="mini" @click="goSearch">搜索</el-button>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
