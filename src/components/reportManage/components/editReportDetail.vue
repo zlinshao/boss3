@@ -943,8 +943,6 @@
       getReportEditInfo() {
         this.changeLoading = true;
         this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=' + this.reportId).then((res) => {
-          console.log(res);
-        // this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=1').then((res) => {
           this.changeLoading = false;
           if (res.data.code === '20000') {
             this.editReportData = res.data.data.data;
