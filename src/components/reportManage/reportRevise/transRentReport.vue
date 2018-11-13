@@ -3,6 +3,7 @@
     <el-dialog :close-on-click-modal="false" title="转租报备" :visible.sync="transRentReportVisible" width="70%">
       <div style="min-height: 550px" class="scroll_bar"
            v-loading="fullLoading"
+           v-if="isShow"
            element-loading-text="拼命加载中"
            element-loading-spinner="el-icon-loading"
            element-loading-background="rgba(255, 255, 255, 0)">
@@ -348,6 +349,7 @@
           </el-row>
         </el-form>
       </div>
+      <div v-else style="width: 100%;text-align: center;">暂未数据</div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="transRentReportVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmSubmit">确 定</el-button>
@@ -458,6 +460,7 @@
         purchase_way_dic: [],
         property_payer_dic: [],
         isUpload: false,
+        isShow: true
       };
     },
     watch: {
@@ -477,7 +480,7 @@
           setTimeout(() => {
             this.preloadData();
           }, 50);
-
+          this.getPic();
         }
       },
     },
@@ -485,6 +488,28 @@
       // this.getDictionary();
     },
     methods: {
+      getPic() {
+        this.getPics('bulletin/rent/',this.processableId,res=>{
+          if(res.data.code == '50220'){
+            this.isShow = true;
+            let data = res.data.data;
+            this.screenshot = this.getImgObject(data.screenshot);
+            this.params.screenshot = this.getImgIdArray(data.screenshot);
+
+            this.photo = this.getImgObject(data.photo);
+            this.params.photo = this.getImgIdArray(data.photo);
+
+            this.screenshot_leader = this.getImgObject(data.screenshot_leader);
+            this.params.screenshot_leader = this.getImgIdArray(
+              data.screenshot_leader
+            );
+            this.deposit_photo = this.getImgObject(data.deposit_photo);
+            this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
+          }else {
+            this.isShow = false;
+          }
+        })
+      },
       getDictionary() {
         let department_id = this.reportDetailData.department_id;
         this.$http.get(globalConfig.server + "financial/account_alloc/map?org_id=" + department_id).then((res) => {

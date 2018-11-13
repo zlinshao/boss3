@@ -10,7 +10,7 @@
           <el-row v-if="JSON.stringify(show_content) !== '{}'">
             <el-col :span="18">
               <div class="personalInfo">
-                <div class="personalA">
+                <div class="personalA" v-if="personal">
                   <p @click="staffDetailDialog=true">
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
@@ -316,7 +316,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
-        <el-button size="small" type="primary" @click="manager">确定</el-button>
+        <el-button :disabled="!disabledBtn" size="small" type="primary" @click="manager">确定</el-button>
       </div>
     </el-dialog>
 
@@ -496,6 +496,7 @@
         leader_name: '',
         showPriceRange: false, //显示价格区间
         priceRegion: '',
+        disabledBtn: true,
       }
     },
 
@@ -514,6 +515,7 @@
 
       module(val) {
         this.reportVisible = val;
+        this.btnStatus();
         if (!val) {
           this.approvalStatus = ""
         }
@@ -680,14 +682,10 @@
       //直接发送电子收据
       directSendElectronicReceipt() {
         this.$http.post(globalConfig.server + '/financial/receipt/send/' + this.electronicReceiptId, {"phone": this.phone}).then((res) => {
-          console.log(res)
-          if (res.data.code == "20000") {
-            this.$message({
-              type: 'success',
-              message: res.data.msg
-            });
+          if (res.data.code === "20000") {
+            this.prompt('success', res.data.msg)
           } else {
-            this.prompt('error', res.data.msg);
+            this.prompt('warning', res.data.msg);
           }
         })
       },
@@ -715,7 +713,7 @@
             this.bulletinType = res.data.data.process.content.bulletin_name;
 
             if (this.bulletinType === "租房报备") {
-              this.suggestpriceStatus = true
+              this.suggestpriceStatus = true;
               this.getSuggestPrice()
             }
 
@@ -829,25 +827,28 @@
 
       // 确认评论
       manager() {
-        if (this.form.operation !== 'to_comment') {
-          if (this.form.comment !== '' || this.form.album.length !== 0) {
-            this.sureComment(this.form.operation);
-            this.antherControl(this.form.operation);
+        if (this.disabledBtn) {
+          this.disabledBtn = false;
+          if (this.form.operation !== 'to_comment') {
+            if (this.form.comment !== '' || this.form.album.length !== 0) {
+              this.sureComment(this.form.operation);
+              this.antherControl(this.form.operation);
+            } else {
+              this.antherControl(this.form.operation);
+            }
           } else {
-            this.antherControl(this.form.operation);
-          }
-        } else {
-          if (this.form.comment !== '' || this.form.album.length !== 0) {
-            this.sureComment(this.form.operation);
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: '请填写评论内容！',
-            })
+            if (this.form.comment !== '' || this.form.album.length !== 0) {
+              this.sureComment(this.form.operation);
+            } else {
+              this.btnStatus();
+              this.prompt('warning', '请填写评论内容！');
+            }
           }
         }
       },
-
+      btnStatus() {
+        this.disabledBtn = true;
+      },
       sureComment(val) {
         if (this.picStatus) {
           this.$http.post(this.address + `workflow/process/comment/${this.reportId}`, {
@@ -864,46 +865,37 @@
                 this.comments(this.reportId, 1);
               } else {
                 this.getProcess(this.reportId);
-
               }
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message,
-              });
+              this.prompt('success', res.data.msg);
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message,
-              })
+              this.prompt('warning', res.data.msg);
             }
+            this.btnStatus();
+          }).catch(_ => {
+            this.btnStatus();
           })
         } else {
-          this.$notify.warning({
-            title: '警告',
-            message: '图片上传中...',
-          })
+          this.btnStatus();
+          this.prompt('warning', '图片上传中...');
         }
       },
       antherControl(val) {
         this.$http.post(this.address + `workflow/process/trans/${this.reportId}`, {
           operation: val
         }).then(res => {
-          if (res.data.code == '20000') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
+          if (res.data.code === '20000') {
+            this.prompt('success', res.data.msg);
             this.commentVisible = false;
             this.getProcess();
+            this.btnStatus();
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
+            this.prompt('warning', res.data.msg);
             this.commentVisible = false;
             this.getProcess();
+            this.btnStatus();
           }
         }).catch(err => {
+          this.btnStatus();
           console.log(err);
         })
       },
@@ -1018,7 +1010,6 @@
         this.$http.get(globalConfig.server + 'bulletin/quality/range', {
           params: price,
         }).then((res) => {
-          console.log(res);
           this.priceRegion = res.data.priceMin + '~' + res.data.priceMax + '元';
         });
       },

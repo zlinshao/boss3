@@ -128,5 +128,10 @@ export default {
           break;
       }
     };
+    Vue.prototype.getPics = function (url,process_id,callback) {
+      this.$http.get(globalConfig.server + url + process_id).then(res=>{
+        callback(res);
+      })
+    }
   }
 }

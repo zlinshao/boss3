@@ -505,7 +505,6 @@
         this.$http.get(globalConfig.server + 'bulletin/quality/' + this.processableId).then((res) => {
           if (res.data.code === '51420') {
             let data = res.data.data;
-            console.log(data);
             this.params.quality_up = String(data.quality_up);
             if (data.quality_up === '1') {
               this.house_name = data.address;
