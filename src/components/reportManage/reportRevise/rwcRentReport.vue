@@ -2,6 +2,7 @@
   <div id="addHouseResources">
     <el-dialog :close-on-click-modal="false" title="未收先租" :visible.sync="rwcRentReportVisible" width="70%">
       <div style="min-height: 550px" class="scroll_bar"
+           v-if="isShow"
            v-loading="fullLoading"
            element-loading-text="拼命加载中"
            element-loading-spinner="el-icon-loading"
@@ -339,6 +340,7 @@
           </el-row>
         </el-form>
       </div>
+      <div v-else style="text-align: center;width: 100%">暂无数据</div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="rwcRentReportVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmSubmit">确 定</el-button>
@@ -446,6 +448,7 @@
         purchase_way_dic: [],
         property_payer_dic: [],
         isUpload: false,
+        isShow: true
       };
     },
     watch: {
@@ -475,8 +478,8 @@
     methods: {
       getPic() {
         this.getPics('bulletin/rent_without_collect/',this.processableId,res=>{
-          console.log(res);
           if(res.data.code == '50120'){
+            this.isShow = true;
             let data = res.data.data;
             this.photo = this.getImgObject(data.photo);
             this.params.photo = this.getImgIdArray(data.photo);
@@ -486,6 +489,8 @@
             this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
             this.deposit_photo = this.getImgObject(data.deposit_photo);
             this.params.deposit_photo = this.getImgIdArray(data.deposit_photo);
+          }else {
+            this.isShow = false;
           }
         })
       },

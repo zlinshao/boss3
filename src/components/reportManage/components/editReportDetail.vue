@@ -1018,7 +1018,6 @@
         this.$http.get(globalConfig.server + 'bulletin/quality/range', {
           params: price,
         }).then((res) => {
-          console.log(res);
           this.priceRegion = res.data.priceMin + '~' + res.data.priceMax + '元';
         });
       },
