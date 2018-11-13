@@ -54,14 +54,14 @@
             <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
             <span>{{chartData.name}}</span>
           </div>
-          <toprightcontrol 
-            :cardData="chartData" 
+          <toprightcontrol
+            :cardData="chartData"
             :btnstatus="btnstatus" >
           </toprightcontrol>
         </div>
         <div class="detailcontent">
           <div class="contentTop">
-            
+
             <el-row :gutter="20">
               <el-col :span="4">
                 <div class="detailSelect">
@@ -167,7 +167,7 @@
         </div>
       </div>
     </el-dialog>
-    
+
   </div>
 </template>
 <script>
@@ -205,7 +205,7 @@
           page: 1,
           limit:5
         },
-        diaParams:{   
+        diaParams:{
           city:"",
           area:"",
           group:"",
@@ -293,21 +293,20 @@
       },
       getList(val,id){
         if(val=='city'){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
-            // console.log(res)
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id=331").then((res) => {
+            if(res.data.code == "70050"){
               this.cityOption = res.data.data
             }
           });
         }else if(val=="area"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) => {
+            if(res.data.code == "70050"){
               this.areaOption = res.data.data
             }
           });
         }else if(val=="group"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) => {
+            if(res.data.code == "70050"){
               this.groupOption = res.data.data
             }
           });
@@ -327,18 +326,18 @@
           this.getChart(this.diaParams,val)
           // console.log(this.$refs.control)
       },
-      
+
       // getNewDate(){
       //   var date =  new Date()
       //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
       //   var year = lastdate.getFullYear();
-      //   var month = lastdate.getMonth()+1;   
-      //   var day = lastdate.getDate(); 
+      //   var month = lastdate.getMonth()+1;
+      //   var day = lastdate.getDate();
       //   this.dataParams.start_date = year + '-' +month + '-' + day
       //   this.dataParams.end_date = year + '-' +month + '-' + day
       // },
       getChart(params,val){ //获取数据
-        
+
         if(val=="default"){
           this.dataParams.city = params.city
           this.dataParams.area=params.area,
@@ -346,7 +345,7 @@
           this.dataParams.start_date=params.start_date,
           this.dataParams.end_date=params.end_date
           this.loading = true
-          this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => { 
+          this.$http.get(this.chartData.data_source,{headers:{"Accept":"application/vnd.boss18+json"},params: this.dataParams}).then((res) => {
             this.loading = false
             if(res.data.code == "20000"){
               this.tableData = res.data.data.data
@@ -368,7 +367,7 @@
           this.$http.get(this.chartData.data_source,{
               headers:{"Accept":"application/vnd.boss18+json"},
               params: this.diaParams
-            }).then((res) => { 
+            }).then((res) => {
             this.loadingDia = false
             if(res.data.code == "20000"){
               this.tableDataDia = res.data.data.data
@@ -379,12 +378,12 @@
             }
           });
         }
-        
+
       },
       showDetailChartDialog(){
         // console.log(this.status)
         if(!this.status){
-          
+
           this.detaildialogVisible = true
         }
         // this.sendDetailData = item
@@ -394,7 +393,7 @@
       this.tableTh = tableChartData
       this.getChartDate(this.dataParams)
       this.selectDate = [this.dataParams.start_date,this.dataParams.end_date]
-      this.getList('city')
+      // this.getList('city');
       this.getChart(this.dataParams,'default')
     },
     watch:{
@@ -454,7 +453,7 @@
     margin-top:30px;
     padding: 0 50px;
   }
-   
+
 }
 </style>
 <style>

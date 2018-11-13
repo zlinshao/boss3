@@ -58,7 +58,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                    label="是否上班缺卡"  
+                    label="是否上班缺卡"
                     prop="is_am_sign"
                 >
                     <template slot-scope="scope">
@@ -68,7 +68,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="是否下班缺卡"  
+                    label="是否下班缺卡"
                     prop="is_pm_sign"
                 >
                     <template slot-scope="scope">
@@ -78,7 +78,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="是否休息"  
+                    label="是否休息"
                     prop="is_rest"
                 >
                     <template slot-scope="scope">
@@ -88,7 +88,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="是否加班"  
+                    label="是否加班"
                     prop="is_work_overtime"
                 >
                     <template slot-scope="scope">
@@ -98,7 +98,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="是否排班"  
+                    label="是否排班"
                     prop="is_arrange"
                 >
                     <template slot-scope="scope">
@@ -108,7 +108,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="是否出差"  
+                    label="是否出差"
                     prop="is_business"
                 >
                     <template slot-scope="scope">
@@ -119,7 +119,7 @@
                 </el-table-column>
                 <el-table-column
                     label="是否迟到"
-                    prop="is_late"  
+                    prop="is_late"
                 >
                     <template slot-scope="scope">
                         <div>
@@ -132,7 +132,7 @@
                     prop="late_minutes"
                 ></el-table-column>
                 <el-table-column
-                    label="是否请假"  
+                    label="是否请假"
                     prop="is_vacate"
                 >
                     <template slot-scope="scope">
@@ -142,7 +142,7 @@
                     </template>
                 </el-table-column>
                  <el-table-column
-                    label="是否旷工"  
+                    label="是否旷工"
                     prop="is_absenteeism"
                 >
                     <template slot-scope="scope">
@@ -157,10 +157,10 @@
             <el-pagination
                 @size-change="punchSizeChange"
                 @current-change="punchCurrentChange"
-                :page-sizes="[5,10,15]"
+                :page-sizes="[12,24,36]"
                 :page-size="punchCardParams.limit"
                 :current-page="punchCardParams.page"
-                layout="total,sizes,prev, pager, next ,jumper" 
+                layout="total,sizes,prev, pager, next ,jumper"
                 :total="punchCount">
             </el-pagination>
         </div>
@@ -332,6 +332,16 @@
                         </el-col>
                       </el-row>
                     </el-col>
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">离职人员</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-checkbox v-model="is_dimissionNum" @change="retired">包括离职员工</el-checkbox>
+                        </el-col>
+                      </el-row>
+                    </el-col>
                   </el-row>
                 <div class="btnOperate">
                     <el-button size="mini" type="primary" @click="goSearch">搜索</el-button>
@@ -345,7 +355,7 @@
       <!--部门-->
       <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths" @close="closeOrgan"
                     @selectMember="selectMember"></Organization>
-    </div>    
+    </div>
 </template>
 
 <script>
@@ -373,7 +383,8 @@ export default {
               is_vacate: "",//是否请假
               is_absenteeism: "",//是否旷工
               page: 1,
-              limit: 5,
+              limit: 12,
+              is_dimission: "0",   // 离职人员
           },
           punchCardList:[],
           gettingList: false,
@@ -384,9 +395,18 @@ export default {
           organizeType: "",
           lengths: 0,
           organDivision: "",
+          is_dimissionNum: false,  // 离职人员
       }
   },
   methods: {
+    //   离职人员
+       retired(val) {
+        if(this.is_dimissionNum) {
+            this.punchCardParams.is_dimission = "1";
+        } else {
+            this.punchCardParams.is_dimission = '0';
+        }
+      },
       getPunchCardList (){
           this.gettingList = true;
           this.punchListInfo = " ";
@@ -428,7 +448,7 @@ export default {
       },
       goSearch (){
         this.punchCardParams.page = 1;
-        this.punchCardParams.limit = 5;
+        this.punchCardParams.limit = 12;
         this.getPunchCardList();
       },
       resetting (){

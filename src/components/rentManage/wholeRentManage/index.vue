@@ -134,6 +134,16 @@
               :row-class-name="tableRowCollectName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
+              <el-table-column width="40" align="center">
+                <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.department_name && (scope.row.department_name === '南京马群组' ||
+                        scope.row.department_name === '南京仙林一' ||
+                        scope.row.department_name === '南京仙林二')">
+                        <b style="color: red;">新</b>
+                      </span>
+                </template>
+              </el-table-column>
               <el-table-column width="40">
                 <template slot-scope="scope">
                   <span v-if="scope.row.contract_number&&checkContractData[scope.row.contract_number.toUpperCase()]">
@@ -278,7 +288,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                  <span v-if="scope.row.department_name && scope.row.department_name">{{scope.row.department_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -352,6 +362,16 @@
               @row-contextmenu='clientMenu'
               :row-class-name="tableRowRentName"
               style="width: 100%">
+              <el-table-column width="40" align="center">
+                <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.department_name && (scope.row.department_name === '南京马群组' ||
+                        scope.row.department_name === '南京仙林一' ||
+                        scope.row.department_name === '南京仙林二')">
+                        <b style="color: red;">新</b>
+                      </span>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="合同上传时间">
                 <template slot-scope="scope">
@@ -469,7 +489,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -1149,7 +1169,7 @@
         this.rentStatus = ' ';
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.rentParams}).then((res) => {
           this.rentLoading = false;
-          if (res.data.code === '61110') {
+          if (res.data.code === '61010') {
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
             let collectIdArray = '';

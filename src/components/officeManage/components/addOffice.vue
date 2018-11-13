@@ -97,9 +97,10 @@
         }
       },
       selectMember(val){
+        this.params.office_num = "";
         this.params.depart_id = val[0].id;
         this.depart_name = val[0].name;
-        this.params.office_num = val[0].users;
+        this.params.office_num = val[0].users.length;
       },
       confirmAdd() {
         this.$http.post(globalConfig.server+'api/v1/house-save',this.params).then( res => {

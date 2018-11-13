@@ -2443,13 +2443,13 @@
       }
     }
     .panelContent {
-      width: 500px;
-      height: 375px;
+      width: 428px;
+      height: 360px;
       background: #FFFFFF;
       z-index: 2000;
       border-radius: 6px;
       position: fixed;
-      bottom: 100px;
+      bottom: 60px;
       right: -550px;
       border: 1px solid rgba(64, 158, 255, .12);
       /*photo-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);*/

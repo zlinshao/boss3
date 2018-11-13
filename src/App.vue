@@ -22,8 +22,7 @@
       width="45%"
       title="视频教程"
       @open="openVideo"
-      @close="closeVideo"
-    >
+      @close="closeVideo">
       <div style="width: 100%;height: 400px;text-align: center;">
         <video :src="videoUri" width="100%" controls height="400px"></video>
       </div>
@@ -57,11 +56,6 @@
       }
     },
     created() {
-      if (localStorage.myData !== undefined) {
-        let head = JSON.parse(localStorage.myData);
-        globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-      }
-
       if (localStorage.personal !== undefined) {
         globalConfig.personal = JSON.parse(localStorage.personal);
       }
@@ -86,16 +80,15 @@
           return response;
         }, function (error) {
           if (error && error.response) {
-            if (error.response.data.status_code === 401) {
-              // that.$alert('登陆超时请重新登陆', '温馨提示', {
-              //   confirmButtonText: '确定',
-              //   callback: action => {
-              //     that.loginIndex++;
-              //     localStorage.removeItem('personal');
-              //     globalConfig.header.Authorization = '';
-              //     that.$router.push({path: '/login'});
-              //   }
-              // });
+            if (error.response.status === 401) {
+              that.$alert('登陆超时请重新登陆', '温馨提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  that.loginIndex++;
+                  localStorage.removeItem('personal');
+                  that.$router.push({path: '/login'});
+                }
+              });
             }
           }
           return Promise.reject(error);
@@ -141,6 +134,16 @@
     color: #787a7e;
     font-size: 14px;
     background-color: #f4f3f6;
+    video::-internal-media-controls-download-button {
+      display: none;
+    }
+    video::-webkit-media-controls {
+      overflow: hidden !important;
+    }
+    video::-webkit-media-controls-enclosure {
+      width: calc(100% + 100px);
+      margin-left: auto;
+    }
     #app {
       height: 100%;
       .lookVideo{

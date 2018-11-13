@@ -1,5 +1,5 @@
 <template>
-  <div id="addRentRepair">
+  <div id="addCollectRepair">
     <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addCollectRepairDialog" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
@@ -96,6 +96,13 @@
           </el-row>
           <el-row>
             <el-col :span="24">
+              <el-form-item label="上传照片">
+                <UpLoad :ID="'add_collect'" @getImg="myGetImg" :isClear="isClear" :editImage="photos"></UpLoad>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
               <el-form-item label="备注">
                 <el-input type="textarea" v-model="form.remark"></el-input>
               </el-form-item>
@@ -116,10 +123,11 @@
 
 <script>
   import Organization from "../../common/organization";
+  import UpLoad from '../../common/UPLOAD.vue';
 
   export default {
     props: ["module", "contract"],
-    components: {Organization},
+    components: {Organization, UpLoad},
     data() {
       return {
         addCollectRepairDialog: false,
@@ -145,6 +153,7 @@
           emergency: "",            //紧急程度
           liable_name: "",          //前租客姓名
           module: 1,                //租房
+          photo: [],                //房屋影像
         },
         follow_name: "",                //跟进人名字
         personCategory: [],
@@ -153,10 +162,13 @@
           {id: 2, value: "紧急"}
         ],
         cities: [],
+        isClear :false,                 //删除照片
+        photos: [],                     //房屋影像
       };
     },
     mounted() {
       this.getDictionary();
+      console.log(this.form)
     },
     watch: {
       module(val) {
@@ -188,6 +200,7 @@
       },
       confirmAdd() {
         this.forbidden = true;
+        console.log(this.form)
         this.$http.post(globalConfig.server + "repaire/insert", this.form).then(res => {
           this.forbidden = false;
           if (res.data.code === "600200") {
@@ -221,9 +234,12 @@
           emergency: "",            //紧急程度
           liable_name: "",          //前租客姓名
           module: 1,                //收房
+          photo:[],
         };
         this.address = "";
         this.follow_name = "";
+        this.photos = [];
+        this.isClear = true
       },
       closeOrganization() {
         this.organizationDialog = false;
@@ -242,7 +258,12 @@
       emptyStaff() {
         this.follow_name = "";
         this.form.follow_id = "";
-      }
+      },
+      // 截图
+      myGetImg(val) {
+        this.picStatus = val[2];
+        this.form.album = val[1];
+      },
     }
   };
 </script>

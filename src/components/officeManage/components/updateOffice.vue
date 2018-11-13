@@ -107,10 +107,12 @@
       selectMember(val){
         this.params.depart_id = val[0].id;
         this.depart_name = val[0].name;
-        this.params.office_num = val[0].users;
+        this.params.office_num = val[0].users.length;
       },
       confirmAdd() {
         this.$http.post(globalConfig.server+'api/v1/house-update',this.params).then( res => {
+          console.log(res, "11111");
+          
           if(res.data.code === '60024'){
             this.$notify.success({
               title:'成功',

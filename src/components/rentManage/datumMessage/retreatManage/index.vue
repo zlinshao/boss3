@@ -113,6 +113,24 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;"
+                                v-model="org_name"
+                                size="mini">
+                        <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -152,6 +170,10 @@
                     </span>
                     <span v-else="">/</span>
                   </template>
+                </el-table-column>
+                <el-table-column
+                  prop="client"
+                  label="房东姓名">
                 </el-table-column>
                 <el-table-column
                   prop="check_time"
@@ -201,8 +223,16 @@
                 <el-table-column
                   label="创建人">
                   <template slot-scope="scope">
+                    <!--<span v-text="creators_show(scope)"></span>-->
                     <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
                     <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="部门"
+                >
+                  <template slot-scope="scope">
+                    <span v-text="creators_show(scope)"></span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -286,6 +316,10 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="client"
+                  label="租客姓名">
+                </el-table-column>
+                <el-table-column
                   prop="check_time"
                   label="退房时间">
                 </el-table-column>
@@ -334,7 +368,13 @@
                   label="创建人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
-                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="部门"
+                >
+                  <template slot-scope="scope">
+                    <span v-text="creators_show(scope)"></span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -402,6 +442,9 @@
 
 
     <UploadPic :upLoadDialog="upLoadDialog" :status="status" :vacationId="operateId" @close="closeModal"></UploadPic>
+    <!--组织架构-->
+    <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths" @close="closeOrgan"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -410,10 +453,11 @@
   import EditCollectVacation from './components/editVacation.vue'
   import VacationDetail from './components/vacationDetail.vue'
   import UploadPic from './components/upScreenshot'
+  import Organization from "../../../common/organization";
 
   export default {
     name: 'hello',
-    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic},
+    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic,Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -434,7 +478,9 @@
           search: '',
           check_time: [],
           status: '',
+          org_id: '',
         },
+        org_name: '',
         params_second: {
           page: 1,
           limit: 12,
@@ -443,6 +489,7 @@
           search: '',
           check_time: [],
           status: '',
+          org_id: '',
         },
 
 
@@ -460,6 +507,10 @@
         address: '',
         status: '',
         superAuthority : false,
+        organDivision: '',
+        organModule: false,
+        organizeType: '',
+        lengths: 0,
       }
     },
     created() {
@@ -467,11 +518,44 @@
       this.getData_rent();
     },
     methods: {
+      openOrgan(val,type) {
+        // 打开组织架构
+        this.organDivision = val;
+        this.organModule = true;
+        this.organizeType = type;
+        this.lengths = 1;
+      },
+      emptyDepart() {
+        this.org_name = "";
+        this.params_second.org_id = '';
+      },
+      closeOrgan() {
+        this.organDivision = "";
+        this.organModule = false;
+        this.organizeType = "";
+        this.lengths = 0;
+      },
+      selectMember(val) {
+        this.params.org_id = val[0].id;
+        this.params_second.org_id = val[0].id;
+        this.org_name = val[0].name;
+      },
+      creators_show(scope) {
+          var org = '';
+          if(scope.row.creators.length !== 0 && scope.row.creators.org){
+            scope.row.creators.org.map((item,index)=>{
+              org += item.name;
+            });
+            org = org.substring(0,org.length - 1);
+          }
+          return org;
+      },
       //获取退租列表
       getData_collect() {
         this.emptyStatus = ' ';
         this.isLoading = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
+          console.log(res,'房东退房');
           this.isLoading = false;
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
@@ -489,6 +573,7 @@
         this.emptyStatus_second = ' ';
         this.isLoading_second = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params_second}).then((res) => {
+          console.log(res,'租客退房');
           this.isLoading_second = false;
           if (res.data.code === '20000') {
             this.superAuthority = res.data.data.can;
@@ -505,6 +590,7 @@
       //切换标签页
       handleClick() {
         this.isRent = this.activeName === 'first' ? 0 : 1;
+        this.resetting();
       },
       //分页
       handleCurrentChange(val) {
@@ -574,9 +660,13 @@
         if(this.activeName === 'first'){
           this.params.check_time = [];
           this.params.status = '';
+          this.org_name = '';
+          this.params.org_id = '';
         }else {
           this.params_second.check_time = [];
           this.params_second.status = '';
+          this.org_name = '';
+          this.params_second.org_id = '';
         }
 
       },

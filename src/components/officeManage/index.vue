@@ -181,7 +181,7 @@
           <el-table-column
             label="部门人数">
             <template slot-scope="scope">
-              <span v-if="scope.row.depart">{{scope.row.depart.users}}</span>
+              <span v-if="scope.row.depart">{{scope.row.office_num}}</span>
               <span v-else>/</span>
             </template>
           </el-table-column>

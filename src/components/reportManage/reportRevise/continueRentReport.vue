@@ -433,7 +433,6 @@
           setTimeout(() => {
             this.preloadData();
           }, 50);
-
         }
       },
     },
@@ -455,7 +454,6 @@
       //预填报备数据
       preloadData() {
         let data = this.reportDetailData;
-        console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;

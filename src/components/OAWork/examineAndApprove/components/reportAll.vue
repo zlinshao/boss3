@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.q" placeholder="房屋地址/报备人" @keyup.enter.native="search" clearable>
+              <el-input v-model="params.q" placeholder="房屋地址" @keyup.enter.native="search" clearable>
                 <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -131,10 +131,10 @@
               label="房屋地址">
             </el-table-column>
             <el-table-column
-              prop="place"
+              prop="places"
               label="状态">
               <template slot-scope="scope">
-                <el-tag :type="statusStyle(scope.row)">{{ scope.row.place }}</el-tag>
+                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column
@@ -147,7 +147,7 @@
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :page-size="15"
+                :page-size="12"
                 layout="total, prev, pager, next, jumper"
                 :total="totalNum">
               </el-pagination>
@@ -248,7 +248,7 @@
       },
       statusStyle(val){
         if(val.status=="review"){
-          if(val.place=="片区经理审批中"){
+          if(val.places=="片区经理审批中"){
             return ""
           }
           return "warning"
@@ -267,11 +267,11 @@
       getTableData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
-        this.$http.get(globalConfig.server_user + 'process', {params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'workflow/process', {params: this.params}).then((res) => {
           this.tableLoading = false;
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.totalNum = res.data.meta.total;
+          if (res.data.code === '20000' && res.data.data.data.length !== 0) {
+            let data = res.data.data.data;
+            this.totalNum = res.data.data.count;
             let dataList = [];
             for (let i = 0; i < data.length; i++) {
               let user = {};
@@ -291,8 +291,8 @@
                   } else {
                     user.house_name = '/';
                   }
-                  user.place = data[i].place.display_name;
-                  user.status = data[i].place.status;
+                  user.places = data[i].places.display_name;
+                  user.status = data[i].places.status;
                 } else {
                   user.bulletin = data[i].flow.content.staff_name + '的' + data[i].flow.content.bulletin_name || '/';
                   user.name = data[i].flow.content.staff_name || '';
@@ -303,11 +303,11 @@
                   } else {
                     user.house_name = '/';
                   }
-                  user.place = data[i].flow.place.display_name;
-                  user.status = data[i].flow.place.status;
+                  user.places = data[i].flow.places.display_name;
+                  user.status = data[i].flow.places.status;
                 }
               } else {
-                user.place = '/';
+                user.places = '/';
                 user.status = '/';
               }
               dataList.push(user);
@@ -321,7 +321,7 @@
         })
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        // console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         this.params.page = val;
@@ -423,7 +423,7 @@
         // console.log(1111111111111)
         if(columnIndex === 5){
           if(row.status === 'review'){
-            if(row.place === '片区经理审批中'){
+            if(row.places === '片区经理审批中'){
               return 'color:blue'
             }else{
               return 'color:orange'

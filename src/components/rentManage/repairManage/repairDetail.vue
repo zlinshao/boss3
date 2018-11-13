@@ -56,7 +56,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="房东电话">
+                <el-form-item :label="customer_type + '电话'">
                   <div class="content">
                     <span v-if="repairDetail.landlord_mobile">{{repairDetail.landlord_mobile}}</span>
                     <span v-if="!repairDetail.landlord_mobile">暂无</span>
@@ -136,12 +136,22 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            
             <el-row>
               <el-col :span="24">
                 <el-form-item label="备注">
                   <div class="content">
                     <span v-if="repairDetail.remark">{{repairDetail.remark}}</span>
                     <span v-if="!repairDetail.remark">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="截图">
+                  <div>
+                    <img v-if="repairDetail.album" v-for="item in repairDetail.album" :data-src="item.uri" :src="item.uri" data-magnify=""></img>
                   </div>
                 </el-form-item>
               </el-col>
@@ -388,6 +398,7 @@
         next_follow_name: '',   //下次跟进人
         state_repair: [],       //维修状态
         states: {},             //维修状态
+        customer_type:''
       };
     },
     watch: {
@@ -428,8 +439,18 @@
           if (res.data.code === "600200") {
             this.isFlag = res.data.data.update;
             this.repairDetail = res.data.data;
+            if(res.data.data.contract_type.indexOf('Renter') > -1){
+              this.customer_type = '租客';
+            }else{
+              this.customer_type = '房东';
+            }
             this.repairDetail.house_name = this.houseData.house_name;
-            this.repairDetail.follow_name = res.data.data.followor.name;
+            if(res.data.data.album){
+              this.repairDetail.album = res.data.data.album;
+            }
+            if(res.data.data.followor){
+              this.repairDetail.follow_name = res.data.data.followor.name;
+            }
           } else {
             this.$notify.warning({
               title: "警告",
@@ -438,6 +459,7 @@
           }
         });
       },
+      
       closeModal(val) {
         this.collectRepairDialog = false;
         this.rentRepairDialog = false;
@@ -446,6 +468,7 @@
         }
       },
       editRepair() {
+        this.repairDetail = Object.assign({},this.repairDetail)
         if (this.houseData.activeName === "first") {
           this.collectRepairDialog = true;
         } else {

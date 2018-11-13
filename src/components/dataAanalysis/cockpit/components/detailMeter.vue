@@ -37,7 +37,7 @@
                   </div>
                 </el-col>
               </el-row>
-              
+
             </div>
             <div class="radio_city">
               <el-radio-group v-model="placeForm.city" size="mini" class="radioreset" @change="choose('city',placeForm.city)">
@@ -66,10 +66,10 @@
             </div>
           </div>
           <div class="chartCanva">
-            <component 
-              :is="detailMeterMsg.topic.chart_set[0].type" 
-              :chartData="detailMeterMsg.topic" 
-              :chartStyle="mainchartstyle" 
+            <component
+              :is="detailMeterMsg.topic.chart_set[0].type"
+              :chartData="detailMeterMsg.topic"
+              :chartStyle="mainchartstyle"
               v-if="detailMeterMsg.topic.chart_set"
               ref="mainchart"
             ></component>
@@ -81,7 +81,7 @@
               2.每个柱形表示某个组织维度的业绩金额<br>
               3.组织架构维度标签下有三个下拉菜单选择项：城市（有全国以及各个城市选项，所有显示所有城市的数据，各个城市显示选择城市下辖区域的数据）/区域（显示下辖片区的数据）/片区（显示片区组员的数据）<br>
               4.时间维度标签有下拉菜单选择项：日历组件，可选择的任意时间段（除去当天）。<br> -->
-              {{detailMeterMsg.topic.introduction}}
+              {{detailMeterMsg.introduction}}
             </p>
           </div>
         </div>
@@ -93,22 +93,22 @@
               <el-col :span="12" v-for="(item,index) in detailMeterMsg.cards" :key="index"  v-if="item.data_source">
                 <chartCard id="card" :cardData="item" >
                   <template slot="right">
-                    <toprightControl 
-                      :cardData="item" 
-                      :btnstatus="btnstatus" 
+                    <toprightControl
+                      :cardData="item"
+                      :btnstatus="btnstatus"
                       :meterData="detailMeterMsg">
                     </toprightControl>
                   </template>
                   <template slot="content">
-                    <component 
-                      :is="item.chart_set[0].type" 
-                      :chartData="item" 
-                      :chartStyle="chartstyle" 
+                    <component
+                      :is="item.chart_set[0].type"
+                      :chartData="item"
+                      :chartStyle="chartstyle"
                       :status="true"
                       ref="minor"
                     ></component>
                   </template>
-                  
+
                 </chartCard>
               </el-col>
             </el-row>
@@ -133,7 +133,7 @@
   import stackedPercentageColumn from "../../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
   import textCard from "../../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../../wareHouseData/chart/tableCard.vue"            //表格卡片
-  
+
 
   export default {
     props: ['detailMeterVisible', 'detailMeterMsg','editStatus'],
@@ -212,7 +212,7 @@
           },
           ]
         },
-        
+
       }
     },
     filters:{
@@ -235,10 +235,10 @@
           this.getList("group",id)
         }
       },
-      getList(val,id){ 
+      getList(val,id){
         if(val=='city'){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {   
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id=331").then((res) => {
+            if(res.data.code == "20000"){
               res.data.data.forEach(item=>{
                 if(item.name!=="外出考察"){
                   this.cityOption.push(item)
@@ -247,14 +247,14 @@
             }
           });
         }else if(val=="area"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) => {
+            if(res.data.code == "20000"){
               this.areaOption = res.data.data
             }
           });
         }else if(val=="group"){
-          this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-            if(res.data.status_code == 200){
+          this.$http.get(globalConfig.server+"organization/other/org-tree?id="+id).then((res) =>{
+            if(res.data.code == "20000"){
               this.groupOption = res.data.data
             }
           });
@@ -291,7 +291,7 @@
               }
             }
         },
-      
+
     },
     watch: {
       detailMeterVisible(val) {

@@ -7,7 +7,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="跟进方式" required="">
-                <el-select clearable  placeholder="请选择装修类型" v-model="formInline.follow_type" value="">
+                <el-select clearable  placeholder="请选择跟进方式" v-model="formInline.follow_type" value="">
                   <el-option v-for="item in follow_type_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                 </el-select>
               </el-form-item>

@@ -1,5 +1,5 @@
 <template>
-  <div id="addCollectRepair">
+  <div id="addRentRepair">
     <el-dialog :close-on-click-modal="false" title="修改维修单" :visible.sync="addRentModule" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
@@ -35,7 +35,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="房东电话">
+              <el-form-item label="租客电话">
                 <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>
@@ -89,6 +89,13 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="上传照片">
+                <UpLoad :ID="'upload_rent'" @getImg="myGetImg" :isClear="isClear" :editImage="photos"></UpLoad>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -104,10 +111,11 @@
 
 <script>
   import Organization from '../../common/organization';
+  import UpLoad from '../../common/UPLOAD.vue';
 
   export default {
     props: ['module', 'detail'],
-    components: {Organization},
+    components: {Organization, UpLoad},
     data() {
       return {
         addRentModule: false,
@@ -126,6 +134,7 @@
           liable_name: '',        //前租客姓名
           content: '',            //维修内容
           remark: '',             //备注
+          album: [],                //房屋影像
         },
         house_name: '',         //房屋地址
         follow_name: '',
@@ -134,7 +143,10 @@
         emergencies: [
           {id: 1, value: "一般"},
           {id: 2, value: "紧急"}
-        ]
+        ],
+        isClear :false,                 //删除照片
+        photos: {},                     //房屋影像
+        albums : {}
       };
     },
     mounted() {
@@ -150,6 +162,11 @@
         }
       },
       detail(val) {
+        let _this = this;
+        setTimeout(function(){
+          _this.photos = {};
+          _this.showPhotos(val,_this.photos);
+        },100)
         this.form.id = val.id;                              //维修单id
         this.house_name = val.house_name;
         this.form.repaire_num = val.repaire_num;            //合同编号
@@ -208,8 +225,12 @@
           liable_name: '',        //前租客姓名
           content: '',            //维修内容
           remark: '',             //备注
+          // album : []
         };
         this.follow_name = '';
+        this.albums = {};
+        this.photos = {};
+        this.isClear = true;
       },
       closeOrganization() {
         this.organizeType = '';
@@ -226,6 +247,18 @@
       emptyStaff() {
         this.follow_name = '';
         this.form.follow_id = '';
+      },
+       // 截图
+      myGetImg(val) {
+        this.picStatus = val[2];
+        this.form.album = val[1];
+      },
+      showPhotos(val,photo){
+        if(val.album  && val.album.length){
+          val.album.map(function(item,index){
+            photo[item.id] = item.uri
+          });
+        }
       }
     },
   };

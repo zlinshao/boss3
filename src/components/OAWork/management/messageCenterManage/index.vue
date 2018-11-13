@@ -130,7 +130,7 @@
                 label="职位">
                 <template slot-scope="scope">
                   <span v-if="scope.row.is_anonymous">匿名</span>
-                  <span v-else-if="scope.row.asker.role.length<1">暂无</span>
+                  <span v-else-if="scope.row.asker.length<1">暂无</span>
                   <span v-for="v in scope.row.asker.role" v-else>{{v.display_name}}&nbsp;&nbsp;&nbsp;</span>
                 </template>
               </el-table-column>
@@ -138,8 +138,8 @@
                 label="部门">
                 <template slot-scope="scope">
                   <span v-if="scope.row.is_anonymous">匿名</span>
-                  <span v-else-if="scope.row.asker.org.length<1">暂无</span>
-                  <span v-for="v in scope.row.asker.org" v-else>{{v.name}}&nbsp;&nbsp;&nbsp;</span>
+                  <span v-else-if="scope.row.asker.length<1">暂无</span>
+                  <span v-else>{{scope.row.asker.org.name}}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -504,6 +504,8 @@
           this.isHigh = false;
           if (res.data.code === '70110') {
             this.tableData = res.data.data;
+            console.log(this.tableData, "11111");
+            
             this.totalNum = res.data.meta.num;  //记录总条数
             if (res.data.data.length < 1) {
               this.tableStatus = '暂无数据';

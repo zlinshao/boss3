@@ -45,16 +45,18 @@
         prop="repair_time"
         label="预计维修时间">
         <template slot-scope="scope">
-          <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-          <span v-if="!scope.row.repair_time">暂无</span>
+          <span v-text="repair_time(scope)"></span>
+          <!--<span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>-->
+          <!--<span v-if="!scope.row.repair_time">暂无</span>-->
         </template>
       </el-table-column>
       <el-table-column
         prop="repair_master"
         label="维修师傅">
         <template slot-scope="scope">
-          <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-          <span v-if="!scope.row.repair_master">暂无</span>
+          <span v-text="repair_master(scope)"></span>
+          <!--<span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>-->
+          <!--<span v-if="!scope.row.repair_master">暂无</span>-->
         </template>
       </el-table-column>
       <el-table-column
@@ -69,7 +71,7 @@
         prop="repair_money"
         label="跟进人">
         <template slot-scope="scope">
-          <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+          <span v-if="scope.row.followor">{{scope.row.followor.name}}</span>
           <span v-if="!scope.row.followor">暂无</span>
         </template>
       </el-table-column>
@@ -77,8 +79,12 @@
         prop="status"
         label="维修状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.status">{{scope.row.status}}</span>
-          <span v-if="!scope.row.status">暂无</span>
+          <div v-if="scope.row.status">
+            <span v-for="(item,index) in dirData">
+              {{ item.id == scope.row.status ? dirData[index].dictionary_name : ''}}
+            </span>
+          </div>
+          <span v-else>/</span>
         </template>
       </el-table-column>
     </el-table>
@@ -120,12 +126,14 @@
           contract_id: '',
           is_lease: 1,
           module: 1,
+          repair_status: '',
         },
-
+        dirData: [],
       }
     },
     mounted() {
       this.getTableData();
+      this.getDir();
     },
     activated() {
       this.getTableData();
@@ -155,6 +163,25 @@
       },
     },
     methods: {
+      getDir() {
+        this.dictionary(595,1).then(res=>{
+          this.dirData = res.data;
+        })
+      },
+      repair_time(scope) {
+        if(scope.row.follow && scope.row.follow.length>0){
+          return scope.row.follow[0].repair_time;
+        }else{
+          return '暂无';
+        }
+      },
+      repair_master(scope) {
+        if(scope.row.follow && scope.row.follow.length>0){
+          return scope.row.follow[0].repair_master;
+        }else{
+          return '暂无';
+        }
+      },
       dblClickTable(row) {
         this.houseData = row;
         if (row.contract.house) {
@@ -175,6 +202,7 @@
         this.$http.get(globalConfig.server + 'repaire/list', {params: this.params}).then((res) => {
           this.tableLoading = false;
           if (res.data.code === '600200') {
+            console.log(res);
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
             if (res.data.data.data.length < 1) {

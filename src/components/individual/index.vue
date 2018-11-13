@@ -263,6 +263,7 @@
     components: {Announcement},
     data() {
       return {
+        urls: globalConfig.server,
         announcementDialog: false,
         landholder: {},
         isEdit: false,
@@ -308,7 +309,6 @@
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
       this.loginDay = this.landholder.data.loginday;
-      ;
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();
@@ -328,9 +328,6 @@
       }
     },
     methods: {
-      // goLineCollege() {
-      //   this.$router.push({path: '/LineCollege'});
-      // },
       routerLink(val, type) {
         this.$router.push({path: val, query: {type: type}})
       },
@@ -341,33 +338,32 @@
         this.$store.dispatch('articleDetail', data);
       },
       getSystemTableData() {
-        this.$http.get(globalConfig.server + 'oa/portal/', {params: {dict_id: 552, pages: 1}}).then((res) => {
+        this.$http.get(this.urls + 'oa/portal/', {params: {dict_id: 552, pages: 1}}).then((res) => {
           if (res.data.code === '80000') {
             this.systemData = res.data.data.data;
           }
         })
       },
       getAlbumNum() {
-        this.$http.get(globalConfig.server + "album?page=" + this.currentPage + "&limit=16").then((res) => {
+        this.$http.get(this.urls + "album?page=" + this.currentPage + "&limit=16").then((res) => {
           if (res.data.code === "20110") {
             this.albumNum = res.data.num;
           }
         });
       },
       getLogNum() {
-        this.$http.get(globalConfig.server + 'oa/daily_tmp/index?page=1&style=count&self=&limit=500').then((res) => {
+        this.$http.get(this.urls + 'oa/daily_tmp/index?page=1&style=count&self=&limit=500').then((res) => {
           if (res.data.code === '80000') {
             this.logNum = res.data.data.count;
           }
         });
       },
       getBackNum() {
-        this.$http.get(globalConfig.server_user + 'process').then((res) => {
-          let data = res.data.data;
-          if (res.data.status === 'success' && data.length !== 0) {
-            this.backLogNum = res.data.meta.total;
-          }
-        })
+        this.$http.get(this.urls + 'workflow/process?type=2&only_count=1').then((res) => {
+          if(res.data.code == "20000") {
+            this.backLogNum = res.data.data.count;
+          } 
+        });
       },
       //显示个人签名的input
       showInput() {
@@ -387,7 +383,7 @@
       editPersonalSign() {
         this.isEdit = false;
         if (this.isChanged) {
-          this.$http.post(globalConfig.server + 'manager/staff_record', this.params).then((res) => {
+          this.$http.post(this.urls + 'manager/staff_record', this.params).then((res) => {
             let personal = JSON.parse(localStorage.personal);
             if (res.data.code === '30010') {
               personal.data.signature = res.data.data;
@@ -405,7 +401,7 @@
       //个人考勤
       getCheckWork() {
         let data = new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
-        this.$http.get(globalConfig.server + 'attendance?year_month=' + data).then((res) => {
+        this.$http.get(this.urls + 'attendance?year_month=' + data).then((res) => {
           if (res.data.code === '20010') {
             this.late = res.data.data.late;
             this.early = res.data.data.early;
@@ -418,14 +414,14 @@
 
       //getAnnouncement
       getPraise() {
-        this.$http.get(globalConfig.server + 'announcement/Praise', this.params).then((res) => {
+        this.$http.get(this.urls + 'announcement/Praise', this.params).then((res) => {
           if (res.data.code === '80010') {
             this.praiseData = res.data.data;
           }
         })
       },
       getPunishment() {
-        this.$http.get(globalConfig.server + 'announcement/Punishment', this.params).then((res) => {
+        this.$http.get(this.urls + 'announcement/Punishment', this.params).then((res) => {
           if (res.data.code === '80010') {
             this.punishmentData = res.data.data;
           }
@@ -442,7 +438,7 @@
 
       //获取积分总数
       getCredit() {
-        this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
+        this.$http.get(this.urls + 'credit/manage/self').then((res) => {
           if (res.data.code === '30310') {
             this.creditTotal = res.data.data;
           }

@@ -151,7 +151,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button
-            @click.native.prevent=""
+            @click="goDetail(scope)"
             type="text"
             size="small">
             详情
@@ -438,6 +438,9 @@
         console.log(11111)
         this.getTableData();
       },
+      goDetail(scope) {
+        this.$router.push({path: '/achieveDetail',query:{user_id:scope.row.sign_user_id}});
+      }
     }
   }
 </script>

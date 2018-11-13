@@ -2,7 +2,7 @@
   <div id="markInfo">
     <div>
       <el-row :gutter="20">
-        <el-col :span="10">
+        <el-col :span="11">
           <!-- 班次说明 -->
           <div>
             班次说明
@@ -13,14 +13,38 @@
               :key="tmp.id"
               size="mini">{{tmp.alias}}: {{tmp.name}}{{tmp.morning_work_time}}-{{tmp.pm_rest_time}}
             </el-tag>
+            <div>
+              本月未排班人数：<span style="color: red;cursor: pointer;" @click="searchUnSort">{{ unSortCount }}人</span>
+              <el-button type="text" style="color: #14e731;margin-left: 15px;" @click="searchAll">全部</el-button>
+            </div>
           </div>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="13">
           <!-- 搜索 -->
-          <div style="text-align:right;padding-right:50px">
+          <div style="text-align:right;">
             <el-row :gutter="20">
               <el-col :span="24">
-                <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px">
+                <el-form :inline="true" ref="form" :model="arrangeParams" label-width="50px" style="margin-top:-8px" onsubmit="return false">
+                  <el-form-item>
+                    <span>月份:</span>
+                    <el-select v-model="arrangeParams.arrange_month" style="width:180px" placeholder="请选择" size="mini"
+                               @change="ChangeMonth">
+                      <el-option
+                        v-for="(item,index) in monthList"
+                        :key="index"
+                        :label="item.date"
+                        :value="item.date">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item>
+                    <span>部门:</span>
+                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:180px;"
+                              v-model="arrangeParams.org_name"
+                              size="mini">
+                      <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                    </el-input>
+                  </el-form-item>
                   <el-form-item>
                     <el-input
                       v-model="arrangeParams.search"
@@ -28,10 +52,13 @@
                       size="mini"
                       style="width:250px;dispaly:inline-block;margin-left:20px;"
                       clearable
-                      @keyup.enter.native="goSearch"
+                      @keyup.enter.native.prevent="goSearch"
                     >
                       <el-button slot="append" icon="el-icon-search" @click="goSearch"></el-button>
                     </el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="mini" @click="goSearch">搜索</el-button>
                   </el-form-item>
                   <el-form-item>
                     <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
@@ -62,24 +89,22 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)">
-        <el-table-column label="部门" width="80px">
+        <el-table-column label="部门" align="center" width="100px">
           <template slot-scope="scope">
             <span v-text="partInfo(scope.row)"></span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="80px"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center" width="100px"></el-table-column>
 
-        <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label" width="48%">
-          <template slot-scope="scope">
+        <el-table-column v-for="(colu,index) in columnList" :key="index" :label="colu.label">
+          <template slot-scope="scope" align="center">
             <div v-text="showArrange(scope.row,colu.label)" :class="bg(scope.row,colu.label)"
                  style="cursor:pointer;"></div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100px">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <div>
-              <el-button type="primary" size="mini" @click="saveCurrentArrange(scope.row)">保存</el-button>
-            </div>
+            <el-button type="primary" size="mini" icon="el-icon-check" circle @click="saveCurrentArrange(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,23 +115,13 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-sizes="[5,10,15]"
+        :page-sizes="[12,24,36]"
         :page-size="arrangeParams.limit"
         :current-page="arrangeParams.page"
         layout="total,sizes,prev, pager, next ,jumper"
         :total="arrangePageTotal">
       </el-pagination>
     </div>
-
-    <!-- 排班表 仅查看 -->
-    <!-- <div style="margin-top:50px">
-      <el-table style="width:100%" :data="arrangeListDataLook" :cell-style="cellStyle" :cell-class-name="cell">
-        <el-table-column prop='date' label="班次/日期">
-        </el-table-column>
-        <el-table-column v-for="(colu,idx) in columnListLook" :key="idx" :prop="colu.prop" :label="colu.label" width="50px">
-        </el-table-column>
-      </el-table>
-    </div> -->
 
     <!-- 修改班次 dialog -->
     <div>
@@ -125,72 +140,17 @@
       </el-dialog>
     </div>
 
-    <!-- 修改班次是否保存 -->
-    <!-- <div>
-      <el-dialog :visible.sync="okShow" width="15%">
-        <h4>有修改的数据尚未保存，是否保存？</h4>
-        <div style="text-align:right;">
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="okShow = false" size="mini">取消</el-button>
-            <el-button type="primary" @click="okShow = false" size="mini">确定</el-button>
-          </span>
-        </div>
-      </el-dialog>
-    </div> -->
-
-    <!-- 批量导出模板 -->
-    <!-- <div>
-      <el-dialog title="模板设置排班" :visible.sync="outputShow" width="60%">
-        <EditArrange :date="arrangeParams.arrange_month" />
-      </el-dialog>
-    </div> -->
-
     <!--组织架构-->
     <Organization :organizationDialog="organModule" :type="organizeType" :length="lengths" @close="closeOrgan"
                   @selectMember="selectMember"></Organization>
 
+    <!--高级搜索内容-->
     <div class="highRanking" style="position:static !important;">
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" onsubmit="return false" :model="arrangeParams" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
-          <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">月份</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-select v-model="arrangeParams.arrange_month" style="width:300px" placeholder="请选择" size="mini"
-                             @change="ChangeMonth">
-                    <el-option
-                      v-for="(item,index) in monthList"
-                      :key="index"
-                      :label="item.date"
-                      :value="item.date">
-                    </el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">部门</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:300px;"
-                              v-model="arrangeParams.org_name"
-                              size="mini">
-                      <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
           <el-row class="el_row_border">
             <el-col :span="12">
               <el-row>
@@ -240,6 +200,7 @@
         </el-form>
       </div>
     </div>
+
     <!-- 导入排班表 -->
     <div>
       <el-dialog
@@ -276,7 +237,7 @@
         arrangePageTotal: 0,
         arrangeParams: {
           page: 1,
-          limit: 5,
+          limit: 12,
           user_id: null,
           org_id: [],
           search: "",
@@ -323,10 +284,20 @@
         currentDay: '',
         exprotLoading: false,
         exprotTemp: false,
-        importTmp: false
+        importTmp: false,
+      //  没有排班的接口
+        unSortCount: '',
+        unSortIds: [],
       };
     },
     methods: {
+      searchAll() {
+        this.arrangeParams.user_id = null;
+        this.getArrangeList(this.arrangeParams);
+      },
+      searchUnSort() {
+        this.getArrangeList(this.arrangeParams,this.unSortIds);
+      },
       getImg(val) {
         console.log(val);
         if (val[1].length > 1) {
@@ -467,17 +438,21 @@
       },
       // -------------分割线 高级搜索部分----------------
       //排班列表
-      getArrangeList(arrangeParams) {
+      getArrangeList(arrangeParams,sort) {
         this.arrangeLoading = true;
         this.arrangeInfo = " ";
+        if(sort){
+          arrangeParams.user_id = sort;
+        }
         this.$http
-          .get(this.url + "attendance/sort", {
-            params: arrangeParams
-          })
-          .then(res => {
+          .post(this.url + "attendance/sort/list",arrangeParams).then(res => {
             if (res.status == 200) {
               if (res.data.code == 20000) {
                 this.arrangeLoading = false;
+                if(res.data.data.unSort.count && res.data.data.unSort.user_id){
+                  this.unSortCount = res.data.data.unSort.count;
+                  this.unSortIds = res.data.data.unSort.user_id;
+                }
                 if (res.data.data.data.length < 1) {
                   this.getArrangeEmpty();
                 } else {
@@ -561,14 +536,14 @@
       //编辑排班
       clickCell(row, column, cell, event) {
         this.currentDay = column.label;
-        var res = this.estimateMonth();
-        if (!res) {
-          this.$notify.warning({
-            message: "不能编辑小于或等于当前日期的排班",
-            title: "警告"
-          });
-          return false;
-        }
+        // var res = this.estimateMonth();
+        // if (!res) {
+        //   this.$notify.warning({
+        //     message: "不能编辑小于或等于当前日期的排班",
+        //     title: "警告"
+        //   });
+        //   return false;
+        // }
         // if (row["oa_sort"] != null) {
         //   if (row["oa_sort"]["arrange"][column.label]) {
         //     this.currentArrange = row["oa_sort"]["arrange"][column.label];
@@ -788,20 +763,20 @@
         // this.arrangeParams.arrange_month = val;
         // console.log(val);
       },
-      //判断是否可编辑
-      estimateMonth() {
-        var date = new Date().toLocaleDateString();
-        var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
-        if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
-          return false;
-        } else {
-          return true;
-        }
-      },
+      // //判断是否可编辑
+      // estimateMonth() {
+      //   var date = new Date().toLocaleDateString();
+      //   var currentMonth = this.arrangeParams.arrange_month + "-" + this.currentDay
+      //   if (new Date(currentMonth).getTime() <= new Date(date).getTime()) {
+      //     return false;
+      //   } else {
+      //     return true;
+      //   }
+      // },
       //搜索
       goSearch() {
         this.arrangeParams.page = 1;
-        this.arrangeParams.limit = 5;
+        this.arrangeParams.limit = 12;
         this.getArrangeList(this.arrangeParams);
         this.getCurrentMonthDays(this.arrangeParams.arrange_month);
         var date = new Date().toLocaleDateString().split("/");
@@ -811,6 +786,7 @@
         } else {
           this.exportBtnShow = false;
         }
+        return false;
       },
       resetting() {
         this.getQuery();
@@ -828,6 +804,8 @@
       outArrange() {
         this.exprotLoading = true;
         this.$http.post(this.url + "attendance/sort-excel/sort-out", this.arrangeParams).then(res => {
+          console.log(res);
+          return false;
           if (res.status == 200) {
             if (res.data.code == 10000) {
               this.exprotLoading = false;
@@ -852,13 +830,21 @@
         this.$http.post(this.url + "attendance/sort-excel/templet-out", this.arrangeParams).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
-              this.exprotTemp = false;
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-              window.location.href = res.data.data.uri;
-
+              console.log(res);
+              if(res.data.data.uri){
+                this.exprotTemp = false;
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                window.location.href = res.data.data.uri;
+              }else{
+                this.$notify.warning({
+                  title: '警告',
+                  message:'导出失败'
+                })
+                return false;
+              }
             }else {
               this.exprotTemp = false;
               this.$notify.warning({
@@ -885,8 +871,11 @@
 
 <style lang="scss">
   #markInfo {
-    width: 100%;
+    width: 100% !important;
     position: relative;
+    .el-table__header-wrapper table.el-table__header,table.el-table__body{
+      width: auto !important;
+    }
     .tableInfo {
       text-align: center;
     }

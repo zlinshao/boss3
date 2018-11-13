@@ -41,123 +41,124 @@
           </el-dropdown>
         </div>
         <!--消息-->
-        <div class="message" style="position: relative;margin-right: 15px">
-          <el-dropdown>
-            <el-badge v-if="messageTotal>0" :max="99" :value="messageTotal" class="item">
-              <i class="el-icons-fa-comment-o"></i>
-              消 息
-            </el-badge>
-            <el-badge v-else class="item">
-              <i class="el-icons-fa-comment-o"></i>
-              消 息
-            </el-badge>
-            <el-dropdown-menu slot="dropdown" class="menuLists">
-              <!--消息图标-->
-              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0"
-                                :key="index">
-                <div class="first">
-                  <el-row @click.native="showMessageDetail(item)">
-                    <el-col :span="4">
-                      <div class="picSign">
-                        <i class="el-icon-bell"></i>
-                      </div>
-                    </el-col>
-                    <el-col :span="20">
-                      <div class="public">
-                        <div class="signOne">系统公告</div>
-                        <div class="limits">{{item.content.content}}</div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">
-                  <el-col :span="24">
-                    <div style="display:block; margin:5px 0; text-align:center; color:#409EFF">查看全部<span
-                      style="color:#f00">{{messageTotal}}条</span>未读
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-dropdown-item>
-              <el-dropdown-item class="not" v-if="unReadMessageData.length <=0">
-                <el-row style="cursor:default; ">
-                  <el-col :span="24">
-                    <i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>
-                    <div
-                      style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">
-                      您当前还没有消息提醒
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="unReadMessageData.length <=0">
-                <el-row @click.native="showOtherDetail('read')">
-                  <el-col :span="24">
-                    <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+        <!--<div class="message" style="position: relative;margin-right: 15px">-->
+          <!--<el-dropdown>-->
+            <!--<el-badge v-if="messageTotal>0" :max="99" :value="messageTotal" class="item">-->
+              <!--<i class="el-icons-fa-comment-o"></i>-->
+              <!--消 息-->
+            <!--</el-badge>-->
+            <!--<el-badge v-else class="item">-->
+              <!--<i class="el-icons-fa-comment-o"></i>-->
+              <!--消 息-->
+            <!--</el-badge>-->
+            <!--<el-dropdown-menu slot="dropdown" class="menuLists">-->
+              <!--&lt;!&ndash;消息图标&ndash;&gt;-->
+              <!--<el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0"-->
+                                <!--:key="index">-->
+                <!--<div class="first">-->
+                  <!--<el-row @click.native="showMessageDetail(item)">-->
+                    <!--<el-col :span="4">-->
+                      <!--<div class="picSign">-->
+                        <!--<i class="el-icon-bell"></i>-->
+                      <!--</div>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="20">-->
+                      <!--<div class="public">-->
+                        <!--<div class="signOne">系统公告</div>-->
+                        <!--<div class="limits">{{item.content.content}}</div>-->
+                      <!--</div>-->
+                    <!--</el-col>-->
+                  <!--</el-row>-->
+                <!--</div>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item>-->
+                <!--<el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">-->
+                  <!--<el-col :span="24">-->
+                    <!--<div style="display:block; margin:5px 0; text-align:center; color:#409EFF">查看全部<span-->
+                      <!--style="color:#f00">{{messageTotal}}条</span>未读-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item class="not" v-if="unReadMessageData.length <=0">-->
+                <!--<el-row style="cursor:default; ">-->
+                  <!--<el-col :span="24">-->
+                    <!--<i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>-->
+                    <!--<div-->
+                      <!--style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">-->
+                      <!--您当前还没有消息提醒-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item v-if="unReadMessageData.length <=0">-->
+                <!--<el-row @click.native="showOtherDetail('read')">-->
+                  <!--<el-col :span="24">-->
+                    <!--<div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-dropdown-item>-->
+            <!--</el-dropdown-menu>-->
+          <!--</el-dropdown>-->
 
+          <!--&lt;!&ndash;//喜报名片&ndash;&gt;-->
+          <!--<div v-if="gladFlag">-->
+            <!--<div class="gladBulletin">-->
+              <!--<div class="gladTop"></div>-->
+              <!--<div class="gladContent">-->
+                <!--<div class="title">-->
+                  <!--<img src="../assets/images/daosui_left.png" alt="">-->
+                  <!--<span class="words">-->
+                  <!--<span style="color: #e8468e;margin-right: 5px">恭喜</span>南京一区一组王彪出租租房-->
+                <!--</span>-->
+                  <!--<img src="../assets/images/daosui_right.png" alt="">-->
+                <!--</div>-->
 
-          <!--//喜报名片-->
-          <div v-if="gladFlag">
-            <div class="gladBulletin">
-              <div class="gladTop"></div>
-              <div class="gladContent">
-                <div class="title">
-                  <img src="../assets/images/daosui_left.png" alt="">
-                  <span class="words">
-                  <span style="color: #e8468e;margin-right: 5px">恭喜</span>南京一区一组王彪出租租房
-                </span>
-                  <img src="../assets/images/daosui_right.png" alt="">
-                </div>
-
-                <div class="glad_card">
-                  <div class="glad_card_head">
-                    <img src="../assets/images/head.jpg" alt="">
-                  </div>
-                  <div class="glad_card_info">
-                    <div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>
-                    <div style="width: 100%;margin: 15px 0">
-                      <div style="border: 1px solid #fb4699;width:25px"></div>
-                    </div>
-                    <div style="width: 100%;height: 20px;font-size: 14px;">
-                      <span style="color: #abadae">签约时长：</span>3年3个月（租）
-                    </div>
-                    <div style="width: 100%;height: 20px;font-size: 14px;">
-                      <span style="color: #abadae">签约时长：</span>3年3个月（租）
-                    </div>
-                    <div class="glad_card_right">
-                      <span class="gladsp1"><span>￥</span>2600</span>
-                      <span class="gladsp2">月单价</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="gladBottom">
-                <div class="glad_close" @click="glad_close">
-                  <span>关闭</span>
-                </div>
-              </div>
-            </div>
-            <div class="gladBackground"></div>
-          </div>
-        </div>
+                <!--<div class="glad_card">-->
+                  <!--<div class="glad_card_head">-->
+                    <!--<img src="../assets/images/head.jpg" alt="">-->
+                  <!--</div>-->
+                  <!--<div class="glad_card_info">-->
+                    <!--<div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>-->
+                    <!--<div style="width: 100%;margin: 15px 0">-->
+                      <!--<div style="border: 1px solid #fb4699;width:25px"></div>-->
+                    <!--</div>-->
+                    <!--<div style="width: 100%;height: 20px;font-size: 14px;">-->
+                      <!--<span style="color: #abadae">签约时长：</span>3年3个月（租）-->
+                    <!--</div>-->
+                    <!--<div style="width: 100%;height: 20px;font-size: 14px;">-->
+                      <!--<span style="color: #abadae">签约时长：</span>3年3个月（租）-->
+                    <!--</div>-->
+                    <!--<div class="glad_card_right">-->
+                      <!--<span class="gladsp1"><span>￥</span>2600</span>-->
+                      <!--<span class="gladsp2">月单价</span>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="gladBottom">-->
+                <!--<div class="glad_close" @click="glad_close">-->
+                  <!--<span>关闭</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="gladBackground"></div>-->
+          <!--</div>-->
+        <!--</div>-->
         <div @click="openModalDialog('instructionDialog')" class="guide" style="cursor: pointer">
           <i style="font-size:26px; margin-right:4px;" class="iconfont icon-gantanhaodefuben"></i>
           功能说明
         </div>
-        <div  class="guide" style="cursor: pointer">
+        <div class="guide" style="cursor: pointer">
           <el-popover
             placement="bottom"
             width="200"
             trigger="hover"
-            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-            <div slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;" class="iconfont el-icon-mobile-phone"></i> app下载</div>
+            content="下载乐伽管理APP，随时随地管理你的房源~">
+            <div @click="downLoadApp" slot="reference"><i style="font-size:26px; margin-right:-11px;margin-top:9px;"
+                                     class="iconfont el-icon-mobile-phone"></i> app下载
+            </div>
           </el-popover>
         </div>
         <!--个人信息-->
@@ -190,17 +191,29 @@
               </div>
               <div class="navigation">
                 <el-row>
+                  <!--<el-col :span="10" class="checkUp">-->
+                    <!--<div class="navigationLeft">-->
+                      <!--<el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">-->
+                        <!--<div class="msgCenter">-->
+                          <!--<i class="el-icon-bell"></i>-->
+                          <!--<div class="msgTitle">消息中心</div>-->
+                        <!--</div>-->
+                      <!--</el-dropdown-item>-->
+                    <!--</div>-->
+                  <!--</el-col>-->
                   <el-col :span="10" class="checkUp">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">
-                        <div class="msgCenter">
-                          <i class="el-icon-bell"></i>
-                          <div class="msgTitle">消息中心</div>
+                      <el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">
+                        <div class="msgCenter" style="display: -webkit-box;">
+                          <i class="el-icon-document" style="color: #58D788;"></i>
+                          <div class="msgTitle">
+                            <span>问卷调查</span>
+                            <span v-if="questionnaireData && questionnaireData.available" class="circle_red"></span>
+                          </div>
                         </div>
                       </el-dropdown-item>
                     </div>
                   </el-col>
-
                   <el-col :span="10" class="checkUp" :offset="4">
                     <div class="navigationLeft">
                       <el-dropdown-item @click.native="routers('checkWork')" style="padding: 0">
@@ -269,19 +282,6 @@
                           <div class="msgTitle">
                             <span>在线考试</span>
                             <span v-if="examData && examData.available" class="circle_red"></span>
-                          </div>
-                        </div>
-                      </el-dropdown-item>
-                    </div>
-                  </el-col>
-                  <el-col :span="10" class="checkUp" :offset="4">
-                    <div class="navigationLeft">
-                      <el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">
-                        <div class="msgCenter" style="display: -webkit-box;">
-                          <i class="el-icon-document" style="color: #58D788;"></i>
-                          <div class="msgTitle">
-                            <span>问卷调查</span>
-                            <span v-if="questionnaireData && questionnaireData.available" class="circle_red"></span>
                           </div>
                         </div>
                       </el-dropdown-item>
@@ -421,6 +421,16 @@
     <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
     <ReadingView :ReadingDialog="ReadingDialog" :yanFirstInfo="yanFirstInfo" @close="readcloseModal"></ReadingView>
+
+    <!--下载dialog-->
+    <el-dialog
+      :visible.sync="downShow"
+      width="25%"
+    >
+      <div style="width: 400px;height: 400px;text-align: center;margin: 0 auto;">
+        <img style="width: 90%;" :src="imgUrl" alt="">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -499,6 +509,10 @@
         quesNaireDialog: false,
         examData: {},
         questionnaireData: {},
+
+        //下载
+        downShow: false,
+        imgUrl: ''
       };
     },
     computed: {
@@ -620,8 +634,8 @@
         }
       });
       //定时器 轮巡获取最新消息
-      this.getUnreadTermly();
-      this.getUnReadMessage();
+      // this.getUnreadTermly();
+      // this.getUnReadMessage();
       //调查问卷
       this.getQuesNaireData();
       //个人门户下的考试和调查1分钟轮询一次
@@ -651,9 +665,28 @@
       //获取积分明细
       this.getCredit();
       //定时器 轮巡获取最新消息
-      this.getUnreadTermly();
+      // this.getUnreadTermly();
     },
     methods: {
+      //下载app
+      downLoadApp (){
+        this.downShow = true;
+        this.$http.get(globalConfig.server + 'api/qrcode/app').then(res =>{
+          if(res.status == 200){
+            if(res.data.code == 10000){
+              this.imgUrl = res.data.data;
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: '获取失败！'
+              });
+              this.downShow = false;
+            }
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       downChange() {
         this.getExamNaireRedCircle();
       },
@@ -751,25 +784,25 @@
           }
         } else {
           this.setLockPwdDialog = true;
-            // this.setLockPwdDialog = false;
+          // this.setLockPwdDialog = false;
         }
       },
       //定时器 轮巡获取最新消息
-      getUnreadTermly() {
-        clearInterval(this.messageInterval);
-        this.messageInterval = null;
-        this.messageInterval = setInterval(() => {
-          if (localStorage.personal) {
-            this.getUnReadMessage();
-          }
-        }, 100000);
-      },
+      // getUnreadTermly() {
+      //   clearInterval(this.messageInterval);
+      //   this.messageInterval = null;
+      //   this.messageInterval = setInterval(() => {
+      //     if (localStorage.personal) {
+      //       this.getUnReadMessage();
+      //     }
+      //   }, 100000);
+      // },
 
       //验证二级密码弹框
       openBadge(key) {
         if (!eval(this.unlockFlagpart)) {
           for (let chi in this.chinese) {
-            if (this.chinese[chi] == key) {
+            if (this.chinese[chi] === key) {
               this.unLockName = key;
               this.unlockSecondPWDialog = true;
             }
@@ -781,7 +814,7 @@
         this.$http.interceptors.response.use(response => {
             //配置请求回来的信息
             if (this.$route.path !== '/lock') {
-              if (response.data.code == "7777") {
+              if (response.data.code === "7777") {
                 clearInterval(this.interval);
                 this.interval = null;
                 clearInterval(this.messageInterval);
@@ -834,7 +867,7 @@
       },
 
       showOtherDetail(val) {
-        if (val == 'unread') {
+        if (val === 'unread') {
           this.$router.push({
             path: "/messageCenter",
             query: {
@@ -876,24 +909,22 @@
       //二级密码回调
       unlockFlag(val) {
         this.unlockFlagpart = val;
-        var millisecondx = new Date().getTime();
-        var expiresTimex = new Date(millisecondx + 60 * 1000 * 60 * 18); //设置18小时缓存
+        let millisecondx = new Date().getTime();
+        let expiresTimex = new Date(millisecondx + 60 * 1000 * 60 * 18); //设置18小时缓存
         cookie.set("unlockFlagpart", val, {expires: expiresTimex});
         if (this.unlockFlagpart) {
           this.chinese = []
         }
       },
-
       //获取未读消息
       getUnReadMessage() {
-        this.$http.get(globalConfig.server_user + "messages?unread=1").then(res => {
-          if (res.data.status === "success") {
-            this.unReadMessageData = res.data.data;
-            this.messageTotal = res.data.meta.total;
-          }
-        });
+        // this.$http.get(globalConfig.server_user + "messages?unread=1").then(res => {
+        //   if (res.data.status === "success") {
+        //     this.unReadMessageData = res.data.data;
+        //     this.messageTotal = res.data.meta.total;
+        //   }
+        // });
       },
-
       //二级密码
       getDictionary2() {
         this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
@@ -914,12 +945,10 @@
       fullScreen(val) {
         screenFull.toggle();
       },
-
       clickScreen() {
         this.screenStatus = true;
         localStorage.setItem("initCount", 1);
       },
-
       countTime() {
         let countDown = [];
         this.$http.get(globalConfig.server + "setting/dictionary/203").then(res => {
@@ -943,7 +972,6 @@
           }
         });
       },
-
       startCount() {
         clearInterval(this.interval);
         new Promise((resolve, reject) => {
@@ -957,21 +985,17 @@
               resolve("锁屏");
             }
           }, 1000);
+        }).then(data => {
+          this.lockScreen();
+        }).catch(err => {
+          this.Countdown = this.defaultTime;
+          this.startCount();
+          this.screenStatus = false;
         })
-          .then(data => {
-            this.lockScreen();
-          })
-          .catch(data => {
-            this.Countdown = this.defaultTime;
-            this.startCount();
-            this.screenStatus = false;
-          })
       },
-
       changeCollapse() {
         this.isCollapse = !this.isCollapse;
       },
-
       lockScreen() {
         clearInterval(this.interval);
         this.interval = null;
@@ -995,7 +1019,6 @@
           }
         })
       },
-
       //获取积分总数
       getCredit() {
         this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
@@ -1004,7 +1027,6 @@
           }
         })
       },
-
       //喜报关闭
       glad_close() {
         this.gladFlag = false;

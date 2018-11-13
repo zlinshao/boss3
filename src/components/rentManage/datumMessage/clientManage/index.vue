@@ -62,7 +62,7 @@
               v-loading="rentLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(255, 255, 255, 0)"              
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-dblclick="dblClickTable"
               @row-contextmenu='openContextMenu'
               @row-click="clickTable"
@@ -86,32 +86,35 @@
                   <span v-if="scope.row.renters.length==0 && scope.row.lords.length>0">房东</span>
                   <span v-if="scope.row.renters.length>0 && scope.row.lords.length>0">租客/房东</span>
                   <span v-if="scope.row.renters.length==0 && scope.row.lords.length==0">暂无数据</span>
-                </template>     
+                </template>
               </el-table-column>
               <el-table-column
                 label="证件号">
                 <template slot-scope="scope">
                   <span v-if="scope.row.idcard">{{scope.row.idcard}}</span>
-                  <span v-else>暂无数据</span>       
-                </template>            
+                  <span v-else>暂无数据</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="个人/中介">
                 <template slot-scope="scope">
                   <span v-if="scope.row.is_agent == 0">个人</span>
                   <span v-if="scope.row.is_agent == 1">中介</span>
-                </template>                 
+                </template>
               </el-table-column>
               <el-table-column
                 label="负责人">
                 <template slot-scope="scope">
                   <span v-if="scope.row.user">{{scope.row.user.name}}</span>
                   <span v-else>暂无数据</span>
-                </template>    
+                </template>
               </el-table-column>
               <el-table-column
-                prop="date"
                 label="所属部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.org">{{scope.row.org.name}}</span>
+                  <span v-else>暂无数据</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -132,10 +135,10 @@
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>    
+               @clickOperate="clickEvent"></RightMenu>
     <Remind :remindDialog="remindDialog" :sendId="sendId" :totalNumber="num" :sendName="sendName" @close="closeRemind"></Remind>
     <CustomerDetail :customerDetailDialog="customerDetailDialog" :activeId="activeId" @close="closeModal"></CustomerDetail>
-    <Organization :organizationDialog="organizeDialog" :length="length" :type="type" 
+    <Organization :organizationDialog="organizeDialog" :length="length" :type="type"
                   @selectMember="selectMember" @close="closeOrganization"></Organization>
   </div>
 </template>
@@ -211,7 +214,7 @@ export default {
       }
       this.staff_name= '';
          this.sendId = "";
-        this.sendName = "";     
+        this.sendName = "";
     },
     // 人资搜索
     selectDep() {
@@ -277,14 +280,14 @@ export default {
     //客户信息
     getCustomer() {
       this.rentStatus = " ";
-      this.rentLoading = true;      
+      this.rentLoading = true;
       this.$http
         .get(globalConfig.server + "core/customer", { params: this.formInline })
         .then(res => {
           this.rentLoading = false;
           if (res.data.code === "10000") {
             this.tableData = res.data.data.data;
-            this.totalNumber = res.data.data.total;
+            this.totalNumber = res.data.data.count;
           }else{
             this.rentStatus = '暂无数据';
             this.totalNumber = 0;

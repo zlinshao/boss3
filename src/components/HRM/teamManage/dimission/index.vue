@@ -44,10 +44,14 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input placeholder="请选择" @focus="openOrgan('positionNames', 'depart')" v-model="params.orgNames"
-                              size="mini">
-                      <el-button slot="append" @click="emptyDepart('positionNames')">清空</el-button>
-                    </el-input>
+                    <el-select v-model="params.positionNames" >
+                      <el-option
+                        v-for="(item,index) in positionList"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.name"
+                        ></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -172,6 +176,7 @@
           orgNames: '',
           positionNames: '',
         },
+        positionList: []
       }
     },
     mounted() {
@@ -244,6 +249,7 @@
           orgNames: '',
           positionNames: '',
         };
+        this.positionList = [];
       },
       // 分页
       handleSizeChange(val) {
@@ -261,9 +267,22 @@
         this.organizeType = type;
         this.lengths = '';
       },
+      // openOrganOrg(val, type) {
+      //   this.organDivision = val;
+      //   this.organModule = true;
+      //   this.organizeType = type;
+      //   this.lengths = '';
+      // },
+      // openOrganName(val, type) {
+      //   this.organDivision = val;
+      //   this.organModule = true;
+      //   this.organizeType = type;
+      //   this.lengths = '';
+      // },
       // 清空部门
       emptyDepart(val) {
         this.params[val] = '';
+        this.positionList = [];
       },
       // 关闭组织架构
       closeOrgan() {
@@ -279,9 +298,20 @@
         this.params[organ] = [];
         for (let item of val) {
           arr.push(item.name);
+          this.getPositionList(item.id);
         }
         this.departName(arr, organ);
         this.dimissionList(this.params.page);
+      },
+      getPositionList(id) {
+        this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
+          if (res.data.code === '20000') {
+            console.log(res);
+            this.positionList = res.data.data.data;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        });
       },
       // 数组名称去重 拼接
       departName(arr, organ) {

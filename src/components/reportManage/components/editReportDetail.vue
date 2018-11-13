@@ -10,7 +10,7 @@
           <el-row v-if="JSON.stringify(show_content) !== '{}'">
             <el-col :span="18">
               <div class="personalInfo">
-                <div class="personalA">
+                <div class="personalA" v-if="personal">
                   <p @click="staffDetailDialog=true">
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
@@ -26,13 +26,15 @@
                 <div class="statuss"
                      :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}">
                 </div>
-                <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">本小区价格区间：{{priceRegion}}</div>
+                <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">
+                  本小区价格区间：{{priceRegion}}
+                </div>
               </div>
-              
+
               <div class="scroll_bar">
                 <el-row>
                   <el-col :span="12" v-if="suggestpriceStatus">
-                    <el-form-item  class="detailTitle" label="建议价格">
+                    <el-form-item class="detailTitle" label="建议价格">
                       <div class="special"><span style="color: red">{{suggest_price}}</span></div>
                     </el-form-item>
                   </el-col>
@@ -64,9 +66,9 @@
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
-                    
+
                   </el-col>
-                  
+
                   <!--图片-->
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
@@ -114,15 +116,15 @@
                     </div>
                     <div>
                       <span class="itemLabel">审批状态 : </span>
-                      <span class="itemContent">{{item.place.display_name}}</span>
+                      <!--<span class="itemContent">{{item.place.display_name}}</span>-->
                     </div>
                     <div>
                       <span class="itemLabel">报备人 : </span>
-                      <span class="itemContent">{{item.content.department_name}}</span>
+                      <span class="itemContent">{{item.content.staff_name}}</span>
                     </div>
                     <div>
                       <span class="itemLabel">所属部门 : </span>
-                      <span class="itemContent">{{item.user.name}}</span>
+                      <span class="itemContent">{{item.content.department_name}}</span>
                     </div>
                     <div>
                       <span class="itemLabel">报备时间 : </span>
@@ -149,17 +151,16 @@
                           <span v-for="(item,index) in value.user.org" v-if="index === 0">-{{item.name}}</span>
                         </div>
                         <div class="commentB">
-                          {{value.created_at}}
+                          {{value.create_time}}
                         </div>
                       </div>
                       <div class="commentC">
                           <span>
-                            {{value.body}}
+                            {{value.content}}
                           </span>
-                        <div>
-                          <p v-for="(p,index) in value.album">
-                            <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri"
-                                 v-if="!p.is_video">
+                        <div v-if="value.album && value.album['image_pic']">
+                          <p v-for="(p,index) in value.album['image_pic']">
+                            <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri">
                           </p>
                         </div>
                       </div>
@@ -295,7 +296,7 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="signaturebtn" type="success" v-if="signature">签&nbsp;章</el-button>
+        <el-button @click="signaturebtn" type="success" v-if="signature">确&nbsp;定</el-button>
         <el-button @click="sendElectronicReceipt" type="success" v-if="!signature">发送电子数据</el-button>
         <el-button @click="electronicReceiptVisible = false">取&nbsp;消</el-button>
       </span>
@@ -315,7 +316,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
-        <el-button size="small" type="primary" @click="manager">确定</el-button>
+        <el-button :disabled="!disabledBtn" size="small" type="primary" @click="manager">确定</el-button>
       </div>
     </el-dialog>
 
@@ -413,8 +414,8 @@
     },
     data() {
       return {
-        suggest_price:'',
-        suggestpriceStatus:false,
+        suggest_price: '',
+        suggestpriceStatus: false,
         pdfUrl: "",
         electronicReceiptStatu: true,//电子数据按钮显示
         electronicReceiptDisabled: true,//电子数据按钮禁用
@@ -423,6 +424,7 @@
         sendElectronicReceiptBtnText: "发送电子收据", //发送电子收据按钮文字
         electronicReceiptParam: {},//电子数据参数
         ElectronicReceiptBtnColor: "success",
+        pdfLoadingStatus: true,
         bank: {},//银行数据
         signature: true,//签章按钮显示隐藏
         pdfloading: true,//pdf加载
@@ -436,7 +438,8 @@
         is_receipt: "",//是否电子收据
         radioCity: "南京市",
         sendElectronicReceiptNumber: '',
-        address: globalConfig.server_user,
+        // address: globalConfig.server_user,
+        address: globalConfig.server,
         fullLoading: false,
         reportVisible: false,
         rentReport: false,
@@ -491,26 +494,28 @@
         staffDetailDialog: false,
         leader_phone: '',
         leader_name: '',
-        showPriceRange : false, //显示价格区间
-        priceRegion : '',
+        showPriceRange: false, //显示价格区间
+        priceRegion: '',
+        disabledBtn: true,
       }
     },
 
     watch: {
       place: {
-        handler(newval,oldval){
-          if (newval.name == "fund-master_review" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
-            if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" ||this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
+        handler(newval, oldval) {
+          // if (newval.name == "fund-master_review" && oldval.name == "market-marketing-manager_review" && this.is_receipt.id == "1") {
+          if (newval.status === "published" && oldval.name === "market-marketing-manager_review" && this.is_receipt.id === "1") {
+            if (this.bulletinType == "租房报备" || this.bulletinType == "公司转租报备" || this.bulletinType == "个人转租报备" || this.bulletinType == "调房报备" || this.bulletinType == "未收先租确定报备" || this.bulletinType == "已知未收先租报备" || this.bulletinType == "续租报备" || this.bulletinType == "尾款报备") {
               this.createElectronicReceipt()
             }
           }
         },
-        deep:true
-       
+        deep: true
       },
 
       module(val) {
         this.reportVisible = val;
+        this.btnStatus();
         if (!val) {
           this.approvalStatus = ""
         }
@@ -571,12 +576,12 @@
         }
       },
       //建议价格
-      getSuggestPrice(){
+      getSuggestPrice() {
         // console.log(this.houseId)
-        this.$http.get(globalConfig.server + 'coreproject/houses/suggestprice?house_id='+this.houseId).then((res) => {
-          
+        this.$http.get(globalConfig.server + 'coreproject/houses/suggestprice?house_id=' + this.houseId).then((res) => {
+
           if (res.data.code === "20010") {
-            this.suggest_price = res.data.data.suggest_price 
+            this.suggest_price = res.data.data.suggest_price
           } else {
             this.suggest_price = '没有价格'
           }
@@ -587,6 +592,7 @@
         // console.log(this.bank);
         // console.log({...this.electronicReceiptParam, ...this.bank});
         this.fullLoading = true;
+        this.pdfloading = true;
         this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20001') {
@@ -614,7 +620,8 @@
           if (res.data.code === "20000") {
             this.electronicReceiptId = res.data.data.id;
             this.pdfUrl = res.data.data.shorten_uri;
-            this.signature = true
+            this.signature = true;
+            this.pdfLoadingStatus = false
           } else {
             this.$notify.error({
               title: '错误',
@@ -626,13 +633,14 @@
       },
       //电子收据签章
       signaturebtn() {
-        // this.pdfloading = true;
+        this.pdfloading = true;
         this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
           if (res.data.code === "20000") {
-            // this.pdfloading = false;
-            // this.pdfUrl = res.data.data.shorten_uri;
-            this.directSendElectronicReceipt()
-            this.electronicReceiptVisible = false
+            this.pdfloading = false;
+            this.pdfUrl = res.data.data.shorten_uri;
+
+            // this.directSendElectronicReceipt()
+            // this.electronicReceiptVisible = false
             this.signature = false
           } else {
 
@@ -672,27 +680,22 @@
         });
       },
       //直接发送电子收据
-      directSendElectronicReceipt(){
+      directSendElectronicReceipt() {
         this.$http.post(globalConfig.server + '/financial/receipt/send/' + this.electronicReceiptId, {"phone": this.phone}).then((res) => {
-          console.log(res)
-          if (res.data.code=="20000") {
-            this.$message({
-              type: 'success',
-              message: res.data.msg
-            });
-          }else{
-            this.prompt('error',res.data.msg);
+          if (res.data.code === "20000") {
+            this.prompt('success', res.data.msg)
+          } else {
+            this.prompt('warning', res.data.msg);
           }
         })
       },
       getProcess() {
-        this.suggestpriceStatus = false
+        this.suggestpriceStatus = false;
         this.fullLoading = true;
         this.approvedStatus = false;
-        this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
+        this.$http.get(this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
-          console.log(res)
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
+          if (res.data.code === '20020' && res.data.data) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
@@ -709,23 +712,23 @@
 
             this.bulletinType = res.data.data.process.content.bulletin_name;
 
-            if(this.bulletinType === "租房报备"){
-              this.suggestpriceStatus = true
+            if (this.bulletinType === "租房报备") {
+              this.suggestpriceStatus = true;
               this.getSuggestPrice()
             }
 
             this.approvalStatus = pro.place.status;
-            if(pro.content.bulletin_type === "bulletin_quality" && pro.place.name === "appraiser-officer_review"){
+            if (pro.content.bulletin_type === "bulletin_quality" && pro.place.name === "appraiser-officer_review") {
               this.showPriceRange = true;
               let priceObj = {};
               priceObj.decorate = pro.content.decorate.id;
               priceObj.room = pro.content.house_type[0];
               priceObj.community = pro.content.community.id;
               this.priceArea(priceObj)
-            }else{
+            } else {
               this.showPriceRange = false;
             }
-            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" ||this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
+            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
 
               this.electronicReceiptStatu = true;
               this.bulletinId = res.data.data.process.id;
@@ -766,16 +769,16 @@
               this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
                 if (res.data.code === "20000") {
                   if (res.data.data.is_sent) {
-                    this.sendElectronicReceiptBtnText = "已发送电子收据";
-                    this.ElectronicReceiptBtnColor = "info"
+                    this.sendElectronicReceiptBtnText = "发送电子收据";
+                    this.ElectronicReceiptBtnColor = "success"
                   } else {
                     this.sendElectronicReceiptBtnText = "发送电子收据";
                     this.ElectronicReceiptBtnColor = "success"
                   }
                 }
               });
-              
-              if ((this.approvalStatus === "published"||(this.approvalStatus === "review"&&this.place.name==="fund-master_review")) && this.is_receipt.id == "1") {
+
+              if ((this.approvalStatus === "published" || (this.approvalStatus === "review" && this.place.name === "fund-master_review")) && this.is_receipt.id == "1") {
                 this.electronicReceiptDisabled = false
               } else {
                 this.electronicReceiptDisabled = true
@@ -802,15 +805,10 @@
         this.comments(this.reportId, val);
       },
       comments(val, page) {
-        this.$http.get(this.address + 'comments', {
-          params: {
-            id: val,
-            page: page,
-          }
-        }).then((res) => {
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
-            this.commentList = res.data.data;
-            this.paging = res.data.meta.total;
+        this.$http.get(this.address + `workflow/process/comment/${this.reportId}?process_id = ${val}`).then((res) => {
+          if (res.data.code === '20000' && res.data.data.length !== 0) {
+            this.commentList = res.data.data.data;
+            this.paging = res.data.data.count;
           } else {
             this.commentList = [];
             this.paging = 0;
@@ -829,51 +827,77 @@
 
       // 确认评论
       manager() {
-        if (this.form.operation !== 'to_comment') {
-          this.sureComment(this.form.operation);
-        } else {
-
-          if (this.form.comment !== '' || this.form.album.length !== 0) {
-            this.sureComment(this.form.operation);
+        if (this.disabledBtn) {
+          this.disabledBtn = false;
+          if (this.form.operation !== 'to_comment') {
+            if (this.form.comment !== '' || this.form.album.length !== 0) {
+              this.sureComment(this.form.operation);
+              this.antherControl(this.form.operation);
+            } else {
+              this.antherControl(this.form.operation);
+            }
           } else {
-            this.$notify.warning({
-              title: '警告',
-              message: '请填写评论内容！',
-            })
+            if (this.form.comment !== '' || this.form.album.length !== 0) {
+              this.sureComment(this.form.operation);
+            } else {
+              this.btnStatus();
+              this.prompt('warning', '请填写评论内容！');
+            }
           }
         }
       },
-
+      btnStatus() {
+        this.disabledBtn = true;
+      },
       sureComment(val) {
         if (this.picStatus) {
-          this.$http.put(this.address + 'process/' + this.reportId, this.form).then((res) => {
-            if (res.data.status === 'success') {
+          this.$http.post(this.address + `workflow/process/comment/${this.reportId}`, {
+            content: this.form.comment,
+            obj_id: this.reportId,
+            parent_id: 0,
+            video_file: [],
+            image_pic: this.form.album,
+            process_id: this.reportId
+          }).then((res) => {
+            if (res.data.code === '20000') {
               this.commentVisible = false;
               if (val === 'to_comment') {
                 this.comments(this.reportId, 1);
               } else {
                 this.getProcess(this.reportId);
-
               }
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message,
-              })
-
-
+              this.prompt('success', res.data.msg);
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.message,
-              })
+              this.prompt('warning', res.data.msg);
             }
+            this.btnStatus();
+          }).catch(_ => {
+            this.btnStatus();
           })
         } else {
-          this.$notify.warning({
-            title: '警告',
-            message: '图片上传中...',
-          })
+          this.btnStatus();
+          this.prompt('warning', '图片上传中...');
         }
+      },
+      antherControl(val) {
+        this.$http.post(this.address + `workflow/process/trans/${this.reportId}`, {
+          operation: val
+        }).then(res => {
+          if (res.data.code === '20000') {
+            this.prompt('success', res.data.msg);
+            this.commentVisible = false;
+            this.getProcess();
+            this.btnStatus();
+          } else {
+            this.prompt('warning', res.data.msg);
+            this.commentVisible = false;
+            this.getProcess();
+            this.btnStatus();
+          }
+        }).catch(err => {
+          this.btnStatus();
+          console.log(err);
+        })
       },
       close_() {
         this.isClear = true;
@@ -892,10 +916,10 @@
       //获取报备相关信息
       getReportAboutInfo() {
         this.isLoading = true;
-        this.$http.get(globalConfig.server_user + 'process?house_id=' + this.houseId).then((res) => {
+        this.$http.get(this.address + 'workflow/process?house=' + this.houseId).then((res) => {
           this.isLoading = false;
-          if (res.data.status === 'success') {
-            this.reportAboutData = res.data.data;
+          if (res.data.code === '20000') {
+            this.reportAboutData = res.data.data.data;
           } else {
             this.reportAboutData = [];
           }
@@ -973,7 +997,7 @@
         this.changeRentReport = false;
         this.rwcRentReport = false;
         this.rwcConfirmRentReport = false;
-        
+
         if (val === 'success') {
           this.getProcess();
           this.getReportEditInfo();
@@ -985,7 +1009,6 @@
         this.$http.get(globalConfig.server + 'bulletin/quality/range', {
           params: price,
         }).then((res) => {
-          console.log(res);
           this.priceRegion = res.data.priceMin + '~' + res.data.priceMax + '元';
         });
       },

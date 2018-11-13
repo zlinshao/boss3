@@ -6,7 +6,7 @@
           <el-button type="primary" size="mini" :disabled="btnDisable" @click="openOrganizeModal">分配</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
-          <!-- <el-button type="primary" size="mini" :disabled="btnDisable" @click="mergeBtn" >合并</el-button> -->
+          <el-button type="primary" size="mini" :disabled="btnDisable" @click="mergeBtn" >合并</el-button>
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -16,8 +16,8 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-radio v-model="form.keyword_type" label="1">部门</el-radio>
             <el-radio v-model="form.keyword_type" label="0">小区</el-radio>
+            <el-radio v-model="form.keyword_type" label="1">部门</el-radio>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
@@ -263,7 +263,7 @@
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList" :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
 
-    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch> 
+    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
 
      <!-- 组织架构 -->
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization"></organization>
@@ -275,7 +275,7 @@ import RightMenu from "../../../common/rightMenu.vue"; //右键
 import VillageModule from "./villageModule";
 import VillageSearch from "../../../common/villageSearch";
 import { setTimeout, clearTimeout } from "timers";
-import organization from "../../../common/organization"; //组织架构 
+import organization from "../../../common/organization"; //组织架构
 
 export default {
   name: "hello",
@@ -288,7 +288,7 @@ export default {
       deletedBtn: true, // 删除按钮
       checkList: [],
       cityDate: [
-       { 
+       {
           city: [],
           country: []
        }
@@ -344,7 +344,7 @@ export default {
         area: "",
         region: "",
         a: "list",
-        keyword_type: '1',
+        keyword_type: '0',
       },
       tableData: [],
 
@@ -394,7 +394,7 @@ export default {
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
           this.communityArr.push(item.id)
-        } 
+        }
       })
       this.pitch = val[0].id;
       if(val.length == 1) {
@@ -504,12 +504,12 @@ export default {
           this.newCityList = res.data.data;
         }
       })
-      
+
     },
     // 新的区县搜索
     newChooseCountry(val,id, index) {
       this.ind3 = "";
-      this.organization = val.org_id;  
+      this.organization = val.org_id;
       this.ind2 = index;                    // 样式切换
       this.form.region = "";
       this.form.area = "";
@@ -752,7 +752,7 @@ export default {
 
     // 删除
     openDelete() {
-      this.$confirm("此操作将删除该小区, 是否继续?", "提示", {
+      this.$confirm("此操作将删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -869,7 +869,7 @@ export default {
       position: absolute;
       bottom: 0;
       right: 0;
-     
+
     }
   }
   .el-table .cell {

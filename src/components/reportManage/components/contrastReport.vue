@@ -127,9 +127,9 @@
     methods:{
       getData(){
         this.isLoading = true;
-        this.$http.get(globalConfig.server_user + 'process/' + this.aboutReportId).then((res) => {
+        this.$http.get(globalConfig.server + 'workflow/process/' + this.aboutReportId).then((res) => {
           this.isLoading = false;
-          if (res.data.status === 'success' && res.data.data.length !== 0) {
+          if (res.data.code === '20020' && res.data.data) {
             this.aboutReportData = JSON.parse(res.data.data.process.content.show_content_compress);
           } else {
             this.aboutReportData = {};

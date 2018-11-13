@@ -21,12 +21,12 @@
         <el-table-column
           label="房屋地址">
           <template slot-scope="scope">
-            <span v-if="scope.row.construct">
-              <span v-if="scope.row.construct.house">
-                {{scope.row.construct.house.name}}
+            <span v-if="scope.row.address">
+              <span v-if="scope.row.address">
+                {{scope.row.address}}
               </span>
             </span>
-            <span v-if="!scope.row.construct">暂无</span>
+            <span v-if="!scope.row.address">暂无</span>
           </template>
         </el-table-column>
         <el-table-column

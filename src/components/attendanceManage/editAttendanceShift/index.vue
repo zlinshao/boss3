@@ -22,7 +22,7 @@
       <!-- 分页 -->
       <div class="block pages">
         <!--  :current-page="" :page-size="params.limit" -->
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[10, 20, 30,40]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12, 24, 36]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dataTotal">
         </el-pagination>
       </div>
       <!-- 编辑考勤班次 -->
@@ -260,7 +260,7 @@ export default {
       dataTotal: 0, // 总数据
       checkTitle: true, // 编辑头部
       params: {
-        limit: 15,
+        limit: 12,
         page: 1
       },
       form: {
@@ -311,7 +311,7 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
-      
+
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {

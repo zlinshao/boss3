@@ -45,19 +45,45 @@
                   <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <!-- <el-col :span="8">
                 <el-form-item label="工单编号">
                   <div class="content">
                     <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
                     <span v-if="!workOrderDetail.num">暂无</span>
                   </div>
                 </el-form-item>
+              </el-col> -->
+              <el-col :span="8">
+                <el-form-item label="合同编号">
+                  <div class="content">
+                    <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
+                    <span v-if="!workOrderDetail.num">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              
+              <el-col :span="8">
+                <el-form-item label="工单类型">
+                  <div class="content">{{workOrderDetail.types}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8"  v-if="isComplainOrder">
+                <el-form-item label="投诉类型">
+                  <div class="content">{{workOrderDetail.complainType}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8"  v-if="isComplainOrder">
+                <el-form-item label="投诉渠道">
+                  <div class="content">{{workOrderDetail.complainChannel}}</div>
+                </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="下次跟进人">
+                <el-form-item label="紧急程度">
                   <div class="content">
-                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
-                    <span v-if="!workOrderDetail.follows">暂无</span>
+                    <span v-if="workOrderDetail.emergency === 1">一般</span>
+                    <span v-if="workOrderDetail.emergency === 2">紧急</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -72,12 +98,15 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="工单类型">
-                  <div class="content">{{workOrderDetail.types}}</div>
+                <el-form-item label="下次跟进人">
+                  <div class="content">
+                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
+                    <span v-if="!workOrderDetail.follows">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="跟进时间">
+                <el-form-item label="下次跟进时间">
                   <div class="content">
                     <span v-if="workOrderDetail.follow_time">{{workOrderDetail.follow_time}}</span>
                     <span v-if="!workOrderDetail.follow_time">暂无</span>
@@ -85,15 +114,9 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="紧急程度">
-                  <div class="content">
-                    <span v-if="workOrderDetail.emergency === 1">一般</span>
-                    <span v-if="workOrderDetail.emergency === 2">紧急</span>
-                  </div>
-                </el-form-item>
-              </el-col>
+              
               <el-col :span="8" v-if="workOrderDetail.follow_status === 338">
                 <el-form-item label="完成时间">
                   <div class="content">
@@ -115,13 +138,24 @@
             </el-row>
             <el-row>
               <el-col :span="24" v-if="workOrderDetail.album">
-                <el-form-item label="截图">
+                <el-form-item label="照片">
                   <img v-if="workOrderDetail.album.image_pic !== []" data-magnify
                        v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri"
                        alt="">
                 </el-form-item>
               </el-col>
             </el-row>
+
+
+
+
+
+
+
+
+
+
+
             <div class="follow_result">
               <div class="title">跟进结果</div>
               <el-button type="text" size="small" @click="addResult(workOrderDetail.id)" :disabled="workOrderDetail.follow_status === 338">
@@ -231,8 +265,9 @@
                   </el-col>
                   <el-col :span="24" v-if="item.img">
                     <el-form-item label="截图">
-                      <img v-if="val.length > 0" data-magnify
+                      <img v-if="Object.keys(item.img.image_pic)[0] !== '' && val.length > 0" data-magnify
                            v-for="val in item.img.image_pic" :data-src="val[0].uri" :src="val[0].uri">
+                           <span v-else>没有上传图片</span>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -241,7 +276,69 @@
             <div class="content" v-else style="text-align: center;line-height: 30px">
               暂无数据
             </div>
-          </el-form>
+
+
+            <!-- <div class="accountability_result">
+              <div class="title">认责结果</div>
+              <el-button type="text" size="small" @click="addResult(workOrderDetail.id)" :disabled="workOrderDetail.follow_status === 338">
+                <i class="el-icon-plus"></i>编辑认责结果
+              </el-button>
+            </div>
+            <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks"> -->
+                <el-row v-for="(item,index) in workOrderDetail.remarks" :key="item.id"
+                        v-if="index == workOrderDetail.remarks.length - 1"
+                        class="remarks">
+                  <el-col :span="12">
+                    <el-form-item label="跟进时间">
+                      <div class="content">
+                        <span v-if="item.create_time">{{item.create_time}}</span>
+                        <span v-if="!item.create_time">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进人">
+                      <div class="content">
+                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
+                        <span v-if="!item.simple_staff">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="下次跟进时间">
+                      <div class="content">
+                        <span v-if="item.next_follow_time">{{item.next_follow_time}}</span>
+                        <span v-if="!item.next_follow_time">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进状态">
+                      <div class="content">
+                        <span v-if="item.follow_status">{{item.follow_status}}</span>
+                        <span v-if="!item.follow_status">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进结果">
+                      <div class="content">
+                        <span v-if="item.content">{{item.content}}</span>
+                        <span v-if="!item.content">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="下次跟进人">
+                      <div class="content">
+                        <span v-if="item.next_follow_name">{{item.next_follow_name}}</span>
+                        <span v-if="!item.next_follow_name">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+          <!-- </el-form> -->
         </div>
       </div>
     </el-dialog>
@@ -278,12 +375,17 @@
           next_follow_id: '',//下次跟进人
           content: '',//跟进结果
           album: '',//图片
+          
         },
+        complainChannel:'',              //投诉渠道
+        complainType : '',               //投诉类型
         organizationDialog: false,
         length: 0,
         type: '',
         workOrderLoading: false,
         house_name: '',
+        isComplainOrder: false, //是否未投诉单
+        complainTypes :['A类：原则性投诉', 'B类:重大投诉', 'C类:一般性投诉(被动)', 'D类：一般性投诉(主动)'],            //投诉类型
       };
     },
     watch: {
@@ -354,7 +456,22 @@
         this.$http.get(globalConfig.server + 'customer/work_order/' + this.wordData.id).then((res) => {
           this.workOrderLoading = false;
           if (res.data.code === "10020") {
+           
+            
+            if(res.data.data.type === 699){
+              this.isComplainOrder = true;
+            }else{
+              this.isComplainOrder = false;
+              this.complainType = '';
+              this.complainChannel = '';
+            }
             this.workOrderDetail = res.data.data;
+             console.log(this.workOrderDetail, "22222");
+            for(var item in this.workOrderDetail.album.image_pic){
+              if(!this.workOrderDetail.album.image_pic[item].length){
+                delete this.workOrderDetail.album.image_pic[item]
+              }
+            }
           }
         });
       },
@@ -433,7 +550,7 @@
       border-radius: 6px;
       margin: 0 10px 10px 0;
     }
-    .follow_result {
+    .follow_result,.accountability_result{
       display: flex;
       justify-content: space-between;
     }

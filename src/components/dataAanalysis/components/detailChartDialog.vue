@@ -13,12 +13,11 @@
         <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
         <span>{{detailData.name}}</span>
         </div>
-        <toprightcontrol 
-          :cardData="detailData" 
-          :btnstatus="btnstatus"
-          :diaStatus="true">
+        <toprightcontrol
+          :cardData="detailData"
+          :btnstatus="btnstatus">
         </toprightcontrol>
-        
+
       </div>
       <div class="detailcontent">
         <div class="contentTop">
@@ -60,7 +59,7 @@
                     :value="item.id">
                   </el-option>
                 </el-select>
-              </div>   
+              </div>
             </el-col>
               <!-- 开始日期 -->
             <el-col :span="8" v-if="detailData.name=='空置期抵消差额'?false:true">
@@ -68,7 +67,6 @@
                 <el-date-picker
                   size="small"
                   v-model="selectDate"
-                  unlink-panels
                   :picker-options="pickerOptions"
                   type="daterange"
                   value-format="yyyy-MM-dd"
@@ -99,11 +97,11 @@
           </el-row>
         </div>
         <div class="content">
-         <component 
-          :is="detailData.chart_set[0].type" 
-          :chartData="detailData" 
-          :chartStyle="chartstyle" 
-          :params="params" 
+         <component
+          :is="detailData.chart_set[0].type"
+          :chartData="detailData"
+          :chartStyle="chartstyle"
+          :params="params"
           ref="chartComp"
           :status="true"
           v-if="detailData.chart_set"
@@ -126,7 +124,7 @@
   import stackedPercentageColumn from "../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
   // import textCard from "../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../wareHouseData/chart/tableCard.vue"            //表格卡片
-  
+
     export default {
       name:"detailChartDialog",
       components:{
@@ -231,21 +229,20 @@
         },
         getList(val,id){
           if(val=='city'){
-            this.$http.get(globalConfig.server_user+"organizations?parent_id=331&per_page_number=50").then((res) => {          
-              
-              if(res.data.status_code == 200){
+            this.$http.get(globalConfig.server+"organization/other/org-tree?id=331").then((res) => {
+              if(res.data.code == "20000"){
                 this.cityOption = res.data.data
               }
             });
           }else if(val=="area"){
-            this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-              if(res.data.status_code == 200){
+            this.$http.get(globalConfig.server+"organizationsorganization/other/org-tree?id="+id).then((res) => {
+              if(res.data.code == "20000"){
                 this.areaOption = res.data.data
               }
             });
           }else if(val=="group"){
-            this.$http.get(globalConfig.server_user+"organizations?parent_id="+id+"&per_page_number=50").then((res) => {          
-              if(res.data.status_code == 200){
+            this.$http.get(globalConfig.server+"organization/other/org-tree?parent_id="+id).then((res) => {
+              if(res.data.code == "20000"){
                 this.groupOption = res.data.data
               }
             });
@@ -260,19 +257,19 @@
             this.params.group = this.placeForm.group
             this.params.start_date = this.selectDate[0]
             this.params.end_date = this.selectDate[1]
-           
+
             this.$refs.chartComp.getChart(this.params,"default")
             // console.log(this.$refs.topright)
             // this.$nextTick
-            
-            
+
+
         },
         // getNewDate(){
         //   var date =  new Date()
         //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
         //   var year = lastdate.getFullYear();
-        //   var month = lastdate.getMonth()+1; 
-        //   var day = lastdate.getDate(); 
+        //   var month = lastdate.getMonth()+1;
+        //   var day = lastdate.getDate();
         //   this.params.start_date = year + '-' +month + '-' + day
         //   this.params.end_date = year + '-' +month + '-' + day
         //   this.params.date = year + '-' +month + '-' + day
@@ -281,7 +278,7 @@
       watch:{
         modules(val){
           this.detaildialogVisible = val
-          
+
         },
         detaildialogVisible(val){
           this.params = JSON.parse(JSON.stringify(chartParams))
@@ -311,7 +308,7 @@
 			mounted(){
         this.getList('city')
       }
-      
+
     }
 </script>
 <style scoped lang="scss">
@@ -336,7 +333,7 @@
     margin-top:30px;
     padding: 0 50px;
   }
-   
+
 }
 </style>
 <style lang="scss">
