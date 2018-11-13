@@ -1105,7 +1105,7 @@
         departManageName: '',
         selectPostID: '',
         selectOrgID: '',
-        growthData: '',
+        growthData: [],
         currentDuty: '',
         currentPosi: '',
         gender: '',
@@ -1241,10 +1241,10 @@
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
           console.log(res);
-          this.getDuty(res.data.data.id,true);
-          if(res.data.data.detail.recommender){
-            this.getDuty(res.data.data.detail.recommender,false);
-          }else{
+          this.getDuty(res.data.data.id, true);
+          if (res.data.data.detail.recommender) {
+            this.getDuty(res.data.data.detail.recommender, false);
+          } else {
             this.recommender = "暂无";
           }
           this.staffDetailData = {};
@@ -1286,83 +1286,87 @@
         });
         //成长轨迹
         this.$http.get(globalConfig.server + 'manager/staff/growth/' + row.id).then((res) => {
-          this.growthData = res.data.data;
+          if (res.data.code === '10070') {
+            this.growthData = res.data.data;
+          } else {
+            this.growthData = [];
+          }
         });
       },
       //获取职位岗位
-      getDuty (user_id,status){
-        this.$http.get(globalConfig.server + 'hrm/User/userInfo',{
-          params:{
+      getDuty(user_id, status) {
+        this.$http.get(globalConfig.server + 'hrm/User/userInfo', {
+          params: {
             user_id
           }
-        }).then(res =>{
-          if(res.status === 200){
-            if(res.data.code == 90010){
-              if(status){
+        }).then(res => {
+          if (res.status === 200) {
+            if (res.data.code == 90010) {
+              if (status) {
                 this.currentDuty = res.data.data.dutyInfoNames;
                 this.currentPosi = res.data.data.positionInfoNames;
                 this.dict(res);
-              }else{
+              } else {
                 this.recommender = res.data.data.name;
               }
             }
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
-      dict (res){
+      dict(res) {
         this.dictionary(228, 1).then(result => {// 性别
-          result.data.map((item,index)=>{
-            if(res.data.data.gender){
-              if(item.id === res.data.data.gender){
+          result.data.map((item, index) => {
+            if (res.data.data.gender) {
+              if (item.id === res.data.data.gender) {
                 this.gender = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.gender = "暂无";
             }
           })
         });
         this.dictionary(231, 1).then(result => {// 生育状况
-          result.data.map((item,index)=>{
-            if(res.data.data.fertility_status){
-              if(item.id == res.data.data.fertility_status){
+          result.data.map((item, index) => {
+            if (res.data.data.fertility_status) {
+              if (item.id == res.data.data.fertility_status) {
                 this.fertility_status = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.fertility_status = "暂无";
             }
           })
         });
         this.dictionary(33, 1).then(result => {// 婚姻状况
-          result.data.map((item,index)=>{
-            if(res.data.data.marital_status){
-              if(item.id == res.data.data.marital_status){
+          result.data.map((item, index) => {
+            if (res.data.data.marital_status) {
+              if (item.id == res.data.data.marital_status) {
                 this.marital_status = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.marital_status = "暂无";
             }
           })
         });
         this.dictionary(38, 1).then(result => {// 政治面貌
-          result.data.map((item,index)=>{
-            if(res.data.data.political_status){
-              if(item.id == res.data.data.political_status){
+          result.data.map((item, index) => {
+            if (res.data.data.political_status) {
+              if (item.id == res.data.data.political_status) {
                 this.political_status = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.political_status = "暂无";
             }
           })
         });
         this.dictionary(39, 1).then(result => {
-          result.data.map((item,index)=>{
-            if(res.data.data.education){
-              if(item.id == res.data.data.education){
+          result.data.map((item, index) => {
+            if (res.data.data.education) {
+              if (item.id == res.data.data.education) {
                 this.education = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.education = "暂无";
             }
           })
@@ -1725,7 +1729,7 @@
           this.sendLeaveMsgDialog = true;
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
-        }else if ( val.clickIndex ==='remove_power'){
+        } else if (val.clickIndex === 'remove_power') {
           this.RemovePowerModule = true;
           this.RemovePowerData = val.data;
         }
