@@ -1034,6 +1034,7 @@
           page: 1,
           org_id: 1,
           is_dimission: '',
+          infinite: 20,         //需要权限
           forward: '',
           is_recursion: 1,
           entry_time: [],
@@ -1054,7 +1055,9 @@
           limit: 5,
           page: 1,
         },
-
+        paramsOrg: {
+          infinite: 20,
+        },
         staffTableData: [],    //员工列表
         positionTableData: [], //岗位列表
         positionList: [],      //职位列表
@@ -1388,7 +1391,9 @@
       getDepart() {
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(globalConfig.server + 'organization/org/1').then((res) => {
+        this.$http.get(globalConfig.server + 'organization/org/1', {
+          params: this.paramsOrg
+        }).then((res) => {
           this.collectLoading = false;
           if (res.data.code === '20020') {
             this.setTree = [];
