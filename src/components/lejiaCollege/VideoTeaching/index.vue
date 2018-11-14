@@ -12,9 +12,9 @@
       <el-main>
         <!-- 内容 -->
         <div class="videoList" v-for="(item, index) in videoData" :key="index">
-          <video ref="video" controls :src="item.file"></video>
+          <video ref="video" controls controlsList='nodownload' :src="item.file"></video>
           <input type="checkbox" :value="item.id" v-model="checkData">
-          <!-- <span>播放时长：{{item.duration}}</span> -->
+          <span class="name">视屏名称：{{item.video_name}}</span>
           <span class="num">播放次数：{{item.play_count}}</span>
         </div>
         <div class="noNum" v-if="videoData.length==0">暂无数据</div>
@@ -35,7 +35,22 @@
         <!-- 上传 -->
         <div class="uploadVideo">
           <el-dialog title="上传视屏" :visible.sync="uploadVideo" width="30%">
-            <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+            <el-form>
+              <el-row>
+                <el-col>
+                  <el-form-item label="视屏名称" required>
+                    <el-input v-model="videoName"></el-input>
+                  </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="上传视屏" required>
+                  <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="release" size="mini">发布</el-button>
               <el-button @click="uploadVideo = false" size="mini">取 消</el-button>
@@ -60,11 +75,13 @@ export default {
       videoData: [], // 视屏数据
       checkData: [], // 双向数据绑定的数组
       dialogImageUrl: "", //
+      videoName: "",
       form: {
         page: 1,
         limit: 12,
         file_id: "",
-        classify_id: ""
+        classify_id: "",
+        video_name: ""
       },
       videoAlbumId: "" //视屏分类id
     };
@@ -120,12 +137,13 @@ export default {
       val[1].forEach((item, index) => {
         arr.push(item);
       });
-      this.form.file_id = arr;
+      this.form.file_id = arr[0].toString();
       this.picStatus = !val[2];
     },
     // 发布
     release() {
       this.form.classify_id = this.videoAlbumId;
+      this.form.video_name = this.videoName;
       this.$http
         .post(globalConfig.server + "video/upload-video", this.form)
         .then(res => {
@@ -201,10 +219,20 @@ export default {
       width: 100%;
       border: 1px solid gray;
     }
+    .name {
+       position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
     .num {
       position: absolute;
       bottom: 20px;
       right: 20px;
+    }
+  }
+  .uploadVideo {
+    .el-input {
+      width: 80%;
     }
   }
   .deletedInfo {
