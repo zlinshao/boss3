@@ -520,13 +520,13 @@
       'examineesForm.from': {
         deep: true,
         handler(val, oldVal) {
-          this.getExaminees();
+          // this.getExaminees();
         }
       },
       'examineesForm.approved': {
         deep: true,
         handler(val, oldVal) {
-          this.getExaminees();
+          // this.getExaminees();
         }
       },
       examDialog(val) {
