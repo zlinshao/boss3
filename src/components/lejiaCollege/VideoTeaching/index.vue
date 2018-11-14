@@ -230,6 +230,11 @@ export default {
       right: 20px;
     }
   }
+  .uploadVideo {
+    .el-input {
+      width: 80%;
+    }
+  }
   .deletedInfo {
     span {
       text-align: center;

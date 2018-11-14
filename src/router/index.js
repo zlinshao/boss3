@@ -376,7 +376,7 @@ export default new Router({
         {path: '/leaveOffice', component: LeaveOffice, name: '离职短信'},
 
         // 视屏管理
-        { path: '/VideoTeaching', component: VideoTeaching, name: '视屏管理', meta: { keepAlive: true }},
+        { path: '/VideoTeaching', component: VideoTeaching, name: '视频管理', meta: { keepAlive: true }},
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
