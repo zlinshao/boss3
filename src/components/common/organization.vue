@@ -116,6 +116,7 @@
           limit: 20,
           page: 1,
           keywords: '',
+          infinite: 20,
           org_id: this.depart,
         },
         staffList: [],            // 员工列表
@@ -197,7 +198,7 @@
         this.fullLoading = true;
         this.list = [];
         this.pitchOnData = id === this.depart ? [] : this.pitchOnData;
-        this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
+        this.$http.get(this.url + 'organization/other/org-tree?id=' + id + '#infinite=20').then(res => {
           this.fullLoading = false;
           this.parent_id = id;
           this.rightHeight();
