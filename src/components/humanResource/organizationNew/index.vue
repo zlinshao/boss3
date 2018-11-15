@@ -141,7 +141,6 @@
                         </el-col>
                       </el-row>
                     </el-col>
-                    s
                     <el-col :span="12">
                       <el-row>
                         <el-col :span="8">

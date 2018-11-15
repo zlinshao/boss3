@@ -368,7 +368,7 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="organizationType"
-                  @selectMember="selectMember" @close="closeModal"></Organization>
+                  @selectMember="selectMember" @close="closeModal" :ids="hhhhhh"></Organization>
 
     <EditHouseInfo :editHouseDialog="editHouseDialog" :houseDetail="houseDetail" :houseId="houseId"
                    @close="closeModal"></EditHouseInfo>
@@ -496,6 +496,7 @@
         houseStatus: {},
         operateArray: [],    //选中数组
         organizationType: '',
+        hhhhhh: '',
         changeHouseStatus: false,
 
         mergeParams: {id: ''},
@@ -607,9 +608,10 @@
 
       //选人模态框
       openOrganizationModal(val) {
+        this.hhhhhh = [9, 88];
         this.organizationDialog = true;
         this.organizationType = val;
-        this.length = 1;
+        this.length = '';
       },
       emptyOrganization() {
         this.formInline.org_id = '';
