@@ -168,7 +168,7 @@ export default {
     // 发布
     release() {
       this.form.classify_id = this.videoAlbumId;
-      this.form.video_name = this.videoName;
+      this.form.video_name = this.params.video_name;
       this.$http
         .post(globalConfig.server + "video/upload-video", this.form)
         .then(res => {
