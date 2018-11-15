@@ -58,7 +58,7 @@
               <el-row>
                 <el-col>
                   <el-form-item label="视屏名称" required>
-                    <el-input v-model="params.video_name"></el-input>
+                    <el-input v-model="form.video_name"></el-input>
                   </el-form-item>
                 </el-col>
             </el-row>
@@ -162,13 +162,12 @@ export default {
       val[1].forEach((item, index) => {
         arr.push(item);
       });
-      this.form.file_id = arr[0].toString();
+      this.form.file_id = arr[0];
       this.picStatus = !val[2];
     },
     // 发布
     release() {
       this.form.classify_id = this.videoAlbumId;
-      this.form.video_name = this.params.video_name;
       this.$http
         .post(globalConfig.server + "video/upload-video", this.form)
         .then(res => {
@@ -210,6 +209,8 @@ export default {
     editName() {
       this.params.video_id = this.checkData[0];
       this.$http.post(globalConfig.server + "video/edit-video",this.params).then(res => {
+        console.log(res, "111111");
+        
         if(res.data.code == "10000") {
           this.$notify.success({
             title: "成功",
