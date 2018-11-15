@@ -949,7 +949,8 @@
         rentFeedback: {},
         houseData: {},
         cities: [], //城市
-        showGroups: ['南京马群组','南京仙林一组','南京仙林二组','南京四区集庆门组','南京殷巷组','南京四区新街口组']
+        showGroups: ['南京马群组','南京仙林一组','南京仙林二组','南京四区集庆门组','南京殷巷组',
+          '南京四区新街口组','南京小龙湾组','南京二区苜蓿园组','杭州一区萧山钱江世纪城组','苏州二区相城1组','苏州三区一组、花桥组','苏州三区二组','苏州三区三组','苏州三区四组']
       }
     },
     mounted() {
@@ -1028,11 +1029,14 @@
     methods: {
       collectHouse(scope,type) {
         var arr = this.showGroups;
-        arr.map((item,index,array)=>{
-          if(this.showGroups.search(item) != -1){
-
-          }
-        })
+        if(!scope.row.department_name){
+          return false;
+        }
+        var departName = scope.row.department_name;
+        if(departName.indexOf('南京马群组')){
+          return true;
+        }
+        return false;
       },
       closeModal(val) {
         this.editRentInfoDialog = false;
