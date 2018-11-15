@@ -396,7 +396,9 @@ export default {
           this.communityArr.push(item.id)
         }
       })
-      this.pitch = val[0].id;
+      if(val.length) {
+        this.pitch = val[0].id;
+      }
       if(val.length == 1) {
         this.deletedBtn = false;
       } else {
