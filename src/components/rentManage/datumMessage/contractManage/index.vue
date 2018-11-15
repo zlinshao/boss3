@@ -1027,16 +1027,12 @@
       }
     },
     methods: {
-      collectHouse(scope,type) {
-        var arr = this.showGroups;
-        if(!scope.row.department_name){
+      collectHouse(scope) {
+        if(scope.row.department_name == '南京三区一组'){
+          return true;
+        }else {
           return false;
         }
-        var departName = scope.row.department_name;
-        if(departName.indexOf('南京马群组')){
-          return true;
-        }
-        return false;
       },
       closeModal(val) {
         this.editRentInfoDialog = false;
@@ -1046,7 +1042,6 @@
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.addFollowUpDialog = false;
-
         if (val === 'updateCollect') {
           this.collectDatafunc();
         } else if (val === 'updateRent') {
@@ -1172,6 +1167,7 @@
           this.rentLoading = false;
           if (res.data.code === '61010') {
             this.rentData = res.data.data;
+            console.log(this.rentData);
             this.totalNumbers = res.data.meta.total;
 
             let collectIdArray = '';
