@@ -1553,8 +1553,8 @@
         //is_enable 有值禁用 is_on_job 离职
         if (row.is_enable && row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1563,8 +1563,8 @@
           ];
         } else if (!row.is_enable && row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1573,8 +1573,8 @@
           ];
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1583,8 +1583,8 @@
           ];
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
