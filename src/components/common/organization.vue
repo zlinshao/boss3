@@ -154,6 +154,7 @@
           //   }
           // }
           // });
+          console.log(this.ids);
           if (this.ids) {
             this.allDepart(this.ids);
           }

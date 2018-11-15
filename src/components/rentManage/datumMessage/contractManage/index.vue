@@ -324,9 +324,7 @@
                   <el-table-column width="40" align="center">
                     <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="false">
                         <b style="color: red;">新</b>
                       </span>
                     </template>
@@ -487,9 +485,7 @@
                   <el-table-column width="40" align="center">
                     <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="false">
                         <b style="color: red;">新</b>
                       </span>
                     </template>
@@ -952,7 +948,7 @@
         collectFeedback: {},
         rentFeedback: {},
         houseData: {},
-        cities: [],                     //城市
+        cities: [], //城市
       }
     },
     mounted() {
@@ -1037,7 +1033,6 @@
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.addFollowUpDialog = false;
-
         if (val === 'updateCollect') {
           this.collectDatafunc();
         } else if (val === 'updateRent') {
@@ -1163,6 +1158,7 @@
           this.rentLoading = false;
           if (res.data.code === '61010') {
             this.rentData = res.data.data;
+            console.log(this.rentData);
             this.totalNumbers = res.data.meta.total;
 
             let collectIdArray = '';

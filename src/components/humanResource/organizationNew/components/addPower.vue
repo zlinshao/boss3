@@ -1,6 +1,6 @@
 <template>
   <div id="addPower">
-    <el-dialog :close-on-click-modal="false" title="权限" :visible.sync="powerVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="角色" :visible.sync="powerVisible" width="60%">
       <el-form size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;">
         <el-row>
           <el-col :span="8">
