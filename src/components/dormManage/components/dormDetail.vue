@@ -60,7 +60,7 @@
                 <span v-if="item.remarks"><b>备注：</b>{{item.remarks}}</span>
               </div>
               <div v-else-if="item.operate_type==2">
-                <span><b>入住时间</b>：{{item.operate_content.guests&&item.operate_content.guests[0].live_time}}；</span>
+                <span><b>入住时间</b>：{{item.operate_content.guests&&item.operate_content.guests.length>0 && item.operate_content.guests[0].live_time}}；</span>
                 <span>
                   <span>入住{{item.operate_content.total}}人，入住人员是</span>
                   <span v-for="number in item.operate_content.guests">
