@@ -324,9 +324,7 @@
                   <el-table-column width="40" align="center">
                     <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="collectHouse(scope,'collect')">
                         <b style="color: red;">新</b>
                       </span>
                     </template>
@@ -487,9 +485,7 @@
                   <el-table-column width="40" align="center">
                     <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="collectHouse(scope,'rent')">
                         <b style="color: red;">新</b>
                       </span>
                     </template>
@@ -952,7 +948,8 @@
         collectFeedback: {},
         rentFeedback: {},
         houseData: {},
-        cities: [],                     //城市
+        cities: [], //城市
+        showGroups: ['南京马群组','南京仙林一组','南京仙林二组','南京四区集庆门组','南京殷巷组','南京四区新街口组']
       }
     },
     mounted() {
@@ -1029,6 +1026,14 @@
       }
     },
     methods: {
+      collectHouse(scope,type) {
+        var arr = this.showGroups;
+        arr.map((item,index,array)=>{
+          if(this.showGroups.search(item) != -1){
+
+          }
+        })
+      },
       closeModal(val) {
         this.editRentInfoDialog = false;
         this.editAddressDialog = false;
