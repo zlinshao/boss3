@@ -385,7 +385,7 @@
       },
       // 职务
       duties(id) {
-        this.$http.get(this.url + 'manager/position?department_id=' + id).then(res => {
+        this.$http.get(this.url + 'organization/duty?org_id=' + id).then(res => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach(item => {
               this.duty.push(item);
@@ -426,7 +426,7 @@
         }
       },
       quarters(id) {
-        this.$http.get(this.url + 'manager/positions?type=' + id).then(res => {
+        this.$http.get(this.url + 'organization/position?duty_id=' + id).then(res => {
           if (res.data.code === '20000') {
             for (let item of res.data.data.data) {
               this.position.push(item);
