@@ -303,6 +303,7 @@ export default {
       type: "",
       organizeVisible: false, // 组织架构
       communityArr: [],  // 小区数组
+      orgId: [],
       distributionForm: {
         org_id: [],  // 部门ID
         community_id: [] // 小区ID
