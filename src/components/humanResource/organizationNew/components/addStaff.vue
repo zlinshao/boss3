@@ -563,8 +563,8 @@
             }
             let detail = res.data.data.detail;
             if (detail) {
-              if (detail.entry_way && detail.entry_way !== 'null' && detail.entry_way.entry_type) {
-                this.params.entry_way = detail.entry_way;
+              if (detail.entry_way && detail.entry_way !== 'null') {
+                this.params.entry_way = JSON.parse(detail.entry_way);
               } else {
                 this.params.entry_way = {entry_type: '', entry_mess: '',};
               }
@@ -579,7 +579,15 @@
               this.params.id_num = detail.id_num;
               this.params.birthday = detail.birthday;
               this.params.recommender = detail.recommender;
-              this.orgData.recommender = detail.recommender_name;
+              if(detail.recommender){
+                this.$http.get(globalConfig.server + 'organization/user/'+detail.recommender).then(res=>{
+                  if(res.data.code == '20020'){
+                    this.orgData.recommender = res.data.data.name;
+                  }else{
+                    this.orgData.recommender = "";
+                  }
+                });
+              }
               this.params.bank_num = detail.bank_num;
               this.params.account_bank = detail.account_bank;
               this.params.branch_bank = detail.branch_bank;
