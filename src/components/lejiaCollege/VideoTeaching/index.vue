@@ -209,8 +209,6 @@ export default {
     editName() {
       this.params.video_id = this.checkData[0];
       this.$http.post(globalConfig.server + "video/edit-video",this.params).then(res => {
-        console.log(res, "111111");
-        
         if(res.data.code == "10000") {
           this.$notify.success({
             title: "成功",
