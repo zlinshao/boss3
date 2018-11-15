@@ -303,6 +303,7 @@ export default {
       type: "",
       organizeVisible: false, // 组织架构
       communityArr: [],  // 小区数组
+      orgId: [],
       distributionForm: {
         org_id: [],  // 部门ID
         community_id: [] // 小区ID
@@ -396,7 +397,9 @@ export default {
           this.communityArr.push(item.id)
         }
       })
-      this.pitch = val[0].id;
+      if(val.length) {
+        this.pitch = val[0].id;
+      }
       if(val.length == 1) {
         this.deletedBtn = false;
       } else {

@@ -6,6 +6,7 @@
           <input id="quan" type="checkbox" @click="checkAll($event)"> 全选
           <!-- <el-button id="quan" type="primary" size="mini" @click="checkAll($event)" >全选</el-button> -->
           <el-button type="primary" size="mini" @click="deletedDialog = true">删除</el-button>
+          <el-button type="primary" size="mini" @click="showEditDialog">编辑</el-button>
           <el-button type="primary" size="mini" @click="uploadVideo = true">上传</el-button>
         </div>
       </el-header>
@@ -22,9 +23,27 @@
         <div class="block pages">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="form.page" :page-sizes="[12,24, 36,48]" :page-size="form.limit" layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
         </div>
+        <!-- 编辑 -->
+        <div class="uploadVideo">
+          <el-dialog title="编辑视屏" :visible.sync="editDialog" width="30%" center>
+            <el-form>
+              <el-row>
+                <el-col>
+                  <el-form-item label="视屏名称" required>
+                    <el-input v-model="params.video_name"></el-input>
+                  </el-form-item>
+                </el-col>
+            </el-row>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="editDialog = false" size="mini">取 消</el-button>
+              <el-button type="primary" @click="editName" size="mini">确 定</el-button>
+            </span>
+          </el-dialog>
+        </div>
         <!-- 删除 -->
         <div class="deletedInfo">
-          <el-dialog :visible.sync="deletedDialog" width="30%" center>
+          <el-dialog title="删除视屏" :visible.sync="deletedDialog" width="30%" center>
             <span>确定删除该视频吗？</span>
             <span slot="footer" class="dialog-footer">
               <el-button @click="deletedDialog = false" size="mini">取 消</el-button>
@@ -39,7 +58,7 @@
               <el-row>
                 <el-col>
                   <el-form-item label="视屏名称" required>
-                    <el-input v-model="videoName"></el-input>
+                    <el-input v-model="form.video_name"></el-input>
                   </el-form-item>
                 </el-col>
             </el-row>
@@ -69,6 +88,7 @@ export default {
   data() {
     return {
       deletedDialog: false,
+      editDialog: false,
       uploadVideo: false,
       isClear: false, //上传组件
       total: 0, //数据总条数
@@ -76,12 +96,17 @@ export default {
       checkData: [], // 双向数据绑定的数组
       dialogImageUrl: "", //
       videoName: "",
+      editVideoName: "",
       form: {
         page: 1,
         limit: 12,
         file_id: "",
         classify_id: "",
         video_name: ""
+      },
+      params: {
+        video_name: "",
+        video_id: ""
       },
       videoAlbumId: "" //视屏分类id
     };
@@ -137,13 +162,12 @@ export default {
       val[1].forEach((item, index) => {
         arr.push(item);
       });
-      this.form.file_id = arr[0].toString();
+      this.form.file_id = arr[0];
       this.picStatus = !val[2];
     },
     // 发布
     release() {
       this.form.classify_id = this.videoAlbumId;
-      this.form.video_name = this.videoName;
       this.$http
         .post(globalConfig.server + "video/upload-video", this.form)
         .then(res => {
@@ -162,6 +186,40 @@ export default {
             });
           }
         });
+    },
+    // 获取视频名
+    showEditDialog() {
+      if(this.checkData.length !==1)  {
+        this.$notify.warning({
+          title: "警告",
+          message: "只支持修改一个视频"
+        })
+       this.editDialog = false;
+      } else {
+        this.editDialog = true;
+      }
+      let checkId = this.checkData[0];
+      this.videoData.forEach((item, index) => {
+        if(item.id == checkId) {
+          this.params.video_name = item.video_name
+        }
+      })
+    },
+    // 编辑
+    editName() {
+      this.params.video_id = this.checkData[0];
+      this.$http.post(globalConfig.server + "video/edit-video",this.params).then(res => {
+        console.log(res, "111111");
+        
+        if(res.data.code == "10000") {
+          this.$notify.success({
+            title: "成功",
+            message: res.data.msg
+          })
+          this.rendering();
+          this.editDialog = false;
+        }
+      })
     },
     // 删除
     deletedVideo() {
