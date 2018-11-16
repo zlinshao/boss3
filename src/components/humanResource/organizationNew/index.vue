@@ -592,10 +592,11 @@
                   <el-col :span="8">
                     <el-form-item label="等级">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.levels">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span>
+                        <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.level">
+                          <span v-for="item in branchBankCategory">{{item.id == staffDetailData.detail.level ? item.dictionary_name : ''}}</span>
+                        </span>
                         <span v-else>暂无</span>
-                      </div>
+                        </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -633,9 +634,8 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type && staffDetailData.detail.entry_way.entry_type.length > 0">
-                          <span
-                            v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
+                            {{entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -652,7 +652,7 @@
                     <el-form-item label="备注">
                       <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
-                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
+                      {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -663,7 +663,7 @@
                     <el-form-item label="离职原因">
                       <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
-                      {{staffDetailData.detail.dismiss_reason.dismiss_type && DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
+                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type && DRCategory[JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -672,7 +672,7 @@
                     <el-form-item label="具体描述">
                       <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
-                      {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
+                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -1116,6 +1116,19 @@
         political_status: '',
         recommender: '',
         education: '',//学历
+        entryWayCategory: [
+          {id: "1", name: '智联招聘'},
+          {id: "2", name: '前程无忧'},
+          {id: "3", name: '58同城'},
+          {id: "4", name: 'BOSS直聘'},
+          {id: "5", name: '猎聘网'},
+          {id: "6", name: '首席信才'},
+          {id: "7", name: '德盛人才'},
+          {id: "8", name: '校园招聘会'},
+          {id: "9", name: '社会招聘会'},
+          {id: "10", name: '推荐'},
+          {id: "11", name: '其他'},
+        ],
       }
     },
     mounted() {
@@ -1126,6 +1139,12 @@
       this.getDefaultData();
       this.getEntryMaterials();
       this.getBranchBank();
+    },
+    computed: {
+      getShow:(level) => {
+        console.log(level);
+        return '//'
+      }
     },
     watch: {
       department_id(val) {
@@ -1231,6 +1250,7 @@
       //等级
       getBranchBank() {
         this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
+          console.log(res);
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
           } else {
