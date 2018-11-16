@@ -228,6 +228,10 @@ const OfficeManage = () => import ('../components/officeManage/index');
 //业绩详情
 const DetailAcievement = () => import('../components/meritPay/achievement/achievementDetails/index');
 
+// 账户管理
+const accountMmanagement = () => import('../components/meritPay/accountMmanagement/index.vue');
+const account = () => import('../components/meritPay/accountMmanagement/components/account.vue')
+
 Vue.use(Router);
 
 export default new Router({
@@ -377,9 +381,13 @@ export default new Router({
 
         // 视屏管理
         { path: '/VideoTeaching', component: VideoTeaching, name: '视频管理', meta: { keepAlive: true }},
+
+        // 账户管理
+        { path: '/account', component: account, name: '账户管理', meta: { keepAlive: true }},
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
+        
         },
       ]
     },
@@ -682,7 +690,8 @@ export default new Router({
       name: '系统设置',
       icon: 'iconfont icon-shezhi1',
       children: [
-        {path: '/moduleSetting', component: ModuleSetting, name: '模块设置'},
+        {path: '/moduleSetting', component: ModuleSetting, name: '模块设置' },
+        // {path: "/accountMmanagement", component: accountMmanagement, name: "账户管理" },
 
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志'},

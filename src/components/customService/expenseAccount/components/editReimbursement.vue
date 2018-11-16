@@ -222,6 +222,8 @@
               this.form.reimbursement.reimburperson_id_name = detail.reimbursement && detail.reimbursement.reimburperson_id_name;
 
               let pic = detail.album.image_pic;
+              console.log(detail.album.image_pic, "4444");
+              
               this.form.image_pic = [];
               let picObject = {};
               pic.forEach((item)=>{
@@ -229,6 +231,8 @@
                 picObject[item.id] = item.uri;
               });
              this.picImg = picObject;
+             console.log(this.picImg, "5555");
+             
             }
 
           }

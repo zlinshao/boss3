@@ -15,7 +15,7 @@
         <div class="videoList" v-for="(item, index) in videoData" :key="index">
           <video ref="video" controls controlsList='nodownload' :src="item.file"></video>
           <input type="checkbox" :value="item.id" v-model="checkData">
-          <span class="name">视屏名称：{{item.video_name}}</span>
+          <span class="name">视频名称：{{item.video_name}}</span>
           <span class="num">播放次数：{{item.play_count}}</span>
         </div>
         <div class="noNum" v-if="videoData.length==0">暂无数据</div>
@@ -25,11 +25,11 @@
         </div>
         <!-- 编辑 -->
         <div class="uploadVideo">
-          <el-dialog title="编辑视屏" :visible.sync="editDialog" width="30%" center>
+          <el-dialog title="编辑视频" :visible.sync="editDialog" width="30%" center>
             <el-form>
               <el-row>
                 <el-col>
-                  <el-form-item label="视屏名称" required>
+                  <el-form-item label="视频名称" required>
                     <el-input v-model="params.video_name"></el-input>
                   </el-form-item>
                 </el-col>
@@ -43,7 +43,7 @@
         </div>
         <!-- 删除 -->
         <div class="deletedInfo">
-          <el-dialog title="删除视屏" :visible.sync="deletedDialog" width="30%" center>
+          <el-dialog title="删除视频" :visible.sync="deletedDialog" width="30%" center>
             <span>确定删除该视频吗？</span>
             <span slot="footer" class="dialog-footer">
               <el-button @click="deletedDialog = false" size="mini">取 消</el-button>
@@ -53,19 +53,20 @@
         </div>
         <!-- 上传 -->
         <div class="uploadVideo">
-          <el-dialog title="上传视屏" :visible.sync="uploadVideo" width="30%">
+          <el-dialog title="上传视频" :visible.sync="uploadVideo" width="30%">
             <el-form>
               <el-row>
                 <el-col>
-                  <el-form-item label="视屏名称" required>
+                  <el-form-item label="视频名称" required>
                     <el-input v-model="form.video_name"></el-input>
                   </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
               <el-col>
-                <el-form-item label="上传视屏" required>
+                <el-form-item label="上传视频" required>
                   <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <span style="color: red;font-size: 12px;">仅支持上传一个视屏</span>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -92,7 +93,7 @@ export default {
       uploadVideo: false,
       isClear: false, //上传组件
       total: 0, //数据总条数
-      videoData: [], // 视屏数据
+      videoData: [], // 视频数据
       checkData: [], // 双向数据绑定的数组
       dialogImageUrl: "", //
       videoName: "",
@@ -108,7 +109,7 @@ export default {
         video_name: "",
         video_id: ""
       },
-      videoAlbumId: "" //视屏分类id
+      videoAlbumId: "" //视频分类id
     };
   },
   watch: {
@@ -179,6 +180,7 @@ export default {
               message: res.data.msg
             });
             this.rendering();
+            this.isClear = true;
             this.uploadVideo = false;
           } else {
             this.$notify.warning({
@@ -283,6 +285,8 @@ export default {
     position: relative;
     video {
       width: 100%;
+      max-height: 195px;
+      object-fit: fill;
       border: 1px solid gray;
     }
     .name {

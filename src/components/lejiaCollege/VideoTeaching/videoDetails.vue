@@ -44,7 +44,7 @@
             </el-row>
             <el-row>
               <el-form-item label="该分类封面图片:">
-                <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                <UpLoad :ID="'comment_pic'" @getImg="getImg" :editImage="picImg" :isClear="isClear"></UpLoad>
               </el-form-item>
             </el-row>
           </el-form>
@@ -74,7 +74,8 @@ export default {
         description: "",
         classify_id: "",
         cover: "",
-      }
+      },
+      picImg: {}
     };
   },
   methods: {
@@ -97,9 +98,12 @@ export default {
           .then(res => {
             this.videoForm.name = res.data.data.name;
             this.videoForm.description = res.data.data.description;
+            this.picImg[Number(res.data.data.id)] = res.data.data.cover;
           });
       } else if (val == "创建") {
         this.title = "创建视屏分类";
+        this.videoForm.name = "";
+        this.videoForm.description = "";
       }
       this.createAlbum = true;
     },
@@ -138,7 +142,7 @@ export default {
               });
               this.createAlbum = false;
               this.getVideoAlbum();
-              this.videoForm = {};
+              // this.videoForm = {};
               this.isClear = true;
             } else {
               this.$notify.warning({
@@ -148,6 +152,7 @@ export default {
             }
           });
       } else if (val == "编辑视屏分类") {
+        this.videoForm.cover = this.videoForm.cover[0];
         this.$http
           .post(globalConfig.server + "video/edit", this.videoForm)
           .then(res => {
@@ -166,7 +171,6 @@ export default {
               });
             }
           });
-        
       }
     },
     // 视屏相册分类
