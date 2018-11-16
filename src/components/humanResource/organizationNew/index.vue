@@ -633,9 +633,8 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type && staffDetailData.detail.entry_way.entry_type.length > 0">
-                          <span
-                            v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
+                            {{entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -1116,6 +1115,19 @@
         political_status: '',
         recommender: '',
         education: '',//学历
+        entryWayCategory: [
+          {id: "1", name: '智联招聘'},
+          {id: "2", name: '前程无忧'},
+          {id: "3", name: '58同城'},
+          {id: "4", name: 'BOSS直聘'},
+          {id: "5", name: '猎聘网'},
+          {id: "6", name: '首席信才'},
+          {id: "7", name: '德盛人才'},
+          {id: "8", name: '校园招聘会'},
+          {id: "9", name: '社会招聘会'},
+          {id: "10", name: '推荐'},
+          {id: "11", name: '其他'},
+        ],
       }
     },
     mounted() {
@@ -1242,7 +1254,6 @@
         this.staffDetail = true;
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
-          console.log(res);
           this.getDuty(res.data.data.id, true);
           if (res.data.data.detail.recommender) {
             this.getDuty(res.data.data.detail.recommender, false);
