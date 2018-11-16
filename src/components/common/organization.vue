@@ -43,7 +43,7 @@
         </div>
         <!--筛选-->
         <div class="filterOrgan">
-          <div class="filterTop" @click="filterOrgan(depart)">
+          <div class="filterTop" @click="tioOrgan(depart)">
             {{department_name}}
           </div>
           <!--面包屑-->
@@ -128,6 +128,7 @@
         lengths: '',
         organType: '',
         department_name: '',
+        firstOpen: true,
       }
     },
     mounted() {
@@ -142,7 +143,7 @@
       organizationVisible(val) {
         if (!val) {
           this.$emit('close');
-          this.close_();
+          // this.close_();
         } else {
           // 所有员工
           // this.$http.get(this.url + 'organization/user?limit=5000').then(res => {
@@ -154,15 +155,20 @@
           //   }
           // }
           // });
-          console.log(this.ids);
-          if (this.ids) {
-            this.allDepart(this.ids);
+          if (this.firstOpen) {
+            console.log(this.ids);
+            if (this.ids) {
+              this.allDepart(this.ids);
+            }
+            this.filterOrgan(this.depart);
           }
-          this.filterOrgan(this.depart);
           this.$nextTick(() => {
             this.leftHeight();
             this.rightHeight();
-          })
+          });
+          setTimeout(() => {
+            this.firstOpen = false;
+          }, 100);
         }
       },
       form() {
@@ -224,12 +230,16 @@
         this.staffList = [];
         this.staffListStatus = false;
       },
+      // 顶级部门
+      tioOrgan(id) {
+        this.pitchOnData = [];
+        this.filterOrgan(id);
+      },
       // 部门/员工
       filterOrgan(id = 1) {
         if (this.parent_id === id) return;
         this.fullLoading = true;
         this.list = [];
-        this.pitchOnData = id === this.depart ? [] : this.pitchOnData;
         this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
           this.fullLoading = false;
           this.parent_id = id;
@@ -319,7 +329,10 @@
           let data = {};
           data.id = res.id;
           data.name = res.name;
-          data.org = res.org ? res.org : '';
+          if (res.hasOwnProperty('avatar')) {
+            data.org = res.org;
+            data.avatar = res.avatar;
+          }
           if (item.id === res.id) {
             this.checkData.push(res.id);
             this.form.push(data);

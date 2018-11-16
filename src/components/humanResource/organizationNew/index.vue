@@ -592,10 +592,11 @@
                   <el-col :span="8">
                     <el-form-item label="等级">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.levels">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span>
+                        <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.level">
+                          <span v-for="item in branchBankCategory">{{item.id == staffDetailData.detail.level ? item.dictionary_name : ''}}</span>
+                        </span>
                         <span v-else>暂无</span>
-                      </div>
+                        </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -633,8 +634,8 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
-                            {{entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name}}
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way != 'null'">
+                            {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -650,8 +651,8 @@
                   <el-col :span="8">
                     <el-form-item label="备注">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
-                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way != 'null'">
+                      {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -661,8 +662,8 @@
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
-                      {{staffDetailData.detail.dismiss_reason.dismiss_type && DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason != 'null'">
+                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type && DRCategory[JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -670,8 +671,8 @@
                   <el-col :span="8">
                     <el-form-item label="具体描述">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
-                      {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason != 'null'">
+                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess ? JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess : ''}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -1139,6 +1140,12 @@
       this.getEntryMaterials();
       this.getBranchBank();
     },
+    computed: {
+      getShow:(level) => {
+        console.log(level);
+        return '//'
+      }
+    },
     watch: {
       department_id(val) {
         this.isGetStaff = false;
@@ -1243,6 +1250,7 @@
       //等级
       getBranchBank() {
         this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
+          console.log(res);
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
           } else {
@@ -1254,6 +1262,7 @@
         this.staffDetail = true;
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
+          console.log(res);
           this.getDuty(res.data.data.id, true);
           if (res.data.data.detail.recommender) {
             this.getDuty(res.data.data.detail.recommender, false);

@@ -647,7 +647,7 @@ export default new Router({
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
-        { path: '/videoDetails', component: videoDetails, name: '教学视频'},
+        // { path: '/videoDetails', component: videoDetails, name: '教学视频'},
 
       ]
     },
