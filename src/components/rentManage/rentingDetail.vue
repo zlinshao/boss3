@@ -323,25 +323,42 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="总收入金额">
-                  <div class="content">{{contractInfo.money_sum}}</div>
+                <el-form-item label="款项名称">
+                  <div class="content">
+                    <span v-if="contractInfo.front_money || (contractInfo.front_money === 0)">定金</span>
+                    <span v-else>押金+租金</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="押金">
-                  <div class="content">{{contractInfo.deposit_payed}}</div>
+                <el-form-item label="总金额">
+                  <div class="content">{{contractInfo.money_sum}}元</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="定金">
-                  <div class="content">{{contractInfo.front_money}}</div>
+                <el-form-item label="电子收据链接">
+                  <div class="content" v-if="contractInfo.receipt_uris && contractInfo.receipt_uris.length>0">
+                    <div v-for="(item,index) in contractInfo.receipt_uris">
+                      <p class="lookInfo" @click="openInfo(item)"><a href="javascript:;">{{ index + 1 }}、{{ item.view_uri }}</a></p>
+                    </div>
+                  </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="租金">
-                  <div class="content">{{contractInfo.rent_money}}</div>
-                </el-form-item>
-              </el-col>
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="押金">-->
+                  <!--<div class="content">{{contractInfo.deposit_payed}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="定金">-->
+                  <!--<div class="content">{{contractInfo.front_money}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="租金">-->
+                  <!--<div class="content">{{contractInfo.rent_money}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
               <el-col :span="8">
                 <el-form-item label="已收金额（汇款账户）">
                   <div class="content">
@@ -1596,6 +1613,10 @@
       }
     },
     methods: {
+      openInfo(item) {
+        console.log(item);
+        window.open(item.view_uri, '_blank', 'width=1250,height=1080,left=350');
+      },
       //切换模式 精简-普通
       switchSimple() {
         this.simple = !this.simple;
@@ -1882,6 +1903,7 @@
       },
       getContractDetail() {
         this.$http.get(globalConfig.server + 'lease/rent/' + this.$route.query.id).then((res) => {
+          console.log(res);
           this.loadingStatus = false;
           if (res.data.code === '61110') {
             // console.log(res)
@@ -2105,6 +2127,19 @@
 </script>
 
 <style scoped lang="scss">
+  //查看电子链接
+  .lookInfo{
+    margin: 0;
+    padding: 0;
+  }
+  .lookInfo a{
+    color: #409EFF;
+    display: block;
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   .content {
     padding: 0 10px;
     min-height: 32px;
