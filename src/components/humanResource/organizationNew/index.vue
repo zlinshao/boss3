@@ -634,7 +634,7 @@
                       <div class="content">
                         <span
                           v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
-                            {{entryWayCategory[JSON.parse(staffDetailData.detail.entry_way).entry_type].name}}
+                            {{entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -1254,7 +1254,6 @@
         this.staffDetail = true;
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
-          console.log(res);
           this.getDuty(res.data.data.id, true);
           if (res.data.data.detail.recommender) {
             this.getDuty(res.data.data.detail.recommender, false);
