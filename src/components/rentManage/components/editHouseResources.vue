@@ -3,7 +3,7 @@
     <el-dialog :close-on-click-modal="false" title="修改房源" :visible.sync="editHouseResourcesDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
-          <el-tab-pane label="房源信息11" name="first">
+          <el-tab-pane label="房源信息" name="first">
             <div class="form_border">
               <el-form size="mini" :model="params" label-width="100px">
                 <el-row>
