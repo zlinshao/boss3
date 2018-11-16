@@ -388,7 +388,7 @@
               <div v-if="albumArray.album && albumArray.album.album_file && albumArray.album.album_file.length > 0"
                    v-for="item in albumArray.album.album_file" style="display: inline-block">
                 <video v-if="item.info.mime && (item.info.mime.indexOf('mp4') > -1 || item.info.mime.indexOf('video') > -1)"
-                       controls preload="auto" width="200" height="120">
+                       controls preload="auto" width="220" height="120">
                   <source :src="item.uri" type="video/mp4">
                 </video>
                 <img v-else="item.info.mime && item.info.mime.indexOf('image') > -1"
@@ -432,7 +432,7 @@
                     <div class="special imgs">
                       <span v-for="(p,index) in key">
                         <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
-                        <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
+                        <video :src="p.uri" controls v-if="p.is_video" width="220px" height="80px"></video>
                       </span>
                     </div>
                   </el-form-item>
