@@ -10,7 +10,7 @@
               </el-col>
               <el-col :span="16">
                 <el-form-item>
-                  <el-select v-model="permissionType" clearable placeholder="请选择" >
+                  <el-select v-model="permissionType"  placeholder="请选择" >
                     <el-option v-for="item in permissionArr" :key="item.value" :label="item.label" :value="item.value">
                       {{item.label}}
                     </el-option>
@@ -26,7 +26,7 @@
               </el-col>
               <el-col :span="18">
                 <el-form-item>
-                  <el-select v-model="currentPositionId" clearable placeholder="请选择">
+                  <el-select v-model="currentPositionId"  placeholder="请选择" @change="getDefaultData">
                     <el-option v-for="item in positionArr" :key="item.id" :label="item.name" :value="item.id">
                       {{item.name}}
                     </el-option>
@@ -42,7 +42,7 @@
               </el-col>
               <el-col :span="18" class="el_col_option">
                 <el-form-item>
-                  <el-select v-model="currentRoleId" placeholder="请选择" clearable>
+                  <el-select v-model="currentRoleId" placeholder="请选择" @change="getDefaultData">
                     <el-option v-for="item in roleArr" :key="item.id" :label="item.display_name"
                                :value="item.id">{{item.display_name}}
                     </el-option>
@@ -58,7 +58,7 @@
               </el-col>
               <el-col :span="18" class="el_col_option">
                 <el-form-item>
-                  <el-select v-model="currentDutyId" placeholder="请选择" clearable>
+                  <el-select v-model="currentDutyId" placeholder="请选择"  @change="getDefaultData">
                     <el-option v-for="item in dutyArr" :key="item.id" :label="item.name"
                                :value="item.id">{{item.name}}
                     </el-option>
@@ -137,6 +137,9 @@
         }, {
           value: 'ban',
           label: '权限黑名单'
+        }, {
+          value: 'all',
+          label: '所有权限'
         }],
         permissionType:'',
         systemName: '',
@@ -165,7 +168,7 @@
       this.permissionType='user';
       this.roleArray = this.powerData.positions;
       this.userId = this.powerData.id;
-      this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
+//      this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
     },
     activated() {
       this.roleArray = this.powerData.positions;
@@ -190,21 +193,6 @@
           this.getDefaultData();
         }
       },
-      currentPositionId(val){
-        if (this.userId) {
-          this.getDefaultData();
-        }
-      },
-      currentRoleId(val){
-        if (this.userId) {
-          this.getDefaultData();
-        }
-      },
-      currentDutyId(val){
-        if (this.userId) {
-          this.getDefaultData();
-        }
-      },
       powerData(val) {
         this.roleArray = val.positions;
         this.userId = val.id;
@@ -220,31 +208,6 @@
       }
     },
     methods: {
-      setPart(val) {
-        let partNames = this.partNames.join(',');
-        this.$http.put(globalConfig.server + 'organization/user/withRole/' + this.userId, {
-          with: val,
-          role: partNames
-        }).then((res) => {
-          if (res.data.code === '20050') {
-            this.prompt('success', res.data.msg);
-            this.powerVisible = false;
-          } else {
-            this.prompt('warning', res.data.msg);
-          }
-        });
-      },
-      getStaffPart() {
-        this.partNames = [];
-        this.$http.get(globalConfig.server + 'organization/user/getRole/' + this.userId).then((res) => {
-          if (res.data.code === '20060') {
-            let data = res.data.data;
-            for (let i = 0; i < data.length; i++) {
-              this.partNames.push(data[i].name);
-            }
-          }
-        });
-      },
       getAllRoleData() {
         this.$http.get(this.urls + 'organization/role', {
           params: {
@@ -293,6 +256,8 @@
           address='organization/duty/getPermission/' + this.currentDutyId;
         }else if(pType==='ban'){
             address='organization/user/getPermissionBan/' + this.userId;
+        }else if(pType==='all'){
+            address='organization/user/getallPermission/' + this.userId;
         }
         this.checkedPower = [];
         this.$http.get(globalConfig.server + address).then((res) => {
