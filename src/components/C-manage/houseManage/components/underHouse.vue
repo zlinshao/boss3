@@ -1,61 +1,61 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <el-table
-        :data="tableData"
-        :empty-text='tableStatus'
-        v-loading="tableLoading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(255, 255, 255, 0)"
-        @row-contextmenu='handlerContextmenu'
-        @row-dblclick="dblClickTable"
-        style="width: 100%">
+      :data="tableData"
+      :empty-text='tableStatus'
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0)"
+      @row-contextmenu='handlerContextmenu'
+      @row-dblclick="dblClickTable"
+      style="width: 100%">
       <el-table-column
-          prop="name"
-          label="小区名称">
+        prop="name"
+        label="小区名称">
       </el-table-column>
       <el-table-column
-          prop="city"
-          label="所在城市">
+        prop="city"
+        label="所在城市">
       </el-table-column>
       <el-table-column
-          prop="address"
-          label="小区地址">
+        prop="address"
+        label="小区地址">
       </el-table-column>
       <el-table-column
-          prop="houseType"
-          label="户型">
+        prop="houseType"
+        label="户型">
       </el-table-column>
       <el-table-column
-          prop="area"
-          label="面积">
+        prop="area"
+        label="面积">
       </el-table-column>
       <el-table-column
-          prop="decorate"
-          label="装修">
+        prop="decorate"
+        label="装修">
       </el-table-column>
       <el-table-column
-          label="状态">
+        label="状态">
         <template slot-scope="scope">
           <span v-if="scope.row.status == 1" class="info_label">未添加</span>
-          <span v-else-if="scope.row.status == 2"  class="success_label">已上线</span>
+          <span v-else-if="scope.row.status == 2" class="success_label">已上线</span>
           <span v-else class="orange_label">已下架</span>
         </template>
       </el-table-column>
       <el-table-column
-          prop="price"
-          label="月单价">
+        prop="price"
+        label="月单价">
       </el-table-column>
 
     </el-table>
     <div class="block pages">
       <div>
         <el-pagination
-            @current-change="handleCurrentChange"
-            :current-page="params.page"
-            :page-size="10"
-            layout="total, prev, pager, next, jumper"
-            :total="totalNum">
+          @current-change="handleCurrentChange"
+          :current-page="params.page"
+          :page-size="10"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNum">
         </el-pagination>
       </div>
     </div>
@@ -73,6 +73,7 @@
   import RightMenu from '../../../common/rightMenu.vue'  //右键
   import houseUpdate from './houseUpdate'
   import HouseDetail from '../../../../components/rentManage/housesManage/components/houseDetail'
+
   export default {
     name: 'hello',
     props: {
@@ -85,7 +86,7 @@
         required: true,
       }
     },
-    components: {RightMenu,houseUpdate,HouseDetail},
+    components: {RightMenu, houseUpdate, HouseDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -99,14 +100,14 @@
         houseDetailDialog: false,
         tableData: [],
         totalNum: 0,
-        undercarriageParams:{
-          house_id : '',
-          status : 3,
+        undercarriageParams: {
+          house_id: '',
+          status: 3,
         },
-        all_dic : [],
-        isOnlyPic : false,
+        all_dic: [],
+        isOnlyPic: false,
         houseDetail: {},
-        house_id : '',
+        house_id: '',
       }
     },
     mounted() {
@@ -128,15 +129,20 @@
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
-        this.$http.post(globalConfig.server+'api/v1/transfer',this.params).then((res)=>{
+        this.$http.post(globalConfig.server + 'api/v1/transfer', this.params).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '90012'){
-            this.tableData = res.data.data.houses;
-            this.totalNum = res.data.data.total;
-            if(res.data.data.houses.length<1){
+          if (res.data.code === '90012') {
+            if (res.data.data.houses) {
+              this.tableData = res.data.data.houses;
+              if (res.data.data.houses.length < 1) {
+                this.tableStatus = '暂无数据';
+              }
+            } else {
+              this.tableData = [];
               this.tableStatus = '暂无数据';
             }
-          }else {
+            this.totalNum = res.data.data.total;
+          } else {
             this.tableStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
@@ -147,14 +153,14 @@
         this.params.page = val;
         this.getTableData();
       },
-      closeModal(val){
+      closeModal(val) {
         this.addWebInfoDialog = false;
         this.houseDetailDialog = false;
-        if(val){
+        if (val) {
           this.getTableData();
         }
       },
-      dblClickTable(row, event){
+      dblClickTable(row, event) {
         this.house_id = row.id;
         this.houseDetail = row;
         this.houseDetailDialog = true;
@@ -172,8 +178,8 @@
       clickEvent(index) {
         this.openModalDialog(index);
       },
-      openModalDialog(index){
-        switch (index){
+      openModalDialog(index) {
+        switch (index) {
           case 'download':
             this.$confirm('您确定下架吗, 是否继续?', '提示', {
               confirmButtonText: '确定',
@@ -183,7 +189,7 @@
               this.undercarriage();
             }).catch(() => {
               this.$notify({
-                title:'提示',
+                title: '提示',
                 type: 'info',
                 message: '已取消下架'
               });
@@ -194,18 +200,18 @@
             break;
         }
       },
-      undercarriage(){
-        this.$http.post(globalConfig.server+'api/v1/transfer',this.undercarriageParams).then((res)=>{
-          if(res.data.code === '90012'){
+      undercarriage() {
+        this.$http.post(globalConfig.server + 'api/v1/transfer', this.undercarriageParams).then((res) => {
+          if (res.data.code === '90012') {
             this.$notify.success({
-              title:'成功',
-              message:res.data.msg,
+              title: '成功',
+              message: res.data.msg,
             });
             this.getTableData()
-          }else {
+          } else {
             this.$notify.warning({
-              title:'警告',
-              message:res.data.msg,
+              title: '警告',
+              message: res.data.msg,
             })
           }
         })
@@ -235,7 +241,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .info_label,.yellow_label,.orange_label,.red_label,.success_label{
+  .info_label, .yellow_label, .orange_label, .red_label, .success_label {
     min-width: 70px;
     height: 28px;
     line-height: 28px;
