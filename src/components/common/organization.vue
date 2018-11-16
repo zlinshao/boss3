@@ -319,7 +319,10 @@
           let data = {};
           data.id = res.id;
           data.name = res.name;
-          data.org = res.org ? res.org : '';
+          if (res.hasOwnProperty('avatar')) {
+            data.org = res.org;
+            data.avatar = res.avatar;
+          }
           if (item.id === res.id) {
             this.checkData.push(res.id);
             this.form.push(data);
