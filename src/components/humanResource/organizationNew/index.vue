@@ -634,8 +634,8 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
-                            {{entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name}}
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way != 'null'">
+                            {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -651,7 +651,7 @@
                   <el-col :span="8">
                     <el-form-item label="备注">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way != 'null'">
                       {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -662,7 +662,7 @@
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason != 'null'">
                       {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type && DRCategory[JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -671,8 +671,8 @@
                   <el-col :span="8">
                     <el-form-item label="具体描述">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
-                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason != 'null'">
+                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess ? JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess : ''}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
