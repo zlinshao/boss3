@@ -7,7 +7,7 @@
           <!-- <el-button id="quan" type="primary" size="mini" @click="checkAll($event)" >全选</el-button> -->
           <el-button type="primary" size="mini" @click="deletedDialog = true">删除</el-button>
           <el-button type="primary" size="mini" @click="showEditDialog">编辑</el-button>
-          <el-button type="primary" size="mini" @click="uploadVideo = true">上传</el-button>
+          <el-button type="primary" size="mini" @click="showUploadDialog">上传</el-button>
         </div>
       </el-header>
       <el-main>
@@ -163,11 +163,13 @@ export default {
         arr.push(item);
       });
       this.form.file_id = arr[0];
+      console.log(this.form.file_id, "3333");
       this.picStatus = !val[2];
     },
     // 发布
     release() {
       this.form.classify_id = this.videoAlbumId;
+      // this.form.video_name = this.videoName;
       this.$http
         .post(globalConfig.server + "video/upload-video", this.form)
         .then(res => {
@@ -178,7 +180,6 @@ export default {
             });
             this.rendering();
             this.uploadVideo = false;
-            this.isClear = true;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -186,6 +187,12 @@ export default {
             });
           }
         });
+    },
+    showUploadDialog() {
+      this.isClear = true;
+      this.form.video_name = "";
+      this.videoName = "";
+      this.uploadVideo = true;
     },
     // 获取视频名
     showEditDialog() {
@@ -208,6 +215,7 @@ export default {
     // 编辑
     editName() {
       this.params.video_id = this.checkData[0];
+      // this.params.video_name = this.editVideoName
       this.$http.post(globalConfig.server + "video/edit-video",this.params).then(res => {
         if(res.data.code == "10000") {
           this.$notify.success({
@@ -215,6 +223,7 @@ export default {
             message: res.data.msg
           })
           this.rendering();
+          this.params.video_name = "";
           this.editDialog = false;
         }
       })
@@ -232,6 +241,7 @@ export default {
               message: res.data.msg
             });
             this.rendering();
+            this.checkData = [];
             this.deletedDialog = false;
           } else {
             this.$notify.warning({
