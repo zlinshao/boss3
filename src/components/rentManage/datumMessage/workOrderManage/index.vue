@@ -45,7 +45,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal">
+                      <el-input v-model="follow_name" readonly=""  placeholder="请选择跟进人" @focus="openOrganizeModal">
                         <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
                       </el-input>
                     </el-form-item>

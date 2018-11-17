@@ -143,6 +143,7 @@
       organizationVisible(val) {
         if (!val) {
           this.$emit('close');
+          this.params.keywords = '';
           // this.close_();
         } else {
           // 所有员工
@@ -320,6 +321,12 @@
       },
       // 选中
       chooseData(item, data) {
+        if (this.lengths === 1) {
+          this.checkDepart = [];
+          this.checkData = [];
+          this.form = [];
+          this.checkDepart.push(item.id);
+        }
         if (this.form.length > this.lengths - 1 && this.lengths !== '') {
           this.prompt('warning', '超出数量限制');
           this.checkDepart.pop();

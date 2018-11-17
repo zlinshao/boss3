@@ -4,9 +4,9 @@
       <el-tab-pane label="短信模板" name="first">
         <Message></Message>
       </el-tab-pane>
-      <el-tab-pane label="登陆日志" name="second">
-        <LoginRecord></LoginRecord>
-      </el-tab-pane>
+      <!--<el-tab-pane label="登陆日志" name="second">-->
+        <!--<LoginRecord></LoginRecord>-->
+      <!--</el-tab-pane>-->
       <el-tab-pane label="用户字典" name="third">
         <UserDictionary></UserDictionary>
       </el-tab-pane>
