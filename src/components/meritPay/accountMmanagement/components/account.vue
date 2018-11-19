@@ -11,17 +11,13 @@
                     <el-input type="textarea" v-model="org_name" :disabled="true" style="resize:none" ></el-input>
                 </el-form-item>
                 <el-form-item label="账户类型">
-                    <!-- <el-select v-model="formAllocation.display_name" clearable placeholder="请选择账户类型"> -->
-                    <el-select v-model="displayName" clearable placeholder="请选择账户类型">
+                    <el-select v-model="displayName" clearable placeholder="请选择账户类型" @change="getAccount">
                         <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <!-- <el-form-item label="开户人">
-                    <el-input v-model="formAllocation.account_owner " placeholder="请填写开户人"></el-input>
-                </el-form-item> -->
                 <el-form-item label="账号">
-                    <el-select multiple v-model="formAllocation.account_id " clearable placeholder="请选择">
+                    <el-select multiple v-model="formAllocation.account_id " clearable placeholder="请选择" >
                         <el-option v-for="item in accountNumOptions" :key="item.value" :label="item.label" :value="item.value" ></el-option>
                     </el-select>
                 </el-form-item>
@@ -35,7 +31,7 @@
             <el-col :span="8">
                 <div class="grid-content bg-purple">
                     <el-table :data="table" style="width: 100%" class="urban-division areaGroup">
-                        <el-table-column prop="province" label="组织架构">
+                        <el-table-column prop="province" label="城市">
                             <template slot-scope="scope">
                                 <div v-for="(item, index) in organizationTable" :key="index" @click="getArea(item.id,index)" :class="{blue: ind1 === index}">{{item.name}}</div>
                             </template>
@@ -70,7 +66,6 @@
         </el-row>
         <!-- 分页 -->
         <div class="block pages">
-            <!-- <el-pagination @size-change="handleSizeChange" :current-page="currentPage" :page-size="12" layout="total, prev, pager, next, jumper" :total="total" :page-sizes="[12, 24, 36, 48]"> </el-pagination> -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[12, 24, 36, 48]" :page-size="12" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
@@ -94,95 +89,69 @@ export default {
       groupTable: [],
       accountTable: [], //账户
       allocationDialog: false,
+      params: {
+        org_id: "",
+        limit: 12,
+        page: 1,
+      },
       formAllocation: {
         //新增form
         org_id: [],
-        account_id: "",
+        account_id: [],
         display_name: "",
         account_owner: ""
       },
-      displayName: "",
+      displayName: "1",
       accountNumOptions: [],  //选择账号
-      accountNumOptions1: [],   //银行账号
-      accountNumOptions2: [],   //支付宝账号
-      accountNumOptions3: [],   //微信账号
       accountTypeOption: [       //账号类型
           {value: "1", label: "银行卡"},
           {value: "2", label: "支付宝"},
           {value: "3", label: "微信"},
       ], 
       currentPage: 1,
-      total: 0
+      total: 0,
+      selectId: ""
     };
   },
-  watch: {
-      allocationDialog(val) {
-          if(!val) {
-              this.$refs.form.resetFields()
-          }
-      },
-      displayName(val) {
-          if(val == 1) {
-              this.accountNumOptions = this.accountNumOptions1;
-          } else if(val == 2) {
-              this.accountNumOptions = this.accountNumOptions2;
-          } else if(val == 3) {
-              this.accountNumOptions = this.accountNumOptions3;
-          }
-      },
-      deep: true
-  },
+  watch: {},
   methods: {
     //   获取账户
-    getAccount() {
-        this.$http.get(globalConfig.server + "financial/account?all=1").then(res => {
+    getAccount(val) {
+        this.accountNumOptions = [];
+        let id = "";
+       id = val || 1;
+        this.$http.get(globalConfig.server + "financial/account?all=1&cate="+ id).then(res => {
+            let obj = null;
             if(res.data.code = "20000") {
-                let obj = null;
                 res.data.data.data.forEach((item, index) => {
                     obj = {};
-                    if(item.name.includes("银行")) {
-                        obj["value"]  = item.id;
-                        obj["label"] = item.name + " " + item.account_num;
-                        this.accountNumOptions1.push(obj);
-                    } else if(item.name.includes("支付宝")) {
-                        obj["value"] = item.id;
-                        obj["label"] = item.name + " " + item.account_num;
-                        this.accountNumOptions2.push(obj);
-                    } else if (item.name.includes("微信")) {
-                        obj["value"] = item.id;
-                        obj["label"] = item.name + " " + item.account_num;
-                        this.accountNumOptions3.push(obj);
-                    }
+                    obj["value"]  = item.id;
+                    obj["label"] = item.name + " " + item.account_num;
+                    this.accountNumOptions.push(obj);
                 })
             }
         })
     },
     // 获取列表数据
     getAccountList(id) {
+      this.params.org_id = id;
+      console.log(this.params, "4444");
       this.$http
-        .get(globalConfig.server + "financial/account_alloc?org_id=" + id)
+        .get(globalConfig.server + "financial/account_alloc",{params: this.params}) 
         .then(res => {
           if (res.data.code == "20000") {
+            console.log(res.data.data.data, "11111");
             this.accountTable = res.data.data.data;
             this.total = res.data.data.count;
-            // this.accountTable.forEach((item, index) => {
-            //   if (item.name.includes("银行")) {
-            //     item["accountType"] = "银行卡";
-            //   } else if (item.name.includes("支付宝")) {
-            //     item["accountType"] = "支付宝";
-            //   } else if (item.name.includes("微信")) {
-            //     item["accountType"] = "微信";
-            //   } else if (item.name.includes("现金")) {
-            //     item["accountType"] = "现金";
-            //   }
-            // });
           }
         });
     },
-    // 获取组织架构
+    // 获取城市
     getOrganization() {
-      this.$http.get(globalConfig.server+ "organization/other/org-tree?id=331").then(res => {
+        this.accountTable = [];
+        this.$http.get(globalConfig.server+ "organization/other/org-tree?id=331").then(res => {
             if(res.data.code == "70050") {
+                res.data.data.children.pop();
                 this.organizationTable = res.data.data.children;
             }
         });
@@ -190,8 +159,10 @@ export default {
     // 获取区域区组
     getArea(id, index) {
          this.ind1 =  index;
+         this.ind2 = "";
          this.areaTable = []; 
          this.groupTable = [];
+         
         this.$http.get(globalConfig.server+ "organization/other/org-tree?id=" + id).then(res => {
             if(res.data.code == "70050") {
                 this.areaTable = res.data.data.children;
@@ -200,13 +171,16 @@ export default {
     },
     // 获取区域小组
     getGroup(id, index) {
+        this.org_name = "";
         this.ind2 = index;
+        this.ind3 = "";
+        this.accountTable = [];
         this.$http.get(globalConfig.server + "organization/other/org-tree?id=" + id).then(res => {
             if(res.data.code == "70050") {
                 this.groupTable = res.data.data.children;
                 this.groupTable.forEach((item, index) => {
                     this.org_name += item.name +  ","
-                    this.formAllocation.org_id.push(item.id)
+                    this.formAllocation.org_id.push(item.id);
                 })
                 this.org_name = this.org_name.substring(0, this.org_name.length - 1)
             }
@@ -214,30 +188,43 @@ export default {
     },
     // 获取数据
     getAccountTable(id, index,name) {
+        this.org_name = name;
         this.ind3 = index;
-        // this.formAllocation.org_name = name;   // 暂时后面删除
-        this.getAccountList(id);
+        this.selectId = id;
+        this.getAccountList(this.selectId);
     },
     // 新增分配
     addAllocation() {
       this.allocationDialog = false;
       this.formAllocation.display_name = this.displayName;
-      console.log(this.formAllocation, "66666");
       this.$http.post(globalConfig.server + "financial/account_alloc", this.formAllocation).then(res => {
-          console.log(res, "444");
-          
+          if(res.data.code == "20000") {
+            this.$notify.success({
+                title: "成功",
+                message: res.data.msg
+            })
+            this.getAccountList(this.selectId)
+          }else {
+            this.$notify.warning({
+                title: "警告",
+                message: res.data.msg
+            });
+          }
       })
     },
-    handleSizeChange() {
+    handleSizeChange(val) {
+      this.params.limit = val;
+      this.getAccountList(this.params.limit);
       console.log(`每页 ${val} 条`);
     },
-    handleCurrentChange() {
+    handleCurrentChange(val) {
+      this.params.page = val;
+      this.getAccountList(this.params.page);
       console.log(`当前页: ${val}`);
     }
   },
   created() {
-      this.getAccount();
-    // this.getAccountList();
+    this.getAccount();
     this.getOrganization();
   }
 };
