@@ -30,25 +30,6 @@
     </el-dialog>
     <el-row :gutter="20">
       <el-col :span="8">
-        <!-- <div class="grid-content bg-purple">
-                    <el-table :data="table" style="width: 100%" class="urban-division areaGroup">
-                        <el-table-column prop="province" label="城市">
-                            <template slot-scope="scope">
-                                <div v-for="(item, index) in organizationTable" :key="index" @click="getArea(item.id,index)" :class="{blue: ind1 === index}">{{item.name}}</div>
-                            </template>
-                        </el-table-column>
-                         <el-table-column prop="province" label="区组">
-                            <template slot-scope="scope">
-                                <div v-for="(item, index) in areaTable" :key="index" @click="getGroup(item.id, index)" class="organization" :class="{blue: ind2 === index}">{{item.name}}</div>
-                            </template>
-                        </el-table-column>
-                         <el-table-column prop="province" label="区域小组">
-                            <template slot-scope="scope">
-                                <div v-for="(item, index) in groupTable" :key="index" class="organization" @click="getAccountTable(item.id, index,item.name)"  :class="{blue: ind3 === index}">{{item.name}}</div>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div> -->
         <div class="border left">
           <div class="top">
             <div>
@@ -184,6 +165,8 @@ export default {
               obj = {};
               obj["value"] = item.id;
               obj["label"] = item.name + " " + item.account_num;
+              obj["account_owner"] = item.account_owner;
+              obj["display_name"] = item.display_name;
               this.accountNumOptions.push(obj);
             });
           }
@@ -191,8 +174,6 @@ export default {
     },
     // 获取列表数据
     getAccountList(id) {
-      console.log(this.params, "11111");
-      
       this.$http
         .get(globalConfig.server + "financial/account_alloc", {
           params: this.params
@@ -267,7 +248,7 @@ export default {
               message: res.data.msg
             });
             this.getAccountList(this.selectId);
-            this.org_name = "";
+            // this.org_name = "";
             // this.formAllocation.account_id = [];
             this.allocationDialog = false;
           } else {
@@ -280,12 +261,13 @@ export default {
     },
     getBankAccount(val) {
       this.accountNumOptions.forEach((item, index) => {
-        if (item.id == val) {
+        if (item.value == val) {
           if (!item.account_owner || !item.display_name) {
             this.$notify.warning({
               title: "警告",
               message: "开户人或者开户行为空"
             });
+            this.formAllocation.account_id = [];
           }
         }
       });
@@ -305,14 +287,7 @@ export default {
     nodeClick(data, node, store) {
         this.org_name = data.name;
         this.formAllocation.org_id = data.id;
-        // data.forEach((item, index) => {
-        //   this.org_name += item.name + ",";
-        //   this.formAllocation.org_id.push(data.id)
-        // })
         this.params.org_id = data.id;
-        // this.department_id = data.id;
-        // this.department_name = data.name;
-        // this.departManageName = data.leader && data.leader.name;
         this.getAccountList()
     },
     nodeExpand(data, node, store) {
