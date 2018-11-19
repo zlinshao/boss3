@@ -72,8 +72,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="department_name" @focus="openOrganizeModal"
-                                placeholder="请选择" readonly=""></el-input>
+                      <el-input v-model="department_name" @focus="openOrganizeModal" placeholder="请选择" readonly="">
+                        <el-button slot="append" @click="emptyDepart()">清空</el-button>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -985,6 +986,11 @@
         this.organizationDialog = true;
         this.length = 1;
         this.type = 'depart';
+      },
+      // 清空部门
+      emptyDepart() {
+        this.collectParams.org_id = '';
+        this.department_name = '';
       },
       selectMember(val) {
         this.organizationDialog = false;
