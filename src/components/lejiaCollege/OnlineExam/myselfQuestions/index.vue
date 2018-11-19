@@ -536,13 +536,12 @@
             message: '只能上传jpg/png文件，且不超过2M'
           })
         } else {
-          this.$http.post(globalConfig.server_user + 'files', formData, config).then((res) => {
-            if (res.data.status === 'success') {
+          this.$http.post(this.urls + 'api/v1/upload-indirect', formData, config).then((res) => {
+            if (res.data.code === '110100') {
               Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
             }
           })
         }
-
       },
       getQueryData() {
         if (!this.$route.query.paper_id) {

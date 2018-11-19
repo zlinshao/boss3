@@ -151,7 +151,7 @@ const VillageDetail = () => import  ('../components/systemSetting/managerSetting
 const ManagerSetting = () => import  ('../components/systemSetting/managerSetting/index.vue');                           //管理员设置
 
 
-// const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue');                                   //回收站
+// const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue');                                    //回收站
 // const contractModule =()=> import  ('../comments/systemSetting/contractModule/index1.vue');                        //合同模板
 // const ExportManage =()=> import  ('../comments/systemSetting/exportManage/index1.vue');                            //导出管理
 
@@ -387,7 +387,7 @@ export default new Router({
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
-        
+
         },
       ]
     },
@@ -647,7 +647,7 @@ export default new Router({
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
-        // { path: '/videoDetails', component: videoDetails, name: '教学视频'},
+        { path: '/videoDetails', component: videoDetails, name: '教学视频'},
 
       ]
     },
@@ -691,7 +691,7 @@ export default new Router({
       icon: 'iconfont icon-shezhi1',
       children: [
         {path: '/moduleSetting', component: ModuleSetting, name: '模块设置' },
-        // {path: "/accountMmanagement", component: accountMmanagement, name: "账户管理" },
+        {path: "/accountMmanagement", component: accountMmanagement, name: "账户管理" },
 
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志'},

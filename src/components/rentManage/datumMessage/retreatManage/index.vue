@@ -37,7 +37,7 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">退租时间</div>
+                    <div class="el_col_label">报备时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -77,7 +77,7 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">退租时间</div>
+                    <div class="el_col_label">报备时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -124,8 +124,46 @@
                       <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;"
                                 v-model="org_name"
                                 size="mini">
-                        <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                        <el-button slot="append" @click="emptyDepart()">清空</el-button>
                       </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12" v-if="activeName === 'first'">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">退房时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.check_house_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12" v-else>
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">退房时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params_second.check_house_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -477,6 +515,7 @@
           contract_id: '',
           search: '',
           check_time: [],
+          check_house_time: [],
           status: '',
           org_id: '',
         },
@@ -488,6 +527,7 @@
           contract_id: '',
           search: '',
           check_time: [],
+          check_house_time: [],
           status: '',
           org_id: '',
         },
@@ -590,7 +630,7 @@
       //切换标签页
       handleClick() {
         this.isRent = this.activeName === 'first' ? 0 : 1;
-        this.resetting();
+        // this.resetting();
       },
       //分页
       handleCurrentChange(val) {
@@ -659,11 +699,13 @@
       resetting() {
         if(this.activeName === 'first'){
           this.params.check_time = [];
+          this.params.check_house_time = [];
           this.params.status = '';
           this.org_name = '';
           this.params.org_id = '';
         }else {
           this.params_second.check_time = [];
+          this.params_second.check_house_time = [];
           this.params_second.status = '';
           this.org_name = '';
           this.params_second.org_id = '';
