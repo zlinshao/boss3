@@ -73,14 +73,14 @@
               :default-expanded-keys="defaultExpandKeys" 
               :props="defaultProps" 
               :expand-on-click-node="false" 
-              :render-content="renderContent">
+              >
             </el-tree>
           </div>
         </div>
       </el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple">
-          <el-table :data="accountTable" style="width: 100%" class="urban-division"  @selection-change="handleSelectionChange">
+          <el-table :data="accountTable" style="width: 100%" class="urban-division"  @selection-change="handleSelectionChange" >
             <el-table-column type="selection">
             </el-table-column>
             <el-table-column prop="account.cate" label="账户类型">
@@ -99,7 +99,7 @@
     </el-row>
     <!-- 分页 -->
     <div class="block pages">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[12, 24, 36, 48]" :page-size="12" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -123,11 +123,6 @@ export default {
       groupTable: [],
       accountTable: [], //账户
       allocationDialog: false,
-      oldParams: {
-        org_id: [],
-        limit: 12,
-        page: 1
-      },
       formAllocation: {
         //新增form
         org_id: [],
@@ -148,6 +143,7 @@ export default {
       // 新的数据
       setTree: [],
       collectStatus: "",
+      tableEmpty: "",
       collectLoading: false,
       params: {
         keywords: '',
@@ -195,7 +191,7 @@ export default {
     },
     // 获取列表数据
     getAccountList(id) {
-      this.oldParams.org_id = id;
+      console.log(this.params, "11111");
       
       this.$http
         .get(globalConfig.server + "financial/account_alloc", {
@@ -214,6 +210,9 @@ export default {
               }
             });
             this.total = res.data.data.count;
+          } else if(res.data.code == "20001") {
+            this.accountTable = [];
+              this.tableEmpty = res.data.msg;
           }
         });
     },
@@ -229,51 +228,7 @@ export default {
           }
         });
     },
-    // 获取区域区组
-    // getArea(id, index) {
-    //   this.ind1 = index;
-    //   this.ind2 = "";
-    //   this.areaTable = [];
-    //   this.groupTable = [];
-    //   this.$http
-    //     .get(globalConfig.server + "organization/other/org-tree?id=" + id)
-    //     .then(res => {
-    //       if (res.data.code == "70050") {
-    //         this.areaTable = res.data.data.children;
-    //       }
-    //     });
-    // },
-    // 获取区域小组
-    // getGroup(id, index) {
-    //   this.org_name = "";
-    //   this.ind2 = index;
-    //   this.ind3 = "";
-    //   this.accountTable = [];
-    //   this.$http
-    //     .get(globalConfig.server + "organization/other/org-tree?id=" + id)
-    //     .then(res => {
-    //       if (res.data.code == "70050") {
-    //         this.groupTable = res.data.data.children;
-    //         this.groupTable.forEach((item, index) => {
-    //           this.org_name += item.name + ",";
-    //           this.formAllocation.org_id.push(item.id);
-    //         });
-    //         this.org_name = this.org_name.substring(
-    //           0,
-    //           this.org_name.length - 1
-    //         );
-    //       }
-    //     });
-    // },
-    // 获取数据
-    // getAccountTable(id, index, name) {
-    //   this.org_name = name;
-    //   this.ind3 = index;
-    //   this.selectId = id;
-    //   this.formAllocation.org_id = []; // 清空区组ID
-    //   this.formAllocation.org_id.push(id); // 添加小组ID
-    //   this.getAccountList(this.selectId);
-    // },
+   
     // 删除账号
     handleSelectionChange(val) {
       val.forEach((item, index) => {
@@ -300,7 +255,6 @@ export default {
     },
     // 新增分配
     addAllocation() {
-      // this.formAllocation.display_name = this.displayName;
       this.$http
         .post(
           globalConfig.server + "financial/account_alloc",
@@ -314,7 +268,7 @@ export default {
             });
             this.getAccountList(this.selectId);
             this.org_name = "";
-            this.formAllocation.account_id = [];
+            // this.formAllocation.account_id = [];
             this.allocationDialog = false;
           } else {
             this.$notify.warning({
@@ -337,13 +291,13 @@ export default {
       });
     },
     handleSizeChange(val) {
-      this.oldParams.limit = val;
-      this.getAccountList(this.oldParams.limit);
+      this.params.limit = val;
+      this.getAccountList(this.params.limit);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      this.oldParams.page = val;
-      this.getAccountList(this.oldParams.page);
+      this.params.page = val;
+      this.getAccountList(this.params.page);
       console.log(`当前页: ${val}`);
     },
     // 新的获取城市数据
@@ -379,22 +333,22 @@ export default {
           }
         })
       },
-    renderContent(h, {node, data, store}) { //加载节点
-        let that = this;
-        return h(TreeRender, {
-          props: {
-            DATA: data,
-            NODE: node,
-            STORE: store,
-          },
-          on: {
-            nodeSet: ((s, d, n) => that.handleSet(s, d, n)),
-            nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
-            nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
-            nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
-          }
-        });
-      },
+    // renderContent(h, {node, data, store}) { //加载节点
+    //     let that = this;
+    //     return h(TreeRender, {
+    //       props: {
+    //         DATA: data,
+    //         NODE: node,
+    //         STORE: store,
+    //       },
+    //       on: {
+    //         nodeSet: ((s, d, n) => that.handleSet(s, d, n)),
+    //         nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
+    //         nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
+    //         nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
+    //       }
+    //     });
+    //   },
       //获取部门数据
       getDepart() {
         this.collectLoading = true;
