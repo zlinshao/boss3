@@ -37,7 +37,9 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-input readonly="" placeholder="点击选择" v-model="staff_name"
-                              @focus="openOrganizationModal('staff')"></el-input>
+                              @focus="openOrganizationModal('staff')">
+                      <el-button slot="append" @click="emptyDepart('staff_id')">清空</el-button>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -50,7 +52,9 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-input readonly="" placeholder="点击选择" v-model="depart_name"
-                              @focus="openOrganizationModal('depart')"></el-input>
+                              @focus="openOrganizationModal('depart')">
+                      <el-button slot="append" @click="emptyDepart('depart_id')">清空</el-button>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -490,8 +494,8 @@
         length: '',
         type: '',
         dateRange: [],
-        consractList:[], //合同总数表格数据
-        cityList:[]
+        consractList: [], //合同总数表格数据
+        cityList: []
       }
     },
     watch: {
@@ -516,29 +520,29 @@
     },
     mounted() {
       this.getTotalList();
-      this.dictionary(306,1).then((res) => {this.cityList = res.data;
+      this.dictionary(306, 1).then((res) => {
+        this.cityList = res.data;
         this.getContract(this.cityList);
-        
+
       });
     },
     methods: {
-      getContract(val){
+      getContract(val) {
         this.$http
-        .get(globalConfig.server + "contract/reserve")
-        .then(res => {
-          if (res.data.code === "20000") {
-              this.consractList=res.data.data.data;
-              for(let i=0;i<val.length;i++){
-                for(let j=0;j<res.data.data.data.length;j++){
-                  if(res.data.data.data[j].city_code == val[i].variable.city_code)
-                  {
-                    this.consractList[j].city_name=val[i].dictionary_name
+          .get(globalConfig.server + "contract/reserve")
+          .then(res => {
+            if (res.data.code === "20000") {
+              this.consractList = res.data.data.data;
+              for (let i = 0; i < val.length; i++) {
+                for (let j = 0; j < res.data.data.data.length; j++) {
+                  if (res.data.data.data[j].city_code == val[i].variable.city_code) {
+                    this.consractList[j].city_name = val[i].dictionary_name
                   }
 
                 }
               }
-          }
-        });      
+            }
+          });
       },
 
       handleSizeChange(val) {
@@ -691,6 +695,14 @@
         this.length = 1;
         this.type = val;
         this.organizationDialog = true
+      },
+      emptyDepart(val) {
+        this.params[val] = '';
+        if (val === 'staff_id') {
+          this.staff_name = '';
+        } else {
+          this.depart_name = '';
+        }
       },
       selectMember(val) {
         if (this.type === 'staff') {
