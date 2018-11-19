@@ -132,6 +132,12 @@ export default {
       this.$http.get(globalConfig.server + url + process_id).then(res=>{
         callback(res);
       })
+    };
+    const show = true;
+    Vue.prototype.OutPut = function (...args) {
+      if(show){
+        console.log(args);
+      }
     }
   }
 }

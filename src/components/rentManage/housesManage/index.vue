@@ -162,6 +162,10 @@
                 label="归属公司"
                 prop="corp_name"
               >
+                <template slot-scope="scope">
+                  <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房型">

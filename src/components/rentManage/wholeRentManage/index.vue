@@ -176,6 +176,15 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="归属公司"
+                prop="corp_name"
+              >
+                <template slot-scope="scope">
+                  <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="合同性质">
                 <template slot-scope="scope">
                   <span v-if="scope.row.type">{{scope.row.type}}</span>
@@ -1006,6 +1015,7 @@
           this.collectLoading = false;
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
+            this.OutPut(res.data.data);
             this.collectTotalNum = res.data.meta.total;
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
