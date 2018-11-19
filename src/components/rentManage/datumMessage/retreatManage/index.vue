@@ -37,7 +37,7 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">退租时间</div>
+                    <div class="el_col_label">报备时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -77,7 +77,7 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">退租时间</div>
+                    <div class="el_col_label">报备时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -124,7 +124,7 @@
                       <el-input placeholder="请选择" @focus="openOrgan('org_names', 'depart')" style="width:250px;"
                                 v-model="org_name"
                                 size="mini">
-                        <el-button slot="append" @click="emptyDepart('org_names')">清空</el-button>
+                        <el-button slot="append" @click="emptyDepart()">清空</el-button>
                       </el-input>
                     </el-form-item>
                   </el-col>
