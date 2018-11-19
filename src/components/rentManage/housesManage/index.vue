@@ -159,6 +159,11 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="归属公司"
+                prop="corp_name"
+              >
+              </el-table-column>
+              <el-table-column
                 label="房型">
                 <template slot-scope="scope">
                   <span>{{dicts.room[scope.row.room]}}</span>

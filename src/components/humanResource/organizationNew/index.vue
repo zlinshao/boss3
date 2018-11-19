@@ -1140,12 +1140,6 @@
       this.getEntryMaterials();
       this.getBranchBank();
     },
-    computed: {
-      getShow:(level) => {
-        console.log(level);
-        return '//'
-      }
-    },
     watch: {
       department_id(val) {
         this.isGetStaff = false;
@@ -1250,7 +1244,6 @@
       //等级
       getBranchBank() {
         this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
-          console.log(res);
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
           } else {
@@ -1262,7 +1255,6 @@
         this.staffDetail = true;
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
-          console.log(res);
           this.getDuty(res.data.data.id, true);
           if (res.data.data.detail.recommender) {
             this.getDuty(res.data.data.detail.recommender, false);
