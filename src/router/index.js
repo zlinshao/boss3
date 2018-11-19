@@ -151,7 +151,7 @@ const VillageDetail = () => import  ('../components/systemSetting/managerSetting
 const ManagerSetting = () => import  ('../components/systemSetting/managerSetting/index.vue');                           //管理员设置
 
 
-// const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue');                                   //回收站
+// const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue');                                    //回收站
 // const contractModule =()=> import  ('../comments/systemSetting/contractModule/index1.vue');                        //合同模板
 // const ExportManage =()=> import  ('../comments/systemSetting/exportManage/index1.vue');                            //导出管理
 
@@ -387,7 +387,7 @@ export default new Router({
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
-        
+
         },
       ]
     },

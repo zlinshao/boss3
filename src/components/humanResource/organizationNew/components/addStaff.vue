@@ -569,13 +569,9 @@
                 this.params.entry_way = {entry_type: '', entry_mess: '',};
               }
               if (detail.dismiss_reason && detail.dismiss_reason !== 'null') {
-                if(Array.isArray(detail.dismiss_reason)){
-                  this.params.dismiss_reason = JSON.parse(detail.dismiss_reason[0]) || {dismiss_type: '', dismiss_mess: '',};
-                }else {
-                  this.params.dismiss_reason = detail.dismiss_reason || {dismiss_type: '', dismiss_mess: '',};
-                }
+                this.params.dismiss_reason = JSON.parse(detail.dismiss_reason);
               } else {
-                this.params.dismiss_reason = {dismiss_type: '', dismiss_mess: '',};
+                this.params.dismiss_reason = {dismiss_type: '', dismiss_mess: ''};
               }
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
