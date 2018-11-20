@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="账号">
-          <el-select multiple v-model="formAllocation.account_id " clearable placeholder="请选择" @change="getBankAccount">
+          <el-select multiple v-model="formAllocation.account_id " clearable placeholder="请选择" >
             <el-option v-for="item in accountNumOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
