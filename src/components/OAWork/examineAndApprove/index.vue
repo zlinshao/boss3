@@ -436,6 +436,14 @@
               label="房屋地址">
             </el-table-column>
             <el-table-column
+              label="归属公司"
+            >
+              <template slot-scope="scope">
+                <span style="color: #525252;" v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{ house_name[scope.row.house_id].corp_name }}</span>
+                <span style="color: #525252;" v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="places"
               label="状态">
               <template slot-scope="scope">
@@ -481,6 +489,14 @@
           <el-table-column
             prop="house_name"
             label="房屋地址">
+          </el-table-column>
+          <el-table-column
+            label="归属公司"
+          >
+            <template slot-scope="scope">
+              <span style="color: #525252;" v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{ house_name[scope.row.house_id].corp_name }}</span>
+              <span style="color: #525252;" v-else>暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="places"
@@ -917,6 +933,7 @@
         repairVisible: false,                             //客服部问题申报
         miscellaneousExpensesVisible: false,              //客服部问题申报
         miscellaneousExpensesOfficialVisible: false,      //客服部问题申报
+        house_name: {},
       };
     },
     mounted() {
@@ -1031,14 +1048,14 @@
           this.examineLoading = false;
           if (res.data.code === '20000' && res.data.data.data.length !== 0) {
             let data = res.data.data.data;
-            // if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
-            //   this.amount = res.data.meta.total;
-            // }
             this.paging = res.data.data.count;
             let dataList = [];
+            let house_id = [];
             for (let i = 0; i < data.length; i++) {
               let user = {};
               if (val.type === 3) {
+                house_id.push(data[i].house_id);
+                user.house_id = data[i].house_id;
                 user.is_receipt = data[i].content.is_receipt
                 user.created_at = data[i].created_at;
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
@@ -1066,6 +1083,8 @@
               if (val.type === 1 || val.type === 2 || val.type === 4) {
                 user.bulletin = data[i].title;
                 if (data[i]) {
+                  house_id.push(data[i].house_id);
+                  user.house_id = data[i].house_id;
                   user.is_receipt = data[i].content.is_receipt;
                   user.created_at = data[i].created_at;
                   user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
@@ -1097,11 +1116,27 @@
               dataList.push(user);
             }
             this.tableData = dataList;
+            this.getName(house_id);
           } else {
             this.tableData = [];
             this.paging = 0;
             this.emptyContent = '暂无数据';
           }
+        })
+      },
+      getName(houseIds = []) {
+        this.$http.get(globalConfig.server + '/organization/other/house-corp',{
+          params:{
+            houseIds
+          }
+        }).then(res=>{
+          if(res.data.code == '700120'){
+            this.house_name = res.data.data;
+          }else {
+            this.house_name = {};
+          }
+        }).catch(err=>{
+          console.log(err);
         })
       },
       retract(flag) {

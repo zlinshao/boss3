@@ -131,6 +131,14 @@
               label="房屋地址">
             </el-table-column>
             <el-table-column
+              label="归属公司"
+            >
+              <template slot-scope="scope">
+                <span style="color: #525252;" v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{ house_name[scope.row.house_id].corp_name }}</span>
+                <span style="color: #525252;" v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="places"
               label="状态">
               <template slot-scope="scope">
@@ -225,7 +233,8 @@
         tableLoading: false,
         reportModule: false,
         reportID: '',
-        approveStatus:''
+        approveStatus:'',
+        house_name: {}
       }
     },
     watch: {
@@ -238,6 +247,9 @@
       }
     },
     methods: {
+      showCorp(scope) {
+        console.log(scope);
+      },
       rowBackground({row, rowIndex}) {
         if (this.reportAllID.includes(row.id)) return 'rowBackground';
       },
@@ -273,9 +285,12 @@
             let data = res.data.data.data;
             this.totalNum = res.data.data.count;
             let dataList = [];
+            let house_id = [];
             for (let i = 0; i < data.length; i++) {
+              house_id.push(data[i].house_id);
               let user = {};
               if (data[i]) {
+                user.house_id = data[i].house_id;
                 user.is_receipt = data[i].content.is_receipt
                 user.created_at = data[i].created_at;
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
@@ -312,12 +327,28 @@
               }
               dataList.push(user);
             }
+            this.getName(house_id);
             this.tableData = dataList;
           } else {
             this.tableData = [];
             this.totalNum = 0;
             this.tableStatus = '暂无数据';
           }
+        })
+      },
+      getName(houseIds = []) {
+        this.$http.get(globalConfig.server + '/organization/other/house-corp',{
+          params:{
+            houseIds
+          }
+        }).then(res=>{
+          if(res.data.code == '700120'){
+            this.house_name = res.data.data;
+          }else {
+            this.house_name = {};
+          }
+        }).catch(err=>{
+          console.log(err);
         })
       },
       handleSizeChange(val) {

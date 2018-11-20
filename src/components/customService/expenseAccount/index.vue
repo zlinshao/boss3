@@ -856,6 +856,7 @@
           this.collectLoading = false;
           if (res.data.code === '30000') {
             this.collectTableData = res.data.data.data;
+            console.log(this.collectTableData);
             this.totalNumCollect = res.data.data.count;
             if (res.data.data.data.length < 1) {
               this.collectStatus = "暂无数据";
