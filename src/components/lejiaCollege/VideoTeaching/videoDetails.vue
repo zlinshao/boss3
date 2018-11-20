@@ -44,6 +44,7 @@
             </el-row>
             <el-row>
               <el-form-item label="该分类封面图片:">
+                <!-- {{picImg}} -->
                 <UpLoad :ID="'comment_pic'" @getImg="getImg" :editImage="picImg" :isClear="isClear"></UpLoad>
               </el-form-item>
             </el-row>
