@@ -103,9 +103,6 @@ export default {
             o = res.data.data.cover;
             // this.picImg[Number(res.data.data.id)]  = o;
             this.picImg[res.data.data.id]  = o;
-            console.log(this.picImg, "1111");
-            console.log(o, "1111");
-            
           });
       } else if (val == "创建") {
         this.title = "创建视频分类";
@@ -187,7 +184,6 @@ export default {
       this.$http.get(globalConfig.server + "video/list").then(res => {
         if (res.data.code == "10000") {
           this.videoAlbumlist = res.data.data;
-          console.log(this.videoAlbumlist, "1111");
         }
       });
     },

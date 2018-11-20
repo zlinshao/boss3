@@ -78,7 +78,6 @@
         }
       },
       isClear(val) {
-        console.log(val, "1111");
         this.imgId = [];
         this.imgArray = [];
         this.editImg = [];

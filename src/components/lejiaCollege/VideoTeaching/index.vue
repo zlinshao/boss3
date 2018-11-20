@@ -181,6 +181,7 @@ export default {
             this.rendering();
             this.isClear = true;
             this.uploadVideo = false;
+            location.reload()
           } else {
             this.$notify.warning({
               title: "警告",
