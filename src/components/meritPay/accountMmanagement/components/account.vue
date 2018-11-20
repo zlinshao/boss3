@@ -64,6 +64,8 @@
           <el-table :data="accountTable" style="width: 100%" class="urban-division"  @selection-change="handleSelectionChange" >
             <el-table-column type="selection">
             </el-table-column>
+            <el-table-column prop="org.name" label="部门">
+            </el-table-column>
             <el-table-column prop="account.cate" label="账户类型">
             </el-table-column>
             <el-table-column prop="account.display_name" label="开户行">
@@ -75,14 +77,15 @@
             <!-- <el-table-column prop="account_owner" label="操作人">
                         </el-table-column> -->
           </el-table>
+          <!-- 分页 -->
+        <div class="block pages">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          </el-pagination>
+        </div>
         </div>
       </el-col>
     </el-row>
-    <!-- 分页 -->
-    <div class="block pages">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
-    </div>
+    
   </div>
 </template>
 
@@ -297,6 +300,7 @@ export default {
         this.org_name = data.name;
         this.formAllocation.org_id = data.id;
         this.params.org_id = data.id;
+        this.params.page = '1';
         this.getAccountList()
     },
     nodeExpand(data, node, store) {
