@@ -107,7 +107,7 @@ export default {
       formAllocation: {
         //新增form
         org_id: [],
-        account_id: []
+        account_id: [],
       },
       displayName: "1",
       accountNumOptions: [], //选择账号
@@ -180,7 +180,16 @@ export default {
         })
         .then(res => {
           if (res.data.code == "20000") {
-            this.accountTable = res.data.data.data;
+            let isArray = res.data.data.data instanceof Array;
+            let _this = this;
+            if(!isArray) {
+              _this.accountTable = [];
+              for(let i in res.data.data.data) {
+                _this.accountTable.push( res.data.data.data[i])
+              }
+            } else {
+              _this.accountTable = res.data.data.data;
+            }
             this.accountTable.forEach((item, index) => {
               if (item.account.cate == 1) {
                 item.account.cate = "银行卡";
@@ -193,7 +202,7 @@ export default {
             this.total = res.data.data.count;
           } else if(res.data.code == "20001") {
             this.accountTable = [];
-              this.tableEmpty = res.data.msg;
+            this.tableEmpty = res.data.msg;
           }
         });
     },
@@ -249,7 +258,7 @@ export default {
             });
             this.getAccountList(this.selectId);
             // this.org_name = "";
-            // this.formAllocation.account_id = [];
+            this.formAllocation.account_id = [];
             this.allocationDialog = false;
           } else {
             this.$notify.warning({
@@ -274,12 +283,12 @@ export default {
     },
     handleSizeChange(val) {
       this.params.limit = val;
-      this.getAccountList(this.params.limit);
+      this.getAccountList();
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.params.page = val;
-      this.getAccountList(this.params.page);
+      this.getAccountList();
       console.log(`当前页: ${val}`);
     },
     // 新的获取城市数据
