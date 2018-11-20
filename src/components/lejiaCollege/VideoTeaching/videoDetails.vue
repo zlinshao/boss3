@@ -1,8 +1,8 @@
 <template>
   <div id="videoList">
     <div class="videoBtn">
-      <!-- <el-button icon="el-icon-picture-outline" type="primary" size="mini" >上传视屏</el-button>  createAlbum = true-->
-      <el-button icon="el-icon-picture-outline" type="primary" size="mini" @click="createEditaAlumlist('创建')">视屏分类</el-button>
+      <!-- <el-button icon="el-icon-picture-outline" type="primary" size="mini" >上传视频</el-button>  createAlbum = true-->
+      <el-button icon="el-icon-picture-outline" type="primary" size="mini" @click="createEditaAlumlist('创建')">视频分类</el-button>
     </div>
     <div class="videoClassification">
       <!-- 相册列表 -->
@@ -29,21 +29,21 @@
             </div>
           </el-card>
         </el-col>
-        <!-- 创建视屏相册 -->
+        <!-- 创建视频相册 -->
         <el-dialog :title="title" :visible.sync="createAlbum" width="30%" class="createdVideo">
           <el-form>
             <el-row>
-              <el-form-item label="视屏分类名称:" required>
-                <el-input v-model="videoForm.name" placeholder="请输入视屏分类名称"></el-input>
+              <el-form-item label="视频分类名称:" required>
+                <el-input v-model="videoForm.name" placeholder="请输入视频分类名称"></el-input>
               </el-form-item>
             </el-row>
             <el-row>
-              <el-form-item label="视屏分类说明:">
-                <el-input v-model="videoForm.description" type="textarea" placeholder="请输入视屏分类说明"></el-input>
+              <el-form-item label="视频分类说明:">
+                <el-input v-model="videoForm.description" type="textarea" placeholder="请输入视频分类说明"></el-input>
               </el-form-item>
             </el-row>
             <el-row>
-              <el-form-item label="该分类封面图片:">
+              <el-form-item label="上传新的封面图片:">
                 <!-- {{picImg}} -->
                 <UpLoad :ID="'comment_pic'" @getImg="getImg" :editImage="picImg" :isClear="isClear"></UpLoad>
               </el-form-item>
@@ -66,8 +66,8 @@ export default {
   components: { UpLoad },
   data() {
     return {
-      createAlbum: false, //创建视屏册
-      videoAlbumlist: [], //视屏册列表
+      createAlbum: false, //创建视频册
+      videoAlbumlist: [], //视频册列表
       title: "", //编辑与创建标题
       isClear: false,  //清空上传组件
       videoForm: {
@@ -92,23 +92,29 @@ export default {
     // 创建与编辑
     createEditaAlumlist(val, id) {
       if (val == "编辑") {
-        this.title = "编辑视屏分类";
+        this.title = "编辑视频分类";
         this.videoForm.classify_id = id;
         this.$http
           .get(globalConfig.server + "video/read?classify_id=" + id)
           .then(res => {
             this.videoForm.name = res.data.data.name;
             this.videoForm.description = res.data.data.description;
-            this.picImg[Number(res.data.data.id)] = res.data.data.cover;
+            let o = {};
+            o = res.data.data.cover;
+            // this.picImg[Number(res.data.data.id)]  = o;
+            this.picImg[res.data.data.id]  = o;
+            console.log(this.picImg, "1111");
+            console.log(o, "1111");
+            
           });
       } else if (val == "创建") {
-        this.title = "创建视屏分类";
+        this.title = "创建视频分类";
         this.videoForm.name = "";
         this.videoForm.description = "";
       }
       this.createAlbum = true;
     },
-    // 删除视屏册
+    // 删除视频册
     deleteAlumlist(id) {
       this.videoForm.classify_id = id;
       this.$http
@@ -129,9 +135,9 @@ export default {
           }
         });
     },
-    // 创建视屏相册
+    // 创建视频相册
     createVideo(val) {
-      if (val == "创建视屏分类") {
+      if (val == "创建视频分类") {
         this.videoForm.cover = this.videoForm.cover[0]
         this.$http
           .post(globalConfig.server + "video/create", this.videoForm)
@@ -141,10 +147,10 @@ export default {
                 title: "成功",
                 message: res.data.msg
               });
-              this.createAlbum = false;
               this.getVideoAlbum();
               // this.videoForm = {};
               this.isClear = true;
+              this.createAlbum = false;
             } else {
               this.$notify.warning({
                 title: "警告",
@@ -152,8 +158,10 @@ export default {
               });
             }
           });
-      } else if (val == "编辑视屏分类") {
-        this.videoForm.cover = this.videoForm.cover[0];
+      } else if (val == "编辑视频分类") {
+        if(this.videoForm.cover) {
+          this.videoForm.cover = this.videoForm.cover[0];
+        }
         this.$http
           .post(globalConfig.server + "video/edit", this.videoForm)
           .then(res => {
@@ -162,9 +170,9 @@ export default {
                 title: "成功",
                 message: res.data.msg
               });
-              this.createAlbum = false;
               this.getVideoAlbum();
               this.isClear = true;
+              this.createAlbum = false;
             } else {
               this.$notify.warning({
                 title: "警告",
@@ -174,15 +182,16 @@ export default {
           });
       }
     },
-    // 视屏相册分类
+    // 视频相册分类
     getVideoAlbum() {
       this.$http.get(globalConfig.server + "video/list").then(res => {
         if (res.data.code == "10000") {
           this.videoAlbumlist = res.data.data;
+          console.log(this.videoAlbumlist, "1111");
         }
       });
     },
-    // 跳转视屏详情页
+    // 跳转视频详情页
     toVideoAlbumDetail(id) {
       this.$router.push({ path: "/VideoTeaching", query: { classify_id: id } });
     }
