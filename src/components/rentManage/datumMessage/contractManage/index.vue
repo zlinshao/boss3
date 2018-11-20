@@ -1158,7 +1158,6 @@
           this.rentLoading = false;
           if (res.data.code === '61010') {
             this.rentData = res.data.data;
-            console.log(this.rentData);
             this.totalNumbers = res.data.meta.total;
 
             let collectIdArray = '';

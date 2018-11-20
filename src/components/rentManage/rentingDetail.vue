@@ -337,11 +337,12 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="电子收据链接">
-                  <div class="content" v-if="contractInfo.receipt_uris && contractInfo.receipt_uris.length>0">
-                    <div v-for="(item,index) in contractInfo.receipt_uris">
-                      <p class="lookInfo" @click="openInfo(item)"><a href="javascript:;">{{ index + 1 }}、{{ item.view_uri }}</a></p>
+                  <div class="content" v-if="contractInfo.deposit_photo">
+                    <div v-for="item in contractInfo.deposit_photo">
+                      <img data-magnify="" data-caption="图片查看器" :data-src="item" :src="item">
                     </div>
                   </div>
+                  <div v-else class="content">暂无</div>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="8">-->
@@ -1613,10 +1614,6 @@
       }
     },
     methods: {
-      openInfo(item) {
-        console.log(item);
-        window.open(item.view_uri, '_blank', 'width=1250,height=1080,left=350');
-      },
       //切换模式 精简-普通
       switchSimple() {
         this.simple = !this.simple;
