@@ -61,7 +61,7 @@
       </el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple">
-          <el-table :data="accountTable" style="width: 100%" class="urban-division"  @selection-change="handleSelectionChange" >
+          <el-table :data="accountTable" style="width: 100%" class="urban-division"  @selection-change="handleSelectionChange" ref="multipleTable">
             <el-table-column type="selection">
             </el-table-column>
             <el-table-column prop="org.name" label="部门">
@@ -224,11 +224,24 @@ export default {
    
     // 删除账号
     handleSelectionChange(val) {
-      val.forEach((item, index) => {
-        if(!this.multipleSelection.includes(item.id)) {
-          this.multipleSelection.push(item.id);
+      let _this = this;
+      let arr = this.$refs.multipleTable.data;
+       this.multipleSelection = [];
+      if(arr.length !== val.length) {
+        val.forEach((item, index) => {
+          arr.forEach((val, key) => {
+            if(val.id == item.id) {
+              _this.multipleSelection.push(item.id);
+            }
+          })
+        })
+      } else {
+        val.forEach((item, index) => {
+        if(!_this.multipleSelection.includes(item.id)) {
+          _this.multipleSelection.push(item.id);
         }
       })
+      }
     },
     deleteAccount() {
       this.$http.post(globalConfig.server + "financial/account_alloc/delete", {account_id: this.multipleSelection}).then(res => {
