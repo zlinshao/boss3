@@ -43,7 +43,7 @@
                     <el-form-item v-if="!value" :label="index" class="detailTitle">
                       <div class="special">{{value}}</div>
                     </el-form-item>
-                    <el-form-item v-if="index === 'receiptUri'" label="电子收据">
+                    <el-form-item v-if="value && Array.isArray(value) && index === 'receiptUri'" label="电子收据">
                       <div class="special">
                       <span v-for="p in value">
                         <span v-if="p.image_url">
@@ -60,7 +60,7 @@
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="value && Array.isArray(value)" :label="index">
+                    <el-form-item v-if="value && Array.isArray(value) && index !== 'receiptUri'" :label="index">
                       <div class="special">
                         <div
                           v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'"
@@ -704,7 +704,6 @@
         this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res=>{
           if(res.data.code == '20020'){
             this.show_content = res.data.data.content.show_content;
-            console.log(this.show_content);
           }
         }).catch(err=>{
           console.log(err);
@@ -717,7 +716,6 @@
         this.$http.get(this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
-            console.log(this.show_content);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
