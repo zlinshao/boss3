@@ -1640,15 +1640,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-            params: {
-              dismiss_time: this.form.dismiss_time,
-              dismiss_reason: this.form.dismiss_reason,
-            }
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '710418') {
-              this.prompt('success', res.data.msg);
               this.getPostStaffData();
+              this.getStaffData();
+              this.prompt('success', res.data.msg);
               this.selectLeaveDateDialog = false;
             } else {
               this.prompt('warning', res.data.msg);
@@ -1665,11 +1664,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-            params: {
-              dismiss_time: this.form.dismiss_time,
-              dismiss_reason: this.form.dismiss_reason,
-            }
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '710418') {
               this.prompt('success', res.data.msg);
