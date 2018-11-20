@@ -2,7 +2,7 @@
   <div id="account">
     <!-- 新增分配 -->
     <div class="addAllocation">
-      <el-button type="primary" size="mini" @click="deleteAccount">删除</el-button>
+      <el-button type="primary" size="mini" @click="deleteAccount" :disabled="multipleSelection.length == 0">删除</el-button>
       <el-button type="primary" size="mini" @click="allocationDialog = true"><i class="el-icon-plus"></i>&nbsp;新增分配</el-button>
     </div>
     <!-- 新增分配弹出框 -->
@@ -284,19 +284,19 @@ export default {
           }
         });
     },
-    getBankAccount(val) {
-      this.accountNumOptions.forEach((item, index) => {
-        if (item.value == val) {
-          if (!item.account_owner || !item.display_name) {
-            this.$notify.warning({
-              title: "警告",
-              message: "开户人或者开户行为空"
-            });
-            this.formAllocation.account_id = [];
-          }
-        }
-      });
-    },
+    // getBankAccount(val) {
+    //   this.accountNumOptions.forEach((item, index) => {
+    //     if (item.value == val) {
+    //       if (!item.account_owner || !item.display_name) {
+    //         this.$notify.warning({
+    //           title: "警告",
+    //           message: "开户人或者开户行为空"
+    //         });
+    //         this.formAllocation.account_id = [];
+    //       }
+    //     }
+    //   });
+    // },
     handleSizeChange(val) {
       this.params.limit = val;
       this.getAccountList();
