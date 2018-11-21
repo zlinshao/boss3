@@ -135,7 +135,7 @@
           </div>
         </div>
         <div class="formItem" v-if="loginModel==2">
-          <el-input placeholder="请输入手机号" v-model="phone">
+          <el-input placeholder="请输入手机号" v-model="phone" @keyup.enter.native="phoneLoginFly()">
             <template slot="append">
               <span class="china">中国</span> +86
             </template>
@@ -267,8 +267,6 @@
           if (res.data.code === '20000') {
             this.loginInfo();
             this.prompt('success', res.data.msg);
-            console.log(this.getCookie("PHPSESSID"), "111111")
-            console.log(document.cookie, "22222")
           } else {
             this.prompt('warning', res.data.msg);
           }

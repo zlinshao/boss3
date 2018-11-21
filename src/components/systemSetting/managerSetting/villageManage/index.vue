@@ -3,10 +3,10 @@
     <div class="highRanking">
       <div class="highSearch">
         <div class="managementBtn">
-          <el-button type="primary" size="mini" :disabled="btnDisable" @click="openOrganizeModal">分配</el-button>
+          <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openOrganizeModal">分配</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
-          <el-button type="primary" size="mini" :disabled="btnDisable" @click="mergeBtn" >合并</el-button>
+          <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -263,10 +263,10 @@
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList" :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
 
-    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch> 
+    <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
 
      <!-- 组织架构 -->
-    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization"></organization>
+    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization" :ids="selectedID"></organization>
   </div>
 </template>
 
@@ -275,7 +275,7 @@ import RightMenu from "../../../common/rightMenu.vue"; //右键
 import VillageModule from "./villageModule";
 import VillageSearch from "../../../common/villageSearch";
 import { setTimeout, clearTimeout } from "timers";
-import organization from "../../../common/organization"; //组织架构 
+import organization from "../../../common/organization"; //组织架构
 
 export default {
   name: "hello",
@@ -288,7 +288,7 @@ export default {
       deletedBtn: true, // 删除按钮
       checkList: [],
       cityDate: [
-       { 
+       {
           city: [],
           country: []
        }
@@ -303,6 +303,7 @@ export default {
       type: "",
       organizeVisible: false, // 组织架构
       communityArr: [],  // 小区数组
+      orgId: [],
       distributionForm: {
         org_id: [],  // 部门ID
         community_id: [] // 小区ID
@@ -357,7 +358,8 @@ export default {
       villageLoading: false,
       mergeParams: { id: "" },
       mergeName: "",
-      oldVillageName: ""
+      oldVillageName: "",
+      selectedID: [],   // 选中小组
     };
   },
   mounted() {
@@ -394,9 +396,11 @@ export default {
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
           this.communityArr.push(item.id)
-        } 
+        }
       })
-      this.pitch = val[0].id;
+      if(val.length) {
+        this.pitch = val[0].id;
+      }
       if(val.length == 1) {
         this.deletedBtn = false;
       } else {
@@ -441,6 +445,7 @@ export default {
               let departStr = ""
               data[i].orgs.forEach((item, index) => {
                 departStr += item.name + '，';
+                this.selectedID.push(item.id);
               })
               list.department = departStr.substring(0, departStr.length - 1);
               this.lengthStr = list.department;
@@ -504,12 +509,12 @@ export default {
           this.newCityList = res.data.data;
         }
       })
-      
+
     },
     // 新的区县搜索
     newChooseCountry(val,id, index) {
       this.ind3 = "";
-      this.organization = val.org_id;  
+      this.organization = val.org_id;
       this.ind2 = index;                    // 样式切换
       this.form.region = "";
       this.form.area = "";
@@ -869,7 +874,7 @@ export default {
       position: absolute;
       bottom: 0;
       right: 0;
-     
+
     }
   }
   .el-table .cell {

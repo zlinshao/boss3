@@ -168,7 +168,6 @@
     },
     mounted() {
       this.getDictionary();
-      console.log(this.form)
     },
     watch: {
       module(val) {

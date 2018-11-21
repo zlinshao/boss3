@@ -250,7 +250,7 @@
                       <el-select v-model="params.status" clearable>
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
-                        <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
+                        <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
                       </el-select>
@@ -324,9 +324,7 @@
                   <el-table-column width="40" align="center">
                     <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="false">
                         <b style="color: red;">新</b>
                       </span>
                     </template>
@@ -382,6 +380,15 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="归属公司"
+                    prop="corp_name"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -487,9 +494,7 @@
                   <el-table-column width="40" align="center">
                     <template slot-scope="scope">
                       <span
-                        v-if="scope.row.department && (scope.row.department.name === '南京马群组' ||
-                        scope.row.department.name === '南京仙林一' ||
-                        scope.row.department.name === '南京仙林二')">
+                        v-if="false">
                         <b style="color: red;">新</b>
                       </span>
                     </template>
@@ -540,6 +545,15 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="归属公司"
+                    prop="corp_name"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -871,7 +885,7 @@
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
           user_id: '',   //员工
-          status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
+          status: '',   // 房屋状态1:未签约， 2：已签约， 6：快到期（15天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
           visit_status: '',
@@ -952,7 +966,7 @@
         collectFeedback: {},
         rentFeedback: {},
         houseData: {},
-        cities: [],                     //城市
+        cities: [], //城市
       }
     },
     mounted() {
@@ -1037,7 +1051,6 @@
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.addFollowUpDialog = false;
-
         if (val === 'updateCollect') {
           this.collectDatafunc();
         } else if (val === 'updateRent') {

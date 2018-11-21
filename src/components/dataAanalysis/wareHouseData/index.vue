@@ -11,19 +11,19 @@
               <toprightControl :cardData="item" :btnstatus="btnstatus" ></toprightControl>
             </template>
             <template slot="content">
-              <component 
-                :is="item.chart_set[0].type"  
-                :chartData="item" 
-                :chartStyle="chartstyle" 
+              <component
+                :is="item.chart_set[0].type"
+                :chartData="item"
+                :chartStyle="chartstyle"
                 @click.native="showDetailChartDialog(item)"
                 v-if="item.chart_set"
               ></component>
             </template>
           </chartCard>
         </el-col>
-        <el-col 
+        <el-col
           v-if="!cardloading"
-          :span="24" 
+          :span="24"
           v-loading="cardloading"
           style="text-align: center;"
           element-loading-text="拼命加载中"
@@ -42,10 +42,10 @@
         @keyup.enter.native="searchCard(params)"
         v-model="params.keyword">
       </el-input>
-      <el-button 
-        icon="el-icon-search" 
-        circle 
-        size="mini" 
+      <el-button
+        icon="el-icon-search"
+        circle
+        size="mini"
         class="searchBtn"
         @click="searchCard"
       ></el-button>

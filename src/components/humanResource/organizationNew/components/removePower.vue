@@ -1,17 +1,33 @@
 <template>
   <div id="removePower">
-    <el-dialog :close-on-click-modal="false" title="权限黑名单" :visible.sync="powerVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="权限" :visible.sync="powerVisible" width="60%">
       <el-form size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;">
         <el-row>
           <el-col :span="8">
             <el-row>
               <el-col :span="6">
-                <div class="el_col_label" style="line-height: 30px;">职位名称</div>
+                <div class="el_col_label" style="line-height: 30px;">权限类型</div>
               </el-col>
               <el-col :span="16">
                 <el-form-item>
-                  <el-select v-model="currentRoleId" clearable placeholder="请选择">
-                    <el-option v-for="item in roleArray" :key="item.id" :label="item.name" :value="item.id">
+                  <el-select v-model="permissionType"  placeholder="请选择" >
+                    <el-option v-for="item in permissionArr" :key="item.value" :label="item.label" :value="item.value">
+                      {{item.label}}
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="16" v-if="permissionType=='position'">
+            <el-row>
+              <el-col :span="3">
+                <div class="el_col_label" style="line-height: 30px;">职位名称</div>
+              </el-col>
+              <el-col :span="18">
+                <el-form-item>
+                  <el-select v-model="currentPositionId"  placeholder="请选择" @change="getDefaultData">
+                    <el-option v-for="item in positionArr" :key="item.id" :label="item.name" :value="item.id">
                       {{item.name}}
                     </el-option>
                   </el-select>
@@ -19,16 +35,32 @@
               </el-col>
             </el-row>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="16" v-if="permissionType=='role'">
             <el-row>
               <el-col :span="3">
                 <div class="el_col_label" style="line-height: 30px;">角色名称</div>
               </el-col>
               <el-col :span="18" class="el_col_option">
                 <el-form-item>
-                  <el-select v-model="partNames" placeholder="请选择" multiple>
-                    <el-option v-for="item in partArrCategory" :key="item.name" :label="item.display_name"
-                               :value="item.name">{{item.display_name}}
+                  <el-select v-model="currentRoleId" placeholder="请选择" @change="getDefaultData">
+                    <el-option v-for="item in roleArr" :key="item.id" :label="item.display_name"
+                               :value="item.id">{{item.display_name}}
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="16" v-if="permissionType=='duty'">
+            <el-row>
+              <el-col :span="3">
+                <div class="el_col_label" style="line-height: 30px;">职务名称</div>
+              </el-col>
+              <el-col :span="18" class="el_col_option">
+                <el-form-item>
+                  <el-select v-model="currentDutyId" placeholder="请选择"  @change="getDefaultData">
+                    <el-option v-for="item in dutyArr" :key="item.id" :label="item.name"
+                               :value="item.id">{{item.name}}
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -66,8 +98,11 @@
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <!--<el-button size="small" type="primary" @click="setPart('attach')">关联角色</el-button>-->
         <!--<el-button size="small" type="primary" @click="setPart('detach')">解除角色关联</el-button>-->
-        <!--<el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>-->
-        <el-button size="small" type="primary" @click="empower('person')">同步权限黑名单</el-button>
+        <el-button v-if="permissionType=='duty'"size="small" type="primary" @click="empower('duty')">授权给职务</el-button>
+        <el-button v-if="permissionType=='role'"size="small" type="primary" @click="empower('role')">授权给角色</el-button>
+        <el-button v-if="permissionType=='user'"size="small" type="primary" @click="empower('user')">授权给个人</el-button>
+        <el-button v-if="permissionType=='position'" size="small" type="primary" @click="empower('position')">授权给职位</el-button>
+        <el-button v-if="permissionType=='ban'" size="small" type="primary" @click="empower('ban')">同步权限黑名单</el-button>
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
     </el-dialog>
@@ -87,6 +122,26 @@
           limit: 120,
           page: 1,
         },
+        permissionArr: [{
+          value: 'user',
+          label: '个人权限'
+        }, {
+          value: 'position',
+          label: '职位权限'
+        }, {
+          value: 'duty',
+          label: '职务权限'
+        }, {
+          value: 'role',
+          label: '角色权限'
+        }, {
+          value: 'ban',
+          label: '权限黑名单'
+        }, {
+          value: 'all',
+          label: '所有权限'
+        }],
+        permissionType:'',
         systemName: '',
         systemData: [],
         moduleName: '',
@@ -98,20 +153,26 @@
         checkAll: false,
         isIndeterminate: true,
         currentRoleId: '',
+        currentPositionId: '',
+        currentDutyId: '',
         roleArray: [],
         userId: '',
         partArrCategory: [],
+        positionArr: [],
+        roleArr: [],
+        dutyArr: [],
         partNames: [],
       }
     },
     mounted() {
+      this.permissionType='user';
       this.roleArray = this.powerData.positions;
-      this.userId = this.powerData.user_id;
-      this.currentRoleId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
+      this.userId = this.powerData.id;
+//      this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
     },
     activated() {
       this.roleArray = this.powerData.positions;
-      this.userId = this.powerData.user_id;
+      this.userId = this.powerData.id;
     },
     watch: {
       module(val) {
@@ -122,7 +183,14 @@
         if (!val) {
           this.$emit('close');
         } else {
-          this.getAllPartData();
+          this.getAllRoleData();
+          this.getAllDutyData();
+          this.getAllPositoinData();
+        }
+      },
+      permissionType(val){
+        if (this.userId) {
+          this.getDefaultData();
         }
       },
       powerData(val) {
@@ -131,39 +199,16 @@
         setTimeout(() => {
           if (this.userId) {
             this.getDefaultData();
-            this.getStaffPart();
+//            this.getStaffPart();
           }
         }, 0);
-        this.currentRoleId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
+        this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
+        this.currentRoleId = this.powerData.roles && this.powerData.roles[0] && this.powerData.roles[0].id;
+        this.currentDutyId = this.powerData.duties && this.powerData.duties[0] && this.powerData.duties[0].id;
       }
     },
     methods: {
-      setPart(val) {
-        let partNames = this.partNames.join(',');
-        this.$http.put(globalConfig.server + 'organization/user/withRole/' + this.userId, {
-          with: val,
-          role: partNames
-        }).then((res) => {
-          if (res.data.code === '20050') {
-            this.prompt('success', res.data.msg);
-            this.powerVisible = false;
-          } else {
-            this.prompt('warning', res.data.msg);
-          }
-        });
-      },
-      getStaffPart() {
-        this.partNames = [];
-        this.$http.get(globalConfig.server + 'organization/user/getRole/' + this.userId).then((res) => {
-          if (res.data.code === '20060') {
-            let data = res.data.data;
-            for (let i = 0; i < data.length; i++) {
-              this.partNames.push(data[i].name);
-            }
-          }
-        });
-      },
-      getAllPartData() {
+      getAllRoleData() {
         this.$http.get(this.urls + 'organization/role', {
           params: {
             limit: 500,
@@ -171,13 +216,51 @@
           }
         }).then((res) => {
           if (res.data.code === '20000') {
-            this.partArrCategory = res.data.data.data;
+            this.roleArr = res.data.data.data;
+          }
+        });
+      },
+      getAllDutyData() {
+        this.$http.get(this.urls + 'organization/duty', {
+          params: {
+            limit: 500,
+            page: 1,
+          }
+        }).then((res) => {
+          if (res.data.code === '20000') {
+            this.dutyArr = res.data.data.data;
+          }
+        });
+      },
+      getAllPositoinData() {
+        this.$http.get(this.urls + 'organization/position', {
+          params: {
+            limit: 500,
+            page: 1,
+          }
+        }).then((res) => {
+          if (res.data.code === '20000') {
+            this.positionArr = res.data.data.data;
           }
         });
       },
       getDefaultData() {
+        let pType=this.permissionType,address;
+        if(pType==='user'){
+          address='organization/user/getPermission/' + this.userId;
+        }else if(pType==='position'){
+          address='organization/position/getPermission/' + this.currentPositionId;
+        }else if(pType==='role'){
+          address='organization/role/getPermission/' + this.currentRoleId;
+        }else if(pType==='duty'){
+          address='organization/duty/getPermission/' + this.currentDutyId;
+        }else if(pType==='ban'){
+            address='organization/user/getPermissionBan/' + this.userId;
+        }else if(pType==='all'){
+            address='organization/user/getallPermission/' + this.userId;
+        }
         this.checkedPower = [];
-        this.$http.get(globalConfig.server + 'organization/user/getPermissionBan/' + this.userId).then((res) => {
+        this.$http.get(globalConfig.server + address).then((res) => {
           if (res.data.code === '20060') {
             let powers = res.data.data;
             powers.forEach((item) => {
@@ -304,21 +387,31 @@
         })
       },
       empower(val) {
-        let powerIds = this.checkedPower.toString(), str,ids;
-        if (val === 'position') {
-          ids = this.currentRoleId;
-          str = 'position';
-        } else {
-          ids = this.userId;
+        let powerIds = this.checkedPower.toString(), str,ids,address;
+        if (val === 'user') {
           str = 'user';
+          address= 'organization/permission/setpermissions/' + this.userId;
+        }else  if (val === 'position') {
+          str = 'position';
+          address= 'organization/permission/setpermissions/' + this.currentPositionId;
+        }else  if (val === 'role') {
+          str = 'role';
+          address= 'organization/permission/setpermissions/' + this.currentRoleId;
+        } else  if (val === 'duty') {
+          str = 'duty';
+          address= 'organization/permission/setpermissions/' + this.currentDutyId;
+        }else  if (val === 'ban') {
+          str = '';
+          address= 'organization/permission/ban/' + this.userId;
         }
-        this.$http.put(globalConfig.server + 'organization/permission/ban/' + ids, {
-//          on: str,
+
+        this.$http.put(globalConfig.server + address, {
+          on: str,
           permissions: powerIds,
         }).then((res) => {
           if (res.data.code === '20000') {
             this.powerVisible = false;
-            this.prompt('success', '黑名单权限同步成功');
+            this.prompt('success', '设置成功');
           } else {
             this.prompt('warning', res.data.msg);
           }

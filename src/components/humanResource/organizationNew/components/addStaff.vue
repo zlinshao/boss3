@@ -563,15 +563,15 @@
             }
             let detail = res.data.data.detail;
             if (detail) {
-              if (detail.entry_way && detail.entry_way !== 'null' && detail.entry_way.entry_type) {
-                this.params.entry_way = detail.entry_way;
+              if (detail.entry_way && detail.entry_way !== 'null') {
+                this.params.entry_way = JSON.parse(detail.entry_way);
               } else {
                 this.params.entry_way = {entry_type: '', entry_mess: '',};
               }
-              if (detail.dismiss_reason !== 'null') {
-                this.params.dismiss_reason = JSON.parse(detail.dismiss_reason) || {dismiss_type: '', dismiss_mess: '',};
+              if (detail.dismiss_reason && detail.dismiss_reason !== 'null') {
+                this.params.dismiss_reason = detail.dismiss_reason;
               } else {
-                this.params.dismiss_reason = {dismiss_type: '', dismiss_mess: '',};
+                this.params.dismiss_reason = {dismiss_type: '', dismiss_mess: ''};
               }
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
@@ -579,7 +579,15 @@
               this.params.id_num = detail.id_num;
               this.params.birthday = detail.birthday;
               this.params.recommender = detail.recommender;
-              this.orgData.recommender = detail.recommender_name;
+              if (detail.recommender) {
+                this.$http.get(globalConfig.server + 'organization/user/' + detail.recommender).then(res => {
+                  if (res.data.code == '20020') {
+                    this.orgData.recommender = res.data.data.name;
+                  } else {
+                    this.orgData.recommender = "";
+                  }
+                });
+              }
               this.params.bank_num = detail.bank_num;
               this.params.account_bank = detail.account_bank;
               this.params.branch_bank = detail.branch_bank;
@@ -732,6 +740,8 @@
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
             }
+          }).catch(err => {
+            this.disabledBtn = false;
           });
         } else {
           //新增
@@ -744,6 +754,8 @@
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
             }
+          }).catch(err => {
+            this.disabledBtn = false;
           });
         }
       },

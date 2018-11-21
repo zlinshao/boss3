@@ -54,14 +54,14 @@
             <i class="el-icon-arrow-left" @click="detaildialogVisible=false"></i>
             <span>{{chartData.name}}</span>
           </div>
-          <toprightcontrol 
-            :cardData="chartData" 
+          <toprightcontrol
+            :cardData="chartData"
             :btnstatus="btnstatus" >
           </toprightcontrol>
         </div>
         <div class="detailcontent">
           <div class="contentTop">
-            
+
             <el-row :gutter="20">
               <el-col :span="4">
                 <div class="detailSelect">
@@ -167,7 +167,7 @@
         </div>
       </div>
     </el-dialog>
-    
+
   </div>
 </template>
 <script>
@@ -205,7 +205,7 @@
           page: 1,
           limit:5
         },
-        diaParams:{   
+        diaParams:{
           city:"",
           area:"",
           group:"",
@@ -326,18 +326,18 @@
           this.getChart(this.diaParams,val)
           // console.log(this.$refs.control)
       },
-      
+
       // getNewDate(){
       //   var date =  new Date()
       //   var lastdate = new Date(date.getTime() - 3600 * 1000 * 24)
       //   var year = lastdate.getFullYear();
-      //   var month = lastdate.getMonth()+1;   
-      //   var day = lastdate.getDate(); 
+      //   var month = lastdate.getMonth()+1;
+      //   var day = lastdate.getDate();
       //   this.dataParams.start_date = year + '-' +month + '-' + day
       //   this.dataParams.end_date = year + '-' +month + '-' + day
       // },
       getChart(params,val){ //获取数据
-        
+
         if(val=="default"){
           this.dataParams.city = params.city
           this.dataParams.area=params.area,
@@ -378,12 +378,12 @@
             }
           });
         }
-        
+
       },
       showDetailChartDialog(){
         // console.log(this.status)
         if(!this.status){
-          
+
           this.detaildialogVisible = true
         }
         // this.sendDetailData = item
@@ -453,7 +453,7 @@
     margin-top:30px;
     padding: 0 50px;
   }
-   
+
 }
 </style>
 <style>

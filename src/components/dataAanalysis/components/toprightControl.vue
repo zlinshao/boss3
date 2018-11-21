@@ -13,11 +13,11 @@
           <p v-if="cardData.introduction">
             {{cardData.introduction}}
           </p>
-        <el-button 
-          icon="el-icon-question" 
-          slot="reference" 
+        <el-button
+          icon="el-icon-question"
+          slot="reference"
           circle
-          style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;" 
+          style="float: right;overflow:hidden;border:1px #409EFF solid;color:#409EFF;"
           size="mini"
           type="text"></el-button>
       </el-popover>
@@ -41,27 +41,27 @@
           <li @click="addCard('topic')"><i class="el-icon-plus"></i>主题指标</li>
           <li @click="addCard('card')"><i class="el-icon-plus"></i>分析指标</li>
         </ul>
-        <el-button 
+        <el-button
           slot="reference" icon="el-icon-plus" circle
           style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
-          size="mini" type="text" 
+          size="mini" type="text"
           @click="getMeterNameList"
           v-if="btnstatus.hideAdd"
           ></el-button>
       </el-popover>
-      <el-button 
-        icon="el-icon-search" 
-        circle  
-        size="mini" 
+      <el-button
+        icon="el-icon-search"
+        circle
+        size="mini"
         style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
         @click="showDetailChartDialog"
         v-if="btnstatus.large"
         ></el-button>
     </div>
-      <el-button 
-      icon="el-icon-close" 
-      circle  
-      size="mini" 
+      <el-button
+      icon="el-icon-close"
+      circle
+      size="mini"
       style="float: right;overflow:hidden;border:1px #409EFF solid;margin-right: 10px;color:#409EFF;"
       @click="delConfirm"
       v-if="btnstatus.delete"
@@ -118,7 +118,7 @@
             this.meterList = res.data.data.data.private
             // this.meterList = res.data.data.data.public
           } else {
-            
+
           }
         });
       },
@@ -163,9 +163,9 @@
               this.$message({
                 type: 'info',
                 message: '已取消添加'
-              });          
+              });
             });
-      
+
           }else{
             this.params.topic_card_id = this.cardData.id
             this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.currentList.id,this.params, {
@@ -178,7 +178,7 @@
               }
             });
           }
-          
+
         }
         if(val === "card"){
           this.params.card_ids.push(this.cardData.id)
@@ -204,7 +204,7 @@
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
       },
       delCard(){
@@ -224,7 +224,7 @@
         })
         this.params.user_id = this.meterData.user_id||JSON.parse(localStorage.getItem("personal")).id
         this.params.topic_card_id = this.meterData.topic_card_id
-        
+
         this.$http.put(globalConfig.server + "/bisys/dashboard/"+this.meterData.id,this.params, {
           headers: {"Accept": "application/vnd.boss18+json"}
         }).then((res) => {

@@ -73,7 +73,7 @@
                       <div class="special imgs">
                       <span v-for="(p,index) in value">
                         <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
-                        <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
+                        <video :src="p.uri" controls v-if="p.is_video" width="220px" height="80px"></video>
                       </span>
                       </div>
                     </el-form-item>

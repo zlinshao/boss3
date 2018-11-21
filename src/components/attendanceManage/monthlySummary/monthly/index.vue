@@ -448,8 +448,8 @@ export default {
               item.sort_dimension.forEach((key, ind) => {
                 attendanceObj = {};
                 key.forEach((a, b) => {
-                  
-                  
+
+
                   attendanceObj.date = a.sign_date;
                   if(a.event_attribute == 1) {
                     if(a.status == 0)  {
@@ -458,7 +458,7 @@ export default {
                        attendanceObj.resultWork = "迟到"
                     }
                     attendanceObj.goWork = a.dimensions.hour + ":" + a.dimensions.minute;       // 上班时间
-                  } else if(a.event_attribute == 2) { 
+                  } else if(a.event_attribute == 2) {
                     if(a.status == 0)  {
                       attendanceObj.resultOffWork = "正常"   // 下班打卡正常
                     }else if(a.status == 2) {

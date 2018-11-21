@@ -37,7 +37,7 @@
                   </div>
                 </el-col>
               </el-row>
-              
+
             </div>
             <div class="radio_city">
               <el-radio-group v-model="placeForm.city" size="mini" class="radioreset" @change="choose('city',placeForm.city)">
@@ -66,10 +66,10 @@
             </div>
           </div>
           <div class="chartCanva">
-            <component 
-              :is="detailMeterMsg.topic.chart_set[0].type" 
-              :chartData="detailMeterMsg.topic" 
-              :chartStyle="mainchartstyle" 
+            <component
+              :is="detailMeterMsg.topic.chart_set[0].type"
+              :chartData="detailMeterMsg.topic"
+              :chartStyle="mainchartstyle"
               v-if="detailMeterMsg.topic.chart_set"
               ref="mainchart"
             ></component>
@@ -93,22 +93,22 @@
               <el-col :span="12" v-for="(item,index) in detailMeterMsg.cards" :key="index"  v-if="item.data_source">
                 <chartCard id="card" :cardData="item" >
                   <template slot="right">
-                    <toprightControl 
-                      :cardData="item" 
-                      :btnstatus="btnstatus" 
+                    <toprightControl
+                      :cardData="item"
+                      :btnstatus="btnstatus"
                       :meterData="detailMeterMsg">
                     </toprightControl>
                   </template>
                   <template slot="content">
-                    <component 
-                      :is="item.chart_set[0].type" 
-                      :chartData="item" 
-                      :chartStyle="chartstyle" 
+                    <component
+                      :is="item.chart_set[0].type"
+                      :chartData="item"
+                      :chartStyle="chartstyle"
                       :status="true"
                       ref="minor"
                     ></component>
                   </template>
-                  
+
                 </chartCard>
               </el-col>
             </el-row>
@@ -133,7 +133,7 @@
   import stackedPercentageColumn from "../../wareHouseData/chart/stackedPercentageColumn.vue"       //百分比堆叠柱状图
   import textCard from "../../wareHouseData/chart/textCard.vue"               //文本卡片
   import tableCard from "../../wareHouseData/chart/tableCard.vue"            //表格卡片
-  
+
 
   export default {
     props: ['detailMeterVisible', 'detailMeterMsg','editStatus'],
@@ -212,7 +212,7 @@
           },
           ]
         },
-        
+
       }
     },
     filters:{
@@ -235,7 +235,7 @@
           this.getList("group",id)
         }
       },
-      getList(val,id){ 
+      getList(val,id){
         if(val=='city'){
           this.$http.get(globalConfig.server+"organization/other/org-tree?id=331").then((res) => {
             if(res.data.code == "20000"){
@@ -291,7 +291,7 @@
               }
             }
         },
-      
+
     },
     watch: {
       detailMeterVisible(val) {

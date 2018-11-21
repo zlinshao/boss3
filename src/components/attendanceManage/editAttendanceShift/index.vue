@@ -311,7 +311,7 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
-      
+
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {

@@ -151,7 +151,7 @@ const VillageDetail = () => import  ('../components/systemSetting/managerSetting
 const ManagerSetting = () => import  ('../components/systemSetting/managerSetting/index.vue');                           //管理员设置
 
 
-// const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue');                                   //回收站
+// const Recycle =()=> import  ('../comments/systemSetting/recycleBin/index1.vue');                                    //回收站
 // const contractModule =()=> import  ('../comments/systemSetting/contractModule/index1.vue');                        //合同模板
 // const ExportManage =()=> import  ('../comments/systemSetting/exportManage/index1.vue');                            //导出管理
 
@@ -227,6 +227,10 @@ const OfficeManage = () => import ('../components/officeManage/index');
 
 //业绩详情
 const DetailAcievement = () => import('../components/meritPay/achievement/achievementDetails/index');
+
+// 账户管理
+const accountMmanagement = () => import('../components/meritPay/accountMmanagement/index.vue');
+const account = () => import('../components/meritPay/accountMmanagement/components/account.vue')
 
 Vue.use(Router);
 
@@ -376,10 +380,14 @@ export default new Router({
         {path: '/leaveOffice', component: LeaveOffice, name: '离职短信'},
 
         // 视屏管理
-        { path: '/VideoTeaching', component: VideoTeaching, name: '视屏管理', meta: { keepAlive: true }},
+        { path: '/VideoTeaching', component: VideoTeaching, name: '视频管理', meta: { keepAlive: true }},
+
+        // 账户管理
+        { path: '/account', component: account, name: '账户管理', meta: { keepAlive: true }},
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
-        
+
+
         },
       ]
     },
@@ -556,24 +564,24 @@ export default new Router({
         {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
       ]
     },
-    {
-      path: '/',
-      component: Index,
-      name: 'HRM',
-      icon: 'iconfont icon-renzi',
-      children: [
-        {
-          path: '/teamManage', component: TeamManage, name: '人员信息管理',
-          children: [
-            {path: '/teamManage/roster', component: Roster, name: '花名册'},
-            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-            {path: '/dimission', component: Dimission, name: '离职管理'},
-          ],
-        },
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: 'HRM',
+    //   icon: 'iconfont icon-renzi',
+    //   children: [
+    //     {
+    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
+    //       children: [
+    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
+    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+    //         {path: '/dimission', component: Dimission, name: '离职管理'},
+    //       ],
+    //     },
+    //   ]
+    // },
     {
       path: '/staffDetail',
       component: StaffDetail,
@@ -639,7 +647,7 @@ export default new Router({
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
-        // { path: '/videoDetails', component: videoDetails, name: '教学视频'},
+        { path: '/videoDetails', component: videoDetails, name: '教学视频'},
 
       ]
     },
@@ -682,7 +690,8 @@ export default new Router({
       name: '系统设置',
       icon: 'iconfont icon-shezhi1',
       children: [
-        {path: '/moduleSetting', component: ModuleSetting, name: '模块设置'},
+        {path: '/moduleSetting', component: ModuleSetting, name: '模块设置' },
+        {path: "/accountMmanagement", component: accountMmanagement, name: "账户管理" },
 
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志'},

@@ -62,7 +62,7 @@
               </el-row>
             </el-col>
           </el-row>
-          <el-row class="el_row_border" style="margin-top: 10px;">
+          <el-row class="el_row_border">
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">

@@ -72,8 +72,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="department_name" @focus="openOrganizeModal"
-                                placeholder="请选择" readonly=""></el-input>
+                      <el-input v-model="department_name" @focus="openOrganizeModal" placeholder="请选择" readonly="">
+                        <el-button slot="append" @click="emptyDepart()">清空</el-button>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -173,6 +174,15 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.address">{{scope.row.address}}</span>
                   <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="归属公司"
+                prop="corp_name"
+              >
+                <template slot-scope="scope">
+                  <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -986,6 +996,11 @@
         this.length = 1;
         this.type = 'depart';
       },
+      // 清空部门
+      emptyDepart() {
+        this.collectParams.org_id = '';
+        this.department_name = '';
+      },
       selectMember(val) {
         this.organizationDialog = false;
         this.collectParams.org_id = val[0].id;
@@ -1006,6 +1021,7 @@
           this.collectLoading = false;
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
+            this.OutPut(res.data.data);
             this.collectTotalNum = res.data.meta.total;
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {

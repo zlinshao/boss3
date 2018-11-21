@@ -1,6 +1,6 @@
 <template>
   <div id="addPower">
-    <el-dialog :close-on-click-modal="false" title="权限" :visible.sync="powerVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="角色" :visible.sync="powerVisible" width="60%">
       <el-form size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;">
         <el-row>
           <el-col :span="8">
@@ -65,8 +65,8 @@
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button size="small" type="primary" @click="setPart('attach')">关联角色</el-button>
         <el-button size="small" type="primary" @click="setPart('detach')">解除角色关联</el-button>
-        <el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>
-        <el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>
+        <!--<el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>-->
+        <!--<el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>-->
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
     </el-dialog>

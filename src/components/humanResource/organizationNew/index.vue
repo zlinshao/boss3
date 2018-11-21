@@ -141,7 +141,6 @@
                         </el-col>
                       </el-row>
                     </el-col>
-                    s
                     <el-col :span="12">
                       <el-row>
                         <el-col :span="8">
@@ -593,8 +592,9 @@
                   <el-col :span="8">
                     <el-form-item label="等级">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.levels">
-                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span>
+                        <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.level">
+                          <span v-for="item in branchBankCategory">{{item.id == staffDetailData.detail.level ? item.dictionary_name : ''}}</span>
+                        </span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -634,9 +634,8 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way.entry_type && staffDetailData.detail.entry_way.entry_type.length > 0">
-                          <span
-                            v-for="item in staffDetailData.detail.entry_way.entry_type">{{EWCategory[item]}}&nbsp;</span>
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
+                            {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -652,8 +651,8 @@
                   <el-col :span="8">
                     <el-form-item label="备注">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way">
-                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
+                      {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -663,8 +662,8 @@
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
-                      {{staffDetailData.detail.dismiss_reason.dismiss_type && DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                      {{DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -672,7 +671,7 @@
                   <el-col :span="8">
                     <el-form-item label="具体描述">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
                       {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -1034,6 +1033,7 @@
           page: 1,
           org_id: 1,
           is_dimission: '',
+          infinite: 20,         //需要权限
           forward: '',
           is_recursion: 1,
           entry_time: [],
@@ -1054,7 +1054,9 @@
           limit: 5,
           page: 1,
         },
-
+        paramsOrg: {
+          infinite: 20,
+        },
         staffTableData: [],    //员工列表
         positionTableData: [], //岗位列表
         positionList: [],      //职位列表
@@ -1105,7 +1107,7 @@
         departManageName: '',
         selectPostID: '',
         selectOrgID: '',
-        growthData: '',
+        growthData: [],
         currentDuty: '',
         currentPosi: '',
         gender: '',
@@ -1114,6 +1116,19 @@
         political_status: '',
         recommender: '',
         education: '',//学历
+        entryWayCategory: [
+          {id: "1", name: '智联招聘'},
+          {id: "2", name: '前程无忧'},
+          {id: "3", name: '58同城'},
+          {id: "4", name: 'BOSS直聘'},
+          {id: "5", name: '猎聘网'},
+          {id: "6", name: '首席信才'},
+          {id: "7", name: '德盛人才'},
+          {id: "8", name: '校园招聘会'},
+          {id: "9", name: '社会招聘会'},
+          {id: "10", name: '推荐'},
+          {id: "11", name: '其他'},
+        ],
       }
     },
     mounted() {
@@ -1240,11 +1255,10 @@
         this.staffDetail = true;
         //员工详情
         this.$http.get(globalConfig.server + 'organization/staff/' + row.id).then((res) => {
-          console.log(res);
-          this.getDuty(res.data.data.id,true);
-          if(res.data.data.detail.recommender){
-            this.getDuty(res.data.data.detail.recommender,false);
-          }else{
+          this.getDuty(res.data.data.id, true);
+          if (res.data.data.detail.recommender) {
+            this.getDuty(res.data.data.detail.recommender, false);
+          } else {
             this.recommender = "暂无";
           }
           this.staffDetailData = {};
@@ -1286,83 +1300,87 @@
         });
         //成长轨迹
         this.$http.get(globalConfig.server + 'manager/staff/growth/' + row.id).then((res) => {
-          this.growthData = res.data.data;
+          if (res.data.code === '10070') {
+            this.growthData = res.data.data;
+          } else {
+            this.growthData = [];
+          }
         });
       },
       //获取职位岗位
-      getDuty (user_id,status){
-        this.$http.get(globalConfig.server + 'hrm/User/userInfo',{
-          params:{
+      getDuty(user_id, status) {
+        this.$http.get(globalConfig.server + 'hrm/User/userInfo', {
+          params: {
             user_id
           }
-        }).then(res =>{
-          if(res.status === 200){
-            if(res.data.code == 90010){
-              if(status){
+        }).then(res => {
+          if (res.status === 200) {
+            if (res.data.code == 90010) {
+              if (status) {
                 this.currentDuty = res.data.data.dutyInfoNames;
                 this.currentPosi = res.data.data.positionInfoNames;
                 this.dict(res);
-              }else{
+              } else {
                 this.recommender = res.data.data.name;
               }
             }
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
-      dict (res){
+      dict(res) {
         this.dictionary(228, 1).then(result => {// 性别
-          result.data.map((item,index)=>{
-            if(res.data.data.gender){
-              if(item.id === res.data.data.gender){
+          result.data.map((item, index) => {
+            if (res.data.data.gender) {
+              if (item.id === res.data.data.gender) {
                 this.gender = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.gender = "暂无";
             }
           })
         });
         this.dictionary(231, 1).then(result => {// 生育状况
-          result.data.map((item,index)=>{
-            if(res.data.data.fertility_status){
-              if(item.id == res.data.data.fertility_status){
+          result.data.map((item, index) => {
+            if (res.data.data.fertility_status) {
+              if (item.id == res.data.data.fertility_status) {
                 this.fertility_status = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.fertility_status = "暂无";
             }
           })
         });
         this.dictionary(33, 1).then(result => {// 婚姻状况
-          result.data.map((item,index)=>{
-            if(res.data.data.marital_status){
-              if(item.id == res.data.data.marital_status){
+          result.data.map((item, index) => {
+            if (res.data.data.marital_status) {
+              if (item.id == res.data.data.marital_status) {
                 this.marital_status = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.marital_status = "暂无";
             }
           })
         });
         this.dictionary(38, 1).then(result => {// 政治面貌
-          result.data.map((item,index)=>{
-            if(res.data.data.political_status){
-              if(item.id == res.data.data.political_status){
+          result.data.map((item, index) => {
+            if (res.data.data.political_status) {
+              if (item.id == res.data.data.political_status) {
                 this.political_status = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.political_status = "暂无";
             }
           })
         });
         this.dictionary(39, 1).then(result => {
-          result.data.map((item,index)=>{
-            if(res.data.data.education){
-              if(item.id == res.data.data.education){
+          result.data.map((item, index) => {
+            if (res.data.data.education) {
+              if (item.id == res.data.data.education) {
                 this.education = result.data[index].dictionary_name;
               }
-            }else{
+            } else {
               this.education = "暂无";
             }
           })
@@ -1384,7 +1402,9 @@
       getDepart() {
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(globalConfig.server + 'organization/org/1').then((res) => {
+        this.$http.get(globalConfig.server + 'organization/org/1', {
+          params: this.paramsOrg
+        }).then((res) => {
           this.collectLoading = false;
           if (res.data.code === '20020') {
             this.setTree = [];
@@ -1544,8 +1564,8 @@
         //is_enable 有值禁用 is_on_job 离职
         if (row.is_enable && row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1554,8 +1574,8 @@
           ];
         } else if (!row.is_enable && row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
@@ -1564,8 +1584,8 @@
           ];
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1574,8 +1594,8 @@
           ];
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
-            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
-            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限黑名单', data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '角色', data: row},
+            {clickIndex: 'remove_power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
@@ -1620,15 +1640,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-            params: {
-              dismiss_time: this.form.dismiss_time,
-              dismiss_reason: this.form.dismiss_reason,
-            }
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '710418') {
-              this.prompt('success', res.data.msg);
               this.getPostStaffData();
+              this.getStaffData();
+              this.prompt('success', res.data.msg);
               this.selectLeaveDateDialog = false;
             } else {
               this.prompt('warning', res.data.msg);
@@ -1645,11 +1664,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-            params: {
-              dismiss_time: this.form.dismiss_time,
-              dismiss_reason: this.form.dismiss_reason,
-            }
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '710418') {
               this.prompt('success', res.data.msg);
@@ -1725,7 +1742,7 @@
           this.sendLeaveMsgDialog = true;
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
-        }else if ( val.clickIndex ==='remove_power'){
+        } else if (val.clickIndex === 'remove_power') {
           this.RemovePowerModule = true;
           this.RemovePowerData = val.data;
         }

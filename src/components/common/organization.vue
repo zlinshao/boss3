@@ -43,7 +43,7 @@
         </div>
         <!--筛选-->
         <div class="filterOrgan">
-          <div class="filterTop" @click="filterOrgan(depart)">
+          <div class="filterTop" @click="tioOrgan(depart)">
             {{department_name}}
           </div>
           <!--面包屑-->
@@ -99,7 +99,7 @@
 <script>
   export default {
     name: "organization",
-    props: ['organizationDialog', 'length', 'type', 'depart'],
+    props: ['organizationDialog', 'length', 'type', 'depart', 'ids'],
     data() {
       return {
         organizationVisible: false,
@@ -123,11 +123,12 @@
         parent_id: '',            // 当前层级 id
         pitchOnData: [],          // 面包屑
         checkDepart: [],          // 复选框 部门
-        checkData: [],            // 选中员工
+        checkData: [],            // 选中员工 css
         form: [],
         lengths: '',
         organType: '',
         department_name: '',
+        firstOpen: true,
       }
     },
     mounted() {
@@ -142,13 +143,33 @@
       organizationVisible(val) {
         if (!val) {
           this.$emit('close');
-          this.close_();
+          this.params.keywords = '';
+          // this.close_();
         } else {
-          this.filterOrgan(this.depart);
+          // 所有员工
+          // this.$http.get(this.url + 'organization/user?limit=5000').then(res => {
+          //   console.log(res.data);
+          // if (res.data.code === '20000') {
+          //   let data = res.data.data.data;
+          //   for (let key of data) {
+          //     console.log(key);
+          //   }
+          // }
+          // });
+          if (this.firstOpen) {
+            console.log(this.ids);
+            if (this.ids) {
+              this.allDepart(this.ids);
+            }
+            this.filterOrgan(this.depart);
+          }
           this.$nextTick(() => {
             this.leftHeight();
             this.rightHeight();
-          })
+          });
+          setTimeout(() => {
+            this.firstOpen = false;
+          }, 100);
         }
       },
       form() {
@@ -170,6 +191,25 @@
     },
     computed: {},
     methods: {
+      allDepart(ids) {
+        this.form = [];
+        this.checkDepart = ids;
+        this.$http.get(this.url + 'organization/org?limit=1000').then(res => {
+          if (res.data.code === '20000') {
+            let data = res.data.data.data;
+            for (let key of data) {
+              let list = {};
+              if (ids.includes(key.id)) {
+                list.id = key.id;
+                list.name = key.name;
+                list.org = key.org ? key.org : '';
+                this.form.push(list);
+                this.checkDepart.push(list);
+              }
+            }
+          }
+        });
+      },
       // 搜索/员工
       searchStaff() {
         if (this.params.keywords === '') {
@@ -191,12 +231,16 @@
         this.staffList = [];
         this.staffListStatus = false;
       },
+      // 顶级部门
+      tioOrgan(id) {
+        this.pitchOnData = [];
+        this.filterOrgan(id);
+      },
       // 部门/员工
       filterOrgan(id = 1) {
         if (this.parent_id === id) return;
         this.fullLoading = true;
         this.list = [];
-        this.pitchOnData = id === this.depart ? [] : this.pitchOnData;
         this.$http.get(this.url + 'organization/other/org-tree?id=' + id).then(res => {
           this.fullLoading = false;
           this.parent_id = id;
@@ -277,15 +321,28 @@
       },
       // 选中
       chooseData(item, data) {
+        if (this.lengths === 1) {
+          this.checkDepart = [];
+          this.checkData = [];
+          this.form = [];
+          this.checkDepart.push(item.id);
+        }
         if (this.form.length > this.lengths - 1 && this.lengths !== '') {
           this.prompt('warning', '超出数量限制');
           this.checkDepart.pop();
           return;
         }
         data.forEach(res => {
+          let data = {};
+          data.id = res.id;
+          data.name = res.name;
+          if (res.hasOwnProperty('avatar')) {
+            data.org = res.org;
+            data.avatar = res.avatar;
+          }
           if (item.id === res.id) {
             this.checkData.push(res.id);
-            this.form.push(res);
+            this.form.push(data);
           }
         });
       },
@@ -304,6 +361,7 @@
       },
       // 确定
       confirmSelect() {
+        console.log(this.form);
         this.organizationVisible = false;
         this.$emit('selectMember', this.form);
       },

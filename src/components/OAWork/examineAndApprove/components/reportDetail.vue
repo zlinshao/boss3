@@ -50,11 +50,11 @@
                 <el-col :span="24" v-else>
                   <el-form-item :label="index">
                     <div class="special imgs">
-                <span v-for="(p,index) in key">
-                  <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
-                  <!--<img src="../../../../assets/images/file.png" @click="checkTv(pic.uri)"  v-if="p.is_video">-->
-                  <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
-                </span>
+                      <span v-for="(p,index) in key">
+                        <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
+                        <!--<img src="../../../../assets/images/file.png" @click="checkTv(pic.uri)"  v-if="p.is_video">-->
+                        <video :src="p.uri" controls v-if="p.is_video" width="200px" height="80px"></video>
+                      </span>
                     </div>
                   </el-form-item>
                 </el-col>

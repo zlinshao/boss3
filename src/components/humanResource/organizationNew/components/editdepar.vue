@@ -62,6 +62,9 @@
           is_corp: '0',
           corp_wx: ''
         },
+        paramsOrg: {
+          infinite: 20,
+        },
         is_corp: false,
         organizationDialog: false,
         department: '',
@@ -84,7 +87,9 @@
     },
     methods: {
       getDepartInfo(id) {
-        this.$http.get(globalConfig.server + 'organization/org/' + id).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/org/' + id, {
+          params: this.paramsOrg,
+        }).then((res) => {
           if (res.data.code === '20020') {
             let data = res.data.data;
             this.params.name = data.name;
@@ -98,7 +103,9 @@
               this.params.corp_wx = '';
             }
             this.department = '';
-            this.$http.get(globalConfig.server + 'organization/org/' + this.params.parent_id).then((res) => {
+            this.$http.get(globalConfig.server + 'organization/org/' + this.params.parent_id, {
+              params: this.paramsOrg,
+            }).then((res) => {
               if (res.data.code === '20020') {
                 this.department = res.data.data.name;
               }

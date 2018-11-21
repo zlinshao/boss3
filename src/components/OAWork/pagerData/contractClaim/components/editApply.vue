@@ -123,6 +123,7 @@
 <script>
   import Organization from '../../../../common/organization.vue'
   import Upload from '../../../../common/UPLOAD.vue'
+
   export default {
     components: {Organization, Upload},
     props: ['editApplyDialog', 'applyEditId', 'startOperate'],
@@ -159,19 +160,19 @@
 
       };
     },
-    mounted(){
+    mounted() {
 
     },
     watch: {
-      editApplyDialog(val){
+      editApplyDialog(val) {
         this.editApplyDialogVisible = val
       },
-      editApplyDialogVisible(val){
+      editApplyDialogVisible(val) {
         if (!val) {
           this.$emit('close')
         }
       },
-      startOperate(val){
+      startOperate(val) {
         if (val) {
           this.getDictionary();
         }
@@ -180,14 +181,14 @@
     },
     methods: {
 
-      getDictionary(){
+      getDictionary() {
         this.dictionary(306, 1).then((res) => {
           this.cityDictionary = res.data;
           this.getApplyDetail();
         });
       },
       //获取详情
-      getApplyDetail(){
+      getApplyDetail() {
         this.$http.get(globalConfig.server + 'contract/apply/' + this.applyEditId).then((res) => {
           if (res.data.code === '20000') {
             let applyInfo = res.data.data.full;
@@ -204,12 +205,13 @@
             //照片修改
             let picObject = {};
             this.params.screenshot = [];
-            applyInfo.screenshot.forEach((item) => {
-              picObject[item.id] = item.uri;
-              this.params.screenshot.push(item.id)
-            });
+            if (applyInfo.screenshot) {
+              applyInfo.screenshot.forEach((item) => {
+                picObject[item.id] = item.uri;
+                this.params.screenshot.push(item.id)
+              });
+            }
             this.editImage = picObject;
-
 
             this.isSelectCollect = applyInfo.collects;
             this.isSelectRent = applyInfo.rents;
@@ -232,12 +234,12 @@
 
 
       //调出选人组件
-      openOrganizeModal(){
+      openOrganizeModal() {
         this.organizationDialog = true;
         this.type = 'staff';
         this.length = 1;
       },
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         this.type = '';
         this.length = '';
@@ -248,18 +250,18 @@
 
       },
 
-      closeModal(){
+      closeModal() {
         this.organizationDialog = false
       },
 
-      getImg(val){
+      getImg(val) {
         console.log(val)
         this.upStatus = val[2];
         this.params.screenshot = val[1];
       },
 
       //确认提交
-      confirmAdd(){
+      confirmAdd() {
         if (this.upStatus === true) {
           this.$notify.warning({
             title: '警告',
@@ -284,7 +286,7 @@
           })
         }
       },
-      closeAddModal(){
+      closeAddModal() {
         $('.imgItem').remove();
         this.params = {
           city_code: '',
