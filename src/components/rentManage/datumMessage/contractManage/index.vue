@@ -383,6 +383,15 @@
                     </template>
                   </el-table-column>
                   <el-table-column
+                    label="归属公司"
+                    prop="corp_name"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     prop="phone"
                     label="手机号码">
                     <template slot-scope="scope">
@@ -536,6 +545,15 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="归属公司"
+                    prop="corp_name"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -1158,7 +1176,6 @@
           this.rentLoading = false;
           if (res.data.code === '61010') {
             this.rentData = res.data.data;
-            console.log(this.rentData);
             this.totalNumbers = res.data.meta.total;
 
             let collectIdArray = '';

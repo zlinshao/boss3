@@ -275,6 +275,14 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="归属公司"
+              >
+                <template slot-scope="scope">
+                  <span style="color: #525252;" v-if="house_name && scope.row.contracts && scope.row.contracts.house_id && house_name[scope.row.contracts.house_id]">{{ house_name[scope.row.contracts.house_id].corp_name }}</span>
+                  <span style="color: #525252;" v-else>暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 prop="source.dictionary_name"
                 label="来源">
                 <template slot-scope="scope">
@@ -428,6 +436,14 @@
                   <span v-if="scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name">{{scope.row.contracts.house.name}}</span>
                   <span
                     v-if="!(scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name)">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="归属公司"
+              >
+                <template slot-scope="scope">
+                  <span style="color: #525252;" v-if="house_name2 && scope.row.contracts && scope.row.contracts.house_id && house_name2[scope.row.contracts.house_id]">{{ house_name2[scope.row.contracts.house_id].corp_name }}</span>
+                  <span style="color: #525252;" v-else>暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -692,6 +708,8 @@
         isClear: false,
         payment_pic: [],
         uploadStatus: false,
+        house_name: {},
+        house_name2: {}
       }
     },
     mounted() {
@@ -845,6 +863,25 @@
           }
         });
       },
+      getName(houseIds = [],status) {
+        this.$http.get(globalConfig.server + '/organization/other/house-corp',{
+          params:{
+            houseIds
+          }
+        }).then(res=>{
+          if(res.data.code == '700120'){
+            if(status){
+              this.house_name = res.data.data;
+            }else{
+              this.house_name2 = res.data.data;
+            }
+          }else {
+            this.house_name = {};
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+      },
       getCollectTableData() {
         this.collectStatus = ' ';
         this.collectLoading = true;
@@ -856,6 +893,15 @@
           this.collectLoading = false;
           if (res.data.code === '30000') {
             this.collectTableData = res.data.data.data;
+            let house_id = [];
+            res.data.data.data.map((item)=>{
+              if(item.contracts){
+               house_id.push(item.contracts.house_id);
+              }else{
+                house_id = [];
+              }
+            });
+            this.getName(house_id,true);
             this.totalNumCollect = res.data.data.count;
             if (res.data.data.data.length < 1) {
               this.collectStatus = "暂无数据";
@@ -880,6 +926,15 @@
           this.rentLoading = false;
           if (res.data.code === '30000') {
             this.rentTableData = res.data.data.data;
+            let house_id = [];
+            res.data.data.data.map((item)=>{
+              if(item.contracts){
+                house_id.push(item.contracts.house_id);
+              }else{
+                house_id = [];
+              }
+            });
+            this.getName(house_id,false);
             this.totalNumRent = res.data.data.count;
             if (res.data.data.data.length < 1) {
               this.rentStatus = "暂无数据";
