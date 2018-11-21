@@ -3,7 +3,7 @@
     <div class="highRanking">
       <div class="highSearch">
         <div class="managementBtn">
-          <el-button type="primary" size="mini" :disabled="btnDisable" @click="openOrganizeModal">分配</el-button>
+          <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openOrganizeModal">分配</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
@@ -266,7 +266,7 @@
     <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
 
      <!-- 组织架构 -->
-    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization"></organization>
+    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization" :ids="selectedID"></organization>
   </div>
 </template>
 
@@ -358,7 +358,8 @@ export default {
       villageLoading: false,
       mergeParams: { id: "" },
       mergeName: "",
-      oldVillageName: ""
+      oldVillageName: "",
+      selectedID: [],   // 选中小组
     };
   },
   mounted() {
@@ -444,6 +445,7 @@ export default {
               let departStr = ""
               data[i].orgs.forEach((item, index) => {
                 departStr += item.name + '，';
+                this.selectedID.push(item.id);
               })
               list.department = departStr.substring(0, departStr.length - 1);
               this.lengthStr = list.department;
