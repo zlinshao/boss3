@@ -172,6 +172,15 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  label="归属公司"
+                >
+                  <template slot-scope="scope">
+                    <span v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{house_name[scope.row.house_id].corp_name}}</span>
+                    <!--<span style="color: #525252;" v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{ house_name[scope.row.house_id].corp_name }}</span>-->
+                    <span style="color: #525252;" v-else>暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="client"
                   label="房东姓名">
                 </el-table-column>
@@ -313,6 +322,14 @@
                       {{scope.row.renter_house_name}}
                     </span>
                     <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="归属公司"
+                >
+                  <template slot-scope="scope">
+                    <span style="color: #525252;" v-if="house_name2 && scope.row.house_id && house_name2[scope.row.house_id]">{{ house_name2[scope.row.house_id].corp_name }}</span>
+                    <span style="color: #525252;" v-else>暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -511,6 +528,8 @@
         organModule: false,
         organizeType: '',
         lengths: 0,
+        house_name: {},
+        house_name2: {}
       }
     },
     created() {
@@ -555,9 +574,12 @@
         this.emptyStatus = ' ';
         this.isLoading = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
-          console.log(res,'房东退房');
           this.isLoading = false;
+          let house_id = [];
           if (res.data.code === '20000') {
+            res.data.data.data.map((item)=>{
+              house_id.push(item.house_id);
+            });
             this.superAuthority = res.data.data.can;
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
@@ -567,15 +589,38 @@
             this.totalNumber = 0;
             this.emptyStatus = '暂无数据';
           }
+          this.getName(house_id,true);
+        })
+      },
+      getName(houseIds = [],status) {
+        this.$http.get(globalConfig.server + '/organization/other/house-corp',{
+          params:{
+            houseIds
+          }
+        }).then(res=>{
+          if(res.data.code == '700120'){
+            if(status){
+              this.house_name = res.data.data;
+            }else{
+              this.house_name2 = res.data.data;
+            }
+          }else {
+            this.house_name = {};
+          }
+        }).catch(err=>{
+          console.log(err);
         })
       },
       getData_rent() {
         this.emptyStatus_second = ' ';
         this.isLoading_second = true;
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params_second}).then((res) => {
-          console.log(res,'租客退房');
           this.isLoading_second = false;
+          let house_id = [];
           if (res.data.code === '20000') {
+            res.data.data.data.map((item)=>{
+              house_id.push(item.house_id);
+            });
             this.superAuthority = res.data.data.can;
             this.tableData_second = res.data.data.data;
             this.totalNumber_second = res.data.data.count;
@@ -585,6 +630,7 @@
             this.totalNumber_second = 0;
             this.emptyStatus_second = '暂无数据';
           }
+          this.getName(house_id,false);
         })
       },
       //切换标签页
