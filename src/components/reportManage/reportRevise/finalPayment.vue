@@ -150,12 +150,12 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="开单人" required="">
-                <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="params.staff_name"></el-input>
+                <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="params.staff_name" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="部门" required="">
-                <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="params.department_name"></el-input>
+                <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="params.department_name" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
