@@ -250,10 +250,9 @@
                       <el-select v-model="params.status" clearable>
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
-                        <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
+                        <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
-                        <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -868,7 +867,7 @@
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
           user_id: '',   //员工
-          status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
+          status: '',   // 房屋状态1:未签约， 2：已签约， 6：快到期（15天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
           visit_status: '',
