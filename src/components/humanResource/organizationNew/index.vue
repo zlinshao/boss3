@@ -596,7 +596,7 @@
                           <span v-for="item in branchBankCategory">{{item.id == staffDetailData.detail.level ? item.dictionary_name : ''}}</span>
                         </span>
                         <span v-else>暂无</span>
-                        </div>
+                      </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -634,7 +634,7 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way != 'null'">
+                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
                             {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
@@ -651,7 +651,7 @@
                   <el-col :span="8">
                     <el-form-item label="备注">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way != 'null'">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
                       {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -662,8 +662,8 @@
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason != 'null'">
-                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type && DRCategory[JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_type]}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                      {{DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -671,8 +671,8 @@
                   <el-col :span="8">
                     <el-form-item label="具体描述">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason != 'null'">
-                      {{JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess ? JSON.parse(staffDetailData.detail.dismiss_reason).dismiss_mess : ''}}</span>
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                      {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -1640,15 +1640,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-            params: {
-              dismiss_time: this.form.dismiss_time,
-              dismiss_reason: this.form.dismiss_reason,
-            }
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '710418') {
-              this.prompt('success', res.data.msg);
               this.getPostStaffData();
+              this.getStaffData();
+              this.prompt('success', res.data.msg);
               this.selectLeaveDateDialog = false;
             } else {
               this.prompt('warning', res.data.msg);
@@ -1665,11 +1664,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-            params: {
-              dismiss_time: this.form.dismiss_time,
-              dismiss_reason: this.form.dismiss_reason,
-            }
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
           }).then((res) => {
             if (res.data.code === '710418') {
               this.prompt('success', res.data.msg);

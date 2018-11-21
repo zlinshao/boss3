@@ -569,7 +569,7 @@
                 this.params.entry_way = {entry_type: '', entry_mess: '',};
               }
               if (detail.dismiss_reason && detail.dismiss_reason !== 'null') {
-                this.params.dismiss_reason = JSON.parse(detail.dismiss_reason);
+                this.params.dismiss_reason = detail.dismiss_reason;
               } else {
                 this.params.dismiss_reason = {dismiss_type: '', dismiss_mess: ''};
               }
@@ -579,11 +579,11 @@
               this.params.id_num = detail.id_num;
               this.params.birthday = detail.birthday;
               this.params.recommender = detail.recommender;
-              if(detail.recommender){
-                this.$http.get(globalConfig.server + 'organization/user/'+detail.recommender).then(res=>{
-                  if(res.data.code == '20020'){
+              if (detail.recommender) {
+                this.$http.get(globalConfig.server + 'organization/user/' + detail.recommender).then(res => {
+                  if (res.data.code == '20020') {
                     this.orgData.recommender = res.data.data.name;
-                  }else{
+                  } else {
                     this.orgData.recommender = "";
                   }
                 });
@@ -740,6 +740,8 @@
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
             }
+          }).catch(err => {
+            this.disabledBtn = false;
           });
         } else {
           //新增
@@ -752,6 +754,8 @@
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
             }
+          }).catch(err => {
+            this.disabledBtn = false;
           });
         }
       },

@@ -164,7 +164,6 @@ export default {
         arr.push(item);
       });
       this.form.file_id = arr[0];
-      console.log(this.form.file_id, "3333");
       this.picStatus = !val[2];
     },
     // 发布
@@ -182,6 +181,7 @@ export default {
             this.rendering();
             this.isClear = true;
             this.uploadVideo = false;
+            location.reload()
           } else {
             this.$notify.warning({
               title: "警告",

@@ -253,6 +253,7 @@
                         <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
+                        <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
