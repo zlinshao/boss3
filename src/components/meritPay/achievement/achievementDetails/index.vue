@@ -38,7 +38,7 @@
         ></el-table-column>
         <el-table-column
           label="房屋地址"
-          prop="house_name"
+          prop="address"
           width="150px"
         ></el-table-column>
         <el-table-column
