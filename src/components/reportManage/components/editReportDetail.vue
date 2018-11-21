@@ -615,7 +615,27 @@
       //生成电子收据
       createElectronicReceipt() {
         this.electronicReceiptVisible = true;
-        this.$http.post(globalConfig.server + 'financial/receipt/generate', {...this.electronicReceiptParam, ...this.bank}).then((res) => {
+        var params = {};
+        params.account_id = this.electronicReceiptParam.account_id || "";
+        params.process_id = this.electronicReceiptParam.process_id || "";
+        params.department_id = this.electronicReceiptParam.department_id || "";
+        params.date = this.reportDetailData.bulletindate || "";
+        params.payer = this.electronicReceiptParam.payer || "";
+        params.address = this.electronicReceiptParam.address || "";
+        params.price = this.electronicReceiptParam.price || "";
+        params.sign_at = this.electronicReceiptParam.sign_at || "";
+        params.duration = this.electronicReceiptParam.duration || "";
+        params.pay_way = this.electronicReceiptParam.pay_way || "";
+        if(this.reportDetailData.show_content['定金'] && this.reportDetailData.show_content['定金'] !== ''){
+          params.payment = "定金";
+        }else {
+          params.payment = "押金+租金";
+        }
+        params.amount = this.reportDetailData.show_content['总金额'] || "";
+        params.sum = this.reportDetailData.show_content['总金额'] || "";
+        params.memo = "";
+        params = Object.assign(this.bank,params);
+        this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
             this.electronicReceiptId = res.data.data.id;
