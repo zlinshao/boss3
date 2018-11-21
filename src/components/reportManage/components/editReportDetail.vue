@@ -26,9 +26,7 @@
                 <div class="statuss"
                      :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}">
                 </div>
-                <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">
-                  本小区价格区间：{{priceRegion}}
-                </div>
+                <!-- <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">本小区价格区间：{{priceRegion}}</div> -->
               </div>
 
               <div class="scroll_bar">
@@ -263,7 +261,13 @@
           <div v-if="!fullLoading && JSON.stringify(show_content) === '{}'" style="text-align: center">无相关记录</div>
         </el-form>
       </div>
+      <div class="houseInfo"  v-if="showPriceRange" >
+          <p class="houseSource">房源概况</p>
+          <div class="houseSourceInfo">{{houseSourceInfo}}</div>
+          <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
+        </div>
       <div slot="footer" class="dialog-footer">
+        
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
                    v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
@@ -387,6 +391,12 @@
     <RwcConfirmRentReport :rwcConfirmRentReport="rwcConfirmRentReport" :reportDetailData="reportDetailData"
                           :reportId="reportId" :processableId="processable_id"
                           @close="closeModal"></RwcConfirmRentReport>
+    <finalPayment :finalPayment="finalPayment" 
+                  :reportDetailData="reportDetailData" 
+                  :reportId="reportId" 
+                  :processableId="processable_id"
+                  @close="closeModal">
+    </finalPayment>
   </div>
 </template>
 
@@ -404,13 +414,14 @@
   import ChangeRentReport from '../reportRevise/changeRentReport'
   import RwcRentReport from '../reportRevise/rwcRentReport'
   import RwcConfirmRentReport from '../reportRevise/rwcConfirmRentReport'
+  import FinalPayment from '../reportRevise/finalPayment'
 
   export default {
     name: "report-detail",
     props: ['module', 'reportId', 'changeId'],
     components: {
       UpLoad, ContrastReport, RentReport, CollectReport, HouseReport, ContinueCollectReport,
-      ContinueRentReport, TransRentReport, ChangeRentReport, RwcRentReport, RwcConfirmRentReport
+      ContinueRentReport, TransRentReport, ChangeRentReport, RwcRentReport, RwcConfirmRentReport, FinalPayment
     },
     data() {
       return {
@@ -451,6 +462,7 @@
         changeRentReport: false,
         rwcRentReport: false,
         rwcConfirmRentReport: false,
+        finalPayment:false,
         show_content: {},
         reportDetailData: {},
         processable_id: '',
@@ -460,7 +472,7 @@
         printScreen: ['新凭证截图', '证件照片', '房产证照片', '旧凭证截图', '新押金收条', '旧押金收条', '押金收条', '款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '组长同意截图', '房屋影像', '房屋照片', '退租交接单'],
 
         routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
-          'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],
+          'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change', 'bulletin_retainage'],
         approvedStatus: false,
         process: {},
         videoSrc: '',
@@ -981,6 +993,8 @@
           case 'bulletin_RWC_confirm':
             this.rwcConfirmRentReport = true;
             break;
+          case 'bulletin_retainage' :
+            this.finalPayment = true;
         }
       },
 
@@ -997,7 +1011,8 @@
         this.changeRentReport = false;
         this.rwcRentReport = false;
         this.rwcConfirmRentReport = false;
-
+        this.finalPayment = false;
+        console.log(val)
         if (val === 'success') {
           this.getProcess();
           this.getReportEditInfo();
@@ -1012,6 +1027,14 @@
           this.priceRegion = res.data.priceMin + '~' + res.data.priceMax + '元';
         });
       },
+      //获取房源概况
+      getHouseInfo(houseInfo){
+         this.$http.get(globalConfig.server + 'bulletin/quality/city_houses_status', {
+          params: houseInfo,
+        }).then((res) => {
+          this.houseSourceInfo = res.data.data;
+        });
+      }
     },
   }
 </script>
@@ -1297,5 +1320,24 @@
       vertical-align: middle;
       margin: 0 5px 5px 0;
     }
-  }
+    /*footer*/
+    
+    .houseInfo{
+      .houseSource{
+        color: #409EFF;
+        font-size: 16px;
+        margin:10px 0 0 0;
+        padding: 16px 0;
+        border-top: 1px solid #eee;
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: rgb(238, 238, 238);
+      }
+      div{
+        font-size: 16px;
+        margin: 5px 0 0 40px;
+      }
+    }
+    
+  } 
 </style>
