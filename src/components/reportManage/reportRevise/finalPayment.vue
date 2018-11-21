@@ -515,9 +515,10 @@
             this.params.deposit_photo_new = data.draft_content.deposit_photo_new;
             this.params.deposit_photo_old = data.draft_content.deposit_photo_old;
             this.receipts = data.deposit_photo_new;
+            console.log(this.receipts);
             this.leaders = this.leaders !== null ?  this.leaders.reduce((p, c) => {p[c.id] = c.uri; return p}, {}) : {};
             this.screenshots = this.screenshots !== null ? this.screenshots.reduce((p, c) => {p[c.id] = c.uri; return p}, {}) : {};
-            this.receipts = this.receipts.length !== null ? this.receipts.reduce((p, c) => {p[c.id] = c.uri; return p}, {}) : {};
+            this.receipts = this.receipts !== null ? this.receipts.reduce((p, c) => {p[c.id] = c.uri; return p}, {}) : {};
             this.params.id = data.id || res.data.id;                     //id
             this.params.city_id = data.city_id;                     //城市
             this.params.house_id = data.draft_content.house_id;      //城市
