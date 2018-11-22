@@ -336,11 +336,12 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="电子收据链接">
+                <el-form-item label="电子收据">
                   <div class="content" v-if="contractInfo.deposit_photo">
-                    <div v-for="item in contractInfo.deposit_photo">
-                      <img data-magnify="" data-caption="图片查看器" :data-src="item" :src="item">
-                    </div>
+                    <span v-for="item in contractInfo.deposit_photo">
+                      <!--<img style="width: 20%;" :src="item" alt="">-->
+                      <img style="width: 20%;" data-magnify="" data-caption="图片查看器" :data-src="item" :src="item">
+                    </span>
                   </div>
                   <div v-else class="content">暂无</div>
                 </el-form-item>
