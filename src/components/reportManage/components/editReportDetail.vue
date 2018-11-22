@@ -278,7 +278,7 @@
           <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
         </div>
       <div slot="footer" class="dialog-footer">
-        
+
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
                    v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
@@ -402,9 +402,9 @@
     <RwcConfirmRentReport :rwcConfirmRentReport="rwcConfirmRentReport" :reportDetailData="reportDetailData"
                           :reportId="reportId" :processableId="processable_id"
                           @close="closeModal"></RwcConfirmRentReport>
-    <finalPayment :finalPayment="finalPayment" 
-                  :reportDetailData="reportDetailData" 
-                  :reportId="reportId" 
+    <finalPayment :finalPayment="finalPayment"
+                  :reportDetailData="reportDetailData"
+                  :reportId="reportId"
                   :processableId="processable_id"
                   @close="closeModal">
     </finalPayment>
@@ -656,7 +656,7 @@
         }
         params.amount = this.reportDetailData.show_content['总金额'] || "";
         params.sum = this.reportDetailData.show_content['总金额'] || "";
-        params.memo = "";
+        params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank,params);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
@@ -789,7 +789,7 @@
               this.bulletinId = res.data.data.process.id;
               this.phone = res.data.data.process.content.phone;
               this.is_receipt = res.data.data.process.content.is_receipt;
-
+              this.electronicReceiptParam.memo = res.data.data.process.content.memo || '';
               this.electronicReceiptParam.process_id = res.data.data.process.id;
               this.electronicReceiptParam.department_id = res.data.data.process.content.department_id;
               this.electronicReceiptParam.account_id = res.data.data.process.content.account_id || [];
@@ -1364,7 +1364,7 @@
       margin: 0 5px 5px 0;
     }
     /*footer*/
-    
+
     .houseInfo{
       .houseSource{
         color: #409EFF;
@@ -1381,6 +1381,6 @@
         margin: 5px 0 0 40px;
       }
     }
-    
-  } 
+
+  }
 </style>
