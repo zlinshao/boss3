@@ -41,13 +41,24 @@
                     <el-form-item v-if="!value" :label="index" class="detailTitle">
                       <div class="special">{{value}}</div>
                     </el-form-item>
-
+                    <el-form-item v-if="value && Array.isArray(value) && index === 'receiptUri'" label="电子收据">
+                      <div class="special">
+                      <span v-for="p in value">
+                        <span v-if="p.image_url">
+                          <img data-magnify="" data-caption="图片查看器" :data-src="p.image_url" :src="p.image_url">
+                        </span>
+                        <span v-else>
+                          暂无
+                        </span>
+                      </span>
+                      </div>
+                    </el-form-item>
                     <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index"
                                   class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="value && Array.isArray(value)" :label="index">
+                    <el-form-item v-if="value && Array.isArray(value) && index !== 'receiptUri'" :label="index">
                       <div class="special">
                         <div
                           v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'"
@@ -701,6 +712,15 @@
           }
         })
       },
+      getShow_content() {
+        this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res=>{
+          if(res.data.code == '20020'){
+            this.show_content = res.data.data.content.show_content;
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+      },
       getProcess() {
         this.suggestpriceStatus = false;
         this.fullLoading = true;
@@ -708,12 +728,15 @@
         this.$http.get(this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
-            this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
             this.deal = res.data.data.deal;
-            this.process = res.data.data.process;
+            if(res.data.data.process.processable_type === "bulletin_rent_basic"){
+              this.getShow_content();
+            }else{
+              this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
+            }
 
             let pro = res.data.data.process;
             this.houseId = res.data.data.process.house_id;
