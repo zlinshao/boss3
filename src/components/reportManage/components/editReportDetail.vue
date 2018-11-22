@@ -752,12 +752,21 @@
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
             this.deal = res.data.data.deal;
-            if(res.data.data.process.processable_type === "bulletin_rent_basic"){
-              this.getShow_content();
-            }else{
-              this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
+            let type = res.data.data.process.processable_type;
+            switch (type) {
+              case "bulletin_rent_basic":
+              case "bulletin_rent_trans":
+              case "bulletin_rent_continued":
+              case "bulletin_rent_RWC":
+              case "bulletin_RWC_confirm":
+              case "bulletin_change":
+              case "bulletin_retainage":
+                this.getShow_content();
+                break;
+              default:
+                this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
+                break;
             }
-
             let pro = res.data.data.process;
             this.houseId = res.data.data.process.house_id;
             this.personal = pro.user;
