@@ -38,7 +38,7 @@
         ></el-table-column>
         <el-table-column
           label="房屋地址"
-          prop="house_name"
+          prop="address"
           width="150px"
         ></el-table-column>
         <el-table-column
@@ -61,7 +61,7 @@
         <el-table-column
           label="单价"
           prop="month_price"
-        ></el-table-column>
+          ></el-table-column>
         <el-table-column
           label="空置期"
           prop="vacancy"
@@ -104,6 +104,8 @@
           :total="totalPage"
           :page-size="searchList.limit"
           :current-page="searchList.page"
+          @current-change="handleCurrentChange"
+           @size-change="handleSizeChange"
           layout="total,sizes,prev,pager,next,jumper"
         ></el-pagination>
       </div>
@@ -293,6 +295,14 @@
       },
       selectRow(row) {
         console.log(row);
+      },
+       handleCurrentChange(val) {
+        this.searchList.page = val;
+        this.getListData();
+      },
+       handleSizeChange(val) {
+          this.searchList.limit = val;
+          this.getListData();
       },
       changeDate(val) {
         this.searchList.start_time = new Date(val[0]).toLocaleDateString().split('/').join('-');
