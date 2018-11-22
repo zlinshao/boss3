@@ -19,6 +19,9 @@
             <el-form-item>
               <el-button type="primary" @click="viewExamineRecord">查看审批报表</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="success" size="mini" @click="handleAllotDepart(currentAllot)">分配</el-button>
+            </el-form-item>
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -250,10 +253,9 @@
                       <el-select v-model="params.status" clearable>
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
-                        <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
+                        <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
-                        <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -314,6 +316,7 @@
               <div class="myTable">
                 <el-table
                   :data="collectData"
+                  ref="collectMultipleTable"
                   :empty-text='rentStatus'
                   v-loading="rentLoading"
                   element-loading-text="拼命加载中"
@@ -321,14 +324,11 @@
                   element-loading-background="rgba(255, 255, 255, 0)"
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
+                  @selection-change="handleSelection"
                   style="width: 100%">
-                  <el-table-column width="40" align="center">
-                    <template slot-scope="scope">
-                      <span
-                        v-if="false">
-                        <b style="color: red;">新</b>
-                      </span>
-                    </template>
+                  <el-table-column
+                    type="selection"
+                    width="55">
                   </el-table-column>
                   <el-table-column width="40">
                     <template slot-scope="scope">
@@ -381,6 +381,15 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="归属公司"
+                    prop="corp_name"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -475,6 +484,7 @@
               <div class="myTable">
                 <el-table
                   :data="rentData"
+                  ref="rentMultipleTable"
                   :empty-text='rentStatus'
                   v-loading="rentLoading"
                   element-loading-text="拼命加载中"
@@ -482,14 +492,11 @@
                   element-loading-background="rgba(255, 255, 255, 0)"
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
+                  @selection-change="handleSelection"
                   style="width: 100%">
-                  <el-table-column width="40" align="center">
-                    <template slot-scope="scope">
-                      <span
-                        v-if="false">
-                        <b style="color: red;">新</b>
-                      </span>
-                    </template>
+                  <el-table-column
+                    type="selection"
+                    width="55">
                   </el-table-column>
                   <el-table-column
                     width="136px"
@@ -537,6 +544,15 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="归属公司"
+                    prop="corp_name"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -783,6 +799,9 @@
                  :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
 
+
+    <Organization :organizationDialog="allotVisible" :type="allotType" :length="allotLength"
+                  @close="allotCloseOrganization" @selectMember="allotSelectMember"></Organization>
   </div>
 </template>
 
@@ -868,7 +887,7 @@
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
           user_id: '',   //员工
-          status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
+          status: '',   // 房屋状态1:未签约， 2：已签约， 6：快到期（15天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
           visit_status: '',
@@ -950,6 +969,12 @@
         rentFeedback: {},
         houseData: {},
         cities: [], //城市
+        contract_ids: [],
+        allotVisible: false,
+        allotType: '',
+        allotLength: '',
+        allotOrg_id: '',
+        currentAllot: 'first'
       }
     },
     mounted() {
@@ -1026,6 +1051,70 @@
       }
     },
     methods: {
+      allotOpenOrganization(type){
+        this.allotType = type;
+        this.allotLength = 1;
+        this.allotVisible = true;
+      },
+      allotSelectMember(item) {
+        this.allotOrg_id = item[0].id;
+        this.allotGo();
+      },
+      allotCloseOrganization() {
+        this.allotVisible = false;
+      },
+      allotGo() {
+        var params = {};
+        params.contract_ids = this.contract_ids;
+        params.org_id = this.allotOrg_id;
+        var url = '';
+        if(this.currentAllot === 'first'){
+          url = 'coreproject/lord/allocate';
+        }else if(this.currentAllot === 'second'){
+          url = 'coreproject/renter/allocate';
+        }
+        this.$http.post(globalConfig.server + url,params).then(res =>{
+          console.log(res);
+          if(res.data.code === '20000'){
+            this.$notify.success({
+              title: '成功',
+              message: '分配成功！'
+            });
+            this.allotOrg_id = '';
+            this.contract_ids = [];
+            this.$refs.collectMultipleTable.clearSelection();
+            this.$refs.rentMultipleTable.clearSelection();
+          }else {
+            this.$notify.warning({
+              title: '失败',
+              message: '分配失败！'
+            })
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleAllotDepart() {
+        if(this.contract_ids.length<1){
+          this.$notify.warning({
+            title: "警告",
+            message: "请选择需要分配的合同！"
+          });
+          return false;
+        }else {
+          this.allotOpenOrganization('depart');
+        }
+      },
+      handleSelection(selection) {
+        this.contract_ids = [];
+        if(selection.length>0){
+          selection.map(item => {
+            this.contract_ids.push(item.contract_id);
+          })
+        }else {
+          this.contract_ids = [];
+        }
+      },
       closeModal(val) {
         this.editRentInfoDialog = false;
         this.editAddressDialog = false;
@@ -1159,7 +1248,6 @@
           this.rentLoading = false;
           if (res.data.code === '61010') {
             this.rentData = res.data.data;
-            console.log(this.rentData);
             this.totalNumbers = res.data.meta.total;
 
             let collectIdArray = '';
@@ -1446,6 +1534,7 @@
       },
       // tabs标签页
       handleClick(tab, event) {
+        this.currentAllot = tab.name;
         this.params.page = 1;
         this.resetting();
         if (this.activeName == "first") {
