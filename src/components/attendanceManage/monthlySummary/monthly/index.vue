@@ -43,7 +43,31 @@
       <el-button type="primary" size="mini" @click="searchRecord">确定</el-button>
       <!-- <el-button type="primary" size="mini">导出</el-button>  -->
     </div>
-    <!--  -->
+    <!-- 查看列表  -->
+    <div class="exportList">
+      <el-button type="primary" size="mini" @click="lookList">查看列表</el-button>
+    </div>
+    <!-- 导出弹出框 -->
+    <el-dialog title="导出列表框" :visible.sync="lookListDialog" width="30%">
+      <el-table :data="exportListData" border style="width: 100%">
+        <el-table-column prop="user.name" label="用户名">
+        </el-table-column>
+        <el-table-column prop="create_time" label="导出时间">
+        </el-table-column>
+        <el-table-column prop="status" label="导出结果">
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="download" size="mini">下载</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="lookListDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="exportList" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 列表  -->
     <div class="table">
       <!-- <el-table :data="tableData" border  @cell-click="popUps" > -->
       <el-table :data="tableData" border ref="crayTable">
@@ -72,7 +96,7 @@
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></organization>
     <!-- 查看当月考勤 -->
     <el-dialog :title="attendanceName+ params.arrange_month +'的考勤记录'" :visible.sync="attendanceMonth" width="50%" :before-close="attendanceDialog">
-      <el-table :data="newAttendanceData" height="250" border style="width: auto">
+      <el-table :data="newAttendanceData" height="80%" border style="width: auto">
         <el-table-column prop="date" label="日期">
         </el-table-column>
         <el-table-column prop="workShift" label="上班排班">
@@ -124,6 +148,9 @@ export default {
   components: { organization },
   data() {
     return {
+      externalLink: "",
+      exportListData: [],
+      lookListDialog: false,
       beLate: false,
       is_dimissionNum: false,
       params: {
@@ -231,6 +258,7 @@ export default {
       this.newAttendanceData = val.attendanceData;
       this.attendanceName = val.name;
       this.attendanceMonth = true
+
     },
     searchRecord() {
       this.params.page = 1;
@@ -448,15 +476,13 @@ export default {
               item.sort_dimension.forEach((key, ind) => {
                 attendanceObj = {};
                 key.forEach((a, b) => {
-
-
                   attendanceObj.date = a.sign_date;
                   if(a.event_attribute == 1) {
                     if(a.status == 0)  {
                       attendanceObj.resultWork = "正常"  // 上班打卡正常
                     } else if(a.status == 1) {
                        attendanceObj.resultWork = "迟到"
-                    }
+                    } 
                     attendanceObj.goWork = a.dimensions.hour + ":" + a.dimensions.minute;       // 上班时间
                   } else if(a.event_attribute == 2) {
                     if(a.status == 0)  {
@@ -497,6 +523,44 @@ export default {
     // 当月考勤
     attendanceDialog() {
       this.attendanceMonth = false;
+    },
+    // 查看列表
+    lookList() {
+      this.lookListDialog = true;
+      this.$http.get(globalConfig.server + "attendance/summary/excel-list").then(res => {
+        if(res.data.code == "20000") {
+          this.exportListData = res.data.data;
+          this.exportListData.forEach((item, index) => {
+            if(item.status) {
+              item.status = "导出完成";
+            } else {
+              item.status = "正在导出"
+            }
+            this.externalLink = item.file_id;
+          })
+        }
+      })
+    },
+    // 导出Excel表
+    download() {
+      this.$http.post(globalConfig.server + "attendance/summary/excel",this.params).then(res => {
+        console.log(res, "22222");
+        if(res.data.code == "20000") {
+          this.$notify.success({
+            title: "成功",
+            msg: res.data.msg
+          })
+        } else {
+          this.$notify.warning({
+            title: "失败",
+            msg: res.data.msg
+          })
+        }
+      })
+    },
+    // 
+    exportList() {
+      window.open(this.externalLink);
     }
   }
 };
@@ -566,6 +630,9 @@ export default {
   .has-gutter {
     max-height: 72px;
     padding: 0;
+  }
+  .exportList {
+    float: right;
   }
 }
 </style>
