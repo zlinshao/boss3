@@ -61,7 +61,7 @@
                     <el-form-item v-if="value && Array.isArray(value) && index !== 'receiptUri'" :label="index">
                       <div class="special">
                         <div
-                          v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'"
+                          v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '实际收款时间' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'"
                           v-for="item in value">{{item}}
                         </div>
                         <div v-else>
@@ -638,7 +638,7 @@
       //生成电子收据
       createElectronicReceipt() {
         this.electronicReceiptVisible = true;
-        var params = {};
+        let params = {};
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
@@ -654,8 +654,11 @@
         } else {
           params.payment = "押金+租金";
         }
-        params.amount = this.reportDetailData.show_content['总金额'] || "";
-        params.sum = this.reportDetailData.show_content['总金额'] || "";
+        params.amount = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
+        params.sum = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
+        console.log(this.reportDetailData.show_content)
+        console.log(this.reportDetailData.show_content['总金额'])
+        console.log(this.reportDetailData.show_content['款项金额'])
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
@@ -735,6 +738,7 @@
       getShow_content() {
         this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res => {
           if (res.data.code == '20020') {
+            this.reportDetailData = res.data.data.content;
             this.show_content = JSON.parse(res.data.data.content.show_content_compress);
           }
         }).catch(err => {

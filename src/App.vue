@@ -69,7 +69,7 @@
     },
     methods: {
       openVideo() {
-        this.videoUri = "http://s.lejias.cn/peixun.mp4";
+        this.videoUri = "http://s.lejias.cn/lkbiaOdSxIFCSxe966VU6UKlZRCo";
       },
       closeVideo() {
         this.videoUri = "";
