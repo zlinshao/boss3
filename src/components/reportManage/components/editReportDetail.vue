@@ -272,11 +272,11 @@
           <div v-if="!fullLoading && JSON.stringify(show_content) === '{}'" style="text-align: center">无相关记录</div>
         </el-form>
       </div>
-      <div class="houseInfo"  v-if="showPriceRange" >
-          <p class="houseSource">房源概况</p>
-          <div class="houseSourceInfo">{{houseSourceInfo}}</div>
-          <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
-        </div>
+      <div class="houseInfo" v-if="showPriceRange">
+        <p class="houseSource">房源概况</p>
+        <div class="houseSourceInfo">{{houseSourceInfo}}</div>
+        <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
+      </div>
       <div slot="footer" class="dialog-footer">
 
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
@@ -473,7 +473,7 @@
         changeRentReport: false,
         rwcRentReport: false,
         rwcConfirmRentReport: false,
-        finalPayment:false,
+        finalPayment: false,
         show_content: {},
         reportDetailData: {},
         processable_id: '',
@@ -649,15 +649,15 @@
         params.sign_at = this.electronicReceiptParam.sign_at || "";
         params.duration = this.electronicReceiptParam.duration || "";
         params.pay_way = this.electronicReceiptParam.pay_way || "";
-        if(this.reportDetailData.show_content['定金'] && this.reportDetailData.show_content['定金'] !== ''){
+        if (this.reportDetailData.show_content['定金'] && this.reportDetailData.show_content['定金'] !== '') {
           params.payment = "定金";
-        }else {
+        } else {
           params.payment = "押金+租金";
         }
         params.amount = this.reportDetailData.show_content['总金额'] || "";
         params.sum = this.reportDetailData.show_content['总金额'] || "";
         params.memo = this.electronicReceiptParam.memo || "";
-        params = Object.assign(this.bank,params);
+        params = Object.assign(this.bank, params);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
@@ -733,11 +733,11 @@
         })
       },
       getShow_content() {
-        this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res=>{
-          if(res.data.code == '20020'){
-            this.show_content = res.data.data.content.show_content;
+        this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res => {
+          if (res.data.code == '20020') {
+            this.show_content = JSON.parse(res.data.data.content.show_content_compress);
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err);
         })
       },
@@ -748,11 +748,13 @@
         this.$http.get(this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
-            this.reportDetailData = res.data.data.process.content;
-            this.processable_id = res.data.data.process.processable_id;
-            this.operation = res.data.data.operation;
-            this.deal = res.data.data.deal;
-            let type = res.data.data.process.processable_type;
+            let data = res.data.data;
+            this.reportDetailData = data.process.content;
+            this.processable_id = data.process.processable_id;
+            this.operation = data.operation;
+            this.deal = data.deal;
+            this.process = data.process;
+            let type = data.process.processable_type;
             switch (type) {
               case "bulletin_rent_basic":
               case "bulletin_rent_trans":
@@ -1080,8 +1082,8 @@
         });
       },
       //获取房源概况
-      getHouseInfo(houseInfo){
-         this.$http.get(globalConfig.server + 'bulletin/quality/city_houses_status', {
+      getHouseInfo(houseInfo) {
+        this.$http.get(globalConfig.server + 'bulletin/quality/city_houses_status', {
           params: houseInfo,
         }).then((res) => {
           this.houseSourceInfo = res.data.data;
@@ -1374,18 +1376,18 @@
     }
     /*footer*/
 
-    .houseInfo{
-      .houseSource{
+    .houseInfo {
+      .houseSource {
         color: #409EFF;
         font-size: 16px;
-        margin:10px 0 0 0;
+        margin: 10px 0 0 0;
         padding: 16px 0;
         border-top: 1px solid #eee;
         border-top-width: 1px;
         border-top-style: solid;
         border-top-color: rgb(238, 238, 238);
       }
-      div{
+      div {
         font-size: 16px;
         margin: 5px 0 0 40px;
       }

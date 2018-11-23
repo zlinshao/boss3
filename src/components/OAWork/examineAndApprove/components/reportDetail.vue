@@ -64,7 +64,7 @@
           <el-col :span="6" style="padding-left: 6px;">
             <div>
               <div class="commentTop">
-                评论&nbsp;{{paging}}
+                评论&nbsp;{{paging}}111111111
               </div>
               <div v-if="commentList.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">
                 暂无评论
@@ -119,7 +119,6 @@
           @click="commentOn(index)">
           {{key}}
         </el-button>
-        <!--<el-button size="small" type="primary" @click="reportVisible = false">关&nbsp;闭</el-button>-->
       </div>
     </el-dialog>
 
