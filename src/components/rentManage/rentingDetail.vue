@@ -347,26 +347,26 @@
                 </el-form-item>
               </el-col>
               <!--<el-col :span="8">-->
-                <!--<el-form-item label="押金">-->
-                  <!--<div class="content">{{contractInfo.deposit_payed}}</div>-->
-                <!--</el-form-item>-->
+              <!--<el-form-item label="押金">-->
+              <!--<div class="content">{{contractInfo.deposit_payed}}</div>-->
+              <!--</el-form-item>-->
               <!--</el-col>-->
               <!--<el-col :span="8">-->
-                <!--<el-form-item label="定金">-->
-                  <!--<div class="content">{{contractInfo.front_money}}</div>-->
-                <!--</el-form-item>-->
+              <!--<el-form-item label="定金">-->
+              <!--<div class="content">{{contractInfo.front_money}}</div>-->
+              <!--</el-form-item>-->
               <!--</el-col>-->
               <!--<el-col :span="8">-->
-                <!--<el-form-item label="租金">-->
-                  <!--<div class="content">{{contractInfo.rent_money}}</div>-->
-                <!--</el-form-item>-->
+              <!--<el-form-item label="租金">-->
+              <!--<div class="content">{{contractInfo.rent_money}}</div>-->
+              <!--</el-form-item>-->
               <!--</el-col>-->
               <el-col :span="8">
                 <el-form-item label="已收金额（汇款账户）">
                   <div class="content">
-                     <span v-for="(item,index) in contractInfo.money_table">
-                      {{item.money_sep}}元，{{matchDictionary(item.money_way)}} <span
-                       v-show="index<contractInfo.money_table-1">;</span>
+                     <span v-for="(item,index) in contractInfo.money_table" style="display: block;">
+                      {{item.money_sep}}元，{{item.money_way}} <span
+                       v-show="index<contractInfo.money_table - 1">;</span>
                     </span>
                   </div>
                 </el-form-item>
@@ -388,7 +388,8 @@
               <el-col :span="8">
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_price}}
                     </span>
                   </div>
@@ -400,7 +401,8 @@
               <el-col :span="8">
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_name}}
                     </span>
                   </div>
@@ -409,7 +411,8 @@
               <el-col :span="8">
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_phone}}
                     </span>
                   </div>
@@ -418,7 +421,8 @@
               <el-col :span="8">
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_username}}
                     </span>
                   </div>
@@ -1075,28 +1079,32 @@
                 </el-form-item>
                 <el-form-item label="现中介费(元)">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_price}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_name}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_phone}}
                     </span>
                   </div>
                 </el-form-item>
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
+                    <span
+                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_username}}
                     </span>
                   </div>
@@ -2126,11 +2134,12 @@
 
 <style scoped lang="scss">
   //查看电子链接
-  .lookInfo{
+  .lookInfo {
     margin: 0;
     padding: 0;
   }
-  .lookInfo a{
+
+  .lookInfo a {
     color: #409EFF;
     display: block;
     width: 90%;
@@ -2138,6 +2147,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
   .content {
     padding: 0 10px;
     min-height: 32px;
