@@ -12,6 +12,8 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0)"
+      @row-contextmenu="contextMenu"
+      @row-click="show = false">
       style="width: 100%">
       <el-table-column
         prop="organization[0].name"
@@ -38,14 +40,17 @@
     </div>
 
     <ReviseCompany :reviseCompanyDialog="reviseCompanyDialog" @close="closeModal"></ReviseCompany>
+     <!--右键-->
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
 <script>
   import ReviseCompany from './components/reviseCompany.vue'
-
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
   export default {
-    components: {ReviseCompany},
+    components: {ReviseCompany,RightMenu},
     name: 'company-manage',
     data() {
       return {
@@ -59,6 +64,12 @@
         tableStatus: ' ',
         tableLoading: false,
         totalNum: 0,
+        tableDetail: {},
+        details: {},
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
       }
     },
     mounted() {
@@ -105,6 +116,58 @@
       handleCurrentChange(val) {
         this.params.page = val;
         this.getTableData();
+      },
+      // 右键 
+      contextMenu(row, event) {
+        this.details = row;
+        this.lists = [
+          {clickIndex: 'deleteCompany', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+        ];
+        this.contextMenuParam(event);
+      },
+       //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+      // 右键回调
+      clickEvent(val) {
+        switch (val) {
+          case 'deleteCompany':
+            this.openDelete(this.details);
+            break;
+        }
+      },
+      // 删除
+      openDelete(id) {
+        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(globalConfig.server + 'organization/companyorg/delete/' + id.id).then((res) => {
+            if (res.data.code === '71040') {
+              this.show = false;
+              this.prompt('success', '删除成功');
+              this.getTableData();
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+          this.show = false;
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
     }
   }
