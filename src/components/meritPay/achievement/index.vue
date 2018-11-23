@@ -106,6 +106,7 @@
       element-loading-background="rgba(255, 255, 255, 0)"
       @row-contextmenu='openContextMenu'
       @cell-dblclick='openDetail'
+      @row-click='clickTable'
       width="100%">
       <el-table-column
         label="员工"
@@ -146,7 +147,7 @@
         label="租房净得金额"
         prop="rent_real_money">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         fixed="right"
         label="操作">
         <template slot-scope="scope">
@@ -157,57 +158,37 @@
             详情
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <div class="block pages">
       <el-pagination
-        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="form.page"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="12"
-        layout="total,sizes, prev, pager, next, jumper"
+        :page-size="5"
+        layout="total, prev, pager, next, jumper"
         :total="totalNum">
       </el-pagination>
     </div>
-    <el-dialog :close-on-click-modal="true" title="业绩详情" :visible.sync="dialogVisible" width="30%">
-      <el-row style="margin: 0 20px;">
-        <el-col :span="6">个人提成：</el-col>
-        <el-col :span="18">{{dblRowData.achv}}</el-col>
-      </el-row>
-      <el-row style="margin: 0 20px;">
-        <el-col :span="6">奖励：</el-col>
-        <el-col :span="18">{{dblRowData.bonus}}</el-col>
-      </el-row>
-      <el-row style="margin: 0 20px;">
-        <el-col :span="6">认责：</el-col>
-        <el-col :span="18">{{dblRowData.penalty}}</el-col>
-      </el-row>
-      <el-row style="margin: 0 20px;">
-        <el-col :span="6">业绩包：</el-col>
-        <el-col :span="18">{{dblRowData && dblRowData.package && dblRowData.package.name}}</el-col>
-      </el-row>
-      <span slot="footer" class="dialog-footer">
-          <!--<el-button @click="dialogVisible = false" size="mini">取 消</el-button>-->
-          <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
-        </span>
-    </el-dialog>
+    <div class="myDetail">
+      <achieveDetail :staff_id="staff_id" :start_time="form.start_time" :end_time="form.end_time"></achieveDetail>
+    </div>
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
     <right-menu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                 @clickOperateMore="clickEvent"></right-menu>
   </div>
+  
 </template>
 
 <script>
   import Organization from '../../common/organization.vue'
   import RightMenu from '../../common/rightMenu.vue'    //右键
-
+  import achieveDetail from './components/detail.vue'
   export default {
     name: 'index',
-    components: {Organization, RightMenu},
+    components: {Organization, RightMenu,achieveDetail},
     data() {
       return {
         show: false,
@@ -274,6 +255,7 @@
         achvOverflow: '',
         collectStatus: ' ',
         collectLoading: false,
+        staff_id:''
       }
     },
     mounted() {
@@ -440,7 +422,10 @@
       },
       goDetail(scope) {
         this.$router.push({path: '/achieveDetail',query:{user_id:scope.row.sign_user_id}});
-      }
+      },
+       clickTable(row, event) {
+        this.staff_id=row.sign_user_id;
+      },
     }
   }
 </script>
