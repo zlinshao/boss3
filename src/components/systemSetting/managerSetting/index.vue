@@ -16,9 +16,12 @@
       <el-tab-pane label="角色管理" name="fifth">
         <RoleManage></RoleManage>
       </el-tab-pane>
-      <!--<el-tab-pane label="小区管理" name="sixth">-->
+      <el-tab-pane label="公司部门管理" name="sixth">
+        <CompanyManage></CompanyManage>
+      </el-tab-pane>
+      <!-- <el-tab-pane label="小区管理" name="sixth">-->
         <!--<VillageManage></VillageManage>-->
-      <!--</el-tab-pane>-->
+      <!--</el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -30,10 +33,10 @@
   import RoleManage from './roleManage/index.vue'
   import PowerManage from './powerManage/index.vue'
   import VillageManage from './villageManage/index.vue'
-
+  import CompanyManage from './companyManage/index.vue'
   export default {
     name: "index",
-    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage},
+    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage,CompanyManage},
     data() {
       return {
         activeName: 'first'

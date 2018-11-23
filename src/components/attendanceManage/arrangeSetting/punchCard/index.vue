@@ -57,6 +57,20 @@
                     </div>
                   </template>
                 </el-table-column>
+                 <el-table-column label="上班排版时间" prop="attendanceData[0].workShift">
+                </el-table-column>
+                <el-table-column label="下班排版时间" prop="attendanceData[0].workOffShift">
+                </el-table-column>
+                <el-table-column label="休息" prop="attendanceData[0].hugh">
+                </el-table-column>
+                <el-table-column label="上班打卡时间" prop="attendanceData[0].goWork">
+                </el-table-column>
+                <el-table-column label="打卡结果" prop="attendanceData[0].resultWork">
+                </el-table-column>
+                <el-table-column label="下班打卡时间" prop="attendanceData[0].goOffWork">
+                </el-table-column>
+                <el-table-column label="打卡结果"  prop="attendanceData[0].resultOffWork"> 
+                </el-table-column>
                 <el-table-column
                     label="是否上班缺卡"
                     prop="is_am_sign"
@@ -422,6 +436,41 @@ export default {
                       this.punchCount = res.data.data.count;
                       this.gettingList = false;
                       this.isHighPunch = false;
+                      let attendanceObj = null;
+                      let attendanceArr = null; 
+                      this.punchCardList.forEach((item, index) => {
+                        attendanceArr = [];
+                          item.sort_dimension.forEach((val, key) => {
+                              attendanceObj = {};
+                              if(val.event_attribute == 1) {
+                                  if(val.status == 0) {
+                                      attendanceObj['resultWork'] = "正常";
+                                  } else if(val.status == 1) {
+                                      attendanceObj['resultWork'] = "迟到";
+                                  } else if (val.status == 4) {
+                                      attendanceObj['resultWork'] = "外勤"
+                                  }
+                                  attendanceObj['goWork'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 上班打卡
+                              } else if(val.event_attribute == 2) {
+                                  if(val.status == 0) {
+                                      attendanceObj['resultOffWork'] = "正常";
+                                  } else if(val.status == 2) {
+                                       attendanceObj['resultOffWork'] = "早退";
+                                  } else if (val.status == 4) {
+                                      attendanceObj['resultOffWork'] = "外勤"
+                                  }
+                                  attendanceObj['goOffWork'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 下班打卡
+                              } else if(val.event_attribute == 3) {
+                                  attendanceObj['workShift'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 上班排版
+                              } else if(val.event_attribute == 4) {
+                                  attendanceObj['workOffShift'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 下班排版
+                              } else if(val.event_attribute == 5) {
+                                  attendanceObj['hugh'] = "休息"
+                              }
+                          })
+                          attendanceArr.push(attendanceObj)
+                          this.punchCardList[index].attendanceData =  attendanceArr
+                      })
                   }else if(res.data.code == 20001){
                         this.emptyData();
                   }

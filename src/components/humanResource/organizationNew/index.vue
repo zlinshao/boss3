@@ -230,6 +230,13 @@
                       </div>
                     </template>
                   </el-table-column>
+                  <el-table-column
+                    label="操作"
+                  >
+                    <template slot-scope="scope">
+                      <el-button type="primary" size="mini" @click="openChangePhone(scope)">修改手机号</el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
                 <div class="tableBottom">
                   <el-pagination
@@ -1197,6 +1204,37 @@
       },
     },
     methods: {
+      changePhone(scope,phone) {
+        this.$http.put(globalConfig.server + 'organization/other/change-phone',{
+          id: scope.row.id,
+          phone
+        }).then(res =>{
+          if(res.data.code === "700800"){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getStaffData();
+          }else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            });
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
+      },
+      openChangePhone(scope) {
+        this.$prompt('请输入手机号码','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^1[3|4|5|8][0-9]\d{4,8}$/,
+          inputErrorMessage: '手机号格式不正确'
+        }).then(({value})=>{
+          this.changePhone(scope,value);
+        }).catch(()=>{ })
+      },
       // 导出
       leadingOut() {
         this.isHigh = false;
@@ -1467,6 +1505,38 @@
       handleAdd(s, d, n) {//增加节点
         this.addDepart(d);
       },
+      GoHide(id,hidden) {
+        this.$http.put(globalConfig.server + 'organization/other/hidden-org',{
+          id,
+          hidden
+        }).then(res =>{
+          if(res.data.code == "700710"){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getDepart();
+          }else {
+            this.$notify.success({
+              title: '失败',
+              message: res.data.msg
+            });
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
+      },
+      handleHide(s,d,n) {
+        var id = d.id;
+        var hidden = 0;
+        this.$confirm('您确定隐藏吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.GoHide(id,hidden);
+        }).catch(() => { });
+      }, //禁用
       handleEdit(s, d, n) {//编辑节点
         this.editDepart(d.id);
       },
@@ -2075,7 +2145,8 @@
             nodeSet: ((s, d, n) => that.handleSet(s, d, n)),
             nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
             nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
-            nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
+            nodeDel: ((s, d, n) => that.handleDelete(s, d, n)),
+            nodeHide: ((s,d,n)=> that.handleHide(s,d,n))
           }
         });
       },

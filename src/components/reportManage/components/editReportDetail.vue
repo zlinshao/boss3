@@ -26,9 +26,7 @@
                 <div class="statuss"
                      :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}">
                 </div>
-                <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">
-                  本小区价格区间：{{priceRegion}}
-                </div>
+                <!-- <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">本小区价格区间：{{priceRegion}}</div> -->
               </div>
 
               <div class="scroll_bar">
@@ -43,13 +41,24 @@
                     <el-form-item v-if="!value" :label="index" class="detailTitle">
                       <div class="special">{{value}}</div>
                     </el-form-item>
-
+                    <el-form-item v-if="value && Array.isArray(value) && index === 'receiptUri'" label="电子收据">
+                      <div class="special">
+                      <span v-for="p in value">
+                        <span v-if="p.image_url">
+                          <img data-magnify="" data-caption="图片查看器" :data-src="p.image_url" :src="p.image_url">
+                        </span>
+                        <span v-else>
+                          暂无
+                        </span>
+                      </span>
+                      </div>
+                    </el-form-item>
                     <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index"
                                   class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="value && Array.isArray(value)" :label="index">
+                    <el-form-item v-if="value && Array.isArray(value) && index !== 'receiptUri'" :label="index">
                       <div class="special">
                         <div
                           v-if="index === '定金和收款方式' || index === '补交定金和收款方式' || index === '已收金额和支付方式'||index === '已收金额和汇款账户'"
@@ -263,7 +272,13 @@
           <div v-if="!fullLoading && JSON.stringify(show_content) === '{}'" style="text-align: center">无相关记录</div>
         </el-form>
       </div>
+      <div class="houseInfo"  v-if="showPriceRange" >
+          <p class="houseSource">房源概况</p>
+          <div class="houseSourceInfo">{{houseSourceInfo}}</div>
+          <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
+        </div>
       <div slot="footer" class="dialog-footer">
+
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
                    v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
@@ -387,6 +402,12 @@
     <RwcConfirmRentReport :rwcConfirmRentReport="rwcConfirmRentReport" :reportDetailData="reportDetailData"
                           :reportId="reportId" :processableId="processable_id"
                           @close="closeModal"></RwcConfirmRentReport>
+    <finalPayment :finalPayment="finalPayment"
+                  :reportDetailData="reportDetailData"
+                  :reportId="reportId"
+                  :processableId="processable_id"
+                  @close="closeModal">
+    </finalPayment>
   </div>
 </template>
 
@@ -404,13 +425,14 @@
   import ChangeRentReport from '../reportRevise/changeRentReport'
   import RwcRentReport from '../reportRevise/rwcRentReport'
   import RwcConfirmRentReport from '../reportRevise/rwcConfirmRentReport'
+  import FinalPayment from '../reportRevise/finalPayment'
 
   export default {
     name: "report-detail",
     props: ['module', 'reportId', 'changeId'],
     components: {
       UpLoad, ContrastReport, RentReport, CollectReport, HouseReport, ContinueCollectReport,
-      ContinueRentReport, TransRentReport, ChangeRentReport, RwcRentReport, RwcConfirmRentReport
+      ContinueRentReport, TransRentReport, ChangeRentReport, RwcRentReport, RwcConfirmRentReport, FinalPayment
     },
     data() {
       return {
@@ -451,6 +473,7 @@
         changeRentReport: false,
         rwcRentReport: false,
         rwcConfirmRentReport: false,
+        finalPayment:false,
         show_content: {},
         reportDetailData: {},
         processable_id: '',
@@ -460,7 +483,7 @@
         printScreen: ['新凭证截图', '证件照片', '房产证照片', '旧凭证截图', '新押金收条', '旧押金收条', '押金收条', '款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '组长同意截图', '房屋影像', '房屋照片', '退租交接单'],
 
         routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
-          'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],
+          'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change', 'bulletin_retainage'],
         approvedStatus: false,
         process: {},
         videoSrc: '',
@@ -615,7 +638,27 @@
       //生成电子收据
       createElectronicReceipt() {
         this.electronicReceiptVisible = true;
-        this.$http.post(globalConfig.server + 'financial/receipt/generate', {...this.electronicReceiptParam, ...this.bank}).then((res) => {
+        var params = {};
+        params.account_id = this.electronicReceiptParam.account_id || "";
+        params.process_id = this.electronicReceiptParam.process_id || "";
+        params.department_id = this.electronicReceiptParam.department_id || "";
+        params.date = this.reportDetailData.bulletindate || "";
+        params.payer = this.electronicReceiptParam.payer || "";
+        params.address = this.electronicReceiptParam.address || "";
+        params.price = this.electronicReceiptParam.price || "";
+        params.sign_at = this.electronicReceiptParam.sign_at || "";
+        params.duration = this.electronicReceiptParam.duration || "";
+        params.pay_way = this.electronicReceiptParam.pay_way || "";
+        if(this.reportDetailData.show_content['定金'] && this.reportDetailData.show_content['定金'] !== ''){
+          params.payment = "定金";
+        }else {
+          params.payment = "押金+租金";
+        }
+        params.amount = this.reportDetailData.show_content['总金额'] || "";
+        params.sum = this.reportDetailData.show_content['总金额'] || "";
+        params.memo = this.electronicReceiptParam.memo || "";
+        params = Object.assign(this.bank,params);
+        this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
             this.electronicReceiptId = res.data.data.id;
@@ -689,6 +732,15 @@
           }
         })
       },
+      getShow_content() {
+        this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res=>{
+          if(res.data.code == '20020'){
+            this.show_content = res.data.data.content.show_content;
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+      },
       getProcess() {
         this.suggestpriceStatus = false;
         this.fullLoading = true;
@@ -696,13 +748,25 @@
         this.$http.get(this.address + `workflow/process/${this.reportId}`).then((res) => {
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
-            this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.reportDetailData = res.data.data.process.content;
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
             this.deal = res.data.data.deal;
-            this.process = res.data.data.process;
-
+            let type = res.data.data.process.processable_type;
+            switch (type) {
+              case "bulletin_rent_basic":
+              case "bulletin_rent_trans":
+              case "bulletin_rent_continued":
+              case "bulletin_rent_RWC":
+              case "bulletin_RWC_confirm":
+              case "bulletin_change":
+              case "bulletin_retainage":
+                this.getShow_content();
+                break;
+              default:
+                this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
+                break;
+            }
             let pro = res.data.data.process;
             this.houseId = res.data.data.process.house_id;
             this.personal = pro.user;
@@ -734,7 +798,7 @@
               this.bulletinId = res.data.data.process.id;
               this.phone = res.data.data.process.content.phone;
               this.is_receipt = res.data.data.process.content.is_receipt;
-
+              this.electronicReceiptParam.memo = res.data.data.process.content.memo || '';
               this.electronicReceiptParam.process_id = res.data.data.process.id;
               this.electronicReceiptParam.department_id = res.data.data.process.content.department_id;
               this.electronicReceiptParam.account_id = res.data.data.process.content.account_id || [];
@@ -981,6 +1045,8 @@
           case 'bulletin_RWC_confirm':
             this.rwcConfirmRentReport = true;
             break;
+          case 'bulletin_retainage' :
+            this.finalPayment = true;
         }
       },
 
@@ -997,7 +1063,8 @@
         this.changeRentReport = false;
         this.rwcRentReport = false;
         this.rwcConfirmRentReport = false;
-
+        this.finalPayment = false;
+        console.log(val)
         if (val === 'success') {
           this.getProcess();
           this.getReportEditInfo();
@@ -1012,6 +1079,14 @@
           this.priceRegion = res.data.priceMin + '~' + res.data.priceMax + '元';
         });
       },
+      //获取房源概况
+      getHouseInfo(houseInfo){
+         this.$http.get(globalConfig.server + 'bulletin/quality/city_houses_status', {
+          params: houseInfo,
+        }).then((res) => {
+          this.houseSourceInfo = res.data.data;
+        });
+      }
     },
   }
 </script>
@@ -1297,5 +1372,24 @@
       vertical-align: middle;
       margin: 0 5px 5px 0;
     }
+    /*footer*/
+
+    .houseInfo{
+      .houseSource{
+        color: #409EFF;
+        font-size: 16px;
+        margin:10px 0 0 0;
+        padding: 16px 0;
+        border-top: 1px solid #eee;
+        border-top-width: 1px;
+        border-top-style: solid;
+        border-top-color: rgb(238, 238, 238);
+      }
+      div{
+        font-size: 16px;
+        margin: 5px 0 0 40px;
+      }
+    }
+
   }
 </style>

@@ -361,9 +361,9 @@
       },
       // 确定
       confirmSelect() {
-        console.log(this.form);
         this.organizationVisible = false;
         this.$emit('selectMember', this.form);
+        this.close_();
       },
       close_() {
         this.params.keywords = '';

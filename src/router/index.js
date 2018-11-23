@@ -82,7 +82,7 @@ const monthlySummary = () => import('../components/attendanceManage/monthlySumma
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue');                 //通讯管理
-// const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue');               //日程管理
+// const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue');            //日程管理
 const Institution = () => import  ('../components/OAWork/management/institution/index.vue');           //制度管理
 // const Vote =()=> import  ('../comments/OAWork/vote/index1.vue');                                   //投票管理
 const Counter = () => import  ('../components/OAWork/management/counter/index.vue');                   //业绩计算器
