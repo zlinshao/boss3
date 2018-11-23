@@ -288,7 +288,7 @@
           {{value}}
         </el-button>
         <el-button size="small" type="primary" @click="openModal"
-                   v-if="approvedStatus && routerLinks.indexOf(this.process.processable_type) > -1">
+                   v-if="approvedStatus && routerLinks.indexOf(process.processable_type) > -1">
           修 改
         </el-button>
       </div>
@@ -766,17 +766,17 @@
                 this.getShow_content();
                 break;
               default:
-                this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
+                this.show_content = JSON.parse(data.process.content.show_content_compress);
                 break;
             }
-            let pro = res.data.data.process;
-            this.houseId = res.data.data.process.house_id;
+            this.houseId = data.process.house_id;
+            let pro = data.process;
             this.personal = pro.user;
             this.place = pro.place;
             this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
             this.getReportAboutInfo();
 
-            this.bulletinType = res.data.data.process.content.bulletin_name;
+            this.bulletinType = data.process.content.bulletin_name;
 
             if (this.bulletinType === "租房报备") {
               this.suggestpriceStatus = true;
@@ -797,44 +797,44 @@
             if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
 
               this.electronicReceiptStatu = true;
-              this.bulletinId = res.data.data.process.id;
-              this.phone = res.data.data.process.content.phone;
-              this.is_receipt = res.data.data.process.content.is_receipt;
-              this.electronicReceiptParam.memo = res.data.data.process.content.memo || '';
-              this.electronicReceiptParam.process_id = res.data.data.process.id;
-              this.electronicReceiptParam.department_id = res.data.data.process.content.department_id;
-              this.electronicReceiptParam.account_id = res.data.data.process.content.account_id || [];
-              this.electronicReceiptParam.deposit = res.data.data.process.content.front_money;
-              this.electronicReceiptParam.mortgage = res.data.data.process.content.deposit_payed;
-              this.electronicReceiptParam.rental = res.data.data.process.content.rent_money;
-              this.electronicReceiptParam.duration = res.data.data.process.content.show_content["现签约时长"] || res.data.data.process.content.show_content["签约时长"]
-              this.electronicReceiptParam.money_sep = res.data.data.process.content.money_sep;
-              this.electronicReceiptParam.address = res.data.data.process.content.address;
+              this.bulletinId = data.process.id;
+              this.phone = data.process.content.phone;
+              this.is_receipt = data.process.content.is_receipt;
+              this.electronicReceiptParam.memo = data.process.content.memo || '';
+              this.electronicReceiptParam.process_id = data.process.id;
+              this.electronicReceiptParam.department_id = data.process.content.department_id;
+              this.electronicReceiptParam.account_id = data.process.content.account_id || [];
+              this.electronicReceiptParam.deposit = data.process.content.front_money;
+              this.electronicReceiptParam.mortgage = data.process.content.deposit_payed;
+              this.electronicReceiptParam.rental = data.process.content.rent_money;
+              this.electronicReceiptParam.duration = data.process.content.show_content["现签约时长"] || data.process.content.show_content["签约时长"]
+              this.electronicReceiptParam.money_sep = data.process.content.money_sep;
+              this.electronicReceiptParam.address = data.process.content.address;
 
               if (this.bulletinType === "尾款报备") {
-                this.electronicReceiptParam.payer = res.data.data.process.content.customer_name;
-                this.electronicReceiptParam.sign_at = res.data.data.process.content.retainage_date;
-                this.electronicReceiptParam.price = res.data.data.process.content.price_arr.map(item => {
+                this.electronicReceiptParam.payer = data.process.content.customer_name;
+                this.electronicReceiptParam.sign_at = data.process.content.retainage_date;
+                this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
                   return item.split(':')[1];
                 }).join(",");
-                this.electronicReceiptParam.pay_way = res.data.data.process.content.payWay.join(',')
+                this.electronicReceiptParam.pay_way = data.process.content.payWay.join(',')
               } else {
-                this.electronicReceiptParam.payer = res.data.data.process.content.name;
-                this.electronicReceiptParam.sign_at = res.data.data.process.content.sign_date;
-                this.electronicReceiptParam.price = res.data.data.process.content.price_arr.map(item => {
+                this.electronicReceiptParam.payer = data.process.content.name;
+                this.electronicReceiptParam.sign_at = data.process.content.sign_date;
+                this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
                   return item + "元"
                 }).join(',');
-                this.electronicReceiptParam.pay_way = res.data.data.process.content.pay_way_str.map((item) => {
+                this.electronicReceiptParam.pay_way = data.process.content.pay_way_str.map((item) => {
                   return item.msg + " " + item.period;
                 }).join(',');
               }
-              res.data.data.process.content.money_way.forEach((item, index) => {
+              data.process.content.money_way.forEach((item, index) => {
                 this.bank["bank" + (index + 1)] = item;
               });
 
               this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
                 if (res.data.code === "20000") {
-                  if (res.data.data.is_sent) {
+                  if (data.is_sent) {
                     this.sendElectronicReceiptBtnText = "发送电子收据";
                     this.ElectronicReceiptBtnColor = "success"
                   } else {
@@ -1066,7 +1066,6 @@
         this.rwcRentReport = false;
         this.rwcConfirmRentReport = false;
         this.finalPayment = false;
-        console.log(val)
         if (val === 'success') {
           this.getProcess();
           this.getReportEditInfo();
