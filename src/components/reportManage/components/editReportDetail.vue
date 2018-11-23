@@ -36,22 +36,25 @@
                       <div class="special"><span style="color: red">{{suggest_price}}</span></div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12" v-for="(value,index) in show_content" :key="index"
-                          v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!value" :label="index" class="detailTitle">
-                      <div class="special">{{value}}</div>
-                    </el-form-item>
-                    <el-form-item v-if="value && Array.isArray(value) && index === 'receiptUri'" label="电子收据">
+                  <el-col :span="12" v-for="(value,index) in show_content" :key="value"
+                          v-if="printScreen.indexOf(index) === -1 && index === 'receiptUri'">
+                    <el-form-item v-if="value && Array.isArray(value)" label="电子收据">
                       <div class="special">
                       <span v-for="p in value">
-                        <span v-if="p.image_url">
-                          <img data-magnify="" data-caption="图片查看器" :data-src="p.image_url" :src="p.image_url">
+                        <span v-if="p.view_uri">
+                          <a :href="p.view_uri">{{p.view_uri}}</a>
                         </span>
                         <span v-else>
                           暂无
                         </span>
                       </span>
                       </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12" v-for="(value,index) in show_content" :key="index"
+                          v-if="printScreen.indexOf(index) === -1">
+                    <el-form-item v-if="!value" :label="index" class="detailTitle">
+                      <div class="special">{{value}}</div>
                     </el-form-item>
                     <el-form-item v-if="value && !Array.isArray(value) && value.constructor !== Object" :label="index"
                                   class="detailTitle">
@@ -70,14 +73,11 @@
                         </div>
                       </div>
                     </el-form-item>
-
                     <el-form-item v-if="value && value.constructor === Object" :label="index" class="detailTitle">
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
-
                   </el-col>
-
                   <!--图片-->
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
