@@ -649,16 +649,13 @@
         params.sign_at = this.electronicReceiptParam.sign_at || "";
         params.duration = this.electronicReceiptParam.duration || "";
         params.pay_way = this.electronicReceiptParam.pay_way || "";
-        if (this.reportDetailData.show_content['定金'] && this.reportDetailData.show_content['定金'] !== '') {
-          params.payment = "定金";
+        if (this.reportDetailData.show_content['款项名称']) {
+          params.payment = this.reportDetailData.show_content['款项名称'];
         } else {
-          params.payment = "押金+租金";
+          params.payment = '定金';
         }
         params.amount = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
         params.sum = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
-        console.log(this.reportDetailData.show_content)
-        console.log(this.reportDetailData.show_content['总金额'])
-        console.log(this.reportDetailData.show_content['款项金额'])
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
@@ -806,12 +803,12 @@
               this.is_receipt = data.process.content.is_receipt;
               this.electronicReceiptParam.memo = data.process.content.memo || '';
               this.electronicReceiptParam.process_id = data.process.id;
-              this.electronicReceiptParam.department_id = data.process.content.department_id;
+              this.electronicReceiptParam.department_id = data.process.content.org_id;
               this.electronicReceiptParam.account_id = data.process.content.account_id || [];
               this.electronicReceiptParam.deposit = data.process.content.front_money;
               this.electronicReceiptParam.mortgage = data.process.content.deposit_payed;
               this.electronicReceiptParam.rental = data.process.content.rent_money;
-              this.electronicReceiptParam.duration = data.process.content.show_content["现签约时长"] || data.process.content.show_content["签约时长"]
+              this.electronicReceiptParam.duration = data.process.content.show_content["现签约时长"] || data.process.content.show_content["签约时长"];
               this.electronicReceiptParam.money_sep = data.process.content.money_sep;
               this.electronicReceiptParam.address = data.process.content.address;
 
