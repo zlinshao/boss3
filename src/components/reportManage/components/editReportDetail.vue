@@ -641,6 +641,7 @@
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
+        params.house_id = this.electronicReceiptParam.house_id || "";
         params.date = this.reportDetailData.bulletindate || "";
         params.payer = this.electronicReceiptParam.payer || "";
         params.address = this.electronicReceiptParam.address || "";
@@ -803,6 +804,7 @@
               this.is_receipt = data.process.content.is_receipt;
               this.electronicReceiptParam.memo = data.process.content.memo || '';
               this.electronicReceiptParam.process_id = data.process.id;
+              this.electronicReceiptParam.house_id = data.process.house_id;
               this.electronicReceiptParam.department_id = data.process.org_id;
               this.electronicReceiptParam.account_id = data.process.content.account_id || [];
               this.electronicReceiptParam.deposit = data.process.content.front_money;
