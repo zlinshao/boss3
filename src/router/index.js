@@ -82,7 +82,7 @@ const monthlySummary = () => import('../components/attendanceManage/monthlySumma
 
 //OA办公
 // const Communication =()=> import  ('../comments/OAWork/communication/index1.vue');                 //通讯管理
-// const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue');               //日程管理
+// const Programme =()=> import  ('../components/OAWork/management/programme/index1.vue');            //日程管理
 const Institution = () => import  ('../components/OAWork/management/institution/index.vue');           //制度管理
 // const Vote =()=> import  ('../comments/OAWork/vote/index1.vue');                                   //投票管理
 const Counter = () => import  ('../components/OAWork/management/counter/index.vue');                   //业绩计算器
@@ -111,8 +111,8 @@ const LineCollege = () => import  ('../components/lejiaCollege/LineCollege/index
 const StaffRegistration = () => import  ('../components/lejiaCollege/StaffRegistration/index.vue');
 const College = () => import  ('../components/lejiaCollege/college/index.vue'); //乐伽大学
 const OnlineExam = () => import  ('../components/lejiaCollege/OnlineExam/index.vue');    //在线考试
-const VideoTeaching = () => import('../components/lejiaCollege/VideoTeaching/index.vue')  //教学视频详情
-const videoDetails = () => import('../components/lejiaCollege/VideoTeaching/videoDetails.vue') //教学视频管理
+const VideoTeaching = () => import('../components/lejiaCollege/VideoTeaching/index.vue');  //教学视频详情
+const videoDetails = () => import('../components/lejiaCollege/VideoTeaching/videoDetails.vue'); //教学视频管理
 
 const ConfigExam = () => import  ('../components/lejiaCollege/OnlineExam/configExam/index.vue');  //管理试卷
 const BatchQuestions = () => import  ('../components/lejiaCollege/OnlineExam/batchQuestions/index.vue');  //批量导入试题
@@ -230,7 +230,7 @@ const DetailAcievement = () => import('../components/meritPay/achievement/achiev
 
 // 账户管理
 const accountMmanagement = () => import('../components/meritPay/accountMmanagement/index.vue');
-const account = () => import('../components/meritPay/accountMmanagement/components/account.vue')
+const account = () => import('../components/meritPay/accountMmanagement/components/account.vue');
 
 Vue.use(Router);
 

@@ -5,21 +5,21 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <!--<el-form-item>-->
-              <!--<el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">-->
-                <!--<template slot="append">-->
-                  <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
-                <!--</template>-->
-              <!--</el-input>-->
+            <!--<el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">-->
+            <!--<template slot="append">-->
+            <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
+            <!--</template>-->
+            <!--</el-input>-->
             <!--</el-form-item>-->
             <el-form-item v-if="activeName === 'first'">
               <el-input placeholder="地址/合同编号" clearable v-model="params.search"
-                        @keyup.enter.native="search"  size="mini">
+                        @keyup.enter.native="search" size="mini">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item v-else>
               <el-input placeholder="地址/合同编号" clearable v-model="params_second.search"
-                        @keyup.enter.native="search"  size="mini">
+                        @keyup.enter.native="search" size="mini">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -82,12 +82,12 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                          v-model="params_second.check_time"
-                          type="daterange"
-                          value-format="yyyy-MM-dd"
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期">
+                        v-model="params_second.check_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -323,12 +323,12 @@
               <div class="tableBottom" v-if="activeName === 'first'">
                 <div class="left">
                   <el-pagination
-                      @current-change="handleCurrentChange"
-                      :current-page="params.page"
-                      :page-sizes="[12, 20, 30, 40]"
-                      :page-size="params.limit"
-                      layout="total, prev, pager, next, jumper"
-                      :total="totalNumber">
+                    @current-change="handleCurrentChange"
+                    :current-page="params.page"
+                    :page-sizes="[12, 20, 30, 40]"
+                    :page-size="params.limit"
+                    layout="total, prev, pager, next, jumper"
+                    :total="totalNumber">
                   </el-pagination>
                 </div>
               </div>
@@ -345,7 +345,7 @@
                 @row-contextmenu='houseMenu'
                 style="width: 100%">
                 <el-table-column
-                    label="合同编号">
+                  label="合同编号">
                   <template slot-scope="scope">
                     <span v-if="scope.row.renter_contract_number">
                       {{scope.row.renter_contract_number}}
@@ -354,7 +354,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                    label="房屋地址">
+                  label="房屋地址">
                   <template slot-scope="scope">
                     <span v-if="scope.row.renter_house_name">
                       {{scope.row.renter_house_name}}
@@ -363,10 +363,10 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="归属公司"
-                >
+                  label="归属公司">
                   <template slot-scope="scope">
-                    <span style="color: #525252;" v-if="house_name2 && scope.row.house_id && house_name2[scope.row.house_id]">{{ house_name2[scope.row.house_id].corp_name }}</span>
+                    <span style="color: #525252;"
+                          v-if="house_name2 && scope.row.house_id && house_name2[scope.row.house_id]">{{ house_name2[scope.row.house_id].corp_name }}</span>
                     <span style="color: #525252;" v-else>暂无</span>
                   </template>
                 </el-table-column>
@@ -473,12 +473,12 @@
               <div class="tableBottom" v-if="activeName === 'second'">
                 <div class="left">
                   <el-pagination
-                      @current-change="handleCurrentChange"
-                      :current-page="params_second.page"
-                      :page-sizes="[12, 20, 30, 40]"
-                      :page-size="params_second.limit"
-                      layout="total, prev, pager, next, jumper"
-                      :total="totalNumber_second">
+                    @current-change="handleCurrentChange"
+                    :current-page="params_second.page"
+                    :page-sizes="[12, 20, 30, 40]"
+                    :page-size="params_second.limit"
+                    layout="total, prev, pager, next, jumper"
+                    :total="totalNumber_second">
                   </el-pagination>
                 </div>
               </div>
@@ -512,7 +512,7 @@
 
   export default {
     name: 'hello',
-    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic,Organization},
+    components: {RightMenu, EditCollectVacation, VacationDetail, UploadPic, Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -523,8 +523,8 @@
         activeName: 'first',
         totalNumber: 0,
         tableData: [],
-        totalNumber_second : 0,
-        tableData_second : [],
+        totalNumber_second: 0,
+        tableData_second: [],
         params: {
           page: 1,
           limit: 12,
@@ -563,7 +563,7 @@
         isRent: 0,
         address: '',
         status: '',
-        superAuthority : false,
+        superAuthority: false,
         organDivision: '',
         organModule: false,
         organizeType: '',
@@ -577,7 +577,7 @@
       this.getData_rent();
     },
     methods: {
-      openOrgan(val,type) {
+      openOrgan(val, type) {
         // 打开组织架构
         this.organDivision = val;
         this.organModule = true;
@@ -600,14 +600,14 @@
         this.org_name = val[0].name;
       },
       creators_show(scope) {
-          var org = '';
-          if(scope.row.creators.length !== 0 && scope.row.creators.org){
-            scope.row.creators.org.map((item,index)=>{
-              org += item.name;
-            });
-            org = org.substring(0,org.length - 1);
-          }
-          return org;
+        var org = '';
+        if (scope.row.creators.length !== 0 && scope.row.creators.org) {
+          scope.row.creators.org.map((item, index) => {
+            org += item.name;
+          });
+          org = org.substring(0, org.length - 1);
+        }
+        return org;
       },
       //获取退租列表
       getData_collect() {
@@ -617,8 +617,10 @@
           this.isLoading = false;
           let house_id = [];
           if (res.data.code === '20000') {
-            res.data.data.data.map((item)=>{
-              house_id.push(item.house_id);
+            res.data.data.data.forEach((item) => {
+              if (item.house_id) {
+                house_id.push(item.house_id);
+              }
             });
             this.superAuthority = res.data.data.can;
             this.tableData = res.data.data.data;
@@ -629,25 +631,23 @@
             this.totalNumber = 0;
             this.emptyStatus = '暂无数据';
           }
-          this.getName(house_id,true);
+          this.getName(house_id, true);
         })
       },
-      getName(houseIds = [],status) {
-        this.$http.get(globalConfig.server + '/organization/other/house-corp',{
-          params:{
-            houseIds
-          }
-        }).then(res=>{
-          if(res.data.code == '700120'){
-            if(status){
+      getName(houseIds = [], status) {
+        this.$http.get(globalConfig.server + '/organization/other/house-corp', {
+          params: {houseIds}
+        }).then(res => {
+          if (res.data.code === '700120') {
+            if (status) {
               this.house_name = res.data.data;
-            }else{
+            } else {
               this.house_name2 = res.data.data;
             }
-          }else {
+          } else {
             this.house_name = {};
           }
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err);
         })
       },
@@ -658,8 +658,10 @@
           this.isLoading_second = false;
           let house_id = [];
           if (res.data.code === '20000') {
-            res.data.data.data.map((item)=>{
-              house_id.push(item.house_id);
+            res.data.data.data.forEach((item) => {
+              if (item.house_id) {
+                house_id.push(item.house_id);
+              }
             });
             this.superAuthority = res.data.data.can;
             this.tableData_second = res.data.data.data;
@@ -670,7 +672,7 @@
             this.totalNumber_second = 0;
             this.emptyStatus_second = '暂无数据';
           }
-          this.getName(house_id,false);
+          this.getName(house_id, false);
         })
       },
       //切换标签页
@@ -680,10 +682,10 @@
       },
       //分页
       handleCurrentChange(val) {
-        if(this.activeName === 'first'){
+        if (this.activeName === 'first') {
           this.params.page = val;
           this.getData_collect();
-        }else {
+        } else {
           this.params_second.page = val;
           this.getData_rent();
         }
@@ -693,9 +695,9 @@
       deleteColumn() {
         this.$http.get(globalConfig.server + 'customer/check_out/delete/' + this.operateId).then((res) => {
           if (res.data.code === '20040') {
-            if(this.activeName === 'first'){
+            if (this.activeName === 'first') {
               this.getData_collect();
-            }else {
+            } else {
               this.getData_rent();
             }
             this.$notify.success({
@@ -717,9 +719,9 @@
         this.vacationDetail = false;
         if (val === 'success') {
           this.isRent = this.activeName === 'first' ? 0 : 1;
-          if(this.activeName === 'first'){
+          if (this.activeName === 'first') {
             this.getData_collect();
-          }else {
+          } else {
             this.getData_rent();
           }
         }
@@ -734,22 +736,22 @@
       },
       search() {
         this.isHigh = false;
-        if(this.activeName === 'first'){
+        if (this.activeName === 'first') {
           this.params.page = 1;
           this.getData_collect();
-        }else {
+        } else {
           this.params_second.page = 1;
           this.getData_rent();
         }
       },
       resetting() {
-        if(this.activeName === 'first'){
+        if (this.activeName === 'first') {
           this.params.check_time = [];
           this.params.check_house_time = [];
           this.params.status = '';
           this.org_name = '';
           this.params.org_id = '';
-        }else {
+        } else {
           this.params_second.check_time = [];
           this.params_second.check_house_time = [];
           this.params_second.status = '';
