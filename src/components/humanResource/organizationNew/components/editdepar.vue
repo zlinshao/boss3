@@ -27,6 +27,18 @@
                 <el-input placeholder="请输入企业微信id" v-model="params.corp_wx"></el-input>
               </el-form-item>
             </el-col>
+             <!--新加-->
+            <el-col :span="24" v-if="is_corp">
+              <el-form-item label="社会统一信用代码" required>
+                <el-input placeholder="请输入社会统一信用代码" v-model="params.cods_id"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-if="is_corp">
+              <el-form-item label="联系方式" required>
+                <el-input placeholder="请输入联系方式" v-model="params.phone"></el-input>
+              </el-form-item>
+            </el-col>
+            <!--新加-->
             <el-col :span="24">
               <el-form-item label='排序'>
                 <el-input-number v-model="params.order"></el-input-number>
@@ -60,7 +72,9 @@
           name: '',
           order: '',
           is_corp: '0',
-          corp_wx: ''
+          corp_wx: '',
+          cods_id: '',
+          phone: '',
         },
         paramsOrg: {
           infinite: 20,
@@ -83,7 +97,13 @@
         if (val) {
           this.getDepartInfo(val);
         }
-      }
+      },
+      is_corp(val) {
+        this.params.corp_wx = '';
+        this.params.cods_id = '';
+        this.params.phone = '';
+        this.params.is_corp = val ? '1' : '0';
+      },
     },
     methods: {
       getDepartInfo(id) {
@@ -146,7 +166,9 @@
           name: '',
           order: '',
           is_corp: '0',
-          corp_wx: ''
+          corp_wx: '',
+          cods_id: '',
+          phone: '',
         };
         this.is_corp = false;
         this.department = '';
