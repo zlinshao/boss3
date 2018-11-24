@@ -210,8 +210,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="归属公司"
-                >
+                  label="归属公司">
                   <template slot-scope="scope">
                     <span v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{house_name[scope.row.house_id].corp_name}}</span>
                     <!--<span style="color: #525252;" v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{ house_name[scope.row.house_id].corp_name }}</span>-->
@@ -276,10 +275,9 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="部门"
-                >
+                  label="部门">
                   <template slot-scope="scope">
-                    <span v-text="creators_show(scope)"></span>
+                    <span v-text="creators_show(scope.row)"></span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -426,10 +424,9 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="部门"
-                >
+                  label="部门">
                   <template slot-scope="scope">
-                    <span v-text="creators_show(scope)"></span>
+                    {{creators_show(scope.row)}}
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -572,7 +569,7 @@
         house_name2: {}
       }
     },
-    created() {
+    mounted() {
       this.getData_collect();
       this.getData_rent();
     },
@@ -599,13 +596,12 @@
         this.params_second.org_id = val[0].id;
         this.org_name = val[0].name;
       },
-      creators_show(scope) {
-        var org = '';
-        if (scope.row.creators.length !== 0 && scope.row.creators.org) {
-          scope.row.creators.org.map((item, index) => {
+      creators_show(row) {
+        let org = '';
+        if (row.creators && row.creators.org && row.creators.org.length !== 0) {
+          row.creators.org.forEach(item => {
             org += item.name;
           });
-          org = org.substring(0, org.length - 1);
         }
         return org;
       },
