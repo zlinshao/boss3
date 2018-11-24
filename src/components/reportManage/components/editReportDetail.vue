@@ -641,7 +641,7 @@
         let params = {};
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
-        params.department_id = this.electronicReceiptParam.department_id || "";
+        params.department_id = this.electronicReceiptParam.org_id || "";
         params.date = this.reportDetailData.bulletindate || "";
         params.payer = this.electronicReceiptParam.payer || "";
         params.address = this.electronicReceiptParam.address || "";
@@ -658,6 +658,7 @@
         params.sum = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
+        console.log(params);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
@@ -750,7 +751,6 @@
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
             let data = res.data.data;
-            this.reportDetailData = data.process.content;
             this.processable_id = data.process.processable_id;
             this.operation = data.operation;
             this.deal = data.deal;
@@ -768,6 +768,7 @@
                 break;
               default:
                 this.show_content = JSON.parse(data.process.content.show_content_compress);
+                this.reportDetailData = data.process.content;
                 break;
             }
             this.houseId = data.process.house_id;
