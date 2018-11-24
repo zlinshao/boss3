@@ -804,7 +804,7 @@
               this.is_receipt = data.process.content.is_receipt;
               this.electronicReceiptParam.memo = data.process.content.memo || '';
               this.electronicReceiptParam.process_id = data.process.id;
-              this.electronicReceiptParam.department_id = data.process.content.org_id;
+              this.electronicReceiptParam.department_id = data.process.org_id;
               this.electronicReceiptParam.account_id = data.process.content.account_id || [];
               this.electronicReceiptParam.deposit = data.process.content.front_money;
               this.electronicReceiptParam.mortgage = data.process.content.deposit_payed;
