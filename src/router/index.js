@@ -383,7 +383,7 @@ export default new Router({
         { path: '/VideoTeaching', component: VideoTeaching, name: '视频管理', meta: { keepAlive: true }},
 
         // 账户管理
-        { path: '/account', component: account, name: '账户管理', meta: { keepAlive: true }},
+        { path: '/account', component: account, name: '账户管理 ', meta: { keepAlive: true }},
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
