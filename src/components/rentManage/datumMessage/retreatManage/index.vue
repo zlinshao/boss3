@@ -658,8 +658,10 @@
           this.isLoading_second = false;
           let house_id = [];
           if (res.data.code === '20000') {
-            res.data.data.data.map((item) => {
-              house_id.push(item.house_id);
+            res.data.data.data.forEach((item) => {
+              if (item.house_id) {
+                house_id.push(item.house_id);
+              }
             });
             this.superAuthority = res.data.data.can;
             this.tableData_second = res.data.data.data;
