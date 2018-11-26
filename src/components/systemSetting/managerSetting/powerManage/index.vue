@@ -410,6 +410,7 @@
           {clickIndex: 'add3', headIcon: 'el-icon-edit-outline', label: '新增权限'},
           {clickIndex: 'reviseModule', headIcon: 'el-icon-edit-outline', label: '编辑'},
           {clickIndex: 'deleteModule', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+          {clickIndex: 'changeSys', headIcon: 'el-icon-edit-outline',label: '修改所属系统'}
         ];
         this.contextMenuParam(event);
       },
