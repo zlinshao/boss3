@@ -18,8 +18,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="账号">
-          <el-select multiple v-model="formAllocation.account_id " clearable placeholder="请选择" >
-            <el-option v-for="item in accountNumOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-select multiple  v-model="formAllocation.account_id " clearable placeholder="请选择"  ref="bbbb">
+            <el-option v-for="item in accountNumOptions" :key="item.value"  data-num='123' :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -85,7 +85,27 @@
         </div>
       </el-col>
     </el-row>
-    
+    <!-- 新增账户 -->
+    <el-dialog title="补全账户信息" :visible.sync="addAccount" width="30%">
+      <el-form :label-position="labelPosition"  label-width="80px" :model="addAccountFrom" size="mini" ref="form">
+         <el-form-item label="账户名称">
+          <el-input v-model="addAccountFrom.account_name" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="账户账号">
+          <el-input v-model="addAccountFrom.account_num" :disabled="true"></el-input>
+        </el-form-item>
+         <el-form-item label="开户行">
+          <el-input v-model="addAccountFrom.display_name" :disabled="add_account_display"></el-input>
+        </el-form-item>
+         <el-form-item label="开户人">
+          <el-input  v-model="addAccountFrom.account_owner"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addAccount = false" size="mini">取 消</el-button>
+        <el-button type="primary" size="mini" @click="addAccountNameOwner">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,6 +116,17 @@ export default {
   components: { organization },
   data() {
     return {
+      accountId: "",
+      addAccountFrom: {
+        account_id: "",
+        display_name: "",
+        account_owner: ""
+      },
+      add_account_display: false,
+      add_account_num: "",
+      add_display_name: "",
+      add_account_owner: "",
+      addAccount: false,
       table: [{ city: [], country: [] }],
       ind1: 0,
       ind2: 0,
@@ -167,7 +198,7 @@ export default {
             res.data.data.data.forEach((item, index) => {
               obj = {};
               obj["value"] = item.id;
-              obj["label"] = item.name + " " + item.account_num;
+              obj["label"] = item.display_name + " - " + item.account_owner + " - " + item.account_num;
               obj["account_owner"] = item.account_owner;
               obj["display_name"] = item.display_name;
               this.accountNumOptions.push(obj);
@@ -276,13 +307,47 @@ export default {
             // this.org_name = "";
             this.formAllocation.account_id = [];
             this.allocationDialog = false;
-          } else {
+          } else if(res.data.code == "20001") {
+            this.addAccount = true;
+            this.accountId = res.data.info.cate;
+            this.addAccountFrom.account_name = res.data.info.name;
+            this.addAccountFrom.account_id = res.data.info.id;
+            this.addAccountFrom.account_num = res.data.info.account_num;
+            if(res.data.info.cate == 2) {
+              this.addAccountFrom.display_name = "支付宝";
+              this.add_account_display = true;
+            } else if(res.data.info.cate == 3) {
+              this.addAccountFrom.display_name = "微信";
+              this.add_account_display = true;
+            } else {
+              this.addAccountFrom.display_name = res.data.info.display_name;
+              this.addAccountFrom.account_owner = res.data.info.account_owner
+            }
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
             });
           }
         });
+    },
+    // 新增账户人或账户
+    addAccountNameOwner() {
+      // this.addAccountFrom.account_id = this.formAllocation.account_id;
+      this.$http.post(globalConfig.server + "financial/account_alloc/complement", this.addAccountFrom).then(res => {
+        if(res.data.code == "20000") {
+          this.$notify.success({
+            title: "成功",
+            message: res.data.msg
+          })
+          this.addAccount = false;
+          this.getAccount(this.accountId)
+        } else {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          })
+        }
+      })
     },
     // getBankAccount(val) {
     //   this.accountNumOptions.forEach((item, index) => {
@@ -413,6 +478,10 @@ export default {
         });
         this.isLoadingTree = true;
       },
+      // aaaa(e) {
+      //   console.log(this.$refs["bbbb"]["selected"])
+      //   console.log(this.$refs.bbbb)
+      // }
   },
   mounted() {
     this.initExpand();
