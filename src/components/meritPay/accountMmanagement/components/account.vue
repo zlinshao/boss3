@@ -323,6 +323,7 @@ export default {
               this.addAccountFrom.display_name = res.data.info.display_name;
               this.addAccountFrom.account_owner = res.data.info.account_owner
             }
+          } else if(res.data.code == "20012") {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
@@ -340,7 +341,8 @@ export default {
             message: res.data.msg
           })
           this.addAccount = false;
-          this.getAccount(this.accountId)
+          this.getAccount(this.accountId);
+          this.addAccountFrom.account_owner = "";
         } else {
           this.$notify.warning({
             title: "警告",
