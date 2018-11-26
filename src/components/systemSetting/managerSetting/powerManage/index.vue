@@ -189,9 +189,9 @@
       <div style="width: 100%;text-align: center;">
         <el-form :model="powerParams" :rules="rules" ref="powerParams" label-width="100px">
           <el-form-item label="系统" prop="sysSelect">
-            <el-selct size="mini" v-model="powerParams.sysSelect" style="width: 250px;">
-              <el-option v-for="item in sysList" :key="item.id" :value="item.id" :label="item.display_name"></el-option>
-            </el-selct>
+            <el-select size="mini" v-model="powerParams.sysSelect" style="width: 250px;" @change="handleSelectSys">
+              <el-option v-for="tmp in sysList" :key="tmp.id" :value="tmp.id" :label="tmp.display_name"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="模块" prop="powSelect">
             <el-select size="mini" v-model="powerParams.powSelect" style="width: 250px;">
@@ -289,6 +289,10 @@
     },
 
     methods: {
+      handleSelectSys(val) {
+        this.addID.firstID = val;
+        this.modGetAll();
+      },
       handleCancelSys(val) {
         this.sysList = [];
         this.$refs[val].resetFields();
