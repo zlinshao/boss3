@@ -57,13 +57,14 @@
                     </div>
                   </template>
                 </el-table-column>
-                 <el-table-column label="上班排版时间" prop="attendanceData[0].workShift">
+                 <el-table-column label="上班排班时间" prop="attendanceData[0].workShift">
                 </el-table-column>
-                <el-table-column label="下班排版时间" prop="attendanceData[0].workOffShift">
-                </el-table-column>
-                <el-table-column label="休息" prop="attendanceData[0].hugh">
+                <el-table-column label="下班排班时间" prop="attendanceData[0].workOffShift">
                 </el-table-column>
                 <el-table-column label="上班打卡时间" prop="attendanceData[0].goWork">
+                    <template slot-scope="scope">
+                        <div :class="bg(scope.row)">{{scope.row.attendanceData[0].goWork}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="打卡结果" prop="attendanceData[0].resultWork">
                 </el-table-column>
@@ -568,6 +569,10 @@ export default {
       this.punchCardParams.org_id = val[0].id;
       this.org_name = val[0].name;
     },
+    bg(row, label) {
+        console.log(row, "11111");
+        
+    }
   },
   mounted (){
     var date = new Date();
@@ -581,6 +586,9 @@ export default {
     #punchCard{
         width: 100%;
         position: relative;
+        .wanring {
+            color: red;
+        }
     }
 </style>
 
