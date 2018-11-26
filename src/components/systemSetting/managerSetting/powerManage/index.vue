@@ -168,7 +168,7 @@
       width="25%"
     >
       <div style="width: 100%;text-align: center;">
-        <el-form :model="moduleParams" :rules="rules" ref="moduleParams">
+        <el-form :model="moduleParams" :rules="rules" ref="moduleParams" label-width="100px">
           <el-form-item label="系统" prop="sysSelect">
             <el-select size="mini" v-model="moduleParams.sysSelect" style="width: 250px;">
               <el-option v-for="item in tableFirst" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
@@ -177,7 +177,7 @@
         </el-form>
         <div slot="footer">
           <el-button type="normal" size="mini" @click="handleCancelSys('moduleParams')">取消</el-button>
-          <el-button type="primary" size="mini" @click="handleChangeSys('module')">确定</el-button>
+          <el-button type="primary" size="mini" @click="handleChangeSys('module','moduleParams')">确定</el-button>
         </div>
       </div>
     </el-dialog>
@@ -187,7 +187,7 @@
       width="25%"
     >
       <div style="width: 100%;text-align: center;">
-        <el-form :model="powerParams" :rules="rules" ref="powerParams">
+        <el-form :model="powerParams" :rules="rules" ref="powerParams" label-width="100px">
           <el-form-item label="模块" prop="powSelect">
             <el-select size="mini" v-model="powerParams.powSelect" style="width: 250px;">
               <el-option v-for="item in tableSecond" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
@@ -196,7 +196,7 @@
         </el-form>
         <div slot="footer">
           <el-button type="normal" size="mini" @click="handleCancelMod('powerParams')">取消</el-button>
-          <el-button type="primary" size="mini" @click="handleChangeSys('power')">确定</el-button>
+          <el-button type="primary" size="mini" @click="handleChangeSys('power','powerParams')">确定</el-button>
         </div>
       </div>
     </el-dialog>
@@ -267,10 +267,10 @@
           powSelect: ''
         },
         rules: {
-          sys: [
+          sysSelect: [
             { required: true, message: '请输入系统名称', trigger: 'blur' }
           ],
-          module: [
+          powSelect: [
             { required: true, message: '请输入模块名称', trigger: 'blur' }
           ]
         }
@@ -290,50 +290,56 @@
         this.$refs[val].resetFields();
         this.powerVisible = false;
       },
-      handleChangeSys(type) {
-        if(type === 'module'){
-          var system_id = this.moduleParams.sysSelect;
-          var module_id = this.tableDetail.id;
-          this.$http.put(this.urls + 'organization/module/modify-system/id',{id:module_id,system_id}).then(res => {
-            if(res.data.code === '20080'){
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-              this.moduleList(1);
-              this.handleCancelSys('moduleParams');
-            }else {
-              this.$notify.warning({
-                title: '失败',
-                message: res.data.msg
-              });
-              this.handleCancelSys('moduleParams');
+      handleChangeSys(type,val) {
+        this.$refs[val].validate(valid => {
+          if(valid){
+            if(type === 'module'){
+              var system_id = this.moduleParams.sysSelect;
+              var module_id = this.tableDetail.id;
+              this.$http.put(this.urls + 'organization/module/modify-system/id',{id:module_id,system_id}).then(res => {
+                if(res.data.code === '20080'){
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.moduleList(1);
+                  this.handleCancelSys('moduleParams');
+                }else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.handleCancelSys('moduleParams');
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            }else if(type === 'power'){
+              var mod_id = this.powerParams.powSelect;
+              var power_id = this.tableDetail.id;
+              this.$http.put(this.urls + 'organization/permission/modify-module/id',{id:power_id,mod_id}).then(res =>{
+                if(res.data.code === '20080'){
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.moduleList(1);
+                  this.handleCancelMod('powerParams');
+                }else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.handleCancelMod('powerParams');
+                }
+              }).catch(err =>{
+                console.log(err);
+              })
             }
-          }).catch(err => {
-            console.log(err);
-          })
-        }else if(type === 'power'){
-          var mod_id = this.powerParams.powSelect;
-          var power_id = this.tableDetail.id;
-          this.$http.put(this.urls + 'organization/permission/modify-module/id',{id:power_id,mod_id}).then(res =>{
-            if(res.data.code === '20080'){
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-              this.moduleList(1);
-              this.handleCancelMod('powerParams');
-            }else {
-              this.$notify.warning({
-                title: '失败',
-                message: res.data.msg
-              });
-              this.handleCancelMod('powerParams');
-            }
-          }).catch(err =>{
-            console.log(err);
-          })
-        }
+          }else {
+            return false;
+          }
+        });
       },
       // 行 变色
       tableFirstName({row, rowIndex}) {
