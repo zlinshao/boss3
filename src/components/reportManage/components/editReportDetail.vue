@@ -42,7 +42,7 @@
                       <div class="special">
                       <span v-for="p in value">
                         <span v-if="p.view_uri">
-                          <a :href="p.view_uri">{{p.view_uri}}</a>
+                          <a :href="p.view_uri" target="_blank">{{p.view_uri}}</a>
                         </span>
                         <span v-else>
                           暂无
@@ -764,7 +764,7 @@
               case "bulletin_change":
               case "bulletin_retainage":
                 this.getShow_content().then(arr => {
-                  data.process = arr;
+                  data.process.content = arr.content;
                   this.setProcess(data);
                 });
                 break;
