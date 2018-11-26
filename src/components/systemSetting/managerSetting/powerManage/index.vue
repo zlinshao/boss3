@@ -171,7 +171,7 @@
         <el-form :model="moduleParams" :rules="rules" ref="moduleParams" label-width="100px">
           <el-form-item label="系统" prop="sysSelect">
             <el-select size="mini" v-model="moduleParams.sysSelect" style="width: 250px;">
-              <el-option v-for="item in tableFirst" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
+              <el-option v-for="item in sysList" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -190,7 +190,7 @@
         <el-form :model="powerParams" :rules="rules" ref="powerParams" label-width="100px">
           <el-form-item label="模块" prop="powSelect">
             <el-select size="mini" v-model="powerParams.powSelect" style="width: 250px;">
-              <el-option v-for="item in tableSecond" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
+              <el-option v-for="item in modList" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -273,8 +273,9 @@
           powSelect: [
             { required: true, message: '请输入模块名称', trigger: 'blur' }
           ]
-        }
-
+        },
+        sysList: [],
+        modList: []
       }
     },
     mounted() {
@@ -283,10 +284,12 @@
 
     methods: {
       handleCancelSys(val) {
+        this.sysList = [];
         this.$refs[val].resetFields();
         this.moduleVisible = false;
       },
       handleCancelMod(val) {
+        this.modList = [];
         this.$refs[val].resetFields();
         this.powerVisible = false;
       },
@@ -383,7 +386,15 @@
           }
         })
       },
-
+      sysGetAll(){
+        this.$http.get(this.urls + 'organization/system',{
+          params: {all: 'all'}
+        }).then(res => {
+          if(res.data.code === '20000'){
+            this.sysList = res.data.data.data;
+          }
+        })
+      },
       firstClick(row) {
         this.addID.firstID = row.id;
         this.moduleList(1);
@@ -414,7 +425,15 @@
           }
         });
       },
-
+      modGetAll(){
+        this.$http.get(this.urls + 'organization/module?system_id=' + this.addID.firstID,{
+          params:{all: 'all'}
+        }).then(res => {
+          if(res.data.code === '20000'){
+            this.modList = res.data.data.data;
+          }
+        })
+      },
       secondClick(row) {
         this.addID.secondID = row.id;
         this.authority(1);
@@ -584,10 +603,12 @@
             break;
           case 'changeSys':
             this.moduleVisible = true;
+            this.sysGetAll();
             this.tableDetail = this.details;
             break;
           case 'changePower':
             this.powerVisible = true;
+            this.modGetAll();
             this.tableDetail = this.details;
             break;
         }
