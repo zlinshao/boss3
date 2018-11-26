@@ -512,14 +512,11 @@ export default {
                     attendanceObj.goOffWork = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班时间
                   } else if(a.event_attribute == 3) {
                     attendanceObj.workShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 上班排班时间
-                    if(a.dimensions.hour == 13 && attendanceObj.goWork) {
-                      attendanceObj.resultWork = "正常"
-                    }
                   } else if(a.event_attribute == 4) {
                     attendanceObj.workOffShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班班排版时间
                   } else if(a.event_attribute == 5) {
                     attendanceObj.hugh = "休息"
-                  }
+                  } 
                   if(a.status == 3) {
                     attendanceObj.resultOffWork = "补卡"
                   } else if(a.status == 4) {
