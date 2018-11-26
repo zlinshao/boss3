@@ -765,105 +765,12 @@
               case "bulletin_retainage":
                 this.getShow_content().then(arr => {
                   data.process = arr;
+                  this.setProcess(data);
                 });
                 break;
-            }
-            this.show_content = JSON.parse(data.process.content.show_content_compress);
-            this.reportDetailData = data.process.content;
-            this.processable_id = data.process.processable_id;
-            this.operation = data.operation;
-            this.deal = data.deal;
-            this.process = data.process;
-
-            this.houseId = data.process.house_id;
-            let pro = data.process;
-            this.personal = pro.user;
-            this.place = pro.place;
-            this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
-            this.getReportAboutInfo();
-
-            this.bulletinType = data.process.content.bulletin_name;
-
-            if (this.bulletinType === "租房报备") {
-              this.suggestpriceStatus = true;
-              this.getSuggestPrice()
-            }
-
-            this.approvalStatus = pro.place.status;
-            if (pro.content.bulletin_type === "bulletin_quality" && pro.place.name === "appraiser-officer_review") {
-              this.showPriceRange = true;
-              let priceObj = {};
-              priceObj.decorate = pro.content.decorate.id;
-              priceObj.room = pro.content.house_type[0];
-              priceObj.community = pro.content.community.id;
-              this.priceArea(priceObj)
-            } else {
-              this.showPriceRange = false;
-            }
-            if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
-
-              this.electronicReceiptStatu = true;
-              this.bulletinId = data.process.id;
-              this.phone = data.process.content.phone;
-              this.is_receipt = data.process.content.is_receipt;
-              this.electronicReceiptParam.memo = data.process.content.memo || '';
-              this.electronicReceiptParam.process_id = data.process.id;
-              this.electronicReceiptParam.house_id = data.process.house_id;
-              this.electronicReceiptParam.department_id = data.process.org_id;
-              this.electronicReceiptParam.account_id = data.process.content.account_id || [];
-              this.electronicReceiptParam.deposit = data.process.content.front_money;
-              this.electronicReceiptParam.mortgage = data.process.content.deposit_payed;
-              this.electronicReceiptParam.rental = data.process.content.rent_money;
-              this.electronicReceiptParam.duration = data.process.content.show_content["现签约时长"] || data.process.content.show_content["签约时长"];
-              this.electronicReceiptParam.money_sep = data.process.content.money_sep;
-              this.electronicReceiptParam.address = data.process.content.address;
-
-              if (this.bulletinType === "尾款报备") {
-                this.electronicReceiptParam.payer = data.process.content.customer_name;
-                this.electronicReceiptParam.sign_at = data.process.content.retainage_date;
-                this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
-                  return item.split(':')[1];
-                }).join(",");
-                this.electronicReceiptParam.pay_way = data.process.content.payWay.join(',')
-              } else {
-                this.electronicReceiptParam.payer = data.process.content.name;
-                this.electronicReceiptParam.sign_at = data.process.content.sign_date;
-                this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
-                  return item + "元"
-                }).join(',');
-                this.electronicReceiptParam.pay_way = data.process.content.pay_way_str.map((item) => {
-                  return item.msg + " " + item.period;
-                }).join(',');
-              }
-              data.process.content.money_way.forEach((item, index) => {
-                this.bank["bank" + (index + 1)] = item;
-              });
-
-              this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
-                if (res.data.code === "20000") {
-                  if (data.is_sent) {
-                    this.sendElectronicReceiptBtnText = "发送电子收据";
-                    this.ElectronicReceiptBtnColor = "success"
-                  } else {
-                    this.sendElectronicReceiptBtnText = "发送电子收据";
-                    this.ElectronicReceiptBtnColor = "success"
-                  }
-                }
-              });
-              if ((this.approvalStatus === "published" || (this.approvalStatus === "review" && this.place.name === "fund-master_review")) && this.is_receipt.id == "1") {
-                this.electronicReceiptDisabled = false
-              } else {
-                this.electronicReceiptDisabled = true
-              }
-            } else {
-              this.electronicReceiptStatu = false;
-              this.electronicReceiptDisabled = false
-            }
-            for (let key in this.operation) {
-              if (key.indexOf('approved') > -1) {
-                this.approvedStatus = true;
-                return;
-              }
+              default:
+                this.setProcess(data);
+                break;
             }
           } else {
             this.show_content = {};
@@ -872,7 +779,105 @@
         });
         this.comments(this.reportId, 1);
       },
+      setProcess(data) {
+        this.show_content = JSON.parse(data.process.content.show_content_compress);
+        this.reportDetailData = data.process.content;
+        this.processable_id = data.process.processable_id;
+        this.operation = data.operation;
+        this.deal = data.deal;
+        this.process = data.process;
 
+        this.houseId = data.process.house_id;
+        let pro = data.process;
+        this.personal = pro.user;
+        this.place = pro.place;
+        this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
+        this.getReportAboutInfo();
+
+        this.bulletinType = data.process.content.bulletin_name;
+
+        if (this.bulletinType === "租房报备") {
+          this.suggestpriceStatus = true;
+          this.getSuggestPrice()
+        }
+
+        this.approvalStatus = pro.place.status;
+        if (pro.content.bulletin_type === "bulletin_quality" && pro.place.name === "appraiser-officer_review") {
+          this.showPriceRange = true;
+          let priceObj = {};
+          priceObj.decorate = pro.content.decorate.id;
+          priceObj.room = pro.content.house_type[0];
+          priceObj.community = pro.content.community.id;
+          this.priceArea(priceObj)
+        } else {
+          this.showPriceRange = false;
+        }
+        if (this.bulletinType === "租房报备" || this.bulletinType === "公司转租报备" || this.bulletinType === "个人转租报备" || this.bulletinType === "调房报备" || this.bulletinType === "未收先租确定报备" || this.bulletinType === "已知未收先租报备" || this.bulletinType === "续租报备" || this.bulletinType === "尾款报备") {
+
+          this.electronicReceiptStatu = true;
+          this.bulletinId = data.process.id;
+          this.phone = data.process.content.phone;
+          this.is_receipt = data.process.content.is_receipt;
+          this.electronicReceiptParam.memo = data.process.content.memo || '';
+          this.electronicReceiptParam.process_id = data.process.id;
+          this.electronicReceiptParam.house_id = data.process.house_id;
+          this.electronicReceiptParam.department_id = data.process.org_id;
+          this.electronicReceiptParam.account_id = data.process.content.account_id || [];
+          this.electronicReceiptParam.deposit = data.process.content.front_money;
+          this.electronicReceiptParam.mortgage = data.process.content.deposit_payed;
+          this.electronicReceiptParam.rental = data.process.content.rent_money;
+          this.electronicReceiptParam.duration = data.process.content.show_content["现签约时长"] || data.process.content.show_content["签约时长"];
+          this.electronicReceiptParam.money_sep = data.process.content.money_sep;
+          this.electronicReceiptParam.address = data.process.content.address;
+
+          if (this.bulletinType === "尾款报备") {
+            this.electronicReceiptParam.payer = data.process.content.customer_name;
+            this.electronicReceiptParam.sign_at = data.process.content.retainage_date;
+            this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
+              return item.split(':')[1];
+            }).join(",");
+            this.electronicReceiptParam.pay_way = data.process.content.payWay.join(',')
+          } else {
+            this.electronicReceiptParam.payer = data.process.content.name;
+            this.electronicReceiptParam.sign_at = data.process.content.sign_date;
+            this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
+              return item + "元"
+            }).join(',');
+            this.electronicReceiptParam.pay_way = data.process.content.pay_way_str.map((item) => {
+              return item.msg + " " + item.period;
+            }).join(',');
+          }
+          data.process.content.money_way.forEach((item, index) => {
+            this.bank["bank" + (index + 1)] = item;
+          });
+
+          this.$http.get(globalConfig.server + 'financial/receipt/button?process_id=' + this.bulletinId).then((res) => {
+            if (res.data.code === "20000") {
+              if (data.is_sent) {
+                this.sendElectronicReceiptBtnText = "发送电子收据";
+                this.ElectronicReceiptBtnColor = "success"
+              } else {
+                this.sendElectronicReceiptBtnText = "发送电子收据";
+                this.ElectronicReceiptBtnColor = "success"
+              }
+            }
+          });
+          if ((this.approvalStatus === "published" || (this.approvalStatus === "review" && this.place.name === "fund-master_review")) && this.is_receipt.id == "1") {
+            this.electronicReceiptDisabled = false
+          } else {
+            this.electronicReceiptDisabled = true
+          }
+        } else {
+          this.electronicReceiptStatu = false;
+          this.electronicReceiptDisabled = false
+        }
+        for (let key in this.operation) {
+          if (key.indexOf('approved') > -1) {
+            this.approvedStatus = true;
+            return;
+          }
+        }
+      },
       myData(val) {
         this.comments(this.reportId, val);
       },

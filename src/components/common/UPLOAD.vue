@@ -248,12 +248,10 @@
               let name = file.name.substring(0, fileName);//取到文件名长度
               let fileFormat = file.name.substring(fileName + 1, fileNameLength);//截
               file.name = md5(name + new Date().getTime()).toLowerCase() + '.' + fileFormat;
-              console.log(file.name);
               // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
               // 该配置必须要在unique_names: false，save_key: false时才生效
-              let key = "";
               // do something with key here
-              return key;
+              return file.name;
             }
           }
         });
