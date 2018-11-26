@@ -111,8 +111,8 @@ const LineCollege = () => import  ('../components/lejiaCollege/LineCollege/index
 const StaffRegistration = () => import  ('../components/lejiaCollege/StaffRegistration/index.vue');
 const College = () => import  ('../components/lejiaCollege/college/index.vue'); //乐伽大学
 const OnlineExam = () => import  ('../components/lejiaCollege/OnlineExam/index.vue');    //在线考试
-const VideoTeaching = () => import('../components/lejiaCollege/VideoTeaching/index.vue')  //教学视频详情
-const videoDetails = () => import('../components/lejiaCollege/VideoTeaching/videoDetails.vue') //教学视频管理
+const VideoTeaching = () => import('../components/lejiaCollege/VideoTeaching/index.vue');  //教学视频详情
+const videoDetails = () => import('../components/lejiaCollege/VideoTeaching/videoDetails.vue'); //教学视频管理
 
 const ConfigExam = () => import  ('../components/lejiaCollege/OnlineExam/configExam/index.vue');  //管理试卷
 const BatchQuestions = () => import  ('../components/lejiaCollege/OnlineExam/batchQuestions/index.vue');  //批量导入试题
@@ -230,7 +230,7 @@ const DetailAcievement = () => import('../components/meritPay/achievement/achiev
 
 // 账户管理
 const accountMmanagement = () => import('../components/meritPay/accountMmanagement/index.vue');
-const account = () => import('../components/meritPay/accountMmanagement/components/account.vue')
+const account = () => import('../components/meritPay/accountMmanagement/components/account.vue');
 
 Vue.use(Router);
 
@@ -383,7 +383,7 @@ export default new Router({
         { path: '/VideoTeaching', component: VideoTeaching, name: '视频管理', meta: { keepAlive: true }},
 
         // 账户管理
-        { path: '/account', component: account, name: '账户管理', meta: { keepAlive: true }},
+        { path: '/account', component: account, name: '账户管理 ', meta: { keepAlive: true }},
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 

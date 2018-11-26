@@ -291,7 +291,7 @@
               let user = {};
               if (data[i]) {
                 user.house_id = data[i].house_id;
-                user.is_receipt = data[i].content.is_receipt
+                user.is_receipt = data[i].content.is_receipt;
                 user.created_at = data[i].created_at;
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
                 user.id = data[i].id;

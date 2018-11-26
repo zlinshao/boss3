@@ -192,7 +192,7 @@
       },
       // 详情
       openDetail(row) {
-        var data = {ids: row.id};
+        let data = {ids: row.id};
         this.$store.dispatch('articleDetail', data);
         this.$router.push({path: '/Infodetails', query: data});
 
