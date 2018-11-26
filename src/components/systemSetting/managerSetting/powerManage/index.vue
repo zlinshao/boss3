@@ -296,7 +296,7 @@
             if(type === 'module'){
               var system_id = this.moduleParams.sysSelect;
               var module_id = this.tableDetail.id;
-              this.$http.put(this.urls + 'organization/module/modify-system/id',{id:module_id,system_id}).then(res => {
+              this.$http.put(this.urls + `organization/module/modify-system/${module_id}`,{system_id}).then(res => {
                 if(res.data.code === '20080'){
                   this.$notify.success({
                     title: '成功',
@@ -317,7 +317,7 @@
             }else if(type === 'power'){
               var mod_id = this.powerParams.powSelect;
               var power_id = this.tableDetail.id;
-              this.$http.put(this.urls + 'organization/permission/modify-module/id',{id:power_id,mod_id}).then(res =>{
+              this.$http.put(this.urls + `organization/permission/modify-module/${power_id}`,{mod_id}).then(res =>{
                 if(res.data.code === '20080'){
                   this.$notify.success({
                     title: '成功',
