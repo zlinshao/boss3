@@ -198,15 +198,14 @@
         depart_name: '',
         staff_name: '',
         form: {
-          status: '',
-          keywords: '',
           page: 1,
-          limit: 12,
-          date: '',
+          limit: 5,
           depart_ids: [],
           staff_ids: [],
           start_time: '',
           end_time: '',
+          date:'',
+          export:0
         },
         options: [
           {label: '双方业绩为零'},
@@ -289,9 +288,7 @@
         }
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(globalConfig.server + 'salary/achv?limit=5&page=' + this.form.page
-          + '&start_time=' + this.form.start_time + '&end_time=' + this.form.end_time
-          + '&depart_ids=' + this.form.depart_ids).then((res) => {
+        this.$http.get(globalConfig.server + 'salary/achv',{params:this.form}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '88800') {
@@ -397,19 +394,21 @@
       },
       // 导出
       exportData() {
-        this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-          if (!res.data) {
-            return;
-          }
-          console.log(res);
-          let url = window.URL.createObjectURL(new Blob([res.data]));
-          let link = document.createElement('a');
-          link.style.display = 'a';
-          link.href = url;
-          link.setAttribute('download', 'excel.xlsx');
-          document.body.appendChild(link);
-          link.click();
-        });
+        let staffId,deparId,all;
+        if(this.form.staff_ids.length>0){
+           staffId='&staff_ids[]='+this.form.staff_ids.join("&staff_ids[]=");
+        }else{
+          staffId='';
+        }
+       if(this.form.depart_ids.length>0){
+          deparId='&depart_ids[]='+this.form.depart_ids.join("&depart_ids[]=");
+        }else{
+          deparId='';
+        }
+         all=staffId+deparId;
+        // console.log(staffId);
+        let url=globalConfig.server +'salary/achv?page='+this.form.page+'&limit='+this.form.limit+all+'&start_time='+this.form.start_time+'&end_time='+this.form.end_time+'&export=1';
+        window.location.href=url;
       },
       handleSizeChange(val) {
         // console.log(`每页 ${val} 条`);

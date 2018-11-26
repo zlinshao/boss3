@@ -1,5 +1,10 @@
 <template>
     <div id="detail">
+      <div class="highRanking" style=" float:right;z-index:65535;margin:7px 10px 0 0;">
+        <div class="highHide">
+          <el-button size="mini" type="primary" @click="exportDetail">导出详情</el-button>
+        </div>
+      </div>
         <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
         <el-tab-pane label="收房业绩" name="first">
             <div class="table-list">
@@ -63,14 +68,11 @@
                     ></el-table-column>
                     <el-table-column
                     label="名称"
-                    prop="staff_name"
+                    prop="lord_data.sign_user_id.name"
                     ></el-table-column>
                     <el-table-column
                     label="所属部门"
                     prop="department"
-                    ></el-table-column>
-                    <el-table-column
-                    label="备注"
                     ></el-table-column>
                 </el-table>
             </div>
@@ -144,9 +146,6 @@
                     label="所属部门"
                     prop="department"
                     ></el-table-column>
-                    <el-table-column
-                    label="备注"
-                    ></el-table-column>
                 </el-table>
             </div>
         </el-tab-pane>
@@ -199,15 +198,20 @@
                     prop="achv_res.all.real_money"
                     ></el-table-column>
                     <el-table-column
-                    label="名称"
-                    prop="staff_name"
+                    label="片区经理工资"
+                    prop="achv_res.manager.ach"
                     ></el-table-column>
                     <el-table-column
-                    label="所属部门"
-                    prop="department"
+                    label="片区经理认责"
+                    prop="achv_res.manager.duty"
                     ></el-table-column>
                     <el-table-column
-                    label="备注"
+                    label="区长工资"
+                    prop="achv_res.warden.ach"
+                    ></el-table-column>
+                    <el-table-column
+                    label="区长认责"
+                    prop="achv_res.warden.duty"
                     ></el-table-column>
                 </el-table>
             
@@ -285,6 +289,17 @@
         this.page=val;
         this.getListData();
       },
+      exportDetail(){
+        if(!this.staff_id){
+          this.$notify.warning({
+            title: '警告',
+            message: '请先选择员工!'
+          });
+          return false;
+        }
+        let url=globalConfig.server + 'salary/achv/commission/?export=1&staff_ids='+this.staff_id+'&start_time='+this.start_time+'&end_time='+this.end_time;
+        window.location.href=url;
+      }
     }
   };
 </script>
