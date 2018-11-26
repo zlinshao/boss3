@@ -188,6 +188,11 @@
     >
       <div style="width: 100%;text-align: center;">
         <el-form :model="powerParams" :rules="rules" ref="powerParams" label-width="100px">
+          <el-form-item label="系统" prop="sysSelect">
+            <el-selct size="mini" v-model="powerParams.sysSelect" style="width: 250px;">
+              <el-option v-for="item in sysList" :key="item.id" :value="item.id" :label="item.display_name"></el-option>
+            </el-selct>
+          </el-form-item>
           <el-form-item label="模块" prop="powSelect">
             <el-select size="mini" v-model="powerParams.powSelect" style="width: 250px;">
               <el-option v-for="item in modList" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
@@ -264,7 +269,8 @@
           sysSelect: '',
         },
         powerParams: {
-          powSelect: ''
+          powSelect: '',
+          sysSelect: ''
         },
         rules: {
           sysSelect: [
@@ -608,7 +614,7 @@
             break;
           case 'changePower':
             this.powerVisible = true;
-            this.modGetAll();
+            this.sysGetAll();
             this.tableDetail = this.details;
             break;
         }
