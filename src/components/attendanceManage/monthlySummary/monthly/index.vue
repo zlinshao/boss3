@@ -154,7 +154,7 @@ export default {
   components: { organization },
   data() {
     return {
-      dialogTotal: "",
+      dialogTotal: 0,
       uploadBtn: false,
       externalLink: [],
       exportListData: [],
@@ -337,10 +337,12 @@ export default {
     dialogHandleSizeChange(val) {
        this.params.limit = val;
        this.lookList(this.params.limit)
+       console.log(`每页 ${val} 条`);
     },
     dialogHandleCurrentChange(val) {
       this.params.page = val;
-       this.lookList(this.params.page)
+      this.lookList(this.params.page);
+      console.log(`当前页: ${val}`);
     },
     //选人组件
     openOrganizeModal(id) {
@@ -544,7 +546,7 @@ export default {
     // 查看列表
     lookList() {
       this.lookListDialog = true;
-      this.$http.get(globalConfig.server + "attendance/summary/excel-list").then(res => {
+      this.$http.get(globalConfig.server + "attendance/summary/excel-list",{params: this.params}).then(res => {
         if(res.data.code == "20000") {
           this.exportListData = res.data.data;
           this.dialogTotal = res.data.num;
