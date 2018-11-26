@@ -48,7 +48,7 @@
       <el-button type="primary" size="mini" @click="lookList">查看列表</el-button>
     </div>
     <!-- 导出弹出框 -->
-    <el-dialog title="导出列表框" :visible.sync="lookListDialog" width="30%">
+    <el-dialog title="导出列表框" :visible.sync="lookListDialog" width="50%">
       <el-table :data="exportListData" border style="width: 100%">
         <el-table-column prop="user.name" label="用户名">
         </el-table-column>
@@ -58,13 +58,19 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="download" size="mini">下载</el-button>
+            <el-button type="primary" @click="download(scope.row)" size="mini" :disabled="scope.row.file_id ? false : true">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+     <div class="dialogPage block pages">
+      <!--  :current-page="" :page-size="params.limit" -->
+      <el-pagination @size-change="dialogHandleSizeChange" @current-change="dialogHandleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="dialogTotal">
+      </el-pagination>
+    </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="lookListDialog = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="exportList" size="mini">确 定</el-button>
+        <el-button type="primary" @click="exportList" size="mini">导 出</el-button>
       </span>
     </el-dialog>
     <!-- 列表  -->
@@ -148,7 +154,9 @@ export default {
   components: { organization },
   data() {
     return {
-      externalLink: "",
+      dialogTotal: 0,
+      uploadBtn: false,
+      externalLink: [],
       exportListData: [],
       lookListDialog: false,
       beLate: false,
@@ -325,6 +333,17 @@ export default {
       this.refresh(this.params.page);
       console.log(`当前页: ${val}`);
     },
+    // 弹出框分页
+    dialogHandleSizeChange(val) {
+       this.params.limit = val;
+       this.lookList(this.params.limit)
+       console.log(`每页 ${val} 条`);
+    },
+    dialogHandleCurrentChange(val) {
+      this.params.page = val;
+      this.lookList(this.params.page);
+      console.log(`当前页: ${val}`);
+    },
     //选人组件
     openOrganizeModal(id) {
       this.params.org_id = id;
@@ -497,7 +516,7 @@ export default {
                     attendanceObj.workOffShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班班排版时间
                   } else if(a.event_attribute == 5) {
                     attendanceObj.hugh = "休息"
-                  }
+                  } 
                   if(a.status == 3) {
                     attendanceObj.resultOffWork = "补卡"
                   } else if(a.status == 4) {
@@ -527,40 +546,42 @@ export default {
     // 查看列表
     lookList() {
       this.lookListDialog = true;
-      this.$http.get(globalConfig.server + "attendance/summary/excel-list").then(res => {
+      this.$http.get(globalConfig.server + "attendance/summary/excel-list",{params: this.params}).then(res => {
         if(res.data.code == "20000") {
           this.exportListData = res.data.data;
+          this.dialogTotal = res.data.num;
           this.exportListData.forEach((item, index) => {
-            if(item.status) {
+            if(item.status == "1") {
               item.status = "导出完成";
+              this.uploadBtn = false;
             } else {
+              this.uploadBtn = true;
               item.status = "正在导出"
             }
-            this.externalLink = item.file_id;
           })
         }
       })
     },
     // 导出Excel表
-    download() {
+    exportList() {
       this.$http.post(globalConfig.server + "attendance/summary/excel",this.params).then(res => {
-        console.log(res, "22222");
         if(res.data.code == "20000") {
           this.$notify.success({
             title: "成功",
-            msg: res.data.msg
+            message: res.data.msg
           })
+          this.lookList();
         } else {
           this.$notify.warning({
             title: "失败",
-            msg: res.data.msg
+            message: res.data.msg
           })
         }
       })
     },
     // 
-    exportList() {
-      window.open(this.externalLink);
+    download(val) {
+      window.open(val.file_id);
     }
   }
 };
@@ -633,6 +654,17 @@ export default {
   }
   .exportList {
     float: right;
+  }
+  .dialogPage {
+    .el-pagination__sizes {
+      width: 100px;
+    }
+    .el-pagination__jump {
+      margin-left: 0px;
+    }
+    .is-in-pagination {
+      width: 40px;
+    }
   }
 }
 </style>

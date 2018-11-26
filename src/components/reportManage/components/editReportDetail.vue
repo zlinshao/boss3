@@ -734,13 +734,16 @@
         })
       },
       getShow_content() {
-        this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res => {
-          if (res.data.code == '20020') {
-            this.reportDetailData = res.data.data.content;
-            this.show_content = JSON.parse(res.data.data.content.show_content_compress);
-          }
-        }).catch(err => {
-          console.log(err);
+        return new Promise((resolve, reject) => {
+          this.$http.get(this.address + `workflow/process/get/${this.reportId}`).then(res => {
+            if (res.data.code === '20020') {
+              resolve(res.data.data);
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          }).catch(err => {
+            console.log(err);
+          })
         })
       },
       getProcess() {
@@ -751,10 +754,6 @@
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
             let data = res.data.data;
-            this.processable_id = data.process.processable_id;
-            this.operation = data.operation;
-            this.deal = data.deal;
-            this.process = data.process;
             let type = data.process.processable_type;
             switch (type) {
               case "bulletin_rent_basic":
@@ -764,13 +763,18 @@
               case "bulletin_RWC_confirm":
               case "bulletin_change":
               case "bulletin_retainage":
-                this.getShow_content();
-                break;
-              default:
-                this.show_content = JSON.parse(data.process.content.show_content_compress);
-                this.reportDetailData = data.process.content;
+                this.getShow_content().then(arr => {
+                  data.process = arr;
+                });
                 break;
             }
+            this.show_content = JSON.parse(data.process.content.show_content_compress);
+            this.reportDetailData = data.process.content;
+            this.processable_id = data.process.processable_id;
+            this.operation = data.operation;
+            this.deal = data.deal;
+            this.process = data.process;
+
             this.houseId = data.process.house_id;
             let pro = data.process;
             this.personal = pro.user;

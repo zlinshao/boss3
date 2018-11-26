@@ -162,6 +162,49 @@
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
+    <el-dialog
+      title="修改模块归属"
+      :visible.sync="moduleVisible"
+      width="25%"
+    >
+      <div style="width: 100%;text-align: center;">
+        <el-form :model="moduleParams" :rules="rules" ref="moduleParams" label-width="100px">
+          <el-form-item label="系统" prop="sysSelect">
+            <el-select size="mini" v-model="moduleParams.sysSelect" style="width: 250px;">
+              <el-option v-for="item in sysList" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button type="normal" size="mini" @click="handleCancelSys('moduleParams')">取消</el-button>
+          <el-button type="primary" size="mini" @click="handleChangeSys('module','moduleParams')">确定</el-button>
+        </div>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="修改权限归属"
+      :visible.sync="powerVisible"
+      width="25%"
+    >
+      <div style="width: 100%;text-align: center;">
+        <el-form :model="powerParams" :rules="rules" ref="powerParams" label-width="100px">
+          <el-form-item label="系统" prop="sysSelect">
+            <el-select size="mini" v-model="powerParams.sysSelect" style="width: 250px;" @change="handleSelectSys">
+              <el-option v-for="tmp in sysList" :key="tmp.id" :value="tmp.id" :label="tmp.display_name"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="模块" prop="powSelect">
+            <el-select size="mini" v-model="powerParams.powSelect" style="width: 250px;">
+              <el-option v-for="item in modList" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button type="normal" size="mini" @click="handleCancelMod('powerParams')">取消</el-button>
+          <el-button type="primary" size="mini" @click="handleChangeSys('power','powerParams')">确定</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -220,6 +263,25 @@
         tableLoading2: false,
         emptyContent3: ' ',
         tableLoading3: false,
+        moduleVisible: false,
+        powerVisible: false,
+        moduleParams: {
+          sysSelect: '',
+        },
+        powerParams: {
+          powSelect: '',
+          sysSelect: ''
+        },
+        rules: {
+          sysSelect: [
+            { required: true, message: '请输入系统名称', trigger: 'blur' }
+          ],
+          powSelect: [
+            { required: true, message: '请输入模块名称', trigger: 'blur' }
+          ]
+        },
+        sysList: [],
+        modList: []
       }
     },
     mounted() {
@@ -227,6 +289,71 @@
     },
 
     methods: {
+      handleSelectSys(val) {
+        this.addID.firstID = val;
+        this.modGetAll();
+      },
+      handleCancelSys(val) {
+        this.sysList = [];
+        this.$refs[val].resetFields();
+        this.moduleVisible = false;
+      },
+      handleCancelMod(val) {
+        this.modList = [];
+        this.$refs[val].resetFields();
+        this.powerVisible = false;
+      },
+      handleChangeSys(type,val) {
+        this.$refs[val].validate(valid => {
+          if(valid){
+            if(type === 'module'){
+              var system_id = this.moduleParams.sysSelect;
+              var module_id = this.tableDetail.id;
+              this.$http.put(this.urls + `organization/module/modify-system/${module_id}`,{system_id}).then(res => {
+                if(res.data.code === '20080'){
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.moduleList(1);
+                  this.handleCancelSys('moduleParams');
+                }else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.handleCancelSys('moduleParams');
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            }else if(type === 'power'){
+              var mod_id = this.powerParams.powSelect;
+              var power_id = this.tableDetail.id;
+              this.$http.put(this.urls + `organization/permission/modify-module/${power_id}`,{mod_id}).then(res =>{
+                if(res.data.code === '20080'){
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.moduleList(1);
+                  this.handleCancelMod('powerParams');
+                }else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.handleCancelMod('powerParams');
+                }
+              }).catch(err =>{
+                console.log(err);
+              })
+            }
+          }else {
+            return false;
+          }
+        });
+      },
       // 行 变色
       tableFirstName({row, rowIndex}) {
         if (row.id === this.addID.firstID) {
@@ -269,7 +396,15 @@
           }
         })
       },
-
+      sysGetAll(){
+        this.$http.get(this.urls + 'organization/system',{
+          params: {all: 'all'}
+        }).then(res => {
+          if(res.data.code === '20000'){
+            this.sysList = res.data.data.data;
+          }
+        })
+      },
       firstClick(row) {
         this.addID.firstID = row.id;
         this.moduleList(1);
@@ -300,7 +435,15 @@
           }
         });
       },
-
+      modGetAll(){
+        this.$http.get(this.urls + 'organization/module?system_id=' + this.addID.firstID,{
+          params:{all: 'all'}
+        }).then(res => {
+          if(res.data.code === '20000'){
+            this.modList = res.data.data.data;
+          }
+        })
+      },
       secondClick(row) {
         this.addID.secondID = row.id;
         this.authority(1);
@@ -410,6 +553,7 @@
           {clickIndex: 'add3', headIcon: 'el-icon-edit-outline', label: '新增权限'},
           {clickIndex: 'reviseModule', headIcon: 'el-icon-edit-outline', label: '编辑'},
           {clickIndex: 'deleteModule', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+          {clickIndex: 'changeSys', headIcon: 'el-icon-edit-outline',label: '修改所属系统'}
         ];
         this.contextMenuParam(event);
       },
@@ -420,6 +564,7 @@
         this.lists = [
           {clickIndex: 'reviseMod', headIcon: 'el-icon-edit-outline', label: '编辑'},
           {clickIndex: 'deleteMod', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+          {clickIndex: 'changePower', headIcon: 'el-icon-edit-outline', label: '修改所属模块'},
         ];
         this.contextMenuParam(event);
       },
@@ -465,6 +610,16 @@
             break;
           case 'deleteMod':
             this.openDelete(this.details, 'third');
+            break;
+          case 'changeSys':
+            this.moduleVisible = true;
+            this.sysGetAll();
+            this.tableDetail = this.details;
+            break;
+          case 'changePower':
+            this.powerVisible = true;
+            this.sysGetAll();
+            this.tableDetail = this.details;
             break;
         }
       },

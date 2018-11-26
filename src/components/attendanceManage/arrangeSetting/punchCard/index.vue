@@ -57,13 +57,14 @@
                     </div>
                   </template>
                 </el-table-column>
-                 <el-table-column label="上班排版时间" prop="attendanceData[0].workShift">
+                 <el-table-column label="上班排班时间" prop="attendanceData[0].workShift">
                 </el-table-column>
-                <el-table-column label="下班排版时间" prop="attendanceData[0].workOffShift">
-                </el-table-column>
-                <el-table-column label="休息" prop="attendanceData[0].hugh">
+                <el-table-column label="下班排班时间" prop="attendanceData[0].workOffShift">
                 </el-table-column>
                 <el-table-column label="上班打卡时间" prop="attendanceData[0].goWork">
+                    <template slot-scope="scope">
+                        <div :class="bg(scope.row)">{{scope.row.attendanceData[0].goWork}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="打卡结果" prop="attendanceData[0].resultWork">
                 </el-table-column>
@@ -440,36 +441,36 @@ export default {
                       let attendanceArr = null; 
                       this.punchCardList.forEach((item, index) => {
                         attendanceArr = [];
+                        attendanceObj = {};
                           item.sort_dimension.forEach((val, key) => {
-                              attendanceObj = {};
                               if(val.event_attribute == 1) {
                                   if(val.status == 0) {
-                                      attendanceObj['resultWork'] = "正常";
+                                      attendanceObj.resultWork = "正常";
                                   } else if(val.status == 1) {
-                                      attendanceObj['resultWork'] = "迟到";
+                                      attendanceObj.resultWork = "迟到";
                                   } else if (val.status == 4) {
-                                      attendanceObj['resultWork'] = "外勤"
+                                      attendanceObj.resultWork = "外勤"
                                   }
-                                  attendanceObj['goWork'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 上班打卡
+                                  attendanceObj.goWork = val.dimensions.hour + ":" + val.dimensions.minute;    // 上班打卡
                               } else if(val.event_attribute == 2) {
                                   if(val.status == 0) {
-                                      attendanceObj['resultOffWork'] = "正常";
+                                      attendanceObj.resultOffWork = "正常";
                                   } else if(val.status == 2) {
-                                       attendanceObj['resultOffWork'] = "早退";
+                                       attendanceObj.resultOffWork = "早退";
                                   } else if (val.status == 4) {
-                                      attendanceObj['resultOffWork'] = "外勤"
+                                      attendanceObj.resultOffWork = "外勤"
                                   }
-                                  attendanceObj['goOffWork'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 下班打卡
+                                  attendanceObj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;    // 下班打卡
                               } else if(val.event_attribute == 3) {
-                                  attendanceObj['workShift'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 上班排版
+                                  attendanceObj.workShift = val.dimensions.hour + ":" + val.dimensions.minute;    // 上班排版
                               } else if(val.event_attribute == 4) {
-                                  attendanceObj['workOffShift'] = val.dimensions.hour + ":" + val.dimensions.minute;    // 下班排版
+                                  attendanceObj.workOffShift = val.dimensions.hour + ":" + val.dimensions.minute;    // 下班排版
                               } else if(val.event_attribute == 5) {
-                                  attendanceObj['hugh'] = "休息"
+                                  attendanceObj.hugh = "休息"
                               }
                           })
-                          attendanceArr.push(attendanceObj)
-                          this.punchCardList[index].attendanceData =  attendanceArr
+                            attendanceArr.push(attendanceObj)
+                          this.punchCardList[index].attendanceData =  attendanceArr;
                       })
                   }else if(res.data.code == 20001){
                         this.emptyData();
@@ -568,6 +569,10 @@ export default {
       this.punchCardParams.org_id = val[0].id;
       this.org_name = val[0].name;
     },
+    bg(row, label) {
+        // console.log(row, "11111");
+        
+    }
   },
   mounted (){
     var date = new Date();
@@ -581,6 +586,9 @@ export default {
     #punchCard{
         width: 100%;
         position: relative;
+        .wanring {
+            color: red;
+        }
     }
 </style>
 
