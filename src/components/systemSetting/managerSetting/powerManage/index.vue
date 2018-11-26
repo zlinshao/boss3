@@ -163,38 +163,38 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <el-dialog
-      title="修改模块权限"
+      title="修改模块归属"
       :visible.sync="moduleVisible"
       width="25%"
     >
       <div style="width: 100%;text-align: center;">
-        <el-form :model="moduleParams" :rules="sysRules" ref="moduleParams">
-          <el-form-item label="系统" prop="sys">
+        <el-form :model="moduleParams" :rules="rules" ref="moduleParams">
+          <el-form-item label="系统" prop="sysSelect">
             <el-select size="mini" v-model="moduleParams.sysSelect" style="width: 250px;">
               <el-option v-for="item in tableFirst" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
-        <div>
+        <div slot="footer">
           <el-button type="normal" size="mini" @click="handleCancelSys('moduleParams')">取消</el-button>
           <el-button type="primary" size="mini" @click="handleChangeSys('module')">确定</el-button>
         </div>
       </div>
     </el-dialog>
     <el-dialog
-      title="修改权限"
+      title="修改权限归属"
       :visible.sync="powerVisible"
       width="25%"
     >
       <div style="width: 100%;text-align: center;">
-        <el-form :model="powerParams" :rules="sysRules" ref="powerParams">
-          <el-form-item label="模块" prop="module">
+        <el-form :model="powerParams" :rules="rules" ref="powerParams">
+          <el-form-item label="模块" prop="powSelect">
             <el-select size="mini" v-model="powerParams.powSelect" style="width: 250px;">
               <el-option v-for="item in tableSecond" :key="item.id" :value="item.id"  :label="item.display_name"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
-        <div>
+        <div slot="footer">
           <el-button type="normal" size="mini" @click="handleCancelMod('powerParams')">取消</el-button>
           <el-button type="primary" size="mini" @click="handleChangeSys('power')">确定</el-button>
         </div>
@@ -266,7 +266,7 @@
         powerParams: {
           powSelect: ''
         },
-        sysRules: {
+        rules: {
           sys: [
             { required: true, message: '请输入系统名称', trigger: 'blur' }
           ],
@@ -301,15 +301,13 @@
                 message: res.data.msg
               });
               this.moduleList(1);
-              this.moduleVisible = false;
-              this.$refs['moduleParams'].resetFields();
+              this.handleCancelSys('moduleParams');
             }else {
               this.$notify.warning({
                 title: '失败',
                 message: res.data.msg
               });
-              this.moduleVisible = false;
-              this.$refs['moduleParams'].resetFields();
+              this.handleCancelSys('moduleParams');
             }
           }).catch(err => {
             console.log(err);
@@ -324,15 +322,13 @@
                 message: res.data.msg
               });
               this.moduleList(1);
-              this.powerVisible = false;
-              this.$refs['powerParams'].resetFields();
+              this.handleCancelMod('powerParams');
             }else {
               this.$notify.warning({
                 title: '失败',
                 message: res.data.msg
               });
-              this.powerVisible = false;
-              this.$refs['powerParams'].resetFields();
+              this.handleCancelMod('powerParams');
             }
           }).catch(err =>{
             console.log(err);
