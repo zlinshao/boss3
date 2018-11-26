@@ -266,8 +266,8 @@
                   <el-form-item label="是否每个房间有床+床垫">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.bed">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.bed == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -276,8 +276,8 @@
                   <el-form-item label="是否每个房间有衣柜">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.wardrobe">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.wardrobe == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -286,8 +286,8 @@
                   <el-form-item label="是否每个房间有窗帘">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.curtain">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.curtain == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
