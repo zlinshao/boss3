@@ -40,53 +40,6 @@
                    element-loading-spinner="el-icon-loading"
                    element-loading-background="rgba(255, 255, 255, 0)">
             <el-row>
-              <!-- <el-col :span="8">
-                <el-form-item label="创建时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</span>
-                    <span v-if="!workOrderDetail.create_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="创建人">
-                  <div class="content">
-                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
-                    <span v-if="!workOrderDetail.creators">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="房屋地址">
-                  <div class="content" v-if="house_name">{{house_name}}</div>
-                  <div class="content" v-if="!house_name">暂无</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="所属城市">
-                  <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
-                  <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
-                </el-form-item>
-              </el-col> -->
-              <!-- <el-col :span="8">
-                <el-form-item label="工单编号">
-                  <div class="content">
-                    <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
-                    <span v-if="!workOrderDetail.num">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col> -->
-              <!-- <el-col :span="8">
-                <el-form-item label="合同编号">
-                  <div class="content">
-                    <span v-if="workOrderDetail.contract_number">{{workOrderDetail.contract_number}}</span>
-                    <span v-if="!workOrderDetail.contract_number">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col> -->
-              
               <el-col :span="8" class="acount-text">
                 <el-form-item label="工单类型">
                   <div class="content">{{workOrderDetail.types}}{{complaintStr}}</div>
@@ -106,21 +59,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <!-- <el-row>
-              <el-col :span="8"  v-if="isComplainOrder">
-                <el-form-item label="投诉类型">
-                  <div class="content">{{type_of_complaint}}</div>
-                </el-form-item>
-              </el-col>
-               <el-col :span="8">
-                <el-form-item label="紧急程度">
-                  <div class="content">
-                    <span v-if="workOrderDetail.emergency === 1">一般</span>
-                    <span v-if="workOrderDetail.emergency === 2">紧急</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row> -->
             <el-row>
               <el-col :span="8">
                 <el-form-item label="下次跟进人" class="acount-text">
@@ -201,7 +139,7 @@
               <el-row v-for="(item, index) in dutyResultLength" :key='index'>
                 <el-col :span="6">
                   <el-form-item label="认责人" class="acount-text">
-                    <el-select placeholder="请选择" value-key="value"  value="" v-model='accountability_info.dutyInfo[index].dutyUser' @change='selectUser(item, index)'>
+                    <el-select placeholder="请选择" value-key="value" v-if="!forbidEdit"  value="" v-model='accountability_info.dutyInfo[index].dutyUser' @change='selectUser(item, index)'>
                       <el-option 
                         v-for="_item in account_holder"
                         :key="_item.id"
@@ -209,19 +147,28 @@
                         :value="_item.id">
                       </el-option>
                     </el-select>
+                    <div class="content" v-if="forbidEdit">
+                      <span>{{accountability_info.dutyInfo[index].dutyUserName}}</span>
+                    </div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="姓名" class="acount-text">
-                    <div class="">
-                      <el-input v-model="accountability_info.dutyInfo[index].dutyName" @focus="openOrganizeModal"></el-input>
+                    <div class="" v-if="!forbidEdit" :class="'input-' + index">
+                      <el-input  v-model="accountability_info.dutyInfo[index].dutyName" @focus="openOrganizeModal"></el-input>
+                    </div>
+                    <div class="content" v-if="forbidEdit">
+                      <span>{{accountability_info.dutyInfo[index].dutyName}}</span>
                     </div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="认责金额" class="acount-text">
-                    <div class="">
+                    <div class="" v-if="!forbidEdit">
                       <el-input v-model="accountability_info.dutyInfo[index].dutyMoney"></el-input>
+                    </div>
+                    <div class="content" v-if="forbidEdit">
+                      <span>{{accountability_info.dutyInfo[index].dutyMoney}}</span>
                     </div>
                   </el-form-item>
                 </el-col>
@@ -231,8 +178,11 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="认责结果" class="acount-text">
-                    <div class="">
+                    <div class="" v-if="!forbidEdit">
                       <el-input v-model="accountability_info.dutyRes"></el-input>
+                    </div>
+                    <div class="content" v-if="forbidEdit">
+                      <span>{{accountability_info.dutyRes}}</span>
                     </div>
                   </el-form-item>
                 </el-col>
@@ -422,7 +372,7 @@
     </el-dialog>
     <EditWork :editWorkDialog="editWorkDialog" :editWord="workOrderDetail" @close="closeModal"></EditWork>
 
-    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type" :dutyIndex="dutyIndex"
                   @close='closeOrganize' @selectMember="selectMember"></Organization>
   </div>
 </template>
@@ -488,6 +438,7 @@
         forbidEdit:true,     //禁止编辑认责结果
         showButton:false,    //显示按钮
         create_name:'',      
+        dutyIndex:0,
       };
     },
     watch: {
@@ -523,8 +474,9 @@
         this.organizationDialog = false;
       },
       //打开组织架构
-      openOrganizeModal() {
+      openOrganizeModal(target) {
         this.organizationDialog = true;
+        this.dutyIndex = Array.prototype.slice.call(target.path[2].classList).filter(i => i.indexOf('input-') > -1)[0].split('-')[1];
         this.type = 'staff';
         this.length = 1;
       },
@@ -534,6 +486,8 @@
         this.length = '';
         this.params.next_follow_id = val[0].id;
         this.params.next_follow_name = val[0].name;
+        let index = +this.dutyIndex;
+        this.accountability_info.dutyInfo[index].dutyName = val[0].name;
       },
       // 清空组织架构
       emptyFollowPeople() {
@@ -556,7 +510,6 @@
         })
       },
       getDetail() {
-        console.log(this.accountability_info,'--------')
         this.workOrderLoading = true;
         this.$http.get(globalConfig.server + 'customer/work_order/' + this.wordData.id).then((res) => {
           this.workOrderLoading = false;
@@ -588,7 +541,6 @@
       },
       //投诉类型转换投诉详情
       getComplainType(str, obj){
-        console.log(str , obj)
         if(str && obj){
           obj.forEach(item => item.type === str ? this.complaintStr = '(' + item.name + ')' : '')
         }else{
@@ -603,11 +555,8 @@
       //赋值
       assignVal(source){
         let obj = this.deepClone(source);
-        console.log(obj)
-        console.log(this.accountability_info)
         this.accountability_info = obj === null ? this.accountability_info : obj;
         this.dutyResultLength = obj === null ? 1 : obj.dutyInfo && obj.dutyInfo.length;
-        console.log(this.accountability_info)
       },
       //深拷贝
       deepClone(source){
@@ -677,7 +626,6 @@
         this.editWorkDialog = true;
       },
       closeModal(val) {
-        console.log(val)
         this.editWorkDialog = false;
         if (val === 'success') {
           this.getDetail();
@@ -746,7 +694,6 @@
       },
       //编辑认责确认
       sureEdit(){
-        console.log(this.accountability_info);
         if(this.workOrderDetail.type_of_complaint == 1 || this.workOrderDetail.type_of_complaint == 2){
           this.accountability_info.is_valid = '';
         }
