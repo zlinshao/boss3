@@ -78,6 +78,7 @@
         </el-table>
         <div style="text-align: right;">
           <el-pagination
+            size="mini"
             layout="total,prev,pager,next"
             :total="1000"
           ></el-pagination>
@@ -94,6 +95,7 @@
               </el-table>
               <div style="text-align: right;">
                 <el-pagination
+                  size="mini"
                   layout="total,prev,pager,next"
                   :total="1000"
                 ></el-pagination>
@@ -107,6 +109,7 @@
               </el-table>
               <div style="text-align: right;">
                 <el-pagination
+                  size="mini"
                   layout="total,prev,pager,next"
                   :total="1000"
                 ></el-pagination>
@@ -143,10 +146,13 @@
           //重置
           goReset() {},
           //切换click
-          handleTabClick() {},
+          handleTabClick(tab) {
+            this.$message('you checkout' + tab.label);
+            console.log(tab);
+          },
           //高级
           highGrade() {
-            this.$message('功能尚未开启！');
+            this.isHigh = !this.isHigh;
           },
           //导出
           exportData() {
