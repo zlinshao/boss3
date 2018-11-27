@@ -22,6 +22,9 @@
       <el-tab-pane label="显示管理" name="seventh">
         <FeatureList></FeatureList>
       </el-tab-pane>
+      <el-tab-pane label="部门管理" name="eighth">
+        <RenewPart></RenewPart>
+      </el-tab-pane>
       <!-- <el-tab-pane label="小区管理" name="sixth">-->
         <!--<VillageManage></VillageManage>-->
       <!--</el-tab-pane> -->
@@ -38,9 +41,10 @@
   import VillageManage from './villageManage/index.vue'
   import CompanyManage from './companyManage/index.vue'
   import FeatureList from './featureList/index';
+  import RenewPart from './renewPart/index';
   export default {
     name: "index",
-    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage,CompanyManage,FeatureList},
+    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage,CompanyManage,FeatureList,RenewPart},
     data() {
       return {
         activeName: 'first'
