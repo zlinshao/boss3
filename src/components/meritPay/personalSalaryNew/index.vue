@@ -14,16 +14,13 @@
 <script>
     import TraderSalary from './components/tradersalary';
     import ManagerSalary from './components/managersalary';
-//   import PayRoll from './payroll';   //工资条
-//   import HistoryUnclear from './historyUnclear'; //历史未结
-//   import SalaryDetails from './salaryDetails';  //工资明细
 
   export default {
     name: "index",
     components: {TraderSalary,ManagerSalary},
     data() {
       return {
-        activeName: 'first',
+        activeName: 'second',
       }
     },
     mounted() {
@@ -34,7 +31,7 @@
       handleClick(tab, event) {
         // console.log(tab, event);
       },
-      
+
     },
   }
 </script>

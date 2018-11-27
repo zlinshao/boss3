@@ -182,7 +182,6 @@
         },
         methods:{
           getTableData() {
-            console.log(this.form);
             if (this.month) {
               this.form.date = this.month.substring(2);
             }
