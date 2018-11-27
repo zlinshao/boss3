@@ -167,7 +167,6 @@
         }
       },
       editWord(detail) {
-        console.log(detail)
         if (detail) {
           this.follow_name = detail.follows && detail.follows.name;
           this.params.city = detail.city;
@@ -196,7 +195,6 @@
           }else{
             this.isComplainOrder = false;
           }
-          console.log(this.isComplainOrder)
         }
       }
     },
@@ -306,7 +304,6 @@
       },
       //选择工单类型
       selectType(item){
-        console.log(this.params)
         if(item == 699){
           this.isComplainOrder = true;
         }else{
