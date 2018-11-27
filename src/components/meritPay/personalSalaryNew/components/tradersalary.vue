@@ -90,6 +90,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
+          @row-click='clickTable'
           width="100%">
           <el-table-column
             label="员工"
@@ -130,18 +131,23 @@
           :total="totalNum">
         </el-pagination>
       </div>
+      <div class="myDetail">
+        <LordtraderDetail :staff_id="staff_id" :date="form.date"></LordtraderDetail>
+      </div>
       <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
       <right-menu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                 @clickOperateMore="clickEvent"></right-menu>
+
     </div>
 </template>
 <script>
   import Organization from '../../../common/organization.vue';
-  import RightMenu from '../../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../../common/rightMenu.vue';    //右键
+  import LordtraderDetail from './lordtraderdetail';
     export default{
         name:'tradersalary',
-        components:{Organization,RightMenu},
+        components:{Organization,RightMenu,LordtraderDetail},
         data(){
             return{
                 isHigh: false,
@@ -168,6 +174,7 @@
                 rightMenuY: 0,
                 lists: [],
                 show:false,
+                staff_id:''
             }
         },
         mounted() {
@@ -290,6 +297,9 @@
           //关闭右键菜单
           closeMenu() {
             this.show = false;
+          },
+          clickTable(row, event) {
+            this.staff_id=row.staff_id;
           },
         }
     }
