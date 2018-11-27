@@ -111,7 +111,7 @@
           },
           deleteVisiable: false,
           page: 1,
-          limit: 5,
+          limit: 26,
           all: '',
           count: 0,
         }
