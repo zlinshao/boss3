@@ -1888,6 +1888,7 @@
           this.powerModule = true;
           this.powerData = val.data;
         } else if (val.clickIndex === 'send_leave_msg') {
+          this.leaveMsg = false;
           this.sendLeaveMsgDialog = true;
         } else if (val.clickIndex === 'send_leave_xx') {
           this.leaveMsg = true;
