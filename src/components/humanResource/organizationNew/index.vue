@@ -1517,7 +1517,7 @@
             });
             this.getDepart();
           }else {
-            this.$notify.success({
+            this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
