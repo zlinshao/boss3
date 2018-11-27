@@ -234,8 +234,8 @@
                   <el-form-item label="暖气">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.heater">有</span>
-                      <span v-else="">无</span>
+                      <span v-if="detailData.house_goods.heater == '无'">无</span>
+                      <span v-else="">有</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -244,8 +244,8 @@
                   <el-form-item label="天然气">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.gas">有</span>
-                      <span v-else="">无</span>
+                      <span v-if="detailData.house_goods.gas == '无'">无</span>
+                      <span v-else="">有</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -254,8 +254,8 @@
                   <el-form-item label="房屋交接是否干净">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.is_clean">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.is_clean == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -266,8 +266,8 @@
                   <el-form-item label="是否每个房间有床+床垫">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.bed">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.bed == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -276,8 +276,8 @@
                   <el-form-item label="是否每个房间有衣柜">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.wardrobe">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.wardrobe == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -286,8 +286,8 @@
                   <el-form-item label="是否每个房间有窗帘">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.curtain">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.curtain == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -298,8 +298,8 @@
                   <el-form-item label="家电是否齐全">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.is_fill">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.is_fill == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>
@@ -308,8 +308,8 @@
                   <el-form-item label="房东是否予以配齐">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.is_lord_fill">是</span>
-                      <span v-else="">否</span>
+                      <span v-if="detailData.house_goods.is_lord_fill == '无'">否</span>
+                      <span v-else="">是</span>
                     </span>
                     </div>
                   </el-form-item>

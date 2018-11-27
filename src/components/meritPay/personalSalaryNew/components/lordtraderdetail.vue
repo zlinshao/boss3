@@ -1,12 +1,12 @@
 <template>
-    <div id="detail">
+    <div id="lordtraderdetail">
       <div class="highRanking" style=" float:right;z-index:65535;margin:7px 10px 0 0;">
         <div class="highHide">
           <el-button size="mini" type="primary" @click="exportDetail">导出详情</el-button>
         </div>
       </div>
         <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
-        <el-tab-pane label="收房业绩" name="first">
+        <el-tab-pane label="收房相关" name="first">
             <div class="table-list">
                 <el-table
                     style="width: 100%"
@@ -77,7 +77,7 @@
                 </el-table>
             </div>
         </el-tab-pane>
-        <el-tab-pane label="租房业绩" name="second">
+        <el-tab-pane label="租房相关" name="second">
             <div class="table-list">
                 <el-table
                     style="width: 100%"
@@ -102,119 +102,50 @@
                     ></el-table-column>
                     <el-table-column
                     label="付款状态"
-                    prop="rent_data.rent_pay_way"
+                    prop="lord_data.lord_pay_way"
                     >
-                
                     </el-table-column>
                     <el-table-column
-                    label="签约月数"
-                    prop="rent_data.rent_sign_month"
+                    label="签约年数"
+                    prop="lord_data.lord_duration"
                     ></el-table-column>
                     <el-table-column
                     label="单价"
-                    prop="rent_data.rent_month_price"
+                    prop="lord_data.lord_month_price"
                     ></el-table-column>
                     <el-table-column
-                    label="消耗空置期"
-                    prop="rent_data.rent_vacancy_date"
+                    label="空置期"
+                    prop="lord_data.lord_vacancy_date"
                     ></el-table-column>
                     <el-table-column
                     label="中介费"
-                    prop="rent_data.rent_agency_count"
+                    prop="lord_data.lord_property_fee"
                     ></el-table-column>
                     <el-table-column
                     label="实际业绩"
-                    prop="achv_res.rent.basic_achievement"
+                    prop="achv_res.lord.basic_achievement"
                     ></el-table-column>
                     <el-table-column
                     label="溢出业绩"
-                    prop="achv_res.rent.overflow"
+                    prop="achv_res.lord.overflow"
                     ></el-table-column>
                     <el-table-column
                     label="提成"
-                    prop="achv_res.rent.real_money"
+                    prop="achv_res.lord.real_money"
                     ></el-table-column>
                     <el-table-column
                     label="维护费"
-                    prop="achv_res.rent.extra_award"
+                    prop="achv_res.lord.extra_award"
                     ></el-table-column>
                     <el-table-column
                     label="名称"
-                    prop="staff_name"
+                    prop="lord_data.sign_user_id.name"
                     ></el-table-column>
                     <el-table-column
                     label="所属部门"
                     prop="department"
                     ></el-table-column>
                 </el-table>
-            </div>
-        </el-tab-pane>
-        <el-tab-pane label="全部业绩" name="third">
-            <div class="table-list">
-                <el-table
-                    style="width: 100%"
-                    :data="detailData"
-                    v-loading="getShow"
-                    :empty-text="TableInfo"
-                    element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(255, 255, 255, 0)">
-                    <el-table-column
-                    label="发喜报日期"
-                    prop="bulletin_date"
-                    ></el-table-column>
-                    <el-table-column
-                    label="房屋地址"
-                    prop="address"
-                    width="150px"
-                    ></el-table-column>
-                    <el-table-column
-                    label="收房签约年数"
-                    prop="lord_data.lord_duration"
-                    ></el-table-column>
-                    <el-table-column
-                    label="租房签约月数"
-                    prop="rent_data.rent_sign_month"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                    label="收房月单价"
-                    prop="lord_data.lord_month_price"
-                    ></el-table-column>
-                    <el-table-column
-                    label="租房月单价"
-                    prop="rent_data.rent_month_price"
-                    ></el-table-column>
-                    <el-table-column
-                    label="总基本业绩"
-                    prop="achv_res.all.basic_achievement"
-                    ></el-table-column>
-                    <el-table-column
-                    label="总溢出业绩"
-                    prop="achv_res.all.overflow"
-                    ></el-table-column>
-                    <el-table-column
-                    label="总提成"
-                    prop="achv_res.all.real_money"
-                    ></el-table-column>
-                    <el-table-column
-                    label="片区经理工资"
-                    prop="achv_res.manager.ach"
-                    ></el-table-column>
-                    <el-table-column
-                    label="片区经理认责"
-                    prop="achv_res.manager.duty"
-                    ></el-table-column>
-                    <el-table-column
-                    label="区长工资"
-                    prop="achv_res.warden.ach"
-                    ></el-table-column>
-                    <el-table-column
-                    label="区长认责"
-                    prop="achv_res.warden.duty"
-                    ></el-table-column>
-                </el-table>
-            
             </div>
         </el-tab-pane>
         <div style="width: 100%;text-align: right;margin-top: 20px;">
@@ -231,8 +162,8 @@
 </template>
 <script>
     export default {
-        name:'achieve-detail',
-        props:['staff_id','start_time','end_time'],
+        name:'lordtrader-detail',
+        props:['staff_id','date'],
     data() {
       return {
         activeName2: 'first',
@@ -242,6 +173,7 @@
         totalPage: 0,
         limit:5,
         page:1,
+        category:1
       };
     },
     watch:{
@@ -257,10 +189,10 @@
             page:this.page,
             limit:this.limit,
             staff_ids:this.staff_id,
-            start_time:this.start_time,
-            end_time:this.end_time
+            date:this.date,
+            category:this.category
         };
-        this.$http.get(globalConfig.server + 'salary/achv/commission/', {
+        this.$http.get(globalConfig.server + 'salary/achv/getSalaryDetail/', {
           params: params
         }).then(res => {
           if (res.status == 200) {
@@ -283,7 +215,13 @@
         })
       },
       handleClick(tab, event) {
-        // console.log(tab, event);
+        console.log(tab.name);
+        if(tab.name=='first'){
+            this.category=1;
+        }else if(tab.name=='second'){
+            this.category=2;
+        }
+        this.getListData();
       },
       handleCurrentChange(val) {
         this.page=val;

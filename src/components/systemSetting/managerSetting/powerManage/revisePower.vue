@@ -202,6 +202,7 @@
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
+            type: this.form.radio
           }).then((res) => {
             if (res.data.code === '20030') {
               this.prompt(res.data.msg, 1);

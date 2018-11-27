@@ -94,7 +94,7 @@
               </el-col>
             </el-row>
             <el-row class="el_row_border">
-              <el-col :span="12">
+              <!-- <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
                     <div class="el_col_label">更新时间</div>
@@ -112,7 +112,7 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
-              </el-col>
+              </el-col> -->
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -132,8 +132,9 @@
                   </el-col>
                 </el-row>
               </el-col>
-            </el-row>
-            <el-row class="el_row_border">
+
+            <!-- </el-row> -->
+            <!-- <el-row class="el_row_border"> -->
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -191,11 +192,27 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="newest_follow_time"
+                  label="跟进时间">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
+                    <span v-if="!scope.row.newest_follow_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="num"
                   label="工单编号">
                   <template slot-scope="scope">
                     <span v-if="scope.row.num">{{scope.row.num}}</span>
                     <span v-if="!scope.row.num">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="contract_number"
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                    <span v-if="!scope.row.contract_number">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -230,7 +247,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="expected_finish_time"
+                  prop="follow_time"
                   label="下次跟进时间">
                   <template slot-scope="scope">
                     <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
@@ -301,11 +318,27 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="newest_follow_time"
+                  label="跟进时间">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
+                    <span v-if="!scope.row.newest_follow_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="num"
                   label="工单编号">
                   <template slot-scope="scope">
                     <span v-if="scope.row.num">{{scope.row.num}}</span>
                     <span v-if="!scope.row.num">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="contract_number"
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                    <span v-if="!scope.row.contract_number">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -340,7 +373,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="expected_finish_time"
+                  prop="follow_time"
                   label="下次跟进时间">
                   <template slot-scope="scope">
                     <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
@@ -381,6 +414,26 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
+            <!--工单统计-->
+            <!-- <el-tab-pane label="工单统计" name="third">
+               <el-table :data="tableData" style="width: 100%">
+                <el-table-column
+                  prop="date"
+                  label="日期"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  label="姓名"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="地址">
+                </el-table-column>
+              </el-table>
+            </el-tab-pane> -->
+            <!--工单统计-->
           </el-tabs>
           <div class="tableBottom">
             <div class="left">
