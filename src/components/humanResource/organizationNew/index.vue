@@ -886,6 +886,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="selectLeaveDateDialog = false">取 消</el-button>
         <el-button size="small" type="primary" @click="leaveDateConfirm">只离职</el-button>
+        <el-button size="small" type="primary" @click="leaveSendMsg">离职并群发消息</el-button>
         <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
       </span>
     </el-dialog>
@@ -1229,7 +1230,7 @@
         this.$prompt('请输入手机号码','提示',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /^1[3|4|5|8][0-9]\d{4,8}$/,
+          inputPattern: /^1[3|4|5|8|7|9][0-9]\d{4,8}$/,
           inputErrorMessage: '手机号格式不正确'
         }).then(({value})=>{
           this.changePhone(scope,value);
@@ -1517,7 +1518,7 @@
             });
             this.getDepart();
           }else {
-            this.$notify.success({
+            this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
@@ -1726,6 +1727,49 @@
         }).catch(() => {
 
         });
+      },
+      //离职群发
+      leaveSendMsg() {
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              this.prompt('success', res.data.msg);
+              this.getPostStaffData();
+              this.getStaffData();
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
+                if(res.data.code === "710910"){
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.getPostStaffData();
+                  this.getStaffData();
+                  this.selectLeaveDateDialog = false;
+                }else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.selectLeaveDateDialog = false;
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        })
       },
       // 离职并发送短信
       leaveAndSendMsgConfirm() {
