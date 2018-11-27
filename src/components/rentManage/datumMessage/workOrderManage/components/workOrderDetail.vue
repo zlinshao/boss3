@@ -198,22 +198,6 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <!-- <el-row>
-                <el-col :span="8">
-                  <el-form-item label="时间">
-                    <div class="">
-                      <el-input v-model="dutyResult.editTime"></el-input>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="添加人">
-                    <div class="">
-                      <el-input v-model="dutyResult.editUser"></el-input>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row> -->
               <el-row v-for="(item, index) in dutyResultLength" :key='index'>
                 <el-col :span="6">
                   <el-form-item label="认责人" class="acount-text">
@@ -260,7 +244,7 @@
                 </el-col>
               </el-row>
             </el-form>
-            <div class="accountability-tips" v-if="workOrderDetail.accountability_info === null && forbidEdit">暂无</div>
+            <div class="accountability-tips" v-if="workOrderDetail.accountability_info === null && forbidEdit && workOrderDetail.type === 699">暂无</div>
             <!--认责结束-->
             <!--跟进开始-->
             <div class="follow_result">
@@ -275,7 +259,7 @@
                   <el-form-item label="工单状态：" class="acount-text">
                     <el-radio-group v-model="params.follow_status">
                       <el-radio label="338">已完成</el-radio>
-                      <el-radio label="337">未完成</el-radio>
+                      <el-radio label="337">处理中</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -513,6 +497,7 @@
       orderDetailModule(val) {
         if (!val) {
           this.init();
+          this.initAccountInfo();
           this.workOrderDetail = {};
           this.$emit('close');
         } else {
@@ -571,6 +556,7 @@
         })
       },
       getDetail() {
+        console.log(this.accountability_info,'--------')
         this.workOrderLoading = true;
         this.$http.get(globalConfig.server + 'customer/work_order/' + this.wordData.id).then((res) => {
           this.workOrderLoading = false;
@@ -592,7 +578,6 @@
               this.showAccount = true;
             }
             this.assignVal(this.workOrderDetail.accountability_info);
-            console.log(this.workOrderDetail.album.image_pic)
             for(var item in this.workOrderDetail.album.image_pic){
               if(!this.workOrderDetail.album.image_pic[item].length){
                 delete this.workOrderDetail.album.image_pic[item]
@@ -603,8 +588,11 @@
       },
       //投诉类型转换投诉详情
       getComplainType(str, obj){
+        console.log(str , obj)
         if(str && obj){
           obj.forEach(item => item.type === str ? this.complaintStr = '(' + item.name + ')' : '')
+        }else{
+          this.complaintStr = ""
         }
       },
       //时间格式  yy-MM-dd hh-mm-ss
@@ -615,8 +603,11 @@
       //赋值
       assignVal(source){
         let obj = this.deepClone(source);
+        console.log(obj)
+        console.log(this.accountability_info)
         this.accountability_info = obj === null ? this.accountability_info : obj;
         this.dutyResultLength = obj === null ? 1 : obj.dutyInfo && obj.dutyInfo.length;
+        console.log(this.accountability_info)
       },
       //深拷贝
       deepClone(source){
@@ -776,6 +767,23 @@
             });
           }
         })
+      },
+      //初始化认责信息
+      initAccountInfo(){
+        this.accountability_info = {
+          add_user:'',
+          add_time:'',
+          dutyInfo:[
+            {
+              dutyUser:"",
+              dutyUserName:'',
+              dutyName:'',
+              dutyMoney:'',
+            }
+          ],
+          dutyRes:'',
+          is_valid:'1',
+        }
       }
     }
   };
@@ -866,23 +874,20 @@
       display: -webkit-flex;
       justify-content: flex-start;
       align-items: flex-end;
-      height: 98px;
+      height: 88px;
       margin-left: 50px;
       .user{
         width:100px;
         text-align: center;
-        .add_user{
-          font-size: 14px;
-        }
       }
       .icon{
-        height: 98px;
-        width: 18px;
+        height: 88px;
+        width: 14px;
         position: relative;
         bottom: 0;
         .cricle{
-          width: 16px;
-          height: 16px;
+          width: 12px;
+          height: 12px;
           border-radius: 50%;
           border: 1px solid #727479;
           position: absolute;
@@ -893,18 +898,19 @@
           border-color: red;
         }
         .line{
-          height: 80px;
+          height: 74px;
           width: 1px;
           background: #727479;
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
-          bottom: 18px;
+          bottom: 14px;
         }
       }
       .text{
         margin-left:10px;
         font-size: 14px;
+        width: 880px;
       }
       .el-icon-picture{
         cursor: pointer;

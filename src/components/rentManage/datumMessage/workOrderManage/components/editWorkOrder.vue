@@ -29,7 +29,7 @@
           <el-row v-if="isComplainOrder">
             <el-col :span="12">
               <el-form-item label="投诉类型">
-                <el-select clearable v-model="params.type_of_complaint" placeholder="请选择" value="" @change="changeType">
+                <el-select clearable v-model="params.type_of_complaint" placeholder="请选择" value="">
                   <el-option v-for="item in select_type_complaint" :label="item.name" :value="item.type" :key="item.type"></el-option>
                 </el-select>
               </el-form-item>
@@ -40,7 +40,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+           <el-row>
             <!--<el-col :span="12">-->
             <!--<el-form-item label="跟进状态">-->
             <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
@@ -49,6 +49,7 @@
             <!--</el-select>-->
             <!--</el-form-item>-->
             <!--</el-col>-->
+            
             <el-col :span="12">
               <el-form-item label="回复电话">
                 <el-input v-model="params.mobile" placeholder="请输入联系方式"></el-input>
@@ -60,6 +61,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+          
           <el-row>
             <!-- <el-col :span="12">
               <el-form-item label="所属城市" required="">
@@ -69,7 +71,9 @@
                 </el-select>
               </el-form-item>
             </el-col> -->
+            
           </el-row>
+         
           <el-row>
             <el-col :span="12">
               <el-form-item label="跟进时间">
@@ -310,9 +314,6 @@
           this.params.channel_of_complaint = "";
           this.isComplainOrder = false;
         }
-      },
-      changeType(item){
-        console.log(item)
       }
     }
   };
