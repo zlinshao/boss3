@@ -26,8 +26,27 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="下次跟进人" required="">
-                <el-input v-model="follow_name" @focus="openOrganizeModal"></el-input>
+              <el-form-item label="工单类型" required="">
+                <el-select clearable v-model="params.type" placeholder="请选择" value="" @change="selectType">
+                  <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            
+          </el-row>
+          <el-row v-if="showComplain">
+            <el-col :span="12">
+              <el-form-item label="投诉类型">
+                <el-select clearable v-model="params.type_of_complaint" placeholder="请选择" value="">
+                  <el-option v-for="item in select_type_complaint" :label="item.name" :value="item.type"
+                             :key="item.type"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="投诉渠道">
+                <el-input v-model="params.channel_of_complaint" placeholder="微博/贴吧/客服/回访"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -49,7 +68,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="跟进时间">
+              <el-form-item label="下次跟进时间">
                 <el-date-picker type="date" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd" v-model="params.follow_time"></el-date-picker>
               </el-form-item>
@@ -57,11 +76,8 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="工单类型" required="">
-                <el-select clearable v-model="params.type" placeholder="请选择" value="">
-                  <el-option v-for="item in dictionaries" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
+              <el-form-item label="下次跟进人" required="">
+                <el-input v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
             <!--<el-col :span="12">-->
@@ -125,10 +141,12 @@
           image_pic: [],
           mobile: '',
           emergency: '',                   //紧急程度
+          type_of_complaint : '',               //投诉类型
+          channel_of_complaint:'',              //投诉渠道
         },
         organizationDialog: false,
         isClear: false,
-        dictionaries: [],
+        dictionaries: [],                  //工单类型数组
         dictionary_follow: [],
         follow_name: '',
         length: 0,
@@ -138,7 +156,17 @@
         house_name: '',
         forbidden: false,
         cities: [],
+        select_type_complaint :['A类：原则性投诉', 'B类:重大投诉', 'C类:一般性投诉(被动)', 'D类：一般性投诉(主动)'],            //投诉类型
+        showComplain:false,
       };
+    },
+    created(){
+      this.$http.get(globalConfig.server + 'customer/work_order/type_complaint').then(res => {
+        if(res.data.code === '10000'){
+          this.select_type_complaint = res.data.data;
+          console.log(this.select_type_complaint)
+        }
+      })
     },
     watch: {
       addFollowUpDialog(val) {
@@ -153,6 +181,7 @@
         }
       },
       houseData(val) {
+        console.log(val)
         this.params.contract_id = val.contract_id;
         this.params.city = val.city_id;
         this.city_name = val.city_name;
@@ -171,6 +200,7 @@
         // 工单类型
         this.dictionary(696, 1).then((res) => {
           this.dictionaries = res.data;
+          console.log(this.dictionaries)
         });
         // 工单状态
         this.dictionary(335, 1).then((res) => {
@@ -242,7 +272,18 @@
         this.follow_name = '';
         this.isClear = true;
         this.upStatus = false;
-      }
+        this.showComplain = false;
+      },
+      //选择工单类型
+      selectType(item){
+        if(item == 699){
+          this.showComplain = true;
+        }else{
+          this.showComplain = false;
+          this.params.type_of_complaint = '';
+          this.params.channel_of_complaint = '';
+        }
+      },
     }
   };
 </script>
