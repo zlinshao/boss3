@@ -1229,7 +1229,7 @@
         this.$prompt('请输入手机号码','提示',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /^1[3|4|5|8][0-9]\d{4,8}$/,
+          inputPattern: /^1[3|4|5|8|7|9][0-9]\d{4,8}$/,
           inputErrorMessage: '手机号格式不正确'
         }).then(({value})=>{
           this.changePhone(scope,value);
