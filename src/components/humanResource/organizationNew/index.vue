@@ -886,10 +886,11 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="selectLeaveDateDialog = false">取 消</el-button>
         <el-button size="small" type="primary" @click="leaveDateConfirm">只离职</el-button>
+        <el-button size="small" type="primary" @click="leaveSendMsg">离职并发群消息</el-button>
         <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
       </span>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" title="发送离职短信" :visible.sync="sendLeaveMsgDialog" width="30%">
+    <el-dialog :close-on-click-modal="false" :title=" leaveMsg ? '发送群消息' : '发送离职短信'" :visible.sync="sendLeaveMsgDialog" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="sendLeaveMsgForm" label-width="100px"
                  style="padding: 0 20px;">
@@ -1136,6 +1137,7 @@
           {id: "10", name: '推荐'},
           {id: "11", name: '其他'},
         ],
+        leaveMsg: false,
       }
     },
     mounted() {
@@ -1229,7 +1231,7 @@
         this.$prompt('请输入手机号码','提示',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputPattern: /^1[3|4|5|8][0-9]\d{4,8}$/,
+          inputPattern: /^1[3|4|5|8|7|9][0-9]\d{4,8}$/,
           inputErrorMessage: '手机号格式不正确'
         }).then(({value})=>{
           this.changePhone(scope,value);
@@ -1517,7 +1519,7 @@
             });
             this.getDepart();
           }else {
-            this.$notify.success({
+            this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
@@ -1640,6 +1642,7 @@
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_xx', headIcon: 'iconfont icon-duanxin', label: '发送群消息'},
             {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         } else if (!row.is_enable && row.is_on_job) {
@@ -1650,6 +1653,7 @@
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_xx', headIcon: 'iconfont icon-duanxin', label: '发送群消息'},
             {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         } else if (row.is_enable && !row.is_on_job) {
@@ -1660,6 +1664,7 @@
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_xx', headIcon: 'iconfont icon-duanxin', label: '发送群消息'},
             {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         } else if (!row.is_enable && !row.is_on_job) {
@@ -1670,6 +1675,7 @@
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
             {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_xx', headIcon: 'iconfont icon-duanxin', label: '发送群消息'},
             {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         }
@@ -1677,7 +1683,13 @@
       },
       //发送离职短信
       sendLeaveMsgConfirm() {
-        this.$confirm('此操作将给该员工负责的客户发送短信，是否继续?', '提示', {
+        var txt = '';
+        if(this.leaveMsg){
+          txt = '此操作将发送群消息，是否继续?';
+        }else {
+          txt = '此操作将给该员工负责的客户发送短信，是否继续?';
+        }
+        this.$confirm(txt, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -1685,20 +1697,44 @@
           if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
             this.sendLeaveMsgForm.date = this.form.dismiss_time;
           }
-          this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
-            params: {
-              id: this.editId,
-              date: this.sendLeaveMsgForm.date
-            }
-          }).then((res) => {
-            if (res.data.code === '710400') {
-              this.prompt('success', res.data.msg);
-              this.sendLeaveMsgDialog = false;
-              this.selectLeaveDateDialog = false;
-            } else {
-              this.prompt('warning', res.data.msg);
-            }
-          });
+          if(!this.leaveMsg){
+            this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
+              params: {
+                id: this.editId,
+                date: this.sendLeaveMsgForm.date
+              }
+            }).then((res) => {
+              if (res.data.code === '710400') {
+                this.prompt('success', res.data.msg);
+                this.sendLeaveMsgDialog = false;
+                this.selectLeaveDateDialog = false;
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+            });
+          }else {
+            this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
+              if(res.data.code === "710910"){
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                this.getPostStaffData();
+                this.getStaffData();
+                this.sendLeaveMsgDialog = false;
+                this.selectLeaveDateDialog = false;
+              }else {
+                this.$notify.warning({
+                  title: '失败',
+                  message: res.data.msg
+                });
+                this.sendLeaveMsgDialog = false;
+                this.selectLeaveDateDialog = false;
+              }
+            }).catch(err => {
+              console.log(err);
+            })
+          }
         }).catch(() => {
 
         });
@@ -1726,6 +1762,49 @@
         }).catch(() => {
 
         });
+      },
+      //离职群发
+      leaveSendMsg() {
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              this.prompt('success', res.data.msg);
+              this.getPostStaffData();
+              this.getStaffData();
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
+                if(res.data.code === "710910"){
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.getPostStaffData();
+                  this.getStaffData();
+                  this.selectLeaveDateDialog = false;
+                }else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.selectLeaveDateDialog = false;
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        })
       },
       // 离职并发送短信
       leaveAndSendMsgConfirm() {
@@ -1809,6 +1888,10 @@
           this.powerModule = true;
           this.powerData = val.data;
         } else if (val.clickIndex === 'send_leave_msg') {
+          this.leaveMsg = false;
+          this.sendLeaveMsgDialog = true;
+        } else if (val.clickIndex === 'send_leave_xx') {
+          this.leaveMsg = true;
           this.sendLeaveMsgDialog = true;
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;

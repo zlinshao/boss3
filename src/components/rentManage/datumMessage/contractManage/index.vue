@@ -323,6 +323,7 @@
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0)"
                   @row-dblclick="dblClickTable"
+                  @cell-click="showComplainList"
                   @row-contextmenu='houseMenu'
                   @selection-change="handleSelection"
                   style="width: 100%">
@@ -410,7 +411,16 @@
                       <span v-if="!scope.row.end_date">暂无</span>
                     </template>
                   </el-table-column>
-
+                  <el-table-column
+                    prop="work_order"
+                    width="80px"
+                    label="投诉">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.work_order" class="complain">{{scope.row.work_order}}</span>
+                      <div v-if="scope.row.work_order" class="lookOver">查看</div>
+                      <span v-if="!scope.row.work_order" class="complain">0</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     width="80px;"
                     label="是否备忘">
@@ -491,6 +501,7 @@
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0)"
                   @row-dblclick="dblClickTable"
+                  @cell-click="showComplainList"
                   @row-contextmenu='houseMenu'
                   @selection-change="handleSelection"
                   style="width: 100%">
@@ -574,6 +585,16 @@
                     </template>
                   </el-table-column>
                   <el-table-column
+                    prop="work_order"
+                    width="80px"
+                    label="投诉">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.work_order" class="complain">{{scope.row.work_order}}</span>
+                      <div v-if="scope.row.work_order" class="lookOver">查看</div>
+                      <span v-if="!scope.row.work_order" class="complain">0</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     width="80px;"
                     label="是否备忘">
                     <template slot-scope="scope">
@@ -590,7 +611,7 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-
+                  
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -798,6 +819,8 @@
     <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId"
                  :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
+    <ComplainList :complainListDialog="complainListDialog" :complainData="complainData" @close="closeModal">
+    </ComplainList>
 
 
     <Organization :organizationDialog="allotVisible" :type="allotType" :length="allotLength"
@@ -815,6 +838,7 @@
   import AddCollectRepair from '../../components/addCollectRepair.vue'                 //添加房东维修
   import AddRentRepair from '../../components/addRentRepair.vue'                       //添加租客维修
   import AddFollowUp from '../../components/addFollowUp.vue'                           //增加跟进记录
+  import ComplainList from '../../components/complainList'                             //投诉记录
 
   export default {
     name: 'hello',
@@ -827,7 +851,8 @@
       EditAddress,
       AddCollectRepair,
       AddRentRepair,
-      AddFollowUp
+      AddFollowUp,
+      ComplainList
     },
     data() {
       return {
@@ -960,7 +985,8 @@
         checkContractData: [],
         addCollectRepairDialog: false,    //房东添加维修
         addRentRepairDialog: false,       //租客添加维修
-        addFollowUpDialog: false,     //添加工单
+        addFollowUpDialog: false,         //添加工单
+        complainListDialog:false,         //投诉列表
         addReturnvisitDialog: false,
         leaseHistoryDialog: false,
         leaseHistoryTableData: [],
@@ -969,6 +995,7 @@
         rentFeedback: {},
         houseData: {},
         cities: [], //城市
+        complainData: {},
         contract_ids: [],
         allotVisible: false,
         allotType: '',
@@ -1123,6 +1150,7 @@
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.addFollowUpDialog = false;
+        this.complainListDialog = false;
         if (val === 'updateCollect') {
           this.collectDatafunc();
         } else if (val === 'updateRent') {
@@ -1570,6 +1598,24 @@
         this.params.submit_time = [];
         this.isHigh = false;
         this.search();
+      },
+      // 显示投诉列表
+      showComplainList(row, column, cell, event){
+        if(column.property === "work_order"){
+          this.complainListDialog = true;
+          console.log(row.work_order_ids);
+          this.getComplain(row.work_order_ids);
+        }
+      },
+      //发送请求获取投诉详情
+      getComplain(param){
+        this.$http.get(globalConfig.server + '/customer/work_order/complaint?ids=' + param).then(res => {
+            if(res.data.code === "10000"){
+              this.complainData = res.data;
+            }else if(res.data.code === "10001"){
+              this.complainData = {}
+            }
+        })
       }
     },
   }
@@ -1608,6 +1654,13 @@
           }
         }
       }
+    }
+    .complain{
+      cursor: pointer;
+    }
+    .lookOver{
+      color: #409EFF;
+      cursor: pointer;
     }
   }
 </style>

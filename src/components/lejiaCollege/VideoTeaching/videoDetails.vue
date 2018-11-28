@@ -135,7 +135,10 @@ export default {
     // 创建视频相册
     createVideo(val) {
       if (val == "创建视频分类") {
-        this.videoForm.cover = this.videoForm.cover[0]
+        console.log(this.videoForm.cover)
+        if(this.videoForm.cover) {
+          this.videoForm.cover = this.videoForm.cover[0]
+        }
         this.$http
           .post(globalConfig.server + "video/create", this.videoForm)
           .then(res => {
@@ -144,9 +147,9 @@ export default {
                 title: "成功",
                 message: res.data.msg
               });
+              this.isClear = true;
               this.getVideoAlbum();
               // this.videoForm = {};
-              this.isClear = true;
               this.createAlbum = false;
             } else {
               this.$notify.warning({
@@ -167,8 +170,8 @@ export default {
                 title: "成功",
                 message: res.data.msg
               });
-              this.getVideoAlbum();
               this.isClear = true;
+              this.getVideoAlbum();
               this.createAlbum = false;
             } else {
               this.$notify.warning({
