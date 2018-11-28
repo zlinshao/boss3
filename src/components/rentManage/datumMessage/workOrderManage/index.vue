@@ -94,7 +94,7 @@
               </el-col>
             </el-row>
             <el-row class="el_row_border">
-              <el-col :span="12">
+              <!-- <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
                     <div class="el_col_label">更新时间</div>
@@ -112,7 +112,7 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
-              </el-col>
+              </el-col> -->
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -132,8 +132,9 @@
                   </el-col>
                 </el-row>
               </el-col>
-            </el-row>
-            <el-row class="el_row_border">
+
+            <!-- </el-row> -->
+            <!-- <el-row class="el_row_border"> -->
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -184,10 +185,18 @@
                 </el-table-column>
                 <el-table-column
                   prop="create_time"
-                  label="创建时间">
+                  label="创建时间" sortable>
                   <template slot-scope="scope">
                     <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                     <span v-if="!scope.row.create_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="newest_follow_time"
+                  label="跟进时间" sortable>
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
+                    <span v-if="!scope.row.newest_follow_time">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -196,6 +205,14 @@
                   <template slot-scope="scope">
                     <span v-if="scope.row.num">{{scope.row.num}}</span>
                     <span v-if="!scope.row.num">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="contract_number"
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                    <span v-if="!scope.row.contract_number">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -230,7 +247,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="expected_finish_time"
+                  prop="follow_time"
                   label="下次跟进时间">
                   <template slot-scope="scope">
                     <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
@@ -294,10 +311,18 @@
                 </el-table-column>
                 <el-table-column
                   prop="create_time"
-                  label="创建时间">
+                  label="创建时间" sortable>
                   <template slot-scope="scope">
                     <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                     <span v-if="!scope.row.create_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="newest_follow_time"
+                  label="跟进时间" sortable>
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
+                    <span v-if="!scope.row.newest_follow_time">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -306,6 +331,14 @@
                   <template slot-scope="scope">
                     <span v-if="scope.row.num">{{scope.row.num}}</span>
                     <span v-if="!scope.row.num">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="contract_number"
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                    <span v-if="!scope.row.contract_number">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -340,7 +373,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="expected_finish_time"
+                  prop="follow_time"
                   label="下次跟进时间">
                   <template slot-scope="scope">
                     <span v-if="scope.row.follow_time">{{scope.row.follow_time}}</span>
@@ -381,8 +414,62 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
+            <!--工单统计-->
+            <el-tab-pane label="工单统计" name="third" class="workPreview" >
+               <div class='workPreview'>
+                 <span>总数:</span><span>{{workPreview.total}}</span>
+                 <span>待处理:</span><span>{{workPreview.toEdit}}</span>
+                 <span>处理中:</span><span>{{workPreview.editing}}</span>
+                 <span>已完成:</span><span>{{workPreview.edited}}</span>
+               </div>
+               <el-table :data="workOrderDataTotal.follow" style="width: 100%" element-loading-text="拼命加载中" v-loading="totalLoading">
+                <el-table-column
+                  prop="name"
+                  label="跟进人"
+                  width="180">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.name">{{scope.row.name}}</span>
+                    <span v-if="!scope.row.name">0</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="value.count"
+                  label="工单数"
+                  width="180">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.value.count">{{scope.row.value.count}}</span>
+                    <span v-if="!scope.row.value.count">0</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="value"
+                  label="待处理">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.value[336]">{{scope.row.value[336]}}</span>
+                    <span v-if="!scope.row.value[336]">0</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="value"
+                  label="处理中">
+                   <template slot-scope="scope">
+                    <span v-if="scope.row.value[337]">{{scope.row.value[337]}}</span>
+                    <span v-if="!scope.row.value[337]">0</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="value"
+                  label="已完成">
+                   <template slot-scope="scope">
+                    <span v-if="scope.row.value[338]">{{scope.row.value[338]}}</span>
+                    <span v-if="!scope.row.value[338]">0</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <!--工单统计-->
           </el-tabs>
-          <div class="tableBottom">
+          <div class="tableBottom" v-if="this.activeName !== 'third'">
             <div class="left">
               <el-pagination
                 @size-change="handleSizeChange"
@@ -449,6 +536,13 @@
         type: '',
         collectTableData: [],
         rentTableData: [],
+        workOrderDataTotal:[],
+        workPreview:{
+          total:'',
+          toEdit:'',
+          editing:'',
+          edited:''
+        },
         options: [],
         //模态框
         organizationDialog: false,
@@ -462,6 +556,7 @@
         workOrderLoading: false,
         rentStatus: ' ',
         rentLoading: false,
+        totalLoading:false,
       }
     },
     created() {
@@ -492,13 +587,17 @@
         }
       },
       handleClick() {
+        console.log(this.activeName)
         this.close_();
         if (this.activeName === "first") {
           this.params.module = 1;
           this.collectDatafunc();
-        } else {
+        } else if(this.activeName === "second"){
           this.params.module = 2;
           this.rentDatafunc();
+        }else if(this.activeName === "third"){
+          this.params.module = 3;
+          this.getTotalData();
         }
       },
       close_() {
@@ -558,7 +657,39 @@
           }
         })
       },
-
+      //工单统计数据
+      getTotalData(){
+        this.totalLoading = true;
+        this.$http.get(globalConfig.server + 'customer/work_order/total').then(res => {
+          this.totalLoading = false;
+          if(res.data.code === '10030'){
+            if(res.data.data.sumCount){
+              this.workPreview.total = res.data.data.sumCount
+            }else{
+              this.workPreview.total = 0;
+            }
+            if(res.data.data.sumStatus){
+              if(res.data.data.sumStatus[336]){
+                this.workPreview.toEdit = res.data.data.sumStatus[336];
+              }else{
+                this.workPreview.toEdit = 0;
+              }
+              if(res.data.data.sumStatus[337]){
+                this.workPreview.editing = res.data.data.sumStatus[337];
+              }else{
+                this.workPreview.editing = 0;
+              }
+              if(res.data.data.sumStatus[338]){
+                this.workPreview.edited = res.data.data.sumStatus[338];
+              }else{
+                this.workPreview.edited = 0;
+              }
+            }
+            this.workOrderDataTotal = res.data.data;
+            console.log(this.workPreview)
+          }
+        })
+      },
       handleSizeChange(val) {
         this.$store.dispatch('workOrderFilter', this.params);
       },
@@ -712,6 +843,14 @@
     }
     .width {
       width: 90px;
+    }
+    .workPreview{
+      padding: 0 0  10px 0;
+      font-size: 16px;
+      color: #409EFF;
+      span{
+        margin: 0 5px;
+      }
     }
   }
 </style>

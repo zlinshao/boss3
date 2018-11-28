@@ -4,44 +4,19 @@
       <div>
         <el-form size="small" :model="params" label-width="100px">
           <el-row>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
               <el-form-item label="房屋地址">
                 <el-input v-model="editWord.address" disabled></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="12">
               <el-form-item label="工单类型" required="">
-                <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
+                <el-select clearable v-model="params.type" placeholder="缴费方式" value="" @change="selectType">
                   <el-option v-for="item in workStatus" :label="item.dictionary_name" :value="item.id"
                              :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="所属城市" required="">
-                <el-select clearable v-model="params.city" disabled>
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                             :key="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="下次跟进人" placeholder="请选择下次跟进人" required="">
-                <el-input v-model="follow_name" @focus="openOrganizeModal"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <!--<el-col :span="12">-->
-            <!--<el-form-item label="跟进状态">-->
-            <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
-            <!--<el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"-->
-            <!--:key="item.id"></el-option>-->
-            <!--</el-select>-->
-            <!--</el-form-item>-->
-            <!--</el-col>-->
             <el-col :span="12">
               <el-form-item label="紧急程度">
                 <el-select clearable v-model="params.emergency" placeholder="紧急程度" value="">
@@ -50,12 +25,55 @@
                 </el-select>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row v-if="isComplainOrder">
+            <el-col :span="12">
+              <el-form-item label="投诉类型">
+                <el-select clearable v-model="params.type_of_complaint" placeholder="请选择" value="">
+                  <el-option v-for="item in select_type_complaint" :label="item.name" :value="item.type" :key="item.type"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="投诉渠道">
+                <el-input v-model="params.channel_of_complaint" placeholder="微博/贴吧/客服/回访"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+           <el-row>
+            <!--<el-col :span="12">-->
+            <!--<el-form-item label="跟进状态">-->
+            <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
+            <!--<el-option v-for="item in workFollow" :label="item.dictionary_name" :value="item.id"-->
+            <!--:key="item.id"></el-option>-->
+            <!--</el-select>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
+            
             <el-col :span="12">
               <el-form-item label="回复电话">
                 <el-input v-model="params.mobile" placeholder="请输入联系方式"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item label="下次跟进人" placeholder="请选择下次跟进人" required="">
+                <el-input v-model="follow_name" @focus="openOrganizeModal"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
+          
+          <el-row>
+            <!-- <el-col :span="12">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="params.city" disabled>
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col> -->
+            
+          </el-row>
+         
           <el-row>
             <el-col :span="12">
               <el-form-item label="跟进时间">
@@ -109,6 +127,8 @@
           image_pic: [],
           mobile: '',
           emergency: '',
+          type_of_complaint : '',               //投诉类型
+          channel_of_complaint:'',              //投诉渠道
         },
         emergency: [{
           id: 1,
@@ -130,6 +150,8 @@
         upStatus: false,
         cityCategory: [],
         addNum: 0,
+        isComplainOrder: false, //是否为投诉单
+        select_type_complaint :[],      //投诉类型
       };
     },
     watch: {
@@ -155,6 +177,9 @@
           // this.params.follow_status = detail.follow_status;
           this.params.follow_time = detail.follow_time;
           this.params.mobile = detail.mobile;
+          this.select_type_complaint = detail.option && detail.option.select_type_complaint;
+          this.params.type_of_complaint = detail.type_of_complaint;
+          this.params.channel_of_complaint = detail.channel_of_complaint;
           //照片修改
           let picObject = {};
           this.params.image_pic = [];
@@ -165,6 +190,11 @@
             }
           }
           this.editImage = picObject;
+          if(detail.type === 699){
+            this.isComplainOrder = true;
+          }else{
+            this.isComplainOrder = false;
+          }
         }
       }
     },
@@ -271,6 +301,16 @@
         this.detailInfo = {};
         this.editImage = {};
         this.upStatus = false;
+      },
+      //选择工单类型
+      selectType(item){
+        if(item == 699){
+          this.isComplainOrder = true;
+        }else{
+          this.params.type_of_complaint = "";
+          this.params.channel_of_complaint = "";
+          this.isComplainOrder = false;
+        }
       }
     }
   };
