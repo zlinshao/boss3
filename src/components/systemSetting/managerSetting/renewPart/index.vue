@@ -70,9 +70,8 @@
             })
           },
         GoRenew(row){
-          this.$http.put(globalConfig.server + "organization/other/hidden-org",{
+          this.$http.put(globalConfig.server + `organization/other/hidden-org/${row.id}`,{
               hidden: 1,
-              id: row.id
           }).then(res => {
             if(res.data.code === "700710"){
               this.$notify.success({
