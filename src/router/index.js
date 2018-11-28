@@ -168,7 +168,7 @@ const ManagerSetting = () => import  ('../components/systemSetting/managerSettin
 const PeriodicTable = () => import  ('../components/meritPay/periodicTable/index');
 const Achievement = () => import  ('../components/meritPay/achievement/index');
 // const PersonalSalary = () => import  ('../components/meritPay/personalSalary/index');
-const PersonalSalary = () => import  ('../components/meritPay/personalSalaryNew/index');
+// const PersonalSalary = () => import  ('../components/meritPay/personalSalaryNew/index');
 const CollectDetail = () => import  ('../components/rentManage/collectDetail.vue');
 const RentingDetail = () => import  ('../components/rentManage/rentingDetail.vue');
 
