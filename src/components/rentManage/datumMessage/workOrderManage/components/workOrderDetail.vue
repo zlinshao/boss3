@@ -139,12 +139,12 @@
               <el-row v-for="(item, index) in dutyResultLength" :key='index'>
                 <el-col :span="6">
                   <el-form-item label="认责人" class="acount-text">
-                    <el-select placeholder="请选择" value-key="value" v-if="!forbidEdit"  value="" v-model='accountability_info.dutyInfo[index].dutyUser' @change='selectUser(item, index)'>
+                    <el-select placeholder="请选择" value-key="value" v-if="!forbidEdit"  value="" v-model='accountability_info.dutyInfo[index].dutyUserName' @change='selectUser(item, index)'>
                       <el-option 
                         v-for="_item in account_holder"
-                        :key="_item.id"
+                        :key="_item.role_name"
                         :label="_item.role_name"
-                        :value="_item.id">
+                        :value="_item.role_name">
                       </el-option>
                     </el-select>
                     <div class="content" v-if="forbidEdit">
@@ -657,12 +657,14 @@
       },
       //选择认责角色
       selectUser(i, ind){
+        console.log(this.account_holder)
+        console.log(i, ind)
         let _id = this.accountability_info.dutyInfo[ind].dutyUser;
         let _this = this;
         this.account_holder.forEach(function(item, index){
           if(item.id === _id){
             _this.accountability_info.dutyInfo[ind].dutyName = item.name;
-            _this.accountability_info.dutyInfo[ind].dutyUserName = item.role_name;
+            _this.accountability_info.dutyInfo[ind].dutyUser = item.id;
           }
         });
 
