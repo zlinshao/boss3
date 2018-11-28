@@ -185,7 +185,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="create_time"
-                  label="创建时间">
+                  label="创建时间" sortable>
                   <template slot-scope="scope">
                     <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                     <span v-if="!scope.row.create_time">暂无</span>
@@ -193,7 +193,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="newest_follow_time"
-                  label="跟进时间">
+                  label="跟进时间" sortable>
                   <template slot-scope="scope">
                     <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
                     <span v-if="!scope.row.newest_follow_time">暂无</span>
