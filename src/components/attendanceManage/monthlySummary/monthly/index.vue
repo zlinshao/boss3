@@ -540,7 +540,6 @@ export default {
                   } else if(a.event_attribute == 5) {
                     attendanceObj.hugh = "休息";
                     if(key.length >1) {
-                      // attendanceObj.resultOffWork = "休息并打卡";
                       attendanceObj.resultWork = "休息并打卡";
                     }
                   } 
