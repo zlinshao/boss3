@@ -10,6 +10,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
+              <el-form-item label="选择城市" v-if="cityStatus">
+                <el-select v-model="params.city_id" size="mini" clearable>
+                  <el-option v-for="item in cities" :key="item.id" :label="item.city_name" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
               <el-form-item label='部门名称'>
                 <el-input placeholder="请输入内容" v-model="params.name"></el-input>
               </el-form-item>
@@ -61,6 +68,7 @@
     props: ['addDepartDialog', 'parentId', 'parentName'],
     data() {
       return {
+        urls: globalConfig.server,
         addDepartDialogVisible: false,
         params: {
           parent_id: '',
@@ -70,8 +78,10 @@
           corp_wx: '',
           cods_id: '',
           phone: '',
-
+          city_id: '',
         },
+        cityStatus: false,
+        cities: false,
         is_corp: false,
         parent_name: '',
       };
@@ -95,6 +105,23 @@
       parentId(val) {
         if (val) {
           this.params.parent_id = val;
+          this.$http.get(this.urls + 'organization/org/relation-city?parent_id=' + val).then(res => {
+            if (res.data.code === '200820') {
+              let data = res.data.data;
+              if (data === 1) {
+                this.cityStatus = true;
+                this.$http.get(this.urls + 'organization/other/city-list').then(res => {
+                  if (res.data.code === '700180') {
+                    this.cities = res.data.data.data;
+                  } else {
+                    this.prompt('warning', res.data.msg);
+                  }
+                })
+              }
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          })
         }
       },
       parentName(val) {
@@ -105,7 +132,7 @@
     },
     methods: {
       confirmEdit() {
-        this.$http.post(globalConfig.server + 'organization/org', this.params).then((res) => {
+        this.$http.post(this.urls + 'organization/org', this.params).then((res) => {
           if (res.data.code === '20010') {
             this.$emit('close', 'success');
             this.closeModal();
@@ -124,6 +151,7 @@
           corp_wx: '',
           cods_id: '',
           phone: '',
+          city_id: '',
         };
         this.is_corp = false;
       }
