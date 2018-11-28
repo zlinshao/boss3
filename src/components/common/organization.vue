@@ -167,9 +167,9 @@
             this.leftHeight();
             this.rightHeight();
           });
-          setTimeout(() => {
-            this.firstOpen = false;
-          }, 100);
+          // setTimeout(() => {
+          //   this.firstOpen = false;
+          // }, 100);
         }
       },
       form() {

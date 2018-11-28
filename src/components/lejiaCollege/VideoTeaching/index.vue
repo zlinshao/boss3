@@ -26,14 +26,16 @@
         <!-- 编辑 -->
         <div class="uploadVideo">
           <el-dialog title="编辑视频" :visible.sync="editDialog" width="30%" center>
-            <el-form>
-              <el-row>
-                <el-col>
+            <el-form :label-position="labelPosition" label-width="80px" size="mini">
                   <el-form-item label="视频名称" required>
-                    <el-input v-model="params.video_name"></el-input>
+                    <el-input v-model="formPositionName"></el-input>
                   </el-form-item>
-                </el-col>
-            </el-row>
+                  <el-form-item label="岗位" required>
+                    <el-select v-model="formPositionSelect" multiple placeholder="请选择" @change="editPositionId">
+                      <el-option v-for="item in positionOptions" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button @click="editDialog = false" size="mini">取 消</el-button>
@@ -54,22 +56,20 @@
         <!-- 上传 -->
         <div class="uploadVideo">
           <el-dialog title="上传视频" :visible.sync="uploadVideo" width="30%">
-            <el-form>
-              <el-row>
-                <el-col>
+            <el-form  :label-position="labelPosition" label-width="80px" size="mini">
                   <el-form-item label="视频名称" required>
                     <el-input v-model="form.video_name"></el-input>
                   </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
+                  <el-form-item label="岗位" required>
+                    <el-select v-model="form.position_id" multiple placeholder="请选择" @change="getPositionId">
+                      <el-option v-for="item in positionOptions" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                 <el-form-item label="上传视频" required>
                   <UpLoad :ID="'comment_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
                   <span style="color: red;font-size: 12px;">仅支持上传一个视屏</span>
                 </el-form-item>
-              </el-col>
-            </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="release" size="mini">发布</el-button>
@@ -88,6 +88,11 @@ export default {
   components: { UpLoad },
   data() {
     return {
+      formPositionName: "",
+      formPositionSelect: [],
+      editVideoId: "",
+      labelPosition: "left",
+      positionOptions: [],
       deletedDialog: false,
       editDialog: false,
       uploadVideo: false,
@@ -103,11 +108,13 @@ export default {
         limit: 12,
         file_id: "",
         classify_id: "",
-        video_name: ""
+        video_name: "",
+        position_id: [],
       },
       params: {
         video_name: "",
-        video_id: ""
+        video_id: "",
+        position_id: [],
       },
       videoAlbumId: "" //视频分类id
     };
@@ -170,6 +177,8 @@ export default {
     release() {
       this.form.classify_id = this.videoAlbumId;
       // this.form.video_name = this.videoName;
+      // console.log(this.form, "0000")
+      // return
       this.$http
         .post(globalConfig.server + "video/upload-video", this.form)
         .then(res => {
@@ -208,15 +217,21 @@ export default {
         this.editDialog = true;
       }
       let checkId = this.checkData[0];
-      this.videoData.forEach((item, index) => {
-        if(item.id == checkId) {
-          this.params.video_name = item.video_name
-        }
-      })
+      // this.editVideoId = this.checkData[0];
+      // this.videoData.forEach((item, index) => {
+      //   if(item.id == checkId) {
+      //     this.params.video_name = item.video_name
+      //   }
+      // })
+      this.getPositionName(checkId);
+      
     },
     // 编辑
     editName() {
       this.params.video_id = this.checkData[0];
+      this.params.video_name = this.formPositionName;
+      this.params.position_id = this.formPositionSelect;
+      console.log(this.params.position_id, "8888888")
       // this.params.video_name = this.editVideoName
       this.$http.post(globalConfig.server + "video/edit-video",this.params).then(res => {
         if(res.data.code == "10000") {
@@ -226,7 +241,13 @@ export default {
           })
           this.rendering();
           this.params.video_name = "";
+          this.formPositionSelect = [];
           this.editDialog = false;
+        } else {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          })
         }
       })
     },
@@ -263,11 +284,50 @@ export default {
       this.form.page = val;
       this.rendering(this.form.page);
       console.log(`当前页: ${val}`);
+    },
+    // 获取岗位
+    getPost(){
+      this.$http.get(globalConfig.server + "video/position-video").then(res => {
+        console.log(res, "11111")
+        if(res.data.code == "10000") {
+          res.data.data.forEach((item, index) => {
+            this.positionOptions.push({label: item.name, value: item.id})
+          })
+        }
+      })
+    },
+    // 获取岗位ID
+    getPositionId(val) {
+      this.form.position_id = val;
+    },
+    // 获取视频名称
+    getPositionName(id) {
+      this.$http.get(globalConfig.server  + "video/read-video?video_id=" + id).then(res => {
+        if(res.data.code == "10000") {
+          let positionID =  res.data.data.position_id;
+          this.formPositionName = res.data.data.video_name;
+          this.positionOptions.forEach((item, index) => {
+            positionID.forEach((val, key) => {
+              if(item.value == val) {
+                this.formPositionSelect.push(item.value);
+              }
+            })
+          })
+        }
+      })
+    },
+    // 编辑视屏名称
+    editPositionId(val) {
+      this.params.position_id = val;
+      console.log(val, "777777")
     }
   },
   created() {
     this.videoAlbumId = this.$route.query.classify_id;
     this.rendering();
+  },
+  mounted() {
+    this.getPost();
   }
 };
 </script>
@@ -302,7 +362,7 @@ export default {
   }
   .uploadVideo {
     .el-input {
-      width: 80%;
+      // width: 80%;
     }
   }
   .deletedInfo {

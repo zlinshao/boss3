@@ -139,12 +139,12 @@
               <el-row v-for="(item, index) in dutyResultLength" :key='index'>
                 <el-col :span="6">
                   <el-form-item label="认责人" class="acount-text">
-                    <el-select placeholder="请选择" value-key="value" v-if="!forbidEdit"  value="" v-model='accountability_info.dutyInfo[index].dutyUser' @change='selectUser(item, index)'>
+                    <el-select placeholder="请选择" value-key="value" v-if="!forbidEdit"  value="" v-model='accountability_info.dutyInfo[index].dutyUserName' @change='selectUser(item, index)'>
                       <el-option 
                         v-for="_item in account_holder"
-                        :key="_item.id"
+                        :key="_item.role_name"
                         :label="_item.role_name"
-                        :value="_item.id">
+                        :value="_item.role_name">
                       </el-option>
                     </el-select>
                     <div class="content" v-if="forbidEdit">
@@ -216,8 +216,8 @@
                 <el-col :span="12">
                   <el-form-item label="紧急程度" class="acount-text">
                     <el-radio-group v-model="params.emergency">
-                      <el-radio label="2">紧急</el-radio>
-                      <el-radio label="1">一般</el-radio>
+                      <el-radio :label="2">紧急</el-radio>
+                      <el-radio :label="1">一般</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
@@ -476,7 +476,9 @@
       //打开组织架构
       openOrganizeModal(target) {
         this.organizationDialog = true;
-        this.dutyIndex = Array.prototype.slice.call(target.path[2].classList).filter(i => i.indexOf('input-') > -1)[0].split('-')[1];
+        if( Array.prototype.slice.call(target.path[2].classList).filter(i => i.indexOf('input-') > -1)[0]){
+          this.dutyIndex = Array.prototype.slice.call(target.path[2].classList).filter(i => i.indexOf('input-') > -1)[0].split('-')[1];
+        }
         this.type = 'staff';
         this.length = 1;
       },
@@ -520,6 +522,7 @@
               this.isComplainOrder = false;
             }
             this.workOrderDetail = res.data.data;
+            this.params.emergency = this.workOrderDetail.emergency;
             this.account_holder = this.workOrderDetail.option.account_holder;
             this.type_of_complaint = this.workOrderDetail.type_of_complaint;
             this.channel_of_complaint = this.workOrderDetail.channel_of_complaint;
@@ -587,7 +590,7 @@
           next_follow_name: '',//下次跟进人
           content: '',//跟进结果
           album: '',//图片
-          emergency:'1'//紧急程度
+          emergency:'1',//紧急程度
         };
       },
       prompt(val, msg) {
@@ -617,6 +620,7 @@
       // 增进跟进结果
       addResult(id) {
         this.init();
+        this.params.emergency = this.workOrderDetail.emergency;
         this.params.id = id;
         this.showAddWork = true;
       },
@@ -657,12 +661,12 @@
       },
       //选择认责角色
       selectUser(i, ind){
-        let _id = this.accountability_info.dutyInfo[ind].dutyUser;
+        let _id = this.accountability_info.dutyInfo[ind].dutyUserName;
         let _this = this;
         this.account_holder.forEach(function(item, index){
-          if(item.id === _id){
+          if(item.role_name === _id){
             _this.accountability_info.dutyInfo[ind].dutyName = item.name;
-            _this.accountability_info.dutyInfo[ind].dutyUserName = item.role_name;
+            _this.accountability_info.dutyInfo[ind].dutyUser = item.id;
           }
         });
 
