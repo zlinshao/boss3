@@ -117,6 +117,8 @@
                     this.prompt('warning', res.data.msg);
                   }
                 })
+              } else {
+                this.cityStatus = false;
               }
             } else {
               this.prompt('warning', res.data.msg);
@@ -153,6 +155,7 @@
           phone: '',
           city_id: '',
         };
+        this.cityStatus = false;
         this.is_corp = false;
       }
     }
