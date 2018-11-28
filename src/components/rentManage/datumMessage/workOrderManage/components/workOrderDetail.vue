@@ -659,10 +659,10 @@
       selectUser(i, ind){
         console.log(this.account_holder)
         console.log(i, ind)
-        let _id = this.accountability_info.dutyInfo[ind].dutyUser;
+        let _id = this.accountability_info.dutyInfo[ind].dutyUserName;
         let _this = this;
         this.account_holder.forEach(function(item, index){
-          if(item.id === _id){
+          if(item.role_name === _id){
             _this.accountability_info.dutyInfo[ind].dutyName = item.name;
             _this.accountability_info.dutyInfo[ind].dutyUser = item.id;
           }
