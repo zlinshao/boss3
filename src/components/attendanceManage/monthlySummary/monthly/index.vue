@@ -158,6 +158,7 @@
 <script>
 import organization from "../../../common/organization"; //组织架构
 import { setInterval } from 'timers';
+import { log } from 'util';
 export default {
   components: { organization },
   data() {
@@ -507,6 +508,27 @@ export default {
               attendanceArr = [];
               item.sort_dimension.forEach((key, ind) => {
                 attendanceObj = {};
+                let currentAttendance = false;  // 今天是否有排班
+                let currentMon = false;// 早上是否有 实际打卡
+                let currentWan = false;// 下班是否有 实际打卡
+                key.forEach((d, f) => {
+                  if(d.event_attribute == 3) {
+                    currentAttendance = true;  // 今日已排班
+                  }
+                  if(d.event_attribute == 1) {
+                        currentMon = true;
+                  }
+                  if(d.event_attribute == 2) {
+                        currentWan = true;
+                  }
+                })
+                if(currentAttendance  && !currentMon ){
+                    attendanceObj.resultWork = "缺卡"
+                }
+                if(currentAttendance  && !currentWan){
+                    attendanceObj.resultOffWork = "缺卡"
+                }
+
                 key.forEach((a, b) => {
                   attendanceObj.date = a.sign_date;
                   if(a.event_attribute == 1) {
