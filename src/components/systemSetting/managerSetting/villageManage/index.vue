@@ -266,7 +266,7 @@
     <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
 
      <!-- 组织架构 -->
-    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember" :depart="organization" :ids="selectedID"></organization>
+    <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"  :ids="selectedID"></organization>
   </div>
 </template>
 
@@ -282,6 +282,7 @@ export default {
   components: { RightMenu, VillageModule, VillageSearch, organization },
   data() {
     return {
+      personalList: [],
       distribution: false, // 分配框
       multipleSelection: [], //计数多选框
       btnDisable: true, // 分配按钮
@@ -392,7 +393,20 @@ export default {
     handleSelectionChange(val) {
     //  只支持删除一个
     this.communityArr = [];
-      this.multipleSelection = val;
+    this.multipleSelection = val;
+      // 默认选择所属部门
+       this.selectedID = [];
+       console.log(this.selectedID, "1111")
+       if(val.length) {
+         this.personalList.forEach((item, index) => {
+          if(item.id == val[0].id) {
+              item.orgs.forEach((value, key) => {
+                this.selectedID.push(value.id);
+              })
+            }
+          })
+                console.log(this.selectedID, "2222")
+       }
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
           this.communityArr.push(item.id)
@@ -412,19 +426,6 @@ export default {
         this.btnDisable = false;
       }
     },
-    subordinate(val) {
-      console.log(val);
-    },
-    distributionShow() {
-      this.distribution = true;
-    },
-    distributionClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    },
     myData(val) {
       this.villageLoading = true;
       this.emptyContent = " ";
@@ -439,13 +440,13 @@ export default {
             // this.currentPage = val;
             // this.tableData = res.data.data.list;
             let data = res.data.data.list;
+            this.personalList = data;
             this.tableData = [];
             for (let i = 0; i < data.length; i++) {
               let list = {};
               let departStr = ""
               data[i].orgs.forEach((item, index) => {
                 departStr += item.name + '，';
-                this.selectedID.push(item.id);
               })
               list.department = departStr.substring(0, departStr.length - 1);
               this.lengthStr = list.department;
