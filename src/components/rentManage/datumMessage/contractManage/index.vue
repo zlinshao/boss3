@@ -590,6 +590,7 @@
                     label="投诉">
                     <template slot-scope="scope">
                       <span v-if="scope.row.work_order" class="complain">{{scope.row.work_order}}</span>
+                      <div v-if="scope.row.work_order" class="lookOver">查看</div>
                       <span v-if="!scope.row.work_order" class="complain">0</span>
                     </template>
                   </el-table-column>

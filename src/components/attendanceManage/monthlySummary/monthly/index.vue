@@ -54,7 +54,14 @@
         </el-table-column>
         <el-table-column prop="create_time" label="导出时间">
         </el-table-column>
+        <el-table-column prop="update_time" label="导出完成时间" >
+          <template slot-scope="scope">
+            <div v-if="scope.row.ifStatus =='1'">{{scope.row.update_time}}</div>
+          </template>
+        </el-table-column>
         <el-table-column prop="status" label="导出结果">
+        </el-table-column>
+        <el-table-column prop="sort_user_count" label="人数">
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -150,10 +157,13 @@
 
 <script>
 import organization from "../../../common/organization"; //组织架构
+import { setInterval } from 'timers';
+import { log } from 'util';
 export default {
   components: { organization },
   data() {
     return {
+      ifStatus: "",
       dialogTotal: 0,
       uploadBtn: false,
       externalLink: [],
@@ -252,6 +262,10 @@ export default {
         _this.refresh();
       }
     };
+    // window.InitSetInterval = setInterval(_this.lookList(), 5000)
+  },
+  destroyed() {
+    // clearInterval(window.InitSetInterval)
   },
   methods: {
     retired(val) {
@@ -494,11 +508,37 @@ export default {
               attendanceArr = [];
               item.sort_dimension.forEach((key, ind) => {
                 attendanceObj = {};
+                let currentAttendance = false;  // 今天是否有排班
+                let currentMon = false;// 早上是否有 实际打卡
+                let currentWan = false;// 下班是否有 实际打卡
+                key.forEach((d, f) => {
+                  if(d.event_attribute == 3) {
+                    currentAttendance = true;  // 今日已排班
+                  }
+                  if(d.event_attribute == 1) {
+                        currentMon = true;
+                  }
+                  if(d.event_attribute == 2) {
+                        currentWan = true;
+                  }
+                })
+                if(currentAttendance  && !currentMon ){
+                    attendanceObj.resultWork = "缺卡"
+                }
+                if(currentAttendance  && !currentWan){
+                    attendanceObj.resultOffWork = "缺卡"
+                }
+
                 key.forEach((a, b) => {
                   attendanceObj.date = a.sign_date;
                   if(a.event_attribute == 1) {
                     if(a.status == 0)  {
                       attendanceObj.resultWork = "正常"  // 上班打卡正常
+                       key.forEach((c, d) => {
+                        if(c.event_attribute == 5) {
+                          attendanceObj.resultWork = "休息并打卡";
+                        }
+                      })
                     } else if(a.status == 1) {
                        attendanceObj.resultWork = "迟到"
                     } 
@@ -506,8 +546,13 @@ export default {
                   } else if(a.event_attribute == 2) {
                     if(a.status == 0)  {
                       attendanceObj.resultOffWork = "正常"   // 下班打卡正常
+                      key.forEach((c, d) => {
+                        if(c.event_attribute == 5) {
+                          attendanceObj.resultOffWork = "休息并打卡";
+                        }
+                      })
                     }else if(a.status == 2) {
-                       attendanceObj.resultWork = "早退"
+                      attendanceObj.resultWork = "早退"
                     }
                     attendanceObj.goOffWork = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班时间
                   } else if(a.event_attribute == 3) {
@@ -515,7 +560,10 @@ export default {
                   } else if(a.event_attribute == 4) {
                     attendanceObj.workOffShift = a.dimensions.hour + ":" + a.dimensions.minute;  // 下班班排版时间
                   } else if(a.event_attribute == 5) {
-                    attendanceObj.hugh = "休息"
+                    attendanceObj.hugh = "休息";
+                    if(key.length >1) {
+                      attendanceObj.resultWork = "休息并打卡";
+                    }
                   } 
                   if(a.status == 3) {
                     attendanceObj.resultOffWork = "补卡"
@@ -552,11 +600,14 @@ export default {
           this.dialogTotal = res.data.num;
           this.exportListData.forEach((item, index) => {
             if(item.status == "1") {
+              this.exportListData[index]["ifStatus"] = item.status;
               item.status = "导出完成";
               this.uploadBtn = false;
             } else {
+              this.exportListData[index]["ifStatus"] = item.status;
               this.uploadBtn = true;
-              item.status = "正在导出"
+              item.status = "正在导出";
+              // clearInterval(window.InitSetInterval)
             }
           })
         }
@@ -579,10 +630,11 @@ export default {
         }
       })
     },
-    // 
+    // 下载
     download(val) {
       window.open(val.file_id);
-    }
+    },
+
   }
 };
 </script>

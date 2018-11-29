@@ -1,6 +1,6 @@
 <template>
   <div id="editVacation">
-    <el-dialog :close-on-click-modal="false" title="修改退房信息" :visible.sync="editCollectVacationVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="修改退房信息" :visible.sync="editCollectVacationVisible" width="75%">
       <div class="scroll_bar"
            v-loading="isLoading"
            element-loading-text="拼命加载中"
@@ -822,40 +822,40 @@
           Number(this.params.water_fee) + Number(this.params.electricity_fee) + Number(this.params.gas_fee);
       },
       waterTotal() {
-        return (Number(this.params.water_now) - Number(this.params.water_last)) * Number(this.params.water_unit_price)
-          + Number(this.params.water_late_payment) + Number(this.params.water_other);
+        return ((Number(this.params.water_now) - Number(this.params.water_last)) * Number(this.params.water_unit_price)
+          + Number(this.params.water_late_payment) + Number(this.params.water_other)).toFixed(2);
       },
       elePeakTotal() {
-        return (Number(this.params.electricity_peak_now) - Number(this.params.electricity_peak_last)) * Number(this.params.electricity_peak_unit_price)
-          + Number(this.params.electricity_peak_late_payment) + Number(this.params.electricity_peak_other);
+        return ((Number(this.params.electricity_peak_now) - Number(this.params.electricity_peak_last)) * Number(this.params.electricity_peak_unit_price)
+          + Number(this.params.electricity_peak_late_payment) + Number(this.params.electricity_peak_other)).toFixed(2);
       },
       eleValTotal() {
-        return (Number(this.params.electricity_valley_now) - Number(this.params.electricity_valley_last)) * Number(this.params.electricity_valley_unit_price)
-          + Number(this.params.electricity_valley_late_payment) + Number(this.params.electricity_valley_other);
+        return ((Number(this.params.electricity_valley_now) - Number(this.params.electricity_valley_last)) * Number(this.params.electricity_valley_unit_price)
+          + Number(this.params.electricity_valley_late_payment) + Number(this.params.electricity_valley_other)).toFixed(2);
       },
       eleTotalTotal() {
-        return (Number(this.params.electricity_total_now) - Number(this.params.electricity_total_last)) * Number(this.params.electricity_total_unit_price)
-          + Number(this.params.electricity_total_late_payment) + Number(this.params.electricity_total_other);
+        return ((Number(this.params.electricity_total_now) - Number(this.params.electricity_total_last)) * Number(this.params.electricity_total_unit_price)
+          + Number(this.params.electricity_total_late_payment) + Number(this.params.electricity_total_other)).toFixed(2);
       },
       gasTotal() {
-        return (Number(this.params.gas_now) - Number(this.params.gas_last)) * Number(this.params.gas_unit_price)
-          + Number(this.params.gas_late_payment) + Number(this.params.gas_other);
+        return ((Number(this.params.gas_now) - Number(this.params.gas_last)) * Number(this.params.gas_unit_price)
+          + Number(this.params.gas_late_payment) + Number(this.params.gas_other)).toFixed(2);
       },
       managementTotal() {
-        return Number(this.params.property_management_total_fees) + Number(this.params.property_management_water_electricity);
+        return (Number(this.params.property_management_total_fees) + Number(this.params.property_management_water_electricity)).toFixed(2);
       },
       otherEnergyTotal(){
-        return Number(this.params.energy_other)
+        return Number(this.params.energy_other).toFixed(2)
       },
       otherTotal() {
-        return Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
-          + Number(this.params.other_fees) + Number(this.params.TV_fees) + Number(this.params.network_fees);
+        return (Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
+          + Number(this.params.other_fees) + Number(this.params.TV_fees) + Number(this.params.network_fees)).toFixed(2);
       },
       realTotal() {
-        return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) - Number(this.eleTotalTotal)
+        return (Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) - Number(this.eleTotalTotal)
           - Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
           - Number(this.params.sublease_fee) - Number(this.otherEnergyTotal)- Number(this.repair_cost) +
-          (this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit));
+          (this.params.profit_type == 1?Number(this.params.profit):-Number(this.params.profit))).toFixed(2);
       },
     },
     watch: {
