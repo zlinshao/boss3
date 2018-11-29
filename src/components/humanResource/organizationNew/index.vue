@@ -1508,8 +1508,7 @@
         this.addDepart(d);
       },
       GoHide(id,hidden) {
-        this.$http.put(globalConfig.server + 'organization/other/hidden-org',{
-          id,
+        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`,{
           hidden
         }).then(res =>{
           if(res.data.code == "700710"){
