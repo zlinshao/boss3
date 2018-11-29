@@ -101,7 +101,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item :label="customer_type + '电话'" class="repair-text">
+                <el-form-item label="房东电话" class="repair-text">
                   <div class="content">
                     <span v-if="repairDetail.landlord_mobile">{{repairDetail.landlord_mobile}}</span>
                     <span v-if="!repairDetail.landlord_mobile">暂无</span>
@@ -289,7 +289,7 @@
                 </div>
                 <div class="icon">
                   <div class="line" v-if="index !== 0"></div>
-                  <div class="circle"></div>
+                  <div class="circle" :class="{'lastestCircle':index === 0 && repairDetail.status !== 600}"></div>
                 </div>
                 <div class="text">
                   <span class="res-status" v-if="item.status" :class="{'lastest':index === 0 && repairDetail.status !== 600}">{{states[item.status]}}</span>
@@ -650,6 +650,9 @@
           bottom: 0px;
           left: 0;
         }
+        .lastestCircle.circle{
+          border-color: red;
+        }
       }
       .text{
         .res-status{
@@ -664,6 +667,7 @@
     .lastestStep{
       height: 40px;
     }
+    
     .repair-text label{
       color: #999;
     }
