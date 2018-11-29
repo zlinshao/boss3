@@ -658,7 +658,7 @@
         params.sum = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
-        console.log(params);
+        params.sum = this.trim(params.sum);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
@@ -675,7 +675,6 @@
           }
         })
       },
-      //电子收据签章
       signaturebtn() {
         this.pdfloading = true;
         this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
