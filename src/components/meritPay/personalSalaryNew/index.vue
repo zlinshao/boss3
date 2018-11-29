@@ -20,7 +20,7 @@
     components: {TraderSalary,ManagerSalary},
     data() {
       return {
-        activeName: 'second',
+        activeName: 'first',
       }
     },
     mounted() {

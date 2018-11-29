@@ -27,7 +27,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="params.depart_name" @focus="chooseDepart" placeholder="请选择部门"
+                      <el-input v-model="depart_name" @focus="chooseDepart('depart')" placeholder="请选择部门"
                                 readonly>
                         <template slot="append">
                           <div style="cursor: pointer;" @click="closeDepart">清空</div>
@@ -72,7 +72,7 @@
           :empty-text="emptyText"
           v-loading="allLoading"
           element-loading-text="拼命加载中"
-          element-loading-icon="element-icon-spinner"
+          element-loading-icon="element-icon-loading"
           element-loading-background="rgba(255,255,255,0)"
           @row-click="LookDetail"
           highlight-current-row
@@ -97,6 +97,9 @@
 
       <!--表格2-->
       <div class="detail">
+        <div  style="text-align: right;margin-top: 25px;">
+          <el-button type="primary" size="mini" @click="exportDetail">导出详情</el-button>
+        </div>
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
           <el-tab-pane label="收房相关" name="first">
             <div>
@@ -105,7 +108,7 @@
                 :empty-text="collectEmptyText"
                 v-loading="collectLoading"
                 element-loading-text="拼命加载中"
-                element-loading-icon="element-icon-spinner"
+                element-loading-icon="element-icon-loading"
                 element-loading-background="rgba(255,255,255,0)"
               >
                 <el-table-column label="片区名称" prop="sign_org.name"></el-table-column>
@@ -139,7 +142,7 @@
                 :empty-text="rentEmptyText"
                 v-loading="rentLoading"
                 element-loading-text="拼命加载中"
-                element-loading-icon="element-icon-spinner"
+                element-loading-icon="element-icon-loading"
                 element-loading-background="rgba(255,255,255,0)"
               >
                 <el-table-column label="片区名称" prop="sign_org.name"></el-table-column>
@@ -169,23 +172,33 @@
           </el-tab-pane>
         </el-tabs>
       </div>
+
+      <!--组织架构-->
+      <organization :organizationDialog="organizeVisible" :length="length" :type="organizeType" @close="closeOrganize"
+                    @selectMember="selectMember"></organization>
     </div>
 </template>
 <script>
+  import organization from '../../../common/organization';
+
     export default{
         name:'managersalary',
+      components:{ organization },
         data(){
             return{
               url: globalConfig.server,
-              url2: "http://192.168.20.188/boss-ng/public/",
               activeName: 'first',
               params: {
                 page: 1,
                 limit:10,
                 search: '',
-                depart_name: '',
+                depart_ids: '',
                 date: ''
               },
+              depart_name: '',
+              organizeVisible: false,
+              organizeType: '',
+              length: 0 ,
               detailParams: {
                 page: 1,
                 limit: 10,
@@ -228,7 +241,7 @@
             }else {
               this.rentLoading = true;
             }
-            this.$http.get(this.url2 + "salary/achv/getmanagerSalaDetail",{
+            this.$http.get(this.url + "salary/achv/getmanagerSalaDetail",{
               params: this.detailParams
             }).then(res => {
               if(res.data.code === "88800"){
@@ -289,20 +302,31 @@
             })
           },
           //打开部门
-          chooseDepart() {
-            this.$message("此功能尚未开启，敬请期待...");
-            return false;
+          chooseDepart(type) {
+            this.organizeVisible = true;
+            this.organizeType = type;
+            this.length = 1;
+          },
+          closeOrganize() {
+
+          },
+          selectMember(val) {
+            this.params.depart_ids = val[0].id;
+            this.depart_name = val[0].name;
           },
           //清空部门
           closeDepart() {
-            this.params.depart_name = "";
+            this.depart_name = "";
+            this.params.depart_ids = "";
           },
           //搜索
           goSearch() {
             this.getManagerSalary();
+            this.isHigh = false;
           },
           //重置
           goReset() {
+            this.closeDepart();
             this.getCurrentDate();
           },
           //切换click
@@ -316,7 +340,20 @@
           },
           //导出
           exportData() {
-            this.$message('功能尚未开启！');
+            window.location.href = this.url + `salary/achv/getmanagerSala?page=${this.params.page}&limit=${this.params.limit}&depart_ids=${this.params.depart_ids}&
+            date=${this.params.date}&export=1`
+          },
+          //导出详情
+          exportDetail() {
+            if(!this.detailParams.staff_ids){
+              this.$notify.warning({
+                title: "警告",
+                message: "请先选择管理员"
+              });
+              return false;
+            }
+            window.location.href = this.url + `salary/achv/getmanagerSalaDetail?page=${this.detailParams.page}&limit=${this.detailParams.limit}&staff_ids=${this.detailParams.staff_ids}&
+            category=${this.detailParams.category}&date=${this.detailParams.date}&export=1`;
           },
         }
     }
