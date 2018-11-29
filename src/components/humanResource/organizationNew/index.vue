@@ -137,6 +137,7 @@
                           <el-select v-model="params.is_dimission" size="mini" clearable>
                             <el-option key="0" label="在职" value="0">在职</el-option>
                             <el-option key="1" label="离职" value="1">离职</el-option>
+                            <el-option key="10" label="禁用" value="10">禁用</el-option>
                           </el-select>
                         </el-col>
                       </el-row>
@@ -1508,8 +1509,7 @@
         this.addDepart(d);
       },
       GoHide(id,hidden) {
-        this.$http.put(globalConfig.server + 'organization/other/hidden-org',{
-          id,
+        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`,{
           hidden
         }).then(res =>{
           if(res.data.code == "700710"){

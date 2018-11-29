@@ -18,6 +18,7 @@
       <div style="text-align: right;margin-top: 15px;">
         <el-pagination
           @current-change="handleCurrentChange"
+          :page-size="params.limit"
           :current-page.sync="params.page"
           layout="total, prev, pager, next"
           :total="count">

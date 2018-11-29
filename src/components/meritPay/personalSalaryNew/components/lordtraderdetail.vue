@@ -1,11 +1,11 @@
 <template>
     <div id="lordtraderdetail">
       <div class="highRanking" style=" float:right;z-index:65535;margin:7px 10px 0 0;">
-        <div class="highHide">
-          <el-button size="mini" type="primary" @click="exportDetail">导出详情</el-button>
-        </div>
       </div>
-        <el-tabs v-model="activeName2" type="border-card" @tab-click="handleClick">
+      <div style="text-align: right;margin-top: 15px;">
+        <el-button size="mini" type="primary" @click="exportDetail">导出详情</el-button>
+      </div>
+        <el-tabs v-model="activeName2" @tab-click="handleClick">
         <el-tab-pane label="收房相关" name="first">
             <div class="table-list">
                 <el-table
@@ -26,54 +26,49 @@
                     width="150px"
                     ></el-table-column>
                     <el-table-column
-                    label="收房状态"
-                    prop="house_type"
+                    label="片区名称"
+                    prop="sign_org.name"
                     ></el-table-column>
                     <el-table-column
-                    label="付款状态"
-                    prop="lord_data.lord_pay_way"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                    label="签约年数"
-                    prop="lord_data.lord_duration"
+                      label="收房人"
+                      prop="staff_name"
                     ></el-table-column>
                     <el-table-column
-                    label="单价"
-                    prop="lord_data.lord_month_price"
+                      label="原收房价"
+                      prop="collect_price"
                     ></el-table-column>
-                    <el-table-column
-                    label="空置期"
-                    prop="lord_data.lord_vacancy_date"
-                    ></el-table-column>
-                    <el-table-column
-                    label="中介费"
-                    prop="lord_data.lord_property_fee"
-                    ></el-table-column>
-                    <el-table-column
-                    label="实际业绩"
-                    prop="achv_res.lord.basic_achievement"
-                    ></el-table-column>
-                    <el-table-column
-                    label="溢出业绩"
-                    prop="achv_res.lord.overflow"
-                    ></el-table-column>
-                    <el-table-column
-                    label="提成"
-                    prop="achv_res.lord.real_money"
-                    ></el-table-column>
-                    <el-table-column
-                    label="维护费"
-                    prop="achv_res.lord.extra_award"
-                    ></el-table-column>
-                    <el-table-column
-                    label="名称"
-                    prop="lord_data.sign_user_id.name"
-                    ></el-table-column>
-                    <el-table-column
-                    label="所属部门"
-                    prop="department"
-                    ></el-table-column>
+                  <el-table-column
+                    label="重新定义收房价"
+                    prop="house.suggest_price"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房年限"
+                    prop="month"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房空置期"
+                    prop="vacancy"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房中介费"
+                    prop="medi_cost"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房付款方式"
+                    prop="pay_type"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房实际业绩"
+                    prop="achv_real"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房溢出业绩"
+                    prop="achv_overflow"
+                  ></el-table-column>
+                  <el-table-column
+                    label="收房人绩效"
+                    prop="amount_due"
+                  ></el-table-column>
                 </el-table>
             </div>
         </el-tab-pane>
@@ -87,64 +82,63 @@
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)">
-                    <el-table-column
-                    label="发喜报日期"
-                    prop="bulletin_date"
-                    ></el-table-column>
-                    <el-table-column
+                      <el-table-column
+                        label="片区名称"
+                        prop="sign_org.name"
+                      ></el-table-column>
+                  <el-table-column
                     label="房屋地址"
                     prop="address"
-                    width="150px"
-                    ></el-table-column>
-                    <el-table-column
-                    label="收房状态"
-                    prop="house_type"
-                    ></el-table-column>
-                    <el-table-column
-                    label="付款状态"
-                    prop="lord_data.lord_pay_way"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                    label="签约年数"
-                    prop="lord_data.lord_duration"
-                    ></el-table-column>
-                    <el-table-column
-                    label="单价"
-                    prop="lord_data.lord_month_price"
-                    ></el-table-column>
-                    <el-table-column
-                    label="空置期"
-                    prop="lord_data.lord_vacancy_date"
-                    ></el-table-column>
-                    <el-table-column
-                    label="中介费"
-                    prop="lord_data.lord_property_fee"
-                    ></el-table-column>
-                    <el-table-column
-                    label="实际业绩"
-                    prop="achv_res.lord.basic_achievement"
-                    ></el-table-column>
-                    <el-table-column
-                    label="溢出业绩"
-                    prop="achv_res.lord.overflow"
-                    ></el-table-column>
-                    <el-table-column
-                    label="提成"
-                    prop="achv_res.lord.real_money"
-                    ></el-table-column>
-                    <el-table-column
-                    label="维护费"
-                    prop="achv_res.lord.extra_award"
-                    ></el-table-column>
-                    <el-table-column
-                    label="名称"
-                    prop="lord_data.sign_user_id.name"
-                    ></el-table-column>
-                    <el-table-column
-                    label="所属部门"
-                    prop="department"
-                    ></el-table-column>
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房人"
+                    prop="staff_name"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房喜报时间"
+                    prop="bulletin_date"
+                  ></el-table-column>
+                  <el-table-column
+                    label="合同开始时间"
+                    prop="rentContrct.start_at"
+                  ></el-table-column>
+                  <el-table-column
+                    label="是否新租"
+                    prop="is_doc_achv"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房价格"
+                    prop="rent_price"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房付款方式"
+                    prop="pay_type"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房消耗空置期"
+                    prop="vacancy"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房中介费"
+                    prop="medi_cost"
+                  ></el-table-column>
+                  <el-table-column
+                    label="合同签约周期"
+                    prop="month"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房实际业绩"
+                    prop="achv_real"
+                  ></el-table-column>
+                  <el-table-column
+                  label="租房溢出业绩"
+                  prop="achv_overflow"
+                  ></el-table-column>
+                  <el-table-column
+                    label="租房人绩效"
+                    prop="amount_due"
+                  ></el-table-column>
+
                 </el-table>
             </div>
         </el-tab-pane>
@@ -179,7 +173,7 @@
     watch:{
        staff_id(val){
            this.getListData();
-       } 
+       }
     },
     methods: {
         getListData() {
