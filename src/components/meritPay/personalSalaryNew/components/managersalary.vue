@@ -46,7 +46,7 @@
                     <el-form-item>
                       <div class="block">
                         <el-date-picker
-                          v-model="params.month"
+                          v-model="date"
                           type="month"
                           placeholder="选择月"
                           value-format="yyyyMM">
@@ -67,20 +67,30 @@
       </div>
       <!--表格1-->
       <div>
-        <el-table>
-          <el-table-column label="员工姓名" prop="name"></el-table-column>
-          <el-table-column label="工资月份" prop="month"></el-table-column>
-          <el-table-column label="总溢出工资" prop="moreSalary"></el-table-column>
-          <el-table-column label="总溢出金额" prop="moreMoney"></el-table-column>
-          <el-table-column label="总溢出业绩" prop="moreWork"></el-table-column>
-          <el-table-column label="到手金额" prop="getMoney"></el-table-column>
-          <el-table-column label="总奖励" prop="allAward"></el-table-column>
+        <el-table
+          :data="allSalary"
+          :empty-text="emptyText"
+          v-loading="allLoading"
+          element-loading-text="拼命加载中"
+          element-loading-icon="element-icon-spinner"
+          element-loading-background="rgba(255,255,255,0)"
+          @row-click="LookDetail"
+          highlight-current-row
+        >
+          <el-table-column label="员工姓名" prop="sign_user.name"></el-table-column>
+          <el-table-column label="片区" prop="sign_org.name"></el-table-column>
+          <el-table-column label="工资月份" prop="achv_month"></el-table-column>
+          <el-table-column label="绩效" prop="amount_due"></el-table-column>
+          <el-table-column label="认责" prop="duty"></el-table-column>
+          <el-table-column label="综合工资" prop="achv"></el-table-column>
         </el-table>
         <div style="text-align: right;">
           <el-pagination
             size="mini"
             layout="total,prev,pager,next"
-            :total="1000"
+            :current-page="params.page"
+            :page-size="params.limit"
+            :total="allCount"
           ></el-pagination>
         </div>
       </div>
@@ -90,28 +100,69 @@
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
           <el-tab-pane label="收房相关" name="first">
             <div>
-              <el-table>
-                <el-table-column label=""></el-table-column>
+              <el-table
+                :data="collectList"
+                :empty-text="collectEmptyText"
+                v-loading="collectLoading"
+                element-loading-text="拼命加载中"
+                element-loading-icon="element-icon-spinner"
+                element-loading-background="rgba(255,255,255,0)"
+              >
+                <el-table-column label="片区名称" prop="sign_org.name"></el-table-column>
+                <el-table-column label="房屋名称" prop="house.name"></el-table-column>
+                <el-table-column label="收房人" prop="lord.sign_user_id.name"></el-table-column>
+                <el-table-column label="原收房均价" prop="lord.lord_month_price"></el-table-column>
+                <el-table-column label="重新定收房均价" prop="suggest_price"></el-table-column>
+                <el-table-column label="收房年限" prop="lord.lord_duration"></el-table-column>
+                <el-table-column label="收房空置期" prop="lord.lord_vacancy_date"></el-table-column>
+                <el-table-column label="收房中介费" prop="lord.lord_agency_count"></el-table-column>
+                <el-table-column label="收房付款方式" prop="lord.lord_pay_way"></el-table-column>
+                <el-table-column label="收房综合金额" prop="achv"></el-table-column>
+                <el-table-column label="认责" prop="duty"></el-table-column>
+                <el-table-column label="净得金额" prop="amount_due"></el-table-column>
               </el-table>
               <div style="text-align: right;">
                 <el-pagination
+                  :page-size="detailParams.limit"
+                  :current-page="detailParams.page"
                   size="mini"
                   layout="total,prev,pager,next"
-                  :total="1000"
+                  :total="collectCount"
                 ></el-pagination>
               </div>
             </div>
           </el-tab-pane>
           <el-tab-pane label="租房相关" name="second">
             <div>
-              <el-table>
-                <el-table-column label=""></el-table-column>
+              <el-table
+                :data="rentList"
+                :empty-text="rentEmptyText"
+                v-loading="rentLoading"
+                element-loading-text="拼命加载中"
+                element-loading-icon="element-icon-spinner"
+                element-loading-background="rgba(255,255,255,0)"
+              >
+                <el-table-column label="片区名称" prop="sign_org.name"></el-table-column>
+                <el-table-column label="房屋名称" prop="house.name"></el-table-column>
+                <el-table-column label="租房人" prop="sign_user.name"></el-table-column>
+                <el-table-column label="租房喜报时间" prop="rent.bulletindate"></el-table-column>
+                <el-table-column label="合同开始时间" prop="rent.start_at"></el-table-column>
+                <el-table-column label="是否新租" prop="achv.typical"></el-table-column>
+                <el-table-column label="租房价格" prop="rent.rent_month_price"></el-table-column>
+                <el-table-column label="租房付款方式" prop="rent.rent_pay_way"></el-table-column>
+                <el-table-column label="租房消耗空置期" prop="rent.rent_vacancy_date"></el-table-column>
+                <el-table-column label="租房中介费" prop="rent.rent_agency_count"></el-table-column>
+                <el-table-column label="合同签约周期" prop="rent.rent_sign_month"></el-table-column>
+                <el-table-column label="认责" prop="duty"></el-table-column>
+                <el-table-column label="净得" prop="amount_due"></el-table-column>
               </el-table>
               <div style="text-align: right;">
                 <el-pagination
                   size="mini"
+                  :page-size="detailParams.limit"
+                  :current-page="detailParams.page"
                   layout="total,prev,pager,next"
-                  :total="1000"
+                  :total="rentCount"
                 ></el-pagination>
               </div>
             </div>
@@ -125,30 +176,139 @@
         name:'managersalary',
         data(){
             return{
+              url: globalConfig.server,
+              url2: "http://192.168.20.188/boss-ng/public/",
               activeName: 'first',
               params: {
+                page: 1,
+                limit:10,
                 search: '',
                 depart_name: '',
-                month: ''
+                date: ''
               },
-              isHigh: false
+              detailParams: {
+                page: 1,
+                limit: 10,
+                date: '',
+                staff_ids: '',
+                category: 1
+              },
+              date: '',
+              isHigh: false,
+              allSalary: [],
+              allCount: 0,
+              emptyText: "",
+              allLoading: false,
+              collectList: [],
+              collectCount: 0,
+              collectLoading: false,
+              collectEmptyText: "",
+              rentList: [],
+              rentCount: 0,
+              rentLoading: false,
+              rentEmptyText: "",
             }
         },
+      mounted() {
+          this.getCurrentDate();
+          this.getManagerSalary();
+      },
         methods:{
+          getDetailSalary() {
+            this.detailParams.date = this.date.split("/").join("").substring(2,6);
+            if(!this.detailParams.staff_ids){
+              this.$notify.warning({
+                title: "警告",
+                message: "请先选择管理员"
+              });
+              return false;
+            }
+            if(this.detailParams.category === 1){
+              this.collectLoading  = true;
+            }else {
+              this.rentLoading = true;
+            }
+            this.$http.get(this.url2 + "salary/achv/getmanagerSalaDetail",{
+              params: this.detailParams
+            }).then(res => {
+              if(res.data.code === "88800"){
+                if(this.detailParams.category === 1){
+                  this.collectLoading = false;
+                  this.collectEmptyText = " ";
+                  this.collectList = res.data.data.data;
+                  this.collectCount = res.data.data.count;
+                }else {
+                  this.rentLoading = false;
+                  this.rentEmptyText = " ";
+                  this.rentList = res.data.data.data;
+                  this.rentCount = res.data.data.count;
+                }
+              }else {
+                if(this.detailParams.category ===1){
+                  this.collectLoading = false;
+                  this.collectEmptyText = "暂无数据";
+                  this.collectList = [];
+                  this.collectCount = 0;
+                }else {
+                  this.rentLoading = false;
+                  this.rentEmptyText = "暂无数据";
+                  this.rentList = [];
+                  this.rentCount = 0;
+                }
+              }
+            }).catch(err => {
+              console.log(err);
+            })
+          },
+          LookDetail(row) {
+            this.detailParams.staff_ids = row.staff_id;
+            this.getDetailSalary();
+          },
+          getCurrentDate(){
+            this.date = new Date().toLocaleDateString();
+          },
+          getManagerSalary() {
+            this.allLoading = true;
+            this.params.date = this.date.split("/").join("").substring(2,6);
+            this.$http.get(this.url + "salary/achv/getmanagerSala",{
+              params: this.params
+            }).then(res => {
+              if(res.data.code === "88800"){
+                  this.allLoading = false;
+                  this.emptyText = " ";
+                  this.allSalary = res.data.data.data;
+                  this.allCount = res.data.data.count;
+              }else {
+                  this.allSalary = [];
+                  this.allCount = 0;
+                  this.allLoading = false;
+                  this.emptyText = "暂无数据";
+              }
+            }).catch(err => {
+              console.log(err);
+            })
+          },
           //打开部门
-          chooseDepart() {},
+          chooseDepart() {
+            this.$message("此功能尚未开启，敬请期待...");
+            return false;
+          },
           //清空部门
           closeDepart() {
             this.params.depart_name = "";
           },
           //搜索
-          goSearch() {},
+          goSearch() {
+            this.getManagerSalary();
+          },
           //重置
-          goReset() {},
+          goReset() {
+            this.getCurrentDate();
+          },
           //切换click
           handleTabClick(tab) {
-            this.$message('you checkout' + tab.label);
-            console.log(tab);
+            this.detailParams.category = parseInt(tab.index) + 1;
+            this.getDetailSalary();
           },
           //高级
           highGrade() {
