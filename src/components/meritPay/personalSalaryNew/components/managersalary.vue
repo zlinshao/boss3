@@ -281,6 +281,8 @@
             this.date = new Date().toLocaleDateString();
           },
           getManagerSalary() {
+            this.collectList = [];
+            this.rentList = [];
             this.allLoading = true;
             this.params.date = this.date.split("/").join("").substring(2,6);
             this.$http.get(this.url + "salary/achv/getmanagerSala",{
