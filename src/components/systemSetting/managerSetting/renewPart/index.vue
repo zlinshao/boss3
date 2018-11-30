@@ -62,7 +62,8 @@
                 this.Loading = false;
                 this.tableList = res.data.data.data;
                 this.count = res.data.data.count;
-              }else {
+              }else{
+                this.Loading = false;
                 this.tableList = [];
                 this.emptyText = "暂无数据";
               }
