@@ -25,6 +25,7 @@ export default {
     };
     // 去重空格
     Vue.prototype.trim = function (str) {
+      if(typeof str !== 'string') return str;
       return str.replace(/(^\s*)|(\s*$)/g, "");
     };
     // 数组拼接
