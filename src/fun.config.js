@@ -23,6 +23,11 @@ export default {
         })
       })
     };
+    // 去重空格
+    Vue.prototype.trim = function (str) {
+      if(typeof str !== 'string') return str;
+      return str.replace(/(^\s*)|(\s*$)/g, "");
+    };
     // 数组拼接
     Vue.prototype.montage = function (arr) {
       arr = Array.from(new Set(arr));
@@ -128,14 +133,14 @@ export default {
           break;
       }
     };
-    Vue.prototype.getPics = function (url,process_id,callback) {
-      this.$http.get(globalConfig.server + url + process_id).then(res=>{
+    Vue.prototype.getPics = function (url, process_id, callback) {
+      this.$http.get(globalConfig.server + url + process_id).then(res => {
         callback(res);
       })
     };
     const show = true;
     Vue.prototype.OutPut = function (...args) {
-      if(show){
+      if (show) {
         console.log(args);
       }
     }

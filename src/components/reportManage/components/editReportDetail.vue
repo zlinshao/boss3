@@ -23,7 +23,7 @@
                 </div>
                 <div class="auditStatus deal" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{deal}}
                 </div>
-                <div class="statuss"
+                <div class="statuss" @click="throughMan"
                      :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}">
                 </div>
                 <!-- <div v-if="showPriceRange" class="priceRegion" style="font-size:16px;color:orange">本小区价格区间：{{priceRegion}}</div> -->
@@ -502,6 +502,7 @@
         },
         deal: '',
         role_name: [],
+        operators: [],
         showContent: false,
 
         defaultItem: '评论信息',
@@ -574,27 +575,34 @@
           this.isClear = false;
         }
       },
-      staffDetailDialog(val) {
-        if (val) {
-          if (this.process.user && this.process.user.org && this.process.user.org[0] && this.process.user.org[0].leader_id) {
-            this.$http.get(globalConfig.server + 'manager/staff/' + this.process.user.org[0].leader_id).then((res) => {
-              if (res.data.code === '10020') {
-                this.leader_phone = res.data.data.phone;
-                this.leader_name = res.data.data.name;
-              }
-            });
-          }
-        } else {
-          this.leader_phone = '';
-          this.leader_name = '';
-        }
-      }
+      // staffDetailDialog(val) {
+      //   if (val) {
+      //     if (this.process.user && this.process.user.org && this.process.user.org[0] && this.process.user.org[0].leader_id) {
+      //       this.$http.get(globalConfig.server + 'manager/staff/' + this.process.user.org[0].leader_id).then((res) => {
+      //         if (res.data.code === '10020') {
+      //           this.leader_phone = res.data.data.phone;
+      //           this.leader_name = res.data.data.name;
+      //         }
+      //       });
+      //     }
+      //   } else {
+      //     this.leader_phone = '';
+      //     this.leader_name = '';
+      //   }
+      // }
     },
     methods: {
       // 审批人信息
       approvePersonal() {
         if (this.place.auditors) {
           this.role_name = this.place.auditors;
+          this.showContent = true;
+        }
+      },
+      // 通过人
+      throughMan(){
+        if (this.operators.length !== 0) {
+          this.role_name = this.operators;
           this.showContent = true;
         }
       },
@@ -658,7 +666,7 @@
         params.sum = this.reportDetailData.show_content['总金额'] || this.reportDetailData.show_content['款项金额'] || "";
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
-        console.log(params);
+        params.sum = this.trim(params.sum);
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
@@ -675,7 +683,6 @@
           }
         })
       },
-      //电子收据签章
       signaturebtn() {
         this.pdfloading = true;
         this.$http.post(globalConfig.server + '/financial/receipt/sign/' + this.electronicReceiptId).then((res) => {
@@ -789,6 +796,7 @@
 
         this.houseId = data.process.house_id;
         let pro = data.process;
+        this.operators = data.operators;
         this.personal = pro.user;
         this.place = pro.place;
         this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;

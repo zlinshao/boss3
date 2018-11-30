@@ -113,11 +113,11 @@
             prop="achv_real">
           </el-table-column>
           <el-table-column
-            label="总到手金额"
+            label="总绩效"
             prop="amount_due">
           </el-table-column>
           <el-table-column
-            label="总服务费"
+            label="总奖励"
             prop="services_fee">
           </el-table-column>
         </el-table>
@@ -182,7 +182,6 @@
         },
         methods:{
           getTableData() {
-            console.log(this.form);
             if (this.month) {
               this.form.date = this.month.substring(2);
             }

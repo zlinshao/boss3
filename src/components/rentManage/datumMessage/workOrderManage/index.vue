@@ -172,7 +172,7 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @row-dblclick="dblClickTable"
                 @sort-change="sortByTime"
-                :default-sort = "{prop: 'newest_follow_time', order: 'descending'}"
+                :default-sort = "{prop: '', order: 'descending'}"
                 style="width: 100%">
                 <el-table-column
                   prop="emergency"
@@ -300,7 +300,7 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @row-dblclick="dblClickTable"
                 @sort-change="sortByTime"
-                :default-sort = "{prop: 'newest_follow_time', order: 'descending'}"
+                :default-sort = "{prop: '', order: 'descending'}"
                 style="width: 100%">
                 <el-table-column
                   prop="emergency"
@@ -534,6 +534,7 @@
           finish_time: '',
           type: '',
           module: 1,
+          sort: '',
         },
         follow_name: '',   //跟进人
         length: 0,
@@ -561,6 +562,7 @@
         rentStatus: ' ',
         rentLoading: false,
         totalLoading:false,
+        
       }
     },
     created() {
@@ -696,21 +698,21 @@
       },
       //收租房工单排序
       sortByTime(column, prop, order){
-        let paramSort = '',
-            module = 1;
+        // let paramSort = '',
+        let   module = 1;
         if(column.column){
           if(column.column.property === 'create_time'){
             if(column.order === 'descending'){
-              paramSort = '12';
+              this.params.sort = '12';
             }else if(column.order === 'ascending'){
-              paramSort = '21';
+              this.params.sort = '21';
             }
           }
           if(column.column.property === 'newest_follow_time'){
             if(column.order === 'descending'){
-              paramSort = '34';
+              this.params.sort = '34';
             }else if(column.order === 'ascending'){
-              paramSort = '43';
+              this.params.sort = '43';
             }
           }
           if(this.activeName === 'first'){
@@ -718,8 +720,8 @@
           }else if(this.activeName === 'second'){
             module = 2;
           }
-          console.log(paramSort);
-          this.$http.get(globalConfig.server + '/customer/work_order?pages=1&limit=12&keywords=&follow_status=&follow_id=&follow_time=&update_time=&finish_time=&type=&module='+ module +'&sort=' + paramSort).then(res => {
+          console.log(this.params.sort);
+          this.$http.get(globalConfig.server + '/customer/work_order?pages=1&limit=12&keywords=&follow_status=&follow_id=&follow_time=&update_time=&finish_time=&type=&module='+ module +'&sort=' + this.params.sort).then(res => {
             if (res.data.code === '100200'){
               if(module === 1){
                 console.log(res.data.data.data)

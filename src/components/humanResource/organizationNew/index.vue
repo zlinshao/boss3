@@ -137,6 +137,7 @@
                           <el-select v-model="params.is_dimission" size="mini" clearable>
                             <el-option key="0" label="在职" value="0">在职</el-option>
                             <el-option key="1" label="离职" value="1">离职</el-option>
+                            <el-option key="10" label="禁用" value="10">禁用</el-option>
                           </el-select>
                         </el-col>
                       </el-row>
@@ -920,7 +921,8 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="selectLevelDialog=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="levelConfirm">确 定</el-button>
+        <el-button size="small" type="primary" @click="levelConfirm()">复职</el-button>
+        <el-button size="small" type="primary" @click="levelConfirm('yes')">复职并发送入职消息</el-button>
       </span>
     </el-dialog>
 
@@ -1508,8 +1510,7 @@
         this.addDepart(d);
       },
       GoHide(id,hidden) {
-        this.$http.put(globalConfig.server + 'organization/other/hidden-org',{
-          id,
+        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`,{
           hidden
         }).then(res =>{
           if(res.data.code == "700710"){
@@ -1845,7 +1846,7 @@
         });
       },
       //选择复职等级
-      levelConfirm() {
+      levelConfirm(send) {
         this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -1854,6 +1855,9 @@
           this.$http.get(globalConfig.server + 'organization/staff/rehab/' + this.editId + '&level=' + this.levelForm.level).then((res) => {
             if (res.data.code === '710166') {
               this.prompt('success', res.data.msg);
+              if(send === 'yes'){
+                this.levelConfirmSendMsg(this.editId);
+              }
               this.getPostStaffData();
               this.getStaffData();
               this.selectLevelDialog = false;
@@ -1863,6 +1867,22 @@
             }
           });
         }).catch(() => {
+        });
+      },
+      //复职发送消息
+      levelConfirmSendMsg(id){
+        this.$http.get(globalConfig.server + `organization/staff/entry-mess/${id}`).then((res) => {
+          if(res.data.code === "710910"){
+            this.$notify.success({
+              title: "成功",
+              message: "发送成功"
+            });
+          }else {
+            this.$notify.warning({
+              title: "失败",
+              message: "发送失败"
+            });
+          }
         });
       },
       //员工右键回调
