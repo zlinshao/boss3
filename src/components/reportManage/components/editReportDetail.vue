@@ -819,7 +819,7 @@
           priceObj.room = pro.content.house_type[0];
           priceObj.community = pro.content.community.id;
           houseObj.room = pro.content.house_type[0];
-          houseObj.city = pro.content.city_id;
+          houseObj.city = pro.content.community.city.city_id;
           this.priceArea(priceObj);
           this.getHouseInfo(houseObj)
         } else {
