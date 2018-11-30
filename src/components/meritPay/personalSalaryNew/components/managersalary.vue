@@ -27,7 +27,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="depart_name" @focus="chooseDepart('depart')" placeholder="请选择部门"
+                      <el-input v-model="depart_name" @focus="chooseDepartment" placeholder="请选择部门"
                                 readonly>
                         <template slot="append">
                           <div style="cursor: pointer;" @click="closeDepart">清空</div>
@@ -302,13 +302,13 @@
             })
           },
           //打开部门
-          chooseDepart(type) {
+          chooseDepartment() {
             this.organizeVisible = true;
-            this.organizeType = type;
+            this.organizeType = 'depart';
             this.length = 1;
           },
           closeOrganize() {
-
+            this.organizeVisible = false;
           },
           selectMember(val) {
             this.params.depart_ids = val[0].id;
