@@ -150,6 +150,7 @@
         components:{Organization,RightMenu,LordtraderDetail},
         data(){
             return{
+              url: globalConfig.server,
                 isHigh: false,
                 tableData: [],
                 totalNum: 0,
@@ -186,7 +187,7 @@
             this.form.date = this.month.split("/").join("").substring(2,6);
             this.collectLoading = true;
             this.collectStatus = ' ';
-            this.$http.get(globalConfig.server + 'salary/achv/getSalary/',{params:this.form}).then((res) => {
+            this.$http.get(this.url + 'salary/achv/getSalary/',{params:this.form}).then((res) => {
               this.isHigh = false;
               this.collectLoading = false;
               if (res.data.code === '88800') {
@@ -255,7 +256,7 @@
             }
           },
           exportData(){
-            window.location.href = globalConfig.server + `salary/achv/getSalary/?page=${this.form.page}&limit=${this.form.limit}&date=${this.form.date}&staff_ids=${this.form.staff_ids}&
+            window.location.href = this.url + `salary/achv/getSalary/?page=${this.form.page}&limit=${this.form.limit}&date=${this.form.date}&staff_ids=${this.form.staff_ids}&
             depart_ids=${this.form.depart_ids}&export=1`;
           },
           // 右键
