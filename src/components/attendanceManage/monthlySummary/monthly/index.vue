@@ -509,7 +509,7 @@ export default {
               item.sort_dimension.forEach((key, ind) => {
                 attendanceObj = {};
                 let currentAttendance = false;  // 今天是否有排班
-                let currentMon = false;// 早上是否有 实际打卡
+                let currentMon = false;   // 早上是否有 实际打卡
                 let currentWan = false;// 下班是否有 实际打卡
                 key.forEach((d, f) => {
                   if(d.event_attribute == 3) {

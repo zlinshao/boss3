@@ -605,6 +605,7 @@
           this.initial();
           if (this.activeName == 'first') {
             this.$http.get(globalConfig.server + 'lease/collect/' + this.form.contract_id).then((res) => {
+              console.log(res)
               if (res.data.code === '61010') {
                 this.contractInfo = res.data.data;
                 this.agency_price_now = res.data.data.agency;
