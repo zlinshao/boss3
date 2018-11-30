@@ -66,7 +66,7 @@
                     v-for="item in contractInfo.operation.doc" :key="item"
                     @click.native="confirmPress(item)">
                     <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
-                    <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
+                    <span v-if="item === 'to_contract_approved'" @click.stop="contractEntry = true">合同资料无误，同意</span>
                     <span v-if="item === 'to_cancelled'">撤销审核</span>
                     <span v-if="item === 'to_contract_rejected'">合同资料有误，拒绝</span>
                     <span v-if="item === 'to_house_approved'">房屋资料无误，同意</span>
@@ -83,6 +83,230 @@
               </span>
             </el-button>
           </div>
+          <!-- =================================================== -->
+          <!-- 新增加弹窗框 -->
+          <el-dialog title="合同公司联录入" :visible.sync="contractEntry" width="40%">
+            <el-form size="mini" :model="contractForm" label-width="82px" ref="reference">
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="是否接通" required>
+                    <el-select v-model="contractForm.is_connect" placeholder="请选择">
+                      <el-option v-for="item in newconnectCategory" :label="item.name" :key="item.id"
+                                :value="item.id">{{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <div v-if="contractForm.is_connect === 1">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="合同周期" required>
+                  <el-input class="input" v-model="contractForm.contract_month" style="width:50%;float:left;">
+                    <template slot="append">
+                      <div>月</div>
+                    </template>
+                  </el-input>
+                  <el-input class="input" v-model="contractForm.contract_day" style="width:50%;float:left;">
+                    <template slot="append">
+                      <span>天</span>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="来源" required>
+                  <el-select v-model="contractForm.originate" placeholder="请选择来源" clearable>
+                    <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
+                               :value="item.id">{{item.dictionary_name}}
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row v-if="contractForm.originate === 623">
+              <el-col :span="12">
+                <el-form-item label="中介名称" required>
+                  <el-input v-model="contractForm.agency"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="中介价格" required>
+                  <el-input v-model="contractForm.agency_price"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row v-if="contractForm.originate === 623">
+              <el-col :span="12">
+                <el-form-item label="中介人" required>
+                  <el-input v-model="contractForm.agency_person"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="中介电话" required>
+                  <el-input v-model="contractForm.agency_tel"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row v-for="index in newpriceLen" :key="index">
+              <el-col :span="14">
+                <el-form-item label="月单价" v-if="index==1" required>
+                  <el-date-picker
+                    v-model="contractForm.unit_price[0][index-1]"
+                    type="daterange"
+                    align="right"
+                    unlink-panels
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions2"
+                    @change="priceChange(index-1)">
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item v-if="index!=1" required>
+                  <el-date-picker
+                    v-model="contractForm.unit_price[0][index-1]"
+                    type="daterange"
+                    align="right"
+                    unlink-panels
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions2"
+                    @change="priceChange(index-1)"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2" style="float: right;" v-if="index == 1">
+                <i @click="addPriceLen" class="el-icon-circle-plus-outline addicon"></i>
+              </el-col>
+              <el-col :span="2" style="float: right;" v-if="index != 1">
+                <i @click="romovePriceLen(index-1)" class="el-icon-remove-outline addicon"></i>
+              </el-col>
+              <el-col :span="6" style="float: right;">
+                <el-input size="mini" v-model="contractForm.unit_price[1][index-1]" placeholder="请输入价格"></el-input>
+              </el-col>
+            </el-row>
+            <el-row v-for="index in newpayForLen" :key="index+111">
+              <el-col :span="14">
+                <el-form-item label="付款方式" required v-if="index==1">
+                  <el-date-picker
+                    v-model="contractForm.pay_type[0][index-1]"
+                    type="daterange"
+                    align="right"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    unlink-panels
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions2"
+                    @change="payTypeChange(index-1)">
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item required v-if="index!=1">
+                  <el-date-picker
+                    v-model="contractForm.pay_type[0][index-1]"
+                    type="daterange"
+                    align="right"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    unlink-panels
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions2"
+                    @change="payTypeChange(index-1)">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2" style="float: right;" v-if="index == 1">
+                <i @click="addPayLen" class="el-icon-circle-plus-outline addicon"></i>
+              </el-col>
+              <el-col :span="2" style="float: right;" v-if="index != 1">
+                <i @click="romovePayLen(index-1)" class="el-icon-remove-outline addicon"></i>
+              </el-col>
+              <el-col :span="6" style="float: right;" v-if=" activeName =='first'">
+                <el-select size="mini" v-model="contractForm.pay_type[1][index-1]" placeholder="收房付款方式" clearable>
+                  <el-option v-for="item in newpayTypeInfo" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id">{{item.dictionary_name}}
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
+                <span>押</span>
+                <el-select style="width:60px;" size="mini" v-model="contractForm.pay_type[1][index-1]" clearable>
+                  <el-option v-for="item in 48" :label="item" :key="item"
+                             :value="item">
+                  </el-option>
+                </el-select>
+                <span>付</span>
+                <el-input size="mini" style="width:46px;" v-model="contractForm.pay_type[2][index-1]"></el-input>
+              </el-col>
+            </el-row>
+            <el-row v-if=" activeName == 'second'">
+              <el-col :span="12">
+                <el-form-item label="已付金额" required>
+                  <el-input v-model="contractForm.has_pay"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row v-for="index in newpayTypeLen" v-if="activeName == 'second'" :key="index+222">
+              <el-col :span="12">
+                <el-form-item label="支付方式" required>
+                  <el-select v-model="contractForm.pay_method[0][index-1]" placeholder="请选择" clearable>
+                    <el-option v-for="item in payTypeCategory" :label="item.dictionary_name" :key="item.id"
+                               :value="item.id">{{item.dictionary_name}}
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2" style="float: right;" v-if="index == 1">
+                <i @click="addPayTypeLen" class="el-icon-circle-plus-outline addicon"></i>
+              </el-col>
+              <el-col :span="2" style="float: right;" v-if="index != 1">
+                <i @click="romovePayTypeLen(index-1)" class="el-icon-remove-outline addicon"></i>
+              </el-col>
+              <el-col :span="10" style="float: right;">
+                <el-form-item label="金额">
+                  <el-input size="mini" v-model="contractForm.pay_method[1][index-1]" placeholder="请输入价格"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-col :span="12">
+                <el-form-item label="保修期" required>
+                  <el-input class="input" v-model="contractForm.guarantee_month" style="width:50%;float:left;">
+                    <template slot="append">
+                      <div>月</div>
+                    </template>
+                  </el-input>
+                  <el-input class="input" v-model="contractForm.guarantee_day" style="width:50%;float:left;">
+                    <template slot="append">
+                      <span>天</span>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+          </div>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="contractEntry = false" size="mini">取 消</el-button>
+              <el-button type="primary" @click="confirmAgain = true" size="mini">确 定</el-button>
+            </span>
+          </el-dialog>
+          <el-dialog title="提示" :visible.sync="confirmAgain" width="30%">
+            <span>确定保存</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="confirmAgain = false" size="mini">取 消</el-button>
+              <el-button type="primary" @click="newBouncing" size="mini">确 定</el-button>
+            </span>
+          </el-dialog>
+          <!-- =================================================== -->
           <!--精简模式-->
           <div style="display: inline-block" @click="switchSimple">
             <el-button type="primary" size="mini" style="background: #6a8dfb;color: #fff;" v-if="!simple">
@@ -1696,6 +1920,63 @@
     components: {Organization, MemorandumRecord, ApprovalHistory},
     data() {
       return {
+        // 新增字段
+        confirmAgain: false,
+        contractEntry: false,
+        newconnectCategory: [{id: 1, name: '已接通'}, {id: 2, name: '未接通'}],
+        contractForm: {
+          is_connect: "",
+          contract_month: "", //合同周期_月
+          contract_day: "",   //合同周期_日
+          guarantee_month: "",//保修期_月
+          guarantee_day: "",  //保修期_日
+          originate: "",      //来源
+          agency: "",         //中介名称
+          agency_price: "",   //中介费用
+          agency_person: "",  //中介人
+          agency_tel: "",     //中介电话
+          unit_price: [[],[],],      //月单价
+          pay_type: [[], [],[],],       //付款方式
+          pay_method: [[],[],],      //支付方式
+          has_pay: "",        //已支付的费用
+          contract_id: this.$route.query.id,    //合同编号
+          module: 1
+        },
+        responsiblePersonCategory: [],
+        payTypeCategory: [],
+        newpriceLen: 1,
+        newpayForLen: 1,
+        newpayTypeLen: 1,
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        activeName: "first",
+        newpayTypeInfo: [],
+        // =======================
         simple: false,
         steps: 0,
         sizeForm: {},
@@ -1826,9 +2107,112 @@
         handler(val, oldVal) {
           this.canSendStatus = val !== this.history_content;
         }
-      }
+      },
+      // 新赠方法 ====================================
+      newpriceLen(val) {
+        let data = this.contractForm.unit_price;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+      },
+      newpayForLen(val) {
+        let data = this.form.pay_type;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+      },
+      // =============================================
     },
     methods: {
+      // 新增方法
+      priceChange(n) {
+        let data = this.contractForm.unit_price;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = n; i < this.newpriceLen; i++) {
+            if ((i + 1) < this.newpriceLen) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              this.$set(this.contractForm.unit_price[0], priceDate);
+            }
+          }
+        }
+      },
+      addPriceLen(index) {
+        this.newpriceLen++;
+      },
+      romovePriceLen(index) {
+        this.newpriceLen--;
+        this.contractForm.unit_price[0].splice(index, 1);
+        this.contractForm.unit_price[1].splice(index, 1);
+      },
+      payTypeChange(n) {
+        let data = this.contractForm.pay_type;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = n; i < this.newpayForLen; i++) {
+            if ((i + 1) < this.newpayForLen) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              this.$set(this.contractForm.pay_type[0], priceDate);
+            }
+          }
+        }
+      },
+      addPayLen(index) {
+        this.newpayForLen++;
+      },
+      romovePayLen(index) {
+        this.newpayForLen--;
+        if (this.activeName == 'first') {
+          this.contractForm.pay_type[0].splice(index, 1);
+          this.contractForm.pay_type[1].splice(index, 1);
+        }
+        else {
+          this.contractForm.pay_type[0].splice(index, 1);
+          this.contractForm.pay_type[1].splice(index, 1);
+          this.contractForm.pay_type[2].splice(index, 1);
+        }
+      },
+      addPayTypeLen(index) {
+        this.newpayTypeLen++;
+      },
+      romovePayTypeLen(index) {
+        this.newpayTypeLen--;
+        this.contractForm.pay_method[0].splice(index, 1);
+        this.contractForm.pay_method[1].splice(index, 1);
+      },
+      newBouncing() {
+        this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
+          if(res.data.code == '20010') {
+            this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            })
+            this.confirmAgain = false;
+            this.contractEntry = false;
+            this.$refs.reference.resetFields()
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            })
+          }
+        })
+      },
+      // ==================================
       switchSimple() {
         this.simple = !this.simple;
         if (this.simple) {
@@ -2173,7 +2557,7 @@
         this.$http.get(globalConfig.server + 'lease/collect/' + this.contract_id).then((res) => {
           this.loadingStatus = false;
           if (res.data.code === '61010') {
-
+            console.log(res)
             this.contractInfo = res.data.data;
             this.customersInfo = res.data.data.customers;
 
@@ -2271,6 +2655,17 @@
         this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
           this.all_dic = res.data.data;
         })
+        // 新增字典====================================
+        this.dictionary(622).then((res) => {  //回访来源
+          this.responsiblePersonCategory = res.data;
+        });
+        this.dictionary(443).then((res) => {  //收房付款方式
+          this.newpayTypeInfo = res.data;
+        });
+        this.dictionary(629).then((res) => {  //支付方式
+          this.payTypeCategory = res.data;
+        });
+        // ============================================
       },
 
       matchDictionary(id) {
@@ -2382,6 +2777,7 @@
         });
       },
       confirmPress(val) {
+        // this.contractEntry = true;
         this.approveParams.operation = val;
         this.$confirm('您确认操作吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -2571,6 +2967,12 @@
       border-radius: 50%;
       cursor: pointer;
       text-align: center;
+    }
+    .addicon {
+      font-size: 20px;
+      line-height: 28px;
+      margin-left: 28px;
+      cursor: pointer;
     }
   }
 </style>

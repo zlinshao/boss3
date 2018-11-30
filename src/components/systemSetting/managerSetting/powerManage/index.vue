@@ -384,11 +384,11 @@
         }).then((res) => {
           this.tableLoading1 = false;
           if (res.data.code === '20000') {
-            let data = res.data.data.data;
-            if (data.length !== 0) {
-              this.tableFirst = data;
-              this.firstClick(data[0]);
+            var result = res.data.data.data;
+            if (result.length !== 0) {
+              this.tableFirst = result;
               this.paging1 = res.data.data.count;
+              this.firstClick(result[0]);
             }
           } else {
             this.paging1 = 0;
@@ -405,7 +405,7 @@
           }
         })
       },
-      firstClick(row) {
+      firstClick(row){
         this.addID.firstID = row.id;
         this.moduleList(1);
         this.secondPage = 1;
@@ -423,10 +423,10 @@
         }).then((res) => {
           this.tableLoading2 = false;
           if (res.data.code === '20000') {
-            let data = res.data.data.data;
-            if (data.length !== 0) {
-              this.tableSecond = data;
-              this.secondClick(data[0]);
+            let result = res.data.data.data;
+            if (result.length !== 0) {
+              this.tableSecond = result;
+              this.secondClick(result[0]);
               this.paging2 = res.data.data.count;
             }
           } else {
