@@ -172,6 +172,7 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @row-dblclick="dblClickTable"
                 @sort-change="sortByTime"
+                @header-click="removeSort"
                 :default-sort = "{prop: '', order: 'descending'}"
                 style="width: 100%">
                 <el-table-column
@@ -187,7 +188,9 @@
                 </el-table-column>
                 <el-table-column
                   prop="create_time"
-                  label="创建时间" sortable="custom">
+                  label="创建时间"
+                  ref="create_time_collect"
+                  sortable="custom">
                   <template slot-scope="scope">
                     <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                     <span v-if="!scope.row.create_time">暂无</span>
@@ -195,7 +198,9 @@
                 </el-table-column>
                 <el-table-column
                   prop="newest_follow_time"
-                  label="跟进时间" sortable="custom">
+                  label="跟进时间"
+                  ref="newest_follow_time_collect"
+                  sortable="custom">
                   <template slot-scope="scope">
                     <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
                     <span v-if="!scope.row.newest_follow_time">暂无</span>
@@ -300,6 +305,7 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @row-dblclick="dblClickTable"
                 @sort-change="sortByTime"
+                @header-click="removeSort"
                 :default-sort = "{prop: '', order: 'descending'}"
                 style="width: 100%">
                 <el-table-column
@@ -315,7 +321,9 @@
                 </el-table-column>
                 <el-table-column
                   prop="create_time"
-                  label="创建时间" sortable="custom">
+                  label="创建时间"
+                  ref="create_time_rent"
+                  sortable="custom">
                   <template slot-scope="scope">
                     <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                     <span v-if="!scope.row.create_time">暂无</span>
@@ -323,7 +331,9 @@
                 </el-table-column>
                 <el-table-column
                   prop="newest_follow_time"
-                  label="跟进时间" sortable="custom">
+                  label="跟进时间"
+                  ref="newest_follow_time_rent"
+                  sortable="custom">
                   <template slot-scope="scope">
                     <span v-if="scope.row.newest_follow_time">{{scope.row.newest_follow_time}}</span>
                     <span v-if="!scope.row.newest_follow_time">暂无</span>
@@ -593,7 +603,6 @@
         }
       },
       handleClick() {
-        console.log(this.activeName)
         this.close_();
         if (this.activeName === "first") {
           this.params.module = 1;
@@ -698,8 +707,6 @@
       },
       //收租房工单排序
       sortByTime(column, prop, order){
-        // let paramSort = '',
-        let   module = 1;
         if(column.column){
           if(column.column.property === 'create_time'){
             if(column.order === 'descending'){
@@ -715,23 +722,30 @@
               this.params.sort = '43';
             }
           }
-          if(this.activeName === 'first'){
-            module = 1;
-          }else if(this.activeName === 'second'){
-            module = 2;
-          }
-          console.log(this.params.sort);
-          this.$http.get(globalConfig.server + '/customer/work_order?pages=1&limit=12&keywords=&follow_status=&follow_id=&follow_time=&update_time=&finish_time=&type=&module='+ module +'&sort=' + this.params.sort).then(res => {
+          this.$http.get(globalConfig.server + '/customer/work_order', {params: this.params}).then(res => {
             if (res.data.code === '100200'){
-              if(module === 1){
-                console.log(res.data.data.data)
+              if(this.params.module === 1){
                 this.collectTableData = res.data.data.data;
-                console.log(555)
-              }else if(module === 2){
+                this.getTime(1);
+              }else if(this.params.module === 2){
                 this.rentTableData = res.data.data.data;
+                this.getTime(2);
               }
             }
           })
+        }
+      },
+      //清除排序
+      removeSort(column){
+        this.params.sort = '';
+        if(column.property === "create_time" || column.property === "newest_follow_time"){
+          if(this.activeName === "first"){
+            this.$refs.create_time_collect.owner.clearSort();
+            this.collectDatafunc();
+          }else if(this.activeName === "second"){
+            this.$refs.create_time_rent.owner.clearSort();
+            this.rentDatafunc();
+          }
         }
       },
       handleSizeChange(val) {
