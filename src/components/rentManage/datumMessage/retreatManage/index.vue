@@ -225,6 +225,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="check_time"
+                  sortable="custom"
                   label="退房时间">
                 </el-table-column>
                 <el-table-column
@@ -384,6 +385,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="check_time"
+                  sortable="custom"
                   label="退房时间">
                 </el-table-column>
                 <el-table-column
@@ -689,22 +691,39 @@
           this.getName(house_id, false);
         })
       },
-      //根据退款时间排序
+      //根据退款时间或退房时间排序
       sortByTime(column, prop, order){
+        this.show = false;
         let param = {};
-        if(column.column && column.column.property === 'checkout_time'){
+        if(column.column && (column.column.property === 'checkout_time' || column.column.property === 'check_time')){
           if(this.activeName === 'first'){
-            if(column.order === 'descending'){
-              this.params.sort = '56'
-            }else if(column.order === 'ascending'){
-              this.params.sort = '65'
+            if(column.column.property === 'checkout_time'){
+              if(column.order === 'descending'){
+                this.params.sort = '56'
+              }else if(column.order === 'ascending'){
+                this.params.sort = '65'
+              }
+            }else if(column.column.property === 'check_time'){
+              if(column.order === 'descending'){
+                this.params.sort = '78'
+              }else if(column.order === 'ascending'){
+                this.params.sort = '87'
+              }
             }
             param = this.params;
           }else if(this.activeName === 'second'){
-            if(column.order === 'descending'){
-              this.params_second.sort = '56'
-            }else if(column.order === 'ascending'){
-              this.params_second.sort = '65'
+            if(column.column.property === 'checkout_time'){
+              if(column.order === 'descending'){
+                this.params_second.sort = '56'
+              }else if(column.order === 'ascending'){
+                this.params_second.sort = '65'
+              }
+            }else if(column.column.property === 'check_time'){
+              if(column.order === 'descending'){
+                this.params_second.sort = '78'
+              }else if(column.order === 'ascending'){
+                this.params_second.sort = '87'
+              }
             }
             param = this.params_second;
           }
@@ -721,8 +740,7 @@
       },
       //清除排序
       removeSort(column){
-        console.log(this.$refs)
-        if(column.property === "checkout_time"){
+        if(column.property === "checkout_time" || column.property === "check_time"){
           if(this.activeName === "first"){
             this.params.sort = '';
             this.$refs.check_time_lord.owner.clearSort();
