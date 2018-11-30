@@ -53,6 +53,7 @@
 
           <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc"
                style="display: inline-block">
+              <el-button type="primary" size="mini" @click.stop="contractEntry = true">合同公司联录入</el-button>
             <el-dropdown>
               <el-button type="primary" size="mini">
               <span v-if="contractInfo.doc_status">
@@ -66,7 +67,7 @@
                     v-for="item in contractInfo.operation.doc" :key="item"
                     @click.native="confirmPress(item)">
                     <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
-                    <span v-if="item === 'to_contract_approved'" @click.stop="contractEntry = true">合同资料无误，同意</span>
+                    <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
                     <span v-if="item === 'to_cancelled'">撤销审核</span>
                     <span v-if="item === 'to_contract_rejected'">合同资料有误，拒绝</span>
                     <span v-if="item === 'to_house_approved'">房屋资料无误，同意</span>
@@ -86,7 +87,7 @@
           <!-- =================================================== -->
           <!-- 新增加弹窗框 -->
           <el-dialog title="合同公司联录入" :visible.sync="contractEntry" width="40%">
-            <el-form size="mini" :model="contractForm" label-width="82px" ref="reference">
+            <el-form size="mini" :model="contractForm" label-width="82px" ref="contractForm">
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="是否接通" required>
@@ -304,6 +305,22 @@
             <span slot="footer" class="dialog-footer">
               <el-button @click="confirmAgain = false" size="mini">取 消</el-button>
               <el-button type="primary" @click="newBouncing" size="mini">确 定</el-button>
+            </span>
+          </el-dialog>
+          <el-dialog title="合同对比" :visible.sync="contrastContractDialog" width="30%">
+            <div class="content">
+              <div style="color: #e4393c;font-size: 14px">客户{{this.contrastContent}}</div>
+              <div v-for="(item, index) in this.contrastContentList" :key="index">
+                      {{item}}
+              </div>
+              <div style="color: #e4393c;font-size: 14px">行政{{this.administrativeContent}}</div>
+              <div v-for="(item, index) in this.administrativeContentList" :key="index">
+                      {{item}}
+              </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="contrastContractDialog = false" size="mini">取 消</el-button>
+              <el-button type="primary" @click="contrastContractDialog = false" size="mini">确 定</el-button>
             </span>
           </el-dialog>
           <!-- =================================================== -->
@@ -1921,11 +1938,16 @@
     data() {
       return {
         // 新增字段
+        contrastContractDialog: false,
         confirmAgain: false,
         contractEntry: false,
+        contrastContent: "",
+        contrastContentList: [],
+        administrativeContent: "",
+        administrativeContentList: [],
         newconnectCategory: [{id: 1, name: '已接通'}, {id: 2, name: '未接通'}],
         contractForm: {
-          is_connect: "",
+          is_connect: 1,
           contract_month: "", //合同周期_月
           contract_day: "",   //合同周期_日
           guarantee_month: "",//保修期_月
@@ -2137,6 +2159,21 @@
     },
     methods: {
       // 新增方法
+      contractFormClear() {
+        this.contractForm.contract_month = "";
+        this.contractForm.contract_day = "";
+        this.contractForm.guarantee_month = "";
+        this.contractForm.guarantee_day = "";
+        this.contractForm.originate = "";
+        this.contractForm.agency = "";
+        this.contractForm.agency_price = "";
+        this.contractForm.agency_person = "";
+        this.contractForm.agency_tel = "";
+        this.contractForm.unit_price = [[],[],];
+        this.contractForm.pay_type = [[], [],[],];
+        this.contractForm.pay_method = [[],[],];
+        this.contractForm.has_pay = "";
+      },
       priceChange(n) {
         let data = this.contractForm.unit_price;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
@@ -2203,11 +2240,30 @@
             })
             this.confirmAgain = false;
             this.contractEntry = false;
-            this.$refs.reference.resetFields()
+            this.contractFormClear();
+             this.contrastContract();
           } else {
             this.$notify.warning({
               title: "警告",
               message: res.data.msg
+            })
+          }
+        })
+      },
+      // 对比
+      contrastContract() {
+        this.$http.get(globalConfig.server + "contract/contract_diff/diff?module=1&contract_id=" + this.$route.query.id).then(res => {
+          if(res.data.code == "20010") {
+            this.contrastContractDialog = true;
+            console.log(res.data.data.custome_service)
+            this.contrastContent = res.data.data.custome_service.split('#')[0];
+            this.contrastContentList = res.data.data.custome_service.split('#')[1].split(';');
+            this.administrativeContent = res.data.data.administrative.split('#')[0];
+           this.administrativeList = res.data.data.administrative.split('#')[1].split(';');
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              success: res.data.msg
             })
           }
         })
