@@ -187,17 +187,6 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="emergency"
-                  label="紧急程度">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.emergency === 1 && scope.row.follow_status !== 338"
-                          :class="scope.row.overdueTime > currentTime ? 'orange' : 'blue'">{{scope.row.overdueTime}}</span>
-                    <span v-if="scope.row.emergency === 2 && scope.row.follow_status !== 338"
-                          style="color:red">紧急</span>
-                    <span v-if="!scope.row.emergency"></span>
-                  </template>
-                </el-table-column>
-                <el-table-column
                   prop="create_time"
                   label="创建时间"
                   ref="create_time_collect"
