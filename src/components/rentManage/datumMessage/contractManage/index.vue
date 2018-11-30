@@ -819,9 +819,15 @@
     <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId"
                  :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
+    <!--投诉列表-->                 
     <ComplainList :complainListDialog="complainListDialog" :complainData="complainData" @close="closeModal">
     </ComplainList>
-
+    <!--收房报销单-->
+    <AddCollectReimbursement :addCollectReimbursementDialog="addCollectReimbursementDialog" :contract="addReturnInfo"
+                             @close="closeModal"></AddCollectReimbursement>
+    <!--租房报销单-->
+    <AddRentReimbursement :addRentReimbursementDialog="addRentReimbursementDialog" :contract="addReturnInfo"
+                          @close="closeModal"></AddRentReimbursement>
 
     <Organization :organizationDialog="allotVisible" :type="allotType" :length="allotLength"
                   @close="allotCloseOrganization" @selectMember="allotSelectMember"></Organization>
@@ -839,6 +845,8 @@
   import AddRentRepair from '../../components/addRentRepair.vue'                       //添加租客维修
   import AddFollowUp from '../../components/addFollowUp.vue'                           //增加跟进记录
   import ComplainList from '../../components/complainList'                             //投诉记录
+  import AddCollectReimbursement from "../../components/addCollectReimbursement.vue";      //添加房屋报销单
+  import AddRentReimbursement from "../../components/addRentReimbursement.vue";            //添加租客报销单
 
   export default {
     name: 'hello',
@@ -852,7 +860,9 @@
       AddCollectRepair,
       AddRentRepair,
       AddFollowUp,
-      ComplainList
+      ComplainList,
+      AddCollectReimbursement,
+      AddRentReimbursement
     },
     data() {
       return {
@@ -987,6 +997,8 @@
         addRentRepairDialog: false,       //租客添加维修
         addFollowUpDialog: false,         //添加工单
         complainListDialog:false,         //投诉列表
+        addCollectReimbursementDialog: false,  //添加房屋报销单
+        addRentReimbursementDialog: false,  //添加租客报销单
         addReturnvisitDialog: false,
         leaseHistoryDialog: false,
         leaseHistoryTableData: [],
@@ -1151,6 +1163,8 @@
         this.addRentRepairDialog = false;
         this.addFollowUpDialog = false;
         this.complainListDialog = false;
+        this.addCollectReimbursementDialog = false;
+        this.addRentReimbursementDialog = false;
         if (val === 'updateCollect') {
           this.collectDatafunc();
         } else if (val === 'updateRent') {
@@ -1418,6 +1432,7 @@
             },
             {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
             {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
+            {clickIndex: 'addRentReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
             {clickIndex: 'deleteRent', headIcon: 'el-icon-delete', label: '删除',},
           ];
         } else {
@@ -1440,6 +1455,7 @@
             },
             {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
             {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
+            {clickIndex: 'addCollectReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
             {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
           ];
         }
@@ -1472,6 +1488,12 @@
             break;
           case 'addFollowUpDialog':     //增加跟进
             this.addFollowUpDialog = true;
+            break;
+          case 'addCollectReimbursementDialog':
+            this.addCollectReimbursementDialog = true;
+            break;
+          case 'addRentReimbursementDialog':
+            this.addRentReimbursementDialog = true;
             break;
           case 'lookLeaseHistory':
             this.leaseHistoryDialog = true;

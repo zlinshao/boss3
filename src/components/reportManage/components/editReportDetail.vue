@@ -520,6 +520,7 @@
         leader_name: '',
         showPriceRange: false, //显示价格区间
         priceRegion: '',
+        houseSourceInfo: '',
         disabledBtn: true,
       }
     },
@@ -813,10 +814,14 @@
         if (pro.content.bulletin_type === "bulletin_quality" && pro.place.name === "appraiser-officer_review") {
           this.showPriceRange = true;
           let priceObj = {};
+          let houseObj = {};
           priceObj.decorate = pro.content.decorate.id;
           priceObj.room = pro.content.house_type[0];
           priceObj.community = pro.content.community.id;
-          this.priceArea(priceObj)
+          houseObj.room = pro.content.house_type[0];
+          houseObj.city = pro.content.community.city.city_id;
+          this.priceArea(priceObj);
+          this.getHouseInfo(houseObj)
         } else {
           this.showPriceRange = false;
         }

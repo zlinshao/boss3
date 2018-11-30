@@ -165,6 +165,7 @@
         }
       },
       contract(val) {
+        console.log(val.contract_id)
         this.form.contract_id = val.contract_id;
         this.address = val.address;
       },
@@ -230,7 +231,7 @@
       initial() {
         this.form = {
           module: 2, //租房
-          contract_id: '', //合同Id
+          contract_id: this.contract.contract_id, //合同Id
           reimbursement_number: '', //维修单编号
           type: '', //报销类型
           source: '', //来源
