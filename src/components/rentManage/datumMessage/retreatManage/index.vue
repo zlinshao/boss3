@@ -190,6 +190,8 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @row-dblclick="dblClickTable"
                 @row-contextmenu='houseMenu'
+                @sort-change="sortByTime"
+                @header-click="removeSort"
                 style="width: 100%">
                 <el-table-column
                   label="合同编号">
@@ -230,10 +232,16 @@
                   label="退房性质">
                 </el-table-column>
                 <el-table-column
+                  prop="checkout_time"
+                  sortable="custom"
+                  ref="check_time_lord"
+                  label="退款时间">
+                </el-table-column>
+                <el-table-column
                   label="总费用">
                   <template slot-scope="scope">
                     <span v-if="scope.row.details && scope.row.details.total_fees">
-                      {{scope.row.details.total_fees}}
+                      {{scope.row.details.total_fees.toFixed(2)}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -242,7 +250,7 @@
                   label="应退费用">
                   <template slot-scope="scope">
                     <span v-if="scope.row.details&&scope.row.details.should_be_returned_fees">
-                      {{scope.row.details.should_be_returned_fees}}
+                      {{scope.row.details.should_be_returned_fees.toFixed(2)}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -251,7 +259,7 @@
                   label="能源费用">
                   <template slot-scope="scope">
                     <span v-if="scope.row.details&&scope.row.details.deduct_energy_fees">
-                      {{scope.row.details.deduct_energy_fees}}
+                      {{scope.row.details.deduct_energy_fees.toFixed(2)}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -260,7 +268,7 @@
                   label="其他费用">
                   <template slot-scope="scope">
                     <span v-if="scope.row.details&&scope.row.details.others_fees">
-                      {{scope.row.details.others_fees}}
+                      {{scope.row.details.others_fees.toFixed(2)}}
                     </span>
                     <span v-else="">/</span>
                   </template>
@@ -341,6 +349,8 @@
                 element-loading-background="rgba(255, 255, 255, 0)"
                 @row-dblclick="dblClickTable"
                 @row-contextmenu='houseMenu'
+                @sort-change="sortByTime"
+                @header-click="removeSort"
                 style="width: 100%">
                 <el-table-column
                   label="合同编号">
@@ -379,6 +389,12 @@
                 <el-table-column
                   prop="check_types"
                   label="退房性质">
+                </el-table-column>
+                <el-table-column
+                  prop="checkout_time"
+                  sortable="custom"
+                  ref="check_time_rent"
+                  label="退款时间">
                 </el-table-column>
                 <el-table-column
                   label="总费用">
@@ -532,6 +548,7 @@
           check_house_time: [],
           status: '',
           org_id: '',
+          sort:'',
         },
         org_name: '',
         params_second: {
@@ -544,6 +561,7 @@
           check_house_time: [],
           status: '',
           org_id: '',
+          sort:''
         },
 
 
@@ -670,6 +688,52 @@
           }
           this.getName(house_id, false);
         })
+      },
+      //根据退款时间排序
+      sortByTime(column, prop, order){
+        let param = {};
+        if(column.column && column.column.property === 'checkout_time'){
+          if(this.activeName === 'first'){
+            if(column.order === 'descending'){
+              this.params.sort = '56'
+            }else if(column.order === 'ascending'){
+              this.params.sort = '65'
+            }
+            param = this.params;
+          }else if(this.activeName === 'second'){
+            if(column.order === 'descending'){
+              this.params_second.sort = '56'
+            }else if(column.order === 'ascending'){
+              this.params_second.sort = '65'
+            }
+            param = this.params_second;
+          }
+          this.$http.get(globalConfig.server + 'customer/check_out', {params: param}).then(res => {
+            if (res.data.code === '20000'){
+              if(this.activeName === 'first'){
+                this.tableData = res.data.data.data;
+              }else if(this.activeName === 'second'){
+                this.tableData_second = res.data.data.data;
+              }
+            }
+          })
+        }
+      },
+      //清除排序
+      removeSort(column){
+        console.log(this.$refs)
+        if(column.property === "checkout_time"){
+          if(this.activeName === "first"){
+            this.params.sort = '';
+            this.$refs.check_time_lord.owner.clearSort();
+            this.getData_collect();
+          }else if(this.activeName === 'second'){
+            this.params_second.sort = '';
+            this.$refs.check_time_rent.owner.clearSort();
+            this.getData_rent();
+          }
+          
+        }
       },
       //切换标签页
       handleClick() {
