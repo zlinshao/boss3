@@ -7,6 +7,9 @@
       <el-tab-pane label="管理人员工资" name="second">
         <manager-salary></manager-salary>
       </el-tab-pane>
+      <el-tab-pane label="历史工资" name="third">
+        <history-salary></history-salary>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -14,10 +17,10 @@
 <script>
     import TraderSalary from './components/tradersalary';
     import ManagerSalary from './components/managersalary';
-
+    import historySalary from './components/historySalary.vue';
   export default {
     name: "index",
-    components: {TraderSalary,ManagerSalary},
+    components: {TraderSalary,ManagerSalary,historySalary},
     data() {
       return {
         activeName: 'first',
