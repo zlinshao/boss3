@@ -44,7 +44,14 @@
                   <el-table-column
                     label="收房年限"
                     prop="month"
-                  ></el-table-column>
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.month">
+                        {{ scope.row.month / 12 }}
+                      </span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     label="收房空置期"
                     prop="vacancy"
@@ -104,8 +111,12 @@
                   ></el-table-column>
                   <el-table-column
                     label="是否新租"
-                    prop="is_doc_achv"
-                  ></el-table-column>
+                    prop="typical"
+                  >
+                    <template slot-scope="scope">
+                      {{ scope.row.typical && scope.row.typical === 1 ? '新租' : '二次出租'}}
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     label="租房价格"
                     prop="rent_price"
@@ -192,6 +203,7 @@
           if (res.status == 200) {
             if (res.data.code == 88800) {
               this.detailData = res.data.data.data;
+              console.log(this.detailData);
               this.totalPage = res.data.data.count;
               this.getShow = false;
             } else {
@@ -229,7 +241,7 @@
           });
           return false;
         }
-        let url=globalConfig.server + 'salary/achv/commission/?export=1&staff_ids='+this.staff_id+'&start_time='+this.start_time+'&end_time='+this.end_time;
+        let url=globalConfig.server + 'salary/achv/getSalaryDetail/?export=1&staff_ids='+this.staff_id+'&start_time='+this.start_time+'&end_time='+this.end_time;
         window.location.href=url;
       }
     }
