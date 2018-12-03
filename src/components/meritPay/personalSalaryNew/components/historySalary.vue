@@ -136,10 +136,6 @@
             prop="deserved_salary">
           </el-table-column>
           <el-table-column
-            label="新绩效工资"
-            prop="new_basic_achv">
-          </el-table-column>
-          <el-table-column
             label="南京市最低工资计算最低工资"
             prop="nanjing_lowest_salary">
           </el-table-column>
