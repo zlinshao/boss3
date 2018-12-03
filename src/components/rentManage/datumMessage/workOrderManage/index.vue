@@ -496,6 +496,18 @@
               </el-pagination>
             </div>
           </div>
+          <div class="tableBottom" v-if="this.activeName === 'third'">
+            <div class="left">
+              <el-pagination
+                @current-change="totalCurrentChange"
+                :current-page="totalParam.page"
+                :page-sizes="[12, 20, 30, 40]"
+                :page-size="totalParam.limit"
+                layout="total, prev, pager, next, jumper"
+                :total="totalNumber">
+              </el-pagination>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -545,6 +557,10 @@
           type: '',
           module: 1,
           sort: '',
+        },
+        totalParam: {
+          page: 1,
+          limit: 12
         },
         follow_name: '',   //跟进人
         length: 0,
@@ -675,7 +691,7 @@
       //工单统计数据
       getTotalData(){
         this.totalLoading = true;
-        this.$http.get(globalConfig.server + 'customer/work_order/total').then(res => {
+        this.$http.get(globalConfig.server + 'customer/work_order/total', {params: this.totalParam}).then(res => {
           this.totalLoading = false;
           if(res.data.code === '10030'){
             if(res.data.data.sumCount){
@@ -701,7 +717,10 @@
               }
             }
             this.workOrderDataTotal = res.data.data;
+            this.totalNumber = res.data.data.meta.count;
             console.log(this.workPreview)
+          }else{
+            this.totalNumber = 0;
           }
         })
       },
@@ -755,6 +774,10 @@
         this.params.pages = val;
         this.searchList();
         this.$store.dispatch('workOrderFilter', this.params);
+      },
+      totalCurrentChange(val){
+        this.totalParam.page = val;
+        this.getTotalData()
       },
       //房屋右键
       houseMenu(row, event) {
