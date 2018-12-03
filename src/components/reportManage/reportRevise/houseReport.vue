@@ -36,7 +36,22 @@
             </el-col>
           </el-row>
           <el-row>
-
+            <el-col :span='6'>
+              <el-form-item label="物业费" required>
+                <el-col>
+                  <el-input placeholder="物业费单价" v-model="property_fee"></el-input>
+                </el-col>
+              </el-form-item>
+            </el-col>
+            <el-col :span='6'>
+              <el-form-item label="物业联系方式" required>
+                <el-col>
+                  <el-input placeholder="物业联系方式" v-model="property_phone"></el-input>
+                </el-col>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12">
               <el-form-item label="门牌地址" required>
                 <el-col :span="8" style="padding-right: 10px">
@@ -447,6 +462,8 @@
           account_id:'',            
           real_pay_at:''
         },
+        property_fee: '',                //物业费
+        property_phone: '',              //物业联系方式
         house_name: '',
 
         screenshot_leader: {},
@@ -518,6 +535,8 @@
             this.params.community = data.community;                 //小区id
             this.community_name = data.community.village_name;    //小区id
             this.params.door_address = data.door_address;
+            this.property_fee = data.community.property_fee;
+            this.property_phone = data.community.property_phone;
 
             if (data.house_type && Array.isArray(data.house_type)) {
               data.house_type.forEach((item, index) => {
@@ -698,9 +717,14 @@
           this.params.photo = val[1];
         }
       },
-
+      //物业费物业联系方式
+      prefillProperty(){
+        this.params.community.property_fee = this.property_fee;
+        this.params.community.property_phone = this.property_phone;
+      },
       confirmSubmit() {
         if (!this.isUpload) {
+          this.prefillProperty();
           this.$http.post(globalConfig.server + 'bulletin/quality', this.params).then((res) => {
             if (res.data.code === '51430') {
               this.$notify.success({
@@ -795,6 +819,8 @@
         this.type = '';
         this.selectType = '';
         this.isUpload = false;
+        this.property_phone = '';
+        this.property_fee = '';
       },
     },
   };
