@@ -86,6 +86,7 @@
         </el-table>
         <div style="text-align: right;">
           <el-pagination
+          @current-change="handleCurrentChange"
             size="mini"
             layout="total,prev,pager,next"
             :current-page="params.page"
@@ -279,6 +280,10 @@
           },
           getCurrentDate(){
             this.date = new Date().toLocaleDateString();
+          },
+          handleCurrentChange(val) {
+                this.params.page = val;
+                this.getManagerSalary();
           },
           getManagerSalary() {
             this.collectList = [];

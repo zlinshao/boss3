@@ -436,7 +436,7 @@
                  <span>处理中:</span><span>{{workPreview.editing}}</span>
                  <span>已完成:</span><span>{{workPreview.edited}}</span>
                </div>
-               <el-table :data="workOrderDataTotal.follow" style="width: 100%" element-loading-text="拼命加载中" v-loading="totalLoading">
+               <el-table :data="workOrderDataTotal.follow" style="width: 100%" element-loading-text="拼命加载中" v-loading="totalLoading" stripe>
                 <el-table-column
                   prop="name"
                   label="跟进人"
@@ -630,6 +630,7 @@
           this.params.module = 3;
           this.getTotalData();
         }
+        this.$store.dispatch('activeName',this.activeName)
       },
       close_() {
         this.params = {
@@ -643,6 +644,11 @@
           update_time: '',
           finish_time: '',
           type: '',
+        };
+        //工单统计
+        this.totalParam = {
+          page: 1,
+          limit: 12
         }
       },
       getDictionary() {
@@ -718,7 +724,6 @@
             }
             this.workOrderDataTotal = res.data.data;
             this.totalNumber = res.data.data.meta.count;
-            console.log(this.workPreview)
           }else{
             this.totalNumber = 0;
           }
@@ -777,7 +782,8 @@
       },
       totalCurrentChange(val){
         this.totalParam.page = val;
-        this.getTotalData()
+        this.getTotalData();
+        this.$store.dispatch('workOrderTotalFilter', this.totalParam)
       },
       //房屋右键
       houseMenu(row, event) {
