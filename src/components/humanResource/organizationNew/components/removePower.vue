@@ -10,7 +10,7 @@
               </el-col>
               <el-col :span="16">
                 <el-form-item>
-                  <el-select v-model="permissionType"  placeholder="请选择" >
+                  <el-select v-model="permissionType" placeholder="请选择">
                     <el-option v-for="item in permissionArr" :key="item.value" :label="item.label" :value="item.value">
                       {{item.label}}
                     </el-option>
@@ -26,7 +26,7 @@
               </el-col>
               <el-col :span="18">
                 <el-form-item>
-                  <el-select v-model="currentPositionId"  placeholder="请选择" @change="getDefaultData">
+                  <el-select v-model="currentPositionId" placeholder="请选择" @change="getDefaultData">
                     <el-option v-for="item in positionArr" :key="item.id" :label="item.name" :value="item.id">
                       {{item.name}}
                     </el-option>
@@ -58,7 +58,7 @@
               </el-col>
               <el-col :span="18" class="el_col_option">
                 <el-form-item>
-                  <el-select v-model="currentDutyId" placeholder="请选择"  @change="getDefaultData">
+                  <el-select v-model="currentDutyId" placeholder="请选择" @change="getDefaultData">
                     <el-option v-for="item in dutyArr" :key="item.id" :label="item.name"
                                :value="item.id">{{item.name}}
                     </el-option>
@@ -98,10 +98,11 @@
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <!--<el-button size="small" type="primary" @click="setPart('attach')">关联角色</el-button>-->
         <!--<el-button size="small" type="primary" @click="setPart('detach')">解除角色关联</el-button>-->
-        <el-button v-if="permissionType=='duty'"size="small" type="primary" @click="empower('duty')">授权给职务</el-button>
-        <el-button v-if="permissionType=='role'"size="small" type="primary" @click="empower('role')">授权给角色</el-button>
-        <el-button v-if="permissionType=='user'"size="small" type="primary" @click="empower('user')">授权给个人</el-button>
-        <el-button v-if="permissionType=='position'" size="small" type="primary" @click="empower('position')">授权给职位</el-button>
+        <el-button v-if="permissionType=='duty'" size="small" type="primary" @click="empower('duty')">授权给职务</el-button>
+        <el-button v-if="permissionType=='role'" size="small" type="primary" @click="empower('role')">授权给角色</el-button>
+        <el-button v-if="permissionType=='user'" size="small" type="primary" @click="empower('user')">授权给个人</el-button>
+        <el-button v-if="permissionType=='position'" size="small" type="primary" @click="empower('position')">授权给职位
+        </el-button>
         <el-button v-if="permissionType=='ban'" size="small" type="primary" @click="empower('ban')">同步权限黑名单</el-button>
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
@@ -141,7 +142,7 @@
           value: 'all',
           label: '所有权限'
         }],
-        permissionType:'',
+        permissionType: '',
         systemName: '',
         systemData: [],
         moduleName: '',
@@ -165,7 +166,7 @@
       }
     },
     mounted() {
-      this.permissionType='user';
+      this.permissionType = 'user';
       this.roleArray = this.powerData.positions;
       this.userId = this.powerData.id;
 //      this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
@@ -188,7 +189,7 @@
           this.getAllPositoinData();
         }
       },
-      permissionType(val){
+      permissionType(val) {
         if (this.userId) {
           this.getDefaultData();
         }
@@ -245,19 +246,19 @@
         });
       },
       getDefaultData() {
-        let pType=this.permissionType,address;
-        if(pType==='user'){
-          address='organization/user/getPermission/' + this.userId;
-        }else if(pType==='position'){
-          address='organization/position/getPermission/' + this.currentPositionId;
-        }else if(pType==='role'){
-          address='organization/role/getPermission/' + this.currentRoleId;
-        }else if(pType==='duty'){
-          address='organization/duty/getPermission/' + this.currentDutyId;
-        }else if(pType==='ban'){
-            address='organization/user/getPermissionBan/' + this.userId;
-        }else if(pType==='all'){
-            address='organization/user/getallPermission/' + this.userId;
+        let pType = this.permissionType, address;
+        if (pType === 'user') {
+          address = 'organization/user/getPermission/' + this.userId;
+        } else if (pType === 'position') {
+          address = 'organization/position/getPermission/' + this.currentPositionId;
+        } else if (pType === 'role') {
+          address = 'organization/role/getPermission/' + this.currentRoleId;
+        } else if (pType === 'duty') {
+          address = 'organization/duty/getPermission/' + this.currentDutyId;
+        } else if (pType === 'ban') {
+          address = 'organization/user/getPermissionBan/' + this.userId;
+        } else if (pType === 'all') {
+          address = 'organization/user/getallPermission/' + this.userId;
         }
         this.checkedPower = [];
         this.$http.get(globalConfig.server + address).then((res) => {
@@ -387,22 +388,22 @@
         })
       },
       empower(val) {
-        let powerIds = this.checkedPower.toString(), str,ids,address;
+        let powerIds = this.checkedPower.toString(), str, ids, address;
         if (val === 'user') {
           str = 'user';
-          address= 'organization/permission/setpermissions/' + this.userId;
-        }else  if (val === 'position') {
+          address = 'organization/permission/setpermissions/' + this.userId;
+        } else if (val === 'position') {
           str = 'position';
-          address= 'organization/permission/setpermissions/' + this.currentPositionId;
-        }else  if (val === 'role') {
+          address = 'organization/permission/setpermissions/' + this.currentPositionId;
+        } else if (val === 'role') {
           str = 'role';
-          address= 'organization/permission/setpermissions/' + this.currentRoleId;
-        } else  if (val === 'duty') {
+          address = 'organization/permission/setpermissions/' + this.currentRoleId;
+        } else if (val === 'duty') {
           str = 'duty';
-          address= 'organization/permission/setpermissions/' + this.currentDutyId;
-        }else  if (val === 'ban') {
+          address = 'organization/permission/setpermissions/' + this.currentDutyId;
+        } else if (val === 'ban') {
           str = '';
-          address= 'organization/permission/ban/' + this.userId;
+          address = 'organization/permission/ban/' + this.userId;
         }
 
         this.$http.put(globalConfig.server + address, {
