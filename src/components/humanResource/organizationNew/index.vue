@@ -643,7 +643,7 @@
                       <div class="content">
                         <span
                           v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
-                            {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
+                            {{staffDetailData.detail.entry_way.entry_type ? entryWayCategory[staffDetailData.detail.entry_way.entry_type-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -660,7 +660,7 @@
                     <el-form-item label="备注">
                       <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
-                      {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
+                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -1308,6 +1308,7 @@
           if (res.data.code === '710910') {
             let detail = res.data.data.detail;
             this.staffDetailData = res.data.data;
+            return false;
             this.entry_materials = [];
             //入职材料
             if (detail && detail.entry_materials && detail.entry_materials.length > 0) {

@@ -274,12 +274,12 @@
             </div>
           </div>
         </div>
-        <div style="margin-top: 10px;">
-          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
-            </el-button>
-            <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
-          </div>
+        <div style="float: right;">
+          <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
+          </el-button>
+          <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
+        </div>
+        <div style="margin-top: 40px;">
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
               <div class="myHouse">

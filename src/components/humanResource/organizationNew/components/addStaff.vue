@@ -564,7 +564,7 @@
             let detail = res.data.data.detail;
             if (detail) {
               if (detail.entry_way && detail.entry_way !== 'null') {
-                this.params.entry_way = JSON.parse(detail.entry_way);
+                this.params.entry_way = detail.entry_way;
               } else {
                 this.params.entry_way = {entry_type: '', entry_mess: '',};
               }
