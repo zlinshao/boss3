@@ -1639,6 +1639,7 @@
       //右键菜单
       openContextMenu(row, event) {
         this.editId = row.id;
+        console.log(row);
         this.menuType = 'staff';
         //is_enable 有值禁用 is_on_job 离职
         if (row.is_enable && row.is_on_job) {
@@ -1923,7 +1924,6 @@
           this.viewRangeDialog = true;
         } else if (val.clickIndex === 'remove_power') {
           this.RemovePowerModule = true;
-          console.log(val.data);
           this.RemovePowerData = val.data;
         }
       },
@@ -2107,7 +2107,6 @@
             this.positionTableData = res.data.data.data;
             this.totalPostNum = res.data.data.count;
             if (arr.length > 0) {
-              console.log(arr[0]);
               this.selectPostID = arr.id;
               this.selectOrgID = arr[0].duty.org_id;
               this.getPostStaffData();
@@ -2129,9 +2128,9 @@
         this.positionName = row.name;
         this.menuType = 'position';
         this.lists = [
-          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'remove_power', headIcon: 'el-icon-edit', label: '权限',},
-          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改'},
+          {clickIndex: 'remove_power', headIcon: 'el-icon-edit', label: '权限', data: row},
+          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
         ];
         this.contextParams(event);
       },
@@ -2147,7 +2146,16 @@
             this.deletePosition();
           }).catch(() => {
           });
-        } else if (val === 'remove_power') {
+        } else if (val.clickIndex === 'remove_power') {
+          let data = {};
+          data.description = val.data.orgName;
+          data.id = val.data.id;
+          data.name = val.data.name;
+          data.parent_id = val.data.parent_id;
+          this.RemovePowerData = val.data;
+          this.RemovePowerData.types = 'position';
+          this.RemovePowerData.positions = [];
+          this.RemovePowerData.positions.push(data);
           this.RemovePowerModule = true;
         }
       },

@@ -1,7 +1,8 @@
 <template>
   <div id="removePower">
     <el-dialog :close-on-click-modal="false" title="权限" :visible.sync="powerVisible" width="60%">
-      <el-form size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;">
+      <el-form size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;"
+               v-if="this.powerData.types !== 'position'">
         <el-row>
           <el-col :span="8">
             <el-row>
@@ -166,14 +167,11 @@
       }
     },
     mounted() {
-      this.permissionType = 'user';
-      this.roleArray = this.powerData.positions;
-      this.userId = this.powerData.id;
+      // this.permissionType = 'user';
 //      this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
     },
     activated() {
       this.roleArray = this.powerData.positions;
-      this.userId = this.powerData.id;
     },
     watch: {
       module(val) {
@@ -189,23 +187,27 @@
           this.getAllPositoinData();
         }
       },
-      permissionType(val) {
+      permissionType() {
         if (this.userId) {
           this.getDefaultData();
         }
       },
       powerData(val) {
+        if (!this.powerVisible) return;
         this.roleArray = val.positions;
-        this.userId = val.id;
+        if (val.types) {
+          this.permissionType = val.types;
+        } else {
+          this.permissionType = 'user';
+          this.userId = val.id;
+        }
+        this.currentPositionId = val.positions && val.positions[0] && val.positions[0].id;
+        this.currentRoleId = val.roles && val.roles[0] && val.roles[0].id;
+        this.currentDutyId = val.duties && val.duties[0] && val.duties[0].id;
         setTimeout(() => {
-          if (this.userId) {
-            this.getDefaultData();
-//            this.getStaffPart();
-          }
+          this.getDefaultData();
+          // this.getStaffPart();
         }, 0);
-        this.currentPositionId = this.powerData.positions && this.powerData.positions[0] && this.powerData.positions[0].id;
-        this.currentRoleId = this.powerData.roles && this.powerData.roles[0] && this.powerData.roles[0].id;
-        this.currentDutyId = this.powerData.duties && this.powerData.duties[0] && this.powerData.duties[0].id;
       }
     },
     methods: {
