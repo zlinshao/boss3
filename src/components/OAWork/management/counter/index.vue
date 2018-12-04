@@ -187,7 +187,7 @@
         </el-form>
 <!--计算按钮-->
         <el-row>
-          <el-col :span="24">
+          <el-col :span="24" v-show="is_calculate">
             <div class="countButton">
               <el-button type="primary" size="medium" @click="getData">计算业绩</el-button>
             </div>
@@ -306,8 +306,12 @@
         is_show:false,
         is_display:true,
         is_disabled:false,
-        house_name:''
+        house_name:'',
+        is_calculate:false,
       }
+    },
+    mounted(){
+        this.getSettings();
     },
     watch:{
       rent_type(val){
@@ -325,6 +329,17 @@
       }
     },
     methods:{
+      getSettings(){
+        this.$http.get(globalConfig.server + 'salary/overflowrate/getSettings').then((res)=>{
+          if (Number(res.data.code) %10=== 0) {
+              this.is_calculate=true;
+          }else{
+            this.is_calculate=false;
+            this.prompt('warning', res.data.msg);
+          }
+
+        });
+      },
       getData(){
         let address;
         console.log(this.rent_type);
@@ -365,17 +380,30 @@
         this.$http.get(globalConfig.server + 'salary/achv/getContract/?house_name='+this.house_name).then((res) => {
           if (Number(res.data.code) %10=== 0) {
             let data=res.data.data;
-            this.form.lord_duration=data.lord.lord_duration;
-            this.form.lord_month_price=data.lord.lord_month_price;
-            this.form.lord_agency_count=data.lord.lord_agency_count ? data.lord.lord_agency_count : 0;
-            this.form.lord_vacancy_date=data.lord.lord_vacancy_date;
-            this.form.lord_property_fee=data.lord.lord_property_fee;
-            this.form.lord_pay_way=data.lord.lord_pay_way;
-            this.form.rent_month_price=data.rent.rent_month_price;
-            this.form.rent_pay_way=data.rent.rent_pay_way;
-            this.form.rent_agency_count=data.rent.rent_agency_count;
-            this.form.rent_vacancy_date=data.rent.rent_vacancy_date;
-            this.form.rent_sign_month=data.rent.rent_sign_month;
+            if  (data.rent_type=='new'){
+              this.rent_type=1;
+              this.form.lord_duration=data.lord.lord_duration;
+              this.form.lord_month_price=data.lord.lord_month_price;
+              this.form.lord_agency_count=data.lord.lord_agency_count ? data.lord.lord_agency_count : 0;
+              this.form.lord_vacancy_date=data.lord.lord_vacancy_date;
+              this.form.lord_property_fee=data.lord.lord_property_fee;
+              this.form.lord_pay_way=data.lord.lord_pay_way;
+              this.form.rent_month_price=data.rent.rent_month_price;
+              this.form.rent_pay_way=data.rent.rent_pay_way;
+              this.form.rent_agency_count=data.rent.rent_agency_count;
+              this.form.rent_vacancy_date=data.rent.rent_vacancy_date;
+              this.form.rent_sign_month=data.rent.rent_sign_month;
+            }else if(data.rent_type=='second'){
+              this.rent_type=2;
+              this.form.lord_month_price=data.lord.lord_month_price;
+              this.form.rent_month_price=data.rent.rent_month_price;
+              this.form.rent_pay_way=data.rent.rent_pay_way;
+              this.form.rent_agency_count=data.rent.rent_agency_count;
+              this.form.rent_vacancy_date=data.rent.rent_vacancy_date;
+            }
+            
+          }else{
+            this.prompt('warning', res.data.msg);
           }
         });
       }
