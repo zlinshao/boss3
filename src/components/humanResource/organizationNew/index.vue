@@ -659,8 +659,9 @@
                   <el-col :span="8">
                     <el-form-item label="备注">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
-                      {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
+                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -670,7 +671,8 @@
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
                       {{DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -679,7 +681,8 @@
                   <el-col :span="8">
                     <el-form-item label="具体描述">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
                       {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -891,7 +894,8 @@
         <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
       </span>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" :title=" leaveMsg ? '发送群消息' : '发送离职短信'" :visible.sync="sendLeaveMsgDialog" width="30%">
+    <el-dialog :close-on-click-modal="false" :title=" leaveMsg ? '发送群消息' : '发送离职短信'" :visible.sync="sendLeaveMsgDialog"
+               width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="sendLeaveMsgForm" label-width="100px"
                  style="padding: 0 20px;">
@@ -1208,36 +1212,37 @@
       },
     },
     methods: {
-      changePhone(scope,phone) {
-        this.$http.put(globalConfig.server + 'organization/other/change-phone',{
+      changePhone(scope, phone) {
+        this.$http.put(globalConfig.server + 'organization/other/change-phone', {
           id: scope.row.id,
           phone
-        }).then(res =>{
-          if(res.data.code === "700800"){
+        }).then(res => {
+          if (res.data.code === "700800") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getStaffData();
-          }else {
+          } else {
             this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
       openChangePhone(scope) {
-        this.$prompt('请输入手机号码','提示',{
+        this.$prompt('请输入手机号码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^1[3|4|5|8|7|9][0-9]\d{4,8}$/,
           inputErrorMessage: '手机号格式不正确'
-        }).then(({value})=>{
-          this.changePhone(scope,value);
-        }).catch(()=>{ })
+        }).then(({value}) => {
+          this.changePhone(scope, value);
+        }).catch(() => {
+        })
       },
       // 导出
       leadingOut() {
@@ -1509,27 +1514,27 @@
       handleAdd(s, d, n) {//增加节点
         this.addDepart(d);
       },
-      GoHide(id,hidden) {
-        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`,{
+      GoHide(id, hidden) {
+        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`, {
           hidden
-        }).then(res =>{
-          if(res.data.code == "700710"){
+        }).then(res => {
+          if (res.data.code == "700710") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getDepart();
-          }else {
+          } else {
             this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
-      handleHide(s,d,n) {
+      handleHide(s, d, n) {
         var id = d.id;
         var hidden = 0;
         this.$confirm('您确定隐藏吗?', '提示', {
@@ -1537,8 +1542,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.GoHide(id,hidden);
-        }).catch(() => { });
+          this.GoHide(id, hidden);
+        }).catch(() => {
+        });
       }, //禁用
       handleEdit(s, d, n) {//编辑节点
         this.editDepart(d.id);
@@ -1685,9 +1691,9 @@
       //发送离职短信
       sendLeaveMsgConfirm() {
         var txt = '';
-        if(this.leaveMsg){
+        if (this.leaveMsg) {
           txt = '此操作将发送群消息，是否继续?';
-        }else {
+        } else {
           txt = '此操作将给该员工负责的客户发送短信，是否继续?';
         }
         this.$confirm(txt, '提示', {
@@ -1698,7 +1704,7 @@
           if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
             this.sendLeaveMsgForm.date = this.form.dismiss_time;
           }
-          if(!this.leaveMsg){
+          if (!this.leaveMsg) {
             this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
               params: {
                 id: this.editId,
@@ -1713,9 +1719,9 @@
                 this.prompt('warning', res.data.msg);
               }
             });
-          }else {
+          } else {
             this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
-              if(res.data.code === "710910"){
+              if (res.data.code === "710910") {
                 this.$notify.success({
                   title: '成功',
                   message: res.data.msg
@@ -1724,7 +1730,7 @@
                 this.getStaffData();
                 this.sendLeaveMsgDialog = false;
                 this.selectLeaveDateDialog = false;
-              }else {
+              } else {
                 this.$notify.warning({
                   title: '失败',
                   message: res.data.msg
@@ -1766,7 +1772,7 @@
       },
       //离职群发
       leaveSendMsg() {
-        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？','提示',{
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -1783,7 +1789,7 @@
                 this.sendLeaveMsgForm.date = this.form.dismiss_time;
               }
               this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
-                if(res.data.code === "710910"){
+                if (res.data.code === "710910") {
                   this.$notify.success({
                     title: '成功',
                     message: res.data.msg
@@ -1791,7 +1797,7 @@
                   this.getPostStaffData();
                   this.getStaffData();
                   this.selectLeaveDateDialog = false;
-                }else {
+                } else {
                   this.$notify.warning({
                     title: '失败',
                     message: res.data.msg
@@ -1855,7 +1861,7 @@
           this.$http.get(globalConfig.server + 'organization/staff/rehab/' + this.editId + '&level=' + this.levelForm.level).then((res) => {
             if (res.data.code === '710166') {
               this.prompt('success', res.data.msg);
-              if(send === 'yes'){
+              if (send === 'yes') {
                 this.levelConfirmSendMsg(this.editId);
               }
               this.getPostStaffData();
@@ -1870,14 +1876,14 @@
         });
       },
       //复职发送消息
-      levelConfirmSendMsg(id){
+      levelConfirmSendMsg(id) {
         this.$http.get(globalConfig.server + `organization/staff/entry-mess/${id}`).then((res) => {
-          if(res.data.code === "710910"){
+          if (res.data.code === "710910") {
             this.$notify.success({
               title: "成功",
               message: "发送成功"
             });
-          }else {
+          } else {
             this.$notify.warning({
               title: "失败",
               message: "发送失败"
@@ -2123,6 +2129,7 @@
         this.menuType = 'position';
         this.lists = [
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'remove_power', headIcon: 'el-icon-edit', label: '权限', data: row},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextParams(event);
@@ -2139,6 +2146,17 @@
             this.deletePosition();
           }).catch(() => {
           });
+        } else if (val.clickIndex === 'remove_power') {
+          let data = {};
+          data.description = val.data.orgName;
+          data.id = val.data.id;
+          data.name = val.data.name;
+          data.parent_id = val.data.parent_id;
+          this.RemovePowerData = val.data;
+          this.RemovePowerData.types = 'position';
+          this.RemovePowerData.positions = [];
+          this.RemovePowerData.positions.push(data);
+          this.RemovePowerModule = true;
         }
       },
       //修改岗位完成回调
@@ -2249,7 +2267,7 @@
             nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
             nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
             nodeDel: ((s, d, n) => that.handleDelete(s, d, n)),
-            nodeHide: ((s,d,n)=> that.handleHide(s,d,n))
+            nodeHide: ((s, d, n) => that.handleHide(s, d, n))
           }
         });
       },
