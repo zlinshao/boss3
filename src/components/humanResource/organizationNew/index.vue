@@ -306,38 +306,38 @@
                         prop="name"
                         label="职位">
                       </el-table-column>
-                      <el-table-column
-                        label="职级">
-                        <template slot-scope="scope">
-                          <span style="color: #409EFF;cursor: pointer;" @click.stop="lookPath(scope.row)">{{scope.row.path_length}}</span>
-                        </template>
-                      </el-table-column>
                       <!--<el-table-column-->
-                      <!--label="下级职位">-->
-                      <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
-                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
-                      <!--</template>-->
-                      <!--</el-table-column>-->
-                      <!--<el-table-column-->
-                      <!--prop="duty.name"-->
-                      <!--label="职务">-->
-                      <!--</el-table-column>-->
-                      <!--<el-table-column-->
-                      <!--label="职位标识">-->
-                      <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">-->
-                      <!--<span v-if="index === 0">{{item.name}}</span>-->
-                      <!--</span>-->
-                      <!--<span v-else>&nbsp;暂无&nbsp;</span>-->
-                      <!--</template>-->
+                        <!--label="职级">-->
+                        <!--<template slot-scope="scope">-->
+                          <!--<span style="color: #409EFF;cursor: pointer;" @click.stop="lookPath(scope.row)">{{scope.row.path_length}}</span>-->
+                        <!--</template>-->
                       <!--</el-table-column>-->
                       <el-table-column
-                        label="人数">
-                        <template slot-scope="scope">
-                          <span>{{scope.row.users.length}}</span>
-                        </template>
+                      label="下级职位">
+                      <template slot-scope="scope">
+                      <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
+                      <span v-else=""> &nbsp;暂无&nbsp; </span>
+                      </template>
                       </el-table-column>
+                      <el-table-column
+                      prop="duty.name"
+                      label="职务">
+                      </el-table-column>
+                      <el-table-column
+                      label="职位标识">
+                      <template slot-scope="scope">
+                      <span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">
+                      <span v-if="index === 0">{{item.name}}</span>
+                      </span>
+                      <span v-else>&nbsp;暂无&nbsp;</span>
+                      </template>
+                      </el-table-column>
+                      <!--<el-table-column-->
+                        <!--label="人数">-->
+                        <!--<template slot-scope="scope">-->
+                          <!--<span>{{scope.row.users.length}}</span>-->
+                        <!--</template>-->
+                      <!--</el-table-column>-->
                       <el-table-column
                         prop="orgName"
                         label="部门">

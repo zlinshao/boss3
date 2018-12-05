@@ -3,14 +3,14 @@
     <el-dialog :close-on-click-modal="false" title="修改职务" :visible.sync="editOnlyPositionDialogVisible" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="部门名称" required="">
-                <el-input placeholder="请选择部门" readonly @focus="organizationDialog = true"
-                          v-model="department"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <!--<el-row>-->
+            <!--<el-col :span="24">-->
+              <!--<el-form-item label="部门名称" required="">-->
+                <!--<el-input placeholder="请选择部门" readonly @focus="organizationDialog = true"-->
+                          <!--v-model="department"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
           <el-row>
             <el-col :span="24">
               <el-form-item label="职位名称" required="">
@@ -43,7 +43,7 @@
         editOnlyPositionDialogVisible: false,
         params: {
           name: '',
-          org_id: '',
+          // org_id: '',
         },
         department: '',
         organizationDialog: false,
@@ -97,7 +97,7 @@
         this.editOnlyPositionDialogVisible = false;
         this.params = {
           name: '',
-          org_id: '',
+          // org_id: '',
         };
         this.department = '';
       }
