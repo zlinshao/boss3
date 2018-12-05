@@ -268,7 +268,7 @@
                       style="width: 100%">
                       <el-table-column
                         prop="name"
-                        label="职务">
+                        label="职位">
                       </el-table-column>
                       <el-table-column
                         prop="org.name"
@@ -304,7 +304,7 @@
                       style="width: 100%">
                       <el-table-column
                         prop="name"
-                        label="职位">
+                        label="岗位">
                       </el-table-column>
                       <!--<el-table-column-->
                         <!--label="职级">-->
@@ -313,7 +313,7 @@
                         <!--</template>-->
                       <!--</el-table-column>-->
                       <el-table-column
-                      label="下级职位">
+                      label="下级岗位">
                       <template slot-scope="scope">
                       <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
                       <span v-else=""> &nbsp;暂无&nbsp; </span>
@@ -321,10 +321,10 @@
                       </el-table-column>
                       <el-table-column
                       prop="duty.name"
-                      label="职务">
+                      label="职位">
                       </el-table-column>
                       <el-table-column
-                      label="职位标识">
+                      label="岗位标识">
                       <template slot-scope="scope">
                       <span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">
                       <span v-if="index === 0">{{item.name}}</span>
@@ -395,7 +395,7 @@
                         </template>
                       </el-table-column>
                       <el-table-column
-                        label="职位">
+                        label="岗位">
                         <template slot-scope="scope">
                           <span v-if="!scope.row.roles.length"></span>
                           <span v-else v-for="item in scope.row.positions">{{item.name}}</span>
