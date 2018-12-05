@@ -22,7 +22,7 @@
 
           <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item>
-              <el-input placeholder="地址/部门" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
+              <el-input placeholder="地址" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
