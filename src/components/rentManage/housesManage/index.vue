@@ -103,6 +103,21 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
+                    <div class="el_col_label">价格</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.suggest_price" clearable placeholder="请选择价格" value="">
+                        <el-option v-for="key in suggest_price" :label="key.type" :value="key.val"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <!-- <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
                     <div class="el_col_label">当前空置时长</div>
                     </el-col><el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -110,7 +125,7 @@
                     </el-form-item>
                   </el-col>
                 </el-row>
-              </el-col>
+              </el-col> -->
             </el-row>
             <el-row class="el_row_border">
               <el-col :span="12">
@@ -177,21 +192,7 @@
               </el-col>
             </el-row>
              <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">价格</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.suggest_price" clearable placeholder="请选择价格" value="">
-                        <el-option v-for="key in suggest_price" :label="key.type" :value="key.val"
-                                   :key="key.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
+              
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -533,7 +534,7 @@
           property_type: '',                //房屋类型
           area: '',                         //面积
           suggest_price: '',                //价格
-          current_ready_days: '',           //空置时长
+          // current_ready_days: '',           //空置时长
         },
         decoration: [],                     
         property_type: [],                  
