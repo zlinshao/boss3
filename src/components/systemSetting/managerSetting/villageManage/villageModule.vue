@@ -90,7 +90,14 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="物业费">
-                <el-input type="number" v-model="form.propertyFee" placeholder="金额"></el-input>
+                <el-input type="number" v-model="form.property_fee" placeholder="金额"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="物业联系方式">
+                <el-input type="text" v-model="form.property_phone" placeholder="金额"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -161,9 +168,10 @@
           allBuilding: '',              //总栋数
           latitude: '',                 //纬度
           longitude: '',                //经度
-          propertyFee: '',              //物业费
-          min_price: '',              //物业费
-          max_price: '',              //物业费
+          property_fee: '',             //物业费
+          property_phone:'',            //物业联系方式
+          min_price: '',                //物业费
+          max_price: '',                //物业费
           addressId: [],                //小区照片
           configure: '',                //周边配套
           villageIntroduce: '',         //小区简介
@@ -178,6 +186,7 @@
 
     watch: {
       formList(val) {
+        console.log(val)
         this.villageId = val.id;
         this.form.province = val.province.province_id;
         if (val.province !== '') {
@@ -200,7 +209,8 @@
         this.form.built_year = val.built_year;
         this.form.houseType = val.house_type;
         this.form.allBuilding = val.total_buildings;
-        this.form.propertyFee = val.property_fee;
+        this.form.property_fee = val.property_fee === null ? null : +val.property_fee.match(/\d+(\.\d+)*/)[0];
+        this.form.property_phone = val.property_phone;
         this.form.min_price = val.min_price;
         this.form.max_price = val.max_price;
         this.form.configure = val.peripheral_info;
@@ -311,7 +321,8 @@
           built_year: this.form.built_year,
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
-          property_fee: this.form.propertyFee,
+          property_fee: this.form.property_fee,
+          property_phone: this.form.property_phone,
           min_price: this.form.min_price,
           max_price: this.form.max_price,
           house_pic: this.form.addressId,
@@ -341,11 +352,12 @@
         this.form.allBuilding = '';              //总栋数
         this.form.latitude = '';                 //纬度
         this.form.longitude = '';                //经度
-        this.form.propertyFee = '';              //物业费
-        this.form.min_price = '';              //物业费
-        this.form.max_price = '';              //物业费
+        this.form.property_fee = '';             //物业费
+        this.form.property_phone = '';           //物业联系方式
+        this.form.min_price = '';                //物业费
+        this.form.max_price = '';                //物业费
         this.form.addressId = [];                //小区照片
-        this.cover_pic = {};                    //小区照片
+        this.cover_pic = {};                     //小区照片
         this.form.configure = '';                //周边配套
         this.form.villageIntroduce = '';         //小区简介
         $('.imgItem').remove();
