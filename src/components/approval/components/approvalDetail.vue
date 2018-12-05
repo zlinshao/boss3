@@ -11,10 +11,10 @@
                 {{key}} : <div class="content">{{item ? item : '无'}}</div>
               </div>
               <div v-else>
-                {{key}} :
-                <div v-if="detail[key]['data']" class="content">
-                <img v-for="value in detail['附件上传'].data" :src=`${imgUrl}${value['attachment_path']}?api_token=${key['token']}`
-                data-magnify="" :data-src=`${imgUrl}${value['attachment_path']}?api_token=${key['token']}`>
+                附件上传 :
+                <div v-if="detail['附件上传'] && detail['附件上传'].length>0" class="content">
+                <img style="width: 20%;" v-for="value in detail['附件上传']" :src="value"
+                data-magnify="" :data-src="value">
                 </div>
                 <div v-else class="content">暂无</div>
               </div>
@@ -31,7 +31,6 @@
         return {
           innerVisible: false,
           detailData: '',
-          imgUrl: "http://oa.lejias.cn/eoffice10/server/public/api/",
         }
       },
       props: ['approvalVisible','detail'],
@@ -41,11 +40,7 @@
         },
         detail: function (val) {
           this.detailData = val;
-          console.log(this.detailData);
         }
-      },
-      mounted() {
-        console.log(this.detail);
       },
       methods: {
         handleClose() {
@@ -70,6 +65,7 @@
       .content{
         padding: 0 10px;
         min-height: 32px;
+        line-height: 32px;
         background: #eef3fc;
         border-radius: 4px;
         font-size: 12px;

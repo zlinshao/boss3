@@ -112,14 +112,17 @@
       },
       methods: {
         LookDetail(row) {
-          console.log(row);
-          // this.approvalVisible = true;
-          // this.$http.get(this.url2 + `attendance/flow_records/${row.user_id}`).then(res => {
-          this.$http.get(this.url2 + `attendance/flow_records/17`).then(res => {
+          this.$http.get(this.url2 + `attendance/flow_records/${row.user_id}`).then(res => {
+          // this.$http.get(this.url2 + `attendance/flow_records/17`).then(res => {
             console.log(res);
             if(res.data.code === "10000"){
               this.detailData = res.data.data.content;
               this.approvalVisible = true;
+            }else {
+              this.$notify.warning({
+                title: "警告",
+                message: res.data.msg
+              })
             }
           }).catch(err =>{
             console.log(err);
