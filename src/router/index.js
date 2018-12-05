@@ -74,6 +74,7 @@ const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/p
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue'); //编辑班次
 const Approval = () => import('../components/approval/index.vue');
+const Business = () => import('../components/business/index.vue');
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
@@ -673,6 +674,7 @@ export default new Router({
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据'},
         {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台'},
+        {path: '/business', component: Business ,name: '业务数据'}
       ]
     },
     {
