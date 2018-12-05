@@ -68,6 +68,10 @@
           element-loading-background="rgba(255, 255, 255, 0)"
           width="100%">
           <el-table-column
+            label="工资月份"
+            prop="salary_month"
+          ></el-table-column>
+          <el-table-column
             label="姓名"
             prop="name"
           ></el-table-column>
@@ -257,7 +261,7 @@
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page="form.page"
-          :page-size="5"
+          :page-size="12"
           layout="total, prev, pager, next, jumper"
           :total="totalNum">
         </el-pagination>
@@ -289,7 +293,7 @@ import Upload from '../../../common/UPLOAD.vue'
                 totalNum: 0,
                 active: 0,
                 form: {
-                    limit: 5,
+                    limit: 12,
                     page: 1,
                     date:'',
                     staff_ids:[],
@@ -329,7 +333,7 @@ import Upload from '../../../common/UPLOAD.vue'
                 this.$http.get(globalConfig.server + 'salary/sala/index/',{params:this.form} ).then((res) => {
                 this.isHigh = false;
                 this.collectLoading = false;
-                if (res.data.code === '88800') {
+                if (Number(res.data.code) % 10 ===0) {
                     this.header = res.data.data.data[0].header;
                     this.tableData = res.data.data.data;
                     this.totalNum = Number(res.data.data.count);
