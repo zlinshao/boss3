@@ -224,8 +224,8 @@
         this.form.houseType = val.house_type;
         this.form.allBuilding = val.total_buildings;
         
-        if(val.property_fee === null){
-          this.form.property_fee = null
+        if(val.property_fee === null || val.property_fee === ''){
+          this.form.property_fee = ''
         }else if(val.property_fee.indexOf('至') > -1){
           this.isSingle = false;
           this.property_fee_min = val.property_fee.split(/\D+/)[0];
@@ -358,6 +358,7 @@
         }).then((res) => {
           if (res.data.code === '10010' || res.data.code === '10030') {
             this.dialogVisible = false;
+            this.isSingle = true;
             this.$emit('addVillage');
             this.prompt(res.data.msg, 1);
           } else {
@@ -387,6 +388,9 @@
         this.cover_pic = {};                     //小区照片
         this.form.configure = '';                //周边配套
         this.form.villageIntroduce = '';         //小区简介
+        this.property_fee_max = '';
+        this.property_fee_min = '';
+        this.isSingle = true;
         $('.imgItem').remove();
       },
       // ====================提示信息=================
