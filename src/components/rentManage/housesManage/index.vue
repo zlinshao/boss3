@@ -22,7 +22,7 @@
 
           <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item>
-              <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
+              <el-input placeholder="地址/部门" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -100,19 +100,98 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <!--<el-col :span="12">-->
-              <!--<el-row>-->
-              <!--<el-col :span="8">-->
-              <!--<div class="el_col_label">当前控制时长</div>-->
-              <!--</el-col>-->
-              <!--<el-col :span="16" class="el_col_option">-->
-              <!--<el-form-item>-->
-              <!--<el-input v-model="formInline.current_ready_days" placeholder="请输入天数">-->
-              <!--</el-input>-->
-              <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--</el-row>-->
-              <!--</el-col>-->
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">当前空置时长</div>
+                    </el-col><el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="formInline.current_ready_days" placeholder="请输入天数"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">房型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.room" clearable placeholder="请选择房型" value="">
+                        <el-option v-for="key in room" :label="key.type" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">装修</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.decoration" clearable placeholder="装修情况" value="">
+                        <el-option v-for="key in decoration" :label="key.dictionary_name" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">房屋类型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.property_type" clearable placeholder="请选择房屋类型" value="">
+                        <el-option v-for="key in property_type" :label="key.dictionary_name" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">面积</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.area" clearable placeholder="请选择面积" value="">
+                        <el-option v-for="key in area" :label="key.type" :value="key.val"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+             <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">价格</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.suggest_price" clearable placeholder="请选择价格" value="">
+                        <el-option v-for="key in suggest_price" :label="key.type" :value="key.val"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -196,7 +275,7 @@
               <!--<span v-else="">/</span>-->
               <!--</template>-->
               <!--</el-table-column>-->
-              <el-table-column
+              <!-- <el-table-column
                 width="150"
                 label="房屋评分">
                 <template slot-scope="scope">
@@ -205,8 +284,14 @@
                   </span>
                   <span v-else="">/</span>
                 </template>
+              </el-table-column> -->
+              <el-table-column
+                label="房屋面积">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.area">{{scope.row.area}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
-
               <el-table-column
                 label="建议价格">
                 <template slot-scope="scope">
@@ -443,8 +528,33 @@
           is_nrcy: 0,
           is_lord: 1,
           warning_status: '',
-          // current_ready_days: '',
+          room: '',                         //房型
+          decoration: '',                   //装修
+          property_type: '',                //房屋类型
+          area: '',                         //面积
+          suggest_price: '',                //价格
+          current_ready_days: '',           //空置时长
         },
+        decoration: [],                     
+        property_type: [],                  
+        room: [
+          {id: 1, type: '一居室'},
+          {id: 2, type: '二居室'},
+          {id: 3, type: '三居室'},
+          {id: 4, type: '四居室'},
+          {id: 5, type: '其他'},
+        ],
+        area: [
+          {id: 1, type:'100平米以下', val:'0,100'}, 
+          {id: 2, type:'100平米~200平米', val:'100,200'}, 
+          {id: 3, type:'200平米以上', val:'200,99999'}
+        ],
+        suggest_price: [
+          {id: 1, type: '2000元以下', val:'0,2000'}, 
+          {id: 2, type: '2000~3000元', val:'2000,3000'}, 
+          {id: 3, type: '3000~4000元', val:'3000,4000'}, 
+          {id: 4, type: '4000元以上', val:'4000,99999'}
+        ],
         warning_status: [
           {
             id: 1,
@@ -516,6 +626,7 @@
       this.getData();
       this.getDictionary();
       this.getCharts();
+      this.getDecoration();
 //      $('.earlyWarning .warningItem').click(function () {
 //        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
 //      });
@@ -595,7 +706,12 @@
         this.department_name = '';
         this.formInline.status = '';
         this.formInline.warning_status = '';
-        // this.formInline.current_ready_days = '';
+        this.formInline.room = '';
+        this.formInline.decoration = '';
+        this.formInline.property_type = '';
+        this.formInline.area = '';
+        this.formInline.suggest_price = '';
+        this.formInline.current_ready_days = '';
       },
       search() {
         this.isHigh = false;
@@ -810,7 +926,12 @@
           is_nrcy: 0,
           is_lord: 1,
           warning_status: '',
-          // current_ready_days: '',
+          room: '',                         
+          decoration: '',                   
+          property_type: '',                
+          area: '',                         
+          suggest_price: '',                
+          current_ready_days: '',
         };
         this.department_name = '';
         this.getData();
@@ -861,6 +982,28 @@
           }
         })
       },
+      //获取高级搜索条件选择项
+      getHighSearchSelection(){
+        //房型
+        this.$http.get(globalConfig.server + '').then(res => {
+          if(res.data.code === '20000'){
+            this.room = res.data.data
+          }
+        })
+      },
+      //查询装修类型,房屋类型
+      getDecoration(){
+        this.$http.get(globalConfig.server + '/setting/dictionary/404').then(res => {
+          if(res.data.code === '30010'){
+            this.decoration = res.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server + '/setting/dictionary/410').then(res => {
+          if(res.data.code === '30010'){
+            this.property_type = res.data.data;
+          }
+        })
+      }
     }
   }
 </script>
