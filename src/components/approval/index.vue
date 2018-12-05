@@ -91,11 +91,10 @@
       data() {
         return {
           url: globalConfig.server,
-          url2:"http://192.168.20.20:81/",
           approvalVisible: false,
           params: {
             page: 1,
-            limit: 5,
+            limit: 12,
             type: "",
             search: ""
           },
@@ -112,7 +111,7 @@
       },
       methods: {
         LookDetail(row) {
-          this.$http.get(this.url2 + `attendance/flow_records/${row.user_id}`).then(res => {
+          this.$http.get(this.url + `attendance/flow_records/${row.user_id}`).then(res => {
             console.log(res);
             if(res.data.code === "10000"){
               this.detailData = res.data.data.content;
