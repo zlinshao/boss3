@@ -88,16 +88,27 @@
                 <el-input type="number" v-model="form.allBuilding" placeholder="请输入总栋数"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" v-if='isSingle'>
               <el-form-item label="物业费">
                 <el-input type="number" v-model="form.property_fee" placeholder="金额"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" v-if='!isSingle'>
+              <el-form-item label="物业费">
+                <el-col :span="11">
+                  <el-input v-model="property_fee_min" placeholder="请输入最小"></el-input>
+                </el-col>
+                <el-col class="line" :span="2" style="text-align: center">-</el-col>
+                <el-col :span="11">
+                  <el-input v-model="property_fee_max" placeholder="请输入最大"></el-input>
+                </el-col>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="物业联系方式">
-                <el-input type="text" v-model="form.property_phone" placeholder="金额"></el-input>
+                <el-input type="text" v-model="form.property_phone" placeholder="请输入联系方式"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -154,6 +165,9 @@
         villageId: '',
         mapVisible: false,
         dialogVisible: false,
+        isSingle:true,
+        property_fee_min: '',
+        property_fee_max: '',
         cover_pic: {},
         form: {
           province: '',                 //小区位置
@@ -209,7 +223,17 @@
         this.form.built_year = val.built_year;
         this.form.houseType = val.house_type;
         this.form.allBuilding = val.total_buildings;
-        this.form.property_fee = val.property_fee === null ? null : +val.property_fee.match(/\d+(\.\d+)*/)[0];
+        
+        if(val.property_fee === null){
+          this.form.property_fee = null
+        }else if(val.property_fee.indexOf('至') > -1){
+          this.isSingle = false;
+          this.property_fee_min = val.property_fee.split(/\D+/)[0];
+          this.property_fee_max = val.property_fee.split(/\D+/)[1];
+        }else{
+          this.isSingle = true;
+          this.form.property_fee = +val.property_fee.match(/\d+(\.\d+)*/)[0];
+        }
         this.form.property_phone = val.property_phone;
         this.form.min_price = val.min_price;
         this.form.max_price = val.max_price;
@@ -300,6 +324,9 @@
       },
       villageSave(addr) {
         let type, urls;
+        if(!this.isSingle){
+          this.form.property_fee = this.property_fee_min + '至' + this.property_fee_max;
+        }
         if (addr === 'save') {
           type = this.$http.post;
           urls = this.urls + 'setting/community/save';
