@@ -148,7 +148,7 @@
               >
                 <el-table-column label="片区名称" prop="sign_org.name"></el-table-column>
                 <el-table-column label="房屋名称" prop="house.name"></el-table-column>
-                <el-table-column label="租房人" prop="sign_user.name"></el-table-column>
+                <el-table-column label="租房人" prop="rent.sign_user.name"></el-table-column>
                 <el-table-column label="租房喜报时间" prop="rent.bulletindate"></el-table-column>
                 <el-table-column label="合同开始时间" prop="rent.start_at"></el-table-column>
                 <el-table-column label="是否新租" prop="achv.typical"></el-table-column>
