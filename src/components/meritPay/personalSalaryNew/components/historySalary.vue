@@ -17,7 +17,7 @@
             <el-form-item>
                 <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="is_show">
                 <el-button type="primary" size="mini" @click="importShow = true">导入<i
                       class="el-icon-upload el-icon--right"></i></el-button>
             </el-form-item>
@@ -307,10 +307,12 @@ import Upload from '../../../common/UPLOAD.vue'
                 file_id:'',
                 importShow:false,
                 importTmp: false,
+                is_show:true
             }
         },
         mounted() {
             this.getTableData();
+            this.judgePermission();
         },
         methods:{
             goSearch(){
@@ -363,6 +365,14 @@ import Upload from '../../../common/UPLOAD.vue'
             cencelUpload() {
                 this.importTmp= false,
                 this.importShow = false;
+            },
+            //判断是否有上传权限
+            judgePermission(){
+              this.$http.post(globalConfig.server + "salary/sala/import/").then(res => {
+                  if(Number(res.data.code) % 10 ===5){
+                      this.is_show=false;
+                  }
+              });
             },
             importExl() {
                 this.importTmp = true;
