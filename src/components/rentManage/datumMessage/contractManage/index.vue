@@ -1389,6 +1389,7 @@
           city.name = '';
         }
         this.addReturnInfo = row;
+        console.log(row)
         this.addReturnInfo.city_id = city.id;
         this.addReturnInfo.city_name = city.name;
         this.addReturnInfo.cities = this.cities;
