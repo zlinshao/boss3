@@ -73,6 +73,7 @@ const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSett
 const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue'); //编辑班次
+const Approval = () => import('../components/approval/index.vue');
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
@@ -561,7 +562,8 @@ export default new Router({
         {path: '/punchCard', component: PunchCard, name: '日统计'},
         {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
         // {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
-        {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'}
+        {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'},
+        {path: '/approval',component: Approval, name: '审批管理'}
       ]
     },
     // {

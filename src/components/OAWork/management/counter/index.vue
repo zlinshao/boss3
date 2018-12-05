@@ -91,8 +91,8 @@
                     </el-col>
                     <el-col :span="8" v-show="is_display">
                         <div class="monthPrice">
-                          <el-form-item label="中介费">
-                            <el-input v-model="form.lord_agency_count" placeholder="请输入中介费" size="mini"></el-input>
+                          <el-form-item label="收房渠道费">
+                            <el-input v-model="form.lord_agency_count" placeholder="请输入收房渠道费" size="mini"></el-input>
                           </el-form-item>
                         </div>
                       </el-col>
@@ -167,8 +167,8 @@
                   
                   <el-col :span="8">
                     <div class="signDate">
-                      <el-form-item label="中介费">
-                        <el-input v-model="form.rent_agency_count" placeholder="请输入中介费" size="mini"></el-input>
+                      <el-form-item label="租房渠道费">
+                        <el-input v-model="form.rent_agency_count" placeholder="请输入租房渠道费" size="mini"></el-input>
                       </el-form-item>
                     </div>
                   </el-col>
@@ -322,8 +322,8 @@
           this.is_disabled=true;
         }else{
           this.is_display=true;
-          this.form.rent_sign_month='';
-          this.form.lord_duration='';
+          // this.form.rent_sign_month='';
+          // this.form.lord_duration='';
           this.is_disabled=false;
         }
       }

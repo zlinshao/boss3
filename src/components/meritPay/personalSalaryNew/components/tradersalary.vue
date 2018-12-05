@@ -179,7 +179,7 @@
             }
         },
         mounted() {
-          this.month = new Date().toLocaleDateString();
+          // this.month = new Date().toLocaleDateString();
           this.getTableData();
         },
         methods:{

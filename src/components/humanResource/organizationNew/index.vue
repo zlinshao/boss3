@@ -661,7 +661,7 @@
                       <div class="content">
                         <span
                           v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
-                            {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
+                            {{staffDetailData.detail.entry_way.entry_type ? entryWayCategory[staffDetailData.detail.entry_way.entry_type-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
