@@ -44,7 +44,7 @@
       </div>
       <div style="margin-top: 30px;width: 60%;">
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="3">
             <el-checkbox v-model="params.autoContrast" size="mini" style="margin-top: 5px;">增加对比项</el-checkbox>
           </el-col>
           <el-col :span="4">
@@ -72,11 +72,11 @@
           :data="businessList"
           @header-click="handleHeaderClick"
         >
-          <el-table-column label="城市">
+          <el-table-column label="区域">
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.first">{{ scope.row.city }}</span><br>
-                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick">时间段</el-button>
+                <el-button v-if="scope.row.first && params.groupSort === 'group'" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick">时间段</el-button>
               </div>
             </template>
           </el-table-column>
@@ -128,7 +128,7 @@
             time: 1,
             dateTime: '',
             autoContrast: false,
-            groupSort: '',
+            groupSort: 'group',
             price: ''
           },
           businessList: [
