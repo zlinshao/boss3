@@ -242,5 +242,10 @@
       background: #c5cce2;
     }
   }
-
+  .el-picker-panel {
+        z-index: 3000!important;
+      }
+      .el-select-dropdown {
+        z-index: 3000!important;
+      }
 </style>
