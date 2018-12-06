@@ -21,7 +21,7 @@
             label="部门">
           </el-table-column>
           <el-table-column
-            prop="duty.name"
+            prop="name"
             label="职位">
           </el-table-column>
           <!--<el-table-column-->
