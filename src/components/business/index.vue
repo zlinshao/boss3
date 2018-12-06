@@ -2,18 +2,50 @@
     <div id="business">
       <div>
         <el-row :gutter="20">
-          <el-col :span="6">
+          <el-col :span="4">
             <div>
-              <span>区域：</span>
+              <span style="color: #409EFF;">显示：</span>
               <el-radio-group v-model="params.area">
-                <el-radio label="city">全部城市</el-radio>
-                <el-radio label="area">全部片区</el-radio>
-                <el-radio label="approval">新绩效片区</el-radio>
+                <el-radio label="city">城市</el-radio>
+                <el-radio label="area">片区</el-radio>
               </el-radio-group>
             </div>
           </el-col>
           <el-col :span="18">
             <div>
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <span style="color: #409EFF;">城市组成：</span>
+                  <div style="display: inline-block;">
+                    <el-checkbox-group v-model="params.city">
+                      <el-checkbox label="全部"></el-checkbox>
+                      <el-checkbox label="南京"></el-checkbox>
+                      <el-checkbox label="杭州"></el-checkbox>
+                      <el-checkbox label="合肥"></el-checkbox>
+                      <el-checkbox label="武汉"></el-checkbox>
+                    </el-checkbox-group>
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <span style="color: #409EFF;">片区组成：</span>
+                  <div style="display: inline-block;">
+                    <el-checkbox-group v-model="params.city2">
+                      <el-checkbox label="全部"></el-checkbox>
+                      <el-checkbox label="新绩效租"></el-checkbox>
+                      <el-checkbox label="就绩效租"></el-checkbox>
+                    </el-checkbox-group>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+      <!--时间-->
+      <div>
+        <el-row :gutter="20">
+          <el-col :span="14">
+            <div style="margin-top: 20px;">
               <span>时间：</span>
               <el-radio-group v-model="params.time">
                 <el-radio :label="1">最近1天</el-radio>
@@ -38,45 +70,48 @@
                   </template>
                 </el-radio>
               </el-radio-group>
+              <el-button type="primary" size="mini">确定时间</el-button>
+            </div>
+          </el-col>
+          <el-col :span="10">
+            <div style="margin-top: 20px;width: 100%;">
+              <el-row :gutter="20">
+                <el-col :span="4">
+                  <el-checkbox v-model="params.autoContrast" size="mini" style="margin-top: 5px;">增加对比项</el-checkbox>
+                </el-col>
+                <el-col :span="6">
+                  <el-select v-model="params.groupSort" size="mini">
+                    <el-option value="group" label="区域内排序"></el-option>
+                    <el-option value="all" label="区域间排序"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="6">
+                  <el-select v-model="params.price" size="mini">
+                    <el-option value="avg" label="平均差价"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="6">
+                  <el-button type="primary" size="mini" @click="handleAscOrder">升序</el-button>
+                  <el-button type="primary" size="mini" @click="handleDescOrder">降序</el-button>
+                </el-col>
+              </el-row>
             </div>
           </el-col>
         </el-row>
       </div>
-      <div style="margin-top: 30px;width: 60%;">
-        <el-row :gutter="20">
-          <el-col :span="3">
-            <el-checkbox v-model="params.autoContrast" size="mini" style="margin-top: 5px;">增加对比项</el-checkbox>
-          </el-col>
-          <el-col :span="4">
-            <el-select v-model="params.groupSort" size="mini">
-              <el-option value="group" label="区域内排序"></el-option>
-              <el-option value="all" label="区域间排序"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="4">
-            <el-select v-model="params.price" size="mini">
-              <el-option value="avg" label="平均差价"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="4">
-              <el-button type="primary" size="mini" @click="handleAscOrder">升序</el-button>
-              <el-button type="primary" size="mini" @click="handleDescOrder">降序</el-button>
-          </el-col>
-        </el-row>
-      </div>
-
       <div style="margin-top: 30px;">
         <el-table
           :header-cell-class-name="headerStyle"
           :cell-style="cellStyle"
+          :row-class-name="tableRowClassName"
           :data="businessList"
           @header-click="handleHeaderClick"
         >
           <el-table-column label="区域">
             <template slot-scope="scope">
               <div>
-                <span v-if="scope.row.first">{{ scope.row.city }}</span><br>
-                <el-button v-if="scope.row.first && params.groupSort === 'group'" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick">时间段</el-button>
+                <span v-if="scope.row.first">{{ scope.row.city }}</span>
+                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick">时间段</el-button>
               </div>
             </template>
           </el-table-column>
@@ -84,7 +119,7 @@
 
           <el-table-column label="收房">
             <el-table-column label="数量" prop="collect.num"></el-table-column>
-            <el-table-column label="渠道单对比" prop="collect.zhongjie"></el-table-column>
+            <el-table-column label="渠道单比例" prop="collect.zhongjie"></el-table-column>
             <el-table-column label="均价" prop="collect.avg"></el-table-column>
             <el-table-column label="空置期" prop="collect.kongzhi"></el-table-column>
             <el-table-column label="总月数" prop="collect.months"></el-table-column>
@@ -92,7 +127,7 @@
           <el-table-column label="租房">
             <el-table-column label="数量" prop="rent.num"></el-table-column>
             <el-table-column label="已空置" prop="rent.kongzhi"></el-table-column>
-            <el-table-column label="渠道单对比" prop="rent.qudao"></el-table-column>
+            <el-table-column label="渠道单比例" prop="rent.qudao"></el-table-column>
             <el-table-column label="均价" prop="rent.avg"></el-table-column>
             <el-table-column label="回款" prop="rent.back"></el-table-column>
             <el-table-column label="平均差价" prop="rent.avgPrice"></el-table-column>
@@ -106,7 +141,6 @@
           </el-table-column>
         </el-table>
       </div>
-
       <el-dialog
         title="数据统计"
         :visible.sync="statisticalVisible"
@@ -129,7 +163,9 @@
             dateTime: '',
             autoContrast: false,
             groupSort: 'group',
-            price: ''
+            price: '',
+            city: [],
+            city2: []
           },
           businessList: [
             {city: '南京',first:true,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
@@ -188,6 +224,7 @@
         handleAddClick() {
           this.$message("this is add time range operation");
         },
+        //表头颜色
         cellStyle({row, column, rowIndex, columnIndex}) {
           if(column.label === '总业绩'){
             return "color: #DDAF6A";
@@ -198,7 +235,15 @@
           }else if(columnIndex > 12 && columnIndex < 16){
             return "color: #67C23A";
           }
-        }
+        },
+        //区域颜色划分
+        tableRowClassName({row}) {
+          if(row.first){
+            return "success-row";
+          }else {
+            return "";
+          }
+        },
       }
     }
 </script>
@@ -206,10 +251,21 @@
 <style lang="scss">
   #business{
     width: 100%;
-    /*.el-table--border th{*/
-      /*border-bottom: 1px solid #808080 !important;*/
-      /*border-right: 1px solid #808080 !important;*/
-    /*}*/
+    .el-table--border,
+    .el-table--border td,
+    .el-table--border th,
+    .el-table--border tr{
+      border: none !important;
+    }
+    .el-table .success-row {
+      background: #f0f9eb;
+    }
+    .el-table::before{
+      height: 0 !important;
+    }
+    .el-table--border::after, .el-table--group::after{
+      width: 0 !important;
+    }
     .rentBg{
       color: white;
       background-color: #E38E8E !important;
