@@ -111,7 +111,7 @@
       },
       methods: {
         LookDetail(row) {
-          this.$http.get(this.url + `attendance/flow_records/${row.user_id}`).then(res => {
+          this.$http.get(this.url + `attendance/flow_records/${row.id}`).then(res => {
             console.log(res);
             if(res.data.code === "10000"){
               this.detailData = res.data.data.content;
