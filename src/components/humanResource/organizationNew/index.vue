@@ -306,38 +306,38 @@
                         prop="name"
                         label="岗位">
                       </el-table-column>
-                      <!--<el-table-column-->
-                        <!--label="职级">-->
-                        <!--<template slot-scope="scope">-->
-                          <!--<span style="color: #409EFF;cursor: pointer;" @click.stop="lookPath(scope.row)">{{scope.row.path_length}}</span>-->
-                        <!--</template>-->
-                      <!--</el-table-column>-->
                       <el-table-column
-                      label="下级岗位">
-                      <template slot-scope="scope">
-                      <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
-                      <span v-else=""> &nbsp;暂无&nbsp; </span>
-                      </template>
-                      </el-table-column>
-                      <el-table-column
-                      prop="duty.name"
-                      label="职位">
-                      </el-table-column>
-                      <el-table-column
-                      label="岗位标识">
-                      <template slot-scope="scope">
-                      <span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">
-                      <span v-if="index === 0">{{item.name}}</span>
-                      </span>
-                      <span v-else>&nbsp;暂无&nbsp;</span>
-                      </template>
+                        label="职级">
+                        <template slot-scope="scope">
+                          <span style="color: #409EFF;cursor: pointer;" @click.stop="lookPath(scope.row)">{{scope.row.path_length}}</span>
+                        </template>
                       </el-table-column>
                       <!--<el-table-column-->
-                        <!--label="人数">-->
-                        <!--<template slot-scope="scope">-->
-                          <!--<span>{{scope.row.users.length}}</span>-->
-                        <!--</template>-->
+                      <!--label="下级岗位">-->
+                      <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
+                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
+                      <!--</template>-->
                       <!--</el-table-column>-->
+                      <!--<el-table-column-->
+                      <!--prop="duty.name"-->
+                      <!--label="职位">-->
+                      <!--</el-table-column>-->
+                      <!--<el-table-column-->
+                      <!--label="岗位标识">-->
+                      <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">-->
+                      <!--<span v-if="index === 0">{{item.name}}</span>-->
+                      <!--</span>-->
+                      <!--<span v-else>&nbsp;暂无&nbsp;</span>-->
+                      <!--</template>-->
+                      <!--</el-table-column>-->
+                      <el-table-column
+                        label="人数">
+                        <template slot-scope="scope">
+                          <span>{{scope.row.users.length}}</span>
+                        </template>
+                      </el-table-column>
                       <el-table-column
                         prop="orgName"
                         label="部门">
@@ -964,7 +964,7 @@
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
     <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
-    <RemovePower :module="RemovePowerModule" @close="closeRemovePower" :powerData="RemovePowerData"></RemovePower>
+    <RemovePower :module="removePowerModule" @close="closeRemovePower" :powerData="removePowerData"></RemovePower>
 
     <ViewRange :viewRangeDialog="viewRangeDialog" :editId="editId" @close="closeViewRange"></ViewRange>
     <!--查看职级-->
@@ -1034,7 +1034,7 @@
         branchBankCategory: [],
         isHigh: false,
         powerData: [],
-        RemovePowerData: [],
+        removePowerData: [],
         collectStatus: ' ',
         collectLoading: false,
         userCollectStatus: ' ',
@@ -1109,7 +1109,7 @@
         editPositionDialog: false,    //修改职位
         editOnlyPositionDialog: false, //修改职务
         powerModule: false,        //权限
-        RemovePowerModule: false,        //权限黑名单
+        removePowerModule: false,        //权限黑名单
         isEdit: false,
         editId: null,
         totalStaffNum: 0,
@@ -1630,8 +1630,8 @@
       },
       //================权限====================
       closeRemovePower() {
-        this.RemovePowerModule = false;
-        this.RemovePowerData = [];
+        this.removePowerModule = false;
+        this.removePowerData = [];
       },
       //********************员工操作函数****************
       //获取员工数据列表
@@ -1946,8 +1946,8 @@
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
         } else if (val.clickIndex === 'remove_power') {
-          this.RemovePowerModule = true;
-          this.RemovePowerData = val.data;
+          this.removePowerModule = true;
+          this.removePowerData = val.data;
         }
       },
       //禁用，启用
@@ -2122,11 +2122,11 @@
         data.id = val.id;
         data.name = val.name;
         data.parent_id = val.parent_id;
-        this.RemovePowerData = val;
-        this.RemovePowerData.types = 'position';
-        this.RemovePowerData.positions = [];
-        this.RemovePowerData.positions.push(data);
-        this.RemovePowerModule = true;
+        this.removePowerData = val;
+        this.removePowerData.types = 'position';
+        this.removePowerData.positions = [];
+        this.removePowerData.positions.push(data);
+        this.removePowerModule = true;
       },
       //根据职位获取职位
       getPosition() {

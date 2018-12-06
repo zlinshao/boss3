@@ -69,18 +69,25 @@
         <el-button size="small" type="primary" @click="dialogVisible=false">关 闭</el-button>
       </span>
     </el-dialog>
+
+    <RemovePower :module="removePowerModule" @close="closeRemovePower" :powerData="removePowerData"></RemovePower>
   </div>
 </template>
 
 <script>
+  import RemovePower from './removePower.vue'   //权限
+
   export default {
     name: "path-length",
     props: ['module', 'path'],
+    components: {RemovePower},
     data() {
       return {
         pathTableData: [],
+        removePowerData: [],
         pathNum: 0,
         dialogVisible: false,
+        removePowerModule: false,
         pathStatus: ' ',
         pathLoading: false,
         params: {
@@ -110,7 +117,6 @@
     computed: {},
     methods: {
       getPosition(val) {
-        this.pathTableData = [];
         this.pathLoading = true;
         this.pathStatus = ' ';
         this.params.deep = val;
@@ -122,10 +128,32 @@
             this.pathTableData = res.data.data.data;
             this.pathNum = res.data.data.count;
           } else {
-            this.pathNum = 0;
-            this.pathStatus = '暂无数据';
+            this.notAvailable();
           }
+        }).catch(_ => {
+          this.notAvailable();
         })
+      },
+      notAvailable() {
+        this.pathNum = 0;
+        this.pathTableData = [];
+        this.pathStatus = '暂无数据';
+      },
+      // 查看权限
+      lookPower(val) {
+        let data = {};
+        data.description = val.orgName;
+        data.id = val.id;
+        data.name = val.name;
+        data.parent_id = val.parent_id;
+        this.removePowerData = val;
+        this.removePowerData.types = 'position';
+        this.removePowerData.positions = [];
+        this.removePowerData.positions.push(data);
+        this.removePowerModule = true;
+      },
+      closeRemovePower() {
+        this.removePowerModule = false;
       },
       //岗位
       handlePostSizeChange(val) {
