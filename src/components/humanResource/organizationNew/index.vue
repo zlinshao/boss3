@@ -2267,7 +2267,8 @@
           this.postStaffLoading = true;
           this.postStaffStatus = ' ';
         }
-        this.$http.get(globalConfig.server + 'organization/other/staff-list?org_id=' + this.selectOrgID + '&position_id=' + this.selectPostID
+        // org_id = this.selectOrgID
+        this.$http.get(globalConfig.server + 'organization/other/staff-list?position_id=' + this.selectPostID
           + '&page=' + this.postStaffParams.page + '&limit=' + this.postStaffParams.limit).then((res) => {
           this.postStaffLoading = false;
           if (res.data.code === '70010') {
