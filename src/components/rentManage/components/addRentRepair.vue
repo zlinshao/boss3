@@ -182,12 +182,13 @@
         }
       },
       contract(val) {
+        console.log(val)
         this.form.city = val.city_id;
         this.city_name = val.city_name;
         this.address = val.address;
         this.form.contract_id = val.contract_id;
         this.form.contract_number = val.contract_number;
-        this.form.landlord_mobile = val.phone;
+        this.form.landlord_mobile = val.landlord_mobile;
         this.cities = val.cities;
       },
     },

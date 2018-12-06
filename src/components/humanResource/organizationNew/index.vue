@@ -288,7 +288,7 @@
                     </el-pagination>
                   </div>
                 </div>
-                <!--岗位-->
+                <!--职位-->
                 <div class="tableBox">
                   <div class="greenTable">
                     <el-table
@@ -306,29 +306,47 @@
                         prop="name"
                         label="岗位">
                       </el-table-column>
+                      <!--<el-table-column-->
+                        <!--label="职级">-->
+                        <!--<template slot-scope="scope">-->
+                          <!--<span style="color: #409EFF;cursor: pointer;" @click.stop="lookPath(scope.row)">{{scope.row.path_length}}</span>-->
+                        <!--</template>-->
+                      <!--</el-table-column>-->
                       <el-table-column
-                        label="下级岗位">
-                        <template slot-scope="scope">
-                          <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
-                          <span v-else=""> &nbsp;暂无&nbsp; </span>
-                        </template>
+                      label="下级岗位">
+                      <template slot-scope="scope">
+                      <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
+                      <span v-else=""> &nbsp;暂无&nbsp; </span>
+                      </template>
                       </el-table-column>
                       <el-table-column
-                        prop="duty.name"
-                        label="职位">
+                      prop="duty.name"
+                      label="职位">
                       </el-table-column>
                       <el-table-column
-                        label="岗位标识">
-                        <template slot-scope="scope">
-                          <span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">
-                            <span v-if="index === 0">{{item.name}}</span>
-                          </span>
-                          <span v-else>&nbsp;暂无&nbsp;</span>
-                        </template>
+                      label="岗位标识">
+                      <template slot-scope="scope">
+                      <span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">
+                      <span v-if="index === 0">{{item.name}}</span>
+                      </span>
+                      <span v-else>&nbsp;暂无&nbsp;</span>
+                      </template>
                       </el-table-column>
+                      <!--<el-table-column-->
+                        <!--label="人数">-->
+                        <!--<template slot-scope="scope">-->
+                          <!--<span>{{scope.row.users.length}}</span>-->
+                        <!--</template>-->
+                      <!--</el-table-column>-->
                       <el-table-column
                         prop="orgName"
                         label="部门">
+                      </el-table-column>
+                      <el-table-column
+                        label="权限">
+                        <template slot-scope="scope">
+                          <span style="color: #409EFF;cursor: pointer;" @click.stop="lookPower(scope.row)">查看</span>
+                        </template>
                       </el-table-column>
                     </el-table>
                   </div>
@@ -949,6 +967,8 @@
     <RemovePower :module="RemovePowerModule" @close="closeRemovePower" :powerData="RemovePowerData"></RemovePower>
 
     <ViewRange :viewRangeDialog="viewRangeDialog" :editId="editId" @close="closeViewRange"></ViewRange>
+    <!--查看职级-->
+    <PathLength :module="lookPathModule" :path="pathDeep" @close="closeLook"></PathLength>
   </div>
 </template>
 
@@ -964,7 +984,8 @@
   import EditOnlyPosition from './components/editOnlyPostion.vue'
   import AddPower from './components/addPower.vue'   //权限
   import RemovePower from './components/removePower.vue'   //权限
-  import ViewRange from './components/addViewRange'
+  import ViewRange from './components/addViewRange.vue'
+  import PathLength from './components/pathLength.vue' //查看职级
 
   export default {
     name: 'tree',
@@ -979,7 +1000,8 @@
       EditOnlyPosition,
       AddPower,
       RemovePower,
-      ViewRange
+      ViewRange,
+      PathLength
     },
     data() {
       return {
@@ -1076,13 +1098,16 @@
         positionList: [],      //职位列表
         postStaffData: [],  //岗位下的员工列表
         organizationDialog: false,
+
+        lookPathModule: false,    //查看职级
+        pathDeep: '',           //查看职级
         //......................
         addStaffDialog: false, //新增用户模态框
         editDepartDialog: false, //编辑部门模态框
         addDepartDialog: false, //新建部门模态框
         addPositionDialog: false, //新建岗位
-        editPositionDialog: false,    //修改岗位
-        editOnlyPositionDialog: false, //修改职位
+        editPositionDialog: false,    //修改职位
+        editOnlyPositionDialog: false, //修改职务
         powerModule: false,        //权限
         RemovePowerModule: false,        //权限黑名单
         isEdit: false,
@@ -1561,7 +1586,6 @@
       },
       //新建部门
       addDepart(data) {
-        console.log(data);
         this.parentId = data.id;
         this.parentName = data.name;
         this.addDepartDialog = true;
@@ -1980,7 +2004,7 @@
       },
 
       //********************职位操作函数****************
-      //获取单独职位列表
+      //获取单独职务列表
       getOnlyPosition() {
         this.positionTableData = [];
         this.totalPositionNum = 0;
@@ -2013,7 +2037,7 @@
           })
         }
       },
-      //职位右键菜单
+      //职务右键菜单
       openOnlyPositionMenu(row, event) {
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
@@ -2028,7 +2052,7 @@
         ];
         this.contextParams(event);
       },
-      //职位单击
+      //职务单击
       clickOnlyPositionMenu(row, event) {
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
@@ -2043,7 +2067,7 @@
         this.selectOrgID = row.duty.org_id;
         this.getPostStaffData();
       },
-      //右键职位回调
+      //右键职务回调
       openOnlyPositionDialog(val) {
         if (val.clickIndex === 'edit') {
           this.editOnlyPositionDialog = true;
@@ -2071,7 +2095,7 @@
       closeViewRange() {
         this.viewRangeDialog = false;
       },
-      //删除职位
+      //删除职务
       deleteOnlyPosition() {
         this.$http.get(globalConfig.server + 'organization/duty/delete/' + this.onlyPositionId).then((res) => {
           if (res.data.code === '20050') {
@@ -2083,13 +2107,35 @@
         })
       },
       //********************岗位操作函数****************
-      //根据职位获取岗位
+      // 查看职级
+      lookPath(row) {
+        this.pathDeep = row.path_length;
+        this.lookPathModule = true;   //查看职级
+      },
+      closeLook() {
+        this.lookPathModule = false;
+      },
+      // 查看权限
+      lookPower(val) {
+        let data = {};
+        data.description = val.orgName;
+        data.id = val.id;
+        data.name = val.name;
+        data.parent_id = val.parent_id;
+        this.RemovePowerData = val;
+        this.RemovePowerData.types = 'position';
+        this.RemovePowerData.positions = [];
+        this.RemovePowerData.positions.push(data);
+        this.RemovePowerModule = true;
+      },
+      //根据职位获取职位
       getPosition() {
         this.postStaffData = [];
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
-        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + this.onlyPositionId + '&page=' +
-          this.postParams.page + '&limit=' + this.postParams.limit).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + this.onlyPositionId, {
+          params: this.postParams,
+        }).then((res) => {
           this.postCollectLoading = false;
           if (res.data.code === '20000') {
             let arr = res.data.data.data;
@@ -2103,10 +2149,9 @@
             arr.forEach((item) => {
               item.orgName = this.department_name;
             });
-            this.positionTableData = res.data.data.data;
+            this.positionTableData = arr;
             this.totalPostNum = res.data.data.count;
             if (arr.length > 0) {
-              console.log(arr[0]);
               this.selectPostID = arr.id;
               this.selectOrgID = arr[0].duty.org_id;
               this.getPostStaffData();
@@ -2117,19 +2162,19 @@
           } else {
             this.totalPostNum = 0;
             this.positionTableData = [];
+            this.pathTableData = [];
             this.postCollectStatus = '暂无数据';
             this.postStaffStatus = '暂无数据';
           }
         })
       },
-      //岗位右键菜单
+      //职位右键菜单
       openPositionMenu(row, event) {
         this.positionId = row.id;
         this.positionName = row.name;
         this.menuType = 'position';
         this.lists = [
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'remove_power', headIcon: 'el-icon-edit', label: '权限', data: row},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextParams(event);
@@ -2146,27 +2191,16 @@
             this.deletePosition();
           }).catch(() => {
           });
-        } else if (val.clickIndex === 'remove_power') {
-          let data = {};
-          data.description = val.data.orgName;
-          data.id = val.data.id;
-          data.name = val.data.name;
-          data.parent_id = val.data.parent_id;
-          this.RemovePowerData = val.data;
-          this.RemovePowerData.types = 'position';
-          this.RemovePowerData.positions = [];
-          this.RemovePowerData.positions.push(data);
-          this.RemovePowerModule = true;
         }
       },
-      //修改岗位完成回调
+      //修改职位完成回调
       closeEditPosition(val) {
         this.editPositionDialog = false;
         if (val === 'success') {
           this.getPosition();
         }
       },
-      //删除岗位
+      //删除职位
       deletePosition() {
         this.$http.get(globalConfig.server + 'organization/position/delete/' + this.positionId).then((res) => {
           if (res.data.code === '20041') {
@@ -2177,7 +2211,7 @@
           }
         })
       },
-      //新建岗位  position职位  post岗位
+      //新建职位  position职务  post职位
       addPosition(val) {
         this.addPositionDialog = true;
         if (val === 'position') {
@@ -2189,7 +2223,6 @@
             position_id: this.onlyPositionId, position_name: this.onlyPositionName
           })
         }
-        console.log(this.addPositionParams)
       },
       closeAddPosition(val) {
         this.addPositionDialog = false;

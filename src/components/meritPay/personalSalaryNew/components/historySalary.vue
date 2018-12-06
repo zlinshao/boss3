@@ -17,7 +17,7 @@
             <el-form-item>
                 <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="is_show">
                 <el-button type="primary" size="mini" @click="importShow = true">导入<i
                       class="el-icon-upload el-icon--right"></i></el-button>
             </el-form-item>
@@ -67,6 +67,10 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
           width="100%">
+          <el-table-column
+            label="工资月份"
+            prop="salary_month"
+          ></el-table-column>
           <el-table-column
             label="姓名"
             prop="name"
@@ -257,7 +261,7 @@
         <el-pagination
           @current-change="handleCurrentChange"
           :current-page="form.page"
-          :page-size="5"
+          :page-size="12"
           layout="total, prev, pager, next, jumper"
           :total="totalNum">
         </el-pagination>
@@ -289,7 +293,7 @@ import Upload from '../../../common/UPLOAD.vue'
                 totalNum: 0,
                 active: 0,
                 form: {
-                    limit: 5,
+                    limit: 12,
                     page: 1,
                     date:'',
                     staff_ids:[],
@@ -303,10 +307,12 @@ import Upload from '../../../common/UPLOAD.vue'
                 file_id:'',
                 importShow:false,
                 importTmp: false,
+                is_show:true
             }
         },
         mounted() {
             this.getTableData();
+            this.judgePermission();
         },
         methods:{
             goSearch(){
@@ -329,7 +335,7 @@ import Upload from '../../../common/UPLOAD.vue'
                 this.$http.get(globalConfig.server + 'salary/sala/index/',{params:this.form} ).then((res) => {
                 this.isHigh = false;
                 this.collectLoading = false;
-                if (res.data.code === '88800') {
+                if (Number(res.data.code) % 10 ===0) {
                     this.header = res.data.data.data[0].header;
                     this.tableData = res.data.data.data;
                     this.totalNum = Number(res.data.data.count);
@@ -359,6 +365,14 @@ import Upload from '../../../common/UPLOAD.vue'
             cencelUpload() {
                 this.importTmp= false,
                 this.importShow = false;
+            },
+            //判断是否有上传权限
+            judgePermission(){
+              this.$http.post(globalConfig.server + "salary/sala/import/").then(res => {
+                  if(Number(res.data.code) % 10 ===5){
+                      this.is_show=false;
+                  }
+              });
             },
             importExl() {
                 this.importTmp = true;

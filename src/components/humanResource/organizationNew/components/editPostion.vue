@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="修改岗位" :visible.sync="editPositionDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改职位" :visible.sync="editPositionDialogVisible" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
             <el-col :span="24">
-              <el-form-item label="岗位名称" required="">
+              <el-form-item label="职位名称" required="">
                 <el-input placeholder="请输入内容" v-model="params.name"></el-input>
               </el-form-item>
             </el-col>

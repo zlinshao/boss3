@@ -35,7 +35,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="租客电话">
+              <el-form-item label="房东电话">
                 <el-input v-model="form.landlord_mobile"></el-input>
               </el-form-item>
             </el-col>

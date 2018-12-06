@@ -88,9 +88,27 @@
                 <el-input type="number" v-model="form.allBuilding" placeholder="请输入总栋数"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="12" v-if='isSingle'>
               <el-form-item label="物业费">
-                <el-input type="number" v-model="form.propertyFee" placeholder="金额"></el-input>
+                <el-input type="number" v-model="form.property_fee" placeholder="金额"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" v-if='!isSingle'>
+              <el-form-item label="物业费">
+                <el-col :span="11">
+                  <el-input v-model="property_fee_min" placeholder="请输入最小"></el-input>
+                </el-col>
+                <el-col class="line" :span="2" style="text-align: center">-</el-col>
+                <el-col :span="11">
+                  <el-input v-model="property_fee_max" placeholder="请输入最大"></el-input>
+                </el-col>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="物业联系方式">
+                <el-input type="text" v-model="form.property_phone" placeholder="请输入联系方式"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -147,6 +165,9 @@
         villageId: '',
         mapVisible: false,
         dialogVisible: false,
+        isSingle:true,
+        property_fee_min: '',
+        property_fee_max: '',
         cover_pic: {},
         form: {
           province: '',                 //小区位置
@@ -161,9 +182,10 @@
           allBuilding: '',              //总栋数
           latitude: '',                 //纬度
           longitude: '',                //经度
-          propertyFee: '',              //物业费
-          min_price: '',              //物业费
-          max_price: '',              //物业费
+          property_fee: '',             //物业费
+          property_phone:'',            //物业联系方式
+          min_price: '',                //物业费
+          max_price: '',                //物业费
           addressId: [],                //小区照片
           configure: '',                //周边配套
           villageIntroduce: '',         //小区简介
@@ -178,6 +200,7 @@
 
     watch: {
       formList(val) {
+        console.log(val)
         this.villageId = val.id;
         this.form.province = val.province.province_id;
         if (val.province !== '') {
@@ -200,7 +223,18 @@
         this.form.built_year = val.built_year;
         this.form.houseType = val.house_type;
         this.form.allBuilding = val.total_buildings;
-        this.form.propertyFee = val.property_fee;
+        
+        if(val.property_fee === null || val.property_fee === ''){
+          this.form.property_fee = ''
+        }else if(val.property_fee.indexOf('至') > -1){
+          this.isSingle = false;
+          this.property_fee_min = val.property_fee.split(/\D+/)[0];
+          this.property_fee_max = val.property_fee.split(/\D+/)[1];
+        }else{
+          this.isSingle = true;
+          this.form.property_fee = +val.property_fee.match(/\d+(\.\d+)*/)[0];
+        }
+        this.form.property_phone = val.property_phone;
         this.form.min_price = val.min_price;
         this.form.max_price = val.max_price;
         this.form.configure = val.peripheral_info;
@@ -290,6 +324,9 @@
       },
       villageSave(addr) {
         let type, urls;
+        if(!this.isSingle){
+          this.form.property_fee = this.property_fee_min + '至' + this.property_fee_max;
+        }
         if (addr === 'save') {
           type = this.$http.post;
           urls = this.urls + 'setting/community/save';
@@ -311,7 +348,8 @@
           built_year: this.form.built_year,
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
-          property_fee: this.form.propertyFee,
+          property_fee: this.form.property_fee,
+          property_phone: this.form.property_phone,
           min_price: this.form.min_price,
           max_price: this.form.max_price,
           house_pic: this.form.addressId,
@@ -320,6 +358,7 @@
         }).then((res) => {
           if (res.data.code === '10010' || res.data.code === '10030') {
             this.dialogVisible = false;
+            this.isSingle = true;
             this.$emit('addVillage');
             this.prompt(res.data.msg, 1);
           } else {
@@ -341,13 +380,17 @@
         this.form.allBuilding = '';              //总栋数
         this.form.latitude = '';                 //纬度
         this.form.longitude = '';                //经度
-        this.form.propertyFee = '';              //物业费
-        this.form.min_price = '';              //物业费
-        this.form.max_price = '';              //物业费
+        this.form.property_fee = '';             //物业费
+        this.form.property_phone = '';           //物业联系方式
+        this.form.min_price = '';                //物业费
+        this.form.max_price = '';                //物业费
         this.form.addressId = [];                //小区照片
-        this.cover_pic = {};                    //小区照片
+        this.cover_pic = {};                     //小区照片
         this.form.configure = '';                //周边配套
         this.form.villageIntroduce = '';         //小区简介
+        this.property_fee_max = '';
+        this.property_fee_min = '';
+        this.isSingle = true;
         $('.imgItem').remove();
       },
       // ====================提示信息=================
