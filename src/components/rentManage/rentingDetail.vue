@@ -52,7 +52,7 @@
           </div>
           <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc"
                style="display: inline-block">
-              <el-button type="primary" size="mini" @click.stop="getContract">合同公司联录入</el-button>
+              <!--<el-button type="primary" size="mini" @click.stop="contractEntry = true">合同公司联录入</el-button>-->
             <el-dropdown>
               <el-button type="primary" size="mini">
               <span v-if="contractInfo.doc_status">
@@ -66,7 +66,7 @@
                     v-for="item in contractInfo.operation.doc" :key="item"
                     @click.native="confirmPress(item)">
                     <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
-                    <span v-if="item === 'to_contract_approved'" @click.stop="contractEntry = true">合同资料无误，同意</span>
+                    <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
                     <span v-if="item === 'to_cancelled'">撤销审核</span>
                     <span v-if="item === 'to_contract_rejected'">合同资料有误，拒绝</span>
                     <span v-if="item === 'to_house_approved'">房屋资料无误，同意</span>

@@ -150,6 +150,7 @@
         components:{Organization,RightMenu,LordtraderDetail},
         data(){
             return{
+              url: globalConfig.server,
                 isHigh: false,
                 tableData: [],
                 totalNum: 0,
@@ -178,16 +179,15 @@
             }
         },
         mounted() {
+          // this.month = new Date().toLocaleDateString();
           this.getTableData();
         },
         methods:{
           getTableData() {
-            if (this.month) {
-              this.form.date = this.month.substring(2);
-            }
+            this.form.date = this.month.split("/").join("").substring(2,6);
             this.collectLoading = true;
             this.collectStatus = ' ';
-            this.$http.get(globalConfig.server + 'salary/achv/getSalary/',{params:this.form}).then((res) => {
+            this.$http.get(this.url + 'salary/achv/getSalary/',{params:this.form}).then((res) => {
               this.isHigh = false;
               this.collectLoading = false;
               if (res.data.code === '88800') {
@@ -211,6 +211,9 @@
           // 重置
           resetting() {
             this.form.date = '';
+            this.closeDepart();
+            this.month = "";
+            this.closeStaff();
           },
           // 高级筛选
           highGrade() {
@@ -253,7 +256,8 @@
             }
           },
           exportData(){
-            alert('导出');
+            window.location.href = this.url + `salary/achv/getSalary/?page=${this.form.page}&limit=${this.form.limit}&date=${this.form.date}&staff_ids=${this.form.staff_ids}&
+            depart_ids=${this.form.depart_ids}&export=1`;
           },
           // 右键
           openContextMenu(row, event) {

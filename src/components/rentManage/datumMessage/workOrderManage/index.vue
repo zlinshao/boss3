@@ -436,7 +436,7 @@
                  <span>处理中:</span><span>{{workPreview.editing}}</span>
                  <span>已完成:</span><span>{{workPreview.edited}}</span>
                </div>
-               <el-table :data="workOrderDataTotal.follow" style="width: 100%" element-loading-text="拼命加载中" v-loading="totalLoading">
+               <el-table :data="workOrderDataTotal.follow" style="width: 100%" element-loading-text="拼命加载中" v-loading="totalLoading" stripe>
                 <el-table-column
                   prop="name"
                   label="跟进人"
@@ -496,6 +496,18 @@
               </el-pagination>
             </div>
           </div>
+          <div class="tableBottom" v-if="this.activeName === 'third'">
+            <div class="left">
+              <el-pagination
+                @current-change="totalCurrentChange"
+                :current-page="totalParam.page"
+                :page-sizes="[12, 20, 30, 40]"
+                :page-size="totalParam.limit"
+                layout="total, prev, pager, next, jumper"
+                :total="totalNumber">
+              </el-pagination>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -545,6 +557,10 @@
           type: '',
           module: 1,
           sort: '',
+        },
+        totalParam: {
+          page: 1,
+          limit: 12
         },
         follow_name: '',   //跟进人
         length: 0,
@@ -614,6 +630,7 @@
           this.params.module = 3;
           this.getTotalData();
         }
+        this.$store.dispatch('activeName',this.activeName)
       },
       close_() {
         this.params = {
@@ -627,6 +644,11 @@
           update_time: '',
           finish_time: '',
           type: '',
+        };
+        //工单统计
+        this.totalParam = {
+          page: 1,
+          limit: 12
         }
       },
       getDictionary() {
@@ -675,7 +697,7 @@
       //工单统计数据
       getTotalData(){
         this.totalLoading = true;
-        this.$http.get(globalConfig.server + 'customer/work_order/total').then(res => {
+        this.$http.get(globalConfig.server + 'customer/work_order/total', {params: this.totalParam}).then(res => {
           this.totalLoading = false;
           if(res.data.code === '10030'){
             if(res.data.data.sumCount){
@@ -701,7 +723,9 @@
               }
             }
             this.workOrderDataTotal = res.data.data;
-            console.log(this.workPreview)
+            this.totalNumber = res.data.data.meta.count;
+          }else{
+            this.totalNumber = 0;
           }
         })
       },
@@ -755,6 +779,11 @@
         this.params.pages = val;
         this.searchList();
         this.$store.dispatch('workOrderFilter', this.params);
+      },
+      totalCurrentChange(val){
+        this.totalParam.page = val;
+        this.getTotalData();
+        this.$store.dispatch('workOrderTotalFilter', this.totalParam)
       },
       //房屋右键
       houseMenu(row, event) {

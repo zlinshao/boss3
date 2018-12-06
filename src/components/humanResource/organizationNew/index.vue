@@ -288,7 +288,7 @@
                     </el-pagination>
                   </div>
                 </div>
-                <!--岗位-->
+                <!--职位-->
                 <div class="tableBox">
                   <div class="greenTable">
                     <el-table
@@ -307,28 +307,46 @@
                         label="岗位">
                       </el-table-column>
                       <el-table-column
-                        label="下级岗位">
+                        label="职级">
                         <template slot-scope="scope">
-                          <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
-                          <span v-else=""> &nbsp;暂无&nbsp; </span>
+                          <span style="color: #409EFF;cursor: pointer;" @click.stop="lookPath(scope.row)">{{scope.row.path_length}}</span>
                         </template>
                       </el-table-column>
+                      <!--<el-table-column-->
+                      <!--label="下级岗位">-->
+                      <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
+                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
+                      <!--</template>-->
+                      <!--</el-table-column>-->
+                      <!--<el-table-column-->
+                      <!--prop="duty.name"-->
+                      <!--label="职位">-->
+                      <!--</el-table-column>-->
+                      <!--<el-table-column-->
+                      <!--label="岗位标识">-->
+                      <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">-->
+                      <!--<span v-if="index === 0">{{item.name}}</span>-->
+                      <!--</span>-->
+                      <!--<span v-else>&nbsp;暂无&nbsp;</span>-->
+                      <!--</template>-->
+                      <!--</el-table-column>-->
                       <el-table-column
-                        prop="duty.name"
-                        label="职位">
-                      </el-table-column>
-                      <el-table-column
-                        label="岗位标识">
+                        label="人数">
                         <template slot-scope="scope">
-                          <span v-if="scope.row.roles.length" v-for="(item,index) in scope.row.roles">
-                            <span v-if="index === 0">{{item.name}}</span>
-                          </span>
-                          <span v-else>&nbsp;暂无&nbsp;</span>
+                          <span>{{scope.row.users.length}}</span>
                         </template>
                       </el-table-column>
                       <el-table-column
                         prop="orgName"
                         label="部门">
+                      </el-table-column>
+                      <el-table-column
+                        label="权限">
+                        <template slot-scope="scope">
+                          <span style="color: #409EFF;cursor: pointer;" @click.stop="lookPower(scope.row)">查看</span>
+                        </template>
                       </el-table-column>
                     </el-table>
                   </div>
@@ -643,7 +661,7 @@
                       <div class="content">
                         <span
                           v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
-                            {{JSON.parse(staffDetailData.detail.entry_way).entry_type ? entryWayCategory[(JSON.parse(staffDetailData.detail.entry_way).entry_type)-1].name : ''}}
+                            {{staffDetailData.detail.entry_way.entry_type ? entryWayCategory[staffDetailData.detail.entry_way.entry_type-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
@@ -659,8 +677,9 @@
                   <el-col :span="8">
                     <el-form-item label="备注">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
-                      {{JSON.parse(staffDetailData.detail.entry_way).entry_mess}}</span>
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
+                      {{staffDetailData.detail.entry_way.entry_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -670,7 +689,8 @@
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
                       {{DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -679,7 +699,8 @@
                   <el-col :span="8">
                     <el-form-item label="具体描述">
                       <div class="content">
-                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                    <span
+                      v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
                       {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
                         <span v-else>暂无</span>
                       </div>
@@ -891,7 +912,8 @@
         <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
       </span>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" :title=" leaveMsg ? '发送群消息' : '发送离职短信'" :visible.sync="sendLeaveMsgDialog" width="30%">
+    <el-dialog :close-on-click-modal="false" :title=" leaveMsg ? '发送群消息' : '发送离职短信'" :visible.sync="sendLeaveMsgDialog"
+               width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="sendLeaveMsgForm" label-width="100px"
                  style="padding: 0 20px;">
@@ -939,12 +961,14 @@
                  @close="closeAddPosition"></AddPosition>
     <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName"
                   @close="closeEditPosition"></EditPosition>
-    <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
-                      :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
+    <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPosition="onlyPosition"
+                      @close="closeEditOnlyPosition"></EditOnlyPosition>
     <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
-    <RemovePower :module="RemovePowerModule" @close="closeRemovePower" :powerData="RemovePowerData"></RemovePower>
+    <RemovePower :module="removePowerModule" @close="closeRemovePower" :powerData="removePowerData"></RemovePower>
 
     <ViewRange :viewRangeDialog="viewRangeDialog" :editId="editId" @close="closeViewRange"></ViewRange>
+    <!--查看职级-->
+    <PathLength :module="lookPathModule" :path="pathDeep" @close="closeLook"></PathLength>
   </div>
 </template>
 
@@ -960,7 +984,8 @@
   import EditOnlyPosition from './components/editOnlyPostion.vue'
   import AddPower from './components/addPower.vue'   //权限
   import RemovePower from './components/removePower.vue'   //权限
-  import ViewRange from './components/addViewRange'
+  import ViewRange from './components/addViewRange.vue'
+  import PathLength from './components/pathLength.vue' //查看职级
 
   export default {
     name: 'tree',
@@ -975,7 +1000,8 @@
       EditOnlyPosition,
       AddPower,
       RemovePower,
-      ViewRange
+      ViewRange,
+      PathLength
     },
     data() {
       return {
@@ -1008,7 +1034,7 @@
         branchBankCategory: [],
         isHigh: false,
         powerData: [],
-        RemovePowerData: [],
+        removePowerData: [],
         collectStatus: ' ',
         collectLoading: false,
         userCollectStatus: ' ',
@@ -1072,15 +1098,18 @@
         positionList: [],      //职位列表
         postStaffData: [],  //岗位下的员工列表
         organizationDialog: false,
+
+        lookPathModule: false,    //查看职级
+        pathDeep: '',           //查看职级
         //......................
         addStaffDialog: false, //新增用户模态框
         editDepartDialog: false, //编辑部门模态框
         addDepartDialog: false, //新建部门模态框
         addPositionDialog: false, //新建岗位
-        editPositionDialog: false,    //修改岗位
-        editOnlyPositionDialog: false, //修改职位
+        editPositionDialog: false,    //修改职位
+        editOnlyPositionDialog: false, //修改职务
         powerModule: false,        //权限
-        RemovePowerModule: false,        //权限黑名单
+        removePowerModule: false,        //权限黑名单
         isEdit: false,
         editId: null,
         totalStaffNum: 0,
@@ -1097,6 +1126,7 @@
         positionName: '',
         onlyPositionId: '',  //职位id
         onlyPositionName: '',
+        onlyPosition: {},
         menuType: '',    //右键类别
 
         department_id: '',  //y用于监听部门变化
@@ -1208,36 +1238,37 @@
       },
     },
     methods: {
-      changePhone(scope,phone) {
-        this.$http.put(globalConfig.server + 'organization/other/change-phone',{
+      changePhone(scope, phone) {
+        this.$http.put(globalConfig.server + 'organization/other/change-phone', {
           id: scope.row.id,
           phone
-        }).then(res =>{
-          if(res.data.code === "700800"){
+        }).then(res => {
+          if (res.data.code === "700800") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getStaffData();
-          }else {
+          } else {
             this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
       openChangePhone(scope) {
-        this.$prompt('请输入手机号码','提示',{
+        this.$prompt('请输入手机号码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^1[3|4|5|8|7|9][0-9]\d{4,8}$/,
           inputErrorMessage: '手机号格式不正确'
-        }).then(({value})=>{
-          this.changePhone(scope,value);
-        }).catch(()=>{ })
+        }).then(({value}) => {
+          this.changePhone(scope, value);
+        }).catch(() => {
+        })
       },
       // 导出
       leadingOut() {
@@ -1509,27 +1540,27 @@
       handleAdd(s, d, n) {//增加节点
         this.addDepart(d);
       },
-      GoHide(id,hidden) {
-        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`,{
+      GoHide(id, hidden) {
+        this.$http.put(globalConfig.server + `organization/other/hidden-org/${id}`, {
           hidden
-        }).then(res =>{
-          if(res.data.code == "700710"){
+        }).then(res => {
+          if (res.data.code == "700710") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getDepart();
-          }else {
+          } else {
             this.$notify.warning({
               title: '失败',
               message: res.data.msg
             });
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
       },
-      handleHide(s,d,n) {
+      handleHide(s, d, n) {
         var id = d.id;
         var hidden = 0;
         this.$confirm('您确定隐藏吗?', '提示', {
@@ -1537,8 +1568,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.GoHide(id,hidden);
-        }).catch(() => { });
+          this.GoHide(id, hidden);
+        }).catch(() => {
+        });
       }, //禁用
       handleEdit(s, d, n) {//编辑节点
         this.editDepart(d.id);
@@ -1555,7 +1587,6 @@
       },
       //新建部门
       addDepart(data) {
-        console.log(data);
         this.parentId = data.id;
         this.parentName = data.name;
         this.addDepartDialog = true;
@@ -1600,8 +1631,8 @@
       },
       //================权限====================
       closeRemovePower() {
-        this.RemovePowerModule = false;
-        this.RemovePowerData = [];
+        this.removePowerModule = false;
+        this.removePowerData = [];
       },
       //********************员工操作函数****************
       //获取员工数据列表
@@ -1685,9 +1716,9 @@
       //发送离职短信
       sendLeaveMsgConfirm() {
         var txt = '';
-        if(this.leaveMsg){
+        if (this.leaveMsg) {
           txt = '此操作将发送群消息，是否继续?';
-        }else {
+        } else {
           txt = '此操作将给该员工负责的客户发送短信，是否继续?';
         }
         this.$confirm(txt, '提示', {
@@ -1698,7 +1729,7 @@
           if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
             this.sendLeaveMsgForm.date = this.form.dismiss_time;
           }
-          if(!this.leaveMsg){
+          if (!this.leaveMsg) {
             this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
               params: {
                 id: this.editId,
@@ -1713,9 +1744,9 @@
                 this.prompt('warning', res.data.msg);
               }
             });
-          }else {
+          } else {
             this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
-              if(res.data.code === "710910"){
+              if (res.data.code === "710910") {
                 this.$notify.success({
                   title: '成功',
                   message: res.data.msg
@@ -1724,7 +1755,7 @@
                 this.getStaffData();
                 this.sendLeaveMsgDialog = false;
                 this.selectLeaveDateDialog = false;
-              }else {
+              } else {
                 this.$notify.warning({
                   title: '失败',
                   message: res.data.msg
@@ -1766,7 +1797,7 @@
       },
       //离职群发
       leaveSendMsg() {
-        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？','提示',{
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -1783,7 +1814,7 @@
                 this.sendLeaveMsgForm.date = this.form.dismiss_time;
               }
               this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
-                if(res.data.code === "710910"){
+                if (res.data.code === "710910") {
                   this.$notify.success({
                     title: '成功',
                     message: res.data.msg
@@ -1791,7 +1822,7 @@
                   this.getPostStaffData();
                   this.getStaffData();
                   this.selectLeaveDateDialog = false;
-                }else {
+                } else {
                   this.$notify.warning({
                     title: '失败',
                     message: res.data.msg
@@ -1855,7 +1886,7 @@
           this.$http.get(globalConfig.server + 'organization/staff/rehab/' + this.editId + '&level=' + this.levelForm.level).then((res) => {
             if (res.data.code === '710166') {
               this.prompt('success', res.data.msg);
-              if(send === 'yes'){
+              if (send === 'yes') {
                 this.levelConfirmSendMsg(this.editId);
               }
               this.getPostStaffData();
@@ -1870,14 +1901,14 @@
         });
       },
       //复职发送消息
-      levelConfirmSendMsg(id){
+      levelConfirmSendMsg(id) {
         this.$http.get(globalConfig.server + `organization/staff/entry-mess/${id}`).then((res) => {
-          if(res.data.code === "710910"){
+          if (res.data.code === "710910") {
             this.$notify.success({
               title: "成功",
               message: "发送成功"
             });
-          }else {
+          } else {
             this.$notify.warning({
               title: "失败",
               message: "发送失败"
@@ -1916,8 +1947,8 @@
         } else if (val.clickIndex === 'view_range') {
           this.viewRangeDialog = true;
         } else if (val.clickIndex === 'remove_power') {
-          this.RemovePowerModule = true;
-          this.RemovePowerData = val.data;
+          this.removePowerModule = true;
+          this.removePowerData = val.data;
         }
       },
       //禁用，启用
@@ -1974,7 +2005,7 @@
       },
 
       //********************职位操作函数****************
-      //获取单独职位列表
+      //获取单独职务列表
       getOnlyPosition() {
         this.positionTableData = [];
         this.totalPositionNum = 0;
@@ -2007,12 +2038,13 @@
           })
         }
       },
-      //职位右键菜单
+      //职务右键菜单
       openOnlyPositionMenu(row, event) {
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
         this.department_name = row.org.name;
+        this.onlyPosition = row;
 
         this.menuType = 'onlyPosition';
         this.lists = [
@@ -2022,12 +2054,13 @@
         ];
         this.contextParams(event);
       },
-      //职位单击
+      //职务单击
       clickOnlyPositionMenu(row, event) {
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
         this.department_id = row.org.id;
         this.department_name = row.org.name;
+        this.onlyPosition = row;
 
         this.postParams.page = 1;
         this.getPosition();
@@ -2037,7 +2070,7 @@
         this.selectOrgID = row.duty.org_id;
         this.getPostStaffData();
       },
-      //右键职位回调
+      //右键职务回调
       openOnlyPositionDialog(val) {
         if (val.clickIndex === 'edit') {
           this.editOnlyPositionDialog = true;
@@ -2065,7 +2098,7 @@
       closeViewRange() {
         this.viewRangeDialog = false;
       },
-      //删除职位
+      //删除职务
       deleteOnlyPosition() {
         this.$http.get(globalConfig.server + 'organization/duty/delete/' + this.onlyPositionId).then((res) => {
           if (res.data.code === '20050') {
@@ -2077,13 +2110,35 @@
         })
       },
       //********************岗位操作函数****************
-      //根据职位获取岗位
+      // 查看职级
+      lookPath(row) {
+        this.pathDeep = row.path_length;
+        this.lookPathModule = true;   //查看职级
+      },
+      closeLook() {
+        this.lookPathModule = false;
+      },
+      // 查看权限
+      lookPower(val) {
+        let data = {};
+        data.description = val.orgName;
+        data.id = val.id;
+        data.name = val.name;
+        data.parent_id = val.parent_id;
+        this.removePowerData = val;
+        this.removePowerData.types = 'position';
+        this.removePowerData.positions = [];
+        this.removePowerData.positions.push(data);
+        this.removePowerModule = true;
+      },
+      //根据职位获取职位
       getPosition() {
         this.postStaffData = [];
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
-        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + this.onlyPositionId + '&page=' +
-          this.postParams.page + '&limit=' + this.postParams.limit).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + this.onlyPositionId, {
+          params: this.postParams,
+        }).then((res) => {
           this.postCollectLoading = false;
           if (res.data.code === '20000') {
             let arr = res.data.data.data;
@@ -2097,10 +2152,9 @@
             arr.forEach((item) => {
               item.orgName = this.department_name;
             });
-            this.positionTableData = res.data.data.data;
+            this.positionTableData = arr;
             this.totalPostNum = res.data.data.count;
             if (arr.length > 0) {
-              console.log(arr[0]);
               this.selectPostID = arr.id;
               this.selectOrgID = arr[0].duty.org_id;
               this.getPostStaffData();
@@ -2111,12 +2165,13 @@
           } else {
             this.totalPostNum = 0;
             this.positionTableData = [];
+            this.pathTableData = [];
             this.postCollectStatus = '暂无数据';
             this.postStaffStatus = '暂无数据';
           }
         })
       },
-      //岗位右键菜单
+      //职位右键菜单
       openPositionMenu(row, event) {
         this.positionId = row.id;
         this.positionName = row.name;
@@ -2141,14 +2196,14 @@
           });
         }
       },
-      //修改岗位完成回调
+      //修改职位完成回调
       closeEditPosition(val) {
         this.editPositionDialog = false;
         if (val === 'success') {
           this.getPosition();
         }
       },
-      //删除岗位
+      //删除职位
       deletePosition() {
         this.$http.get(globalConfig.server + 'organization/position/delete/' + this.positionId).then((res) => {
           if (res.data.code === '20041') {
@@ -2159,7 +2214,7 @@
           }
         })
       },
-      //新建岗位  position职位  post岗位
+      //新建职位  position职务  post职位
       addPosition(val) {
         this.addPositionDialog = true;
         if (val === 'position') {
@@ -2171,7 +2226,6 @@
             position_id: this.onlyPositionId, position_name: this.onlyPositionName
           })
         }
-        console.log(this.addPositionParams)
       },
       closeAddPosition(val) {
         this.addPositionDialog = false;
@@ -2216,7 +2270,8 @@
           this.postStaffLoading = true;
           this.postStaffStatus = ' ';
         }
-        this.$http.get(globalConfig.server + 'organization/other/staff-list?org_id=' + this.selectOrgID + '&position_id=' + this.selectPostID
+        // org_id = this.selectOrgID
+        this.$http.get(globalConfig.server + 'organization/other/staff-list?position_id=' + this.selectPostID
           + '&page=' + this.postStaffParams.page + '&limit=' + this.postStaffParams.limit).then((res) => {
           this.postStaffLoading = false;
           if (res.data.code === '70010') {
@@ -2249,7 +2304,7 @@
             nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
             nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
             nodeDel: ((s, d, n) => that.handleDelete(s, d, n)),
-            nodeHide: ((s,d,n)=> that.handleHide(s,d,n))
+            nodeHide: ((s, d, n) => that.handleHide(s, d, n))
           }
         });
       },

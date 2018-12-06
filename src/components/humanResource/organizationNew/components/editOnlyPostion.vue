@@ -5,6 +5,14 @@
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
             <el-col :span="24">
+              <el-form-item label="部门名称" required="">
+                <el-input placeholder="请选择部门" readonly @focus="organizationDialog = true"
+                          v-model="department"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
               <el-form-item label="职位名称" required="">
                 <el-input placeholder="请输入内容" v-model="params.name"></el-input>
               </el-form-item>
@@ -28,34 +36,37 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
-    props: ['editOnlyPositionDialog', 'onlyPositionId', 'onlyPositionName'],
+    props: ['editOnlyPositionDialog', 'onlyPosition'],
     components: {Organization},
     data() {
       return {
         editOnlyPositionDialogVisible: false,
         params: {
           name: '',
+          org_id: '',
         },
+        department: '',
         organizationDialog: false,
       };
     },
     watch: {
       editOnlyPositionDialog(val) {
         this.editOnlyPositionDialogVisible = val;
-        this.params.name = this.onlyPositionName;
       },
       editOnlyPositionDialogVisible(val) {
         if (!val) {
           this.$emit('close');
         }
       },
-      onlyPositionName(val) {
-        this.params.name = val;
+      onlyPosition(val) {
+        this.params.name = val.name;
+        this.params.org_id = val.org.id;
+        this.department = val.org.name;
       }
     },
     methods: {
       confirmAdd() {
-        this.$http.put(globalConfig.server + 'organization/duty/' + this.onlyPositionId, this.params).then((res) => {
+        this.$http.put(globalConfig.server + 'organization/duty/' + this.onlyPosition.id, this.params).then((res) => {
           if (res.data.code === '20030') {
             this.$emit('close', 'success');
             this.closeModal();
@@ -87,13 +98,15 @@
         this.editOnlyPositionDialogVisible = false;
         this.params = {
           name: '',
+          org_id: '',
         };
+        this.department = '';
       }
     }
   };
 </script>
+
 <style lang="scss" scoped="">
   #addRentRepair {
   }
-
 </style>

@@ -27,7 +27,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="depart_name" @focus="chooseDepart('depart')" placeholder="请选择部门"
+                      <el-input v-model="depart_name" @focus="chooseDepartment" placeholder="请选择部门"
                                 readonly>
                         <template slot="append">
                           <div style="cursor: pointer;" @click="closeDepart">清空</div>
@@ -86,6 +86,7 @@
         </el-table>
         <div style="text-align: right;">
           <el-pagination
+          @current-change="handleCurrentChange"
             size="mini"
             layout="total,prev,pager,next"
             :current-page="params.page"
@@ -147,10 +148,14 @@
               >
                 <el-table-column label="片区名称" prop="sign_org.name"></el-table-column>
                 <el-table-column label="房屋名称" prop="house.name"></el-table-column>
-                <el-table-column label="租房人" prop="sign_user.name"></el-table-column>
+                <el-table-column label="租房人" prop="rent.sign_user.name"></el-table-column>
                 <el-table-column label="租房喜报时间" prop="rent.bulletindate"></el-table-column>
                 <el-table-column label="合同开始时间" prop="rent.start_at"></el-table-column>
-                <el-table-column label="是否新租" prop="achv.typical"></el-table-column>
+                <el-table-column label="是否新租" prop="typical">
+                 <template slot-scope="scope">
+                      {{ scope.row.achievement.typical && scope.row.achievement.typical === 1 ? '新租' : '二次出租'}}
+                    </template>
+                 </el-table-column>
                 <el-table-column label="租房价格" prop="rent.rent_month_price"></el-table-column>
                 <el-table-column label="租房付款方式" prop="rent.rent_pay_way"></el-table-column>
                 <el-table-column label="租房消耗空置期" prop="rent.rent_vacancy_date"></el-table-column>
@@ -280,7 +285,13 @@
           getCurrentDate(){
             this.date = new Date().toLocaleDateString();
           },
+          handleCurrentChange(val) {
+                this.params.page = val;
+                this.getManagerSalary();
+          },
           getManagerSalary() {
+            this.collectList = [];
+            this.rentList = [];
             this.allLoading = true;
             this.params.date = this.date.split("/").join("").substring(2,6);
             this.$http.get(this.url + "salary/achv/getmanagerSala",{
@@ -302,13 +313,13 @@
             })
           },
           //打开部门
-          chooseDepart(type) {
+          chooseDepartment() {
             this.organizeVisible = true;
-            this.organizeType = type;
+            this.organizeType = 'depart';
             this.length = 1;
           },
           closeOrganize() {
-
+            this.organizeVisible = false;
           },
           selectMember(val) {
             this.params.depart_ids = val[0].id;

@@ -28,10 +28,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="日期">
+          <el-form-item label="日期周期">
             <el-date-picker
               v-model="params.date"
-              type="date"
+              type="daterange"
               value-format="yyyy-MM-dd"
               placeholder="选择日期">
             </el-date-picker>
@@ -140,12 +140,12 @@
         if (this.activeName === 'first') {
           header = this.$http.get(globalConfig.server + 'financial/receivable/transfer', {
             responseType: 'arraybuffer',
-            params: {account: this.account, date: this.params.date, subject_id: subject_id}
+            params: {account: this.account, start_date: this.params.date[0], end_date: this.params.date[1], subject_id: subject_id}
           });
         } else {
           header = this.$http.get(globalConfig.server + 'financial/payable/transfer', {
             responseType: 'arraybuffer',
-            params: {account: this.account, date: this.params.date, subject_id: subject_id}
+            params: {account: this.account, start_date: this.params.date[0], end_date: this.params.date[1], subject_id: subject_id}
           });
         }
 

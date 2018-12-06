@@ -17,16 +17,16 @@
     </el-tooltip>
 
     <!--视频dialog-->
-    <el-dialog
-      :visible.sync="showVideo"
-      width="45%"
-      title="视频教程"
-      @open="openVideo"
-      @close="closeVideo">
-      <div class="showVideoUri" style="width: 100%;height: 400px;text-align: center;">
-        <video :src="videoUri" width="100%" controls height="400px"></video>
-      </div>
-    </el-dialog>
+    <!--<el-dialog-->
+    <!--:visible.sync="showVideo"-->
+    <!--width="45%"-->
+    <!--title="视频教程"-->
+    <!--@open="openVideo"-->
+    <!--@close="closeVideo">-->
+    <!--<div class="showVideoUri" style="width: 100%;height: 400px;text-align: center;">-->
+    <!--<video :src="videoUri" width="100%" controls height="400px"></video>-->
+    <!--</div>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -102,7 +102,8 @@
         this.$store.dispatch('closeMenu')
       },
       playVideo() {
-        this.showVideo = true;
+        // this.showVideo = true;
+        this.$router.push('/videoDetails');
       }
     }
   }

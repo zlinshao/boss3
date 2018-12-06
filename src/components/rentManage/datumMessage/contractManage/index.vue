@@ -254,6 +254,7 @@
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
                         <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
+                        <el-option key="7" label="90天内" value="7">90天内</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
                       </el-select>
@@ -2493,6 +2494,7 @@
           city.name = '';
         }
         this.addReturnInfo = row;
+        console.log(row)
         this.addReturnInfo.city_id = city.id;
         this.addReturnInfo.city_name = city.name;
         this.addReturnInfo.cities = this.cities;

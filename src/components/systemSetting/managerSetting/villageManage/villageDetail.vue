@@ -55,6 +55,11 @@
                 <div class="special">{{myData.property_fee}}</div>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="物业联系方式">
+                <div class="special">{{myData.property_phone}}</div>
+              </el-form-item>
+            </el-col>
 
             <el-col :span="8">
               <el-form-item label="建造年限">
