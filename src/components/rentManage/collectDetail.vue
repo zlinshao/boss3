@@ -66,7 +66,7 @@
                   <el-dropdown-item
                     v-for="item in contractInfo.operation.doc" :key="item"
                     @click.native="confirmPress(item)">
-                    <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
+                    <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>git
                     <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
                     <span v-if="item === 'to_cancelled'">撤销审核</span>
                     <span v-if="item === 'to_contract_rejected'">合同资料有误，拒绝</span>
