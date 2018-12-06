@@ -961,8 +961,8 @@
                  @close="closeAddPosition"></AddPosition>
     <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName"
                   @close="closeEditPosition"></EditPosition>
-    <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
-                      :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
+    <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPosition="onlyPosition"
+                      @close="closeEditOnlyPosition"></EditOnlyPosition>
     <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
     <RemovePower :module="removePowerModule" @close="closeRemovePower" :powerData="removePowerData"></RemovePower>
 
@@ -1126,6 +1126,7 @@
         positionName: '',
         onlyPositionId: '',  //职位id
         onlyPositionName: '',
+        onlyPosition: {},
         menuType: '',    //右键类别
 
         department_id: '',  //y用于监听部门变化
@@ -2043,6 +2044,7 @@
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
         this.department_name = row.org.name;
+        this.onlyPosition = row;
 
         this.menuType = 'onlyPosition';
         this.lists = [
@@ -2058,6 +2060,7 @@
         this.onlyPositionName = row.name;
         this.department_id = row.org.id;
         this.department_name = row.org.name;
+        this.onlyPosition = row;
 
         this.postParams.page = 1;
         this.getPosition();
