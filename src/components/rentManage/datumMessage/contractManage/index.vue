@@ -1213,6 +1213,10 @@
                         <el-table-column prop="uname" label="发送人">
                         </el-table-column>
                       </el-table>
+                      <!-- <div class="dialogPage block pages">
+                        <el-pagination @size-change="dialogHandleSizeChange" @current-change="dialogHandleCurrentChange" :current-page="sendHistoryFrom2.page" :page-sizes="[12,24, 36,48]" :page-size="sendHistoryFrom2.limit" layout="total, sizes, prev, pager, next, jumper" :total="dialogTotal2">
+                        </el-pagination>
+                      </div> -->
                       <span slot="footer" class="dialog-footer">
                         <!-- <el-button @click="sendHistoryDialog = false" size="mini">取 消</el-button> -->
                         <el-button type="primary" @click="sendHistoryDialog2 = false" size="mini">确 定</el-button>
@@ -1438,6 +1442,8 @@
         //   show: true,
         //   showBtn: false
         // },
+        dialogTotal: "",
+        dialogTotal2: "",
         passAllForm: {
           contract_id: "",
           module: 1,
@@ -1465,14 +1471,14 @@
           module: 2,
         },
         sendHistoryFrom: {
-          page: "",
-          limit: "",
+          page: "1",
+          limit: "12",
           contract_id: "",
           module: 1
         },
         sendHistoryFrom2: {
-          page: "",
-          limit: "",
+          page: "1",
+          limit: "12",
           contract_id: "",
           module: 2
         },
@@ -2010,6 +2016,7 @@
       //  全部通过
       passAll() {
         this.passAllForm.contract_id = this.contractForm.contract_id;
+        this.passAllForm.operation = "to_contract_verify_approved";
         this.$http.put(globalConfig.server + "lease/status/verify", this.passAllForm).then(res => {
           if(res.data.code == "60610") {
             this.$notify.success({
@@ -2021,7 +2028,7 @@
           } else {
             this.$notify.warning({
               title: "警告",
-              success: res.data.msg
+              message: res.data.msg
             })
           }
         })
@@ -2040,7 +2047,7 @@
           } else {
             this.$notify.warning({
               title: "警告",
-              success: res.data.msg
+              message: res.data.msg
             })
           }
         })
@@ -2112,10 +2119,11 @@
       },
       sendHistory() {
         this.sendHistoryFrom.contract_id = this.contractForm.contract_id;
-        this.$http.get(globalConfig.server + "lease/status/send-diff-list").then(res => {
+        this.$http.get(globalConfig.server + "lease/status/send-diff-list", {params: this.sendHistoryFrom}).then(res => {
           if(res.data.code == "60600") {
             this.sendHistoryDialog = true;
             this.sendHistoryList = res.data.data.data;
+            this.dialogTotal = res.data.count;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2237,10 +2245,11 @@
       },
       sendHistory2() {
         this.sendHistoryFrom2.contract_id = this.contractForm2.contract_id;
-        this.$http.get(globalConfig.server + "lease/status/send-diff-list").then(res => {
+        this.$http.get(globalConfig.server + "lease/status/send-diff-list", {params: this.sendHistoryFrom2}).then(res => {
           if(res.data.code == "60600") {
             this.sendHistoryDialog2 = true;
             this.sendHistoryList2 = res.data.data.data;
+            this.dialogTotal2 = res.data.count;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2264,12 +2273,13 @@
             // this.contractForm2.customer_name = res.data.data.customer_name;
             // this.contractForm2.customer_phone = res.data.data.customer_phone;
             // this.contractForm2.type = res.data.data.type;
-          } else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            })
-          }
+          } 
+          // else {
+          //   this.$notify.warning({
+          //     title: "警告",
+          //     message: res.data.msg
+          //   })
+          // }
         })
       },
       //  全部通过
@@ -2332,6 +2342,17 @@
       currentPicId(key) {
         this.dragPicId = key;
       },
+      // 弹出框分页
+    dialogHandleSizeChange(val) {
+       this.sendHistoryFrom2.limit = val;
+       this.sendHistory2(this.sendHistoryFrom2.limit)
+       console.log(`每页 ${val} 条`);
+    },
+    dialogHandleCurrentChange(val) {
+      this.sendHistoryFrom2.page = val;
+      this.sendHistory2(this.sendHistoryFrom2.page);
+      console.log(`当前页: ${val}`);
+    },
       // ==========================================
       allotOpenOrganization(type){
         this.allotType = type;
