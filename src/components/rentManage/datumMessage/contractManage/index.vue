@@ -501,13 +501,13 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
-                    <div class="mask" v-if="differentShow2 == 2"></div>
+                    <div class="mask" v-if="differentShow == 2"></div>
                     <!-- <div class="mask"></div> -->
-                    <ul style="padding: 10px;">
+                    <!-- <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList" :key="index" style="width: 16%;float: left;">
                         <img :src="item" style="width: 100%;max-height: 150px;min-height: 100px;"/>
                       </li>
-                    </ul>
+                    </ul> -->
                     <!-- 放大图片 -->
                     <div class="image" @dragover='allowDrop($event)' id="certificate_photo">
                           <span v-if="imgList.length<1">暂无照片</span>
@@ -986,11 +986,17 @@
                     <div style="color:#409EFF; position: relative;">合同照片</div>
                     <div class="mask" v-if="differentShow2 !== 2"></div>
                     <!-- <div class="mask"></div> -->
-                    <ul style="padding: 10px;">
+                    <!-- <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList2" :key="index" style="width: 16%;float: left;">
                         <img :src="item" style="width: 100%;max-height: 150px;min-height: 100px;" />
                       </li>
-                    </ul>
+                    </ul> -->
+                    <!-- 放大图片 -->
+                    <div class="image" @dragover='allowDrop($event)' id="certificate_photo">
+                          <span v-if="imgList.length<1">暂无照片</span>
+                          <img v-for="(value,key) in imgList2" :key="key" :src="value"
+                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
+                    </div>
                   </div>
                   <div style="overflow: hidden">
                   <div class="formInfo" style="width:70%; float: left;">
@@ -1101,7 +1107,7 @@
                           </el-col>
                         </el-row>
                         <el-row v-for="index in newpayForLen" :key="index+111">
-                          <el-col :span="11">
+                          <el-col :span="14">
                             <el-form-item label="付款方式" required v-if="index==1">
                               <el-date-picker
                                 v-model="contractForm2.pay_type[0][index-1]"
@@ -1133,7 +1139,7 @@
                               </el-date-picker>
                             </el-form-item>
                           </el-col>
-                          <el-col :span="2" style="float: right;" v-if="index == 1">
+                          <!-- <el-col :span="2" style="float: right;" v-if="index == 1">
                             <i @click="addPayLen" class="el-icon-circle-plus-outline addicon"></i>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index != 1">
@@ -1145,8 +1151,8 @@
                                         :value="item.id">{{item.dictionary_name}}
                               </el-option>
                             </el-select>
-                          </el-col>
-                          <el-col :span="5">
+                          </el-col> -->
+                          <el-col :span="8"  style="float: right;">
                               <span>押</span>
                               <el-select style="width:60px;" size="mini" v-model="contractForm2.pay_type[1][index-1]" clearable>
                                 <el-option v-for="item in 48" :label="item" :key="item"
@@ -1434,12 +1440,12 @@
         // },
         passAllForm: {
           contract_id: "",
-          moudle: 1,
+          module: 1,
           operation: "",
         },
         passAllForm2: {
           contract_id: "",
-          moudle: 2,
+          module: 2,
           operation: "",
         },
         sendHistoryDialog: false,
@@ -1496,6 +1502,7 @@
         administrativeContent: "",
         administrativeContentList: [],
         contractForm: {
+          start_at: "",
           community_name: "",
           type: "",
           second_pay_at: "",
