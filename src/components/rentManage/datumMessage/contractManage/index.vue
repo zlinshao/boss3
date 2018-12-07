@@ -468,11 +468,11 @@
                     </template>
                   </el-table-column>
                   <!-- 新增部分=================================== -->
-                  <!-- <el-table-column label="行政审核">
+                  <el-table-column label="行政审核">
                     <template  slot-scope="scope">
                       <span @click="getImage(scope.row.contract_id)">{{scope.row.visit_status.name}}</span>
                     </template>
-                  </el-table-column> -->
+                  </el-table-column>
                   <!-- ========================================= -->
                   <el-table-column
                     label="审核状态"
@@ -937,11 +937,11 @@
                     </template>
                   </el-table-column>
                   <!-- 新增部分=================================== -->
-                  <!-- <el-table-column label="行政审核">
+                  <el-table-column label="行政审核">
                     <template  slot-scope="scope">
                       <span @click="getImage2(scope.row.contract_id)">{{scope.row.visit_status.name}}</span>
                     </template>
-                  </el-table-column> -->
+                  </el-table-column>
                   <!-- ========================================= -->
                   <el-table-column
                     label="审核状态"
@@ -1775,6 +1775,12 @@
     methods: {
       // 新增方法
       contractFormClear() {
+        this.contractForm.mortgage_price = "";
+        this.contractForm.customer_card = "";
+        this.contractForm.customer_phone = "";
+        this.contractForm.penalty_price = "";
+        this.contractForm.ready_days = "";
+        this.contractForm.customer_name = "";
         this.contractForm.contract_month = "";
         this.contractForm.contract_day = "";
         this.contractForm.guarantee_month = "";
@@ -2018,18 +2024,15 @@
       contractFormClear2() {
         this.contractForm2.community_name = "";
         this.contractForm2.type = "";
-        this.contractForm2.contract_number = "";
         this.contractForm2.start_at = "";
+        this.contractForm2.contract_number = "";
         this.contractForm2.contract_month = "";
         this.contractForm2.contract_day = "";
         this.contractForm2.mortgage_price = "";
         this.contractForm2.customer_name = "";
         this.contractForm2.customer_phone = "";
-        // this.contractForm2.unit_price = "";
-        // this.contractForm2.pay_type = "";
-         this.contractForm.unit_price = [[],[],];
-        this.contractForm.pay_type = [[], [],[],];
-        // this.contractForm.pay_method = [[],[],];
+         this.contractForm2.unit_price = [[],[],];
+        this.contractForm2.pay_type = [[], [],[],];
       },
       // 租房获取图片
       getImage2(val) {
