@@ -585,7 +585,7 @@
                         </el-row>
                         <el-row>
                           <el-col :span="8">
-                          <el-form-item label="房东信息" required>
+                          <el-form-item label="房东姓名" required>
                             <el-input class="input" v-model="contractForm.customer_name" ></el-input>
                           </el-form-item>
                         </el-col>
@@ -1139,20 +1139,20 @@
                               </el-date-picker>
                             </el-form-item>
                           </el-col>
-                          <!-- <el-col :span="2" style="float: right;" v-if="index == 1">
+                           <el-col :span="2" style="float: right;" v-if="index == 1">
                             <i @click="addPayLen" class="el-icon-circle-plus-outline addicon"></i>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index != 1">
                             <i @click="romovePayLen(index-1)" class="el-icon-remove-outline addicon"></i>
                           </el-col>
-                          <el-col :span="4" style="float: right;" v-if=" activeName2 =='first'">
+                          <!--  <el-col :span="4" style="float: right;" v-if=" activeName2 =='first'">
                             <el-select size="mini" v-model="contractForm2.pay_type[1][index-1]" placeholder="收房付款方式" clearable>
                               <el-option v-for="item in newpayTypeInfo" :label="item.dictionary_name" :key="item.id"
                                         :value="item.id">{{item.dictionary_name}}
                               </el-option>
                             </el-select>
                           </el-col> -->
-                          <el-col :span="8"  style="float: right;">
+                          <el-col :span="8"  style="float: right; text-align: right;">
                               <span>押</span>
                               <el-select style="width:60px;" size="mini" v-model="contractForm2.pay_type[1][index-1]" clearable>
                                 <el-option v-for="item in 48" :label="item" :key="item"
@@ -1160,7 +1160,7 @@
                                 </el-option>
                               </el-select>
                               <span>付</span>
-                              <el-input size="mini" style="width:46px;" v-model="contractForm.pay_type[2][index-1]"></el-input>
+                              <el-input size="mini" style="width:46px;" v-model="contractForm2.pay_type[2][index-1]"></el-input>
                           </el-col>
                         </el-row>
                         
@@ -1827,7 +1827,31 @@
         }
       },
       newpayForLen(val) {
-        let data = this.form.pay_type;
+        let data = this.contractForm.pay_type;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+      },
+       newpriceLen2(val) {
+        let data = this.contractForm2.unit_price;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+      },
+      newpayForLen2(val) {
+        let data = this.contractForm2.pay_type;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
@@ -2317,7 +2341,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog2 = false;
-            this.rentDatafunc()
+            this.rentDatafunc();
           } else {
             this.$notify.warning({
               title: "警告",
