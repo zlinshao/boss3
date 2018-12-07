@@ -1462,13 +1462,13 @@
           page: "",
           limit: "",
           contract_id: "",
-          moudle: 1
+          module: 1
         },
         sendHistoryFrom2: {
           page: "",
           limit: "",
           contract_id: "",
-          moudle: 2
+          module: 2
         },
         alertPepole: "",
         alertPepoleList: [],
