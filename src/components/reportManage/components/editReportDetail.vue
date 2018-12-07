@@ -278,7 +278,7 @@
         <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
-
+        
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
                    v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
@@ -378,7 +378,12 @@
         <el-button size="small" @click="staffDetailDialog = false">关&nbsp;闭</el-button>
       </div>
     </el-dialog>
-
+    <el-dialog :close-on-click-modal="false" title="提示信息" :visible.sync="showBankCartTips" width="30%">
+      <div>{{bankCartMsg}}</div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="closeBankTips">确&nbsp;定</el-button>
+      </div>
+    </el-dialog>
     <ContrastReport :contrastDialog="contrastDialog" :selfReport="selfReport"
                     :aboutReportId="aboutReportId" @close="closeModal"></ContrastReport>
 
@@ -522,6 +527,8 @@
         priceRegion: '',
         houseSourceInfo: '',
         disabledBtn: true,
+        showBankCartTips: false,    
+        bankCartMsg: '',
       }
     },
 
@@ -775,6 +782,12 @@
                   data.process.content = arr.content;
                   this.setProcess(data);
                 });
+                break;
+              case "bulletin_collect_basic":
+                this.setProcess(data);
+                if(data.process.place.name === 'verify-manager_review' || data.process.place.display_name === '核算经理审核中'){
+                  this.checkEmployee(data.process)
+                }
                 break;
               default:
                 this.setProcess(data);
@@ -1111,6 +1124,20 @@
         }).then((res) => {
           this.houseSourceInfo = res.data.data;
         });
+      },
+      //收房报备验证收款银行卡或收款人是否为公司员工
+      checkEmployee(data){
+        this.$http.post(globalConfig.server + '/bulletin/collect/validateBankCard', data).then(res => {
+          if(res.data.code === '50122'){
+            this.showBankCartTips = true;
+            this.bankCartMsg = res.data.msg;
+          }
+        })
+      },
+      //关闭弹框
+      closeBankTips(){
+        this.showBankCartTips = false;
+        this.bankCartMsg = '';
       }
     },
   }
