@@ -536,7 +536,7 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="合同开始日期" required>
-                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" ></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
@@ -557,12 +557,12 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="第一次打房租日期" required>
-                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期"  format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
+                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期" ></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
                             <el-form-item label="第二次打房租日期" required>
-                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期"  format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
+                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期" ></el-date-picker>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -1024,7 +1024,7 @@
                         <el-row>
                           <el-col :span="8">
                             <el-form-item label="合同开始日期" required>
-                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
+                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期" ></el-date-picker>
                           </el-form-item>
                           </el-col>
                           <el-col :span="8">
@@ -1989,8 +1989,20 @@
       getContract() {
         // this.contractEntry = true
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
+          console.log(res, "555555")
           if(res.data.code == "20020") {
             this.differentShow ==  res.data.data.is_frist;
+             console.log(res.data.data.start_at.split("-")[0], "444444")
+            if(res.data.data.start_at.split("-")[0] == "0000") {
+              console.log(111)
+              this.contractForm.start_at = null;
+            } 
+            if(res.data.data.first_pay_at.split("-")[0] == "0000") {
+              this.contractForm.first_pay_at = "";
+            }
+            if(res.data.data.second_pay_at.split("-")[0] == "0000") {
+              this.contractForm.second_pay_at = "";
+            }
             if(this.differentShow == 2) {
               this.contractForm.contract_month = res.data.data.contract_month;
               this.contractForm.start_at = res.data.data.start_at;
@@ -2290,9 +2302,17 @@
       getContract2() {
         // this.contractEntry = true
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id ).then(res => {
-          console.log(res, "555555")
           if(res.data.code == "20020") {
             this.differentShow2 ==  res.data.data.is_frist;
+             if(res.data.data.start_at == "0000-00-00 00:00:00") {
+              this.contractForm2.start_at = "";
+            } 
+            if(res.data.data.first_pay_at == "0000-00-00 00:00:00") {
+              this.contractForm2.first_pay_at = "";
+            }
+            if(res.data.data.second_pay_at == "0000-00-00 00:00:00") {
+              this.contractForm2.second_pay_at = "";
+            }
             if(this.differentShow2 == 2) {
               this.contractForm2.contract_month = res.data.data.contract_month;
               this.contractForm2.contract_day = res.data.data.contract_day;
