@@ -470,7 +470,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.visit_status.name}}</span>
+                      <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -953,7 +953,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.visit_status.name}}</span>
+                      <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -2181,7 +2181,7 @@
                 message: res.data.msg
               })
             }
-            this.Inconsistent = true;
+            this.Inconsistent2 = true;
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
