@@ -984,7 +984,7 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
-                    <div class="mask" v-if="differentShow2 !== 2"></div>
+                    <div class="mask" v-if="differentShow2 == 2"></div>
                     <!-- <div class="mask"></div> -->
                     <!-- <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList2" :key="index" style="width: 16%;float: left;">
@@ -1223,7 +1223,7 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="getContract2('2')" size="mini" >保存页面</el-button>
+                    <el-button type="primary" @click="newBouncing2('2')" size="mini" >保存页面</el-button>
                     <el-button type="primary" @click="passAll2" size="mini">全部通过</el-button>
                     <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
                   </span>
@@ -2290,6 +2290,7 @@
       getContract2() {
         // this.contractEntry = true
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id ).then(res => {
+          console.log(res, "555555")
           if(res.data.code == "20020") {
             this.differentShow2 ==  res.data.data.is_frist;
             if(this.differentShow2 == 2) {
