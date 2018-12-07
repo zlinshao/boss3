@@ -5,34 +5,30 @@
           <el-col :span="4">
             <div>
               <span style="color: #409EFF;">显示：</span>
-              <el-radio-group v-model="params.area">
+              <el-radio-group v-model="params.group">
                 <el-radio label="city">城市</el-radio>
-                <el-radio label="area">片区</el-radio>
+                <el-radio label="org">片区</el-radio>
               </el-radio-group>
             </div>
           </el-col>
           <el-col :span="18">
             <div>
               <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :span="16">
                   <span style="color: #409EFF;">城市组成：</span>
                   <div style="display: inline-block;">
-                    <el-checkbox-group v-model="params.city">
+                    <el-checkbox-group v-model="helpParams.city" @change="selectCity">
                       <el-checkbox label="全部"></el-checkbox>
-                      <el-checkbox label="南京"></el-checkbox>
-                      <el-checkbox label="杭州"></el-checkbox>
-                      <el-checkbox label="合肥"></el-checkbox>
-                      <el-checkbox label="武汉"></el-checkbox>
+                      <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id" v-if="!cityAll"></el-checkbox>
                     </el-checkbox-group>
                   </div>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="8">
                   <span style="color: #409EFF;">片区组成：</span>
                   <div style="display: inline-block;">
-                    <el-checkbox-group v-model="params.city2">
+                    <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
                       <el-checkbox label="全部"></el-checkbox>
-                      <el-checkbox label="新绩效租"></el-checkbox>
-                      <el-checkbox label="就绩效租"></el-checkbox>
+                      <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value" v-if="!helpParams.composeShow"></el-checkbox>
                     </el-checkbox-group>
                   </div>
                 </el-col>
@@ -44,16 +40,16 @@
       <!--时间-->
       <div>
         <el-row :gutter="20">
-          <el-col :span="14">
+          <el-col :span="15">
             <div style="margin-top: 20px;">
               <span>时间：</span>
-              <el-radio-group v-model="params.time">
+              <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
                 <el-radio :label="1">最近1天</el-radio>
                 <el-radio :label="7">最近7天</el-radio>
                 <el-radio :label="30">最近30天</el-radio>
-                <el-radio label="self">
+                <el-radio label="day">
                   <template>
-                    <el-input type="number" size="mini" style="width: 80px;"></el-input>
+                    <el-input type="number" size="mini" style="width: 80px;" v-model="helpParams.days"></el-input>
                   </template>
                   天
                 </el-radio>
@@ -70,23 +66,23 @@
                   </template>
                 </el-radio>
               </el-radio-group>
-              <el-button type="primary" size="mini">确定时间</el-button>
+              <el-button type="primary" size="mini" @click="handleDownFiltrate">确定筛选</el-button>
             </div>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="9">
             <div style="margin-top: 20px;width: 100%;">
               <el-row :gutter="20">
                 <el-col :span="4">
-                  <el-checkbox v-model="params.autoContrast" size="mini" style="margin-top: 5px;">增加对比项</el-checkbox>
+                  <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;">增加对比项</el-checkbox>
                 </el-col>
                 <el-col :span="6">
-                  <el-select v-model="params.groupSort" size="mini">
-                    <el-option value="group" label="区域内排序"></el-option>
-                    <el-option value="all" label="区域间排序"></el-option>
+                  <el-select v-model="params.order_scope" size="mini">
+                    <el-option value="inner" label="区域内排序"></el-option>
+                    <el-option value="" label="区域间排序"></el-option>
                   </el-select>
                 </el-col>
                 <el-col :span="6">
-                  <el-select v-model="params.price" size="mini">
+                  <el-select v-model="params.order_field" size="mini">
                     <el-option value="avg" label="平均差价"></el-option>
                   </el-select>
                 </el-col>
@@ -111,7 +107,7 @@
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.first">{{ scope.row.city }}</span>
-                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick">时间段</el-button>
+                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick(scope)">时间段</el-button>
               </div>
             </template>
           </el-table-column>
@@ -157,16 +153,31 @@
       name: "index",
       data() {
         return {
-          params: {
-            area: 'city',
-            time: 1,
-            dateTime: '',
-            autoContrast: false,
-            groupSort: 'group',
-            price: '',
-            city: [],
-            city2: []
+          url: globalConfig.server,
+          helpParams: {
+            city: ['全部'], //显示
+            compose: ['全部'], //数据来源
+            composeShow: true, //数据来源全选
+            composeList: [
+              {name: '新绩效组',value: 'new_perf'},
+              {name: '旧绩效组',value: 'ord_perf'},
+            ], //数据来源列表
+            time: 1, //天数
+            days: '',
           },
+          params: {
+            dateTime: '',
+            order_scope: '', //区域间、内排序
+            order_field: '', //列表字段排序
+            start_time: '',
+            end_time: '',
+            city: [], //选择的城市
+            group: 'city',//显示城市或区域
+            compose: ['new_perf','old_perf'],//数据组成
+            auto_compare: true, //增加对比项
+          },
+          cityList: [],
+          cityAll: true,
           businessList: [
             {city: '南京',first:true,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
               rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
@@ -191,7 +202,107 @@
           statisticalVisible: false
         }
       },
+      mounted() {
+        this.getCity();
+        this.handleSetTime();
+      },
       methods: {
+        //选择数据来源
+        handleChangeCompose(val) {
+          this.params.compose = [];
+          if(val.length >= this.helpParams.composeList.length){
+            this.helpParams.compose = ['全部'];
+            this.helpParams.composeShow = true;
+            this.params.compose = ['new_perf','old_perf'];
+            return false;
+          }
+          if(val.includes('全部')) {
+            this.helpParams.composeShow = true;
+            this.params.compose = ['new_perf','old_perf'];
+          }else {
+            this.helpParams.composeShow = false;
+            for (var i=0;i<val.length;i++){
+              this.helpParams.composeList.map(item => {
+                if(val[i] === item.name) {
+                  this.params.compose.push(item.value);
+                }
+              })
+            }
+          }
+        },
+        //选择城市
+        selectCity(val) {
+          var city = [];
+          if(val.length >= this.cityList.length){
+            this.cityAll = true;
+            this.helpParams.city = ['全部'];
+            this.cityList.map(value => {
+              city.push(value.id);
+            });
+            this.params.city = city;
+            console.log(this.params.city);
+            return false;
+          }
+          if(val.includes('全部')){
+            this.cityAll = true;
+            this.cityList.map(value => {
+              city.push(value.id);
+            });
+          }else {
+            this.cityAll = false;
+            for (var j=0;j<val.length;j++){
+              this.cityList.map(value => {
+                if(val[j] === value.name){
+                  city.push(value.id);
+                }
+              })
+            }
+          }
+          this.params.city = city;
+          console.log(this.params.city);
+        },
+        //获取城市列表
+        getCity() {
+          this.$http.get(this.url + '/performance/business/cities').then(res => {
+            if(res.data.code === "20010"){
+              this.cityList = res.data.data;
+              this.cityList.map(item => {
+                this.params.city.push(item.id);
+              })
+            }else {
+              this.cityList = [];
+              this.$notify.warning({
+                title: '警告',
+                message: '获取城市列表失败！'
+              })
+            }
+          }).catch(err => {
+            console.log(err);
+          })
+        },
+        //确定筛选
+        handleDownFiltrate() {
+          console.log(this.params);
+        },
+        //筛选时间
+        handleChangeDate(val) {
+          if(val === 1 || val === 7 || val === 30){
+            this.handleSetTime(val);
+          }else {
+            console.log("this is self time",val);
+            console.log(this.helpParams.days);
+          }
+        },
+        //设置周期
+        handleSetTime(val = 1) {
+          var date = new Date();
+          var end_time = date.toLocaleDateString().split("/").join("-");
+          var start_time = date.setDate(date.getDate() - val);
+          start_time = new Date(start_time).toLocaleDateString().split("/").join("-");
+          this.params.end_time = end_time;
+          this.params.start_time = start_time;
+          console.log(this.params);
+        },
         headerStyle({row, column}) {
           if(column.label === '收房'){
             return 'collectBg';
@@ -221,7 +332,8 @@
           this.$message("降序功能尚未开放");
         },
         //添加时间段
-        handleAddClick() {
+        handleAddClick(scope) {
+          console.log(scope.row);
           this.$message("this is add time range operation");
         },
         //表头颜色
