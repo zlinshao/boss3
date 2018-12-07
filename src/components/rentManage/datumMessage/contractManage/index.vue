@@ -501,7 +501,7 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
-                    <div class="mask"></div>
+                    <div class="mask" v-if="showMask.show"></div>
                     <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList" :key="index" style="width: 16%;float: left;">
                         <img :src="item" style="width: 100%;max-height: 150px;min-height: 100px;"/>
@@ -728,7 +728,7 @@
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button>
                     <el-button type="primary"  size="mini" @click="newBouncing">对比</el-button>
                   </div>
                   </div>
@@ -970,6 +970,7 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
+                    <div class="mask" v-if="showMask2.show"></div>
                     <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList2" :key="index" style="width: 16%;float: left;">
                         <img :src="item" style="width: 100%;max-height: 150px;min-height: 100px;" />
@@ -1134,7 +1135,7 @@
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails2">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="showMask2.showBtn">查看合同详情</el-button>
                     <el-button type="primary"  size="mini" @click="newBouncing2">对比</el-button>
                   </div>
                   </div>
@@ -1396,6 +1397,14 @@
     data() {
       return {
         // 新增字段 ==========================
+        showMask: {
+          show: true,
+          showBtn: false
+        },
+        showMask2: {
+          show: true,
+          showBtn: false
+        },
         passAllForm: {
           contract_id: "",
           moudle: 1,
@@ -1862,6 +1871,9 @@
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
+            // this.showMask = false;
+            this.$set(this.showMask, "show",false)
+            this.$set(this.showMask, "showBtn", true)
              this.contrastContract();
           } else {
             this.$notify.warning({
@@ -2064,6 +2076,8 @@
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
+             this.$set(this.showMask2, "show", false)
+             this.$set(this.showMask2, "showBtn", true)
              this.contrastContract2();
           } else {
             this.$notify.warning({
