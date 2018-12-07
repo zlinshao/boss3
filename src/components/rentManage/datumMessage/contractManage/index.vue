@@ -1942,7 +1942,7 @@
                 message: res.data.msg
               })
             }
-            this.Inconsistent = true;
+            
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
@@ -1950,6 +1950,7 @@
             // this.$set(this.showMask, "show",false)
             // this.$set(this.showMask, "showBtn", true)
             if(val == "1") {
+              this.Inconsistent = true;
               this.contrastContract();
             }
           } else {
@@ -1990,6 +1991,7 @@
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = "";
              }
+             
           }
           //  else {
           //   this.$notify.warning({
@@ -2060,7 +2062,7 @@
           window.open(href, '_blank', 'width=1920,height=1080');
       },
       // 收房获取图片
-      getImage(val) {
+      getImage(val, id) {
         this.imgList = {};
         this.contractFormClear();
         this.contractEntryDialog = true;
@@ -2148,7 +2150,7 @@
         this.contractForm2.pay_type = [[], [],[],];
       },
       // 租房获取图片
-      getImage2(val) {
+      getImage2(val, id) {
         this.imgList2 = {};
         this.contractFormClear2();
         this.contractEntryDialog2 = true;
@@ -2182,13 +2184,13 @@
                 message: res.data.msg
               })
             }
-            this.Inconsistent2 = true;
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
             //  this.$set(this.showMask2, "show", false)
             //  this.$set(this.showMask2, "showBtn", true)
             if(val == "1") {
+              this.Inconsistent2 = true;
               this.contrastContract2();
             }
           } else {
@@ -2262,7 +2264,7 @@
       // 获取合同公司联录入
       getContract2() {
         // this.contractEntry = true
-        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id).then(res => {
+        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id ).then(res => {
           if(res.data.code == "20020") {
             this.differentShow2 ==  res.data.data.is_frist;
             if(this.differentShow2 == 2) {
