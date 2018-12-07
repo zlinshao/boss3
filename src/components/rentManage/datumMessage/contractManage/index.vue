@@ -536,7 +536,7 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="合同开始日期" required>
-                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
@@ -557,12 +557,12 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="第一次打房租日期" required>
-                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期"  format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
                             <el-form-item label="第二次打房租日期" required>
-                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期"  format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -1024,7 +1024,7 @@
                         <el-row>
                           <el-col :span="8">
                             <el-form-item label="合同开始日期" required>
-                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
                           </el-form-item>
                           </el-col>
                           <el-col :span="8">
@@ -1962,40 +1962,41 @@
       },
       // 获取合同公司联录入
       getContract() {
-        this.contractEntry = true
+        // this.contractEntry = true
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
-          console.log(res, "44444")
           if(res.data.code == "20020") {
             this.differentShow ==  res.data.data.is_frist;
-            // this.contractForm.contract_month = res.data.data.contract_month;
-            // this.contractForm.start_at = res.data.data.start_at;
-            // this.contractForm.contract_day = res.data.data.contract_day;
-            // this.contractForm.guarantee_month = res.data.data.guarantee_month;
-            // this.contractForm.guarantee_day = res.data.data.guarantee_day;
-            // this.contractForm.originate = res.data.data.originate;
-            // this.contractForm.agency = res.data.data.agency;
-            // this.contractForm.agency_price = res.data.data.agency_price;
-            // this.contractForm.agency_person = res.data.data.agency_person;
-            // this.contractForm.agency_tel = res.data.data.agency_tel;
-            // this.contractForm.unit_price = res.data.data.unit_price;
-            // this.contractForm.pay_type = res.data.data.pay_type;
-            // this.contractForm.pay_method = res.data.data.pay_method;
-            // this.contractForm.mortgage_price = res.data.data.mortgage_price;
-            // this.contractForm.second_pay_at = res.data.data.second_pay_at;
-            // this.contractForm.first_pay_at = res.data.data.first_pay_at;
-            // this.contractForm.penalty_price = res.data.data.penalty_price;
-            // this.contractForm.customer_name = res.data.data.customer_name;
-            // this.contractForm.customer_phone = res.data.data.customer_phone;
-            // this.contractForm.customer_card = res.data.data.customer_card;
-            // this.contractForm.ready_days = res.data.data.ready_days;
-            // this.contractForm.has_pay = "";
+            if(this.differentShow == 2) {
+              this.contractForm.contract_month = res.data.data.contract_month;
+              this.contractForm.start_at = res.data.data.start_at;
+              this.contractForm.contract_day = res.data.data.contract_day;
+              this.contractForm.guarantee_month = res.data.data.guarantee_month;
+              this.contractForm.guarantee_day = res.data.data.guarantee_day;
+              this.contractForm.originate = res.data.data.originate;
+              this.contractForm.agency = res.data.data.agency;
+              this.contractForm.agency_price = res.data.data.agency_price;
+              this.contractForm.agency_person = res.data.data.agency_person;
+              this.contractForm.agency_tel = res.data.data.agency_tel;
+              this.contractForm.unit_price = res.data.data.unit_price;
+              this.contractForm.pay_type = res.data.data.pay_type;
+              this.contractForm.pay_method = res.data.data.pay_method;
+              this.contractForm.mortgage_price = res.data.data.mortgage_price;
+              this.contractForm.second_pay_at = res.data.data.second_pay_at;
+              this.contractForm.first_pay_at = res.data.data.first_pay_at;
+              this.contractForm.penalty_price = res.data.data.penalty_price;
+              this.contractForm.customer_name = res.data.data.customer_name;
+              this.contractForm.customer_phone = res.data.data.customer_phone;
+              this.contractForm.customer_card = res.data.data.customer_card;
+              this.contractForm.ready_days = res.data.data.ready_days;
+              this.contractForm.has_pay = "";
+             }
           }
-           else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            })
-          }
+          //  else {
+          //   this.$notify.warning({
+          //     title: "警告",
+          //     message: res.data.msg
+          //   })
+          // }
         })
       },
       // 对比
@@ -2073,9 +2074,9 @@
             } else if(res.data.data.type == "2") {
               this.contractForm.type = "续收";
             } 
+            this.getContract()
           }
         })
-        this.getContract()
       },
       // 通知人
       getAlertOthers(val) {
@@ -2264,15 +2265,17 @@
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id).then(res => {
           if(res.data.code == "20020") {
             this.differentShow2 ==  res.data.data.is_frist;
-            // this.contractForm2.contract_month = res.data.data.contract_month;
-            // this.contractForm2.contract_day = res.data.data.contract_day;
-            // this.contractForm2.unit_price = res.data.data.unit_price;
-            // this.contractForm2.pay_type = res.data.data.pay_type;
-            // this.contractForm2.pay_method = res.data.data.pay_method;
-            // this.contractForm2.mortgage_price = res.data.data.mortgage_price;
-            // this.contractForm2.customer_name = res.data.data.customer_name;
-            // this.contractForm2.customer_phone = res.data.data.customer_phone;
-            // this.contractForm2.type = res.data.data.type;
+            if(this.differentShow2 == 2) {
+              this.contractForm2.contract_month = res.data.data.contract_month;
+              this.contractForm2.contract_day = res.data.data.contract_day;
+              this.contractForm2.unit_price = res.data.data.unit_price;
+              this.contractForm2.pay_type = res.data.data.pay_type;
+              this.contractForm2.pay_method = res.data.data.pay_method;
+              this.contractForm2.mortgage_price = res.data.data.mortgage_price;
+              this.contractForm2.customer_name = res.data.data.customer_name;
+              this.contractForm2.customer_phone = res.data.data.customer_phone;
+              this.contractForm2.type = res.data.data.type;
+            }
           } 
           // else {
           //   this.$notify.warning({
