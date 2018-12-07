@@ -2070,7 +2070,8 @@
               message: res.data.msg
             })
             this.contractEntryDialog = false;
-            this.rentDatafunc()
+            this.collectDatafunc()
+           
           } else {
             this.$notify.warning({
               title: "警告",
