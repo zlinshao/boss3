@@ -581,17 +581,17 @@
                           <el-form-item label="房东信息" required>
                             <el-input class="input" v-model="contractForm.customer_name" ></el-input>
                           </el-form-item>
-                        </el-col>  
+                        </el-col>
                         <el-col :span="8">
                           <el-form-item label="联系方式" required>
                             <el-input class="input" v-model="contractForm.customer_phone" ></el-input>
                           </el-form-item>
-                        </el-col>  
+                        </el-col>
                         <el-col :span="8">
                            <el-form-item label="卡号" required>
                             <el-input class="input" v-model="contractForm.customer_card" ></el-input>
                           </el-form-item>
-                        </el-col>  
+                        </el-col>
                         </el-row>
                         <el-row v-for="index in newpriceLen" :key="index">
                           <el-col :span="14">
@@ -859,7 +859,7 @@
                     prop="corp_name"
                   >
                     <template slot-scope="scope">
-                      <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                      <span v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{house_name[scope.row.house_id].corp_name}}</span>
                       <span v-else>暂无</span>
                     </template>
                   </el-table-column>
@@ -908,7 +908,7 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-                  
+
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -1031,14 +1031,14 @@
                             <el-form-item label="租客信息" required>
                               <el-input class="input" v-model="contractForm2.customer_name" ></el-input>
                             </el-form-item>
-                          </el-col>  
+                          </el-col>
                           <el-col :span="8">
                             <el-form-item label="联系方式" required>
                               <el-input class="input" v-model="contractForm2.customer_phone" ></el-input>
                             </el-form-item>
-                          </el-col>  
+                          </el-col>
                         </el-row>
-                        
+
                         <el-row v-for="index in newpriceLen" :key="index">
                           <el-col :span="14">
                             <el-form-item label="月单价" v-if="index==1" required>
@@ -1349,7 +1349,7 @@
     <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId"
                  :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
-    <!--投诉列表-->                 
+    <!--投诉列表-->
     <ComplainList :complainListDialog="complainListDialog" :complainData="complainData" @close="closeModal">
     </ComplainList>
     <!--收房报销单-->
@@ -1567,6 +1567,7 @@
         statisticDate: '',
         collectData: [],   //收房合同
         rentData: [],      //租房合同
+        house_name: [],
         formInline: {
           name: '',
           house: '',
@@ -2339,7 +2340,7 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
-            
+
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
@@ -2399,6 +2400,12 @@
           this.rentLoading = false;
           if (res.data.code === '61010') {
             this.rentData = res.data.data;
+            var house_id = [];
+            this.rentData.forEach(item =>{
+              if(item.house_id){
+                house_id.push(item.house_id);
+              }
+            });
             this.totalNumbers = res.data.meta.total;
 
             let collectIdArray = '';
@@ -2416,6 +2423,20 @@
             this.rentStatus = '暂无数据';
             this.totalNumbers = 0;
           }
+          this.getName(house_id);
+        })
+      },
+      getName(houseIds = []) {
+        this.$http.get(globalConfig.server + '/organization/other/house-corp', {
+          params: {houseIds}
+        }).then(res => {
+          if (res.data.code === '700120') {
+              this.house_name = res.data.data;
+          } else {
+            this.house_name = {};
+          }
+        }).catch(err => {
+          console.log(err);
         })
       },
       handleSizeChange(val) {
@@ -2834,7 +2855,7 @@
         width: 100%;
         height: 100%;
         background-color: rgba(255,255,255,.5);
-       
+
       }
   }
 </style>
