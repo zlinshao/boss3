@@ -1826,6 +1826,7 @@
            this.Inconsistent = false;
            this.differentShow = "";
            this.differentShow2 = "";
+           this.contractFormClear()
          }
       },
       contractEntryDialog2(val) { 
@@ -1833,6 +1834,7 @@
           this.Inconsistent2 = false;
           this.differentShow = "";
           this.differentShow2 = "";
+          this.contractFormClear2()
         }
       }
       // =============================================
@@ -2160,11 +2162,11 @@
             } else if(res.data.data.type == "2") {
               this.contractForm2.type = "转租";
             } else if (res.data.data.type == "3") {
-              this.contractForm.type = "续租";
+              this.contractForm2.type = "续租";
             } else if(res.data.data.type == "4") {
-              this.contractForm.type = "未收先租";
+              this.contractForm2.type = "未收先租";
             } else if(res.data.data.type == "5") {
-              this.contractForm.type = "调租";
+              this.contractForm2.type = "调租";
             }
           }
         })
@@ -2886,12 +2888,12 @@
         this.currentAllot = tab.name;
         this.params.page = 1;
         this.resetting();
+        return false
         if (this.activeName == "first") {
           this.collectDatafunc();
         } else if (this.activeName == "second") {
           this.rentDatafunc();
         }
-        console.log(this.is_rent)
       },
       highGrade() {
         this.isHigh = !this.isHigh;
