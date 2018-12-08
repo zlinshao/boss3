@@ -254,7 +254,7 @@
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
                         <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
-                        <el-option key="7" label="90天内" value="7">90天内</el-option>
+                        <el-option v-if="this.is_rent ? true : false" key="7" label="90天内" value="7">90天内</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
                       </el-select>
@@ -330,7 +330,7 @@
                   style="width: 100%">
                   <el-table-column
                     type="selection"
-                    width="55">
+                    width="50">
                   </el-table-column>
                   <el-table-column width="40">
                     <template slot-scope="scope">
@@ -470,7 +470,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage(scope.row.contract_id)">{{scope.row.visit_status.name}}</span>
+                      <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -501,12 +501,13 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
-                    <div class="mask" v-if="showMask.show"></div>
-                    <ul style="padding: 10px;">
-                      <li v-for="(item, index) in imgList" :key="index" style="width: 16%;float: left;">
-                        <img :src="item" style="width: 100%;max-height: 150px;min-height: 100px;"/>
-                      </li>
-                    </ul>
+                    <div class="mask" v-if="differentShow !== 2"></div>
+                    <!-- 放大图片 -->
+                    <div class="image" @dragover='allowDrop($event)' id="certificate_photo">
+                          <span v-if="imgList.length<1">暂无照片</span>
+                          <img v-for="(value,key) in imgList" :key="key" :src="value"
+                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
+                    </div>
                   </div>
                   <div style="overflow: hidden">
                   <div class="formInfo" style="width:70%; float: left;">
@@ -529,7 +530,7 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="合同开始日期" required>
-                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
@@ -550,12 +551,12 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="第一次打房租日期" required>
-                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
                             <el-form-item label="第二次打房租日期" required>
-                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -578,7 +579,7 @@
                         </el-row>
                         <el-row>
                           <el-col :span="8">
-                          <el-form-item label="房东信息" required>
+                          <el-form-item label="房东姓名" required>
                             <el-input class="input" v-model="contractForm.customer_name" ></el-input>
                           </el-form-item>
                         </el-col>
@@ -725,12 +726,18 @@
                             </el-form-item>
                           </el-col>
                         </el-row>
+                        <el-row>
+                          <el-form-item>
+                            <div style="text-align: right;">
+                              <!-- <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button> -->
+                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2">查看合同详情</el-button>
+                              <el-button type="primary"  size="mini" @click="newBouncing('1')">对比</el-button>
+                            </div>
+                          </el-form-item>
+                        </el-row>
                       </div>
                     </el-form>
-                    <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button>
-                    <el-button type="primary"  size="mini" @click="newBouncing">对比</el-button>
-                  </div>
+                    
                   </div>
                   <div class="companyClient" style="width:25%; float: left;padding-left: 20px;">
                     <div style="color: #409EFF; margin-bottom: 10px;">对比公司联和客户联合同</div>
@@ -753,9 +760,9 @@
                     </div>
                   </div>
                   </div>
-                  <Organization :organizationDialog="alertOthers" :type="alertType" :length="alertLength" @close="alertCloseOrganization" @selectMember="alertSelectMember"></Organization>
+                  <Organization :organizationDialog="alertOthers" :type="alertType"  @close="alertCloseOrganization" @selectMember="alertSelectMember"></Organization>
                    <!-- 对比不同显示 -->
-                  <div class="differentContrast" v-if="differentShow" style="width: 50%; overflow: hidden;">
+                  <div class="differentContrast" v-if="Inconsistent" style="width: 50%; overflow: hidden;">
                       <div>对比详情:</div>
                       <el-card class="box-card" style="width: 80%;float: left;margin-left: 16px;">
                         <p style="color: #f55d54">不一致如下：</p>
@@ -780,8 +787,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="getContract" size="mini" >保存页面</el-button>
+                    <el-button type="primary" @click="newBouncing('2')" size="mini" >保存页面</el-button>
                     <el-button type="primary" @click="passAll" size="mini">全部通过</el-button>
+                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- ======================================================================== -->
@@ -939,7 +947,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage2(scope.row.contract_id)">{{scope.row.visit_status.name}}</span>
+                      <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -970,12 +978,13 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
-                    <div class="mask" v-if="showMask2.show"></div>
-                    <ul style="padding: 10px;">
-                      <li v-for="(item, index) in imgList2" :key="index" style="width: 16%;float: left;">
-                        <img :src="item" style="width: 100%;max-height: 150px;min-height: 100px;" />
-                      </li>
-                    </ul>
+                    <div class="mask" v-if="differentShow2 !== 2"></div>
+                    <!-- 放大图片 -->
+                    <div class="image" @dragover='allowDrop($event)' id="certificate_photo">
+                          <span v-if="imgList.length<1">暂无照片</span>
+                          <img v-for="(value,key) in imgList2" :key="key" :src="value"
+                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
+                    </div>
                   </div>
                   <div style="overflow: hidden">
                   <div class="formInfo" style="width:70%; float: left;">
@@ -1003,7 +1012,7 @@
                         <el-row>
                           <el-col :span="8">
                             <el-form-item label="合同开始日期" required>
-                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期"></el-date-picker>
+                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                           </el-form-item>
                           </el-col>
                           <el-col :span="8">
@@ -1118,25 +1127,36 @@
                               </el-date-picker>
                             </el-form-item>
                           </el-col>
-                          <el-col :span="2" style="float: right;" v-if="index == 1">
+                           <el-col :span="2" style="float: right;" v-if="index == 1">
                             <i @click="addPayLen" class="el-icon-circle-plus-outline addicon"></i>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index != 1">
                             <i @click="romovePayLen(index-1)" class="el-icon-remove-outline addicon"></i>
                           </el-col>
-                          <el-col :span="6" style="float: right;" v-if=" activeName2 =='first'">
+                          <!--  <el-col :span="4" style="float: right;" v-if=" activeName2 =='first'">
                             <el-select size="mini" v-model="contractForm2.pay_type[1][index-1]" placeholder="收房付款方式" clearable>
                               <el-option v-for="item in newpayTypeInfo" :label="item.dictionary_name" :key="item.id"
                                         :value="item.id">{{item.dictionary_name}}
                               </el-option>
                             </el-select>
+                          </el-col> -->
+                          <el-col :span="8"  style="float: right; text-align: right;">
+                              <span>押</span>
+                              <el-select style="width:60px;" size="mini" v-model="contractForm2.pay_type[1][index-1]" clearable>
+                                <el-option v-for="item in 48" :label="item" :key="item"
+                                          :value="item">
+                                </el-option>
+                              </el-select>
+                              <span>付</span>
+                              <el-input size="mini" style="width:46px;" v-model="contractForm2.pay_type[2][index-1]"></el-input>
                           </el-col>
                         </el-row>
+                        
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="showMask2.showBtn">查看合同详情</el-button>
-                    <el-button type="primary"  size="mini" @click="newBouncing2">对比</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="newBouncing2('1')">对比</el-button>
                   </div>
                   </div>
                   <div class="companyClient" style="width:25%; float: left;padding-left: 20px;">
@@ -1160,9 +1180,9 @@
                     </div>
                   </div>
                   </div>
-                  <Organization :organizationDialog="alertOthers2" :type="alertType" :length="alertLength" @close="alertCloseOrganization2" @selectMember="alertSelectMember2"></Organization>
+                  <Organization :organizationDialog="alertOthers2" :type="alertType"  @close="alertCloseOrganization2" @selectMember="alertSelectMember2"></Organization>
                    <!-- 对比不同显示 -->
-                  <div class="differentContrast" v-if="differentShow2" style="width: 50%; overflow: hidden;">
+                  <div class="differentContrast" v-if="Inconsistent2" style="width: 50%; overflow: hidden;">
                       <div>对比详情:</div>
                       <el-card class="box-card" style="width: 80%;float: left;margin-left: 16px;">
                         <p style="color: #f55d54">不一致如下：</p>
@@ -1181,14 +1201,19 @@
                         <el-table-column prop="uname" label="发送人">
                         </el-table-column>
                       </el-table>
+                      <!-- <div class="dialogPage block pages">
+                        <el-pagination @size-change="dialogHandleSizeChange" @current-change="dialogHandleCurrentChange" :current-page="sendHistoryFrom2.page" :page-sizes="[12,24, 36,48]" :page-size="sendHistoryFrom2.limit" layout="total, sizes, prev, pager, next, jumper" :total="dialogTotal2">
+                        </el-pagination>
+                      </div> -->
                       <span slot="footer" class="dialog-footer">
                         <!-- <el-button @click="sendHistoryDialog = false" size="mini">取 消</el-button> -->
                         <el-button type="primary" @click="sendHistoryDialog2 = false" size="mini">确 定</el-button>
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="getContract2" size="mini" >保存页面</el-button>
+                    <el-button type="primary" @click="newBouncing2('2')" size="mini" >保存页面</el-button>
                     <el-button type="primary" @click="passAll2" size="mini">全部通过</el-button>
+                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- =========================================================================== -->
@@ -1397,23 +1422,17 @@
     data() {
       return {
         // 新增字段 ==========================
-        showMask: {
-          show: true,
-          showBtn: false
-        },
-        showMask2: {
-          show: true,
-          showBtn: false
-        },
+        // dialogTotal: "",
+        // dialogTotal2: "",
         passAllForm: {
           contract_id: "",
-          moudle: 1,
-          operation: "to_contract_verify_approved",
+          module: 1,
+          operation: "",
         },
         passAllForm2: {
           contract_id: "",
-          moudle: 2,
-          operation: "to_contract_verify_approved",
+          module: 2,
+          operation: "",
         },
         sendHistoryDialog: false,
         sendHistoryList: [],
@@ -1422,10 +1441,26 @@
         clientForm: {
           uids: "",
           content: "",
+          contract_id: "",
+          module: 1,
         },
         clientForm2: {
           uids: "",
           content: "",
+          contract_id: "",
+          module: 2,
+        },
+        sendHistoryFrom: {
+          page: "1",
+          limit: "12",
+          contract_id: "",
+          module: 1
+        },
+        sendHistoryFrom2: {
+          page: "1",
+          limit: "12",
+          contract_id: "",
+          module: 2
         },
         alertPepole: "",
         alertPepoleList: [],
@@ -1434,36 +1469,40 @@
         alertType: "",
         alertOthers: false,
         alertOthers2: false,
-        alertLength: "",
-        alertOrg_id: "",
+        // alertLength: "",
+        // alertOrg_id: "",
         differentContrast: [],
         differentContrast2: [],
-        differentShow: false,
-        differentShow2: false,
+        differentShow: "",
+        differentShow2: "",
+        Inconsistent: false,
+        Inconsistent2: false,
         contractEntryDialog: false,
         contractEntryDialog2: false,
-        contrastContractDialog: false,
-        contrastContractDialog2: false,
-        confirmAgain: false,
-        contractEntry: false,
-        contrastContent: "",
-        contrastContentList: [],
-        administrativeContent: "",
-        administrativeContentList: [],
+        // contrastContractDialog: false,
+        // contrastContractDialog2: false,
+        // confirmAgain: false,
+        // contractEntry: false,
+        // contrastContent: "",
+        // contrastContentList: [],
+        // administrativeContent: "",
+        // administrativeContentList: [],
         contractForm: {
+          // staff_id: "",
+          start_at: "",
           community_name: "",
           type: "",
           second_pay_at: "",
           first_pay_at: "",
           contract_month: "", //合同周期_月
           contract_day: "",   //合同周期_日
-          guarantee_month: "",//保修期_月
-          guarantee_day: "",  //保修期_日
-          originate: "",      //来源
-          agency: "",         //中介名称
-          agency_price: "",   //中介费用
-          agency_person: "",  //中介人
-          agency_tel: "",     //中介电话
+          // guarantee_month: "",//保修期_月
+          // guarantee_day: "",  //保修期_日
+          // originate: "",      //来源
+          // agency: "",         //中介名称
+          // agency_price: "",   //中介费用
+          // agency_person: "",  //中介人
+          // agency_tel: "",     //中介电话
           unit_price: [[],[],],      //月单价
           pay_type: [[], [],[],],       //付款方式
           pay_method: [[],[],],      //支付方式
@@ -1478,6 +1517,7 @@
           ready_days: "",
         },
         contractForm2: {
+          // staff_id: "",
           community_name: "",
           type: "",
           contract_number: "",
@@ -1493,7 +1533,7 @@
           pay_type: [[], [],[],],       //付款方式
           pay_method: [[],[],],      //支付方式
         },
-        responsiblePersonCategory: [],
+        // responsiblePersonCategory: [],
         payTypeCategory: [],
         newpriceLen: 1,
         newpayForLen: 1,
@@ -1525,8 +1565,8 @@
             }
           }]
         },
-        activeName: "first",
-        activeName2: "first",
+        // activeName: "first",
+        // activeName2: "first",
         newpayTypeInfo: [],
         imgList: {},
         imgList2: {},
@@ -1536,7 +1576,7 @@
         show: false,
         lists: [],
         /***********/
-        selectFlag: 1,
+        // selectFlag: 1,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -1564,7 +1604,7 @@
             }
           }]
         },
-        statisticDate: '',
+        // statisticDate: '',
         collectData: [],   //收房合同
         rentData: [],      //租房合同
         house_name: [],
@@ -1631,15 +1671,15 @@
         staff: '',
         type: '',
         length: '',
-        currentPage: 1,
+        // currentPage: 1,
         //模态框
         organizationDialog: false,
         activeName: 'first',
         isHigh: false,
-        input: '',
-        radio: '1',
+        // input: '',
+        // radio: '1',
         value: '',
-        value1: '',
+        // value1: '',
         rentStatus: ' ',
         rentLoading: false,
         memoDialog: false, //备忘模态框
@@ -1685,6 +1725,7 @@
     mounted() {
       this.collectDatafunc();
       // this.getContract();
+      // this.startAt()
     },
     created() {
       this.getDictionary()
@@ -1769,7 +1810,7 @@
         }
       },
       newpayForLen(val) {
-        let data = this.form.pay_type;
+        let data = this.contractForm.pay_type;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
@@ -1780,12 +1821,36 @@
           }
         }
       },
+       contractEntryDialog(val) {
+         if(!val) {
+           this.Inconsistent = false;
+           this.differentShow = "";
+           this.differentShow2 = "";
+           this.contractFormClear()
+         }
+      },
+      contractEntryDialog2(val) { 
+        if(!val) {
+          this.Inconsistent2 = false;
+          this.differentShow = "";
+          this.differentShow2 = "";
+          this.contractFormClear2()
+        }
+      }
       // =============================================
     },
     methods: {
       // 新增方法
+      startAt(val) {
+        if(val.value == "0000-00-00 00:00:00") {
+          val.value = "";
+        }
+      },
       contractFormClear() {
         this.contractForm.mortgage_price = "";
+        this.contractForm.second_pay_at = "";
+        this.contractForm.start_at = "";
+        this.contractForm.first_pay_at = "";
         this.contractForm.customer_card = "";
         this.contractForm.customer_phone = "";
         this.contractForm.penalty_price = "";
@@ -1793,13 +1858,13 @@
         this.contractForm.customer_name = "";
         this.contractForm.contract_month = "";
         this.contractForm.contract_day = "";
-        this.contractForm.guarantee_month = "";
-        this.contractForm.guarantee_day = "";
-        this.contractForm.originate = "";
-        this.contractForm.agency = "";
-        this.contractForm.agency_price = "";
-        this.contractForm.agency_person = "";
-        this.contractForm.agency_tel = "";
+        // this.contractForm.guarantee_month = "";
+        // this.contractForm.guarantee_day = "";
+        // this.contractForm.originate = "";
+        // this.contractForm.agency = "";
+        // this.contractForm.agency_price = "";
+        // this.contractForm.agency_person = "";
+        // this.contractForm.agency_tel = "";
         this.contractForm.unit_price = [[],[],];
         this.contractForm.pay_type = [[], [],[],];
         this.contractForm.pay_method = [[],[],];
@@ -1862,20 +1927,26 @@
         this.contractForm.pay_method[0].splice(index, 1);
         this.contractForm.pay_method[1].splice(index, 1);
       },
-      newBouncing() {
+      newBouncing(val) {
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
-            this.$notify.success({
-              title: "成功",
-              message: res.data.msg
-            })
+            if(val == "2") {
+              this.$notify.success({
+                title: "成功",
+                message: res.data.msg
+              })
+            }
+            
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
             // this.showMask = false;
-            this.$set(this.showMask, "show",false)
-            this.$set(this.showMask, "showBtn", true)
-             this.contrastContract();
+            // this.$set(this.showMask, "show",false)
+            // this.$set(this.showMask, "showBtn", true)
+            if(val == "1") {
+              this.Inconsistent = true;
+              this.contrastContract();
+            }
           } else {
             this.$notify.warning({
               title: "警告",
@@ -1886,44 +1957,50 @@
       },
       // 获取合同公司联录入
       getContract() {
-        this.contractEntry = true
-        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => {
+        // this.contractEntry = true
+        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
           if(res.data.code == "20020") {
-            this.contractForm.contract_month = res.data.data.contract_month;
-            this.contractForm.contract_day = res.data.data.contract_day;
-            this.contractForm.guarantee_month = res.data.data.guarantee_month;
-            this.contractForm.guarantee_day = res.data.data.guarantee_day;
-            this.contractForm.originate = res.data.data.originate;
-            this.contractForm.agency = res.data.data.agency;
-            this.contractForm.agency_price = res.data.data.agency_price;
-            this.contractForm.agency_person = res.data.data.agency_person;
-            this.contractForm.agency_tel = res.data.data.agency_tel;
-            this.contractForm.unit_price = res.data.data.unit_price;
-            this.contractForm.pay_type = res.data.data.pay_type;
-            this.contractForm.pay_method = res.data.data.pay_method;
-            this.contractForm.mortgage_price = res.data.data.mortgage_price;
-            this.contractForm.penalty_price = res.data.data.penalty_price;
-            this.contractForm.customer_name = res.data.data.customer_name;
-            this.contractForm.customer_phone = res.data.data.customer_phone;
-            this.contractForm.customer_card = res.data.data.customer_card;
-            this.contractForm.ready_days = res.data.data.ready_days;
-            this.contractForm.has_pay = "";
-          }
-           else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            })
-          }
+              this.differentShow =  res.data.data.is_frist;
+            // if(res.data.data.is_frist == 2) {
+              this.contractForm.contract_month = res.data.data.contract_month;
+              this.contractForm.start_at = res.data.data.start_at;
+              this.contractForm.contract_day = res.data.data.contract_day;
+              // this.contractForm.guarantee_month = res.data.data.guarantee_month;
+              // this.contractForm.guarantee_day = res.data.data.guarantee_day;
+              // this.contractForm.originate = res.data.data.originate;
+              // this.contractForm.agency = res.data.data.agency;
+              // this.contractForm.agency_price = res.data.data.agency_price;
+              // this.contractForm.agency_person = res.data.data.agency_person;
+              // this.contractForm.agency_tel = res.data.data.agency_tel;
+              this.contractForm.unit_price = res.data.data.unit_price;
+              this.contractForm.pay_type = res.data.data.pay_type;
+              this.contractForm.pay_method = res.data.data.pay_method;
+              this.contractForm.mortgage_price = res.data.data.mortgage_price;
+              this.contractForm.second_pay_at = res.data.data.second_pay_at;
+              this.contractForm.first_pay_at = res.data.data.first_pay_at;
+              this.contractForm.penalty_price = res.data.data.penalty_price;
+              this.contractForm.customer_name = res.data.data.customer_name;
+              this.contractForm.customer_phone = res.data.data.customer_phone;
+              this.contractForm.customer_card = res.data.data.customer_card;
+              this.contractForm.ready_days = res.data.data.ready_days;
+              this.contractForm.has_pay = res.data.data.has_pay;
+            //  }
+          } 
+          //  else {
+          //   this.$notify.warning({
+          //     title: "警告",
+          //     message: res.data.msg
+          //   })
+          // }
         })
       },
       // 对比
       contrastContract() {
         this.$http.get(globalConfig.server + "contract/contract_diff/diff?module=1&contract_id=" + this.contractForm.contract_id).then(res => {
           if(res.data.code == "20010") {
-            this.contrastContractDialog = true;
+            // this.contrastContractDialog = true;
             this.differentContrast = res.data.data.administrative.diff;
-            this.differentShow = true;
+             this.getContract();
           } else {
             this.$notify.warning({
               title: "警告",
@@ -1935,6 +2012,7 @@
       //  全部通过
       passAll() {
         this.passAllForm.contract_id = this.contractForm.contract_id;
+        this.passAllForm.operation = "to_contract_verify_approved";
         this.$http.put(globalConfig.server + "lease/status/verify", this.passAllForm).then(res => {
           if(res.data.code == "60610") {
             this.$notify.success({
@@ -1942,10 +2020,32 @@
               message: res.data.msg
             })
             this.contractEntryDialog = false;
+            this.collectDatafunc()
+            this.contractFormClear();
           } else {
             this.$notify.warning({
               title: "警告",
-              success: res.data.msg
+              message: res.data.msg
+            })
+          }
+        })
+      },
+      passAllNo() {
+         this.passAllForm.contract_id = this.contractForm.contract_id;
+        this.passAllForm.operation = "to_contract_verify_rejected";
+        this.$http.put(globalConfig.server + "lease/status/verify", this.passAllForm).then(res => {
+          if(res.data.code == "60610") {
+            this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            })
+            this.contractEntryDialog = false;
+            this.collectDatafunc()
+           this.contractFormClear();
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
             })
           }
         })
@@ -1957,7 +2057,7 @@
           window.open(href, '_blank', 'width=1920,height=1080');
       },
       // 收房获取图片
-      getImage(val) {
+      getImage(val, id) {
         this.imgList = {};
         this.contractFormClear();
         this.contractEntryDialog = true;
@@ -1966,20 +2066,15 @@
           if(res.data.code == "61010") {
             this.imgList = res.data.data.photo;
             this.contractForm.community_name = res.data.data.community_name;
+            // this.contractForm.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
-              this.contractForm.type = "新租";
+              this.contractForm.type = "新收";
             } else if(res.data.data.type == "2") {
-              this.contractForm.type = "转租";
-            } else if (res.data.data.type == "3") {
-              this.contractForm.type = "续租";
-            } else if(res.data.data.type == "4") {
-              this.contractForm.type = "未收先租";
-            } else if(res.data.data.type == "5") {
-              this.contractForm.type = "调租";
-            }
+              this.contractForm.type = "续收";
+            } 
+            this.getContract()
           }
         })
-        this.getContract()
       },
       // 通知人
       getAlertOthers(val) {
@@ -2003,6 +2098,7 @@
          this.clientForm.uids = ""
       },
       sendPepole() {
+        this.clientForm.contract_id = this.contractForm.contract_id;
         this.$http.post(globalConfig.server + "lease/status/send-verify-res", this.clientForm).then(res => {
           if(res.data.code == "60618") {
             this.$notify.success({
@@ -2021,10 +2117,12 @@
         })
       },
       sendHistory() {
-        this.$http.get(globalConfig.server + "lease/status/send-diff-list").then(res => {
+        this.sendHistoryFrom.contract_id = this.contractForm.contract_id;
+        this.$http.get(globalConfig.server + "lease/status/send-diff-list", {params: this.sendHistoryFrom}).then(res => {
           if(res.data.code == "60600") {
             this.sendHistoryDialog = true;
             this.sendHistoryList = res.data.data.data;
+            // this.dialogTotal = res.data.count;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2048,7 +2146,7 @@
         this.contractForm2.pay_type = [[], [],[],];
       },
       // 租房获取图片
-      getImage2(val) {
+      getImage2(val, id) {
         this.imgList2 = {};
         this.contractFormClear2();
         this.contractEntryDialog2 = true;
@@ -2058,28 +2156,41 @@
             this.imgList2 = res.data.data.photo;
             this.contractForm2.community_name = res.data.data.community_name;
             this.contractForm2.contract_number = res.data.data.contract_number;
+            //  this.contractForm2.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
-              this.contractForm2.type = "新收";
+              this.contractForm2.type = "新租";
             } else if(res.data.data.type == "2") {
-              this.contractForm2.type = "续收";
+              this.contractForm2.type = "转租";
+            } else if (res.data.data.type == "3") {
+              this.contractForm2.type = "续租";
+            } else if(res.data.data.type == "4") {
+              this.contractForm2.type = "未收先租";
+            } else if(res.data.data.type == "5") {
+              this.contractForm2.type = "调租";
             }
           }
         })
         this.getContract2()
       },
-      newBouncing2() {
+      newBouncing2(val) {
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm2).then(res => {
           if(res.data.code == '20010') {
-            this.$notify.success({
-              title: "成功",
-              message: res.data.msg
-            })
+            if(val == "2") {
+              this.$notify.success({
+                title: "成功",
+                message: res.data.msg
+              })
+            }
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
-             this.$set(this.showMask2, "show", false)
-             this.$set(this.showMask2, "showBtn", true)
-             this.contrastContract2();
+            //  this.$set(this.showMask2, "show", false)
+            //  this.$set(this.showMask2, "showBtn", true)
+            if(val == "1") {
+              this.Inconsistent2 = true;
+              this.contrastContract2();
+              
+            }
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2089,6 +2200,7 @@
         })
       },
      sendPepole2() {
+       this.clientForm2.contract_id = this.contractForm2.contract_id;
        this.$http.post(globalConfig.server + "lease/status/send-verify-res", this.clientForm2).then(res => {
           if(res.data.code == "60618") {
             this.$notify.success({
@@ -2133,10 +2245,12 @@
           window.open(href, '_blank', 'width=1920,height=1080');
       },
       sendHistory2() {
-        this.$http.get(globalConfig.server + "lease/status/send-diff-list").then(res => {
+        this.sendHistoryFrom2.contract_id = this.contractForm2.contract_id;
+        this.$http.get(globalConfig.server + "lease/status/send-diff-list", {params: this.sendHistoryFrom2}).then(res => {
           if(res.data.code == "60600") {
             this.sendHistoryDialog2 = true;
             this.sendHistoryList2 = res.data.data.data;
+            // this.dialogTotal2 = res.data.count;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2148,28 +2262,34 @@
       // 获取合同公司联录入
       getContract2() {
         // this.contractEntry = true
-        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id).then(res => {
+        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id + "&").then(res => {
           if(res.data.code == "20020") {
-            this.contractForm2.contract_month = res.data.data.contract_month;
-            this.contractForm2.contract_day = res.data.data.contract_day;
-            this.contractForm2.unit_price = res.data.data.unit_price;
-            this.contractForm2.pay_type = res.data.data.pay_type;
-            this.contractForm2.pay_method = res.data.data.pay_method;
-            this.contractForm2.mortgage_price = res.data.data.mortgage_price;
-            this.contractForm2.customer_name = res.data.data.customer_name;
-            this.contractForm2.customer_phone = res.data.data.customer_phone;
-            this.contractForm2.type = res.data.data.type;
-          } else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            })
-          }
+            this.differentShow2 =  res.data.data.is_frist;
+            // if(res.data.data.is_frist == 2) {
+              this.contractForm2.contract_month = res.data.data.contract_month;
+              this.contractForm2.start_at = res.data.data.start_at;
+              this.contractForm2.contract_day = res.data.data.contract_day;
+              this.contractForm2.unit_price = res.data.data.unit_price;
+              this.contractForm2.pay_type = res.data.data.pay_type;
+              this.contractForm2.pay_method = res.data.data.pay_method;
+              this.contractForm2.mortgage_price = res.data.data.mortgage_price;
+              this.contractForm2.customer_name = res.data.data.customer_name;
+              this.contractForm2.customer_phone = res.data.data.customer_phone;
+              this.contractForm2.type = res.data.data.type;
+            // }
+          } 
+          // else {
+          //   this.$notify.warning({
+          //     title: "警告",
+          //     message: res.data.msg
+          //   })
+          // }
         })
       },
       //  全部通过
       passAll2() {
         this.passAllForm2.contract_id = this.contractForm2.contract_id;
+        this.passAllForm2.operation = "to_contract_verify_approved";
         this.$http.put(globalConfig.server + "lease/status/verify", this.passAllForm2).then(res => {
           if(res.data.code == "60610") {
             this.$notify.success({
@@ -2177,6 +2297,28 @@
               message: res.data.msg
             })
             this.contractEntryDialog2 = false;
+            this.rentDatafunc();
+            this.contractFormClear2();
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              success: res.data.msg
+            })
+          }
+        })
+      },
+      passAll2No() {
+        this.passAllForm2.contract_id = this.contractForm2.contract_id;
+        this.passAllForm2.operation = "to_contract_verify_rejected";
+        this.$http.put(globalConfig.server + "lease/status/verify", this.passAllForm2).then(res => {
+          if(res.data.code == "60610") {
+            this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            })
+            this.contractEntryDialog2 = false;
+            this.rentDatafunc();
+            this.contractFormClear2();
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2189,9 +2331,9 @@
       contrastContract2() {
         this.$http.get(globalConfig.server + "contract/contract_diff/diff?module=2&contract_id=" + this.contractForm2.contract_id).then(res => {
           if(res.data.code == "20010") {
-            this.contrastContractDialog2 = true;
+            // this.contrastContractDialog2 = true;
             this.differentContrast2 = res.data.data.administrative.diff;
-            this.differentShow2 = true;
+            this.getContract2()
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2200,6 +2342,23 @@
           }
         })
       },
+      allowDrop(e) {
+        e.preventDefault();
+      },
+      currentPicId(key) {
+        this.dragPicId = key;
+      },
+      // 弹出框分页
+    dialogHandleSizeChange(val) {
+       this.sendHistoryFrom2.limit = val;
+       this.sendHistory2(this.sendHistoryFrom2.limit)
+       console.log(`每页 ${val} 条`);
+    },
+    dialogHandleCurrentChange(val) {
+      this.sendHistoryFrom2.page = val;
+      this.sendHistory2(this.sendHistoryFrom2.page);
+      console.log(`当前页: ${val}`);
+    },
       // ==========================================
       allotOpenOrganization(type){
         this.allotType = type;
@@ -2265,6 +2424,7 @@
         }
       },
       closeModal(val) {
+        this.addReturnInfo = [];
         this.editRentInfoDialog = false;
         this.editAddressDialog = false;
         this.editHouseResourcesDialog = false;
@@ -2489,18 +2649,15 @@
           this.cities = res.data;
         });
         // 新增字典====================================
-        this.dictionary(622).then((res) => {  //回访来源
-          this.responsiblePersonCategory = res.data;
-        });
+        // this.dictionary(622).then((res) => {  //回访来源
+        //   this.responsiblePersonCategory = res.data;
+        // });
         this.dictionary(443).then((res) => {  //收房付款方式
           this.newpayTypeInfo = res.data;
         });
         this.dictionary(629).then((res) => {  //支付方式
           this.payTypeCategory = res.data;
         });
-        this.dictionary().then(res => {
-          console.log(res, "4444444")
-        })
         // ============================================
       },
       // 城市遍历
@@ -2724,14 +2881,15 @@
       closeOrganization() {
         this.organizationDialog = false
       },
-      selectStatus(flag) {
-        this.selectFlag = flag;
-      },
+      // selectStatus(flag) {
+      //   this.selectFlag = flag;
+      // },
       // tabs标签页
       handleClick(tab, event) {
         this.currentAllot = tab.name;
         this.params.page = 1;
         this.resetting();
+        return false
         if (this.activeName == "first") {
           this.collectDatafunc();
         } else if (this.activeName == "second") {
@@ -2855,7 +3013,16 @@
         width: 100%;
         height: 100%;
         background-color: rgba(255,255,255,.5);
-
       }
+      .image {
+          min-height: 90px;
+          img {
+            width: 120px;
+            height: 80px;
+            border-radius: 4px;
+            margin-right: 10px;
+
+          }
+        }
   }
 </style>
