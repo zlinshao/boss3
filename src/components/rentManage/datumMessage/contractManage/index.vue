@@ -536,7 +536,7 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="合同开始日期" required>
-                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" @focus="startAt" value-format="yyyy-MM-dd"></el-date-picker>
+                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
@@ -1529,6 +1529,7 @@
           ready_days: "",
         },
         contractForm2: {
+          staff_id: "",
           community_name: "",
           type: "",
           contract_number: "",
@@ -1970,7 +1971,7 @@
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
           if(res.data.code == "20020") {
               this.differentShow =  res.data.data.is_frist;
-            if(res.data.data.is_frist == 2) {
+            // if(res.data.data.is_frist == 2) {
               this.contractForm.contract_month = res.data.data.contract_month;
               this.contractForm.start_at = res.data.data.start_at;
               this.contractForm.contract_day = res.data.data.contract_day;
@@ -1993,7 +1994,7 @@
               this.contractForm.customer_card = res.data.data.customer_card;
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = "";
-             }
+            //  }
           } 
           //  else {
           //   this.$notify.warning({
@@ -2164,6 +2165,7 @@
             this.imgList2 = res.data.data.photo;
             this.contractForm2.community_name = res.data.data.community_name;
             this.contractForm2.contract_number = res.data.data.contract_number;
+             this.contractForm2.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
               this.contractForm2.type = "新租";
             } else if(res.data.data.type == "2") {
@@ -2268,10 +2270,10 @@
       // 获取合同公司联录入
       getContract2() {
         // this.contractEntry = true
-        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id ).then(res => {
+        this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id + "&").then(res => {
           if(res.data.code == "20020") {
             this.differentShow2 =  res.data.data.is_frist;
-            if(this.differentShow2 == 2) {
+            // if(res.data.data.is_frist == 2) {
               this.contractForm2.contract_month = res.data.data.contract_month;
               this.contractForm2.contract_day = res.data.data.contract_day;
               this.contractForm2.unit_price = res.data.data.unit_price;
@@ -2281,7 +2283,7 @@
               this.contractForm2.customer_name = res.data.data.customer_name;
               this.contractForm2.customer_phone = res.data.data.customer_phone;
               this.contractForm2.type = res.data.data.type;
-            }
+            // }
           } 
           // else {
           //   this.$notify.warning({
