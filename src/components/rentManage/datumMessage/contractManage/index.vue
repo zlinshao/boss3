@@ -501,7 +501,7 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
-                    <div class="mask" v-if="differentShow == 2"></div>
+                    <div class="mask" v-if="differentShow !== 2"></div>
                     <!-- <div class="mask"></div> -->
                     <!-- <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList" :key="index" style="width: 16%;float: left;">
@@ -536,7 +536,7 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="合同开始日期" required>
-                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" ></el-date-picker>
+                              <el-date-picker v-model="contractForm.start_at"  type="date"  placeholder="选择日期" @focus="startAt" value-format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
@@ -557,12 +557,12 @@
                         <el-row>
                           <el-col :span="12">
                             <el-form-item label="第一次打房租日期" required>
-                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期" ></el-date-picker>
+                              <el-date-picker v-model="contractForm.first_pay_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
                             <el-form-item label="第二次打房租日期" required>
-                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期" ></el-date-picker>
+                              <el-date-picker v-model="contractForm.second_pay_at"  type="date"  placeholder="选择日期" @focus="startAt" format="yyyy-MM-dd"></el-date-picker>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -736,7 +736,7 @@
                           <el-form-item>
                             <div style="text-align: right;">
                               <!-- <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button> -->
-                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow !== 2">查看合同详情</el-button>
+                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2">查看合同详情</el-button>
                               <el-button type="primary"  size="mini" @click="newBouncing('1')">对比</el-button>
                             </div>
                           </el-form-item>
@@ -984,7 +984,7 @@
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
-                    <div class="mask" v-if="differentShow2 == 2"></div>
+                    <div class="mask" v-if="differentShow2 !== 2"></div>
                     <!-- <div class="mask"></div> -->
                     <!-- <ul style="padding: 10px;">
                       <li v-for="(item, index) in imgList2" :key="index" style="width: 16%;float: left;">
@@ -1024,7 +1024,7 @@
                         <el-row>
                           <el-col :span="8">
                             <el-form-item label="合同开始日期" required>
-                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期" ></el-date-picker>
+                            <el-date-picker v-model="contractForm2.start_at"  type="date"  placeholder="选择日期" @focus="startAt"></el-date-picker>
                           </el-form-item>
                           </el-col>
                           <el-col :span="8">
@@ -1167,7 +1167,7 @@
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 !== 2">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2">查看合同详情</el-button>
                     <el-button type="primary"  size="mini" @click="newBouncing2('1')">对比</el-button>
                   </div>
                   </div>
@@ -1434,14 +1434,6 @@
     data() {
       return {
         // 新增字段 ==========================
-        // showMask: {
-        //   show: true,
-        //   showBtn: false
-        // },
-        // showMask2: {
-        //   show: true,
-        //   showBtn: false
-        // },
         dialogTotal: "",
         dialogTotal2: "",
         passAllForm: {
@@ -1493,8 +1485,8 @@
         alertOrg_id: "",
         differentContrast: [],
         differentContrast2: [],
-        differentShow: 2,
-        differentShow2: 2,
+        differentShow: "",
+        differentShow2: "",
         Inconsistent: false,
         Inconsistent2: false,
         contractEntryDialog: false,
@@ -1508,6 +1500,7 @@
         administrativeContent: "",
         administrativeContentList: [],
         contractForm: {
+          staff_id: "",
           start_at: "",
           community_name: "",
           type: "",
@@ -1743,6 +1736,7 @@
     mounted() {
       this.collectDatafunc();
       // this.getContract();
+      // this.startAt()
     },
     created() {
       this.getDictionary()
@@ -1838,44 +1832,29 @@
           }
         }
       },
-       newpriceLen2(val) {
-        let data = this.contractForm2.unit_price;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = 0; i < val; i++) {
-            if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-            }
-          }
-        }
-      },
-      newpayForLen2(val) {
-        let data = this.contractForm2.pay_type;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = 0; i < val; i++) {
-            if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-            }
-          }
-        }
-      },
        contractEntryDialog(val) {
          if(!val) {
            this.Inconsistent = false;
+           this.differentShow = "";
+           this.differentShow2 = "";
          }
       },
       contractEntryDialog2(val) { 
         if(!val) {
           this.Inconsistent2 = false;
+          this.differentShow = "";
+          this.differentShow2 = "";
         }
       }
       // =============================================
     },
     methods: {
       // 新增方法
+      startAt(val) {
+        if(val.value == "0000-00-00 00:00:00") {
+          val.value = "";
+        }
+      },
       contractFormClear() {
         this.contractForm.mortgage_price = "";
         this.contractForm.second_pay_at = "";
@@ -1989,21 +1968,9 @@
       getContract() {
         // this.contractEntry = true
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
-          console.log(res, "555555")
           if(res.data.code == "20020") {
-            this.differentShow ==  res.data.data.is_frist;
-             console.log(res.data.data.start_at.split("-")[0], "444444")
-            if(res.data.data.start_at.split("-")[0] == "0000") {
-              console.log(111)
-              this.contractForm.start_at = null;
-            } 
-            if(res.data.data.first_pay_at.split("-")[0] == "0000") {
-              this.contractForm.first_pay_at = "";
-            }
-            if(res.data.data.second_pay_at.split("-")[0] == "0000") {
-              this.contractForm.second_pay_at = "";
-            }
-            if(this.differentShow == 2) {
+              this.differentShow =  res.data.data.is_frist;
+            if(res.data.data.is_frist == 2) {
               this.contractForm.contract_month = res.data.data.contract_month;
               this.contractForm.start_at = res.data.data.start_at;
               this.contractForm.contract_day = res.data.data.contract_day;
@@ -2027,8 +1994,7 @@
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = "";
              }
-             
-          }
+          } 
           //  else {
           //   this.$notify.warning({
           //     title: "警告",
@@ -2043,7 +2009,7 @@
           if(res.data.code == "20010") {
             this.contrastContractDialog = true;
             this.differentContrast = res.data.data.administrative.diff;
-            this.differentShow = true;
+            // this.differentShow = true;
           } else {
             this.$notify.warning({
               title: "警告",
@@ -2108,6 +2074,7 @@
           if(res.data.code == "61010") {
             this.imgList = res.data.data.photo;
             this.contractForm.community_name = res.data.data.community_name;
+            this.contractForm.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
               this.contractForm.type = "新收";
             } else if(res.data.data.type == "2") {
@@ -2303,16 +2270,7 @@
         // this.contractEntry = true
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=2&contract_id=' + this.contractForm2.contract_id ).then(res => {
           if(res.data.code == "20020") {
-            this.differentShow2 ==  res.data.data.is_frist;
-             if(res.data.data.start_at == "0000-00-00 00:00:00") {
-              this.contractForm2.start_at = "";
-            } 
-            if(res.data.data.first_pay_at == "0000-00-00 00:00:00") {
-              this.contractForm2.first_pay_at = "";
-            }
-            if(res.data.data.second_pay_at == "0000-00-00 00:00:00") {
-              this.contractForm2.second_pay_at = "";
-            }
+            this.differentShow2 =  res.data.data.is_frist;
             if(this.differentShow2 == 2) {
               this.contractForm2.contract_month = res.data.data.contract_month;
               this.contractForm2.contract_day = res.data.data.contract_day;
