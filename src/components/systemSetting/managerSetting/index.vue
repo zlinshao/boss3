@@ -25,6 +25,9 @@
       <el-tab-pane label="部门管理" name="eighth">
         <RenewPart></RenewPart>
       </el-tab-pane>
+      <el-tab-pane label="房屋公司管理" name="ninth">
+        <HouseCompanyManage :activeName='activeName'></HouseCompanyManage>
+      </el-tab-pane>
       <!-- <el-tab-pane label="小区管理" name="sixth">-->
         <!--<VillageManage></VillageManage>-->
       <!--</el-tab-pane> -->
@@ -42,9 +45,10 @@
   import CompanyManage from './companyManage/index.vue'
   import FeatureList from './featureList/index';
   import RenewPart from './renewPart/index';
+  import HouseCompanyManage from './houseCompanyManage/index.vue'
   export default {
     name: "index",
-    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage,CompanyManage,FeatureList,RenewPart},
+    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage,CompanyManage,FeatureList,RenewPart,HouseCompanyManage},
     data() {
       return {
         activeName: 'first'
@@ -55,7 +59,7 @@
     watch: {},
     methods: {
       handleClick(val) {
-
+        this.activeName = val.name
       }
     },
   }
