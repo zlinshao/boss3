@@ -14,7 +14,7 @@
           <el-col :span="18">
             <div>
               <el-row :gutter="20">
-                <el-col :span="16">
+                <el-col :span="cityAll ? 4 : 16">
                   <span style="color: #409EFF;">城市组成：</span>
                   <div style="display: inline-block;">
                     <el-checkbox-group v-model="helpParams.city" @change="selectCity">
@@ -49,19 +49,21 @@
                 <el-radio :label="30">最近30天</el-radio>
                 <el-radio label="day">
                   <template>
-                    <el-input type="number" size="mini" style="width: 80px;" v-model="helpParams.days"></el-input>
+                    <el-input type="number" size="mini" style="width: 80px;" v-model="helpParams.days" @change="handleInputDays"></el-input>
                   </template>
                   天
                 </el-radio>
                 <el-radio label="date">
                   <template>
                     <el-date-picker
-                      v-model="params.dateTime"
+                      v-model="helpParams.dateTime"
                       size="mini"
                       type="daterange"
                       range-separator="至"
                       start-placeholder="开始日期"
-                      end-placeholder="结束日期">
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd"
+                    >
                     </el-date-picker>
                   </template>
                 </el-radio>
@@ -102,6 +104,7 @@
           :row-class-name="tableRowClassName"
           :data="businessList"
           @header-click="handleHeaderClick"
+          @cell-click="handleCellClick"
         >
           <el-table-column label="区域">
             <template slot-scope="scope">
@@ -164,9 +167,11 @@
             ], //数据来源列表
             time: 1, //天数
             days: '',
+            chooseDay: false,
+            dateTime: '',
+            chooseDate: false
           },
           params: {
-            dateTime: '',
             order_scope: '', //区域间、内排序
             order_field: '', //列表字段排序
             start_time: '',
@@ -229,36 +234,35 @@
               })
             }
           }
+          console.log(this.params.compose);
         },
         //选择城市
         selectCity(val) {
-          var city = [];
+          this.params.city = [];
           if(val.length >= this.cityList.length){
             this.cityAll = true;
             this.helpParams.city = ['全部'];
             this.cityList.map(value => {
-              city.push(value.id);
+              this.params.city.push(value.id);
             });
-            this.params.city = city;
-            console.log(this.params.city);
             return false;
           }
           if(val.includes('全部')){
+            this.helpParams.city = ['全部'];
             this.cityAll = true;
             this.cityList.map(value => {
-              city.push(value.id);
+              this.params.city.push(value.id);
             });
           }else {
             this.cityAll = false;
             for (var j=0;j<val.length;j++){
               this.cityList.map(value => {
                 if(val[j] === value.name){
-                  city.push(value.id);
+                  this.params.city.push(value.id);
                 }
               })
             }
           }
-          this.params.city = city;
           console.log(this.params.city);
         },
         //获取城市列表
@@ -282,15 +286,65 @@
         },
         //确定筛选
         handleDownFiltrate() {
-          console.log(this.params);
+          if(this.helpParams.chooseDay) {
+            if(this.helpParams.days){
+              this.handleSetTime(this.helpParams.days);
+            }
+          }
+          if(this.helpParams.chooseDate) {
+            if(this.helpParams.dateTime.length > 1) {
+              this.params.end_time = this.helpParams.dateTime[1];
+              this.params.start_time = this.helpParams.dateTime[0];
+            }
+          }
+          let params = this.params;
+          if(!params.end_time || !params.start_time) {
+            this.$notify.warning({
+              title: '警告',
+              message: '请选择筛选时间！'
+            });
+            return false;
+          }
+          if(params.city.length < 1) {
+            this.$notify.warning({
+              title: '警告',
+              message: '至少有一个进行筛选的城市！'
+            });
+            return false;
+          }
+          if(params.compose.length < 1) {
+            this.$notify.warning({
+              title: '警告',
+              message: '至少有一个进行筛选的数据组成！'
+            });
+            return false;
+          }
+          console.log(params);
+        },
+        //输入天数
+        handleInputDays(val) {
+          this.handleChangeDate(val);
         },
         //筛选时间
         handleChangeDate(val) {
           if(val === 1 || val === 7 || val === 30){
             this.handleSetTime(val);
-          }else {
-            console.log("this is self time",val);
-            console.log(this.helpParams.days);
+            this.helpParams.chooseDay = false;
+            this.helpParams.chooseDate = false;
+            this.helpParams.days = "";
+            this.helpParams.dateTime = "";
+          }else if(val === 'day'){
+            this.params.start_time = '';
+            this.params.end_time = '';
+            this.helpParams.chooseDay = true;
+            this.helpParams.chooseDate = false;
+            this.helpParams.dateTime = "";
+          }else if(val === 'date'){
+            this.helpParams.chooseDay = false;
+            this.helpParams.chooseDate = true;
+            this.helpParams.days = "";
+            this.params.start_time = "";
+            this.params.end_time = "";
           }
         },
         //设置周期
@@ -301,7 +355,6 @@
           start_time = new Date(start_time).toLocaleDateString().split("/").join("-");
           this.params.end_time = end_time;
           this.params.start_time = start_time;
-          console.log(this.params);
         },
         headerStyle({row, column}) {
           if(column.label === '收房'){
@@ -324,6 +377,13 @@
           }else {
             return false;
           }
+        },
+        //单元格被单击
+        handleCellClick(row,column,cell,event) {
+          console.log(row);
+          console.log(column);
+          console.log(cell);
+          console.log(event);
         },
         handleAscOrder() {
           this.$message("升序功能尚未开放");
