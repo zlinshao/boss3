@@ -2469,6 +2469,7 @@
         }
       },
       closeModal(val) {
+        this.addReturnInfo = [];
         this.editRentInfoDialog = false;
         this.editAddressDialog = false;
         this.editHouseResourcesDialog = false;
