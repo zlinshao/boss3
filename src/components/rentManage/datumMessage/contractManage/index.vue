@@ -2601,6 +2601,8 @@
       rentDatafunc() {
         this.rentStatus = " ";
         this.rentLoading = true;
+        // let res = {};
+        // res.data = 
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
           this.rentLoading = false;
           if (res.data.code === '61010') {
@@ -2933,7 +2935,7 @@
       handleClick(tab, event) {
         this.currentAllot = tab.name;
         this.params.page = 1;
-        // this.resetting();
+        this.resetting();
         // return false
         if (this.activeName == "first") {
           this.collectDatafunc();
