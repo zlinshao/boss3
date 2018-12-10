@@ -99,7 +99,7 @@
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-input v-model="depart_name_collect" @focus="chooseDepart" placeholder="请选择创建人"
+                        <el-input v-model="depart_name_collect" @focus="chooseDepart" placeholder="请选择部门"
                                   readonly>
                           <template slot="append">
                             <div style="cursor: pointer;" @click="closeDepart">清空</div>
@@ -208,7 +208,7 @@
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-input v-model="depart_name_rent" @focus="chooseDepart" placeholder="请选择创建人"
+                        <el-input v-model="depart_name_rent" @focus="chooseDepart" placeholder="请选择部门"
                                   readonly>
                           <template slot="append">
                             <div style="cursor: pointer;" @click="closeDepart">清空</div>
