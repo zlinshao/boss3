@@ -485,11 +485,11 @@
                     </template>
                   </el-table-column>
                   <!-- 新增部分=================================== -->
-                  <el-table-column label="行政审核">
+                  <!-- <el-table-column label="行政审核">
                     <template  slot-scope="scope">
                       <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
-                  </el-table-column>
+                  </el-table-column> -->
                   <!-- ========================================= -->
                   <el-table-column
                     label="审核状态"
@@ -968,11 +968,11 @@
                     </template>
                   </el-table-column>
                   <!-- 新增部分=================================== -->
-                  <el-table-column label="行政审核">
+                  <!-- <el-table-column label="行政审核">
                     <template  slot-scope="scope">
                       <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
-                  </el-table-column>
+                  </el-table-column> -->
                   <!-- ========================================= -->
                   <el-table-column
                     label="审核状态"
@@ -2034,16 +2034,16 @@
               this.contractForm.customer_card = res.data.data.customer_card;
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
-                       console.log(res.data.data.first_pay_at, "333333")
-                       this.contractEntryLoading = false;
+              this.contractEntryLoading = false;
             //  }
           } 
-          //  else {
-          //   this.$notify.warning({
-          //     title: "警告",
-          //     message: res.data.msg
-          //   })
-          // }
+           else {
+            // this.$notify.warning({
+            //   title: "警告",
+            //   message: res.data.msg
+            // })
+            this.contractEntryLoading = false;
+          }
         })
       },
       // 对比
@@ -2334,12 +2334,13 @@
             // }
              this.contractEntryLoading2 = false;
           } 
-          // else {
-          //   this.$notify.warning({
-          //     title: "警告",
-          //     message: res.data.msg
-          //   })
-          // }
+          else {
+            // this.$notify.warning({
+            //   title: "警告",
+            //   message: res.data.msg
+            // })
+            this.contractEntryLoading2 = false;
+          }
         })
       },
       //  全部通过
@@ -2557,7 +2558,6 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
-            console.log(this.collectData, "666666")
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
@@ -2596,7 +2596,6 @@
         })
       },
       getReturnNumber(collectIdArray, type) {
-        console.log(collectIdArray, type, "444444")
         this.$http.get(globalConfig.server + 'contract/feedback/num', {
           params: {
             contract_ids: collectIdArray,
