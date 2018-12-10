@@ -708,7 +708,7 @@
                               </el-option>
                             </el-select>
                           </el-col>
-                          <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
+                          <!-- <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
                             <span>押</span>
                             <el-select style="width:60px;" size="mini" v-model="contractForm.pay_type[1][index-1]" clearable>
                               <el-option v-for="item in 48" :label="item" :key="item"
@@ -717,7 +717,7 @@
                             </el-select>
                             <span>付</span>
                             <el-input size="mini" style="width:46px;" v-model="contractForm.pay_type[2][index-1]"></el-input>
-                          </el-col>
+                          </el-col> -->
                         </el-row>
                         <el-row v-if=" activeName == 'second'">
                           <el-col :span="12">
@@ -1861,6 +1861,9 @@
            this.Inconsistent = false;
            this.differentShow = "";
            this.differentShow2 = "";
+           this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
            this.contractFormClear()
          }
       },
@@ -1869,6 +1872,9 @@
           this.Inconsistent2 = false;
           this.differentShow = "";
           this.differentShow2 = "";
+           this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
           this.contractFormClear2()
         }
       }
@@ -2521,11 +2527,9 @@
       search() {
         if (this.activeName === "first") {
           this.params.page = 1;
-          console.log(this.params, "444444444")
           this.collectDatafunc();
         } else if (this.activeName === "second") {
           this.params.page = 1;
-          console.log(this.params, "555555555")
           this.rentDatafunc();
         }
       },
@@ -2597,6 +2601,8 @@
       rentDatafunc() {
         this.rentStatus = " ";
         this.rentLoading = true;
+        // let res = {};
+        // res.data = 
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
           this.rentLoading = false;
           if (res.data.code === '61010') {
@@ -2930,7 +2936,7 @@
         this.currentAllot = tab.name;
         this.params.page = 1;
         this.resetting();
-        return false
+        // return false
         if (this.activeName == "first") {
           this.collectDatafunc();
         } else if (this.activeName == "second") {
