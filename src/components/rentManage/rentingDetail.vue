@@ -325,8 +325,9 @@
               <el-col :span="8">
                 <el-form-item label="款项名称">
                   <div class="content">
-                    <span v-if="contractInfo.front_money || (contractInfo.front_money === 0)">定金</span>
-                    <span v-else>押金+租金</span>
+                    <span v-if="contractInfo.front_money && (parseInt(contractInfo.front_money) > 0)">定金</span>
+                    <span v-else-if="contractInfo.deposit_payed && parseInt(contractInfo.deposit_payed) > 0">押金+租金</span>
+                    <span v-else>租金</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -1621,7 +1622,7 @@
           this.approveParams.type = '';
         }
       },
-    
+
     },
     methods: {
       //切换模式 精简-普通
@@ -1913,8 +1914,8 @@
           console.log(res);
           this.loadingStatus = false;
           if (res.data.code === '61110') {
-            // console.log(res)
             this.contractInfo = res.data.data;
+            console.log(this.contractInfo);
             this.customersInfo = res.data.data.customers;
 
 
