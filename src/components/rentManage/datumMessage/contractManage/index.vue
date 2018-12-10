@@ -1861,6 +1861,7 @@
            this.Inconsistent = false;
            this.differentShow = "";
            this.differentShow2 = "";
+           this.newpriceLen = 1;
            this.contractFormClear()
          }
       },
@@ -1869,6 +1870,7 @@
           this.Inconsistent2 = false;
           this.differentShow = "";
           this.differentShow2 = "";
+           this.newpriceLen = 1;
           this.contractFormClear2()
         }
       }
