@@ -1862,6 +1862,8 @@
            this.differentShow = "";
            this.differentShow2 = "";
            this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
            this.contractFormClear()
          }
       },
@@ -1871,6 +1873,8 @@
           this.differentShow = "";
           this.differentShow2 = "";
            this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
           this.contractFormClear2()
         }
       }
