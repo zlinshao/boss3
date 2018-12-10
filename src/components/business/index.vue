@@ -148,6 +148,12 @@
           this is statistical
         </div>
       </el-dialog>
+      <el-dialog
+        title="详情"
+        :visible.sync="infoDetailVisible"
+      >
+        this is info detail
+      </el-dialog>
     </div>
 </template>
 
@@ -169,7 +175,7 @@
             days: '',
             chooseDay: false,
             dateTime: '',
-            chooseDate: false
+            chooseDate: false,
           },
           params: {
             order_scope: '', //区域间、内排序
@@ -204,7 +210,8 @@
               rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
 
           ],
-          statisticalVisible: false
+          statisticalVisible: false,
+          infoDetailVisible: false
         }
       },
       mounted() {
@@ -329,10 +336,8 @@
         handleChangeDate(val) {
           if(val === 1 || val === 7 || val === 30){
             this.handleSetTime(val);
-            this.helpParams.chooseDay = false;
-            this.helpParams.chooseDate = false;
-            this.helpParams.days = "";
-            this.helpParams.dateTime = "";
+            this.helpParams.chooseDay = this.helpParams.chooseDate = false;
+            this.helpParams.days = this.helpParams.dateTime = "";
           }else if(val === 'day'){
             this.params.start_time = '';
             this.params.end_time = '';
@@ -379,11 +384,9 @@
           }
         },
         //单元格被单击
-        handleCellClick(row,column,cell,event) {
-          console.log(row);
-          console.log(column);
-          console.log(cell);
-          console.log(event);
+        handleCellClick(row,column) {
+          console.log(row,column);
+          this.infoDetailVisible = true;
         },
         handleAscOrder() {
           this.$message("升序功能尚未开放");
