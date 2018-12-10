@@ -514,7 +514,8 @@
                   </el-table-column>
                 </el-table>
                 <!-- 合同公司联录入弹窗框 -->
-                <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog" width="70%" center class="contractPop">
+                <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog" width="70%" center class="contractPop" v-loading="contractEntryLoading"
+    element-loading-text="拼命加载中">
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
@@ -996,7 +997,8 @@
                   </el-table-column>
                 </el-table>
                 <!-- 租房行政审核 -->
-                 <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog2" width="70%" center class="contractPop">
+                 <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog2" width="70%" center class="contractPop" v-loading="contractEntryLoading2"
+    element-loading-text="拼命加载中">
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
@@ -1446,6 +1448,8 @@
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
+        contractEntryLoading2: false,
+        contractEntryLoading: false,
         passAllForm: {
           contract_id: "",
           module: 1,
@@ -2002,6 +2006,7 @@
       // 获取合同公司联录入
       getContract() {
         // this.contractEntry = true
+        
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
           if(res.data.code == "20020") {
               this.differentShow =  res.data.data.is_frist;
@@ -2022,12 +2027,15 @@
               this.contractForm.mortgage_price = res.data.data.mortgage_price;
               this.contractForm.second_pay_at = res.data.data.second_pay_at;
               this.contractForm.first_pay_at = res.data.data.first_pay_at;
+     
               this.contractForm.penalty_price = res.data.data.penalty_price;
               this.contractForm.customer_name = res.data.data.customer_name;
               this.contractForm.customer_phone = res.data.data.customer_phone;
               this.contractForm.customer_card = res.data.data.customer_card;
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
+                       console.log(res.data.data.first_pay_at, "333333")
+                       this.contractEntryLoading = false;
             //  }
           } 
           //  else {
@@ -2064,7 +2072,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog = false;
-            this.collectDatafunc()
+            this.collectDatafunc();
             this.contractFormClear();
           } else {
             this.$notify.warning({
@@ -2102,6 +2110,7 @@
       },
       // 收房获取图片
       getImage(val, id) {
+         this.contractEntryLoading = true;
         this.imgList = {};
         this.contractFormClear();
         this.contractEntryDialog = true;
@@ -2192,6 +2201,7 @@
       },
       // 租房获取图片
       getImage2(val, id) {
+         this.contractEntryLoading2 = true;
         this.imgList2 = {};
         this.contractFormClear2();
         this.contractEntryDialog2 = true;
@@ -2322,6 +2332,7 @@
               this.contractForm2.customer_phone = res.data.data.customer_phone;
               // this.contractForm2.type = res.data.data.type;
             // }
+             this.contractEntryLoading2 = false;
           } 
           // else {
           //   this.$notify.warning({
@@ -2362,6 +2373,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog2 = false;
+            // return false
             this.rentDatafunc();
             this.contractFormClear2();
           } else {
@@ -2545,7 +2557,7 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
-
+            console.log(this.collectData, "666666")
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
@@ -2554,6 +2566,7 @@
             this.collectData.forEach((item) => {
               collectIdArray += item.contract_id + ',';
             });
+            collectIdArray = collectIdArray.substring(0, collectIdArray.length - 1);
             this.checkHandIn();
             this.getReturnNumber(collectIdArray, 1);
 
@@ -2583,6 +2596,7 @@
         })
       },
       getReturnNumber(collectIdArray, type) {
+        console.log(collectIdArray, type, "444444")
         this.$http.get(globalConfig.server + 'contract/feedback/num', {
           params: {
             contract_ids: collectIdArray,
@@ -2601,8 +2615,6 @@
       rentDatafunc() {
         this.rentStatus = " ";
         this.rentLoading = true;
-        // let res = {};
-        // res.data = 
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
           this.rentLoading = false;
           if (res.data.code === '61010') {
@@ -2614,7 +2626,7 @@
               }
             });
             this.totalNumbers = res.data.meta.total;
-
+            // return false
             let collectIdArray = '';
             this.rentData.forEach((item) => {
               collectIdArray += item.contract_id + ',';
