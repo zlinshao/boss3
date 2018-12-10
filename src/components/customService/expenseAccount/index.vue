@@ -95,15 +95,16 @@
                 <el-col :span="12">
                   <el-row>
                     <el-col :span="8">
-                      <div class="el_col_label">来源</div>
+                      <div class="el_col_label">部门</div>
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-select clearable v-model="paramsCollect.source" placeholder="请选择来源" value="">
-                          <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
-                                     :value="item.id"
-                                     :key="item.id"></el-option>
-                        </el-select>
+                        <el-input v-model="depart_name_collect" @focus="chooseDepart" placeholder="请选择创建人"
+                                  readonly>
+                          <template slot="append">
+                            <div style="cursor: pointer;" @click="closeDepart">清空</div>
+                          </template>
+                        </el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -119,6 +120,22 @@
                       <el-form-item>
                         <el-select clearable v-model="paramsCollect.status" placeholder="请选择状态" value="">
                           <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name"
+                                     :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">来源</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsCollect.source" placeholder="请选择来源" value="">
+                          <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
                                      :value="item.id"
                                      :key="item.id"></el-option>
                         </el-select>
@@ -187,15 +204,16 @@
                 <el-col :span="12">
                   <el-row>
                     <el-col :span="8">
-                      <div class="el_col_label">来源</div>
+                      <div class="el_col_label">部门</div>
                     </el-col>
                     <el-col :span="16" class="el_col_option">
                       <el-form-item>
-                        <el-select clearable v-model="paramsRent.source" placeholder="请选择来源" value="">
-                          <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
-                                     :value="item.id"
-                                     :key="item.id"></el-option>
-                        </el-select>
+                        <el-input v-model="depart_name_rent" @focus="chooseDepart" placeholder="请选择创建人"
+                                  readonly>
+                          <template slot="append">
+                            <div style="cursor: pointer;" @click="closeDepart">清空</div>
+                          </template>
+                        </el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -211,6 +229,22 @@
                       <el-form-item>
                         <el-select clearable v-model="paramsRent.status" placeholder="请选择状态" value="">
                           <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name"
+                                     :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-row>
+                    <el-col :span="8">
+                      <div class="el_col_label">来源</div>
+                    </el-col>
+                    <el-col :span="16" class="el_col_option">
+                      <el-form-item>
+                        <el-select clearable v-model="paramsRent.source" placeholder="请选择来源" value="">
+                          <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
                                      :value="item.id"
                                      :key="item.id"></el-option>
                         </el-select>
@@ -676,6 +710,7 @@
           type: '',  //报销类型
           staff_id: '',  //创建人
           contract_id: '',
+          depart_id: '', //部门
         },
         paramsRent: {
           module: 2,
@@ -687,6 +722,7 @@
           type: '',  //报销类型
           staff_id: '',  //创建人
           contract_id: '',
+          depart_id: '', //部门
         },
         addressCollect: '',
         addressRent: '',
@@ -703,7 +739,9 @@
         organizeVisible: false,
         organizeType: '',
         staff_name_collect: '',
+        depart_name_collect: '',
         staff_name_rent: '',
+        depart_name_rent: '',
         reimbursementDetailDialog: false,
         reimbursementTypeCategory: [],  //报销类型
         reimbursementSourceCategory: [],  //报销来源
@@ -969,6 +1007,11 @@
         this.organizeVisible = true;
         this.organizeType = 'staff';
       },
+      //选择部门
+      chooseDepart(){
+        this.organizeVisible = true;
+        this.organizeType = ''
+      },
       // 清空员工
       closeStaff() {
         if (this.activeName === 'first') {
@@ -978,15 +1021,34 @@
           this.paramsRent.staff_id = '';
           this.staff_name_rent = '';
         }
-
+      },
+      //清空部门
+      closeDepart(){
+        if(this.activeName === 'first'){
+          this.paramsCollect.depart_id = '';
+          this.depart_name_collect = '';
+        }else{
+          this.paramsRent.depart_id = '';
+          this.depart_name_rent = '';
+        }
       },
       selectMember(val) {
         if (this.activeName === 'first') {
-          this.paramsCollect.staff_id = val[0].id;
-          this.staff_name_collect = val[0].name;
-        } else {
-          this.paramsRent.staff_id = val[0].id;
-          this.staff_name_rent = val[0].name;
+          if(this.organizeType){
+            this.paramsCollect.staff_id = val[0].id;
+            this.staff_name_collect = val[0].name;
+          }else{
+            this.paramsCollect.depart_id = val[0].id;
+            this.depart_name_collect = val[0].name
+          }
+        }else{
+          if(this.organizeType){
+            this.paramsRent.staff_id = val[0].id;
+            this.staff_name_rent = val[0].name;
+          }else{
+            this.paramsRent.depart_id = val[0].id;
+            this.depart_name_rent = val[0].name
+          }
         }
       },
       closeModal(val) {
@@ -1037,14 +1099,18 @@
           this.paramsCollect.source = '';
           this.paramsCollect.type = '';
           this.paramsCollect.staff_id = '';
+          this.paramsCollect.depart_id = '';
           this.staff_name_collect = '';
+          this.depart_name_collect = '';
         } else {
           this.paramsRent.time = [];
           this.paramsRent.status = '';
           this.paramsRent.source = '';
           this.paramsRent.type = '';
           this.paramsRent.staff_id = '';
+          this.paramsRent.depart_id = '';
           this.staff_name_rent = '';
+          this.depart_name_rent = '';
         }
 
       },
