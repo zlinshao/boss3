@@ -228,6 +228,23 @@
               </el-col>
             </el-row>
             <el-row class="el_row_border">
+               <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">行政审核</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="params.verify_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in administrativeReviewList" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -516,14 +533,19 @@
                       <!-- 收房行政审核 -->
                       <div >
                         <el-row>
-                          <el-col :span="12">
+                          <el-col :span="8">
                            <el-form-item  label="房屋住址" required>
                             <el-input class="input" v-model="contractForm.community_name" ></el-input>
                           </el-form-item>
                           </el-col>
-                          <el-col :span="12">
+                          <el-col :span="8">
                            <el-form-item  label="合同类型" required>
                             <el-input class="input" v-model="contractForm.type" ></el-input>
+                          </el-form-item>
+                          </el-col>
+                          <el-col :span="8">
+                           <el-form-item  label="合同编号" required>
+                            <el-input class="input" v-model="contractForm.contract_number" ></el-input>
                           </el-form-item>
                           </el-col>
                         </el-row>
@@ -1489,6 +1511,7 @@
         // administrativeContentList: [],
         contractForm: {
           // staff_id: "",
+          contract_number: "",
           start_at: "",
           community_name: "",
           type: "",
@@ -1634,6 +1657,7 @@
           visit_status: '',
           note: '', //有无备忘
           submit_time: [], //提交时间
+          verify_status: '',
         },
         doc_sta: [
           {
@@ -1651,6 +1675,17 @@
           {
             value: 'published',
             title: '已通过',
+          },
+         
+        ],
+        administrativeReviewList: [
+          {
+            value: 'to_contract_review',
+            title: '等待行政审核',
+          },
+          {
+            value: 'published_verify',
+            title: '行政审核已通过',
           },
         ],
         visit_sta: [
@@ -1856,7 +1891,10 @@
         this.contractForm.penalty_price = "";
         this.contractForm.ready_days = "";
         this.contractForm.customer_name = "";
+        this.contractForm.community_name = "";
         this.contractForm.contract_month = "";
+        this.contractForm.contract_number = "";
+        this.contractForm.type = "";
         this.contractForm.contract_day = "";
         // this.contractForm.guarantee_month = "";
         // this.contractForm.guarantee_day = "";
@@ -2066,6 +2104,7 @@
           if(res.data.code == "61010") {
             this.imgList = res.data.data.photo;
             this.contractForm.community_name = res.data.data.community_name;
+            this.contractForm.contract_number = res.data.data.contract_number;
             // this.contractForm.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
               this.contractForm.type = "新收";
@@ -2275,7 +2314,7 @@
               this.contractForm2.mortgage_price = res.data.data.mortgage_price;
               this.contractForm2.customer_name = res.data.data.customer_name;
               this.contractForm2.customer_phone = res.data.data.customer_phone;
-              this.contractForm2.type = res.data.data.type;
+              // this.contractForm2.type = res.data.data.type;
             // }
           } 
           // else {
@@ -2482,9 +2521,11 @@
       search() {
         if (this.activeName === "first") {
           this.params.page = 1;
+          console.log(this.params, "444444444")
           this.collectDatafunc();
         } else if (this.activeName === "second") {
           this.params.page = 1;
+          console.log(this.params, "555555555")
           this.rentDatafunc();
         }
       },
@@ -2587,7 +2628,7 @@
         })
       },
       getName(houseIds = []) {
-        this.$http.get(globalConfig.server + '/organization/other/house-corp', {
+        this.$http.get(globalConfig.server + 'organization/other/house-corp', {
           params: {houseIds}
         }).then(res => {
           if (res.data.code === '700120') {
@@ -2904,6 +2945,7 @@
         this.resetting();
       },
       resetting() {
+        this.params.verify_status = '';
         this.department = '';
         this.staff = '';
         this.params.publish_time = [];
