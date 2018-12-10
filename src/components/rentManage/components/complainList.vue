@@ -71,8 +71,11 @@
             }
         },
         complainData(val){
-            this.tableData = val.data.reverse();
-            console.log(val.data)
+            if(val.data && val.data.length){
+                this.tableData = val.data.reverse();
+            }else{
+                this.tableData = []
+            }
         }
     },
     methods:{
@@ -91,8 +94,8 @@
   }
 </script>
 <style lang="scss">
-  .el-dialog__header{
-      border-bottom: none !important;
-  }
+    .el-dialog__header{
+        border-bottom: none !important;
+    }
 
 </style>

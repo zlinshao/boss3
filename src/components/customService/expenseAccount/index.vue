@@ -250,14 +250,6 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="staffs.real_name"
-                label="创建人">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
-                  <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
                 prop="reimbursement_number"
                 label="报销单编号">
                 <template slot-scope="scope">
@@ -340,6 +332,22 @@
                 </template>
               </el-table-column>
               <el-table-column
+                prop="staffs.real_name"
+                label="创建人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
+                  <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="staffs.org"
+                label="部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.staffs && scope.row.staffs.org && scope.row.staffs.org.length">{{scope.row.staffs.org[0].name}}</span>
+                  <span v-if="!(scope.row.staffs && scope.row.staffs.org && scope.row.staffs.org.length)">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="结算人">
                 <template slot-scope="scope">
                   <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
@@ -411,14 +419,6 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                   <span v-if="!scope.row.create_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="staffs.real_name"
-                label="创建人">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
-                  <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -501,6 +501,22 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.account_name">{{scope.row.account_name}}</span>
                   <span v-if="!scope.row.account_name">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="staffs.real_name"
+                label="创建人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
+                  <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="staffs.org"
+                label="部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.staffs && scope.row.staffs.org && scope.row.staffs.org.length">{{scope.row.staffs.org[0].name}}</span>
+                  <span v-if="!(scope.row.staffs && scope.row.staffs.org && scope.row.staffs.org.length)">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
