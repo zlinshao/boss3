@@ -110,7 +110,7 @@
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.first">{{ scope.row.city }}</span>
-                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click="handleAddClick(scope)">时间段</el-button>
+                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
               </div>
             </template>
           </el-table-column>
@@ -145,23 +145,58 @@
         :visible.sync="statisticalVisible"
         width="40%"
       >
-        <div>
-          <div>
-            <span>城市：</span>
-            <el-select v-model="helpParams.checkCity" size="mini" style="width: 100px;">
-              <el-option v-for="item in cityList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </div>
           <div style="width:100%;text-align: center;">
-            <series-line :chartData="charData"></series-line>
+            <h3 style="text-align: left;margin-left: 10%;">收房数量变化</h3>
+            <div>
+              <series-line :chartData="charData"></series-line>
+            </div>
           </div>
-        </div>
       </el-dialog>
       <el-dialog
-        title="详情"
+        title="数据详情"
         :visible.sync="infoDetailVisible"
+        width="60%"
       >
-        this is info detail
+        <el-tabs v-model="activeName" @tab-click="handleTabClick">
+          <el-tab-pane label="收房" name="first">
+            <el-table
+              :data="detailData"
+              :cell-style="DetailCellStyle"
+              :header-cell-class-name="headerDetailStyle"
+            >
+              <el-table-column label="日期" prop="date"></el-table-column>
+              <el-table-column label="员工" prop="yuangong"></el-table-column>
+              <el-table-column label="月单价" prop="price"></el-table-column>
+              <el-table-column label="付款方式" prop="payWay"></el-table-column>
+              <el-table-column label="总月数" prop="allMonth"></el-table-column>
+              <el-table-column label="渠道费" prop="wayPrice"></el-table-column>
+              <el-table-column label="名称" prop="name"></el-table-column>
+              <el-table-column label="姓名" prop="username"></el-table-column>
+              <el-table-column label="空置期" prop="kong"></el-table-column>
+              <el-table-column label="位置" prop="location"></el-table-column>
+              <el-table-column label="合同" prop="hetong"></el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="租房" name="second">
+            <el-table
+              :data="detailData2"
+            >
+              <el-table-column label="日期" prop="date"></el-table-column>
+              <el-table-column label="员工" prop="yuangong"></el-table-column>
+              <el-table-column label="月单价" prop="price"></el-table-column>
+              <el-table-column label="价格差" prop="priceCha"></el-table-column>
+              <el-table-column label="付款方式" prop="payWay"></el-table-column>
+              <el-table-column label="总月数" prop="allMonth"></el-table-column>
+              <el-table-column label="渠道费" prop="wayPrice"></el-table-column>
+              <el-table-column label="名称" prop="name"></el-table-column>
+              <el-table-column label="姓名" prop="username"></el-table-column>
+              <el-table-column label="空置期" prop="kong"></el-table-column>
+              <el-table-column label="位置" prop="location"></el-table-column>
+              <el-table-column label="合同" prop="hetong"></el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="空置" name="third">空置</el-tab-pane>
+        </el-tabs>
       </el-dialog>
         <div ref="lineChart"></div>
     </div>
@@ -255,8 +290,63 @@
               date: '12-30~01-07',
               value:300,
               name: '南京'
-            }
+            },
+            {
+              date: '11-11~11-27',
+              value: 480,
+              name: '合肥'
+            },
+            {
+              date: '11-27~12-07',
+              value:200,
+              name: '合肥'
+            },
+            {
+              date: '12-07~12-17',
+              value:320,
+              name: '合肥'
+            },
+            {
+              date: '12-17~12-24',
+              value:350,
+              name: '合肥'
+            },
+            {
+              date: '12-24~12-30',
+              value:490,
+              name: '合肥'
+            },
+            {
+              date: '12-30~01-07',
+              value:350,
+              name: '合肥'
+            },
           ],
+          activeName: 'first',
+          detailData: [
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情'}
+          ],
+          detailData2: [
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
+            {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200}
+          ]
         }
       },
       mounted() {
@@ -264,6 +354,10 @@
         this.handleSetTime();
       },
       methods: {
+        //tab切换
+        handleTabClick(tab) {
+          console.log(tab);
+        },
         //选择数据来源
         handleChangeCompose(val) {
           this.params.compose = [];
@@ -421,6 +515,13 @@
             return "otherBg";
           }
         },
+        headerDetailStyle({row,column}) {
+          if(column.label === '月单价' || column.label === '付款方式' || column.label === '总月数') {
+            return 'vacancyBg';
+          }else if(column.label === '渠道费' || column.label === '名称' || column.label === '姓名'){
+            return 'rentBg';
+          }
+        },
         //表头单击事件
         handleHeaderClick(column) {
           if(column.label !== '收房' && column.label !== '租房' && column.label !== '其他'){
@@ -430,8 +531,11 @@
           }
         },
         //单元格被单击
-        handleCellClick(row,column) {
-          console.log(row,column);
+        handleCellClick(row,column,event) {
+          // var res = event.getElementsByTagName('button');
+          // if(Array.from(res).length > 0){
+          //   return false;
+          // }
           this.infoDetailVisible = true;
         },
         handleAscOrder() {
@@ -455,6 +559,13 @@
             return "color: #F56C6C";
           }else if(columnIndex > 12 && columnIndex < 16){
             return "color: #67C23A";
+          }
+        },
+        DetailCellStyle({row, column, rowIndex, columnIndex}) {
+          if(columnIndex > 1 && columnIndex < 5 ) {
+            return "color: #DDAF6A";
+          }else if(columnIndex > 4 && columnIndex < 8) {
+            return "color: #409EFF";
           }
         },
         //区域颜色划分

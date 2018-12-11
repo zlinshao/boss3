@@ -32,6 +32,9 @@
           height: 400,
         });
         chart.source(data);
+        chart.scale('value', {
+          min: 100
+        });
         chart.tooltip({
           crosshairs: {
             name: 'line'
@@ -43,9 +46,6 @@
               return val ;
             }
           },
-        });
-        chart.legend(true,{
-          position: 'top'
         });
         chart.line().position('date*value').color('name');
         chart.point().position('date*value').color('name').size(4).shape('circle').style({
