@@ -143,9 +143,18 @@
       <el-dialog
         title="数据统计"
         :visible.sync="statisticalVisible"
+        width="40%"
       >
         <div>
-          this is statistical
+          <div>
+            <span>城市：</span>
+            <el-select v-model="helpParams.checkCity" size="mini" style="width: 100px;">
+              <el-option v-for="item in cityList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </div>
+          <div style="width:100%;text-align: center;">
+            <series-line :chartData="charData"></series-line>
+          </div>
         </div>
       </el-dialog>
       <el-dialog
@@ -154,12 +163,15 @@
       >
         this is info detail
       </el-dialog>
+        <div ref="lineChart"></div>
     </div>
 </template>
 
 <script>
+  import seriesLine from './chart/seriesLine';
     export default {
       name: "index",
+      components: { seriesLine },
       data() {
         return {
           url: globalConfig.server,
@@ -176,6 +188,7 @@
             chooseDay: false,
             dateTime: '',
             chooseDate: false,
+            checkCity: '',
           },
           params: {
             order_scope: '', //区域间、内排序
@@ -211,7 +224,39 @@
 
           ],
           statisticalVisible: false,
-          infoDetailVisible: false
+          infoDetailVisible: false,
+          charData: [
+            {
+              date: '11-11~11-27',
+              value: 400,
+              name: '南京'
+            },
+            {
+              date: '11-27~12-07',
+              value:300,
+              name: '南京'
+            },
+            {
+              date: '12-07~12-17',
+              value:320,
+              name: '南京'
+            },
+            {
+              date: '12-17~12-24',
+              value:310,
+              name: '南京'
+            },
+            {
+              date: '12-24~12-30',
+              value:390,
+              name: '南京'
+            },
+            {
+              date: '12-30~01-07',
+              value:300,
+              name: '南京'
+            }
+          ],
         }
       },
       mounted() {
@@ -322,7 +367,7 @@
           if(params.compose.length < 1) {
             this.$notify.warning({
               title: '警告',
-              message: '至少有一个进行筛选的数据组成！'
+              message: '至少有一个进行筛选的片区组成！'
             });
             return false;
           }
@@ -336,8 +381,10 @@
         handleChangeDate(val) {
           if(val === 1 || val === 7 || val === 30){
             this.handleSetTime(val);
-            this.helpParams.chooseDay = this.helpParams.chooseDate = false;
-            this.helpParams.days = this.helpParams.dateTime = "";
+            this.helpParams.chooseDay = false;
+            this.helpParams.chooseDate = false;
+            this.helpParams.days = '';
+            this.helpParams.dateTime = "";
           }else if(val === 'day'){
             this.params.start_time = '';
             this.params.end_time = '';
@@ -376,7 +423,6 @@
         },
         //表头单击事件
         handleHeaderClick(column) {
-          console.log(column);
           if(column.label !== '收房' && column.label !== '租房' && column.label !== '其他'){
             this.statisticalVisible = true;
           }else {
