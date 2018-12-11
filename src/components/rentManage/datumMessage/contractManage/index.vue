@@ -1869,6 +1869,7 @@
            this.newpriceLen = 1;
            this.newpayForLen = 1
           this.newpayTypeLen = 1,
+          this.allBtn = true;
            this.contractFormClear()
          }
       },
@@ -1880,6 +1881,7 @@
            this.newpriceLen = 1;
            this.newpayForLen = 1
           this.newpayTypeLen = 1,
+           this.allBtn = true;
           this.contractFormClear2()
         }
       }
