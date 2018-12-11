@@ -2014,6 +2014,14 @@
           if(res.data.code == "20020") {
               this.differentShow =  res.data.data.is_frist;
             // if(res.data.data.is_frist == 2) {
+              // console.log(res.data.data.pay_type, "666666")
+              // console.log(res.data.data.unit_price, "77777")
+              // if(res.data.data.unit_price.length > 1) {
+              //   this.contractForm.unit_price = [[],[],]
+              // }
+              // if(res.data.data.pay_type[0].length > 1)  {
+              //   this.contractForm.pay_type = [[], [],[],]
+              // }
               this.contractForm.contract_month = res.data.data.contract_month;
               this.contractForm.start_at = res.data.data.start_at;
               this.contractForm.contract_day = res.data.data.contract_day;
@@ -2024,9 +2032,9 @@
               // this.contractForm.agency_price = res.data.data.agency_price;
               // this.contractForm.agency_person = res.data.data.agency_person;
               // this.contractForm.agency_tel = res.data.data.agency_tel;
-              this.contractForm.unit_price = res.data.data.unit_price;
-              this.contractForm.pay_type = res.data.data.pay_type;
-              this.contractForm.pay_method = res.data.data.pay_method;
+              // this.contractForm.unit_price = res.data.data.unit_price;
+              // this.contractForm.pay_type = res.data.data.pay_type;
+              // this.contractForm.pay_method = res.data.data.pay_method;
               this.contractForm.mortgage_price = res.data.data.mortgage_price;
               this.contractForm.second_pay_at = res.data.data.second_pay_at;
               this.contractForm.first_pay_at = res.data.data.first_pay_at;
@@ -2329,9 +2337,9 @@
               this.contractForm2.contract_month = res.data.data.contract_month;
               this.contractForm2.start_at = res.data.data.start_at;
               this.contractForm2.contract_day = res.data.data.contract_day;
-              this.contractForm2.unit_price = res.data.data.unit_price;
-              this.contractForm2.pay_type = res.data.data.pay_type;
-              this.contractForm2.pay_method = res.data.data.pay_method;
+              // this.contractForm2.unit_price = res.data.data.unit_price;
+              // this.contractForm2.pay_type = res.data.data.pay_type;
+              // this.contractForm2.pay_method = res.data.data.pay_method;
               this.contractForm2.mortgage_price = res.data.data.mortgage_price;
               this.contractForm2.customer_name = res.data.data.customer_name;
               this.contractForm2.customer_phone = res.data.data.customer_phone;
