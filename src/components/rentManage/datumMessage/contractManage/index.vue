@@ -227,7 +227,7 @@
                 </el-row>
               </el-col>
             </el-row>
-            <!-- <el-row class="el_row_border">
+            <el-row class="el_row_border">
                <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -243,7 +243,7 @@
                   </el-col>
                 </el-row>
               </el-col>
-            </el-row> -->
+            </el-row>
             <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
@@ -485,11 +485,11 @@
                     </template>
                   </el-table-column>
                   <!-- 新增部分=================================== -->
-                  <!-- <el-table-column label="行政审核">
+                  <el-table-column label="行政审核">
                     <template  slot-scope="scope">
                       <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
-                  </el-table-column> -->
+                  </el-table-column>
                   <!-- ========================================= -->
                   <el-table-column
                     label="审核状态"
@@ -810,9 +810,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newBouncing('2')" size="mini" >保存页面</el-button>
-                    <el-button type="primary" @click="passAll" size="mini">全部通过</el-button>
-                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
+                    <el-button type="primary" @click="newBouncing('2')" size="mini" :disabled="allBtn">保存页面</el-button>
+                    <el-button type="primary" @click="passAll" size="mini" :disabled="allBtn">全部通过</el-button>
+                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;" :disabled="allBtn">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- ======================================================================== -->
@@ -968,11 +968,11 @@
                     </template>
                   </el-table-column>
                   <!-- 新增部分=================================== -->
-                  <!-- <el-table-column label="行政审核">
+                  <el-table-column label="行政审核">
                     <template  slot-scope="scope">
                       <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
-                  </el-table-column> -->
+                  </el-table-column>
                   <!-- ========================================= -->
                   <el-table-column
                     label="审核状态"
@@ -1235,9 +1235,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newBouncing2('2')" size="mini" >保存页面</el-button>
-                    <el-button type="primary" @click="passAll2" size="mini">全部通过</el-button>
-                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
+                    <el-button type="primary" @click="newBouncing2('2')" size="mini" :disabled="allBtn">保存页面</el-button>
+                    <el-button type="primary" @click="passAll2" size="mini" :disabled="allBtn">全部通过</el-button>
+                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;" :disabled="allBtn">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- =========================================================================== -->
@@ -1448,6 +1448,7 @@
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
+        allBtn: true,
         contractEntryLoading2: false,
         contractEntryLoading: false,
         passAllForm: {
@@ -2035,6 +2036,7 @@
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
               this.contractEntryLoading = false;
+               this.allBtn = false;
             //  }
           } 
            else {
@@ -2043,6 +2045,7 @@
             //   message: res.data.msg
             // })
             this.contractEntryLoading = false;
+             this.allBtn = false;
           }
         })
       },
@@ -2333,6 +2336,7 @@
               // this.contractForm2.type = res.data.data.type;
             // }
              this.contractEntryLoading2 = false;
+             this.allBtn = false;
           } 
           else {
             // this.$notify.warning({
@@ -2340,6 +2344,7 @@
             //   message: res.data.msg
             // })
             this.contractEntryLoading2 = false;
+             this.allBtn = false;
           }
         })
       },
@@ -2962,7 +2967,7 @@
         this.resetting();
       },
       resetting() {
-        this.params.verify_status = '';
+        this.params.verify_status = ''; 
         this.department = '';
         this.staff = '';
         this.params.publish_time = [];
