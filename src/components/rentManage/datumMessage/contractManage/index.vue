@@ -514,7 +514,8 @@
                   </el-table-column>
                 </el-table>
                 <!-- 合同公司联录入弹窗框 -->
-                <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog" width="70%" center class="contractPop">
+                <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog" width="70%" center class="contractPop" v-loading="contractEntryLoading"
+    element-loading-text="拼命加载中">
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
@@ -708,7 +709,7 @@
                               </el-option>
                             </el-select>
                           </el-col>
-                          <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
+                          <!-- <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
                             <span>押</span>
                             <el-select style="width:60px;" size="mini" v-model="contractForm.pay_type[1][index-1]" clearable>
                               <el-option v-for="item in 48" :label="item" :key="item"
@@ -717,7 +718,7 @@
                             </el-select>
                             <span>付</span>
                             <el-input size="mini" style="width:46px;" v-model="contractForm.pay_type[2][index-1]"></el-input>
-                          </el-col>
+                          </el-col> -->
                         </el-row>
                         <el-row v-if=" activeName == 'second'">
                           <el-col :span="12">
@@ -752,8 +753,8 @@
                           <el-form-item>
                             <div style="text-align: right;">
                               <!-- <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button> -->
-                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2">查看合同详情</el-button>
-                              <el-button type="primary"  size="mini" @click="newBouncing('1')">对比</el-button>
+                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2" :disabled="allBtn">查看合同详情</el-button>
+                              <el-button type="primary"  size="mini" @click="newBouncing('1')" :disabled="allBtn">对比</el-button>
                             </div>
                           </el-form-item>
                         </el-row>
@@ -809,9 +810,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newBouncing('2')" size="mini" >保存页面</el-button>
-                    <el-button type="primary" @click="passAll" size="mini">全部通过</el-button>
-                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
+                    <el-button type="primary" @click="newBouncing('2')" size="mini" :disabled="allBtn">保存页面</el-button>
+                    <el-button type="primary" @click="passAll" size="mini" :disabled="allBtn">全部通过</el-button>
+                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;" :disabled="allBtn">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- ======================================================================== -->
@@ -996,7 +997,8 @@
                   </el-table-column>
                 </el-table>
                 <!-- 租房行政审核 -->
-                 <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog2" width="70%" center class="contractPop">
+                 <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog2" width="70%" center class="contractPop" v-loading="contractEntryLoading2"
+    element-loading-text="拼命加载中">
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
@@ -1177,8 +1179,8 @@
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2">查看合同详情</el-button>
-                    <el-button type="primary"  size="mini" @click="newBouncing2('1')">对比</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2" :disabled="allBtn">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="newBouncing2('1')" :disabled="allBtn">对比</el-button>
                   </div>
                   </div>
                   <div class="companyClient" style="width:25%; float: left;padding-left: 20px;">
@@ -1233,9 +1235,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newBouncing2('2')" size="mini" >保存页面</el-button>
-                    <el-button type="primary" @click="passAll2" size="mini">全部通过</el-button>
-                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
+                    <el-button type="primary" @click="newBouncing2('2')" size="mini" :disabled="allBtn">保存页面</el-button>
+                    <el-button type="primary" @click="passAll2" size="mini" :disabled="allBtn">全部通过</el-button>
+                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;" :disabled="allBtn">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- =========================================================================== -->
@@ -1446,6 +1448,9 @@
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
+        allBtn: true,
+        contractEntryLoading2: false,
+        contractEntryLoading: false,
         passAllForm: {
           contract_id: "",
           module: 1,
@@ -1862,6 +1867,9 @@
            this.differentShow = "";
            this.differentShow2 = "";
            this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
+          this.allBtn = true;
            this.contractFormClear()
          }
       },
@@ -1871,6 +1879,9 @@
           this.differentShow = "";
           this.differentShow2 = "";
            this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
+           this.allBtn = true;
           this.contractFormClear2()
         }
       }
@@ -1998,10 +2009,19 @@
       // 获取合同公司联录入
       getContract() {
         // this.contractEntry = true
+        
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
           if(res.data.code == "20020") {
               this.differentShow =  res.data.data.is_frist;
             // if(res.data.data.is_frist == 2) {
+              // console.log(res.data.data.pay_type, "666666")
+              // console.log(res.data.data.unit_price, "77777")
+              // if(res.data.data.unit_price.length > 1) {
+              //   this.contractForm.unit_price = [[],[],]
+              // }
+              // if(res.data.data.pay_type[0].length > 1)  {
+              //   this.contractForm.pay_type = [[], [],[],]
+              // }
               this.contractForm.contract_month = res.data.data.contract_month;
               this.contractForm.start_at = res.data.data.start_at;
               this.contractForm.contract_day = res.data.data.contract_day;
@@ -2012,26 +2032,31 @@
               // this.contractForm.agency_price = res.data.data.agency_price;
               // this.contractForm.agency_person = res.data.data.agency_person;
               // this.contractForm.agency_tel = res.data.data.agency_tel;
-              this.contractForm.unit_price = res.data.data.unit_price;
-              this.contractForm.pay_type = res.data.data.pay_type;
-              this.contractForm.pay_method = res.data.data.pay_method;
+              // this.contractForm.unit_price = res.data.data.unit_price;
+              // this.contractForm.pay_type = res.data.data.pay_type;
+              // this.contractForm.pay_method = res.data.data.pay_method;
               this.contractForm.mortgage_price = res.data.data.mortgage_price;
               this.contractForm.second_pay_at = res.data.data.second_pay_at;
               this.contractForm.first_pay_at = res.data.data.first_pay_at;
+     
               this.contractForm.penalty_price = res.data.data.penalty_price;
               this.contractForm.customer_name = res.data.data.customer_name;
               this.contractForm.customer_phone = res.data.data.customer_phone;
               this.contractForm.customer_card = res.data.data.customer_card;
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
+              this.contractEntryLoading = false;
+               this.allBtn = false;
             //  }
           } 
-          //  else {
-          //   this.$notify.warning({
-          //     title: "警告",
-          //     message: res.data.msg
-          //   })
-          // }
+           else {
+            // this.$notify.warning({
+            //   title: "警告",
+            //   message: res.data.msg
+            // })
+            this.contractEntryLoading = false;
+             this.allBtn = false;
+          }
         })
       },
       // 对比
@@ -2060,7 +2085,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog = false;
-            this.collectDatafunc()
+            this.collectDatafunc();
             this.contractFormClear();
           } else {
             this.$notify.warning({
@@ -2098,6 +2123,7 @@
       },
       // 收房获取图片
       getImage(val, id) {
+         this.contractEntryLoading = true;
         this.imgList = {};
         this.contractFormClear();
         this.contractEntryDialog = true;
@@ -2188,6 +2214,7 @@
       },
       // 租房获取图片
       getImage2(val, id) {
+         this.contractEntryLoading2 = true;
         this.imgList2 = {};
         this.contractFormClear2();
         this.contractEntryDialog2 = true;
@@ -2310,21 +2337,25 @@
               this.contractForm2.contract_month = res.data.data.contract_month;
               this.contractForm2.start_at = res.data.data.start_at;
               this.contractForm2.contract_day = res.data.data.contract_day;
-              this.contractForm2.unit_price = res.data.data.unit_price;
-              this.contractForm2.pay_type = res.data.data.pay_type;
-              this.contractForm2.pay_method = res.data.data.pay_method;
+              // this.contractForm2.unit_price = res.data.data.unit_price;
+              // this.contractForm2.pay_type = res.data.data.pay_type;
+              // this.contractForm2.pay_method = res.data.data.pay_method;
               this.contractForm2.mortgage_price = res.data.data.mortgage_price;
               this.contractForm2.customer_name = res.data.data.customer_name;
               this.contractForm2.customer_phone = res.data.data.customer_phone;
               // this.contractForm2.type = res.data.data.type;
             // }
+             this.contractEntryLoading2 = false;
+             this.allBtn = false;
           } 
-          // else {
-          //   this.$notify.warning({
-          //     title: "警告",
-          //     message: res.data.msg
-          //   })
-          // }
+          else {
+            // this.$notify.warning({
+            //   title: "警告",
+            //   message: res.data.msg
+            // })
+            this.contractEntryLoading2 = false;
+             this.allBtn = false;
+          }
         })
       },
       //  全部通过
@@ -2358,6 +2389,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog2 = false;
+            // return false
             this.rentDatafunc();
             this.contractFormClear2();
           } else {
@@ -2523,11 +2555,9 @@
       search() {
         if (this.activeName === "first") {
           this.params.page = 1;
-          console.log(this.params, "444444444")
           this.collectDatafunc();
         } else if (this.activeName === "second") {
           this.params.page = 1;
-          console.log(this.params, "555555555")
           this.rentDatafunc();
         }
       },
@@ -2543,7 +2573,6 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
-
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
@@ -2552,6 +2581,7 @@
             this.collectData.forEach((item) => {
               collectIdArray += item.contract_id + ',';
             });
+            collectIdArray = collectIdArray.substring(0, collectIdArray.length - 1);
             this.checkHandIn();
             this.getReturnNumber(collectIdArray, 1);
 
@@ -2610,7 +2640,7 @@
               }
             });
             this.totalNumbers = res.data.meta.total;
-
+            // return false
             let collectIdArray = '';
             this.rentData.forEach((item) => {
               collectIdArray += item.contract_id + ',';
@@ -2932,7 +2962,7 @@
         this.currentAllot = tab.name;
         this.params.page = 1;
         this.resetting();
-        return false
+        // return false
         if (this.activeName == "first") {
           this.collectDatafunc();
         } else if (this.activeName == "second") {
@@ -2947,7 +2977,7 @@
         this.resetting();
       },
       resetting() {
-        this.params.verify_status = '';
+        this.params.verify_status = ''; 
         this.department = '';
         this.staff = '';
         this.params.publish_time = [];
