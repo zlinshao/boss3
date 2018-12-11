@@ -753,8 +753,8 @@
                           <el-form-item>
                             <div style="text-align: right;">
                               <!-- <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button> -->
-                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2">查看合同详情</el-button>
-                              <el-button type="primary"  size="mini" @click="newBouncing('1')">对比</el-button>
+                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2" :disabled="allBtn">查看合同详情</el-button>
+                              <el-button type="primary"  size="mini" @click="newBouncing('1')" :disabled="allBtn">对比</el-button>
                             </div>
                           </el-form-item>
                         </el-row>
@@ -1179,8 +1179,8 @@
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2">查看合同详情</el-button>
-                    <el-button type="primary"  size="mini" @click="newBouncing2('1')">对比</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2" :disabled="allBtn">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="newBouncing2('1')" :disabled="allBtn">对比</el-button>
                   </div>
                   </div>
                   <div class="companyClient" style="width:25%; float: left;padding-left: 20px;">
