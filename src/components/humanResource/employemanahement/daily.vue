@@ -71,7 +71,7 @@ export default {
 <style lang="scss">
   #daily {
     .top {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
        .el-date-editor {
         margin-right: 10px;
         width: 20%;

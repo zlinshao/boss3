@@ -3,7 +3,7 @@
     <el-container>
       <el-header style="overflow: hidden;line-height: 60px;">
         <div class="addstaff">
-          <el-button type="primary" size="mini" @click="addEmployDialog = true">新增员工</el-button>
+          <el-button type="primary" size="mini" @click="addLookEmploy()">新增员工</el-button>
         </div>
         <div class="search">
           <el-input v-model="input" placeholder="公司/部门/岗位/姓名/正式" size="mini"></el-input>
@@ -56,13 +56,7 @@
       </el-main>
     </el-container>
     <!-- 新增员工 -->
-    <el-dialog title="新增员工" :visible.sync="addEmployDialog" width="60%">
-      <addEmploy></addEmploy>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addEmployDialog = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="addEmployDialog = false" size="mini">确 定</el-button>
-      </span>
-    </el-dialog>
+    <addEmploy :ids="class_add_id" :addEmployLog="addEmployLog" @close="closeAddEmploy"></addEmploy>
     <!-- 查看奖励记录 -->
     <Rewardreord :ids="class_reward_id" :names="class_reward_name" :orgs="class_reward_org" :roles="class_reward_role" :times ="class_reward_times"  :lookRewardLog="lookRewardLog" @close="closeReward"></Rewardreord>
     <!-- 查看日报 -->
@@ -100,6 +94,7 @@ export default {
       lookApprovalLog: false,  // 查看审批
       lookRewardLog: false,  // 查看奖励记录
       lookDailyLog: false,  // 查看日报
+      addEmployLog: false,  // 新增人员
       total: 0,
       class_atted_id: "",  // 考勤id
       class_type_id: "",  // 排版id
@@ -113,6 +108,7 @@ export default {
       class_reward_role: "",
       class_reward_times: "",
       class_daily_id: "",   // 查看日报
+      class_add_id: "",
       params: {
         keywords: '',
         limit: 12,
@@ -153,6 +149,14 @@ export default {
           
         }
       })
+    },
+    // 新增人员
+    addLookEmploy(id) {
+      this.addEmployLog = true;
+      this.class_add_id = id;
+    },
+    closeAddEmploy() {
+       this.addEmployLog = false;
     },
     // 查看考勤
     lookAttendance(id) {
