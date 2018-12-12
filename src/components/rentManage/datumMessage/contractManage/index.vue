@@ -487,7 +487,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
+                      <span @click="getImage(scope.row.address, scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -970,7 +970,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
+                      <span @click="getImage2(scope.row.address, scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -2122,7 +2122,8 @@
           window.open(href, '_blank', 'width=1920,height=1080');
       },
       // 收房获取图片
-      getImage(val, id) {
+      getImage(address,val, id) {
+        // console.log(address, "111111")
          this.contractEntryLoading = true;
         this.imgList = {};
         this.contractFormClear();
@@ -2131,7 +2132,7 @@
         this.$http.get(globalConfig.server + 'lease/collect/' + val).then(res => {
           if(res.data.code == "61010") {
             this.imgList = res.data.data.photo;
-            this.contractForm.community_name = res.data.data.community_name;
+            this.contractForm.community_name = address;
             this.contractForm.contract_number = res.data.data.contract_number;
             // this.contractForm.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
@@ -2213,7 +2214,7 @@
         this.contractForm2.pay_type = [[], [],[],];
       },
       // 租房获取图片
-      getImage2(val, id) {
+      getImage2(address, val, id) {
          this.contractEntryLoading2 = true;
         this.imgList2 = {};
         this.contractFormClear2();
@@ -2222,7 +2223,7 @@
         this.$http.get(globalConfig.server + 'lease/rent/' + val).then(res => {
           if(res.data.code == "61110") {
             this.imgList2 = res.data.data.photo;
-            this.contractForm2.community_name = res.data.data.community_name;
+            this.contractForm2.community_name = address;
             this.contractForm2.contract_number = res.data.data.contract_number;
             //  this.contractForm2.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
