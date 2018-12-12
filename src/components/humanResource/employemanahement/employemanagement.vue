@@ -8,7 +8,7 @@
         <div class="search">
           <el-input v-model="input" placeholder="公司/部门/岗位/姓名/正式" size="mini"></el-input>
           <el-button type="primary" size="mini">搜索</el-button>
-          <el-button type="primary" size="mini">导入薪资</el-button>
+          <el-button type="primary" size="mini">导入考勤</el-button>
         </div>
       </el-header>
       <el-main style="padding: 0">
@@ -37,7 +37,11 @@
               <el-button type="text" @click="lookTypesetting(scope.row.id)">查看</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="日报" ></el-table-column>
+          <el-table-column label="日报" >
+            <template slot-scope="scope">
+              <el-button type="text" @click="lookDaily(scope.row.id)">查看</el-button>
+            </template>
+          </el-table-column>
           <el-table-column label="审批" >
             <template slot-scope="scope">
               <el-button type="text" @click="lookApproval(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.id)">查看</el-button>
@@ -61,6 +65,8 @@
     </el-dialog>
     <!-- 查看奖励记录 -->
     <Rewardreord :ids="class_reward_id" :names="class_reward_name" :orgs="class_reward_org" :roles="class_reward_role" :times ="class_reward_times"  :lookRewardLog="lookRewardLog" @close="closeReward"></Rewardreord>
+    <!-- 查看日报 -->
+    <Daily :ids="class_daily_id" :lookDailyLog="lookDailyLog" @close="closeDaily"></Daily>
     <!-- 查看考勤 -->
     <LookAttendanceChild :ids="class_atted_id" :lookAttendanceLog="lookAttendanceLog" @close="closeAttendance"></LookAttendanceChild>
     <!-- 排版 -->
@@ -81,8 +87,9 @@ import LookAttendanceChild from './lookAttendance'  // 查看排班
 import employemanagement from './lookTypesetting'  // 查看考勤
 import Approval from './approval'    // 审批
 import Rewardreord from './rewardreord'
+import Daily from './daily'  // 日报
 export default {
-  components: {addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord},
+  components: {addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily},
   data() {
     return {
       input: "",
@@ -92,6 +99,7 @@ export default {
       lookTypesettingLog: false,  // 查看考勤
       lookApprovalLog: false,  // 查看审批
       lookRewardLog: false,  // 查看奖励记录
+      lookDailyLog: false,  // 查看日报
       total: 0,
       class_atted_id: "",  // 考勤id
       class_type_id: "",  // 排版id
@@ -104,6 +112,7 @@ export default {
       class_reward_org: "",
       class_reward_role: "",
       class_reward_times: "",
+      class_daily_id: "",   // 查看日报
       params: {
         keywords: '',
         limit: 12,
@@ -184,6 +193,14 @@ export default {
     },
     closeReward() {
       this.lookRewardLog = false;
+    },
+    // 查看日报
+    lookDaily(val) {
+      this.lookDailyLog = true;
+      this.class_daily_id = val;
+    },
+    closeDaily() {
+       this.lookDailyLog = false;
     },
     // 分页
     handleSizeChange(val) {

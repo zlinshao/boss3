@@ -53,24 +53,24 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4" style="text-align: center; margin-top: 10px;">
-                <el-button type="text" size="mini" @click="addRecordDiag = true">新增记录</el-button>
+                <el-button type="text" size="mini" @click="addEditReward(1)">新增记录</el-button>
               </el-col>
             </el-row>
           </el-form>
         </div>
         <div class="content">
-          <div class="rewardreShowList">
-            <p>2018.11.11</p>
+          <div class="rewardreShowList" v-for="(item, index) in rewardreCotent" :key="index">
+            <p>{{item.time}}</p>
             <div>
               <el-col :span="8">
-                <span>模糊胡</span>
+                <span>{{item.name}}</span>
               </el-col>  
               <el-col :span="8">
-                <div>asdasdasdadadadadassadassaadfcsdfsa</div>
+                <div>{{item.content}}</div>
               </el-col>
-              <el-col :span="8">
-                <el-button type="text" size="mini">编辑</el-button>
-                <el-button type="text" size="mini">删除</el-button>
+              <el-col :span="8" style="text-align: center;">
+                <el-button type="text" size="mini" @click="addEditReward(2)">编辑</el-button>
+                <el-button type="text" size="mini" @click="deletedDialogVisible = true">删除</el-button>
               </el-col>
             </div>
           </div>
@@ -99,6 +99,14 @@
           <el-button type="primary" @click="addRecordDiag = false" size="mini">确 定</el-button>
         </span>
       </el-dialog>
+      <!-- 删除记录 -->
+      <el-dialog title="删除记录" :visible.sync="deletedDialogVisible" width="30%">
+        <span>此操作将永远删除该记录，是否继续？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="deletedDialogVisible = false" size="mini">取 消</el-button>
+          <el-button type="primary" @click="deletedDialogVisible = false" size="mini">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
 </template>
 
@@ -113,6 +121,7 @@ export default {
       isClear: false,
       RewardDialogVisible: false,
       addRecordDiag: false,
+      deletedDialogVisible: false,
       form: {
         name: "",
         time: "",
@@ -134,6 +143,14 @@ export default {
         {value: "表扬", label: "表扬"},
         {value: "批评", label: "批评"},
         {value: "其他", label: "其他"},
+      ],
+      rewardreCotent: [
+        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
+        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
+        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
+        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
+        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
+        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
       ]
     }
   },
@@ -175,6 +192,14 @@ export default {
         // }
         // this.isUpload = val[2];
       },
+      addEditReward(val) {
+        this.addRecordDiag = true;
+        if (val == 1) {
+
+        } else if (val == 2) {
+
+        }
+      }
   }
 }
 </script>

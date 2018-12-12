@@ -1167,8 +1167,8 @@
                           <el-col :span="8"  style="float: right; text-align: right;">
                               <span>押</span>
                               <el-select style="width:60px;" size="mini" v-model="contractForm2.pay_type[1][index-1]" clearable>
-                                <el-option v-for="item in 48" :label="item" :key="item"
-                                          :value="item">
+                                <el-option v-for="(item, index) in yaNum" :label="item.label" :key="index"
+                                          :value="item.value">
                                 </el-option>
                               </el-select>
                               <span>付</span>
@@ -1448,6 +1448,19 @@
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
+        yaNum: [
+          {value: "0", label: "0"},
+          {value: "1", label: "1"},
+          {value: "2", label: "2"},
+          {value: "3", label: "3"},
+          {value: "4", label: "4"},
+          {value: "5", label: "5"},
+          {value: "6", label: "6"},
+          {value: "7", label: "7"},
+          {value: "8", label: "8"},
+          {value: "9", label: "9"},
+          {value: "10", label: "10"},
+        ],
         allBtn: true,
         contractEntryLoading2: false,
         contractEntryLoading: false,
