@@ -75,22 +75,24 @@
             <div style="margin-top: 20px;width: 100%;">
               <el-row :gutter="20">
                 <el-col :span="4">
-                  <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;">增加对比项</el-checkbox>
+                  <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;" @change="handleAddCompare">增加对比项</el-checkbox>
                 </el-col>
                 <el-col :span="6">
-                  <el-select v-model="params.order_scope" size="mini">
+                  <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope">
                     <el-option value="inner" label="区域内排序"></el-option>
                     <el-option value="" label="区域间排序"></el-option>
                   </el-select>
                 </el-col>
                 <el-col :span="6">
-                  <el-select v-model="params.order_field" size="mini">
-                    <el-option value="avg" label="平均差价"></el-option>
+                  <el-select v-model="params.order_field" size="mini" clearable @change="handleOrderField">
+                    <el-option v-for="field in businessFieldList" :label="field.name" :key="field.value" :value="field.value"></el-option>
                   </el-select>
                 </el-col>
                 <el-col :span="6">
-                  <el-button type="primary" size="mini" @click="handleAscOrder">升序</el-button>
-                  <el-button type="primary" size="mini" @click="handleDescOrder">降序</el-button>
+                  <el-radio-group v-model="params.order_sort" @change="handleOrderSort">
+                    <el-radio label="asc">升序</el-radio>
+                    <el-radio label="desc">降序</el-radio>
+                  </el-radio-group>
                 </el-col>
               </el-row>
             </div>
@@ -105,40 +107,52 @@
           :data="businessList"
           @header-click="handleHeaderClick"
           @cell-click="handleCellClick"
+          :empty-text="businessEmptyText"
+          v-loading="businessLoading"
+          element-loading-text="拼命加载中..."
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
         >
-          <el-table-column label="区域">
+          <el-table-column label="区域" min-width="150px;">
             <template slot-scope="scope">
               <div>
-                <span v-if="scope.row.first">{{ scope.row.city }}</span>
-                <el-button v-if="scope.row.first" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
+                <span v-if="scope.row.group">{{ scope.row.group }}</span>
+                <span v-else>其他</span>
+                <el-button v-if="scope.row.first && scope.row.group" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="时间段" prop="dateRange"></el-table-column>
+          <el-table-column label="时间段" prop="date_range" min-width="120px;"></el-table-column>
 
           <el-table-column label="收房">
-            <el-table-column label="数量" prop="collect.num"></el-table-column>
-            <el-table-column label="渠道单比例" prop="collect.zhongjie"></el-table-column>
-            <el-table-column label="均价" prop="collect.avg"></el-table-column>
-            <el-table-column label="空置期" prop="collect.kongzhi"></el-table-column>
-            <el-table-column label="总月数" prop="collect.months"></el-table-column>
+            <el-table-column label="数量/套" prop="lord.count"></el-table-column>
+            <el-table-column label="渠道单比例" prop="lord.agency_percentage"></el-table-column>
+            <el-table-column label="均价/元" prop="lord.price_avg"></el-table-column>
+            <el-table-column label="空置期" prop="lord.ready_days_avg"></el-table-column>
+            <el-table-column label="总月数" prop="lord.sign_month_avg"></el-table-column>
           </el-table-column>
           <el-table-column label="租房">
-            <el-table-column label="数量" prop="rent.num"></el-table-column>
-            <el-table-column label="已空置" prop="rent.kongzhi"></el-table-column>
-            <el-table-column label="渠道单比例" prop="rent.qudao"></el-table-column>
-            <el-table-column label="均价" prop="rent.avg"></el-table-column>
-            <el-table-column label="回款" prop="rent.back"></el-table-column>
-            <el-table-column label="平均差价" prop="rent.avgPrice"></el-table-column>
+            <el-table-column label="数量/套" prop="renter.count"></el-table-column>
+            <el-table-column label="已空置" prop="renter.ready_days_avg"></el-table-column>
+            <el-table-column label="渠道单比例" prop="renter.agency_percentage"></el-table-column>
+            <el-table-column label="均价/元" prop="renter.price_avg"></el-table-column>
+            <el-table-column label="回款" prop="rent.pay_back_avg"></el-table-column>
+            <el-table-column label="平均差价/元" prop="renter.price_diff_avg"></el-table-column>
           </el-table-column>
           <el-table-column label="空置">
-            <el-table-column label="空置房源" prop="other.kongzhi"></el-table-column>
-            <el-table-column label="平均已空置" prop="other.kongzhiday"></el-table-column>
+            <el-table-column label="空置房源/套" prop="vacant.count"></el-table-column>
+            <el-table-column label="平均已空置/套" prop="vacant.vacant_day_avg"></el-table-column>
           </el-table-column>
           <el-table-column label="业绩">
-            <el-table-column label="总业绩" prop="other.all"></el-table-column>
+            <el-table-column label="总业绩" prop="performance.performance"></el-table-column>
           </el-table-column>
         </el-table>
+        <el-pagination
+          :total="businessTotal"
+          :page-size="10"
+          layout="total,prev,pager,next"
+          style="text-align: right;margin-top: 20px;"
+        ></el-pagination>
       </div>
       <el-dialog
         title="数据统计"
@@ -228,46 +242,32 @@
           params: {
             order_scope: '', //区域间、内排序
             order_field: '', //列表字段排序
+            order_sort: 'asc', //升序降序 asc升 desc降
             start_time: '',
             end_time: '',
             city: [], //选择的城市
             group: 'city',//显示城市或区域
             compose: ['new_perf','old_perf'],//数据组成
             auto_compare: true, //增加对比项
+            page_id: '',
+            addition: '',
           },
           cityList: [],
           cityAll: true,
           businessList: [
             {city: '南京',first:true,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
               rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '南京',first:false,dateRange: '12-07~12-14',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '南京',first:false,dateRange: '12-14~12-21',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '杭州',first:true,dateRange: '12-14~12-21',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '杭州',first:false,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '杭州',first:false,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '合肥',first:true,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '合肥',first:false,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-            {city: '合肥',first:false,dateRange: '12-01~12-07',collect:{num:400,zhongjie:'50%',avg: '3500/月',kongzhi: '20天',months: '20月'},
-              rent:{num:200,kongzhi:'10天',qudao: '50%',avg: '3500/月',back:'20天',avgPrice:'-500'},other:{kongzhi:'150套',kongzhiday:'20天',all:15000}},
-
           ],
           statisticalVisible: false,
           infoDetailVisible: false,
           charData: [
             {
-              date: '11-11~11-27',
+              date: '181127',
               value: 400,
               name: '南京'
             },
             {
-              date: '11-27~12-07',
+              date: '181207',
               value:300,
               name: '南京'
             },
@@ -346,14 +346,73 @@
             {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
             {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200},
             {date: '2018-12-11',yuangong: '黎明',price: 1200,payWay: '支付宝',allMonth: 12,wayPrice: 600,name: '租房',username: '天水',kong: 20,location: '南京',hetong: '详情',priceCha:200}
-          ]
+          ],
+          businessEmptyText: '',
+          businessLoading: false,
+          businessTotal: 0,
+          businessFieldList: [],
+          chart_field: '',
         }
       },
       mounted() {
         this.getCity();
+        this.getFieldList();
         this.handleSetTime();
+        this.getBusinessList();
       },
       methods: {
+        //字段排序
+        handleOrderField(val) {
+          this.params.order_field = val;
+          this.getBusinessList();
+        },
+        //升降序
+        handleOrderSort(val) {
+          this.params.order_sort = val;
+          this.getBusinessList();
+        },
+        //区域间排序
+        handleOrderScope(val) {
+          this.params.order_scope = val;
+          this.getBusinessList();
+        },
+        //增加对比项
+        handleAddCompare(val) {
+          this.params.auto_compare = val;
+          this.getBusinessList();
+        },
+        //字段列表
+        getFieldList() {
+          this.$http.get(this.url + 'performance/business/orderFields').then(res => {
+            if(res.data.code === '20010') {
+              this.businessFieldList = res.data.data;
+            }
+          }).catch(err => {
+            console.log(err);
+          })
+        },
+        //获取列表
+        getBusinessList() {
+          this.businessLoading = true;
+          this.$http.get(this.url + '/performance/business',{
+            params: this.params
+          }).then(res => {
+            if(res.data.code === '20000') {
+              this.businessLoading = false;
+              this.businessEmptyText = ' ';
+              this.businessList = res.data.data.data;
+              this.businessTotal = res.data.data.data.length;
+              this.params.page_id = res.data.data.page_id;
+            }else {
+              this.businessLoading = false;
+              this.businessEmptyText = '暂无数据';
+              this.businessList = [];
+              this.params.page_id = '';
+            }
+          }).catch(err => {
+            console.log(err);
+          })
+        },
         //tab切换
         handleTabClick(tab) {
           console.log(tab);
@@ -465,7 +524,7 @@
             });
             return false;
           }
-          console.log(params);
+          this.getBusinessList();
         },
         //输入天数
         handleInputDays(val) {
@@ -524,30 +583,31 @@
         },
         //表头单击事件
         handleHeaderClick(column) {
-          if(column.label !== '收房' && column.label !== '租房' && column.label !== '其他'){
-            this.statisticalVisible = true;
+          this.statisticalVisible =true;
+          if(!column.property) {
+            return false;
+          }
+          var type = column.property.split('.')[0];
+          var field = column.property.split('.')[1];
+          if(type === 'lord') {
+            console.log('this is lord');
+            console.log(field);
+          }else if(type === 'renter') {
+            console.log('this is renter');
+            console.log(field);
           }else {
             return false;
           }
         },
         //单元格被单击
         handleCellClick(row,column,event) {
-          // var res = event.getElementsByTagName('button');
-          // if(Array.from(res).length > 0){
-          //   return false;
-          // }
+          console.log(row,column);
           this.infoDetailVisible = true;
-        },
-        handleAscOrder() {
-          this.$message("升序功能尚未开放");
-        },
-        handleDescOrder() {
-          this.$message("降序功能尚未开放");
         },
         //添加时间段
         handleAddClick(scope) {
-          console.log(scope.row);
-          this.$message("this is add time range operation");
+          this.params.addition = scope.row.group_id;
+          this.getBusinessList();
         },
         //表头颜色
         cellStyle({row, column, rowIndex, columnIndex}) {
@@ -561,6 +621,9 @@
             return "color: #67C23A";
           }
         },
+        /**
+         * @return {string}
+         */
         DetailCellStyle({row, column, rowIndex, columnIndex}) {
           if(columnIndex > 1 && columnIndex < 5 ) {
             return "color: #DDAF6A";
@@ -581,6 +644,9 @@
 </script>
 
 <style lang="scss">
+  body{
+    padding-right: 0 !important;
+  }
   #business{
     width: 100%;
     .el-table--border,
