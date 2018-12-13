@@ -1,6 +1,6 @@
 <template>
   <div id="addStaff">
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addEmployDialog" width="60%">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
@@ -133,6 +133,11 @@
             </el-tab-pane>
             <el-tab-pane label="工作信息" name="second">
               <el-row>
+                  <!-- <el-col :span="8">
+                    <el-form-item label="公司" required>
+                      <el-input placeholder="请输入公司" size="mini" v-model="params.company"></el-input>
+                    </el-form-item>
+                  </el-col> -->
                   <el-col :span="8">
                     <el-form-item label="部门" required>
                       <el-input placeholder="请选择" @focus="openOrgan('department_id', 'depart')"
@@ -151,6 +156,8 @@
                       </el-select>
                     </el-form-item>
                   </el-col>
+                </el-row>
+              <el-row>
                   <el-col :span="8">
                     <el-form-item label="岗位" required>
                       <el-select v-model="params.position_id" clearable multiple :disabled="position.length < 1">
@@ -159,11 +166,43 @@
                       </el-select>
                     </el-form-item>
                   </el-col>
-                </el-row>
-              <el-row>
                   <el-col :span="8">
                     <el-form-item label="入职时间" required>
                       <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间"
+                                      value-format="yyyy-MM-dd">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="入职途径">
+                      <el-select v-model="params.entry_way.entry_type" clearable>
+                        <!--multiple-->
+                        <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
+                                   :label="item.name">{{item.name}}
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="等级" required>
+                      <el-select v-model="params.level" clearable>
+                        <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
+                                   :label="item.dictionary_name">{{item.dictionary_name}}
+                        </el-option>
+                      </el-select>
+                      <div style="color: #409EFF;font-size: 12px;text-align: right;"
+                           v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
+                        <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
+                        <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
+                        <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
+                      </div>
+                    </el-form-item>
+                  </el-col> 
+                  <el-col :span="8">
+                    <el-form-item label="转正时间">
+                      <el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间"
                                       value-format="yyyy-MM-dd">
                       </el-date-picker>
                     </el-form-item>
@@ -184,39 +223,24 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="等级" required>
-                      <el-select v-model="params.level" clearable>
-                        <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
-                                   :label="item.dictionary_name">{{item.dictionary_name}}
-                        </el-option>
-                      </el-select>
-                      <div style="color: #409EFF;font-size: 12px;text-align: right;"
-                           v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
-                        <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
-                        <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
-                        <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
-                      </div>
+                    <el-form-item label="第一次签合同时间">
+                      <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间"
+                                      value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="入职途径">
-                      <el-select v-model="params.entry_way.entry_type" clearable>
-                        <!--multiple-->
-                        <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
-                                   :label="item.name">{{item.name}}
-                        </el-option>
-                      </el-select>
+                    <el-form-item label="第一次合同到期时间">
+                      <el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间"
+                                      value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24" v-if="params.entry_way.entry_type == 11">
+                  <!-- <el-col :span="24" v-if="params.entry_way.entry_type == 11">
                     <el-form-item label="备注">
                       <el-input type="textarea" placeholder="请填写备注" v-model="params.entry_way.entry_mess"></el-input>
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
-                <el-row v-if="editId">
+                <!-- <el-row v-if="editId">
                   <el-col :span="8">
                     <el-form-item label="离职原因">
                       <el-select v-model="params.dismiss_reason.dismiss_type" clearable>
@@ -232,8 +256,8 @@
                                 v-model="params.dismiss_reason.dismiss_mess"></el-input>
                     </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
+                </el-row> -->
+                <!-- <el-row>
                   <el-form-item label="入职材料">
                     <el-checkbox-group v-model="params.entry_materials">
                       <el-checkbox v-for="item in entryMaterialsCategory" :label="item.id" :key="item.id"
@@ -241,9 +265,9 @@
                       </el-checkbox>
                     </el-checkbox-group>
                   </el-form-item>
-                </el-row>
+                </el-row> -->
               <el-row>
-                <el-col :span="8">
+                <!-- <el-col :span="8">
                   <el-form-item label="婚姻状况">
                     <el-select v-model="params.marital_status" clearable>
                       <el-option v-for="item in maritalStatusCategory" :label="item.dictionary_name" :key="item.id"
@@ -251,56 +275,62 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                </el-col>
-                
+                </el-col> -->
               </el-row>
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label="转正时间">
-                    <el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间"
-                                    value-format="yyyy-MM-dd">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
+                    <el-form-item label="第二次签合同时间">
+                      <el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间"
+                                      value-format="yyyy-MM-dd"></el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                <!-- <el-col :span="8">
                   <el-form-item label="企业邮箱">
                     <el-input placeholder="请输入企业邮箱" v-model="params.mail" clearable></el-input>
                   </el-form-item>
-                </el-col>
-                
+                </el-col> -->
               </el-row>
               <el-row>
-                
-                
-                
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="第一次签合同时间">
-                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间"
-                                    value-format="yyyy-MM-dd"></el-date-picker>
+                <el-col :span="24">
+                  <el-form-item label="身份证复印件">
+                    <UpLoad :ID="'copyIDCard'" :isClear="isClear" @getImg="IDcard"></UpLoad>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="第一次合同到期时间">
-                    <el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间"
-                                    value-format="yyyy-MM-dd"></el-date-picker>
+                <el-col :span="24">
+                  <el-form-item label="银行卡复印件">
+                    <UpLoad :ID="'copyBankCard'" :isClear="isClear" @getImg="BankCard"></UpLoad>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="第二次签合同时间">
-                    <el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间"
-                                    value-format="yyyy-MM-dd"></el-date-picker>
+                <el-col :span="24">
+                  <el-form-item label="劳动合同">
+                    <UpLoad :ID="'copyContract'" :isClear="isClear" @getImg="ContractCard"></UpLoad>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label="备注">
-                    <el-input type="textarea" v-model="params.remark" placeholder="请填写备注"></el-input>
+                  <el-form-item label="学历复印件">
+                    <UpLoad :ID="'copyEducation'" :isClear="isClear" @getImg="EducationCard"></UpLoad>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                  <el-form-item label="应聘表">
+                    <UpLoad :ID="'copyApply'" :isClear="isClear" @getImg="ApplyCard"></UpLoad>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                  <el-form-item label="上家离职单位证明">
+                    <UpLoad :ID="'copyDismiss'" :isClear="isClear" @getImg="DismissCard"></UpLoad>
                   </el-form-item>
                 </el-col>
               </el-row>
+              <!-- <el-row>
+                 <el-col :span="24">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" v-model="params.remark" placeholder="请填写备注"></el-input>
+                  </el-form-item>
+                </el-col> 
+              </el-row> -->
             </el-tab-pane>
           </el-tabs>
         </el-form>
@@ -318,12 +348,14 @@
 
 <script>
   import Organization from '../../common/organization';
+  import UpLoad from "../../common/UPLOAD.vue"
 
   export default {
     props: ["ids", "addEmployLog", 'isEdit', 'editId'],
-    components: {Organization},
+    components: {Organization, UpLoad},
     data() {
       return {
+        isClear: false,
         url: globalConfig.server,
         disabledBtn: false,
         addStaffDialogVisible: false,
@@ -334,6 +366,16 @@
         postDisabled: true,
         detailData: {},
         params: {
+          // 新增字段 ========
+          image_info: {
+            doc_photo: [],   // 身份证
+            bank: [],       // 银行卡
+            resume: [],      // 申请表
+            resignation: [],   //  上家单位离职证明
+            labor_contract: [],  // 劳动合同
+            education: [],  // 学历复印件
+          },
+          // ================
           duty_id: [],
           position_id: [],
           department_id: [],
@@ -420,15 +462,15 @@
       };
     },
     watch: {
-      addEmployLog(val) {
+      addEmployLog(val,id) {
         console.log(val, "22222")
-        this.addEmployDialog = val;
+        this.addStaffDialogVisible = val;
       },
-      addEmployDialog(val) {
-        if(!val) {
-          this.$emit("close")
-        }
-      },
+      // addEmployDialog(val) {
+      //   if(!val) {
+      //     this.$emit("close")
+      //   }
+      // },
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
       },
@@ -471,6 +513,26 @@
       this.getDictionaries();
     },
     methods: {
+      // 图片上传 ================
+      IDcard(val) {
+        this.params.image_info.doc_photo = val[1];
+      },
+      BankCard(val) {
+        this.params.image_info.bank = val[1];
+      },
+      ContractCard(val) {
+         this.params.image_info.labor_contract = val[1];
+      },
+      EducationCard(val) {
+         this.params.image_info.education = val[1];
+      },
+      ApplyCard(val) {
+         this.params.image_info.resume = val[1];
+      },
+      DismissCard(val) {
+         this.params.image_info.resignation = val[1];
+      },
+      // ========================
       getDictionaries() {
         this.getSex();
         this.getFertilityStatus();
@@ -483,6 +545,14 @@
         this.getOnJobStatus();
       },
       initial() {
+        this.params.image_info = {
+          id_card: [],
+          bank: [],
+          contract: [],
+          education: [],
+          apply: [],
+          dismiss: []
+        }
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -766,11 +836,14 @@
           });
         } else {
           //新增
+          console.log(this.params, "2222222");
+          return false
           this.$http.post(this.url + 'organization/staff', this.params).then((res) => {
             if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
+              this.isClear = true;
             } else {
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);

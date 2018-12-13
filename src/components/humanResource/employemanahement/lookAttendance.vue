@@ -49,7 +49,6 @@ export default {
     lookAttendanceDialog(val) {
       if (!val) {
         this.$emit('close');
-        this.attendanceData = [];
       }
     }
   },
@@ -58,6 +57,7 @@ export default {
   },
   methods: {
     getAttendance(id) {
+      this.attendanceData = [];
       this.isLoading = true;
       this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {   
         if(res.data.code == "20000") {

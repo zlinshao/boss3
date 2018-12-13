@@ -3,17 +3,23 @@
     <el-container>
       <el-header style="overflow: hidden;line-height: 60px;">
         <div class="addstaff">
-          <el-button type="primary" size="mini" @click="addLookEmploy()">新增员工</el-button>
+          <el-button type="primary" size="mini" @click="addLookEmploy('1')">新增员工</el-button>
         </div>
         <div class="search">
-          <el-input v-model="input" placeholder="公司/部门/岗位/姓名/正式" size="mini"></el-input>
-          <el-button type="primary" size="mini">搜索</el-button>
-          <el-button type="primary" size="mini">导入考勤</el-button>
+          <el-input v-model="params.keywords" placeholder="公司/部门/岗位/姓名/正式" size="mini"></el-input>
+          <el-button type="primary" size="mini" @click="searchEmploy">搜索</el-button>
+          <el-button type="primary" size="mini" @click="lookImportanAtt">导入考勤</el-button>
         </div>
       </el-header>
       <el-main style="padding: 0">
         <el-table :data="staffDate"  border style="width: 100%">
-          <el-table-column prop="name" label="姓名" ></el-table-column>
+          <el-table-column prop="name" label="姓名">
+            <template slot-scope="scope">
+              <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
+              &nbsp;&nbsp;&nbsp;
+              <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;"></i>
+            </template>
+          </el-table-column>
           <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
           <el-table-column prop="roleStr" label="岗位名称" ></el-table-column>
           <el-table-column prop="enroll" label="入职时间" ></el-table-column>
@@ -37,11 +43,11 @@
               <el-button type="text" @click="lookTypesetting(scope.row.id)">查看</el-button>
             </template>
           </el-table-column>
-          <el-table-column label="日报" >
+          <!-- <el-table-column label="日报" >
             <template slot-scope="scope">
               <el-button type="text" @click="lookDaily(scope.row.id)">查看</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="审批" >
             <template slot-scope="scope">
               <el-button type="text" @click="lookApproval(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.id)">查看</el-button>
@@ -52,11 +58,20 @@
               <el-button type="text" @click="lookAttendance(scope.row.id)">查看</el-button>
             </template>
           </el-table-column>
+          <!-- <el-table-column  label="编辑" >
+            <template slot-scope="scope">
+              <el-button type="text" @click="editEmploy(scope.row.id)">编辑</el-button>
+            </template>
+          </el-table-column> -->
         </el-table>
       </el-main>
     </el-container>
+    <!-- 导出考勤 -->
+    <ImportAttendance :lookImportAttendance="lookImportAttendance" @close="closeImportAttendce"></ImportAttendance>
     <!-- 新增员工 -->
-    <addEmploy :ids="class_add_id" :addEmployLog="addEmployLog" @close="closeAddEmploy"></addEmploy>
+    <addEmploy :editId="editId" :isEdit="isEdit" :addEmployLog="addEmployLog" @close="closeAddEmploy"></addEmploy>
+    <!-- 查看员工详情 -->
+    <EmployeeDetails :ids="class_empDetail_id" :lookEmployDetailLog="lookEmployDetailLog" @close="closeEmployDetail"></EmployeeDetails>
     <!-- 查看奖励记录 -->
     <Rewardreord :ids="class_reward_id" :names="class_reward_name" :orgs="class_reward_org" :roles="class_reward_role" :times ="class_reward_times"  :lookRewardLog="lookRewardLog" @close="closeReward"></Rewardreord>
     <!-- 查看日报 -->
@@ -76,17 +91,20 @@
 </template>
 
 <script>
+import ImportAttendance from './importAttendance'  // 导出考勤
 import addEmploy from './addEmploy'   // 新增员工
+import EmployeeDetails from './employeeDetails'  // 员工详情
 import LookAttendanceChild from './lookAttendance'  // 查看排班
 import employemanagement from './lookTypesetting'  // 查看考勤
 import Approval from './approval'    // 审批
 import Rewardreord from './rewardreord'
 import Daily from './daily'  // 日报
 export default {
-  components: {addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily},
+  components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance},
   data() {
     return {
-      input: "",
+      
+      isEdit: false,   // 编辑
       staffDate: [],   // 列表
       addEmployDialog: false,  // 新增员工
       lookAttendanceLog: false,  // 查看排班
@@ -95,6 +113,8 @@ export default {
       lookRewardLog: false,  // 查看奖励记录
       lookDailyLog: false,  // 查看日报
       addEmployLog: false,  // 新增人员
+      lookEmployDetailLog: false,  // 查看员工
+      lookImportAttendance: false,  // 导出考勤
       total: 0,
       class_atted_id: "",  // 考勤id
       class_type_id: "",  // 排版id
@@ -108,13 +128,14 @@ export default {
       class_reward_role: "",
       class_reward_times: "",
       class_daily_id: "",   // 查看日报
-      class_add_id: "",
+      editId: "",  // 新增员工id
+      class_empDetail_id: "",  // 查看员工id
       params: {
         keywords: '',
         limit: 12,
         page: 1,
         org_id: 1,
-        is_dimission: '',
+        is_dimission: 0,
         infinite: 20,         //需要权限
         // forward: '',
         is_recursion: 1,
@@ -127,6 +148,11 @@ export default {
     this.getEmploy();
   },
   methods: {
+    // 搜索
+    searchEmploy() {
+     this.params.page = 1;
+     this.getEmploy();
+    },
     // 获取列表
     getEmploy() {
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
@@ -151,12 +177,33 @@ export default {
       })
     },
     // 新增人员
-    addLookEmploy(id) {
+    addLookEmploy(val, id) {
       this.addEmployLog = true;
-      this.class_add_id = id;
+      if(val == '1') {
+        this.isEdit = false;
+      } else if(val == '2') {
+        this.editId = id;
+        this.isEdit = true;
+      }
     },
     closeAddEmploy() {
        this.addEmployLog = false;
+       this.isEdit = false;
+    },
+    // 导出考勤
+    lookImportanAtt() {
+      this.lookImportAttendance = true;
+    },
+    closeImportAttendce() {
+      this.lookImportAttendance = false;
+    },
+    // 查看员工详情
+    lookEmployeDetails(id) {
+      this.lookEmployDetailLog = true;
+      this.class_empDetail_id = id;
+    },
+    closeEmployDetail() {
+      this.lookEmployDetailLog = false;
     },
     // 查看考勤
     lookAttendance(id) {

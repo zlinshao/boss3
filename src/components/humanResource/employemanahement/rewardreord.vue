@@ -59,20 +59,34 @@
           </el-form>
         </div>
         <div class="content">
-          <div class="rewardreShowList" v-for="(item, index) in rewardreCotent" :key="index">
-            <p>{{item.time}}</p>
-            <div>
-              <el-col :span="8">
-                <span>{{item.name}}</span>
-              </el-col>  
-              <el-col :span="8">
-                <div>{{item.content}}</div>
+          <div class="" v-for="(item, index) in detail.data" :key="index">
+            <el-row>
+              <el-col :span="3">
+                <div style="text-align: center;">
+                  <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
+                  <br/>
+                  <span>{{item.add_user}}</span>
+                </div>
               </el-col>
-              <el-col :span="8" style="text-align: center;">
-                <el-button type="text" size="mini" @click="addEditReward(2)">编辑</el-button>
-                <el-button type="text" size="mini" @click="deletedDialogVisible = true">删除</el-button>
+              <el-col :span="18">
+                <div class="circle"
+                    :class="{'praises': item.type==1, 'criticisms':item.type==2, 'doubts':item.type==3, 'others':item.type==4}"></div>
+                <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;min-height: 50px;">
+                  <div>{{item.remark}}</div>
+                  <div style="margin-top: 10px;" v-if="item.images && item.images.length>0">
+                    <img v-for="img in item.images" :src="img.url" :key="img.id" data-magnify="" :data-src="img.url">
+                  </div>
+                </div>
               </el-col>
-            </div>
+              <el-col :span="3" style="text-align: right;cursor: pointer;padding-top: 8px;">
+                <span @click="editRecord(item)" style="color: #409eff;">
+                  <i class="el-icon-edit"></i>编辑
+                </span>
+                <span @click="removeRecord(item.detail_id)" style="color: #409eff;margin-left: 6px;">
+                  <i class="el-icon-close"></i>删除
+                </span>
+              </el-col>
+            </el-row>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -80,7 +94,7 @@
         </span>
       </el-dialog>
       <!-- 新增记录 -->
-      <el-dialog title="提示" :visible.sync="addRecordDiag" width="30%">
+      <!-- <el-dialog title="提示" :visible.sync="addRecordDiag" width="30%">
         <el-form ref="form" :model="addRecordForm" label-width="80px">
           <el-form-item label="奖励类型">
             <el-select v-model="addRecordForm.recordType" placeholder="请选择奖励类型" size="mini">
@@ -97,6 +111,41 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="addRecordDiag = false" size="mini">取 消</el-button>
           <el-button type="primary" @click="addRecordDiag = false" size="mini">确 定</el-button>
+        </span>
+      </el-dialog> -->
+      <el-dialog :close-on-click-modal="false" title="修改记录" :visible.sync="editStaffRecordDialogVisible" width="30%">
+        <div>
+          <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
+            <el-row>
+              <el-col :span="10">
+                <el-form-item label="类型选择" required>
+                  <el-select v-model="params.type" placeholder="请选择" clearable>
+                    <el-option v-for="val in typeCategory" :key="val.id" :value="val.id" :label="val.name">
+                      {{val.name}}
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="16">
+                <el-form-item label="描述" required>
+                  <el-input v-model="params.remark" type="textarea" rows="2" placeholder="请填写描述"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="照片">
+                  <UPLOAD ID="single_records" :isClear="isClear" :editImage="editImage" @getImg="getImg"></UPLOAD>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="small" @click="editStaffRecordDialogVisible=false">取 消</el-button>
+          <el-button size="small" type="primary" @click.native="confirmEdit" :disabled="disabledBtn">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 删除记录 -->
@@ -120,8 +169,9 @@ export default {
       //  isUpload: false,
       isClear: false,
       RewardDialogVisible: false,
-      addRecordDiag: false,
+      editStaffRecordDialogVisible: false,
       deletedDialogVisible: false,
+      uesr_id: "",
       form: {
         name: "",
         time: "",
@@ -144,14 +194,21 @@ export default {
         {value: "批评", label: "批评"},
         {value: "其他", label: "其他"},
       ],
-      rewardreCotent: [
-        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
-        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
-        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
-        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
-        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
-        {time: "2018-11-12", content: "aaaaaaaa", name: "A"},
-      ]
+      rewardreCotent: [],
+      detail: {},
+      params: {
+        type: '',
+        detail_id: '',
+        remark: '',
+        images: []
+      },
+      typeCategory: [
+        {id: 1, name: '表扬'},
+        {id: 2, name: '批评'},
+        {id: 3, name: '疑惑'},
+        {id: 4, name: '其他'},
+      ],
+      editImage: {},
     }
   },
   watch: {
@@ -160,6 +217,8 @@ export default {
     },
     ids(val) {
       console.log(val);
+      this.uesr_id = val;
+      this.gerRewardReord(val)
     },
     names(val) {
       this.form.name = val;
@@ -182,24 +241,76 @@ export default {
     }
   },
   methods: {
+    // 获取详情
+    gerRewardReord(val) {
+       this.loading = true;
+      this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {user_id: val}).then(res => {
+      // this.$http.post(globalConfig.server + 'credit/manage/employeedetail?user_id=205').then(res => {   // 测试数据
+        this.loading = false;
+        if (res.data.code === "100100") {
+          this.detail = res.data.data;
+        } else {
+          this.detail = {};
+          this.$notify.warning({
+            title: '警告',
+            message: res.data.msg,
+          });
+        }
+      })
+    },
     // 上传图片
     getImg(val) {
-      console.log(val)
-        // if(val[0] === 'comment_pic'){
-        //   this.commentParams.image_pic = val[1];
-        // }else if(val[0] === 'comment_video'){
-        //   this.commentParams.video_file = val[1];
-        // }
-        // this.isUpload = val[2];
-      },
-      addEditReward(val) {
-        this.addRecordDiag = true;
-        if (val == 1) {
-
-        } else if (val == 2) {
-
-        }
+      this.params.images = val[1];
+    },
+    addEditReward(val) {
+      this.addRecordDiag = true;
+      if (val == 1) {
+        
+      } else if (val == 2) {
+        this.editRewardReord();
       }
+    },
+    // 新增奖励记录
+    addRewardReord() {
+      this.$http.post(globalConfig.server + 'credit/manage/addemployee', this.params).then((res) => {
+        if (res.data.code === '10000') {
+          // this.$emit('close', 'success');
+          this.addStaffDialogVisible = false;
+          this.$notify.success({
+            title: '成功',
+            message: res.data.msg,
+          });
+        } else {
+          this.disabledBtn = false;
+          this.$notify.warning({
+            title: '警告',
+            message: res.data.msg,
+          });
+        }
+      })
+    },
+    // 编辑奖励记录
+    editRewardReord(val) {
+      this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {uesr_id: this.uesr_id}).then(res => {
+        if (res.data.code === '10000') {
+          this.params.type = res.data.data.type;
+          this.params.remark = res.data.data.remark;
+          if (res.data.data && res.data.data.images.length > 0) {
+            let data = {};
+            res.data.data.images.forEach((item) => {
+              this.params.images.push(item.id);
+              data[item.id] = item.url;
+            });
+            this.editImage = data;
+          }
+        } else {
+          this.$notify.warning({
+            title: '警告',
+            message: res.data.msg,
+          });
+        }
+      })
+    }
   }
 }
 </script>
