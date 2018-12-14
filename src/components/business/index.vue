@@ -39,7 +39,7 @@
       </div>
       <!--时间-->
       <div class="container">
-        <div style="margin-top: 20px; width: 55%">
+        <div style="margin-top: 20px; width: 60%;">
           <span>时间：</span>
           <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
             <el-radio :label="1">最近1天</el-radio>
@@ -47,7 +47,7 @@
             <el-radio :label="30">最近30天</el-radio>
             <el-radio label="day">
               <template>
-                <el-input type="number" size="mini" style="width: 80px;" v-model="helpParams.days" @change="handleInputDays"></el-input>
+                <el-input @focus="handleFocusDays" type="number" size="mini" style="width: 80px;" v-model="helpParams.days" @change="handleInputDays"></el-input>
               </template>
               天
             </el-radio>
@@ -61,6 +61,7 @@
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
                   value-format="yyyy-MM-dd"
+                  @change="handleChangeDateRange"
                 >
                 </el-date-picker>
               </template>
@@ -68,15 +69,15 @@
           </el-radio-group>
           <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
         </div>
-        <div style="margin-top: 20px;width: 45%">
+        <div style="margin-top: 20px;width: 40%;text-align:center;">
           <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;" @change="handleAddCompare">增加对比项</el-checkbox>
 
-          <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope" style="margin: 0 15px;">
+          <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope" style="width:20%;margin: 0 15px;">
             <el-option value="inner" label="区域内排序"></el-option>
             <el-option value="" label="区域间排序"></el-option>
           </el-select>
 
-          <el-select v-model="params.order_field" size="mini" clearable @change="handleOrderField">
+          <el-select v-model="params.order_field" size="mini" clearable @change="handleOrderField" style="width:20%;">
             <el-option v-for="field in businessFieldList" :label="field.name" :key="field.value" :value="field.value"></el-option>
           </el-select>
 
@@ -567,6 +568,18 @@
         //输入天数
         handleInputDays(val) {
           this.handleChangeDate(val);
+        },
+        handleFocusDays() {
+          this.helpParams.time = 'day';
+          this.helpParams.chooseDay = true;
+          this.helpParams.chooseDate = false;
+          this.helpParams.dateTime = "";
+        },
+        handleChangeDateRange() {
+          this.helpParams.time = 'date';
+          this.helpParams.chooseDay = false;
+          this.helpParams.chooseDate = true;
+          this.helpParams.days = "";
         },
         //筛选时间
         handleChangeDate(val) {
