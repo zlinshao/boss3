@@ -4,9 +4,14 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
-              <el-button slot="append" icon="el-icon-search"></el-button>
-              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            <el-input 
+            placeholder="请输入内容" 
+            v-model="form.search" 
+            size="mini" clearable
+            @keyup.enter.native.prevent="getTableData"
+            >
+            <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+              
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -31,10 +36,12 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.belongTo" size="mini" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in belongValue" :label="key" :value="index + 1" :key="index"></el-option>
-                    </el-select>
+                    <el-input v-model="form.belongName" @focus="openSubjectTree" placeholder="请选择"
+                                readonly>
+                        <template slot="append">
+                          <div style="cursor: pointer;" @click="clearSubjectTree">清空</div>
+                        </template>
+                      </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -46,9 +53,9 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.subjectType" size="mini" clearable>
+                    <el-select v-model="form.er_type" size="mini" clearable>
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in typeValue" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="item in typeValue" :label="item.label" :value="item.value" :key="item.value"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -56,7 +63,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -65,24 +72,29 @@
     </div>
 
     <el-table
+     :empty-text='collectStatus'
+      v-loading="collectLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0)"
       :data="tableData"
       width="100%"
       @row-contextmenu="houseMenu">
       <el-table-column
         label="归属"
-        prop="name">
+        prop="superior_title">
       </el-table-column>
       <el-table-column
-        label="项目"
-        prop="address">
+        label="科目"
+        prop="title">
       </el-table-column>
       <el-table-column
         label="类型"
-        prop="otherName">
+        prop="type">
       </el-table-column>
       <el-table-column
         label="备注"
-        prop="houseType">
+        prop="remark">
       </el-table-column>
     </el-table>
 
@@ -91,75 +103,96 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
+        :page-sizes="[12,20, 50, 100]"
+        :page-size="12"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :total="totalNum">
       </el-pagination>
     </div>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
 
-  <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject"></SubjectModule>
+  <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject" :data="detailData" :cate="cate"></SubjectModule>
+  <subjectTree :subjectDialog="subjectVisible"  :types="subjectType" @close="closeSubjectTree"
+                    @selectSubject="selectSubject"></subjectTree>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../../common/rightMenu.vue'    //右键 
   import SubjectModule from './subjectModule'
+  import subjectTree from '../subjectTree.vue'
   export default {
     name: "index",
-    components: {RightMenu,SubjectModule},
+    components: {RightMenu,SubjectModule,subjectTree},
     data() {
       return {
+        collectStatus: ' ',
+        collectLoading: false,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
-
+        totalNum:0,
         isHigh: false,
         currentPage: 1,
         addSubjectModule: false,
         form: {
-          belongTo: '',
-          subjectType: '',
-          keyWords: '',
+          belong: '',
+          er_type: '',
+          search: '',
+          page:1,
+          limit:12,
+          belongName:''
         },
-        belongValue: ['收房', '租房'],
-        typeValue: ['收入', '支出'],
-        tableData: [
-          {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '广是广泛大概高手高手',
-            houseType: '住宅',
-          },
-        ]
+        subjectVisible:false,
+        belongValue: [],
+        typeValue: [{
+          value:1,
+          label:'收入',
+        },{
+          value:2,
+          label:'支出',
+        },{
+          value:3,
+          label:'混合',
+        }],
+        tableData: [],
+        subjectType:'top',
+        detailData:{},
+        cate:'add'
       }
     },
     mounted() {
+      this.getTableData();
     },
-    watch: {},
+    watch: {
+
+    },
     methods: {
+      getTableData(){
+        this.collectLoading = true;
+        this.collectStatus = ' ';
+        let params=this.form;
+        this.$http.get(globalConfig.finance_server+'account/subject/index',{params:params}).then((res)=>{
+            this.isHigh=false;
+            this.collectLoading=false;
+            if(res.data.success){
+                this.tableData=res.data.data.data;
+                this.totalNum=res.data.data.count;
+            }else{
+              this.collectStatus='暂无数据';
+              this.tableData=[];
+              this.totalNum=0;
+            }
+        });
+      },
       // 重置
       resetting() {
-        this.form.keywords = '';
+        this.form.search = '';
+        this.form.belong='';
+        this.er_type='';
       },
       // 高级筛选
       highGrade() {
@@ -169,30 +202,53 @@
       openSubject() {
         this.addSubjectModule = true;
       },
-      closeSubject() {
+      closeSubject(val) {
+        if(val=='success'){
+          this.getTableData();
+        }
         this.addSubjectModule = false;
+        this.detailData={};
+      },
+      closeSubjectTree(){
+        this.subjectVisible=false;
+      },
+      clearSubjectTree(){
+        this.form.belong='';
+        this.form.belongName='';
+      },
+      openSubjectTree(){
+        this.subjectType='top';
+        this.subjectVisible=true;
+      },
+      selectSubject(val){
+        this.form.belong=val.id;
+        this.form.belongName=val.name;
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        this.form.limit=val;
+        this.form.page=1;
+        this.getTableData();
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.form.page=val;
+        this.getTableData();
       },
       // 右键
       houseMenu(row, event) {
         this.lists = [
-          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',data:row},
+          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',data:row},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
-      clickEvent(val) {
-        if (val === 'delete') {
-          console.log(val);
-          this.openDelete();
-        } else {
-          this.openSubject();
+      clickEvent(index) {
+        if(index.clickIndex==='delete'){
+            this.openDelete(index.data.id);
+        }else{
+            this.detailData=index.data;
+            this.cate='edit';
+            this.openSubject();
         }
       },
       //关闭右键菜单
@@ -212,15 +268,21 @@
         })
       },
       // 删除
-      openDelete() {
+      openDelete(id) {
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+          this.$http.get(globalConfig.finance_server+'account/subject/delete/'+id).then((res)=>{
+              if(res.data.success){
+                this.$message({
+                  type: 'success',
+                  message: res.data.message
+                });
+              }else{
+                this.$message.error(res.data.message);
+              }
           });
         }).catch(() => {
           this.$message({
