@@ -145,7 +145,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button size="small" @click="editStaffRecordDialogVisible=false">取 消</el-button>
-          <el-button size="small" type="primary" @click.native="confirmEdit" :disabled="disabledBtn">确 定</el-button>
+          <el-button size="small" type="primary" @click.native="confirmEdit" >确 定</el-button>
         </span>
       </el-dialog>
       <!-- 删除记录 -->
@@ -209,6 +209,7 @@ export default {
         {id: 4, name: '其他'},
       ],
       editImage: {},
+      disabledBtn: false,
     }
   },
   watch: {
@@ -249,6 +250,9 @@ export default {
         this.loading = false;
         if (res.data.code === "100100") {
           this.detail = res.data.data;
+          this.rewardreForm.praiseNumber = res.data.data.praises;
+          console.log(res.data.data.praises, "111111")
+          console.log(this.rewardreForm.praiseNumber, "111111")
         } else {
           this.detail = {};
           this.$notify.warning({
@@ -265,9 +269,9 @@ export default {
     addEditReward(val) {
       this.addRecordDiag = true;
       if (val == 1) {
-        
+        this.addRewardReord();
       } else if (val == 2) {
-        this.editRewardReord();
+        this.editRecord();
       }
     },
     // 新增奖励记录
@@ -290,11 +294,13 @@ export default {
       })
     },
     // 编辑奖励记录
-    editRewardReord(val) {
+    editRecord(val) {
       this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {uesr_id: this.uesr_id}).then(res => {
         if (res.data.code === '10000') {
-          this.params.type = res.data.data.type;
-          this.params.remark = res.data.data.remark;
+          console.log(res.data.data)
+          
+          // this.params.type = res.data.data.type;
+          // this.params.remark = res.data.data.remark;
           if (res.data.data && res.data.data.images.length > 0) {
             let data = {};
             res.data.data.images.forEach((item) => {

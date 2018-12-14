@@ -253,8 +253,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="mergeDialog = false">取 消</el-button>
-        <el-button type="primary" @click="isConfirmMerge">确 定</el-button>
+        <el-button @click="mergeDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="isConfirmMerge" size="mini">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -361,6 +361,7 @@ export default {
       mergeName: "",
       oldVillageName: "",
       selectedID: [],   // 选中小组
+      communityName: "",  // 选中小区
     };
   },
   mounted() {
@@ -391,12 +392,13 @@ export default {
   },
   methods: {
     handleSelectionChange(val) {
+      console.log(val, "33333")
+      this.communityName = val[0].village_name;
     //  只支持删除一个
     this.communityArr = [];
     this.multipleSelection = val;
       // 默认选择所属部门
        this.selectedID = [];
-       console.log(this.selectedID, "1111")
        if(val.length) {
          this.personalList.forEach((item, index) => {
           if(item.id == val[0].id) {
@@ -405,7 +407,6 @@ export default {
               })
             }
           })
-                console.log(this.selectedID, "2222")
        }
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
@@ -800,12 +801,12 @@ export default {
     isConfirmMerge() {
       let msg = `<div>
                       此操作将会将<b style="color: #e4393c">${
-                        this.oldVillageName
+                        this.communityName
                       }</b>合并到<b style="color: #e4393c">${
         this.mergeName
       }</b>,
                       <b style="color: #e4393c">${
-                        this.oldVillageName
+                        this.communityName
                       }</b>下的所有房屋以及合同将会转移到<b style="color: #e4393c">${
         this.mergeName
       }</b>下,是否继续?
