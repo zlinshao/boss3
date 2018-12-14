@@ -7,6 +7,7 @@
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
+          <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button>
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -236,6 +237,11 @@
                 <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
               </template>
             </el-table-column>
+            <el-table-column prop="share" label="分享部门">
+              <template slot-scope="scope">
+                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.share}}<span v-if="scope.row.share.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </el-col>
@@ -265,8 +271,10 @@
 
     <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
 
-     <!-- 组织架构 -->
+     <!-- 分配组织架构 -->
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"  :ids="selectedID"></organization>
+    <!-- 分享组织架构 -->
+    <organization :organizationDialog="shareOrganizationDia" :length="length" :type="type" @close='closeModalShsre' @selectMember="selectMemberShare"  :ids="selectedShareID"></organization>
   </div>
 </template>
 
@@ -300,6 +308,7 @@ export default {
       newAreaList: [], // 区域
       deletedId: "", // 删除ID
       organizationDialog: false,  // 组织架构
+      shareOrganizationDia: false,  // 组织架构
       length: 0,
       type: "",
       organizeVisible: false, // 组织架构
@@ -361,7 +370,12 @@ export default {
       mergeName: "",
       oldVillageName: "",
       selectedID: [],   // 选中小组
+      selectedShareID: [],   // 选中分享小组
       communityName: "",  // 选中小区
+      shareFrom: {
+        org_id: "",
+        community_id: "",
+      }
     };
   },
   mounted() {
@@ -397,12 +411,16 @@ export default {
     this.multipleSelection = val;
       // 默认选择所属部门
        this.selectedID = [];
+       this.selectedShareID = [];
        if(val.length) {
           this.communityName = val[0].village_name;
          this.personalList.forEach((item, index) => {
           if(item.id == val[0].id) {
               item.orgs.forEach((value, key) => {
                 this.selectedID.push(value.id);
+              })
+              item.shares.forEach((val, inx) => {
+                this.selectedShareID.push(val.id)
               })
             }
           })
@@ -444,11 +462,16 @@ export default {
             this.tableData = [];
             for (let i = 0; i < data.length; i++) {
               let list = {};
-              let departStr = ""
+              let departStr = "";
+              let shareStr = "";
               data[i].orgs.forEach((item, index) => {
                 departStr += item.name + '，';
               })
+              data[i].shares.forEach((item, index) => {
+                shareStr += item.name + '，';
+              })
               list.department = departStr.substring(0, departStr.length - 1);
+              list.share = shareStr.substring(0, shareStr.length - 1);
               this.lengthStr = list.department;
               list.id = data[i].id;
               list.village_name = data[i].village_name;
@@ -572,6 +595,35 @@ export default {
     mergeBtn() {
       this.mergeDialog = true;
     },
+    // 分享
+    shareBtn() {
+      this.shareOrganizationDia = true;
+      this.type = "depart";
+      this.length = 20;
+    },
+    selectMemberShare(val) {
+      this.type = "";
+      this.length = "";
+      this.distributionForm = {org_id: [], community_id: ""};
+      val.forEach((item, index) => {
+       this.distributionForm.org_id.push(item.id)
+      });
+      this.distributionForm.community_id = this.communityArr;
+       this.$http.post(this.urls + "distribution/community/share", this.distributionForm).then(res => {
+         if(res.data.code == "10000") {
+           this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            });
+            this.myData(1);
+         } else {
+           this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+         }
+       })
+    },
      //选人组件
     openOrganizeModal(id) {
       this.organizationDialog = true;
@@ -604,6 +656,9 @@ export default {
      // 关闭模态框
     closeModal() {
       this.organizationDialog = false;
+    },
+    closeModalShsre() {
+      this.shareOrganizationDia = false;
     },
     choose(val, id) {
       if (val === "city") {

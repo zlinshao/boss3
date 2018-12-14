@@ -10,7 +10,7 @@
         </el-select>
         <el-button type="primary" size="mini">搜 索</el-button>
       </div>
-      <div class="calendar">
+      <div class="calendar" v-if="arr.length > 1">
         <table border="1" cellspacing="0" cellpadding="0">
           <tr class='head'>
               <td v-for="(head, index) in heads" :key="index">{{head}}</td>
@@ -27,6 +27,7 @@
           </tr>
       </table>
       </div>
+      <div class="wu" v-else>暂无数据</div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="typesettingDialog = false" size="mini">确 定</el-button>
       </span>
@@ -72,28 +73,44 @@ export default {
   watch: {
     lookTypesettingLog(val) {
       this.typesettingDialog = val;
-      this.getTypeTime();
     },
     ids(val) {
       this.params.user_id = val;
+      this.getTypeTime();
     },
     typesettingDialog(val) {
        if (!val) {
         this.$emit('close');
+        this.init();
+        this.arr = [];
       }
     }
   },
   methods: {
+    // 清除数据
+    init() {
+      this.params = {
+        user_id: "",
+        date: ""
+      }
+    },
     // 获取排班
     getTypeTime() {
       // this.$http.get(globalConfig.server + "attendance/sort/sort?user_id=289&arrange_month=2018-11").then(res => {   // 测试数据
       this.$http.get(globalConfig.server + "attendance/sort/sort", {params: this.params}).then(res => {  
+        console.log(res, "6666666")
         if(res.data.code == "20000") {
           this.arrange = res.data.data.data.arrange;
           this.year = res.data.data.year;
           this.month = res.data.data.month;
           this.params = this.year + "-" + this.month;
           this.getCalendar(this.year, this.month, true);
+        } else {
+          this.arr = [];
+          this.year = res.data.data.year;
+          this.month = res.data.data.month;
+          // // this.params = this.year + "-" + this.month;
+          // this.getCalendar(this.year, this.month, true);
         }
       })
     },
@@ -161,30 +178,8 @@ export default {
           }
         })
       })
-     
-      // let settingObj = Object.values(this.typesetting);
-        // let typeArr = [];
-        // typeArr = Object.values(this.typesettingDate);
-        // for(let key in _this.typesettingDate) {
-        //   typeArr.push(_this.typesettingDate[key])
-        // }
-      // _arr.forEach((item, index) => {
-      //     item.forEach((val, key) => {
-      //       if (val.currentmonth) {
-      //         settingObj.forEach((a, b) => {
-      //           if (_arr[index][key].day == b + 1) {
-      //             _arr[index][key]["typesetting"] = a;
-      //           }
-      //         });
-      //         typeArr.forEach((c, d) => {
-      //           if(_arr[index][key].day == d + 1) {
-      //             _arr[index][key]["correct"] = c
-      //           }
-      //         })
-      //       }
-      //     });
-      // });
       this.arr = _arr;
+      console.log(this.arr, "666666")
     },
   }
 };
@@ -218,6 +213,13 @@ export default {
     .gray {
       color: gray;
       overflow: hidden;
+    }
+    .wu {
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      font-size: 16px;
+      border: 1px solid #cecece;
     }
   }
 </style>

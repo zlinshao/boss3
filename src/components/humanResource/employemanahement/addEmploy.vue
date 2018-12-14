@@ -351,7 +351,7 @@
   import UpLoad from "../../common/UPLOAD.vue"
 
   export default {
-    props: ["ids", "addEmployLog", 'isEdit', 'editId'],
+    props: ["ids", "addStaffDialog", 'isEdit', 'editId'],
     components: {Organization, UpLoad},
     data() {
       return {

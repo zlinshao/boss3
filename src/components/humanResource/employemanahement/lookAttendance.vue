@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      emptyText: "",
+      emptyText: " ",
       lookAttendanceDialog: false,
       attendanceData: [],   // 考勤时间
       params: {
@@ -63,8 +63,33 @@ export default {
         if(res.data.code == "20000") {
           let obj = null;
           this.emptyText = " ";
+          let  year = new Date().getFullYear();
+          let month = new Date().getMonth() + 1;
+          let days= new Date().getDate();
           res.data.data.data[0].sort_dimension.forEach((item, index) => {
             obj = {}
+            let currentAttendance = false;  // 今天是否有排班
+            let currentMon = false;   // 早上是否有 实际打卡
+            let currentWan = false;   // 下班是否有 实际打卡 
+              item.forEach((a, b) => {
+                if(a.dimensions.day <= days) {
+                  if(a.event_attribute == 3) {
+                    currentAttendance = true;
+                  }
+                  if(a.event_attribute == 1) {
+                    currentMon = true;
+                  }
+                  if(a.event_attribute == 2)   {
+                    currentWan = true;
+                  }
+                  if(currentAttendance && !currentMon) {
+                    obj.resultWork = "缺卡";
+                  }
+                  if(currentAttendance && !currentWan) {
+                    obj.resultOffWork = "缺卡";
+                  }
+                }
+              })
             item.forEach((val, key) => {
               obj.sign_date = val.sign_date;
               if(val.classes) {

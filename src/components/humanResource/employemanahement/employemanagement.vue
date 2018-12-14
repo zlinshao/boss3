@@ -12,7 +12,12 @@
         </div>
       </el-header>
       <el-main style="padding: 0">
-        <el-table :data="staffDate"  border style="width: 100%">
+        <el-table :data="staffDate"  border style="width: 100%"
+                        v-loading="isLoading" 
+                        :empty-text="emptyText"  
+                        element-loading-text="拼命加载中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(255, 255, 255, 0)">
           <el-table-column prop="name" label="姓名">
             <template slot-scope="scope">
               <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
@@ -69,7 +74,7 @@
     <!-- 导出考勤 -->
     <ImportAttendance :lookImportAttendance="lookImportAttendance" @close="closeImportAttendce"></ImportAttendance>
     <!-- 新增员工 -->
-    <addEmploy :editId="editId" :isEdit="isEdit" :addEmployLog="addEmployLog" @close="closeAddEmploy"></addEmploy>
+    <addEmploy :editId="editId" :isEdit="isEdit" :addStaffDialog="addStaffDialog" @close="closeAddEmploy"></addEmploy>
     <!-- 查看员工详情 -->
     <EmployeeDetails :ids="class_empDetail_id" :lookEmployDetailLog="lookEmployDetailLog" @close="closeEmployDetail"></EmployeeDetails>
     <!-- 查看奖励记录 -->
@@ -112,7 +117,7 @@ export default {
       lookApprovalLog: false,  // 查看审批
       lookRewardLog: false,  // 查看奖励记录
       lookDailyLog: false,  // 查看日报
-      addEmployLog: false,  // 新增人员
+      addStaffDialog: false,  // 新增人员
       lookEmployDetailLog: false,  // 查看员工
       lookImportAttendance: false,  // 导出考勤
       total: 0,
@@ -141,7 +146,9 @@ export default {
         is_recursion: 1,
         // entry_time: [],
         // leave_time: [],
-      }
+      },
+      isLoading: false,
+      emptyText: " ",
     }
   },
   mounted() {
@@ -155,9 +162,11 @@ export default {
     },
     // 获取列表
     getEmploy() {
+       this.isLoading = true;
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
         console.log(res.data.data.data, "11111")
         if(res.data.code == "70010") {
+          this.emptyText = " ";
           this.total = res.data.count;
           this.staffDate = res.data.data.data;
           res.data.data.data.forEach((item, index) => {
@@ -172,13 +181,16 @@ export default {
               this.staffDate[index].roleStr = roleStr;
             })
           })
-          
+          this.isLoading = false;
+        } else {
+           this.emptyText = "暂无数据";
+          this.isLoading = false;
         }
       })
     },
     // 新增人员
     addLookEmploy(val, id) {
-      this.addEmployLog = true;
+      this.addStaffDialog = true;
       if(val == '1') {
         this.isEdit = false;
       } else if(val == '2') {
@@ -187,7 +199,7 @@ export default {
       }
     },
     closeAddEmploy() {
-       this.addEmployLog = false;
+       this.addStaffDialog = false;
        this.isEdit = false;
     },
     // 导出考勤
