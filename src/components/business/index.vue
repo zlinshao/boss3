@@ -38,66 +38,54 @@
         </el-row>
       </div>
       <!--时间-->
-      <div>
-        <el-row :gutter="20">
-          <el-col :span="15">
-            <div style="margin-top: 20px;">
-              <span>时间：</span>
-              <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
-                <el-radio :label="1">最近1天</el-radio>
-                <el-radio :label="7">最近7天</el-radio>
-                <el-radio :label="30">最近30天</el-radio>
-                <el-radio label="day">
-                  <template>
-                    <el-input type="number" size="mini" style="width: 80px;" v-model="helpParams.days" @change="handleInputDays"></el-input>
-                  </template>
-                  天
-                </el-radio>
-                <el-radio label="date">
-                  <template>
-                    <el-date-picker
-                      v-model="helpParams.dateTime"
-                      size="mini"
-                      type="daterange"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      value-format="yyyy-MM-dd"
-                    >
-                    </el-date-picker>
-                  </template>
-                </el-radio>
-              </el-radio-group>
-              <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
-            </div>
-          </el-col>
-          <el-col :span="9">
-            <div style="margin-top: 20px;width: 100%;">
-              <el-row :gutter="20">
-                <el-col :span="4">
-                  <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;" @change="handleAddCompare">增加对比项</el-checkbox>
-                </el-col>
-                <el-col :span="6">
-                  <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope">
-                    <el-option value="inner" label="区域内排序"></el-option>
-                    <el-option value="" label="区域间排序"></el-option>
-                  </el-select>
-                </el-col>
-                <el-col :span="6">
-                  <el-select v-model="params.order_field" size="mini" clearable @change="handleOrderField">
-                    <el-option v-for="field in businessFieldList" :label="field.name" :key="field.value" :value="field.value"></el-option>
-                  </el-select>
-                </el-col>
-                <el-col :span="6">
-                  <el-radio-group v-model="params.order_sort" @change="handleOrderSort">
-                    <el-radio label="asc">升序</el-radio>
-                    <el-radio label="desc">降序</el-radio>
-                  </el-radio-group>
-                </el-col>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
+      <div class="container">
+        <div style="margin-top: 20px; width: 55%">
+          <span>时间：</span>
+          <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
+            <el-radio :label="1">最近1天</el-radio>
+            <el-radio :label="7">最近7天</el-radio>
+            <el-radio :label="30">最近30天</el-radio>
+            <el-radio label="day">
+              <template>
+                <el-input type="number" size="mini" style="width: 80px;" v-model="helpParams.days" @change="handleInputDays"></el-input>
+              </template>
+              天
+            </el-radio>
+            <el-radio label="date">
+              <template>
+                <el-date-picker
+                  v-model="helpParams.dateTime"
+                  size="mini"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  value-format="yyyy-MM-dd"
+                >
+                </el-date-picker>
+              </template>
+            </el-radio>
+          </el-radio-group>
+          <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
+        </div>
+        <div style="margin-top: 20px;width: 45%">
+          <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;" @change="handleAddCompare">增加对比项</el-checkbox>
+
+          <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope" style="margin: 0 15px;">
+            <el-option value="inner" label="区域内排序"></el-option>
+            <el-option value="" label="区域间排序"></el-option>
+          </el-select>
+
+          <el-select v-model="params.order_field" size="mini" clearable @change="handleOrderField">
+            <el-option v-for="field in businessFieldList" :label="field.name" :key="field.value" :value="field.value"></el-option>
+          </el-select>
+
+          <el-radio-group v-model="params.order_sort" @change="handleOrderSort" style="margin-left: 15px; ">
+            <el-radio label="asc">升序</el-radio>
+            <el-radio label="desc">降序</el-radio>
+          </el-radio-group>
+
+        </div>
       </div>
       <div style="margin-top: 30px;">
         <el-table
@@ -169,7 +157,7 @@
           </div>
       </el-dialog>
       <el-dialog
-        title="数据详情"
+        :title="currentDetailTitle"
         :visible.sync="infoDetailVisible"
         width="60%"
         @close="handleCloseInfoDetail"
@@ -320,7 +308,8 @@
             "rent.pay_back_avg": '租房回款变化(元)',
             "renter.price_diff_avg": '租房平均差价变化'
           },
-          currentTitle: ''
+          currentTitle: '',
+          currentDetailTitle: ''
         }
       },
       mounted() {
@@ -655,6 +644,7 @@
         },
         //单元格被单击
         handleCellClick(row) {
+          this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} )`;
           var detailParams = {};
           detailParams.start_time = row.start;
           detailParams.end_time = row.end;
@@ -748,6 +738,12 @@
     .businessBg{
       color: white;
       background-color: #DDAF6A !important;
+    }
+    .container{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
     }
   }
 </style>
