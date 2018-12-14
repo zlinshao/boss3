@@ -53,7 +53,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4" style="text-align: center; margin-top: 10px;">
-                <el-button type="text" size="mini" @click="addEditReward(1)">新增记录</el-button>
+                <el-button type="text" size="mini" @click="addEditReward('1')">新增记录</el-button>
               </el-col>
             </el-row>
           </el-form>
@@ -79,7 +79,7 @@
                 </div>
               </el-col>
               <el-col :span="3" style="text-align: right;cursor: pointer;padding-top: 8px;">
-                <span @click="editRecord(item)" style="color: #409eff;">
+                <span @click="addEditReward('2',item)" style="color: #409eff;">
                   <i class="el-icon-edit"></i>编辑
                 </span>
                 <span @click="removeRecord(item.detail_id)" style="color: #409eff;margin-left: 6px;">
@@ -160,10 +160,10 @@
 </template>
 
 <script>
-import UpLoad from "../../common/UPLOAD.vue"
+import UPLOAD from "../../common/UPLOAD.vue"
 export default {
   props: ["ids", "lookRewardLog", "names", "orgs", "roles", "times"],
-  components: {UpLoad},
+  components: {UPLOAD},
   data() {
     return {
       //  isUpload: false,
@@ -251,8 +251,9 @@ export default {
         if (res.data.code === "100100") {
           this.detail = res.data.data;
           this.rewardreForm.praiseNumber = res.data.data.praises;
-          console.log(res.data.data.praises, "111111")
-          console.log(this.rewardreForm.praiseNumber, "111111")
+          this.rewardreForm.criticismNumber = res.data.data.criticisms;
+          this.rewardreForm.doubtNumber = res.data.data.doubts;
+          this.rewardreForm.otherNumber = res.data.data.others;
         } else {
           this.detail = {};
           this.$notify.warning({
@@ -266,8 +267,9 @@ export default {
     getImg(val) {
       this.params.images = val[1];
     },
-    addEditReward(val) {
-      this.addRecordDiag = true;
+    addEditReward(val, item) {
+      console.log(item, "222222")
+      this.editStaffRecordDialogVisible = true;
       if (val == 1) {
         this.addRewardReord();
       } else if (val == 2) {
@@ -297,10 +299,11 @@ export default {
     editRecord(val) {
       this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {uesr_id: this.uesr_id}).then(res => {
         if (res.data.code === '10000') {
-          console.log(res.data.data)
-          
-          // this.params.type = res.data.data.type;
-          // this.params.remark = res.data.data.remark;
+          console.log(res)
+          if(res.data.data) {
+            this.params.type = res.data.data.type;
+            this.params.remark = res.data.data.remark;
+          }
           if (res.data.data && res.data.data.images.length > 0) {
             let data = {};
             res.data.data.images.forEach((item) => {

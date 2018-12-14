@@ -392,14 +392,13 @@ export default {
   },
   methods: {
     handleSelectionChange(val) {
-      console.log(val, "33333")
-      this.communityName = val[0].village_name;
     //  只支持删除一个
     this.communityArr = [];
     this.multipleSelection = val;
       // 默认选择所属部门
        this.selectedID = [];
        if(val.length) {
+          this.communityName = val[0].village_name;
          this.personalList.forEach((item, index) => {
           if(item.id == val[0].id) {
               item.orgs.forEach((value, key) => {
