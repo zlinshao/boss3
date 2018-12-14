@@ -149,7 +149,9 @@
         </el-table>
         <el-pagination
           :total="businessTotal"
-          :page-size="10"
+          :page-size="businessCurrentPageSize"
+          :current-page="businessCurrentPage"
+          @current-change="handleChangePage"
           layout="total,prev,pager,next"
           style="text-align: right;margin-top: 20px;"
         ></el-pagination>
@@ -351,7 +353,14 @@
           businessLoading: false,
           businessTotal: 0,
           businessFieldList: [],
+          businessCurrentPageSize: 10,
+          businessCurrentPage: 1,
           chart_field: '',
+        }
+      },
+      computed: {
+        currentBusinessList: function () {
+          return this.businessList.slice((businessCurrentPage - 1) * businessCurrentPageSize , businessCurrentPage * businessCurrentPageSize);
         }
       },
       mounted() {
@@ -361,6 +370,10 @@
         this.getBusinessList();
       },
       methods: {
+        handleChangePage(page) {
+          this.businessCurrentPage = page;
+          this.getBusinessList();
+        },
         //字段排序
         handleOrderField(val) {
           this.params.order_field = val;
@@ -401,6 +414,7 @@
               this.businessLoading = false;
               this.businessEmptyText = ' ';
               this.businessList = res.data.data.data;
+              this.businessList = this.businessList.slice((this.businessCurrentPage - 1) * this.businessCurrentPageSize , this.businessCurrentPage * this.businessCurrentPageSize);
               this.businessTotal = res.data.data.data.length;
               this.params.page_id = res.data.data.page_id;
             }else {
