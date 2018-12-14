@@ -17,6 +17,7 @@
     watch: {
       chartData: function (val) {
         this.chartData  = val;
+        this.drawChart(this.chartData);
       }
     },
     mounted() {
@@ -27,13 +28,12 @@
         this.$refs.chartLine.innerHTML  = '';
         let chart = new this.$G2.Chart({
           container: this.$refs.chartLine,
-          // width:500,
           forceFit: true,
           height: 400,
         });
         chart.source(data);
         chart.scale('value', {
-          min: 100
+          min: 0
         });
         chart.tooltip({
           crosshairs: {
