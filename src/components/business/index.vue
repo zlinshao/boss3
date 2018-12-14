@@ -40,7 +40,7 @@
       <!--时间-->
       <div>
         <el-row :gutter="20">
-          <el-col :span="15">
+          <el-col :span="14">
             <div style="margin-top: 20px;">
               <span>时间：</span>
               <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
@@ -68,10 +68,10 @@
                   </template>
                 </el-radio>
               </el-radio-group>
-              <el-button type="primary" size="mini" @click="handleDownFiltrate">确定筛选</el-button>
+              <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
             </div>
           </el-col>
-          <el-col :span="9">
+          <el-col :span="10">
             <div style="margin-top: 20px;width: 100%;">
               <el-row :gutter="20">
                 <el-col :span="4">
