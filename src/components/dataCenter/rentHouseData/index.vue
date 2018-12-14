@@ -346,6 +346,8 @@
                   v-model="achParams.start"
                   type="datetime"
                   placeholder="选择开始时间"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   default-time="12:00:00">
                 </el-date-picker>
               </el-form-item>
@@ -357,6 +359,8 @@
                   size="mini"
                   v-model="achParams.end"
                   type="datetime"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   placeholder="选择结束时间"
                   default-time="12:00:00">
                 </el-date-picker>
@@ -500,17 +504,16 @@
             params: this.cityForm
           });
         } else {
-          header = this.$http.get(globalConfig.server + 'performance/renter/export', {
-            params: this.achParams
-          });
+          window.location.href = globalConfig.server + 'performance/renter/export?start=' + this.achParams.start + '&end=' + this.achParams.end;
+          this.achParams.start = '';
+          this.achParams.end = '';
+          this.achievementVisible = false;
+          return;
         }
         header.then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
-          this.achievementVisible = false;
-          this.achParams.start = '';
-          this.achParams.end = '';
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';
