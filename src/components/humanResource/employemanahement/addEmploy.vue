@@ -293,7 +293,7 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="身份证复印件">
-                    <UpLoad :ID="'copyIDCard'" :isClear="isClear" @getImg="IDcard"></UpLoad>
+                    <UpLoad :ID="'copyIDCard'" :isClear="isClear" @editImage="editID" @getImg="IDcard"></UpLoad>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
@@ -365,8 +365,9 @@
         positionDisabled: true,
         postDisabled: true,
         detailData: {},
+        // 新增字段 ========
+        editID: {},
         params: {
-          // 新增字段 ========
           image_info: {
             doc_photo: [],   // 身份证
             bank: [],       // 银行卡
@@ -633,6 +634,8 @@
       getStaffInfo() {
         this.$http.get(this.url + 'organization/staff/' + this.editId).then((res) => {
           if (res.data.code === '710910') {
+            // 获取图片
+            console.log(res, "44444444")
             this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;

@@ -164,7 +164,7 @@ export default {
     getEmploy() {
        this.isLoading = true;
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
-        console.log(res.data.data.data, "11111")
+        // console.log(res.data.data.data, "11111")
         if(res.data.code == "70010") {
           this.emptyText = " ";
           this.total = res.data.count;

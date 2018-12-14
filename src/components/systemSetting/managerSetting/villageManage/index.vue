@@ -7,7 +7,7 @@
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
-          <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button>
+          <!-- <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button> -->
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
