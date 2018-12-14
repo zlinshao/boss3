@@ -8,7 +8,7 @@
             <div>
                 <el-form  ref="form" label-width="80px">
                     <el-form-item label='公司' required>
-                        <el-select v-model="params.corp_id" placeholder="请选择公司" @change='selectCorpName'>
+                        <el-select value-key v-model="params.corp_id" placeholder="请选择公司" @change='selectCorpName'>
                             <el-option
                             v-for="item in companyList"
                             :key="item.id"
@@ -35,7 +35,7 @@ export default {
             companyList: [],                        //公司列表
             params:{
                 house_id:'',                        //房屋id
-                corp_id:511,                        //公司id(默认)
+                corp_id:1,                        //公司id(默认)
                 corp_name:'南京乐伽商业管理有限公司', //公司名称(默认)
             }
         }
@@ -91,7 +91,7 @@ export default {
         //初始化数据
         init(){
             this.params.house_id = '';
-            this.params.corp_id = 511;
+            this.params.corp_id = 1;
             this.params.corp_name = '南京乐伽商业管理有限公司';
         },
         //查询分公司
@@ -99,6 +99,11 @@ export default {
             this.$http.get(globalConfig.server + '/organization/org/company').then(res => {
                 if(res.data.code === '20010'){
                     this.companyList = res.data.data
+                    //添加默认
+                    this.companyList.unshift({
+                        company_id: 1,
+                        name: '南京乐伽商业管理有限公司'
+                    })
                 }
             })
         },

@@ -136,6 +136,7 @@
         });
       },
       editRecord(val) {
+        console.log(val, "11111")
         this.record = val;
         this.editStaffRecordDialog = true;
       },

@@ -228,6 +228,23 @@
               </el-col>
             </el-row>
             <el-row class="el_row_border">
+               <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">行政审核</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="params.verify_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in administrativeReviewList" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -254,7 +271,7 @@
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
                         <el-option key="6" label="快到期（15天内）" value="6">快到期（15天内）</el-option>
-                        <el-option v-if="this.is_rent ? true : false" key="7" label="90天内" value="7">90天内</el-option>
+                        <el-option v-if="this.is_rent ? false : true" key="7" label="90天内" value="7">90天内</el-option>
                         <el-option key="4" label="已结束" value="4">已结束</el-option>
                         <el-option key="5" label="已过期" value="5">已过期</el-option>
                       </el-select>
@@ -470,7 +487,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
+                      <span @click="getImage(scope.row.address, scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -497,7 +514,8 @@
                   </el-table-column>
                 </el-table>
                 <!-- 合同公司联录入弹窗框 -->
-                <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog" width="70%" center class="contractPop">
+                <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog" width="70%" center class="contractPop" v-loading="contractEntryLoading"
+    element-loading-text="拼命加载中">
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF;">合同照片</div>
@@ -516,14 +534,19 @@
                       <!-- 收房行政审核 -->
                       <div >
                         <el-row>
-                          <el-col :span="12">
+                          <el-col :span="8">
                            <el-form-item  label="房屋住址" required>
                             <el-input class="input" v-model="contractForm.community_name" ></el-input>
                           </el-form-item>
                           </el-col>
-                          <el-col :span="12">
+                          <el-col :span="8">
                            <el-form-item  label="合同类型" required>
                             <el-input class="input" v-model="contractForm.type" ></el-input>
+                          </el-form-item>
+                          </el-col>
+                          <el-col :span="8">
+                           <el-form-item  label="合同编号" required>
+                            <el-input class="input" v-model="contractForm.contract_number" ></el-input>
                           </el-form-item>
                           </el-col>
                         </el-row>
@@ -686,7 +709,7 @@
                               </el-option>
                             </el-select>
                           </el-col>
-                          <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
+                          <!-- <el-col :span="6" style="float: right;" v-if=" activeName =='second'">
                             <span>押</span>
                             <el-select style="width:60px;" size="mini" v-model="contractForm.pay_type[1][index-1]" clearable>
                               <el-option v-for="item in 48" :label="item" :key="item"
@@ -695,7 +718,7 @@
                             </el-select>
                             <span>付</span>
                             <el-input size="mini" style="width:46px;" v-model="contractForm.pay_type[2][index-1]"></el-input>
-                          </el-col>
+                          </el-col> -->
                         </el-row>
                         <el-row v-if=" activeName == 'second'">
                           <el-col :span="12">
@@ -730,8 +753,8 @@
                           <el-form-item>
                             <div style="text-align: right;">
                               <!-- <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="showMask.showBtn">查看合同详情</el-button> -->
-                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2">查看合同详情</el-button>
-                              <el-button type="primary"  size="mini" @click="newBouncing('1')">对比</el-button>
+                              <el-button type="primary"  size="mini" @click="lookContractDetails" v-if="differentShow == 2" :disabled="allBtn">查看合同详情</el-button>
+                              <el-button type="primary"  size="mini" @click="newBouncing('1')" :disabled="allBtn">对比</el-button>
                             </div>
                           </el-form-item>
                         </el-row>
@@ -787,9 +810,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newBouncing('2')" size="mini" >保存页面</el-button>
-                    <el-button type="primary" @click="passAll" size="mini">全部通过</el-button>
-                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
+                    <el-button type="primary" @click="newBouncing('2')" size="mini" :disabled="allBtn">保存页面</el-button>
+                    <el-button type="primary" @click="passAll" size="mini" :disabled="allBtn">全部通过</el-button>
+                    <el-button type="primary" @click="passAllNo" size="mini" style="background: red; border-color: red;" :disabled="allBtn">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- ======================================================================== -->
@@ -947,7 +970,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
+                      <span @click="getImage2(scope.row.address, scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -974,7 +997,8 @@
                   </el-table-column>
                 </el-table>
                 <!-- 租房行政审核 -->
-                 <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog2" width="70%" center class="contractPop">
+                 <el-dialog title="合同公司联录入" :visible.sync="contractEntryDialog2" width="70%" center class="contractPop" v-loading="contractEntryLoading2"
+    element-loading-text="拼命加载中">
                   <!-- 合同照片 -->
                   <div class="contractPhoto">
                     <div style="color:#409EFF; position: relative;">合同照片</div>
@@ -1143,8 +1167,8 @@
                           <el-col :span="8"  style="float: right; text-align: right;">
                               <span>押</span>
                               <el-select style="width:60px;" size="mini" v-model="contractForm2.pay_type[1][index-1]" clearable>
-                                <el-option v-for="item in 48" :label="item" :key="item"
-                                          :value="item">
+                                <el-option v-for="(item, index) in yaNum" :label="item.label" :key="index"
+                                          :value="item.value">
                                 </el-option>
                               </el-select>
                               <span>付</span>
@@ -1155,8 +1179,8 @@
                       </div>
                     </el-form>
                     <div style="text-align: right;">
-                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2">查看合同详情</el-button>
-                    <el-button type="primary"  size="mini" @click="newBouncing2('1')">对比</el-button>
+                    <el-button type="primary"  size="mini" @click="lookContractDetails2" v-if="differentShow2 == 2" :disabled="allBtn">查看合同详情</el-button>
+                    <el-button type="primary"  size="mini" @click="newBouncing2('1')" :disabled="allBtn">对比</el-button>
                   </div>
                   </div>
                   <div class="companyClient" style="width:25%; float: left;padding-left: 20px;">
@@ -1211,9 +1235,9 @@
                       </span>
                     </el-dialog>
                   <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="newBouncing2('2')" size="mini" >保存页面</el-button>
-                    <el-button type="primary" @click="passAll2" size="mini">全部通过</el-button>
-                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;">全部不通过</el-button>
+                    <el-button type="primary" @click="newBouncing2('2')" size="mini" :disabled="allBtn">保存页面</el-button>
+                    <el-button type="primary" @click="passAll2" size="mini" :disabled="allBtn">全部通过</el-button>
+                    <el-button type="primary" @click="passAll2No" size="mini" style="background: red; border-color: red;" :disabled="allBtn">全部不通过</el-button>
                   </span>
                 </el-dialog>
                 <!-- =========================================================================== -->
@@ -1424,6 +1448,22 @@
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
+        yaNum: [
+          {value: "0", label: "0"},
+          {value: "1", label: "1"},
+          {value: "2", label: "2"},
+          {value: "3", label: "3"},
+          {value: "4", label: "4"},
+          {value: "5", label: "5"},
+          {value: "6", label: "6"},
+          {value: "7", label: "7"},
+          {value: "8", label: "8"},
+          {value: "9", label: "9"},
+          {value: "10", label: "10"},
+        ],
+        allBtn: true,
+        contractEntryLoading2: false,
+        contractEntryLoading: false,
         passAllForm: {
           contract_id: "",
           module: 1,
@@ -1489,6 +1529,7 @@
         // administrativeContentList: [],
         contractForm: {
           // staff_id: "",
+          contract_number: "",
           start_at: "",
           community_name: "",
           type: "",
@@ -1634,6 +1675,7 @@
           visit_status: '',
           note: '', //有无备忘
           submit_time: [], //提交时间
+          verify_status: '',
         },
         doc_sta: [
           {
@@ -1651,6 +1693,17 @@
           {
             value: 'published',
             title: '已通过',
+          },
+         
+        ],
+        administrativeReviewList: [
+          {
+            value: 'to_contract_review',
+            title: '等待行政审核',
+          },
+          {
+            value: 'published_verify',
+            title: '行政审核已通过',
           },
         ],
         visit_sta: [
@@ -1826,6 +1879,10 @@
            this.Inconsistent = false;
            this.differentShow = "";
            this.differentShow2 = "";
+           this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
+          this.allBtn = true;
            this.contractFormClear()
          }
       },
@@ -1834,6 +1891,10 @@
           this.Inconsistent2 = false;
           this.differentShow = "";
           this.differentShow2 = "";
+           this.newpriceLen = 1;
+           this.newpayForLen = 1
+          this.newpayTypeLen = 1,
+           this.allBtn = true;
           this.contractFormClear2()
         }
       }
@@ -1856,7 +1917,10 @@
         this.contractForm.penalty_price = "";
         this.contractForm.ready_days = "";
         this.contractForm.customer_name = "";
+        this.contractForm.community_name = "";
         this.contractForm.contract_month = "";
+        this.contractForm.contract_number = "";
+        this.contractForm.type = "";
         this.contractForm.contract_day = "";
         // this.contractForm.guarantee_month = "";
         // this.contractForm.guarantee_day = "";
@@ -1958,10 +2022,19 @@
       // 获取合同公司联录入
       getContract() {
         // this.contractEntry = true
+        
         this.$http.get(globalConfig.server + 'contract/contract_diff/detail?module=1&contract_id=' + this.contractForm.contract_id).then(res => { 
           if(res.data.code == "20020") {
               this.differentShow =  res.data.data.is_frist;
             // if(res.data.data.is_frist == 2) {
+              // console.log(res.data.data.pay_type, "666666")
+              // console.log(res.data.data.unit_price, "77777")
+              // if(res.data.data.unit_price.length > 1) {
+              //   this.contractForm.unit_price = [[],[],]
+              // }
+              // if(res.data.data.pay_type[0].length > 1)  {
+              //   this.contractForm.pay_type = [[], [],[],]
+              // }
               this.contractForm.contract_month = res.data.data.contract_month;
               this.contractForm.start_at = res.data.data.start_at;
               this.contractForm.contract_day = res.data.data.contract_day;
@@ -1972,26 +2045,31 @@
               // this.contractForm.agency_price = res.data.data.agency_price;
               // this.contractForm.agency_person = res.data.data.agency_person;
               // this.contractForm.agency_tel = res.data.data.agency_tel;
-              this.contractForm.unit_price = res.data.data.unit_price;
-              this.contractForm.pay_type = res.data.data.pay_type;
-              this.contractForm.pay_method = res.data.data.pay_method;
+              // this.contractForm.unit_price = res.data.data.unit_price;
+              // this.contractForm.pay_type = res.data.data.pay_type;
+              // this.contractForm.pay_method = res.data.data.pay_method;
               this.contractForm.mortgage_price = res.data.data.mortgage_price;
               this.contractForm.second_pay_at = res.data.data.second_pay_at;
               this.contractForm.first_pay_at = res.data.data.first_pay_at;
+     
               this.contractForm.penalty_price = res.data.data.penalty_price;
               this.contractForm.customer_name = res.data.data.customer_name;
               this.contractForm.customer_phone = res.data.data.customer_phone;
               this.contractForm.customer_card = res.data.data.customer_card;
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
+              this.contractEntryLoading = false;
+               this.allBtn = false;
             //  }
           } 
-          //  else {
-          //   this.$notify.warning({
-          //     title: "警告",
-          //     message: res.data.msg
-          //   })
-          // }
+           else {
+            // this.$notify.warning({
+            //   title: "警告",
+            //   message: res.data.msg
+            // })
+            this.contractEntryLoading = false;
+             this.allBtn = false;
+          }
         })
       },
       // 对比
@@ -2020,7 +2098,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog = false;
-            this.collectDatafunc()
+            this.collectDatafunc();
             this.contractFormClear();
           } else {
             this.$notify.warning({
@@ -2057,7 +2135,9 @@
           window.open(href, '_blank', 'width=1920,height=1080');
       },
       // 收房获取图片
-      getImage(val, id) {
+      getImage(address,val, id) {
+        // console.log(address, "111111")
+         this.contractEntryLoading = true;
         this.imgList = {};
         this.contractFormClear();
         this.contractEntryDialog = true;
@@ -2065,7 +2145,8 @@
         this.$http.get(globalConfig.server + 'lease/collect/' + val).then(res => {
           if(res.data.code == "61010") {
             this.imgList = res.data.data.photo;
-            this.contractForm.community_name = res.data.data.community_name;
+            this.contractForm.community_name = address;
+            this.contractForm.contract_number = res.data.data.contract_number;
             // this.contractForm.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
               this.contractForm.type = "新收";
@@ -2146,7 +2227,8 @@
         this.contractForm2.pay_type = [[], [],[],];
       },
       // 租房获取图片
-      getImage2(val, id) {
+      getImage2(address, val, id) {
+         this.contractEntryLoading2 = true;
         this.imgList2 = {};
         this.contractFormClear2();
         this.contractEntryDialog2 = true;
@@ -2154,7 +2236,7 @@
         this.$http.get(globalConfig.server + 'lease/rent/' + val).then(res => {
           if(res.data.code == "61110") {
             this.imgList2 = res.data.data.photo;
-            this.contractForm2.community_name = res.data.data.community_name;
+            this.contractForm2.community_name = address;
             this.contractForm2.contract_number = res.data.data.contract_number;
             //  this.contractForm2.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
@@ -2269,21 +2351,25 @@
               this.contractForm2.contract_month = res.data.data.contract_month;
               this.contractForm2.start_at = res.data.data.start_at;
               this.contractForm2.contract_day = res.data.data.contract_day;
-              this.contractForm2.unit_price = res.data.data.unit_price;
-              this.contractForm2.pay_type = res.data.data.pay_type;
-              this.contractForm2.pay_method = res.data.data.pay_method;
+              // this.contractForm2.unit_price = res.data.data.unit_price;
+              // this.contractForm2.pay_type = res.data.data.pay_type;
+              // this.contractForm2.pay_method = res.data.data.pay_method;
               this.contractForm2.mortgage_price = res.data.data.mortgage_price;
               this.contractForm2.customer_name = res.data.data.customer_name;
               this.contractForm2.customer_phone = res.data.data.customer_phone;
-              this.contractForm2.type = res.data.data.type;
+              // this.contractForm2.type = res.data.data.type;
             // }
+             this.contractEntryLoading2 = false;
+             this.allBtn = false;
           } 
-          // else {
-          //   this.$notify.warning({
-          //     title: "警告",
-          //     message: res.data.msg
-          //   })
-          // }
+          else {
+            // this.$notify.warning({
+            //   title: "警告",
+            //   message: res.data.msg
+            // })
+            this.contractEntryLoading2 = false;
+             this.allBtn = false;
+          }
         })
       },
       //  全部通过
@@ -2317,6 +2403,7 @@
               message: res.data.msg
             })
             this.contractEntryDialog2 = false;
+            // return false
             this.rentDatafunc();
             this.contractFormClear2();
           } else {
@@ -2500,7 +2587,6 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
-
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
@@ -2509,6 +2595,7 @@
             this.collectData.forEach((item) => {
               collectIdArray += item.contract_id + ',';
             });
+            collectIdArray = collectIdArray.substring(0, collectIdArray.length - 1);
             this.checkHandIn();
             this.getReturnNumber(collectIdArray, 1);
 
@@ -2567,7 +2654,7 @@
               }
             });
             this.totalNumbers = res.data.meta.total;
-
+            // return false
             let collectIdArray = '';
             this.rentData.forEach((item) => {
               collectIdArray += item.contract_id + ',';
@@ -2587,7 +2674,7 @@
         })
       },
       getName(houseIds = []) {
-        this.$http.get(globalConfig.server + '/organization/other/house-corp', {
+        this.$http.get(globalConfig.server + 'organization/other/house-corp', {
           params: {houseIds}
         }).then(res => {
           if (res.data.code === '700120') {
@@ -2889,7 +2976,7 @@
         this.currentAllot = tab.name;
         this.params.page = 1;
         this.resetting();
-        return false
+        // return false
         if (this.activeName == "first") {
           this.collectDatafunc();
         } else if (this.activeName == "second") {
@@ -2904,6 +2991,7 @@
         this.resetting();
       },
       resetting() {
+        this.params.verify_status = ''; 
         this.department = '';
         this.staff = '';
         this.params.publish_time = [];
