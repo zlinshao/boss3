@@ -277,6 +277,7 @@
         <div style="float: right;">
           <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
           </el-button>
+          <el-button type="primary" size="mini" @click="exportAch()">导出业绩数据</el-button>
           <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
         </div>
         <div style="margin-top: 40px;">
@@ -335,7 +336,41 @@
           </el-tabs>
         </div>
       </div>
+      <el-dialog :close-on-click-modal="false" title="导出业绩数据" :visible.sync="achievementVisible" width="30%">
+        <el-form :inline="true" size="medium">
+          <el-form-item label="活动时间" style="display: flex;">
+            <el-col :span="11">
+              <el-form-item prop="start">
+                <el-date-picker
+                  size="mini"
+                  v-model="achParams.start"
+                  type="datetime"
+                  placeholder="选择开始时间"
+                  default-time="12:00:00">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col style="text-align: center" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="end">
+                <el-date-picker
+                  size="mini"
+                  v-model="achParams.end"
+                  type="datetime"
+                  placeholder="选择结束时间"
+                  default-time="12:00:00">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+        </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button size="small" @click="achievementVisible = false">取&nbsp;消</el-button>
 
+            <el-button size="small" type="primary" @click="exportData(3)">导&nbsp;出
+            </el-button>
+          </div>
+      </el-dialog>
     </div>
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
@@ -351,6 +386,11 @@
     components: {Organization, RightMenu},
     data() {
       return {
+        achievementVisible: false,//导出业绩数据
+        achParams: {
+          start: '',
+          end: '',
+        },
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -440,6 +480,10 @@
         this.cityForm.page = 1;
         this.getPolyData();
       },
+      // 导出业绩数据
+      exportAch() {
+        this.achievementVisible = true;
+      },
       // 导出
       exportData(val) {
         let header;
@@ -449,23 +493,29 @@
             responseType: 'arraybuffer',
             params: this.form
           });
-        } else {
+        } else if (val === 2) {
           this.cityForm.export = 1;
           header = this.$http.get(globalConfig.server + 'performance/renter', {
             responseType: 'arraybuffer',
             params: this.cityForm
+          });
+        } else {
+          header = this.$http.get(globalConfig.server + 'performance/renter/export', {
+            params: this.achParams
           });
         }
         header.then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
-          console.log(res);
+          this.achievementVisible = false;
+          this.achParams.start = '';
+          this.achParams.end = '';
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';
           link.href = url;
-          link.setAttribute('download', 'excel.xls');
+          link.setAttribute('download', 'excel.xlsx');
           document.body.appendChild(link);
           link.click();
         });
