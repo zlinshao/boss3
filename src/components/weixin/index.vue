@@ -39,17 +39,19 @@
           <el-input size="mini" v-model="params.f_phone"></el-input>
         </el-form-item>
         <h4>6.选择好友需要的服务</h4>
-        <el-radio-group v-model="params.f_type">
-          <el-radio label="rent">租房</el-radio>
-          <el-radio label="manage">托管</el-radio>
-        </el-radio-group>
+        <el-form-item prop="f_type">
+          <el-radio-group v-model="params.f_type">
+            <el-radio label="rent">租房</el-radio>
+            <el-radio label="manage">托管</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <h4>7.房屋需求</h4>
         <p>填写您的好友求租/托管房屋的位置、租金范围、房屋的基本条件等</p>
-        <el-form-item prop="f_phone">
-          <el-input size="mini" type="textarea" :row="6" v-model="params.house_params"></el-input>
+        <el-form-item prop="house_info">
+          <el-input type="textarea" size="mini" v-model="params.house_info"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" style="width: 100%;" type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button size="mini" style="width: 100%;" type="primary" @click="submitForm('infoFrom')">提交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -68,14 +70,49 @@
               f_name: '',
               f_phone: '',
               f_type: 'rent',
-              house_params: ''
+              house_info: ''
             },
-            rules: {}
+            rules: {
+              name: [
+                { required: true, message: '请输入姓名', trigger: 'blur' },
+                { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur' }
+              ],
+              phone: [
+                { required: true, message: '请输入手机号码', trigger: 'blur' },
+                { min: 11, max: 15, message: '长度在 11 到 15 个字符', trigger: 'blur' }
+              ],
+              weixin_num: [
+                { required: true, message: '请输入微信号', trigger: 'blur' },
+              ],
+              f_name: [
+                { required: true, message: '请输入好友姓名', trigger: 'blur' },
+                { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur' }
+              ],
+              f_phone: [
+                { required: true, message: '请输入好友手机号码', trigger: 'blur' },
+                { min: 11, max: 15, message: '长度在 11 到 15 个字符', trigger: 'blur' }
+              ],
+              f_type: [
+                { required: true, message: '请选择服务类型',trigger: 'blur'}
+              ],
+              house_info: [
+                { required: true,message: '请输入房屋基本配置',trigger: 'blur'},
+                { min: 0, max: 99, message: '长度在 11 到 15 个字符', trigger: 'blur' }
+              ]
+            }
           }
       },
       methods: {
-        submitForm(form) {
-
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              console.log(this.params)
+              this.$refs[formName].resetFields();
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
         }
       }
     }
