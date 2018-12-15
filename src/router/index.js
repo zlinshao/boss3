@@ -235,6 +235,9 @@ const DetailAcievement = () => import('../components/meritPay/achievement/achiev
 const accountMmanagement = () => import('../components/meritPay/accountMmanagement/index.vue');
 const account = () => import('../components/meritPay/accountMmanagement/components/account.vue');
 
+// 微信开发者
+const weixin = ()=> import('../components/weixin/index.vue');
+
 Vue.use(Router);
 
 export default new Router({
@@ -246,6 +249,12 @@ export default new Router({
     //   name: 'Index',
     //   redirect: '/main',
     // },
+    {
+      path: '/weixin',
+      component: weixin,
+      name: '',
+      hidden: true
+    },
 
     {
       path: '/login',
