@@ -624,6 +624,7 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
+              console.log(res, "22222222")
               if(res.data.data.image_info) {
                 if(res.data.data.image_info.doc_photo) {
                   this.IDimgList = res.data.data.image_info.doc_photo;

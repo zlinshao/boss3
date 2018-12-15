@@ -90,7 +90,7 @@ export default {
       approvalVisible: false,   // 审批详情
       detailData: "",  // 审批详情内容
       isLoading: false,
-      emptyText: "",
+      emptyText: " ",
       types: "",
       dialogVisible: false,
       approvalDialog: false,
@@ -114,10 +114,6 @@ export default {
     lookApprovalLog(val) {
       this.approvalDialog = val;
     },
-    ids(val) {
-      this.params.user_id = val;
-      this.getApprovalData();
-    },
     names(val) {
       this.form.name = val;
     },
@@ -127,20 +123,40 @@ export default {
     roles(val) {
       this.form.position = val;
     },
+    ids(val) {
+      this.params.user_id = val;
+      this.getApprovalData(val);
+    },
     approvalDialog(val) {
       if(!val) {
         this.$emit("close")
-        this.approvalList = [];
-        this.form = {};
-        this.types = "";
+        this.init();
       }
     }
   },
   methods: {
+    // 清除数据
+    init() {
+      this.params = {
+        page: 1,
+        limit: 12,
+        type: "",
+        search: "",
+        user_id: ""
+      }
+    },
     // http://test.v3.api.boss.lejias.cn/attendance/flow_records?page=1&limit=12&type=&search=
-    getApprovalData() {
+    getApprovalData(val) {
        this.isLoading = true;
-      this.$http.get(globalConfig.server + 'attendance/flow_records',{params: this.params}).then(res => {
+      //  this.form = {
+      //     name: "",
+      //     department: "",
+      //     position: ""
+      //  }
+        this.types = "";
+       this.approvalList = [];
+      // this.$http.get(globalConfig.server + 'attendance/flow_records',{params: this.params}).then(res => {
+      this.$http.get(globalConfig.server + 'attendance/flow_records?user_id=' + val).then(res => {
         if(res.data.code == "10000") {
           this.emptyText = " ";
           this.approvalList = res.data.data.data;
