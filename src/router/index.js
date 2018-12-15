@@ -64,6 +64,7 @@ const PersonalRecords = () => import  ('../components/humanResource/personalReco
 const StaffRecords = () => import  ('../components/humanResource/staffRecords/index');     // add by cj 员工档案
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement');     // add by cj 人事报表
 const Employemanagement = () => import('../components/humanResource/employemanahement/employemanagement.vue')    // 员工管理
+const ResignationManagement = () => import('../components/humanResource/resignationManagement/resignationManagement.vue') // 离职管理
 
 // 人员信息管理
 const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
@@ -553,6 +554,7 @@ export default new Router({
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
         // { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
+        // { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
       ]
     },
     //write by shuisheng 2018-10-24
