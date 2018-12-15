@@ -14,22 +14,26 @@
           <el-col :span="18">
             <div>
               <el-row :gutter="20">
-                <el-col :span="cityAll ? 4 : 16">
+                <el-col :span="16">
                   <span style="color: #409EFF;">城市组成：</span>
                   <div style="display: inline-block;">
-                    <el-checkbox-group v-model="helpParams.city" @change="selectCity">
-                      <el-checkbox label="全部"></el-checkbox>
-                      <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id" v-if="!cityAll"></el-checkbox>
-                    </el-checkbox-group>
+                    <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
+                      <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
+                      <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
+                        <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
+                      </el-checkbox-group>
+                    </div>
                   </div>
                 </el-col>
                 <el-col :span="8">
                   <span style="color: #409EFF;">片区组成：</span>
                   <div style="display: inline-block;">
-                    <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
-                      <el-checkbox label="全部"></el-checkbox>
-                      <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value" v-if="!helpParams.composeShow"></el-checkbox>
-                    </el-checkbox-group>
+                    <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
+                      <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
+                      <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
+                        <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
+                      </el-checkbox-group>
+                    </div>
                   </div>
                 </el-col>
               </el-row>
@@ -252,8 +256,8 @@
         return {
           url: globalConfig.server,
           helpParams: {
-            city: ['全部'], //显示
-            compose: ['全部'], //数据来源
+            city: [], //显示
+            compose: ['新绩效组','旧绩效组'], //数据来源
             composeShow: true, //数据来源全选
             composeList: [
               {name: '新绩效组',value: 'new_perf'},
@@ -450,56 +454,59 @@
           // console.log(tab);
           return false;
         },
+        //片区组成全选
+        composeAllCheck(val) {
+          this.helpParams.compose = val ? ['新绩效组','旧绩效组'] : [];
+          if(val) {
+            this.params.compose = [];
+            this.helpParams.composeList.map(item => {
+              this.params.compose.push(item.value);
+            })
+          }else {
+            this.params.compose = [];
+          }
+        },
         //选择数据来源
         handleChangeCompose(val) {
           this.params.compose = [];
-          if(val.length >= this.helpParams.composeList.length){
-            this.helpParams.compose = ['全部'];
-            this.helpParams.composeShow = true;
-            this.params.compose = ['new_perf','old_perf'];
-            return false;
-          }
-          if(val.includes('全部')) {
-            this.helpParams.composeShow = true;
-            this.params.compose = ['new_perf','old_perf'];
-          }else {
-            this.helpParams.composeShow = false;
-            for (var i=0;i<val.length;i++){
-              this.helpParams.composeList.map(item => {
-                if(val[i] === item.name) {
-                  this.params.compose.push(item.value);
-                }
-              })
+          var ValLen = val.length;
+          var composeLen = this.helpParams.composeList.length;
+          this.helpParams.composeShow = ValLen < composeLen ? false : true;
+          this.helpParams.composeList.map(item => {
+            for (var i=0;i<ValLen;i++) {
+              if(item.name === val[i]) {
+                this.params.compose.push(item.value);
+              }
             }
+          });
+        },
+        //城市全选
+        handleCityCheckAll(val) {
+          if (val) {
+            this.params.city = [];
+            this.helpParams.city = [];
+            this.cityList.map(item => {
+              this.params.city.push(item.id);
+              this.helpParams.city.push(item.name);
+            })
+          } else {
+            this.params.city = [];
+            this.helpParams.city = [];
           }
         },
         //选择城市
         selectCity(val) {
           this.params.city = [];
-          if(val.length >= this.cityList.length){
-            this.cityAll = true;
-            this.helpParams.city = ['全部'];
-            this.cityList.map(value => {
-              this.params.city.push(value.id);
-            });
-            return false;
-          }
-          if(val.includes('全部')){
-            this.helpParams.city = ['全部'];
-            this.cityAll = true;
-            this.cityList.map(value => {
-              this.params.city.push(value.id);
-            });
-          }else {
-            this.cityAll = false;
-            for (var j=0;j<val.length;j++){
-              this.cityList.map(value => {
-                if(val[j] === value.name){
-                  this.params.city.push(value.id);
-                }
-              })
+          var ValLen = val.length;
+          var cityLen = this.cityList.length;
+          this.cityAll = ValLen < cityLen ? false : true;
+          this.cityList.map(item => {
+            for (var j=0;j<ValLen;j++) {
+              if (item.name === val[j]) {
+                this.params.city.push(item.id);
+              }
             }
-          }
+          });
         },
         //获取城市列表
         getCity() {
@@ -508,6 +515,7 @@
               this.cityList = res.data.data;
               this.cityList.map(item => {
                 this.params.city.push(item.id);
+                this.helpParams.city.push(item.name);
               })
             }else {
               this.cityList = [];
