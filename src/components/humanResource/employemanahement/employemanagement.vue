@@ -140,7 +140,7 @@ export default {
         limit: 12,
         page: 1,
         org_id: 1,
-        is_dimission: 0,
+        is_dimission: 1,
         infinite: 20,         //需要权限
         // forward: '',
         is_recursion: 1,
