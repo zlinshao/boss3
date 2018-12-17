@@ -1,42 +1,34 @@
 <template>
     <div id="business">
       <div>
+        <span style="color: #409EFF;">显示：</span>
+        <el-radio-group v-model="params.group">
+          <el-radio label="city">城市</el-radio>
+          <el-radio label="org">片区</el-radio>
+        </el-radio-group>
+      </div>
+      <div style="margin-top: 20px;">
         <el-row :gutter="20">
-          <el-col :span="4">
-            <div>
-              <span style="color: #409EFF;">显示：</span>
-              <el-radio-group v-model="params.group">
-                <el-radio label="city">城市</el-radio>
-                <el-radio label="org">片区</el-radio>
-              </el-radio-group>
+          <el-col :span="16">
+            <span style="color: #409EFF;">城市组成：</span>
+            <div style="display: inline-block;">
+              <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
+                <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
+                <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
+                  <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
+                </el-checkbox-group>
+              </div>
             </div>
           </el-col>
-          <el-col :span="18">
-            <div>
-              <el-row :gutter="20">
-                <el-col :span="16">
-                  <span style="color: #409EFF;">城市组成：</span>
-                  <div style="display: inline-block;">
-                    <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
-                      <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
-                      <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
-                        <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
-                      </el-checkbox-group>
-                    </div>
-                  </div>
-                </el-col>
-                <el-col :span="8">
-                  <span style="color: #409EFF;">片区组成：</span>
-                  <div style="display: inline-block;">
-                    <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
-                      <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
-                      <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
-                        <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
-                      </el-checkbox-group>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
+          <el-col :span="8">
+            <span style="color: #409EFF;">片区组成：</span>
+            <div style="display: inline-block;">
+              <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
+                <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
+                <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
+                  <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
+                </el-checkbox-group>
+              </div>
             </div>
           </el-col>
         </el-row>
