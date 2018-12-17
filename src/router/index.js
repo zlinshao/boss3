@@ -553,8 +553,8 @@ export default new Router({
         {path: '/staffRecords', component: StaffRecords, name: '员工档案'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
-        // { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
-        // { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
+        { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
+        { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
       ]
     },
     //write by shuisheng 2018-10-24

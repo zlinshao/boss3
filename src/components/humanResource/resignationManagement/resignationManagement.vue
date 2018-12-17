@@ -67,8 +67,10 @@
           <el-form-item label="离职原因">
             <el-input v-model="dismiss_mess" :disabled="true"></el-input>
           </el-form-item>
+          <el-form-item label="上传文件">
+            <UpLoad :ID="'files'" :isClear="isClear"  @getImg="upLoadFiles"></UpLoad>
+          </el-form-item>
         </el-form>
-          <UpLoad :ID="'files'" :isClear="isClear"  @getImg="upLoadFiles"></UpLoad>
         <span slot="footer" class="dialog-footer">
           <el-button @click="upLoadDialogVisible = false" size="mini">取 消</el-button>
           <el-button type="primary" @click="addResigntionTable" size="mini">确 定</el-button>
