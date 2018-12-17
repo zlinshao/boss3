@@ -43,7 +43,7 @@ const FinanceCustomer=()=>import('../components/financeNew/customerMange');//客
 const FinanceRunning=()=>import('../components/financeNew/runningAccount');//收支流水
 const AccountPayable=()=>import('../components/financeNew/accountPayable');//应付款项
 const AccountReceivable=()=>import('../components/financeNew/accountReceivable');//应收款项
-  
+const PendingItem = () => import  ('../components/financeNew/pendingItem');
 // 微信管理
 // const Reimbursement =()=> import  ('../comments/wechatMessage/reimbursement/index1.vue');            //微信报销
 // const Complain =()=> import  ('../comments/wechatMessage/complain/index1.vue');                      //微信投诉
@@ -506,6 +506,7 @@ export default new Router({
     //     {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
     //     {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
     //     {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
+    //     {path: '/PendingItem', component: PendingItem, name: '待处理项'},
     //   ]
     // },
 
