@@ -16,27 +16,7 @@
             <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
           </el-form-item>
           <el-form-item>
-            <el-dropdown trigger="click" @command="newAdd">
-              <el-button type="primary" size="mini">
-                新增<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="collect">应收</el-dropdown-item>
-                <el-dropdown-item command="rent">应付</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-form-item>
-          <el-form-item>
-            <el-dropdown trigger="click" @command="lookStatus">
-              <el-button type="primary" size="mini">
-                汇总<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="all">汇总</el-dropdown-item>
-                <el-dropdown-item command="collect">应收</el-dropdown-item>
-                <el-dropdown-item command="rent">应付</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-button type="primary"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown trigger="click" @command="leadingOut">
@@ -44,8 +24,8 @@
                 导出<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="collect">应收</el-dropdown-item>
-                <el-dropdown-item command="rent">应付</el-dropdown-item>
+                <el-dropdown-item command="collect">导出</el-dropdown-item>
+                <el-dropdown-item command="rent">催缴导出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-form-item>
@@ -61,7 +41,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">款项状态</div>
+                  <div class="el_col_label">入账状态</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -76,7 +56,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">补齐时间</div>
+                  <div class="el_col_label">应收日期</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -101,24 +81,22 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">部门/员工</div>
+                  <div class="el_col_label">催缴状态</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="department_name" @focus="openOrganize" placeholder="请选择部门/员工"
-                              readonly>
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="close_">清空</div>
-                      </template>
-                    </el-input>
+                    <el-select v-model="form.tag_status" clearable size="mini">
+                      <el-option label="请选择" value=""></el-option>
+                      <el-option v-for="(key,index) in tag_status" :label="key" :value="index + 1" :key="index"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
-            </el-col>
+            </el-col>  
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">付款时间</div>
+                  <div class="el_col_label">催缴日期</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -157,9 +135,26 @@
                 </el-col>
               </el-row>
             </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门/员工</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                        <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择员工"
+                                readonly>
+                        <template slot="append">
+                            <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                        </template>
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -177,8 +172,10 @@
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="collectData"
         width="100%"
-        @cell-dblclick="dblCollect"
-        @row-contextmenu="collectMenu">
+        @cell-click="showDetail"
+        @row-contextmenu="collectMenu"
+         @header-click="selectPrice"
+        >
         <el-table-column
           label="收款时间"
           prop="pay_date"
@@ -280,13 +277,24 @@
         </el-pagination>
       </div>
     </div>
-
+    <el-dialog title="收货地址" :visible.sync="addrDetail">
+    <el-table :data="addrDetails">
+        <el-table-column property="addr" label="客户姓名" width="150"></el-table-column>
+        <el-table-column property="customer.contract" label="手机号" width="200"></el-table-column>
+        <el-table-column property="addr" label="租房月数"></el-table-column>
+        <el-table-column property="addr" label="付款方式"></el-table-column>
+        <el-table-column property="addr" label="月单价"></el-table-column>
+        <el-table-column property="addr" label="合同时间周期"></el-table-column>
+        <el-table-column property="addr" label="开单人"></el-table-column>
+        <el-table-column property="addr" label="部门"></el-table-column>
+    </el-table>
+    </el-dialog>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
     <!--组织架构-->
-    <organization :organizationDialog="organizeVisible" @close="closeOrganize"></organization>
+    <organization :organizationDialog="organizeVisible" @close="closeOrganize" :type="organizeType"  @selectMember="selectMember"></organization>
 
     <!--高级筛选-->
     <!-- <FilterModule :module="filterModule" @close="closeFilter"></FilterModule> -->
@@ -295,12 +303,12 @@
     <ChargeModule :module="chargeVisible" @close="closeCharge" :title="titles"></ChargeModule>
 
     <!--编辑付款/收款时间-->
-    <!-- <ReviseTime :module="payTimeVisible" :date="payTimes" @close="closePayTime" :title="titles"></ReviseTime> -->
+    <ReviseTime :module="payTimeVisible" :date="payTimes" @close="closePayTime" :title="titles"></ReviseTime>
 
     <!--编辑补齐时间-->
-    <!-- <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime"></PolishTime> -->
+    <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime"></PolishTime>
 
-    <!-- <Remarks :module="remarkVisible" @close="closeRemark"></Remarks> -->
+    <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
 
     <!-- 科目搜索 -->
     <subjectTree :subjectDialog="subjectVisible"  :types="subjectType" @close="closeSubjectTree"
@@ -314,13 +322,13 @@
   import subjectTree from '../components/subjectTree.vue'  
 //   import FilterModule from './components/advancedFilter'
   import ChargeModule from '../components/chargeModule.vue'
-//   import ReviseTime from './components/reviseTime'
-//   import PolishTime from './components/polishTime'
+  import ReviseTime from '../components/reviseTime.vue'
+  import PolishTime from '../components/polishTime.vue'
   import Remarks from '../../common/remarks.vue'
 
   export default {
     name: "index",
-    components: {organization, RightMenu,Remarks,subjectTree,ChargeModule},
+    components: {organization, RightMenu,Remarks,subjectTree,ChargeModule,PolishTime,ReviseTime},
     data() {
       return {
         subjectType:'',
@@ -346,6 +354,7 @@
         filterModule: false,
         organizeVisible: false,
         values: ['待入账', '待结清', '已结清', '已超额',],
+        tag_status: ['违约', '延期', '贴条', '换锁','维修','资金','炸弹','调房','特殊情况'],
         form: {
             staff_ids:[],
             department_ids:[],
@@ -367,6 +376,8 @@
           receivable_sum:'',//应收金额
           received_sum:''//实收金额
         },
+        addrDetail:false,
+        addrDetails:[],
         totalNum:0,
         rangeDate:'',
         tagDate:'',
@@ -374,6 +385,8 @@
         department_name:'',
         collectLoading:false,
         collectStatus:'',
+        organizeType:'',
+        staff_name:'',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -419,12 +432,19 @@
             let params=this.form;
             this.$http.get(this.url+'account/receivable/index',{params:params}).then((res)=>{
                 if(res.data.success){
-                    this.isHigh=false;
-                    this.collectLoading=false;
-                    console.log(res);
-                    this.collectData=res.data.data.data;
-                    this.totalNum=res.data.data.count;
-                    this.sum=res.data.data.sum;
+                    if  (res.data.data.count){
+                        this.isHigh=false;
+                        this.collectLoading=false;
+                        console.log(res);
+                        this.collectData=res.data.data.data;
+                        this.totalNum=res.data.data.count;
+                        this.sum=res.data.data.sum;
+                    }else{
+                        this.collectStatus='暂无数据';
+                        this.collectData=[];
+                        this.totalNum=0;
+                    }
+                    
                 }else{
                     this.collectStatus='暂无数据';
                     this.collectData=[];
@@ -436,17 +456,49 @@
             this.subjectVisible=false;
         },
         clearSubjectTree(){
-            this.form.belong='';
-            this.form.belongName='';
+             this.form.subject_id='';
+            this.subject_name='';
         },
         openSubjectTree(){
-            this.subjectType='top';
+            this.subjectType='next';
             this.subjectVisible=true;
         },
         selectSubject(val){
-            this.form.belong=val.id;
-            this.form.belongName=val.name;
+            this.form.subject_id=val.id;
+            this.subject_name=val.name;
         },
+        closeOrganize() {
+            this.organizeVisible = false;
+          },
+         // 员工筛选
+        chooseStaff() {
+            this.organizeVisible = true;
+            this.organizeType = 'staff';
+        },
+        // 清空员工
+        closeStaff() {
+            this.form.staff_ids = [];
+            this.staff_name = '';
+        },
+        selectMember(val) {
+            if (this.organizeType === 'depart') {
+              for (var i = 0; i < val.length; i++) {
+                this.department_name = this.department_name === "" ? val[i].name : this.department_name + "," + val[i].name;
+                this.form.depart_ids.push(val[i].id);
+              }
+            } else if (this.organizeType === 'staff') {
+              for (var i = 0; i < val.length; i++) {
+                this.staff_name = this.staff_name === "" ? val[i].name : this.staff_name + "," + val[i].name;
+                this.form.staff_ids.push(val[i].id);
+              }
+            }
+          },
+        selectPrice(column,event){
+            if(column.property==="balance"){
+                alert(1);
+            }
+            
+        },  
       // 重置
       resetting() {
         this.form.keywords = '';
@@ -459,49 +511,23 @@
       leadingOut(val) {
         console.log(val);
       },
-      // 新增
-      newAdd(val) {
-        console.log(val);
-        if (val === 'collect') {
-          this.chargeVisible = true;
-          this.titles = val;
-        } else {
-          this.chargeVisible = true;
-          this.titles = val;
-        }
-      },
-      // 查看应收/应付
-      lookStatus(val) {
-        this.lookType = val;
-        if (val === 'all') {
-          this.pageNumber = 5;
-        } else {
-          this.pageNumber = 12;
-        }
-      },
-      closeFilter() {
-        this.filterModule = false;
-      },
+     
       closeCharge() {
         this.chargeVisible = false;
       },
       handleSelect(item) {
         console.log(item);
       },
-
-      // 部门员工筛选
-      openOrganize() {
-        this.organizeVisible = true;
-      },
-      // 部门员工筛选
-      closeOrganize() {
-        this.organizeVisible = false;
-      },
       close_() {
         console.log(1);
       },
-      // 双击 收
-      dblCollect(row, column, cell, event) {
+      // 
+      showDetail(row, column, cell, event) {
+          if(column.property==="addr"){//显示详情
+          console.log(row);
+            this.addrDetails.push(row);
+            this.addrDetail=true;
+          }
         // console.log(row);
         // console.log(column);
         // console.log(cell);
