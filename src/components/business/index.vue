@@ -1,42 +1,34 @@
 <template>
     <div id="business">
       <div>
+        <span style="color: #409EFF;">显示：</span>
+        <el-radio-group v-model="params.group">
+          <el-radio label="city">城市</el-radio>
+          <el-radio label="org">片区</el-radio>
+        </el-radio-group>
+      </div>
+      <div style="margin-top: 20px;">
         <el-row :gutter="20">
-          <el-col :span="4">
-            <div>
-              <span style="color: #409EFF;">显示：</span>
-              <el-radio-group v-model="params.group">
-                <el-radio label="city">城市</el-radio>
-                <el-radio label="org">片区</el-radio>
-              </el-radio-group>
+          <el-col :span="16">
+            <span style="color: #409EFF;">城市组成：</span>
+            <div style="display: inline-block;">
+              <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
+                <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
+                <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
+                  <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
+                </el-checkbox-group>
+              </div>
             </div>
           </el-col>
-          <el-col :span="18">
-            <div>
-              <el-row :gutter="20">
-                <el-col :span="16">
-                  <span style="color: #409EFF;">城市组成：</span>
-                  <div style="display: inline-block;">
-                    <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
-                      <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
-                      <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
-                        <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
-                      </el-checkbox-group>
-                    </div>
-                  </div>
-                </el-col>
-                <el-col :span="8">
-                  <span style="color: #409EFF;">片区组成：</span>
-                  <div style="display: inline-block;">
-                    <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
-                      <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
-                      <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
-                        <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
-                      </el-checkbox-group>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
+          <el-col :span="8">
+            <span style="color: #409EFF;">片区组成：</span>
+            <div style="display: inline-block;">
+              <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
+                <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
+                <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
+                  <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
+                </el-checkbox-group>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -46,7 +38,7 @@
         <div style="margin-top: 20px; width: 60%;">
           <span>时间：</span>
           <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
-            <el-radio :label="1">最近1天</el-radio>
+            <el-radio :label="0">今天</el-radio>
             <el-radio :label="7">最近7天</el-radio>
             <el-radio :label="30">最近30天</el-radio>
             <el-radio label="day">
@@ -241,6 +233,36 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
+          <el-tab-pane label="业绩" name="fourth">
+            <el-table
+              :data="detailData.performance"
+              :cell-style="DetailCellStyle2"
+              :header-cell-class-name="headerDetailStyle"
+            >
+              <el-table-column label="日期" prop="bulletin_date" min-width="130px"></el-table-column>
+              <el-table-column label="员工" prop="user"></el-table-column>
+              <el-table-column label="月单价" prop="month_price"></el-table-column>
+              <el-table-column label="价格差" prop="price_diff"></el-table-column>
+              <el-table-column label="付款方式" prop="pay_way"></el-table-column>
+              <el-table-column label="总月数" prop="sign_month"></el-table-column>
+              <el-table-column label="渠道费" prop="agency_amount">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.agency_amount">{{ scope.row.agency_amount }}</span>
+                  <span v-else>0</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
+              <el-table-column label="姓名" prop="customer"></el-table-column>
+              <el-table-column label="空置期" prop="ready_days"></el-table-column>
+              <el-table-column label="业绩" prop="performance"></el-table-column>
+              <el-table-column label="位置" prop="city"></el-table-column>
+              <el-table-column label="合同">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="goHeTongDetail(scope.row,'renter')">详情</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
         </el-tabs>
       </el-dialog>
         <div ref="lineChart"></div>
@@ -263,7 +285,7 @@
               {name: '新绩效组',value: 'new_perf'},
               {name: '旧绩效组',value: 'ord_perf'},
             ], //数据来源列表
-            time: 1, //天数
+            time: 0, //天数
             days: '',
             chooseDay: false,
             dateTime: '',
@@ -439,11 +461,13 @@
               this.businessList = this.businessList.slice((this.businessCurrentPage - 1) * this.businessCurrentPageSize , this.businessCurrentPage * this.businessCurrentPageSize);
               this.businessTotal = res.data.data.data.length;
               this.params.page_id = res.data.data.page_id;
+              this.params.addition = '';
             }else {
               this.businessLoading = false;
               this.businessEmptyText = '暂无数据';
               this.businessList = [];
               this.params.page_id = '';
+              this.params.addition = '';
             }
           }).catch(err => {
             console.log(err);
@@ -591,7 +615,7 @@
         },
         //筛选时间
         handleChangeDate(val) {
-          if(val === 1 || val === 7 || val === 30){
+          if(val === 0 || val === 7 || val === 30){
             this.handleSetTime(val);
             this.helpParams.chooseDay = false;
             this.helpParams.chooseDate = false;
@@ -612,7 +636,7 @@
           }
         },
         //设置周期
-        handleSetTime(val = 1) {
+        handleSetTime(val = 0) {
           var date = new Date();
           var end_time = date.toLocaleDateString().split("/").join("-");
           var start_time = date.setDate(date.getDate() - val);
