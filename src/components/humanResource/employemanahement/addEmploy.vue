@@ -293,34 +293,34 @@
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="身份证复印件">
-                    <UpLoad :ID="'copyIDCard'" :isClear="isClear" @editImage="editID" @getImg="IDcard"></UpLoad>
+                    <UpLoad :ID="'copyIDCard'" :isClear="isClear" :editImage="editIDCopy" @getImg="IDcard"></UpLoad>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="银行卡复印件">
-                    <UpLoad :ID="'copyBankCard'" :isClear="isClear" @getImg="BankCard"></UpLoad>
+                    <UpLoad :ID="'copyBankCard'" :isClear="isClear" :editImage="editBank" @getImg="BankCard"></UpLoad>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="劳动合同">
-                    <UpLoad :ID="'copyContract'" :isClear="isClear" @getImg="ContractCard"></UpLoad>
+                    <UpLoad :ID="'copyContract'" :isClear="isClear" :editImage="editContract" @getImg="ContractCard"></UpLoad>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="学历复印件">
-                    <UpLoad :ID="'copyEducation'" :isClear="isClear" @getImg="EducationCard"></UpLoad>
+                    <UpLoad :ID="'copyEducation'" :isClear="isClear" :editImage="editEducation" @getImg="EducationCard"></UpLoad>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="应聘表">
-                    <UpLoad :ID="'copyApply'" :isClear="isClear" @getImg="ApplyCard"></UpLoad>
+                    <UpLoad :ID="'copyApply'" :isClear="isClear" :editImage="editResume" @getImg="ApplyCard"></UpLoad>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="上家离职单位证明">
-                    <UpLoad :ID="'copyDismiss'" :isClear="isClear" @getImg="DismissCard"></UpLoad>
+                    <UpLoad :ID="'copyDismiss'" :isClear="isClear" :editImage="editResignation" @getImg="DismissCard"></UpLoad>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -366,7 +366,12 @@
         postDisabled: true,
         detailData: {},
         // 新增字段 ========
-        editID: {},
+        editIDCopy: {},
+        editBank: {},
+        editContract: {},
+        editEducation: {},
+        editResume: {},
+        editResignation: {},
         params: {
           image_info: {
             doc_photo: [],   // 身份证
@@ -463,10 +468,10 @@
       };
     },
     watch: {
-      addEmployLog(val,id) {
-        console.log(val, "22222")
-        this.addStaffDialogVisible = val;
-      },
+      // addEmployLog(val,id) {
+      //   console.log(val, "22222")
+      //   this.addStaffDialogVisible = val;
+      // },
       // addEmployDialog(val) {
       //   if(!val) {
       //     this.$emit("close")
@@ -482,6 +487,7 @@
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
+          this.isClear = true;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
@@ -517,21 +523,27 @@
       // 图片上传 ================
       IDcard(val) {
         this.params.image_info.doc_photo = val[1];
+        console.log(this.params.image_info.doc_photo, "身份证")
       },
       BankCard(val) {
         this.params.image_info.bank = val[1];
+        console.log(this.params.image_info.bank, "银行卡")
       },
       ContractCard(val) {
          this.params.image_info.labor_contract = val[1];
+         console.log(this.params.image_info.labor_contract, "合同")
       },
       EducationCard(val) {
          this.params.image_info.education = val[1];
+         console.log(this.params.image_info.education, "学历")
       },
       ApplyCard(val) {
          this.params.image_info.resume = val[1];
+         console.log(this.params.image_info.resume, "申请表")
       },
       DismissCard(val) {
          this.params.image_info.resignation = val[1];
+         console.log(this.params.image_info.resignation, "离职证明")
       },
       // ========================
       getDictionaries() {
@@ -546,14 +558,14 @@
         this.getOnJobStatus();
       },
       initial() {
-        this.params.image_info = {
-          id_card: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
+        // this.params.image_info = {
+        //   doc_photo: [],
+        //   bank: [],
+        //   contract: [],
+        //   education: [],
+        //   apply: [],
+        //   dismiss: []
+        // }
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -630,12 +642,85 @@
       //     this.postDisabled = true;
       //   }
       // },
+      // 
+      // 获取图片
+      getImgList() {
+        this.editEducation = {};
+        this.editBank = {};
+        this.editContract = {};
+        this.editResignation = {};
+        this.editResume = {};
+        this.editIDCopy = {};
+        this.params.image_info = {
+          doc_photo: [],   // 身份证
+          bank: [],       // 银行卡
+          resume: [],      // 申请表
+          resignation: [],   //  上家单位离职证明
+          labor_contract: [],  // 劳动合同
+          education: [],  // 学历复印件
+        }
+         this.$http.get(globalConfig.server + 'hrm/User/userInfo', {params: {user_id: this.editId}}).then(res => {
+           if (res.data.code == 90010) {
+             let obj1 = {};
+             let obj2 = {};
+             let obj3 = {};
+             let obj4 = {};
+             let obj5 = {};
+             let obj6 = {};
+             if(res.data.data.image_info) {
+                for( let key in res.data.data.image_info) {
+                  if(key == "education") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.params.image_info.education.push(item.id);
+                      obj1[item.id] = item.uri;
+                    })
+                    this.editEducation = obj1;
+                  }
+                  if(key == "bank") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.params.image_info.bank.push(item.id);
+                      obj2[item.id] = item.uri;
+                    })
+                    this.editBank = obj2;
+                  }
+                  if(key == "labor_contract") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.params.image_info.labor_contract.push(item.id);
+                      obj3[item.id] = item.uri;
+                    })
+                    this.editContract = obj3;
+                  }
+                  if(key == "resignation") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.params.image_info.resignation.push(item.id);
+                      obj4[item.id] = item.uri;
+                    })
+                    this.editResignation = obj4;
+                  }
+                  if(key == "resume") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.params.image_info.resume.push(item.id);
+                      obj5[item.id] = item.uri;
+                    })
+                    this.editResume = obj5;
+                  }
+                  if(key == "doc_photo") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.params.image_info.doc_photo.push(item.id);
+                      obj6[item.id] = item.uri;
+                    })
+                    this.editIDCopy = obj6;
+                  }
+                }
+              }
+           }
+         })
+      },
       //编辑时获取员工信息
       getStaffInfo() {
         this.$http.get(this.url + 'organization/staff/' + this.editId).then((res) => {
           if (res.data.code === '710910') {
-            // 获取图片
-            console.log(res, "44444444")
+            this.getImgList();
             this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
@@ -824,9 +909,11 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
+          console.log(this.params, "修改")
+          // return false
           this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
-              this.$emit('close', 'success');
+              // this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               this.initial();
               this.prompt('success', res.data.msg);
@@ -839,8 +926,8 @@
           });
         } else {
           //新增
-          console.log(this.params, "2222222");
-          return false
+          console.log(this.params, "新增");
+          // return false
           this.$http.post(this.url + 'organization/staff', this.params).then((res) => {
             if (res.data.code === '71002') {
               this.$emit('close', 'success');

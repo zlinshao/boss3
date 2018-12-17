@@ -345,6 +345,7 @@ export default {
               data[item.id] = item.url;
             });
             this.editImage = data;
+            console.log(this.editImage)
           }
         } else {
           this.$notify.warning({

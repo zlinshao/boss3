@@ -73,7 +73,7 @@
     </el-container>
     <!-- 导出考勤 -->
     <ImportAttendance :lookImportAttendance="lookImportAttendance" @close="closeImportAttendce"></ImportAttendance>
-    <!-- 新增员工 -->
+    <!-- 新增与编辑员工 -->
     <addEmploy :editId="editId" :isEdit="isEdit" :addStaffDialog="addStaffDialog" @close="closeAddEmploy"></addEmploy>
     <!-- 查看员工详情 -->
     <EmployeeDetails :ids="class_empDetail_id" :lookEmployDetailLog="lookEmployDetailLog" @close="closeEmployDetail"></EmployeeDetails>
@@ -167,7 +167,7 @@ export default {
         // console.log(res.data.data.data, "11111")
         if(res.data.code == "70010") {
           this.emptyText = " ";
-          this.total = res.data.count;
+          this.total = res.data.data.count;
           this.staffDate = res.data.data.data;
           res.data.data.data.forEach((item, index) => {
             let orgStr = "";
@@ -201,6 +201,7 @@ export default {
     closeAddEmploy() {
        this.addStaffDialog = false;
        this.isEdit = false;
+       this.getEmploy();
     },
     // 导出考勤
     lookImportanAtt() {
@@ -216,6 +217,7 @@ export default {
     },
     closeEmployDetail() {
       this.lookEmployDetailLog = false;
+      this.getEmploy();
     },
     // 查看考勤
     lookAttendance(id) {
@@ -268,12 +270,12 @@ export default {
     // 分页
     handleSizeChange(val) {
       this.params.limit = val;
-      this.refresh(this.params.limit);
+      this.getEmploy(this.params.limit);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.params.page = val;
-      this.refresh(this.params.page);
+      this.getEmploy(this.params.page);
       console.log(`当前页: ${val}`);
     },
   }
