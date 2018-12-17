@@ -241,6 +241,36 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
+          <el-tab-pane label="业绩" name="fourth">
+            <el-table
+              :data="detailData.performance"
+              :cell-style="DetailCellStyle2"
+              :header-cell-class-name="headerDetailStyle"
+            >
+              <el-table-column label="日期" prop="bulletin_date" min-width="130px"></el-table-column>
+              <el-table-column label="员工" prop="user"></el-table-column>
+              <el-table-column label="月单价" prop="month_price"></el-table-column>
+              <el-table-column label="价格差" prop="price_diff"></el-table-column>
+              <el-table-column label="付款方式" prop="pay_way"></el-table-column>
+              <el-table-column label="总月数" prop="sign_month"></el-table-column>
+              <el-table-column label="渠道费" prop="agency_amount">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.agency_amount">{{ scope.row.agency_amount }}</span>
+                  <span v-else>0</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
+              <el-table-column label="姓名" prop="customer"></el-table-column>
+              <el-table-column label="空置期" prop="ready_days"></el-table-column>
+              <el-table-column label="业绩" prop="performance"></el-table-column>
+              <el-table-column label="位置" prop="city"></el-table-column>
+              <el-table-column label="合同">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="goHeTongDetail(scope.row,'renter')">详情</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
         </el-tabs>
       </el-dialog>
         <div ref="lineChart"></div>
