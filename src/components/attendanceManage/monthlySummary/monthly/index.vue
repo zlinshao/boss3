@@ -589,6 +589,13 @@ export default {
               title: "警告",
               message: res.data.msg
             });
+          } else if(res.data.code == "70001") {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+            this.tableData = [];
+            this.total = 0;
           }
         });
     },

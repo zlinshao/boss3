@@ -6,9 +6,9 @@
           <el-button type="primary" size="mini" @click="addLookEmploy('1')">新增员工</el-button>
         </div>
         <div class="search">
-          <el-input v-model="params.keywords" placeholder="公司/部门/岗位/姓名/正式" size="mini"></el-input>
+          <el-input v-model="params.keywords" placeholder="公司/部门/岗位/姓名/正式" size="mini" @keyup.enter.prevent.native="searchEmploy" clearable></el-input>
           <el-button type="primary" size="mini" @click="searchEmploy">搜索</el-button>
-          <el-button type="primary" size="mini" @click="lookImportanAtt">导入考勤</el-button>
+          <el-button type="primary" size="mini" @click="lookImportanAtt">导出考勤</el-button>
         </div>
       </el-header>
       <el-main style="padding: 0">
@@ -28,6 +28,18 @@
           <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
           <el-table-column prop="roleStr" label="岗位名称" ></el-table-column>
           <el-table-column prop="enroll" label="入职时间" ></el-table-column>
+          <el-table-column prop="created_at" label="在职状态">
+            <template slot-scope="scope">
+              <div>
+                <!-- <span v-if="scope.row.is_on_job"><el-tag type="warning">离职</el-tag></span>
+                <span v-if="!scope.row.is_on_job"><el-tag type="success">在职</el-tag></span> -->
+                <span v-if="scope.row.status == '1'">在职</span>
+                <span v-if="scope.row.status == '2'">离职</span>
+                <span v-if="scope.row.status == '3'">禁用</span>
+                <span v-if="scope.row.status == '4'">停止留薪</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="" label="岗位状态" >
             <template slot-scope="scope">
               <div>
@@ -36,7 +48,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="levels.dictionary_name" label="正式" ></el-table-column>
+          <!-- <el-table-column prop="levels.dictionary_name" label="正式" ></el-table-column> -->
           <!-- <el-table-column label="薪资记录" ></el-table-column> -->
           <el-table-column label="奖励记录" >
             <template slot-scope="scope">
@@ -87,6 +99,8 @@
     <employemanagement :ids="class_type_id" :lookTypesettingLog="lookTypesettingLog" @close="closeTypesetting"></employemanagement>
     <!-- 审批 -->
     <Approval :ids="class_approval_id" :names="class_approval_name" :orgs="class_approval_org" :roles="class_approval_role"  :lookApprovalLog="lookApprovalLog" @close="closeApproval"></Approval>
+    <!-- 右键 -->
+    <!-- <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff> -->
     <!-- 分页 -->
     <div class="block pages">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -104,11 +118,12 @@ import employemanagement from './lookTypesetting'  // 查看考勤
 import Approval from './approval'    // 审批
 import Rewardreord from './rewardreord'
 import Daily from './daily'  // 日报
+// import AddStaff from '../../organizationNew/addStaff.vue'  // 右键
 export default {
   components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance},
   data() {
     return {
-      
+      addStaffDialog: false, // 右键
       isEdit: false,   // 编辑
       staffDate: [],   // 列表
       addEmployDialog: false,  // 新增员工

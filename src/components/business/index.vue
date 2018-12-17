@@ -38,7 +38,7 @@
         <div style="margin-top: 20px; width: 60%;">
           <span>时间：</span>
           <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
-            <el-radio :label="1">最近1天</el-radio>
+            <el-radio :label="0">今天</el-radio>
             <el-radio :label="7">最近7天</el-radio>
             <el-radio :label="30">最近30天</el-radio>
             <el-radio label="day">
@@ -285,7 +285,7 @@
               {name: '新绩效组',value: 'new_perf'},
               {name: '旧绩效组',value: 'ord_perf'},
             ], //数据来源列表
-            time: 1, //天数
+            time: 0, //天数
             days: '',
             chooseDay: false,
             dateTime: '',
@@ -615,7 +615,7 @@
         },
         //筛选时间
         handleChangeDate(val) {
-          if(val === 1 || val === 7 || val === 30){
+          if(val === 0 || val === 7 || val === 30){
             this.handleSetTime(val);
             this.helpParams.chooseDay = false;
             this.helpParams.chooseDate = false;
@@ -636,7 +636,7 @@
           }
         },
         //设置周期
-        handleSetTime(val = 1) {
+        handleSetTime(val = 0) {
           var date = new Date();
           var end_time = date.toLocaleDateString().split("/").join("-");
           var start_time = date.setDate(date.getDate() - val);

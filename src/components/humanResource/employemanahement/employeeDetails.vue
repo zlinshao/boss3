@@ -4,7 +4,7 @@
         <div class="scroll_bar">
           <el-form size="small" label-width="120px" >
             <el-tabs v-model="detailActiveName">
-              <el-tab-pane label="基础信息" name="first">
+              <el-tab-pane label="个人信息" name="first">
                 <div class="form_border">
                   <el-row :gutter="20">
                     <el-col :span="8">
@@ -186,7 +186,7 @@
                   
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="辅助信息" name="second">
+              <el-tab-pane label="工作信息" name="second">
                 <div class="form_border">
                   <el-row :gutter="24">
                     <!-- <el-col :span="8">
