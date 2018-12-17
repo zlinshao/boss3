@@ -18,40 +18,40 @@
     <div class="form">
       <el-form :model="params" :rules="rules" ref="infoFrom">
         <h4>1.您的姓名</h4>
-        <el-form-item prop="name">
-          <el-input size="mini" v-model="params.name"></el-input>
+        <el-form-item prop="user_name">
+          <el-input size="small" v-model="params.user_name"></el-input>
         </el-form-item>
         <h4>2.您的联系方式</h4>
-        <el-form-item prop="phone">
-          <el-input size="mini" v-model="params.phone"></el-input>
+        <el-form-item prop="user_phone">
+          <el-input size="small" v-model="params.user_phone"></el-input>
         </el-form-item>
         <h4>3.您的微信号</h4>
-        <el-form-item prop="weixin_num">
-          <el-input size="mini" v-model="params.weixin_num"></el-input>
+        <el-form-item prop="user_account">
+          <el-input size="small" v-model="params.user_account"></el-input>
         </el-form-item>
         <h4>您推荐的好友信息</h4>
         <h4>4.您推荐的好友姓名</h4>
-        <el-form-item prop="f_name">
-          <el-input size="mini" v-model="params.f_name"></el-input>
+        <el-form-item prop="recommend_name">
+          <el-input size="small" v-model="params.recommend_name"></el-input>
         </el-form-item>
         <h4>5.好友联系方式</h4>
-        <el-form-item prop="f_phone">
-          <el-input size="mini" v-model="params.f_phone"></el-input>
+        <el-form-item prop="recommend_phone">
+          <el-input size="small" v-model="params.recommend_phone"></el-input>
         </el-form-item>
         <h4>6.选择好友需要的服务</h4>
-        <el-form-item prop="f_type">
-          <el-radio-group v-model="params.f_type">
-            <el-radio label="rent">租房</el-radio>
-            <el-radio label="manage">托管</el-radio>
+        <el-form-item prop="recommend_type">
+          <el-radio-group v-model="params.recommend_type">
+            <el-radio :label="1">租房</el-radio>
+            <el-radio :label="2">托管</el-radio>
           </el-radio-group>
         </el-form-item>
         <h4>7.房屋需求</h4>
         <p>填写您的好友求租/托管房屋的位置、租金范围、房屋的基本条件等</p>
-        <el-form-item prop="house_info">
-          <el-input type="textarea" size="mini" v-model="params.house_info"></el-input>
+        <el-form-item prop="house_where">
+          <el-input type="textarea" size="small" v-model="params.house_where"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" style="width: 100%;" type="primary" @click="submitForm('infoFrom')">提交</el-button>
+          <el-button size="small" style="width: 100%;" type="primary" @click="submitForm('infoFrom')">提交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -63,51 +63,59 @@
         name: "index",
       data() {
           return {
+            url: globalConfig.server,
             params: {
-              name: '',
-              phone: '',
-              weixin_num: '',
-              f_name: '',
-              f_phone: '',
-              f_type: 'rent',
-              house_info: ''
+              user_name: '',
+              user_phone: '',
+              user_account: '',
+              recommend_name: '',
+              recommend_phone: '',
+              recommend_type: 1,
+              house_where: ''
             },
             rules: {
-              name: [
+              user_name: [
                 { required: true, message: '请输入姓名', trigger: 'blur' },
                 { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur' }
               ],
-              phone: [
+              user_phone: [
                 { required: true, message: '请输入手机号码', trigger: 'blur' },
                 { min: 11, max: 15, message: '长度在 11 到 15 个字符', trigger: 'blur' }
               ],
-              weixin_num: [
+              user_account: [
                 { required: true, message: '请输入微信号', trigger: 'blur' },
               ],
-              f_name: [
+              recommend_name: [
                 { required: true, message: '请输入好友姓名', trigger: 'blur' },
                 { min: 2, max: 4, message: '长度在 2 到 4 个字符', trigger: 'blur' }
               ],
-              f_phone: [
+              recommend_phone: [
                 { required: true, message: '请输入好友手机号码', trigger: 'blur' },
                 { min: 11, max: 15, message: '长度在 11 到 15 个字符', trigger: 'blur' }
               ],
-              f_type: [
+              recommend_type: [
                 { required: true, message: '请选择服务类型',trigger: 'blur'}
               ],
-              house_info: [
+              house_where: [
                 { required: true,message: '请输入房屋基本配置',trigger: 'blur'},
                 { min: 0, max: 99, message: '长度在 11 到 15 个字符', trigger: 'blur' }
               ]
-            }
+            },
           }
       },
       methods: {
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              console.log(this.params)
-              this.$refs[formName].resetFields();
+              console.log(this.params);
+              this.$http.post(this.url + '/recommend/fellow',{
+                data: this.params
+              }).then(res => {
+                console.log(res);
+              }).catch(err => {
+                console.log(err);
+              });
+              // this.$refs[formName].resetFields();
             } else {
               console.log('error submit!!');
               return false;
@@ -126,6 +134,7 @@
     width: 90%;
     padding: 15px;
     text-align: center;
+    margin: 0 auto;
     .title>h2{
       color: #409EFF;
     }
