@@ -175,7 +175,7 @@ export default {
         // 传递参数
         limit: 12,
         page: 1,
-        org_id: "",
+        org_id: [],
         search: "",
         arrange_month: "",
         is_dimission: '0'    // 离职人员
@@ -360,25 +360,29 @@ export default {
     },
     //选人组件
     openOrganizeModal(id) {
-      this.params.org_id = id;
+      // this.params.org_id = id;
       // this.follow_name = '';
       this.organizationDialog = true;
       this.type = "depart";
-      this.length = 1;
+      // this.length = 1;
     },
     selectMember(val) {
       this.type = "";
       this.length = "";
       this.follow_id = "";
       this.follow_name = "";
-      val.forEach(item => {
-        this.follow_id += item.id + ",";
-        this.follow_name = item.name + ",";
+      let arr = [];
+      let str = "";
+      val.forEach((item, index) => {
+       arr.push(item.id);
+        str += item.name + ",";
       });
-      this.params.org_id = this.follow_id.substring(
-        0,
-        this.follow_id.length - 1
-      );
+      this.follow_name = str;
+      this.params.org_id = arr;
+      // this.params.org_id = this.follow_id.substring(
+      //   0,
+      //   this.follow_id.length - 1
+      // );
       // this.params.org_id = this.follow_id;
       this.follow_name = this.follow_name.substring(
         0,
@@ -392,7 +396,7 @@ export default {
     },
     emptyFollowPeople() {
       this.follow_id = "";
-      this.params.org_id = "";
+      this.params.org_id = [];
       this.follow_name = "";
     },
     // 弹窗
@@ -446,6 +450,7 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
+      // console.log(this.params)
       this.$http
         .get(globalConfig.server + "attendance/summary", {
           params: this.params

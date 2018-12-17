@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import subjectTree from  '../subjectTree.vue'
+  import subjectTree from  '../../components/subjectTree.vue'
   export default {
     name: "add-subject",
     components:{subjectTree},

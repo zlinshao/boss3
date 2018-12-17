@@ -439,11 +439,13 @@
               this.businessList = this.businessList.slice((this.businessCurrentPage - 1) * this.businessCurrentPageSize , this.businessCurrentPage * this.businessCurrentPageSize);
               this.businessTotal = res.data.data.data.length;
               this.params.page_id = res.data.data.page_id;
+              this.params.addition = '';
             }else {
               this.businessLoading = false;
               this.businessEmptyText = '暂无数据';
               this.businessList = [];
               this.params.page_id = '';
+              this.params.addition = '';
             }
           }).catch(err => {
             console.log(err);

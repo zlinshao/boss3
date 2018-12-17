@@ -19,7 +19,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="月份">
+                <el-form-item label="部门">
                   <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
                     <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
                   </el-input>

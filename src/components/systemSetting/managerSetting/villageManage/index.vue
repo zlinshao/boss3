@@ -7,7 +7,8 @@
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
-          <!-- <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button> -->
+          <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button>
+          <!-- <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="cancelShareBtn" >取消分享</el-button> -->
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -314,6 +315,9 @@ export default {
       organizeVisible: false, // 组织架构
       communityArr: [],  // 小区数组
       orgId: [],
+      cancelShareFrom: {
+        community_id: "",
+      },
       distributionForm: {
         org_id: [],  // 部门ID
         community_id: [] // 小区ID
@@ -594,6 +598,25 @@ export default {
     // 合并
     mergeBtn() {
       this.mergeDialog = true;
+    },
+    // 取消分享
+    cancelShareBtn() {
+      this.cancelShareFrom.community_id = this.communityArr;
+      this.$http.post(this.urls + "distribution/community/un-share", this.cancelShareFrom).then(res => {
+        console.log(res, "333333")
+        if(res.data.code == "1000") {
+          this.$notify.success({
+            title: "成功",
+            message: res.data.msg
+          })
+          this.myData(1)
+        } else {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          })
+        }
+      })
     },
     // 分享
     shareBtn() {

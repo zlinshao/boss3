@@ -2,7 +2,7 @@
     <div id="employeeDetails">
       <el-dialog :close-on-click-modal="false" title="员工详情" :visible.sync="staffDetail" width="60%">
         <div class="scroll_bar">
-          <el-form size="small" label-width="120px">
+          <el-form size="small" label-width="120px" >
             <el-tabs v-model="detailActiveName">
               <el-tab-pane label="基础信息" name="first">
                 <div class="form_border">
@@ -498,12 +498,12 @@ export default {
   props: ["ids", "lookEmployDetailLog"],
   data() {
     return {
-      IDimgList: {},           // ID图片
-      BankimgList: {},        // 银行卡图片
-      ContractimgList: {},   // 合同图片
-      EducationimgList: {},  // 学历图片
-      ApplyimgList: {},      // 申请图片
-      DismissimgList: {},   // 离职证明图片
+      IDimgList: [],           // ID图片
+      BankimgList: [],        // 银行卡图片
+      ContractimgList: [],   // 合同图片
+      EducationimgList: [],  // 学历图片
+      ApplyimgList: [],      // 申请图片
+      DismissimgList: [],   // 离职证明图片
       staffDetail: false,
       detailActiveName: 'first',
       employDetailId: "",  // 员工id
@@ -563,7 +563,6 @@ export default {
         this.staffDetailData = {};
         this.currentPost = this.currentPosition = '';
         if (res.data.code === '710910') {
-          console.log(res, "1111111")
           let detail = res.data.data.detail;
           this.staffDetailData = res.data.data;
           this.entry_materials = [];
@@ -624,22 +623,39 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
-              console.log(res, "22222222")
+              console.log(res.data.data.image_info, "22222222")
               if(res.data.data.image_info) {
-                if(res.data.data.image_info.doc_photo) {
-                  this.IDimgList = res.data.data.image_info.doc_photo;
-                }
-                if(res.data.data.image_info.labor_contract) {
-                  this.ContractimgList = res.data.data.image_info.labor_contract;
-                }
-                if(res.data.data.image_info.education) {
-                  this.EducationimgList = res.data.data.image_info.education;
-                }
-                if(res.data.data.image_info.resignation) {
-                  this.DismissimgList = res.data.data.image_info.resignation;
-                }
-                if(res.data.data.image_info.resume) {
-                  this.ApplyimgList = res.data.data.image_info.resume;
+                for( let key in res.data.data.image_info) {
+                  if(key == "doc_photo") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.IDimgList.push(item.uri)
+                    })
+                  }
+                   if(key == "education") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.EducationimgList.push(item.uri)
+                    })
+                  }
+                  if(key == "labor_contract") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.ContractimgList.push(item.uri)
+                    })
+                  }
+                  if(key == "resignation") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.DismissimgList.push(item.uri)
+                    })
+                  }
+                  if(key == "resume") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.ApplyimgList.push(item.uri)
+                    })
+                  }
+                  if(key == "bank") {
+                    res.data.data.image_info[key].forEach((item, index) => {
+                      this.BankimgList.push(item.uri)
+                    })
+                  }
                 }
               }
               this.dict(res);
@@ -733,6 +749,13 @@ export default {
       font-size: 12px;
       color: #727479;
       line-height: 30px;
+    }
+    .image {
+      img {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
+      }
     }
   }
   
