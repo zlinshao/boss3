@@ -55,6 +55,23 @@
         </el-form-item>
       </el-form>
     </div>
+    <div style="width: 100%;text-align: right;">
+      <el-button type="text" size="small" @click="getDataList">查看我的邀请</el-button>
+    </div>
+    <div :class="{list : !isShow}">
+      <el-table
+        :data="inviteList"
+      >
+        <el-table-column label="好友" prop="recommend_name"></el-table-column>
+        <el-table-column label="好友联系方式" prop="recommend_phone" min-width="120px;"></el-table-column>
+        <el-table-column label="服务类别" prop="recommend_type">
+          <template slot-scope="scope">
+            <span v-text="scope.row.recommend_type === 1 ? '租房' : '托管'"></span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" prop="recommend_status"></el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -101,21 +118,54 @@
                 { min: 0, max: 99, message: '长度在 11 到 15 个字符', trigger: 'blur' }
               ]
             },
+            isShow: false,
+            inviteList: []
           }
       },
       methods: {
+        //获取邀请列表
+        getDataList() {
+          if (this.isShow) {
+            this.isShow = false;
+            return false;
+          }
+          this.$http.get(this.url + '/recommend/fellow').then(res => {
+            if(res.data.code === '20000') {
+              this.inviteList = res.data.data;
+              this.isShow = true;
+            }else {
+              this.inviteList = [];
+              this.isShow = false;
+              this.$notify.warning({
+                title: '警告',
+                message: '获取列表失败'
+              });
+            }
+          }).catch(err => {
+            console.log(err);
+          })
+        },
+          //提交邀请
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              console.log(this.params);
-              this.$http.post(this.url + '/recommend/fellow',{
-                data: this.params
-              }).then(res => {
-                console.log(res);
+              this.$http.post(this.url + '/recommend/fellow',this.params).then(res => {
+                if(res.data.code === '20000') {
+                  this.message.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  this.$refs[formName].resetFields();
+                }else {
+                  this.message.warning({
+                    title: '警告',
+                    message: res.data.msg
+                  });
+                  return false;
+                }
               }).catch(err => {
                 console.log(err);
               });
-              // this.$refs[formName].resetFields();
             } else {
               console.log('error submit!!');
               return false;
@@ -147,6 +197,9 @@
     .form{
       margin-top: 20px;
       text-align: left;
+    }
+    .list{
+      display: none;
     }
   }
 </style>
