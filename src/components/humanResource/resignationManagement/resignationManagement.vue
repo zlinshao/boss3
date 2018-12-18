@@ -124,6 +124,8 @@ export default {
         user_id: "",
         dismiss_time: "",
         dismiss_reason: "",
+        dismiss_mess: "",
+        // dismiss_type: "",
       },
       titleName: "",
       upLoadDialogVisible: false,
@@ -169,11 +171,12 @@ export default {
     addUploadFiles(val, row) {
       this.form.user_id = row.id;
       let dismiss_reason = row.staffs.dismiss_reason;
-       this.form.dismiss_time = row.staffs.dismiss_time
+      this.form.dismiss_reason = row.staffs.dismiss_reason;
+      this.form.dismiss_time = row.staffs.dismiss_time
       for (let key in dismiss_reason) {
         if(key == "dismiss_mess") {
           this.dismiss_mess = row.dismiss_mess;
-          this.form.dismiss_reason = row.dismiss_mess;
+          this.form.dismiss_mess = row.dismiss_mess;
         } else if(key == "dismiss_type") {
           if(dismiss_reason[key] == "1") {
             this.dismiss_type = "主动离职";
@@ -184,6 +187,7 @@ export default {
           } else if(dismiss_reason[key] == "4") {
             this.dismiss_type = "开除";
           }
+          // this.form.dismiss_type = dismiss_reason[key];
         }
       }
       if(val == "1") {
@@ -198,6 +202,7 @@ export default {
       this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.form.user_id, {
         dismiss_time: this.form.dismiss_time,
         dismiss_reason: this.form.dismiss_reason,
+
         resignation_form: this.form.resignation_form
       }).then(res => {
         if (res.data.code === '710418') {
@@ -285,6 +290,13 @@ export default {
 
           })
             console.log(this.resignationData)
+        } else if(res.data.code == "70011") {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          })
+          this.resignationData = [];
+          this.total = 0;
         }
       })
     },

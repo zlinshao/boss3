@@ -278,6 +278,8 @@ export default {
       })
     },
     addEditReward(val, item) {
+      this.initParams();
+      this.initEditParams();
       this.editStaffRecordDialogVisible = true;
       if (val == '1') {
         this.titleName = "新增记录";
@@ -321,6 +323,7 @@ export default {
             this.editStaffRecordDialogVisible = false;
             this.isClear = true;
             this.gerRewardReord(this.saveUid);
+            this.initParams();
           } else {
             this.$notify.warning({
               title: '警告',
