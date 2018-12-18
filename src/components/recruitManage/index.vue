@@ -372,6 +372,7 @@
                             type: 'success'
                         });
                         this.togglePositionDialogVisible = false;
+                        this.recruitID = [];
                         this.getPositionList()
                     }else{
                         this.$notify.error({
@@ -404,6 +405,7 @@
             },
             //获取招聘列表
             getPositionList(){
+                this.recruitID = [];
                 this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
                     if(res.data.code === '10000'){
                         this.positionList = res.data.data.data;
@@ -423,12 +425,9 @@
                 // console.log(this.recruitID);
                 if(this.recruitID.length){
                     this.recruitID.forEach((item, index) => {
-                        // console.log(item);
                         //已约面试
                         this.$http.get(globalConfig.server + 'hrm/interview?search=&status=1&recruitment_id=' + item).then(res => {
                             if(res.data.code === '20000'){
-                                // console.log(item, index);
-                                // console.log(this.positionList)
                                 this.$set(this.positionList[index], 'interviewDated', res.data.data.count)
                             }
                         });

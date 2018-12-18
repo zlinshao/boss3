@@ -818,6 +818,7 @@
             },
             processManageDialog(val){
                 if(!val){
+                    this.searchParam = '';
                     this.$emit('close');
                 }
             },

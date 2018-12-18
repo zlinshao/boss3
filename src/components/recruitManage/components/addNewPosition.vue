@@ -1,8 +1,8 @@
 <template>
     <div id="newPosition">
-        <el-dialog title="新增招聘职位" :visible.sync="newPositionVisible" width="50%">
+        <el-dialog title="新增招聘职位" :visible.sync="newPositionVisible" width="40%">
             <div>
-                <el-form ref="form" :model="form" label-width="80px">
+                <el-form ref="form" :model="form" size='mini' label-width="80px">
                     <el-form-item label="部门">
                         <el-input v-model="department_name" @focus="chooseDepart" placeholder="请选择部门" readonly>
                         <template slot="append">
