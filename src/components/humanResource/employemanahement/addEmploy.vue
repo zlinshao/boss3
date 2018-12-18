@@ -1123,6 +1123,7 @@
         this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
+            console.log(this.branchBankCategory)
           } else {
             this.branchBankCategory = [];
           }

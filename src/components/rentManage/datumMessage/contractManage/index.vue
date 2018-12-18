@@ -1552,7 +1552,7 @@
           // agency_price: "",   //中介费用
           // agency_person: "",  //中介人
           // agency_tel: "",     //中介电话
-          unit_price: [[],[]],      //月单价
+          unit_price: [[],[],],      //月单价
           pay_type: [[], [],[],],       //付款方式
           pay_method: [[],[],],      //支付方式
           has_pay: "",        //已支付的费用
@@ -2000,31 +2000,33 @@
         this.contractForm.pay_method[1].splice(index, 1);
       },
       newBouncing(val) {
-        console.log(this.contractForm, "444444")
-        // 字段处理
-        let obj = null;
+        let obj1 = null;
+        let obj2 = null;
         let priceArr = [];
         let payArr = [];
-       this.contractForm.unit_price[0].forEach((item, index) => {
-          obj = {price: "", period: ""};
-          obj.period = item;
-          priceArr.push(obj)
-        })
-        this.contractForm.unit_price[1].forEach((item, index) => {
-          priceArr[index].price = item;
-        })
-        this.contractForm.pay_type[0].forEach((item, index) => {
-          obj = {period: "", pay_way: "", pay_way_str: ""};
-          obj.period = item;
-          payArr.push(obj)
-        })
-        this.contractForm.pay_type[1].forEach((item, index) => {
-          payArr[index].pay_way = item;
-          payArr[index].pay_way_str = item;
-        })
-        this.contractForm.unit_price = priceArr;
-        this.contractForm.pay_type = payArr;
-        // return false
+        if(this.contractForm.unit_price[0].length >= 1 && this.contractForm.unit_price[1].length >= 1) {
+          this.contractForm.unit_price[0].forEach((item, index) => {
+            obj1 = {price: "", period: ""};
+            obj1.period = item;
+            priceArr.push(obj)
+          })
+          this.contractForm.unit_price[1].forEach((item, index) => {
+            priceArr[index].price = item;
+          })
+          this.contractForm.unit_price = priceArr;
+        }
+        if(this.contractForm.pay_type[0].length >= 1 && this.contractForm.pay_type[1].length >= 1) {
+          this.contractForm.pay_type[0].forEach((item, index) => {
+            obj2 = {period: "", pay_way: "", pay_way_str: ""};
+            obj2.period = item;
+            payArr.push(obj)
+          })
+          this.contractForm.pay_type[1].forEach((item, index) => {
+            payArr[index].pay_way = item;
+            payArr[index].pay_way_str = item;
+          })
+          this.contractForm.pay_type = payArr;
+        }
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {
@@ -2092,7 +2094,7 @@
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
               this.contractEntryLoading = false;
-               this.allBtn = false;
+              this.allBtn = false;
             //  }
           } 
            else {
@@ -2288,32 +2290,37 @@
         this.getContract2()
       },
       newBouncing2(val) {
-         // 字段处理
-        let obj = null;
+        // 字段处理
+        let obj1 = null;
+        let obj2 = null;
         let priceArr = [];
         let payArr = [];
-       this.contractForm2.unit_price[0].forEach((item, index) => {
-          obj = {price: "", period: ""};
-          obj.period = item;
-          priceArr.push(obj)
-        })
-        this.contractForm2.unit_price[1].forEach((item, index) => {
-          priceArr[index].price = item;
-        })
-        this.contractForm2.pay_type[0].forEach((item, index) => {
-          obj = {period: "", pay_way: "", pay_way_bet: ""};
-          obj.period = item;
-          payArr.push(obj)
-        })
-        this.contractForm2.pay_type[1].forEach((item, index) => {
-          payArr[index].pay_way_bet = item;
-        })
-        this.contractForm2.pay_type[2].forEach((item, index) => {
-          payArr[index].pay_way = item;
-        })
-        this.contractForm2.unit_price = priceArr;
-        this.contractForm2.pay_type = payArr;
-        // return false
+        if(this.contractForm2.unit_price[0].length >= 1 && this.contractForm2.unit_price[1].length >= 1) {
+          this.contractForm2.unit_price[0].forEach((item, index) => {
+            obj1 = {price: "", period: ""};
+            obj1.period = item;
+            priceArr.push(obj)
+          })
+          this.contractForm2.unit_price[1].forEach((item, index) => {
+            priceArr[index].price = item;
+          })
+          this.contractForm2.unit_price = priceArr;
+        }
+       if(this.contractForm2.pay_type[0].length >= 1 && this.contractForm2.pay_type[1].length >= 1) {
+          this.contractForm2.pay_type[0].forEach((item, index) => {
+            obj2 = {period: "", pay_way: "", pay_way_bet: ""};
+            obj2.period = item;
+            payArr.push(obj)
+          })
+          this.contractForm2.pay_type[1].forEach((item, index) => {
+            payArr[index].pay_way_bet = item;
+          })
+          this.contractForm2.pay_type[2].forEach((item, index) => {
+            payArr[index].pay_way = item;
+          })
+          this.contractForm2.pay_type = payArr;
+       }
+       
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm2).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {
