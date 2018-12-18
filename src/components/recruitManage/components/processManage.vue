@@ -835,6 +835,8 @@
                     if(res.data.code === '20000'){
                         // console.log(res.data.data);
                         this.interviewDatedData = res.data.data.data
+                    }else{
+                        this.interviewDatedData = []
                     }
                 });
                 //面试完毕
@@ -842,6 +844,8 @@
                     if(res.data.code === '20000'){
                         // console.log(res.data.data);
                         this.interviewFinishedData = res.data.data.data
+                    }else{
+                        this.interviewFinishedData = []
                     }
                 });
                 //待入职
@@ -853,6 +857,8 @@
                                 item.entry_time = this.timestampToDate(item.entry_other.entry_time)
                             }
                         })
+                    }else{
+                        this.toInductData = []
                     }
                 });
                 //已入职
@@ -860,6 +866,8 @@
                     if(res.data.code === '20000'){
                         // console.log(res.data.data);
                         this.inductedData = res.data.data.data
+                    }else{
+                        this.inductedData = []
                     }
                 });
             },
@@ -1317,8 +1325,16 @@
                                 message: res.data.msg,
                                 type: 'success'
                             });
+                            this.getAllData(this.id);
+                        }else{
+                            this.$notify({
+                                title: '警告',
+                                message: res.data.msg,
+                                type: 'warning'
+                            });
                         }
-                        this.getAllData(this.id);
+                        this.entryStatus.update.entry_status = '';
+                        this.is_editing_entry_statuss = '';
                     })
                 }
             },

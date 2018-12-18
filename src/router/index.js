@@ -63,7 +63,7 @@ const OrganizationNew = () => import  ('../components/humanResource/organization
 const PersonalRecords = () => import  ('../components/humanResource/personalRecords/index');
 const StaffRecords = () => import  ('../components/humanResource/staffRecords/index');     // add by cj 员工档案
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement');     // add by cj 人事报表
-const RecruitManage = () => import ('../components/recruitManage/index.vue')
+const RecruitManage = () => import ('../components/recruitManage/index.vue')                                                //招聘管理
 const Employemanagement = () => import('../components/humanResource/employemanahement/employemanagement.vue')    // 员工管理
 const ResignationManagement = () => import('../components/humanResource/resignationManagement/resignationManagement.vue') // 离职管理
 
