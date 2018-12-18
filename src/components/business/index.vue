@@ -102,7 +102,7 @@
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.group">{{ scope.row.group }}</span>
-                <span v-else>其他</span>
+                <span v-else></span>
                 <el-button v-if="scope.row.first && scope.row.group" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
               </div>
             </template>
