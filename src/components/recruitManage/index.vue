@@ -12,9 +12,9 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公司">
+                <!-- <el-form-item label="公司">
                     <el-input v-model="formInline.company" placeholder=""></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="部门">
                     <el-input v-model="department_name_search" @focus="chooseDepart" placeholder="请选择部门" readonly>
                         <template slot="append">
@@ -51,7 +51,7 @@
                         </el-row>
                     </el-header>
                     <el-main>
-                        <el-row>
+                        <el-row class='position-info'>
                             <el-col :span='2' v-if='(edit_index !== index)'>
                                 <span class='position'>{{item.role.name}}</span>
                             </el-col>
@@ -136,14 +136,15 @@
                     </el-main>
                     <el-footer>
                         <el-row :gutter="20" class='data-preview'>
-                            <el-button :span="6" @click='platformManage(item, index)'>{{item.platform ? Object.keys(item.platform).length : 0}}个平台已发布</el-button>
-                            <el-button :span="6" @click='processManage(item, index)'>{{item.interviewDated ? item.interviewDated  : 0}}人已约面试</el-button>
-                            <el-button :span="6" @click='processManage(item, index)'>{{item.interviewFinished ? item.interviewFinished  : 0}}人面试完毕</el-button>
-                            <el-button :span="6" @click='processManage(item, index)'>{{item.toInduct ? item.toInduct  : 0}}人等待入职</el-button>
-                            <el-button :span="6" @click='processManage(item, index)'>{{item.inducted ? item.inducted  : 0}}人已入职</el-button>
+                            <el-button class='button' :span="6" @click='platformManage(item, index)'>{{item.platform ? Object.keys(item.platform).length : 0}}个平台已发布</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.interviewDated ? item.interviewDated  : 0}}人已约面试</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.interviewFinished ? item.interviewFinished  : 0}}人面试完毕</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.toInduct ? item.toInduct  : 0}}人等待入职</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.inducted ? item.inducted  : 0}}人已入职</el-button>
                         </el-row>
                     </el-footer>
                 </el-container>
+                <div class='dotted-line'></div>
             </div>
         </div>
         <!--招聘详情结束-->
@@ -310,7 +311,6 @@
             },
             //编辑职位
             editPosition(index){
-                // console.log(index);
                 this.is_editing = true;
                 this.edit_index = index;
                 this.position_name = this.positionList[index].role.name;
@@ -329,8 +329,6 @@
             },
             //保存职位修改
             saveEdit(id){
-                // console.log(this.form);
-                // this.form.org_id = ''
                 this.$http.put(globalConfig.server + 'hrm/recruitment/' + id, this.form).then(res => {
                     if(res.data.code === '10030'){
                         this.$notify({
@@ -355,15 +353,12 @@
             },
             //打开开始/结束招聘对话框
             togglePosition(index){
-                // console.log(index);
                 this.position_index = index;
                 this.position_status = this.positionList[index].status;
                 this.togglePositionDialogVisible = true;
-                // console.log(this.position_status)
             },
             //确定开始/结束职位招聘
             confirmTogglePosition(id){
-                // console.log(this.position_index, this.position_status);
                 this.$http.put(globalConfig.server + 'hrm/recruitment/' + id, {'update':'status'}).then(res => {
                     if(res.data.code === '10030'){
                         this.$notify({
@@ -638,6 +633,23 @@
         padding: 0 30px;
         .positionTitle{
             font-weight: 700;
+            font-size: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            color: rgb(16, 16, 16);
+            font-style: normal;
+            letter-spacing: 0px;
+            line-height: 24px;
+        }
+        .position-info{
+            font-family: SourceHanSansSC;
+            font-weight: 400;
+            font-size: 14px;
+            color: rgb(16, 16, 16);
+            font-style: normal;
+            letter-spacing: 0px;
+            line-height: 20px;
+            text-decoration: none;
         }
         .position{
             font-weight: 700;
@@ -654,7 +666,15 @@
             height: 100%;
         }
         .data-preview{
-            color: rgb(0, 150, 136);
+            .button{
+                border: none;
+                color: rgb(0, 150, 136);
+                margin: 0 60px 0 0;
+            }
+        }
+        .dotted-line{
+            border-bottom: dotted 1px rgba(187, 187, 187, 1);
+            margin-bottom: 50px;
         }
     }
 </style>

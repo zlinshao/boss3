@@ -1,7 +1,7 @@
 <template>
     <div id="business">
       <div>
-        <span style="color: #409EFF;">显示：</span>
+        <span style="font-weight: bold;">显示：</span>
         <el-radio-group v-model="params.group">
           <el-radio label="city">城市</el-radio>
           <el-radio label="org">片区</el-radio>
@@ -10,7 +10,7 @@
       <div style="margin-top: 20px;">
         <el-row :gutter="20">
           <el-col :span="16">
-            <span style="color: #409EFF;">城市组成：</span>
+            <span style="font-weight: bold;">城市组成：</span>
             <div style="display: inline-block;">
               <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
                 <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
@@ -21,7 +21,7 @@
             </div>
           </el-col>
           <el-col :span="8">
-            <span style="color: #409EFF;">片区组成：</span>
+            <span style="font-weight: bold;">片区组成：</span>
             <div style="display: inline-block;">
               <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
                 <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
@@ -35,8 +35,8 @@
       </div>
       <!--时间-->
       <div class="container">
-        <div style="margin-top: 20px; width: 60%;">
-          <span>时间：</span>
+        <div style="margin-top: 20px; width: 58%;">
+          <span style="font-weight: bold;">时间：</span>
           <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
             <el-radio :label="0">今天</el-radio>
             <el-radio :label="7">最近7天</el-radio>
@@ -65,8 +65,8 @@
           </el-radio-group>
           <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
         </div>
-        <div style="margin-top: 20px;width: 40%;text-align:center;">
-          <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;" @change="handleAddCompare">增加对比项</el-checkbox>
+        <div style="margin-top: 20px;width: 42%;text-align:left;" class="composeCheck">
+          <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;margin-right: 50px;font-weight: bold;" @change="handleAddCompare">增加对比项</el-checkbox>
 
           <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope" style="width:20%;margin: 0 15px;">
             <el-option value="inner" label="区域内排序"></el-option>
@@ -653,7 +653,9 @@
             return "vacancyBg";
           }else if(column.label === '业绩'){
             return "businessBg";
-          }else {
+          }else if(column.label === '区域' || column.label === '时间段') {
+            return "area_time";
+          } else {
             return "otherBg";
           }
         },
@@ -776,6 +778,9 @@
     .otherBg{
       background-color: #EEEEEE !important;
     }
+    .area_time{
+      background-color: #f0f9eb !important;
+    }
     .vacancyBg{
       color: white;
       background-color: #36AA35 !important;
@@ -789,6 +794,11 @@
       display: flex;
       justify-content: space-between;
       flex-wrap: nowrap;
+    }
+    .composeCheck{
+      .el-checkbox__input.is-checked+.el-checkbox__label{
+        color: #787a7e !important;
+      }
     }
   }
 </style>
