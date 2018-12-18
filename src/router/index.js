@@ -58,6 +58,7 @@ const OrganizationNew = () => import  ('../components/humanResource/organization
 const PersonalRecords = () => import  ('../components/humanResource/personalRecords/index');
 const StaffRecords = () => import  ('../components/humanResource/staffRecords/index');     // add by cj 员工档案
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement');     // add by cj 人事报表
+const RecruitManage = () => import ('../components/recruitManage/index.vue')
 
 // 人员信息管理
 const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
@@ -547,6 +548,7 @@ export default new Router({
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构'},
         {path: '/integralManage', component: IntegralManage, name: '积分管理'},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案'},
+        {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
       ]
