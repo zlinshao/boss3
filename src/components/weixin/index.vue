@@ -122,7 +122,7 @@
               ],
               house_where: [
                 { required: true,message: '请输入房屋基本配置',trigger: 'blur'},
-                { min: 0, max: 99, message: '长度在 11 到 15 个字符', trigger: 'blur' }
+                { min: 0, max: 999, message: '长度在 0 到 999 之间', trigger: 'blur' }
               ]
             },
             isShow: false,
@@ -176,13 +176,13 @@
             if (valid) {
               this.$http.post(this.url + '/recommend/fellow',this.params).then(res => {
                 if(res.data.code === '20000') {
-                  this.message.success({
+                  this.$notify.success({
                     title: '成功',
                     message: res.data.msg
                   });
                   this.$refs[formName].resetFields();
                 }else {
-                  this.message.warning({
+                  this.$notify.warning({
                     title: '警告',
                     message: res.data.msg
                   });
