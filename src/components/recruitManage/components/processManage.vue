@@ -1,7 +1,15 @@
 <template>
     <div id="process">
         <el-dialog  :visible.sync="processManageDialog" width="80%">
-           <el-tabs v-model="activeName" @tab-click="handleClick">
+           <el-tabs v-model="activeName" @tab-click="handleClick" class='el-tabs'>
+               <el-form inline size='mini' class="search">
+                    <el-form-item label="">
+                        <el-input v-model='searchParam' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button  @click='search'>搜索</el-button>
+                    </el-form-item>
+                </el-form>
                 <el-tab-pane label="已约面试" name="first">
                     <el-table
                         :data="interviewDatedData"
@@ -642,7 +650,7 @@
     import Organization from '../../common/organization.vue';
     import InductionMaterials from './components/inductionMaterials.vue';
     import BackgroundReseach from './components/backgroundReseach.vue';
-    import BasicInfo from './components/BasicInfo.vue';
+    import BasicInfo from './components/basicInfo.vue';
     // import BasicDetail from './components/BasicDetail.vue';
     export default {
         name: 'process',
@@ -668,6 +676,7 @@
                 is_editing_interview_status:'',
                 lookUpResumeDialog : false,
                 album:[],
+                searchParam: '',
                 interviewParams: {
                     name: '',
                     gender: '',
@@ -826,7 +835,57 @@
         },
         methods: {
             handleClick(){
-
+                console.log(this.activeName)
+            },
+            //搜索
+            search(){
+                let _status = '';
+                switch (this.activeName){
+                    
+                    case 'first' :
+                        _status = 1;
+                        break;
+                    case 'second' :
+                        _status = 2;
+                        break;
+                    case 'third' :
+                        _status = 3;
+                        break;
+                    case 'fourth' :
+                        _status = 4;
+                        break;
+                }
+                this.$http.get(globalConfig.server + 'hrm/interview?search=' + this.searchParam + '&status=' + _status + '&recruitment_id=' + this.id).then(res => {
+                    if(this.activeName === 'first'){
+                        if(res.data.code === '20000'){
+                            this.interviewDatedData = res.data.data.data
+                        }else{
+                            this.interviewDatedData = []
+                        }
+                    }
+                    if(this.activeName === 'second'){
+                        if(res.data.code === '20000'){
+                            this.interviewFinishedData = res.data.data.data
+                        }else{
+                            this.interviewFinishedData = []
+                        }
+                    }
+                    if(this.activeName === 'third'){
+                        if(res.data.code === '20000'){
+                            this.toInductData = res.data.data.data
+                        }else{
+                            this.toInductData = []
+                        }
+                    }
+                    if(this.activeName === 'fourth'){
+                        if(res.data.code === '20000'){
+                            this.inductedData = res.data.data.data
+                        }else{
+                            this.inductedData = []
+                        }
+                    }
+                    
+                });
             },
             //获取数据
             getAllData(id){
@@ -1505,6 +1564,14 @@
     .edit-condition{
         display: flex;
         justify-content: center;
+    }
+    .el-tabs{
+        position: relative;
+    }
+    .search{
+        position: absolute;
+        right: 35px;
+        top: 0;
     }
 </style>
 

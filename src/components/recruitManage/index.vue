@@ -278,7 +278,7 @@
         },
         watch: {
             togglePositionDialogVisible(val){
-                console.log(val);
+                // console.log(val);
                 if(!val){
                     this.position_index = '';
                     this.position_status = '';
@@ -310,7 +310,7 @@
             },
             //编辑职位
             editPosition(index){
-                console.log(index);
+                // console.log(index);
                 this.is_editing = true;
                 this.edit_index = index;
                 this.position_name = this.positionList[index].role.name;
@@ -329,7 +329,7 @@
             },
             //保存职位修改
             saveEdit(id){
-                console.log(this.form);
+                // console.log(this.form);
                 // this.form.org_id = ''
                 this.$http.put(globalConfig.server + 'hrm/recruitment/' + id, this.form).then(res => {
                     if(res.data.code === '10030'){
@@ -355,15 +355,15 @@
             },
             //打开开始/结束招聘对话框
             togglePosition(index){
-                console.log(index);
+                // console.log(index);
                 this.position_index = index;
                 this.position_status = this.positionList[index].status;
                 this.togglePositionDialogVisible = true;
-                console.log(this.position_status)
+                // console.log(this.position_status)
             },
             //确定开始/结束职位招聘
             confirmTogglePosition(id){
-                console.log(this.position_index, this.position_status);
+                // console.log(this.position_index, this.position_status);
                 this.$http.put(globalConfig.server + 'hrm/recruitment/' + id, {'update':'status'}).then(res => {
                     if(res.data.code === '10030'){
                         this.$notify({
@@ -415,20 +415,20 @@
                         this.positionList = [];
                         this.recruitID = [];
                     }
-                    console.log(this.positionList)
+                    // console.log(this.positionList)
                 })
             },
             //获取已约面试/面试结束/等待入职/已经入职数据
             getInterviewDated(){
-                console.log(this.recruitID);
+                // console.log(this.recruitID);
                 if(this.recruitID.length){
                     this.recruitID.forEach((item, index) => {
                         // console.log(item);
                         //已约面试
                         this.$http.get(globalConfig.server + 'hrm/interview?search=&status=1&recruitment_id=' + item).then(res => {
                             if(res.data.code === '20000'){
-                                console.log(item, index);
-                                console.log(this.positionList)
+                                // console.log(item, index);
+                                // console.log(this.positionList)
                                 this.$set(this.positionList[index], 'interviewDated', res.data.data.count)
                             }
                         });
@@ -513,7 +513,7 @@
                 let str = ''
                 this.status.forEach(item => {
                     if(item.id === _id){
-                        console.log(item.dictionary_name)
+                        // console.log(item.dictionary_name)
                         str = item.dictionary_name;
                         return str 
                     }
@@ -537,7 +537,7 @@
             //选择部门
             selectMember(val){
                 if(!this.selectPositionDialogVisible){
-                    console.log(val);
+                    // console.log(val);
                     this.params.org_id = val[0].id;
                     this.department_name_search = val[0].name;
                 }else{
@@ -555,7 +555,7 @@
                 this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then((res) => {
                     if (res.data.code === '20000') {
                         this.duty = res.data.data.data;
-                        console.log(res.data.data.data)
+                        // console.log(res.data.data.data)
                     }
                 });
             },
@@ -620,13 +620,13 @@
             },
            /************************* 平台相关*************************************/
            platformManage(item, index){
-               console.log(item, index)
+            //    console.log(item, index)
                this.platformDialog = true;
                this.$store.dispatch('toEdit',item)
            },
            /************************* 流程管理*************************************/
            processManage(item, index){
-               console.log(item, index);
+            //    console.log(item, index);
                this.id = item.id;
                this.processDialog = true;
            }
