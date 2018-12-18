@@ -1,76 +1,184 @@
 <template>
   <div id="employemanagement">
     <el-container>
-      <el-header style="overflow: hidden;line-height: 60px;">
-        <div class="addstaff">
-          <el-button type="primary" size="mini" @click="addLookEmploy('1')">新增员工</el-button>
-        </div>
-        <div class="search">
-          <el-input v-model="params.keywords" placeholder="公司/部门/岗位/姓名/正式" size="mini"></el-input>
-          <el-button type="primary" size="mini" @click="searchEmploy">搜索</el-button>
-          <el-button type="primary" size="mini" @click="lookImportanAtt">导入考勤</el-button>
-        </div>
-      </el-header>
-      <el-main style="padding: 0">
-        <el-table :data="staffDate"  border style="width: 100%"
-                        v-loading="isLoading" 
-                        :empty-text="emptyText"  
-                        element-loading-text="拼命加载中"
-                        element-loading-spinner="el-icon-loading"
-                        element-loading-background="rgba(255, 255, 255, 0)">
-          <el-table-column prop="name" label="姓名">
-            <template slot-scope="scope">
-              <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
-              &nbsp;&nbsp;&nbsp;
-              <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;"></i>
-            </template>
-          </el-table-column>
-          <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
-          <el-table-column prop="roleStr" label="岗位名称" ></el-table-column>
-          <el-table-column prop="enroll" label="入职时间" ></el-table-column>
-          <el-table-column prop="" label="岗位状态" >
-            <template slot-scope="scope">
-              <div>
-                <span v-if="scope.row.is_on_job"><el-tag type="danger">禁用</el-tag></span>
-                <span v-if="!scope.row.is_on_job"><el-tag type="success">启用</el-tag></span>
+        <div class="highRanking">
+          <el-header style="overflow: hidden;line-height: 60px;">
+            <div class="addstaff">
+              <el-button type="primary" size="mini" @click="addLookEmploy('1')">新增员工</el-button>
+            </div>
+            <div class="search">
+              <el-input v-model="params.keywords" placeholder="公司/部门/岗位/姓名/正式" size="mini" @keyup.enter.prevent.native="searchEmploy" clearable></el-input>
+              <el-button type="primary" size="mini" @click="searchEmploy">搜 索</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">高 级</el-button>
+              <el-button type="primary" size="mini" @click="lookImportanAtt">导出考勤</el-button>
+            </div>
+          </el-header>
+          <el-main style="padding: 0">
+            <div class="filter high_grade" :class="isHigh? 'highHide':''">
+                <el-form :inline="true" onsubmit="return false" :model="params" size="mini" label-width="100px">
+                  <div class="filterTitle">
+                    <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+                  </div>
+                  <el-row class="el_row_border">
+                    <el-col :span="8">
+                      <el-col :span="8">
+                          <div class="el_col_label">部门</div>
+                      </el-col>
+                      <el-col :span="16" class="el_col_option">
+                        <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
+                          <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
+                        </el-input>
+                      </el-col>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">入职时间</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-form-item>
+                            <el-date-picker
+                              v-model="params.entry_time"
+                              type="daterange"
+                              value-format="yyyy-MM-dd"
+                              range-separator="至"
+                              start-placeholder="开始日期"
+                              end-placeholder="结束日期">
+                            </el-date-picker>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">离职时间</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-form-item>
+                            <el-date-picker
+                              v-model="params.leave_time"
+                              type="daterange"
+                              value-format="yyyy-MM-dd"
+                              range-separator="至"
+                              start-placeholder="开始日期"
+                              end-placeholder="结束日期">
+                            </el-date-picker>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                  </el-row>
+                  <!-- <el-row class="el_row_border">
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">在职状态</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-select v-model="params.is_dimission" size="mini" clearable>
+                            <el-option key="0" label="在职" value="0">在职</el-option>
+                            <el-option key="1" label="离职" value="1">离职</el-option>
+                            <el-option key="10" label="禁用" value="10">禁用</el-option>
+                          </el-select>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">是否转正</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-select v-model="params.forward" size="mini" clearable>
+                            <el-option key="0" label="已转正" value="1">已转正</el-option>
+                            <el-option key="1" label="未转正" value="2">未转正</el-option>
+                          </el-select>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                  </el-row> -->
+                  <div class="btnOperate">
+                    <el-button size="mini" type="primary" @click="searchEmploy">搜索</el-button>
+                    <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+                    <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+                  </div>
+                </el-form>
               </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="levels.dictionary_name" label="正式" ></el-table-column>
-          <!-- <el-table-column label="薪资记录" ></el-table-column> -->
-          <el-table-column label="奖励记录" >
-            <template slot-scope="scope">
-              <el-button type="text" @click="lookRewardRecord(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.enroll, scope.row.id)">查看</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="排版" >
-            <template slot-scope="scope">
-              <el-button type="text" @click="lookTypesetting(scope.row.id)">查看</el-button>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column label="日报" >
-            <template slot-scope="scope">
-              <el-button type="text" @click="lookDaily(scope.row.id)">查看</el-button>
-            </template>
-          </el-table-column> -->
-          <el-table-column label="审批" >
-            <template slot-scope="scope">
-              <el-button type="text" @click="lookApproval(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.id)">查看</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column  label="考勤" >
-            <template slot-scope="scope">
-              <el-button type="text" @click="lookAttendance(scope.row.id)">查看</el-button>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column  label="编辑" >
-            <template slot-scope="scope">
-              <el-button type="text" @click="editEmploy(scope.row.id)">编辑</el-button>
-            </template>
-          </el-table-column> -->
-        </el-table>
-      </el-main>
+            <el-table :data="staffDate"  border style="width: 100%"
+                            v-loading="isLoading" 
+                            :empty-text="emptyText"  
+                            element-loading-text="拼命加载中"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(255, 255, 255, 0)">
+              <el-table-column prop="name" label="姓名">
+                <template slot-scope="scope">
+                  <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
+                  &nbsp;&nbsp;&nbsp;
+                  <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;"></i>
+                </template>
+              </el-table-column>
+              <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
+              <el-table-column prop="roleStr" label="岗位名称" ></el-table-column>
+              <el-table-column prop="enroll" label="入职时间" ></el-table-column>
+              <el-table-column prop="created_at" label="在职状态">
+                <template slot-scope="scope">
+                  <div>
+                    <!-- <span v-if="scope.row.is_on_job"><el-tag type="warning">离职</el-tag></span>
+                    <span v-if="!scope.row.is_on_job"><el-tag type="success">在职</el-tag></span> -->
+                    <span v-if="scope.row.status == '1'">在职</span>
+                    <span v-if="scope.row.status == '2'">离职</span>
+                    <span v-if="scope.row.status == '3'">禁用</span>
+                    <span v-if="scope.row.status == '4'">停止留薪</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="" label="岗位状态" >
+                <template slot-scope="scope">
+                  <div>
+                    <span v-if="scope.row.is_on_job"><el-tag type="danger">禁用</el-tag></span>
+                    <span v-if="!scope.row.is_on_job"><el-tag type="success">启用</el-tag></span>
+                  </div>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column prop="levels.dictionary_name" label="正式" ></el-table-column> -->
+              <!-- <el-table-column label="薪资记录" ></el-table-column> -->
+              <el-table-column label="奖励记录" >
+                <template slot-scope="scope">
+                  <el-button type="text" @click="lookRewardRecord(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.enroll, scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column label="排版" >
+                <template slot-scope="scope">
+                  <el-button type="text" @click="lookTypesetting(scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column label="日报" >
+                <template slot-scope="scope">
+                  <el-button type="text" @click="lookDaily(scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column> -->
+              <el-table-column label="审批" >
+                <template slot-scope="scope">
+                  <el-button type="text" @click="lookApproval(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column  label="考勤" >
+                <template slot-scope="scope">
+                  <el-button type="text" @click="lookAttendance(scope.row.id)">查看</el-button>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column  label="编辑" >
+                <template slot-scope="scope">
+                  <el-button type="text" @click="editEmploy(scope.row.id)">编辑</el-button>
+                </template>
+              </el-table-column> -->
+            </el-table>
+          </el-main>
+      </div>
     </el-container>
+    <!-- 组织架构 -->
+     <Organization  :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></Organization>
     <!-- 导出考勤 -->
     <ImportAttendance :lookImportAttendance="lookImportAttendance" @close="closeImportAttendce"></ImportAttendance>
     <!-- 新增与编辑员工 -->
@@ -87,6 +195,8 @@
     <employemanagement :ids="class_type_id" :lookTypesettingLog="lookTypesettingLog" @close="closeTypesetting"></employemanagement>
     <!-- 审批 -->
     <Approval :ids="class_approval_id" :names="class_approval_name" :orgs="class_approval_org" :roles="class_approval_role"  :lookApprovalLog="lookApprovalLog" @close="closeApproval"></Approval>
+    <!-- 右键 -->
+    <!-- <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff> -->
     <!-- 分页 -->
     <div class="block pages">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -96,6 +206,7 @@
 </template>
 
 <script>
+import Organization from '../../common/organization'  // 组织架构
 import ImportAttendance from './importAttendance'  // 导出考勤
 import addEmploy from './addEmploy'   // 新增员工
 import EmployeeDetails from './employeeDetails'  // 员工详情
@@ -104,11 +215,18 @@ import employemanagement from './lookTypesetting'  // 查看考勤
 import Approval from './approval'    // 审批
 import Rewardreord from './rewardreord'
 import Daily from './daily'  // 日报
+// import AddStaff from '../../organizationNew/addStaff.vue'  // 右键
 export default {
-  components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance},
+  components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance, Organization},
   data() {
     return {
-      
+      follow_name: "", //跟进人
+      follow_id: "", // 部门ID
+      organizationDialog: false,
+      type: "",
+      length: 0,
+      isHigh: false,
+      // addStaffDialog: false, // 右键
       isEdit: false,   // 编辑
       staffDate: [],   // 列表
       addEmployDialog: false,  // 新增员工
@@ -142,10 +260,10 @@ export default {
         org_id: 1,
         is_dimission: 0,
         infinite: 20,         //需要权限
-        // forward: '',
+        forward: '',
         is_recursion: 1,
-        // entry_time: [],
-        // leave_time: [],
+        entry_time: [],
+        leave_time: [],
       },
       isLoading: false,
       emptyText: " ",
@@ -160,9 +278,21 @@ export default {
      this.params.page = 1;
      this.getEmploy();
     },
+    // 高级搜索
+    highGrade() {
+      this.isHigh = !this.isHigh;
+    },
+    resetting() {
+      this.params.is_dimission = '';
+      this.params.forward = '';
+      this.params.entry_time = [];
+      this.params.leave_time = [];
+    },
     // 获取列表
     getEmploy() {
-       this.isLoading = true;
+      this.isLoading = true;
+      // this.resignationData = [];
+      // this.total = 0;
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
         // console.log(res.data.data.data, "11111")
         if(res.data.code == "70010") {
@@ -182,8 +312,14 @@ export default {
             })
           })
           this.isLoading = false;
-        } else {
-           this.emptyText = "暂无数据";
+        } else if(res.data.code == "70011") {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          })
+          this.staffDate = [];
+          this.total = 0;
+          this.emptyText = "暂无数据";
           this.isLoading = false;
         }
       })
@@ -278,17 +414,61 @@ export default {
       this.getEmploy(this.params.page);
       console.log(`当前页: ${val}`);
     },
+    // 组织架构
+    openOrganizeModal(id) {
+      this.params.org_id = id;
+      // this.follow_name = '';
+      this.organizationDialog = true;
+      this.type = "depart";
+      this.length = 1;
+    },
+    selectMember(val) {
+      this.type = "";
+      this.length = "";
+      this.follow_id = "";
+      this.follow_name = "";
+      val.forEach(item => {
+        this.follow_id += item.id + ",";
+        this.follow_name = item.name + ",";
+      });
+      this.params.org_id = this.follow_id.substring(
+        0,
+        this.follow_id.length - 1
+      );
+      // this.params.org_id = this.follow_id;
+      this.follow_name = this.follow_name.substring(
+        0,
+        this.follow_name.length - 1
+      );
+    },
+    // 关闭模态框
+    closeModal() {
+      this.organizationDialog = false;
+      // this.params.org_id = this.follow_id
+    },
+    emptyFollowPeople() {
+      this.follow_id = "";
+      this.params.org_id = "";
+      this.follow_name = "";
+    },
   }
 };
 </script>
 
 <style lang="scss">
   #employemanagement {
+    .highRanking {
+      width: 100%;
+    }
     .addstaff {
       float: left
     }
+    .filter {
+      padding: 10px 10px 0 10px;
+    }
     .search {
       float: right;
+      width: 30%;
       .el-input {
         width: 52%;
       }
