@@ -56,7 +56,14 @@
       </el-form>
     </div>
     <div style="width: 100%;text-align: right;">
-      <el-button type="text" size="small" @click="getDataList">查看我的邀请</el-button>
+      <el-button type="text" size="small" @click="openInvite">查看我的邀请</el-button>
+    </div>
+    <div :class="{getNum: !getPhone}">
+      <el-input type="text" size="small" v-model="user_phone" placeholder="请输入您的手机号码"></el-input>
+      <div style="text-align: right;margin: 15px 0">
+        <el-button type="normal" size="mini" @click="handleCancel">取消</el-button>
+        <el-button type="primary" size="mini" @click="getDataList">确定</el-button>
+      </div>
     </div>
     <div :class="{list : !isShow}">
       <el-table
@@ -119,17 +126,34 @@
               ]
             },
             isShow: false,
-            inviteList: []
+            inviteList: [],
+            user_phone: '',
+            getPhone: false
           }
       },
       methods: {
+        handleCancel() {
+          this.getPhone = false;
+          this.isShow = false;
+          this.user_phone = '';
+        },
+        openInvite() {
+          if (this.getPhone) {
+            this.getPhone = false;
+            this.isShow = false;
+            this.user_phone = '';
+            return false;
+          } else {
+            this.getPhone = true;
+          }
+        },
         //获取邀请列表
         getDataList() {
-          if (this.isShow) {
-            this.isShow = false;
+          if (!this.user_phone) {
+            this.$message("请输入手机号码");
             return false;
           }
-          this.$http.get(this.url + '/recommend/fellow').then(res => {
+          this.$http.get(this.url + `/recommend/fellow/${this.user_phone}`).then(res => {
             if(res.data.code === '20000') {
               this.inviteList = res.data.data;
               this.isShow = true;
@@ -198,7 +222,7 @@
       margin-top: 20px;
       text-align: left;
     }
-    .list{
+    .list,.getNum{
       display: none;
     }
   }
