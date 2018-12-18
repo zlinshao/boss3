@@ -149,8 +149,9 @@
         },
         //获取邀请列表
         getDataList() {
-          if (!this.user_phone) {
-            this.$message("请输入手机号码");
+          var reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+          if (!this.user_phone || !reg.test(this.user_phone)) {
+            this.$message("手机号码格式不正确");
             return false;
           }
           this.$http.get(this.url + `/recommend/fellow/${this.user_phone}`).then(res => {
