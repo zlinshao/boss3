@@ -284,6 +284,14 @@
                                       value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="在职状态">
+                      <el-select v-model="params.statusValue" placeholder="请选择">
+                        <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
                 <!-- <el-col :span="8">
                   <el-form-item label="企业邮箱">
                     <el-input placeholder="请输入企业邮箱" v-model="params.mail" clearable></el-input>
@@ -366,6 +374,12 @@
         postDisabled: true,
         detailData: {},
         // 新增字段 ========
+        statusOptions:[
+          {value: "1", label: "在职"},
+          {value: "2", label: "离职"},
+          {value: "3", label: "停薪"},
+          {value: "4", label: "停薪"},
+        ],
         editIDCopy: {},
         editBank: {},
         editContract: {},
@@ -381,6 +395,7 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
+          statusValue: "",
           // ================
           duty_id: [],
           position_id: [],
@@ -468,6 +483,9 @@
       };
     },
     watch: {
+      isClear: function (val) {
+        this.isClear = val;
+      },
       // addEmployLog(val,id) {
       //   console.log(val, "22222")
       //   this.addStaffDialogVisible = val;
@@ -479,6 +497,17 @@
       // },
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
+        console.log("111")
+        this.params.image_info = {
+          doc_photo: [],
+          bank: [],
+          contract: [],
+          education: [],
+          apply: [],
+          dismiss: []
+        }
+        this.isClear = true;
+        console.log("222")
       },
       addStaffDialogVisible(val) {
         if (!val) {
@@ -523,27 +552,27 @@
       // 图片上传 ================
       IDcard(val) {
         this.params.image_info.doc_photo = val[1];
-        console.log(this.params.image_info.doc_photo, "身份证")
+        // console.log(this.params.image_info.doc_photo, "身份证")
       },
       BankCard(val) {
         this.params.image_info.bank = val[1];
-        console.log(this.params.image_info.bank, "银行卡")
+        // console.log(this.params.image_info.bank, "银行卡")
       },
       ContractCard(val) {
          this.params.image_info.labor_contract = val[1];
-         console.log(this.params.image_info.labor_contract, "合同")
+        //  console.log(this.params.image_info.labor_contract, "合同")
       },
       EducationCard(val) {
          this.params.image_info.education = val[1];
-         console.log(this.params.image_info.education, "学历")
+        //  console.log(this.params.image_info.education, "学历")
       },
       ApplyCard(val) {
          this.params.image_info.resume = val[1];
-         console.log(this.params.image_info.resume, "申请表")
+        //  console.log(this.params.image_info.resume, "申请表")
       },
       DismissCard(val) {
          this.params.image_info.resignation = val[1];
-         console.log(this.params.image_info.resignation, "离职证明")
+        //  console.log(this.params.image_info.resignation, "离职证明")
       },
       // ========================
       getDictionaries() {
@@ -558,14 +587,14 @@
         this.getOnJobStatus();
       },
       initial() {
-        // this.params.image_info = {
-        //   doc_photo: [],
-        //   bank: [],
-        //   contract: [],
-        //   education: [],
-        //   apply: [],
-        //   dismiss: []
-        // }
+        this.params.image_info = {
+          doc_photo: [],
+          bank: [],
+          contract: [],
+          education: [],
+          apply: [],
+          dismiss: []
+        }
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -575,6 +604,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
+        this.params.statusValue = "";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -659,6 +689,8 @@
           labor_contract: [],  // 劳动合同
           education: [],  // 学历复印件
         }
+        this.isClear = true;
+        console.log("444444")
          this.$http.get(globalConfig.server + 'hrm/User/userInfo', {params: {user_id: this.editId}}).then(res => {
            if (res.data.code == 90010) {
              let obj1 = {};
@@ -720,6 +752,7 @@
       getStaffInfo() {
         this.$http.get(this.url + 'organization/staff/' + this.editId).then((res) => {
           if (res.data.code === '710910') {
+            console.log("33333")
             this.getImgList();
             this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
@@ -915,6 +948,7 @@
             if (res.data.code === '71002') {
               // this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
+              this.isClear = true;
               this.initial();
               this.prompt('success', res.data.msg);
             } else {
@@ -926,7 +960,7 @@
           });
         } else {
           //新增
-          console.log(this.params, "新增");
+          // console.log(this.params, "新增");
           // return false
           this.$http.post(this.url + 'organization/staff', this.params).then((res) => {
             if (res.data.code === '71002') {
@@ -934,6 +968,8 @@
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
               this.isClear = true;
+              this.initial();
+
             } else {
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);

@@ -34,7 +34,11 @@
       </div>
       <div class="table">
         <el-table :data="resignationData" border style="width: 100%">
-          <el-table-column prop="name" label="姓名" ></el-table-column>
+          <el-table-column prop="name" label="姓名" >
+            <template slot-scope="scope">
+              <span @click="lookResigntionElempoly(scope.row.id)">{{scope.row.name}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="orgStr" label="部门" ></el-table-column>
           <el-table-column prop="roleStr" label="职位" ></el-table-column>
           <el-table-column prop="enroll" label="入职时间" ></el-table-column>
@@ -98,6 +102,8 @@
           <el-button type="primary" @click="viewContract = false" size="mini">确 定</el-button>
         </span>
       </el-dialog>
+      <!-- 离职员工详情 -->
+      <RetiredEmployeeDetails :ids="ids" :lookResigntion="lookResigntion" @close="closeResigntion"></RetiredEmployeeDetails>
       <!-- 分页 -->
     <div class="block pages">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -109,10 +115,13 @@
 <script>
 import Organization from '../../common/organization'  // 组织架构
 import UpLoad from "../../common/UPLOAD"   // 上传文件
+import RetiredEmployeeDetails from "./components/retiredEmployeeDetails"  // 离职员工详情
 export default {
-  components: {Organization, UpLoad},
+  components: {Organization, UpLoad, RetiredEmployeeDetails},
   data() {
     return {
+      ids: "",
+      lookResigntion: false,
       viewResignationFrom: false,
       imagesResignationList: [],
       viewContract: false,
@@ -168,6 +177,15 @@ export default {
     }
   },
   methods: {
+    // 查看离职员工详情
+    lookResigntionElempoly(id) {
+      this.lookResigntion = true;
+      this.ids = id;
+    },
+    closeResigntion() {
+      this.lookResigntion = false;
+      this.getResignationEmploye();
+    },
     addUploadFiles(val, row) {
       this.form.user_id = row.id;
       let dismiss_reason = row.staffs.dismiss_reason;
