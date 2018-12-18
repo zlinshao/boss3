@@ -21,14 +21,16 @@
                   </div>
                   <el-row class="el_row_border">
                     <el-col :span="8">
-                      <el-col :span="8">
+                      <el-row>
+                        <el-col :span="8">
                           <div class="el_col_label">部门</div>
-                      </el-col>
-                      <el-col :span="16" class="el_col_option">
-                        <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
-                          <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
-                        </el-input>
-                      </el-col>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
+                            <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
+                          </el-input>
+                        </el-col>
+                      </el-row>
                     </el-col>
                     <el-col :span="8">
                       <el-row>
@@ -49,7 +51,7 @@
                         </el-col>
                       </el-row>
                     </el-col>
-                    <el-col :span="8">
+                    <!-- <el-col :span="8">
                       <el-row>
                         <el-col :span="8">
                           <div class="el_col_label">离职时间</div>
@@ -67,7 +69,7 @@
                           </el-form-item>
                         </el-col>
                       </el-row>
-                    </el-col>
+                    </el-col> -->
                   </el-row>
                   <!-- <el-row class="el_row_border">
                     <el-col :span="12">
@@ -283,18 +285,20 @@ export default {
       this.isHigh = !this.isHigh;
     },
     resetting() {
-      this.params.is_dimission = '';
+      // this.params.is_dimission = '';
+      this.follow_name = "";
       this.params.forward = '';
+      this.params.org_id = 1;
       this.params.entry_time = [];
       this.params.leave_time = [];
     },
     // 获取列表
     getEmploy() {
       this.isLoading = true;
-      // this.resignationData = [];
-      // this.total = 0;
+      console.log(this.params, "11111111")
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
         // console.log(res.data.data.data, "11111")
+         this.isHigh = false;
         if(res.data.code == "70010") {
           this.emptyText = " ";
           this.total = res.data.data.count;
