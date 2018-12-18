@@ -151,9 +151,7 @@
           prop="status">
           <template slot-scope="scope">
             <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待结算</el-button>
-            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
-            <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
-            <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
+            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">已结算</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -311,8 +309,15 @@
         if (val.clickIndex === 'delete') {
           this.openDelete(val.data.id);
         } else if (val.clickIndex === 'settle') {
-          this.detailData=val.data;
-          this.pendVisible = true;
+          if(val.data.status===1){
+            this.detailData=val.data;
+            this.pendVisible = true;
+          }else{
+            this.$message({
+              type: 'info',
+              message: '已结算'
+            });
+          }
         }
       },
       //右键参数

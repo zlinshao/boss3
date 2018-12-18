@@ -31,10 +31,10 @@
               <el-input placeholder="请输入内容" v-model="detailed_address" disabled></el-input>
             </el-form-item>
             <el-form-item label="水费">
-              <el-input placeholder="请输入内容" v-model="form.water_fee" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="form.water_fee" type="number" clearable></el-input>
             </el-form-item>
             <el-form-item label="差额">
-              <el-input placeholder="请输入内容" v-model="form.diff_fee" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="form.diff_fee" type="number" clearable></el-input>
             </el-form-item>
             <el-form-item label="电费">
               <el-input placeholder="请输入内容" v-model="form.elec_fee" clearable></el-input>
@@ -66,10 +66,10 @@
               <el-input placeholder="请输入内容" v-model="form.refund_should" clearable></el-input>
             </el-form-item>
             <el-form-item label="实际扣款">
-              <el-input placeholder="请输入内容" v-model="form.refund_diff" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="refund_diff" disabled></el-input>
             </el-form-item>
             <el-form-item label="实际退款">
-              <el-input placeholder="请输入内容" v-model="form.refund_real" clearable></el-input>
+              <el-input placeholder="请输入内容" v-model="refund_real" disabled></el-input>
             </el-form-item>
             <el-form-item label="结算方式">
               <el-select v-model="form.account_type" size="mini" clearable>
@@ -115,7 +115,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary" @click="settleAccount">结&nbsp;算</el-button>
+        <el-button size="small" v-if="showBtn" type="primary" @click="settleAccount">结&nbsp;算</el-button>
       </div>
     </el-dialog>
 
@@ -139,6 +139,7 @@
         dialogVisible: false,
         subjectType:'next',
         fullLoading: false,
+        showBtn:true,
         pickerOptions: {
           shortcuts: [{
             text: '今天',
@@ -207,6 +208,23 @@
     },
     activated() {
     },
+    computed:{
+        refund_diff:function(){
+            return Number(this.form.water_fee)
+            +Number(this.form.diff_fee)
+            +Number(this.form.elec_fee)
+            +Number(this.form.gas_fee)
+            +Number(this.form.property_fee)
+            +Number(this.form.net_fee)
+            +Number(this.form.sublet_fee)
+            +Number(this.form.manage_fee)
+            +Number(this.form.check_fee)
+            +Number(this.form.penalty_fee);
+        },
+        refund_real:function(){
+          return Number(this.form.refund_should)-this.refund_diff;
+        }
+    },
     watch: {
       module(val) {
         this.dialogVisible = val;
@@ -238,8 +256,8 @@
           this.form.check_fee=data.check_fee;
           this.form.penalty_fee=data.penalty_fee;
           this.form.refund_should=data.refund_should;
-          this.form.refund_diff=data.refund_diff;
-          this.form.refund_real=data.refund_real;
+          // this.form.refund_diff=data.refund_diff;
+          // this.form.refund_real=data.refund_real;
           this.form.account_num=data.account_num;
           this.form.collect_rent=data.collect_rent;
           this.form.staff_id=data.staff_id;
@@ -250,10 +268,16 @@
           this.form.end_date=data.end_date;
           this.form.status=data.status;
           this.id=data.id;
+          if(data.status===2){
+            this.showBtn=false;
+          }else{
+            this.showBtn=true;
+          }
       },
       // 结算
       settleAccount() {
-        console.log(this.form);
+        this.form.refund_diff=this.refund_diff;
+        this.form.refund_real=this.refund_real;
         this.$http.post(globalConfig.finance_server+'account/pending/settle/'+this.id,this.form).then((res)=>{
             if(res.data.success){
               this.prompt('success', res.data.msg);
