@@ -685,7 +685,9 @@
           }
           var obj = {
             chart_field,
-            page_id: this.params.page_id
+            page_id: this.params.page_id,
+            order_field: this.params.order_field, //列表字段排序
+            order_sort: this.params.order_sort, //升序降序 asc升 desc降
           };
           this.getChartData(obj);
         },
