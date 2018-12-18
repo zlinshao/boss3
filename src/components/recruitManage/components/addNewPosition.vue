@@ -231,7 +231,6 @@
                 this.file = {};
                 this.duty = [];
                 this.position = [];
-
                 this.form.org_id = '';
                 this.form.position_id = '';
                 this.form.year.min = '';
