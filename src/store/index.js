@@ -13,6 +13,7 @@ import badge from './modules/badge';  //每日弹窗
 import onlineExam from './modules/onlineExam';  //乐伽大学在线考试
 import quesNaire from './modules/quesNaire';  //问卷调查
 import autoForm from './modules/autoForm'
+import platform from './modules/platform'
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -25,7 +26,8 @@ const store = new Vuex.Store({
     badge,
     onlineExam,
     quesNaire,
-    autoForm
+    autoForm,
+    platform
   },
   getters
 });
