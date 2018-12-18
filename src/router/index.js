@@ -30,15 +30,20 @@ const RetreatManage = () => import  ('../components/rentManage/datumMessage/retr
 // 财务账本
 // const Foundation =()=> import  ('../components/finance/foundation/index');                                //基础管理
 // const FundMessage =()=> import  ('../components/finance/fundMessage/index.vue');                          //款项管理
-const ClientMessage = () => import  ('../components/finance/clientMessage/index.vue');                         //客户管理
-const PendingItem = () => import  ('../components/finance/pendingItem/index.vue');                             //待处理项
-const PendingSettle = () => import  ('../components/finance/pendingItem/components/pendingSettle.vue');        //结算
-
-const StaticDetail = () => import  ('../components/finance/statistics/components/staticDetail');            //统计详情
+//  const ClientMessage = () => import  ('../components/finance/clientMessage/index.vue');                         //客户管理
+//  const PendingItem = () => import  ('../components/finance/pendingItem/index.vue');                             //待处理项
+ const PendingSettle = () => import  ('../components/finance/pendingItem/components/pendingSettle.vue');        //结算
+ const StaticDetail = () => import  ('../components/finance/statistics/components/staticDetail');            //统计详情
 // const Statistics =()=> import  ('../components/finance/statistics/index.vue');                            //数据统计
 // const IncomeFlow =()=> import  ('../components/finance/incomeFlow/index');                                //收支流水
+  
 
-
+const FinanceBasicMange=()=>import('../components/financeNew/basicManage');//基本管理
+const FinanceCustomer=()=>import('../components/financeNew/customerMange');//客户管理
+const FinanceRunning=()=>import('../components/financeNew/runningAccount');//收支流水
+const AccountPayable=()=>import('../components/financeNew/accountPayable');//应付款项
+const AccountReceivable=()=>import('../components/financeNew/accountReceivable');//应收款项
+const PendingItem = () => import  ('../components/financeNew/pendingItem');
 // 微信管理
 // const Reimbursement =()=> import  ('../comments/wechatMessage/reimbursement/index1.vue');            //微信报销
 // const Complain =()=> import  ('../comments/wechatMessage/complain/index1.vue');                      //微信投诉
@@ -59,6 +64,8 @@ const PersonalRecords = () => import  ('../components/humanResource/personalReco
 const StaffRecords = () => import  ('../components/humanResource/staffRecords/index');     // add by cj 员工档案
 const PersonnelStatement = () => import  ('../components/humanResource/organizationNew/components/personnelStatement');     // add by cj 人事报表
 const RecruitManage = () => import ('../components/recruitManage/index.vue')
+const Employemanagement = () => import('../components/humanResource/employemanahement/employemanagement.vue')    // 员工管理
+const ResignationManagement = () => import('../components/humanResource/resignationManagement/resignationManagement.vue') // 离职管理
 
 // 人员信息管理
 const TeamManage = () => import  ('../components/HRM/teamManage/index.vue');                          // 人员信息管理
@@ -74,7 +81,8 @@ const ArrangeSetting = () => import ('../components/attendanceManage/arrangeSett
 const PunchCard = () => import ('../components/attendanceManage/arrangeSetting/punchCard/index');
 const EditArrange = () => import ('../components/attendanceManage/arrangeSetting/editArrange/index.vue'); //编辑排班
 const EditAttendanceShift = () => import('../components/attendanceManage/editAttendanceShift/index.vue'); //编辑班次
-const Approval = () => import('../components/approval/index.vue');
+const Approval = () => import('../components/approval/index.vue'); //审批管理
+const Business = () => import('../components/business/index.vue');
 
 // 考勤记录
 const attendanceRecord = () => import('../components/attendanceManage/attendanceRecord/record/index.vue');
@@ -494,15 +502,12 @@ export default new Router({
     //   name: '财务账本',
     //   icon: 'iconfont icon-caiwu1',
     //   children: [
-    //     // {path: '/accountManage', component: AccountManage, name: '账户管理'},
-    //     // {path: '/subjectManage', component: SubjectManage, name: '科目管理'},
-    //     // {path: '/foundation', component: Foundation, name: '基础管理'},
-    //     // {path: '/fundMessage', component: FundMessage, name: '款项管理'},
-    //
-    //     // {path: '/statistics', component: Statistics, name: '数据统计'},
-    //     // {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
-    //     {path: '/clientMessage', component: ClientMessage, name: '客户管理'},
-    //     {path: '/pendingItem', component: PendingItem, name: '待处理项'},
+    //     {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
+    //     {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
+    //     {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
+    //     {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
+    //     {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
+    //     {path: '/PendingItem', component: PendingItem, name: '待处理项'},
     //   ]
     // },
 
@@ -551,6 +556,8 @@ export default new Router({
         {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
+        { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
+        { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
       ]
     },
     //write by shuisheng 2018-10-24
@@ -675,6 +682,7 @@ export default new Router({
       children: [
         {path: '/achievementData', component: AchievementData, name: '业绩数据'},
         {path: '/dataAanalysis', component: dataAanalysis, name: '分析平台'},
+        {path: '/business', component: Business ,name: '业务数据'}
       ]
     },
     {

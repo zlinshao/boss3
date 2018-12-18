@@ -95,6 +95,7 @@
           this.params.detail_id = this.record.detail_id;
           // this.params.type = this.record.type;
           this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {detail_id: this.record.detail_id}).then((res) => {
+          console.log(res, "44444")
             if (res.data.code === '10000') {
               this.params.type = res.data.data.type;
               this.params.remark = res.data.data.remark;
@@ -105,6 +106,7 @@
                   data[item.id] = item.url;
                 });
                 this.editImage = data;
+                console.log(this.editImage, "111111111111111")
               }
             } else {
               this.$notify.warning({

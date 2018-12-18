@@ -534,9 +534,10 @@
           area: '',                         //面积
           suggest_price: '',                //价格
           // current_ready_days: '',           //空置时长
+          source_web: 1 //来源
         },
-        decoration: [],                     
-        property_type: [],                  
+        decoration: [],
+        property_type: [],
         room: [
           {id: 1, type: '一居室'},
           {id: 2, type: '二居室'},
@@ -545,14 +546,14 @@
           {id: 5, type: '其他'},
         ],
         area: [
-          {id: 1, type:'100平米以下', val:'0,100'}, 
-          {id: 2, type:'100平米~200平米', val:'100,200'}, 
+          {id: 1, type:'100平米以下', val:'0,100'},
+          {id: 2, type:'100平米~200平米', val:'100,200'},
           {id: 3, type:'200平米以上', val:'200,99999'}
         ],
         suggest_price: [
-          {id: 1, type: '2000元以下', val:'0,2000'}, 
-          {id: 2, type: '2000~3000元', val:'2000,3000'}, 
-          {id: 3, type: '3000~4000元', val:'3000,4000'}, 
+          {id: 1, type: '2000元以下', val:'0,2000'},
+          {id: 2, type: '2000~3000元', val:'2000,3000'},
+          {id: 3, type: '3000~4000元', val:'3000,4000'},
           {id: 4, type: '4000元以上', val:'4000,99999'}
         ],
         warning_status: [
@@ -926,11 +927,11 @@
           is_nrcy: 0,
           is_lord: 1,
           warning_status: '',
-          room: '',                         
-          decoration: '',                   
-          property_type: '',                
-          area: '',                         
-          suggest_price: '',                
+          room: '',
+          decoration: '',
+          property_type: '',
+          area: '',
+          suggest_price: '',
           current_ready_days: '',
         };
         this.department_name = '';

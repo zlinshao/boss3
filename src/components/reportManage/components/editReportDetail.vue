@@ -278,7 +278,9 @@
         <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
-        
+        <el-button size="small" type="primary" @click="editInfo" v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
+          修改电子收据
+        </el-button>
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
                    v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
           {{sendElectronicReceiptBtnText}}
@@ -527,7 +529,7 @@
         priceRegion: '',
         houseSourceInfo: '',
         disabledBtn: true,
-        showBankCartTips: false,    
+        showBankCartTips: false,
         bankCartMsg: '',
       }
     },
@@ -600,6 +602,16 @@
       // }
     },
     methods: {
+      //修改电子收据
+      editInfo() {
+        this.$prompt('请输入修改的客户姓名','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValue:this.electronicReceiptParam.payer,
+        }).then(({value}) => {
+          this.createElectronicReceipt(value);
+        }).catch(() => { })
+      },
       // 审批人信息
       approvePersonal() {
         if (this.place.auditors) {
@@ -650,7 +662,7 @@
         })
       },
       //生成电子收据
-      createElectronicReceipt() {
+      createElectronicReceipt(name) {
         this.electronicReceiptVisible = true;
         let params = {};
 
@@ -659,7 +671,7 @@
         params.department_id = this.electronicReceiptParam.department_id || "";
         params.house_id = this.electronicReceiptParam.house_id || "";
         params.date = this.reportDetailData.bulletindate || "";
-        params.payer = this.electronicReceiptParam.payer || "";
+        params.payer = name || this.electronicReceiptParam.payer || "";
         params.address = this.electronicReceiptParam.address || "";
         params.price = this.electronicReceiptParam.price || "";
         params.sign_at = this.electronicReceiptParam.sign_at || "";

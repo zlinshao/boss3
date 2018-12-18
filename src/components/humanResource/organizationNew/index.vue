@@ -1645,6 +1645,7 @@
         if (!this.params.leave_time) {
           this.params.leave_time = [];
         }
+        console.log(this.params)
         this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then((res) => {
           this.userCollectLoading = false;
           this.isHigh = false;
