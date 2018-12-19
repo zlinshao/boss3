@@ -1864,8 +1864,8 @@
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
             if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
             }
           }
         }
@@ -1876,8 +1876,8 @@
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
             if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
             }
           }
         }
@@ -1942,19 +1942,19 @@
         this.contractForm.pay_method = [[],[],];
         this.contractForm.has_pay = "";
       },
-      priceChange(n) {
-        let data = this.contractForm.unit_price;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = n; i < this.newpriceLen; i++) {
-            if ((i + 1) < this.newpriceLen) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.contractForm.unit_price[0], priceDate);
-            }
-          }
-        }
-      },
+      // priceChange(n) {
+      //   let data = this.contractForm.unit_price;
+      //   if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+      //     let priceDate = data[0];
+      //     for (var i = n; i < this.newpriceLen; i++) {
+      //       if ((i + 1) < this.newpriceLen) {
+      //         priceDate[i + 1] = [];
+      //         priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //         this.$set(this.contractForm.unit_price[0], priceDate);
+      //       }
+      //     }
+      //   }
+      // },
       addPriceLen(index) {
         this.newpriceLen++;
       },
@@ -1963,27 +1963,28 @@
         this.contractForm.unit_price[0].splice(index, 1);
         this.contractForm.unit_price[1].splice(index, 1);
       },
-      payTypeChange(n) {
-        let data = this.contractForm.pay_type;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = n; i < this.newpayForLen; i++) {
-            if ((i + 1) < this.newpayForLen) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.contractForm.pay_type[0], priceDate);
-            }
-          }
-        }
-      },
+      // payTypeChange(n) {
+      //   let data = this.contractForm.pay_type;
+      //   if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+      //     let priceDate = data[0];
+      //     for (var i = n; i < this.newpayForLen; i++) {
+      //       if ((i + 1) < this.newpayForLen) {
+      //         priceDate[i + 1] = [];
+      //         priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //         this.$set(this.contractForm.pay_type[0], priceDate);
+      //       }
+      //     }
+      //   }
+      // },
       addPayLen(index) {
         this.newpayForLen++;
+        // this.contractForm.pay_type = [[], [], []]
       },
       romovePayLen(index) {
         this.newpayForLen--;
         if (this.activeName == 'first') {
-          this.contractForm.pay_type[0].splice(index, 1);
-          this.contractForm.pay_type[1].splice(index, 1);
+          // this.contractForm.pay_type[0].splice(index, 1);
+          // this.contractForm.pay_type[1].splice(index, 1);
         }
         else {
           this.contractForm.pay_type[0].splice(index, 1);
@@ -2039,6 +2040,8 @@
             if(val == "1") {
               this.Inconsistent = true;
               this.contrastContract();
+              this.contractForm.unit_price = [[],[],];
+              this.contractForm.pay_type = [[],[],[]];
             }
           } else {
             this.$notify.warning({
@@ -2322,7 +2325,8 @@
             if(val == "1") {
               this.Inconsistent2 = true;
               this.contrastContract2();
-              
+              this.contractForm2.unit_price = [[],[],];
+              this.contractForm2.pay_type = [[],[],[]];
             }
           } else {
             this.$notify.warning({

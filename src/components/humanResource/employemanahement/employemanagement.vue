@@ -54,18 +54,28 @@
                     <el-col :span="12">
                      <el-row>
                        <el-col :span="8">
-                          <div class="el_col_label">岗位</div>
+                          <div class="el_col_label">职位</div>
                        </el-col>
                        <el-col :span="16" class="el_col_option">
-                         <!-- <el-form-item label="职位" required>
-                          <el-select v-model="params.duty_id" @change="positionSelect" clearable multiple
-                                    :disabled="duty.length < 1">
+                          <el-select v-model="params.duty_id" clearable multiple size="mini" @change="positionSelect"  :disabled="duty.length < 1" style="width: 100%;">
                             <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
-                            </el-option>
+                          </el-option>
                           </el-select>
-                        </el-form-item> -->
                        </el-col>
                      </el-row>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">岗 位</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                            <el-select v-model="params.position_id" clearable multiple :disabled="position.length < 1" style="width: 100%;" size="mini">
+                              <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
+                              </el-option>
+                            </el-select>
+                        </el-col>
+                      </el-row>
                     </el-col>
                     <!-- <el-col :span="8">
                       <el-row>
@@ -168,7 +178,7 @@
                   <el-button type="text" @click="lookRewardRecord(scope.row.name, scope.row.orgStr, scope.row.roleStr, scope.row.enroll, scope.row.id)">查看</el-button>
                 </template>
               </el-table-column>
-              <el-table-column label="排版" >
+              <el-table-column label="排班" >
                 <template slot-scope="scope">
                   <el-button type="text" @click="lookTypesetting(scope.row.id)">查看</el-button>
                 </template>
@@ -240,6 +250,8 @@ export default {
   components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance, Organization},
   data() {
     return {
+      position: [],   // 岗位
+      duty: [],   // 职位
       follow_name: "", //跟进人
       follow_id: "", // 部门ID
       organizationDialog: false,
@@ -291,8 +303,42 @@ export default {
   },
   mounted() {
     this.getEmploy();
+    // this.getPosition();
   },
   methods: {
+    // 获取职位
+    getPosition(id) {
+      this.$http.get(globalConfig.server + "organization/duty?org_id=" + id).then(res => {
+        if(res.data.code === '20000') {
+          res.data.data.data.forEach((item, index) => {
+            let obj = {}
+            obj.id = item.id;
+            obj.name = item.name;
+            this.duty.push(obj);
+          })
+        }
+      })
+    },
+    // 选择职位
+    positionSelect(val) {
+      if(val.length > 0) {
+        for(let item of val) {
+          this.getPositoin(item)
+        }
+      }
+    },
+    // 获取岗位
+    getPositoin(id) {
+      this.$http.get(globalConfig.server + 'organization/position?duty_id=' + id).then(res => {
+        if (res.data.code === '20000') {
+          for (let item of res.data.data.data) {
+            this.position.push(item);
+          }
+        } else {
+          this.prompt('warning', res.data.msg);
+        }
+      })
+    },
     // 搜索
     searchEmploy() {
      this.params.page = 1;
@@ -313,7 +359,6 @@ export default {
     // 获取列表
     getEmploy() {
       this.isLoading = true;
-      console.log(this.params, "11111111")
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
         // console.log(res.data.data.data, "11111")
          this.isHigh = false;
@@ -446,7 +491,7 @@ export default {
       // this.follow_name = '';
       this.organizationDialog = true;
       this.type = "depart";
-      this.length = 1;
+      // this.length = 1;
     },
     selectMember(val) {
       this.type = "";
@@ -466,6 +511,7 @@ export default {
         0,
         this.follow_name.length - 1
       );
+      this.getPosition(this.params.org_id)
     },
     // 关闭模态框
     closeModal() {
