@@ -66,7 +66,7 @@
           <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
         </div>
         <div style="margin-top: 20px;width: 42%;text-align:left;" class="composeCheck">
-          <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;margin-right: 50px;font-weight: bold;" @change="handleAddCompare">增加对比项</el-checkbox>
+          <!--<el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;margin-right: 50px;font-weight: bold;" @change="handleAddCompare">增加对比项</el-checkbox>-->
 
           <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope" style="width:20%;margin: 0 15px;">
             <el-option value="inner" label="区域内排序"></el-option>
@@ -301,7 +301,7 @@
             city: [], //选择的城市
             group: 'city',//显示城市或区域
             compose: ['new_perf','old_perf'],//数据组成
-            auto_compare: true, //增加对比项
+            // auto_compare: true, //增加对比项
             page_id: '',
             addition: '',
           },
