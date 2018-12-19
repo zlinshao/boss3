@@ -10,8 +10,8 @@
       <div style="margin-top: 20px;">
         <el-row :gutter="20">
           <el-col :span="16">
-            <span style="font-weight: bold;">城市组成：</span>
-            <div style="display: inline-block;">
+            <span style="font-weight: bold;font-size: 12px !important;color: rgb(159,155,155)">城市组成：</span>
+            <div style="display: inline-block;font-size: 12px !important;" class="font_style">
               <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
                 <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
                 <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
@@ -21,9 +21,9 @@
             </div>
           </el-col>
           <el-col :span="8">
-            <span style="font-weight: bold;">片区组成：</span>
+            <span style="font-weight: bold; font-size: 12px !important;color: rgb(159,155,155)">片区组成：</span>
             <div style="display: inline-block;">
-              <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
+              <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;" class="font_style">
                 <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
                 <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
                   <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
@@ -283,7 +283,7 @@
             composeShow: true, //数据来源全选
             composeList: [
               {name: '新绩效组',value: 'new_perf'},
-              {name: '旧绩效组',value: 'ord_perf'},
+              {name: '旧绩效组',value: 'old_perf'},
             ], //数据来源列表
             time: 0, //天数
             days: '',
@@ -800,6 +800,11 @@
     .composeCheck{
       .el-checkbox__input.is-checked+.el-checkbox__label{
         color: #787a7e !important;
+      }
+    }
+    .font_style{
+      .el-checkbox__label{
+        font-size: 12px !important;
       }
     }
   }
