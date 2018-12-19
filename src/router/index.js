@@ -563,7 +563,7 @@ export default new Router({
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构'},
         {path: '/integralManage', component: IntegralManage, name: '积分管理'},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案'},
-        {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
+        // {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
         { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
