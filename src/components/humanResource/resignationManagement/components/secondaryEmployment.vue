@@ -366,11 +366,11 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization';
-  import UpLoad from "../../common/UPLOAD.vue"
+  import Organization from '../../../common/organization';
+  import UpLoad from "../../../common/UPLOAD.vue"
 
   export default {
-    props: ["ids", "addStaffDialog", 'isEdit', 'editId'],
+    props: ["ids", "lookSecondary", 'isEdit', 'editId'],
     components: {Organization, UpLoad},
     data() {
       return {
@@ -506,7 +506,7 @@
       //     this.$emit("close")
       //   }
       // },
-      addStaffDialog(val) {
+      lookSecondary(val) {
         this.addStaffDialogVisible = val;
         this.params.image_info = {
           doc_photo: [],
@@ -949,12 +949,12 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          console.log(this.params, "修改")
+          // console.log(this.params, "修改")
           // return false
           this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
               // this.$emit('close', 'success');
-              this.addStaffDialogVisible = false;
+              this.levelConfirm();
               // this.isClear = true;
               this.initial();
               this.prompt('success', res.data.msg);
@@ -985,6 +985,17 @@
             this.disabledBtn = false;
           });
         }
+      },
+      // 复职
+      levelConfirm() {
+        this.$http.get(globalConfig.server + 'organization/staff/rehab/' + this.editId + '&level=' + this.params.level).then(res => {
+          if (res.data.code === '710166') {
+            this.prompt('success', res.data.msg);
+            this.addStaffDialogVisible = false;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        })
       },
       selectDepart() {
         this.organizationDialog = true;
