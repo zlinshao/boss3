@@ -53,77 +53,77 @@
         </el-form>
       </div>
     </div>
-
-    <el-table
-      :data="tableData"
-      width="100%"
-      @row-dblclick="dblClickTable"
-      @row-contextmenu="customerMenu">
-      <el-table-column
-        label="生成时间"
-        prop="create_time">
-      </el-table-column>
-      <el-table-column
-        label="房屋地址"
-        prop="address">
-      </el-table-column>
-      <el-table-column
-        label="客户姓名"
-        prop="customer_name">
-      </el-table-column>
-      <el-table-column
-        label="手机号"
-        prop="contact">
-      </el-table-column>
-      <el-table-column
-        label="收房月数"
-        prop="months">
-      </el-table-column>
-      <el-table-column
-        label="付款方式"
-        prop="pay_types">
-      </el-table-column>
-      <el-table-column
-        label="月单价"
-        prop="prices">
-      </el-table-column>
-      <el-table-column
-        label="待签约日期"
-        prop="deal_date">
-      </el-table-column>
-      <el-table-column
-        label="第一次打房租日期"
-        prop="first_pay_date">
-      </el-table-column>
-      <el-table-column
-        label="客户付款方式"
-        prop="account_type">
-      </el-table-column>
-      <el-table-column
-        label="账号"
-        prop="account_num">
-      </el-table-column>
-      <el-table-column
-        label="签约人"
-        prop="real_name">
-      </el-table-column>
-      <el-table-column
-        label="状态"
-        prop="status">
-      </el-table-column>
-    </el-table>
-    <div class="block pages">
-      <el-pagination
-        @siz-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
-      </el-pagination>
+    <div style="margin-top: 50px;">
+      <el-table
+        :data="tableData"
+        width="100%"
+        @row-dblclick="dblClickTable"
+        @row-contextmenu="customerMenu">
+        <el-table-column
+          label="生成时间"
+          prop="create_time">
+        </el-table-column>
+        <el-table-column
+          label="房屋地址"
+          prop="address">
+        </el-table-column>
+        <el-table-column
+          label="客户姓名"
+          prop="customer_name">
+        </el-table-column>
+        <el-table-column
+          label="手机号"
+          prop="contact">
+        </el-table-column>
+        <el-table-column
+          label="收房月数"
+          prop="months">
+        </el-table-column>
+        <el-table-column
+          label="付款方式"
+          prop="pay_types">
+        </el-table-column>
+        <el-table-column
+          label="月单价"
+          prop="prices">
+        </el-table-column>
+        <el-table-column
+          label="待签约日期"
+          prop="deal_date">
+        </el-table-column>
+        <el-table-column
+          label="第一次打房租日期"
+          prop="first_pay_date">
+        </el-table-column>
+        <el-table-column
+          label="客户付款方式"
+          prop="account_type">
+        </el-table-column>
+        <el-table-column
+          label="账号"
+          prop="account_num">
+        </el-table-column>
+        <el-table-column
+          label="签约人"
+          prop="real_name">
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          prop="status">
+        </el-table-column>
+      </el-table>
+      <div class="block pages">
+        <el-pagination
+          @siz-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[20, 100, 200, 300, 400]"
+          :page-size="20"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400">
+        </el-pagination>
+      </div>
     </div>
-
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -143,43 +143,30 @@
     components: {RightMenu, LandLord, LandLordDetail},
     data() {
       return {
+        url: globalConfig.server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
-
         lordVisible: false,
         detailVisible: false,
-
         currentPage: 1,
         isHigh: false,
         form: {},
-
-        tableData: [
-          {
-            create_time: '2018-08-02 16:26:04',
-            address: '时光澔韵11-11-1111 ',
-            customer_name: '第三方是',
-            contact: '15298556588',
-            months: '12',
-            pay_types: '双月付',
-            prices: '100000',
-            deal_date: '2018-07-31',
-            first_pay_date: '2018-07-31',
-            account_type: '银行卡',
-            account_num: '6217002710000684874',
-            real_name: '王照国',
-            status: 1,
-          },
-        ],
+        tableData: [],
       }
     },
     mounted() {
+      this.getCustomsList();
     },
-    activated() {
-    },
-    watch: {},
     methods: {
+      getCustomsList() {
+        this.$http.get(this.url + 'account/index').then(res => {
+          console.log(res);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       // 新增客户
       openAccount() {
         this.lordVisible = true;
@@ -273,5 +260,7 @@
 </script>
 
 <style lang="scss">
-
+  body{
+    padding-right: 0 !important;
+  }
 </style>
