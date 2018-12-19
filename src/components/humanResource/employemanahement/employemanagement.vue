@@ -20,7 +20,7 @@
                     <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
                   </div>
                   <el-row class="el_row_border">
-                    <el-col :span="8">
+                    <el-col :span="12">
                       <el-row>
                         <el-col :span="8">
                           <div class="el_col_label">部门</div>
@@ -32,7 +32,7 @@
                         </el-col>
                       </el-row>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="12">
                       <el-row>
                         <el-col :span="8">
                           <div class="el_col_label">入职时间</div>
@@ -50,6 +50,22 @@
                           </el-form-item>
                         </el-col>
                       </el-row>
+                    </el-col>
+                    <el-col :span="12">
+                     <el-row>
+                       <el-col :span="8">
+                          <div class="el_col_label">岗位</div>
+                       </el-col>
+                       <el-col :span="16" class="el_col_option">
+                         <!-- <el-form-item label="职位" required>
+                          <el-select v-model="params.duty_id" @change="positionSelect" clearable multiple
+                                    :disabled="duty.length < 1">
+                            <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
+                            </el-option>
+                          </el-select>
+                        </el-form-item> -->
+                       </el-col>
+                     </el-row>
                     </el-col>
                     <!-- <el-col :span="8">
                       <el-row>
@@ -118,6 +134,8 @@
                   <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
                   &nbsp;&nbsp;&nbsp;
                   <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;"></i>
+                  &nbsp;&nbsp;&nbsp;
+                  <!-- <i class="el-icon-close" @click="deletedEmploy(scope.row.id)" style="cursor: pointer;"></i> -->
                 </template>
               </el-table-column>
               <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
@@ -135,13 +153,13 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="" label="岗位状态" >
-                <template slot-scope="scope">
+              <el-table-column prop="levels.dictionary_name" label="等级" >
+                <!-- <template slot-scope="scope">
                   <div>
                     <span v-if="scope.row.is_on_job"><el-tag type="danger">禁用</el-tag></span>
                     <span v-if="!scope.row.is_on_job"><el-tag type="success">启用</el-tag></span>
                   </div>
-                </template>
+                </template> -->
               </el-table-column>
               <!-- <el-table-column prop="levels.dictionary_name" label="正式" ></el-table-column> -->
               <!-- <el-table-column label="薪资记录" ></el-table-column> -->
@@ -327,6 +345,10 @@ export default {
           this.isLoading = false;
         }
       })
+    },
+    // 删除人员
+    deletedEmploy(id) {
+
     },
     // 新增人员
     addLookEmploy(val, id) {

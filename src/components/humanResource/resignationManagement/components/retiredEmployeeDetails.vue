@@ -495,7 +495,7 @@
 
 <script>
 export default {
-  props: ["ids", "lookEmployDetailLog"],
+  props: ["ids", "lookResigntion"],
   data() {
     return {
       IDimgList: [],           // ID图片
@@ -538,7 +538,7 @@ export default {
     }
   },
   watch: {
-    lookEmployDetailLog(val) {
+    lookResigntion(val) {
       this.staffDetail = val;
     },
     staffDetail(val) {
