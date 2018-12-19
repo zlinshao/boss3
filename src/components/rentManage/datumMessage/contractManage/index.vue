@@ -1913,7 +1913,6 @@
       //拉入黑名单
       handlePullBlack(scope) {
         console.log(scope);
-        this.$message('pull black');
       },
       //鼠标移入
       cellMouseEnter(row,column) {
