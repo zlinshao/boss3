@@ -2022,7 +2022,7 @@
         }else{
           console.log('数量不对');
         }
-        console.log(this.contractForm, "44444")
+        // console.log(this.contractForm, "44444")
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {

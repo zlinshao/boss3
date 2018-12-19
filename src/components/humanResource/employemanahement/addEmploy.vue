@@ -494,7 +494,6 @@
     },
     watch: {
       isClear: function (val) {
-        console.log(val)
         this.isClear = val;
       },
       // addEmployLog(val,id) {
@@ -949,7 +948,7 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          console.log(this.params, "修改")
+          // console.log(this.params, "修改")
           // return false
           this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
@@ -1059,7 +1058,6 @@
         this.resetOrg('position');
         if (val.length > 0) {
           for (let item of val) {
-            console.log(item)
             this.quarters(item);
           }
         }
@@ -1167,7 +1165,6 @@
         this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
-            console.log(this.branchBankCategory)
           } else {
             this.branchBankCategory = [];
           }
