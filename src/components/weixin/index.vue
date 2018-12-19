@@ -5,47 +5,44 @@
     </div>
     <div class="content">
       <p>活动规则：</p>
-      <p>1、本活动所有人均可参与，推荐求租/托管成功签约，推荐人和被推荐人平分666元现金奖励。多推荐多赚钱，奖励无上限；</p>
+      <p>1、本活动所有人均可参与，推荐求租/托管成功签约，推荐人和被推荐人平分<span style="color: red;">666元现金奖励</span>。多推荐多赚钱，奖励无上限；</p>
       <p>2、被推荐人签约完成并交付相关款项后视为成功签约；（续约不参与本次活动。）</p>
-      <p>3、活动仅限南京地区，其他城市敬请期待；</p>
-      <p>4、活动咨询及合作请添加专属微信：13605140401；</p>
+      <p>3、活动<span style="font-weight: bold;">仅限南京地区</span>，其他城市敬请期待；</p>
+      <p>4、活动咨询及合作请添加专属微信：<span style="font-weight: bold;">13605140401</span>；</p>
       <p>5、由于需要人工审核，所有奖励红包在签约成功后1-7个工作日内到账；</p>
       <p>6、活动时间2018年12月8日至2019年1月31日。</p>
     </div>
-    <el-card>
-      <b>提示：</b>不发了返利网客服务旅客访问量凤舞龙飞分为了加快分解违反了我垃圾费奇偶发了我房间里。
-    </el-card>
     <div class="form">
       <el-form :model="params" :rules="rules" ref="infoFrom">
-        <h4>1.您的姓名</h4>
+        <h4><span style="color: red;">*</span>1.您的姓名</h4>
         <el-form-item prop="user_name">
           <el-input size="small" v-model="params.user_name"></el-input>
         </el-form-item>
-        <h4>2.您的联系方式</h4>
+        <h4><span style="color: red;">*</span>2.您的联系方式</h4>
         <el-form-item prop="user_phone">
           <el-input size="small" v-model="params.user_phone"></el-input>
         </el-form-item>
-        <h4>3.您的微信号</h4>
+        <h4><span style="color: red;">*</span>3.您的微信号</h4>
         <el-form-item prop="user_account">
           <el-input size="small" v-model="params.user_account"></el-input>
         </el-form-item>
         <h4>您推荐的好友信息</h4>
-        <h4>4.您推荐的好友姓名</h4>
+        <h4><span style="color: red;">*</span>4.您推荐的好友姓名</h4>
         <el-form-item prop="recommend_name">
           <el-input size="small" v-model="params.recommend_name"></el-input>
         </el-form-item>
-        <h4>5.好友联系方式</h4>
+        <h4><span style="color: red;">*</span>5.好友联系方式</h4>
         <el-form-item prop="recommend_phone">
           <el-input size="small" v-model="params.recommend_phone"></el-input>
         </el-form-item>
-        <h4>6.选择好友需要的服务</h4>
+        <h4><span style="color: red;">*</span>6.选择好友需要的服务</h4>
         <el-form-item prop="recommend_type">
           <el-radio-group v-model="params.recommend_type">
             <el-radio :label="1">租房</el-radio>
             <el-radio :label="2">托管</el-radio>
           </el-radio-group>
         </el-form-item>
-        <h4>7.房屋需求</h4>
+        <h4><span style="color: red;">*</span>7.房屋需求</h4>
         <p>填写您的好友求租/托管房屋的位置、租金范围、房屋的基本条件等</p>
         <el-form-item prop="house_where">
           <el-input type="textarea" size="small" v-model="params.house_where"></el-input>
@@ -153,8 +150,7 @@
         },
         //获取邀请列表
         getDataList() {
-          var reg = /^[1][3,4,5,7,8][0-9]{9}$/;
-          if (!this.user_phone || !reg.test(this.user_phone)) {
+          if (!this.user_phone || this.user_phone.length < 11) {
             this.$message("手机号码格式不正确");
             return false;
           }
