@@ -34,7 +34,8 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleEditStatus(scope.row)">修改状态</el-button>
+              <el-button type="text" @click="handleEditStatus(scope.row)">修改</el-button>
+              <el-button type="text" @click="handleDeleteInfo(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -124,6 +125,30 @@
           this.getInviteList();
       },
       methods: {
+        handleDeleteInfo(row) {
+          this.$confirm('您确定删除吗?','提示',{
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.delete(this.url + `/recommend/fellow/${row.id}`).then(res => {
+              if (res.data.code === '20000') {
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                this.getInviteList();
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg
+                })
+              }
+            }).catch(err =>{
+              console.log(err);
+            })
+          }).catch(() => { })
+        },
         textDetail(row) {
           this.$alert(`${row.house_where}`,'文本详情',{
             confirmButtonText: '确定'
