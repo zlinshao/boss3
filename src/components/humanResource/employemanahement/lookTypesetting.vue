@@ -97,7 +97,7 @@ export default {
       dayarr: [],
       params: {
         user_id: "",
-        date: ""
+        // date: ""
       },
       arrangeList: [],
       modifyDay: "",
@@ -161,6 +161,7 @@ export default {
       this.$http.get(globalConfig.server + "attendance/sort/sort", {params: this.params}).then(res => {  
         if(res.data.code == "20000") {
           this.arrangeList = res.data.data.data.arrange;
+          this.arrangeList.pop();
           // this.year = res.data.data.year;
           // this.selectmonth = res.data.data.month;
           // this.params.data = this.year + "-" + this.month;
@@ -176,6 +177,7 @@ export default {
     },
      // 获取日历
     getCalendar(year, month, isClear) {
+      console.log(year, month, "555555")
       if (isClear) {
         this.dayarr = [];
       }
@@ -249,10 +251,12 @@ export default {
     submitModify() {
        this.currentSort.arrange_month = this.year + "-" + this.month;
        console.log(this.currentArrange)
-       this.arrangeList[this.modifyDay] = this.currentArrange;
+       console.log(this.modifyDay)
+       this.arrangeList[this.modifyDay - 1] = this.currentArrange;
+       
        console.log(this.arrangeList)
        this.currentSort.arrange = Object.values(this.arrangeList)
-       return false;
+      //  return false;
       this.$http.post(globalConfig.server + "attendance/sort", {
               user_id: this.currentSort.user_id,
               arrange: this.currentSort.arrange,
@@ -279,7 +283,7 @@ export default {
     searchScheduling() {
       console.log(this.year, this.month)
       this.selectmonth = this.month;
-      this.params.data = this.year + "-" + this.month;
+      this.params.arrange_month = this.year + "-" + this.month;
       this.getTypeTime();
     },
     getYear() {

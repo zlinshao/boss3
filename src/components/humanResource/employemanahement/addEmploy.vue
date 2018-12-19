@@ -525,7 +525,7 @@
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          // this.isClear = true;
+          this.isClear = true;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
