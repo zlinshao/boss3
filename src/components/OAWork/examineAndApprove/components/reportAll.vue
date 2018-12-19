@@ -301,8 +301,6 @@
                 user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
                 user.id = data[i].id;
                 if (data[i].content) {
-                  user.bulletin = data[i].content.staff_name + '的' + data[i].content.bulletin_name || '/';
-                  user.name = data[i].content.staff_name || '';
                   // user.house_name = (data[i].content.house && data[i].content.house.name) || '/';
                   if (data[i].content.house) {
                     user.house_name = data[i].content.house.name;
@@ -314,8 +312,8 @@
                   user.places = data[i].places.display_name;
                   user.status = data[i].places.status;
                 } else {
-                  user.bulletin = data[i].flow.content.staff_name + '的' + data[i].flow.content.bulletin_name || '/';
-                  user.name = data[i].flow.content.staff_name || '';
+                  // user.bulletin = data[i].flow.content.staff_name + '的' + data[i].flow.content.bulletin_name || '/';
+                  // user.name = data[i].flow.content.staff_name || '';
                   if (data[i].flow.content.house) {
                     user.house_name = data[i].flow.content.house.name;
                   } else if (data[i].flow.content.address) {
@@ -325,6 +323,13 @@
                   }
                   user.places = data[i].flow.places.display_name;
                   user.status = data[i].flow.places.status;
+                }
+                if (!data[i].user) {
+                  user.bulletin = '';
+                  user.name = '';
+                }else {
+                  user.bulletin = data[i].user.name + '的' + data[i].content.bulletin_name || '/';
+                  user.name = data[i].user.name || '';
                 }
               } else {
                 user.places = '/';

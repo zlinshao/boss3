@@ -85,7 +85,7 @@
                     <el-col :span="8">
                       <div class="signTime">
                         <el-form-item label="收房年限">
-                          <el-input v-model="form.lord_duration"  placeholder="请输入收房年限" size="mini"></el-input>
+                          <el-input v-model="form.lord_duration"  placeholder="请输入收房年限" size="mini" :disabled="is_disabled"></el-input>
                         </el-form-item>
                       </div>
                     </el-col>

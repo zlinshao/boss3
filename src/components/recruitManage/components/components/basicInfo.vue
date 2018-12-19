@@ -8,245 +8,334 @@
               <div class="addForm">
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="真实姓名" required>
+                    <el-form-item label="真实姓名" required v-if='is_add'>
                       <el-input placeholder="请输入真实姓名" v-model="params.real_name" clearable></el-input>
                     </el-form-item>
+                    <el-form-item label="真实姓名" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.real_name'>
+                          {{basicInfo_info.basic_info.real_name}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
                   </el-col>
+
                   <el-col :span="8">
-                    <el-form-item label="性别" required>
+                    <el-form-item label="性别" required  v-if='is_add'>
                       <el-radio-group v-model="params.gender">
                         <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id" name="gender">
                           {{item.dictionary_name}}
                         </el-radio>
                       </el-radio-group>
                     </el-form-item>
+                    <el-form-item label="性别" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.gender'>
+                          {{basicInfo_info.basic_info.gender}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
                   </el-col>
+
                   <el-col :span="8">
-                    <el-form-item label="手机号码" required>
+                    <el-form-item label="手机号码" required v-if='is_add'>
                       <el-input placeholder="请输入手机号码" v-model="params.phone" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号码" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.phone'>
+                          {{basicInfo_info.basic_info.phone}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
+                
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="身份证号" required>
+                    <el-form-item label="身份证号" required v-if='is_add'>
                       <el-input placeholder="请输入身份证号" v-model="params.id_num" @blur="checkIDNumData"
                                 clearable></el-input>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="生日">
-                      <el-input placeholder="请输入生日" v-model="params.birthday" clearable></el-input>
+                    <el-form-item label="身份证号" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.id_num'>
+                          {{basicInfo_info.basic_info.id_num}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="生育状况">
+                    <el-form-item label="生日" v-if='is_add'>
+                      <el-input placeholder="请输入生日" v-model="params.birthday" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="生日" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.birthday'>
+                          {{basicInfo_info.basic_info.birthday}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="生育状况" v-if='is_add'>
                       <el-radio-group v-model="params.fertility_status">
                         <el-radio v-for="item in fertilityStatusCategory" :label="item.id" name="gender" :key="item.id">
                           {{item.dictionary_name}}
                         </el-radio>
                       </el-radio-group>
                     </el-form-item>
+                     <el-form-item label="生育状况" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.fertility_status'>
+                          {{fertility_status}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="16">
-                    <el-form-item label="家庭住址" required>
+                    <el-form-item label="家庭住址" required v-if='is_add'>
                       <el-input placeholder="请输入家庭住址" v-model="params.home_addr" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="家庭住址" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.home_addr'>
+                          {{basicInfo_info.basic_info.home_addr}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="紧急电话" required>
+                    <el-form-item label="紧急电话" required  v-if='is_add'>
                       <el-input placeholder="请输入紧急电话" v-model="params.emergency_call" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="紧急电话" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.emergency_call'>
+                          {{basicInfo_info.basic_info.emergency_call}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
+               
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="银行卡号" required>
+                    <el-form-item label="银行卡号" required v-if='is_add'>
                       <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData"
                                 clearable></el-input>
                     </el-form-item>
+                    <el-form-item label="银行卡号" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.bank_num'>
+                          {{basicInfo_info.basic_info.bank_num}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="开户行" required>
+                    <el-form-item label="开户行" required v-if='is_add'>
                       <el-input placeholder="请输入开户行" v-model="params.account_bank" clearable></el-input>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="支行">
-                      <el-input placeholder="请输入支行" v-model="params.branch_bank" clearable></el-input>
+                    <el-form-item label="开户行" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.account_bank'>
+                          {{basicInfo_info.basic_info.account_bank}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
                   <el-col :span="8">
-                    <el-form-item label="银联行号">
+                  <el-form-item label="政治面貌" v-if='is_add'>
+                    <el-select v-model="params.political_status" clearable>
+                      <el-option v-for="item in politicalStatusCategoey" :label="item.dictionary_name" :key="item.id"
+                                 :value="item.id">{{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                   <el-form-item label="政治面貌" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.political_status'>
+                          {{political_status}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                </el-col>
+                  <el-col :span="8">
+                      <el-form-item label="支行" v-if='is_add'>
+                          <el-input placeholder="请输入支行" v-model="params.branch_bank" clearable></el-input>
+                      </el-form-item>
+                       <el-form-item label="支行" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.branch_bank'>
+                            {{basicInfo_info.basic_info.branch_bank}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                  <!-- <el-col :span="8">
+                      <el-form-item label="银联行号" v-if='is_add'>
+                        <el-input placeholder="请输入支行" v-model="params.branch_bank" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item label="银联行号" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.branch_bank'>
+                            {{basicInfo_info.basic_info.branch_bank}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                    </el-col> -->
+                    <el-col :span="8">
+                    <el-form-item label="开户名" v-if='is_add'>
                       <el-input placeholder="请输入开户名" v-model="params.account_name" clearable></el-input>
                     </el-form-item>
+                    <el-form-item label="开户名" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.account_name'>
+                        {{basicInfo_info.basic_info.account_name}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                  <el-form-item label="政治面貌">
-                    <el-select v-model="params.political_status" clearable>
-                        <el-option v-for="item in politicalStatusCategoey" :label="item.dictionary_name" :key="item.id"
-                                  :value="item.id">{{item.dictionary_name}}
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="籍贯">
-                      <el-input placeholder="请输入籍贯" v-model="params.origin_addr" clearable></el-input>
-                    </el-form-item>
-                  </el-col>
+                  <el-form-item label="籍贯" v-if='is_add'>
+                    <el-input placeholder="请输入籍贯" v-model="params.origin_addr" clearable></el-input>
+                  </el-form-item>
+                  <el-form-item label="籍贯" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.origin_addr'>
+                            {{basicInfo_info.basic_info.origin_addr}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="毕业院校">
-                      <el-input placeholder="请输入毕业院校" v-model="params.school" clearable></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="专业">
-                      <el-input placeholder="请输入专业" v-model="params.major" clearable></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="学历">
-                      <el-select v-model="params.education" clearable>
-                        <el-option v-for="item in educationCategory" :label="item.dictionary_name" :key="item.id"
-                                  :value="item.id">{{item.dictionary_name}}
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
+                <el-col :span="8">
+                  <el-form-item label="毕业院校"  v-if='is_add'>
+                    <el-input placeholder="请输入毕业院校" v-model="params.school" clearable></el-input>
+                  </el-form-item>
+                  <el-form-item label="毕业院校" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.school'>
+                        {{basicInfo_info.basic_info.school}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="专业" v-if='is_add'>
+                    <el-input placeholder="请输入专业" v-model="params.major" clearable></el-input>
+                  </el-form-item>
+                  <el-form-item label="专业" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.major'>
+                        {{basicInfo_info.basic_info.major}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="学历" v-if='is_add'>
+                    <el-select v-model="params.education" clearable>
+                      <el-option v-for="item in educationCategory" :label="item.dictionary_name" :key="item.id"
+                                 :value="item.id">{{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="学历" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.education'>
+                        {{education}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="毕业时间" v-if='is_add'>
+                    <el-date-picker v-model="params.graduation_time" type="date" placeholder="请选择毕业时间"
+                                    value-format="yyyy-MM-dd" clearable></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="毕业时间" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.graduation_time'>
+                        {{basicInfo_info.basic_info.graduation_time}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+                <el-row>
                 </el-row>
                 <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="毕业时间">
-                      <el-date-picker v-model="params.graduation_time" type="date" placeholder="请选择毕业时间"
-                                      value-format="yyyy-MM-dd" clearable></el-date-picker>
+                  <el-col :span="24" v-if="params.entry_way.entry_type == 11">
+                    <el-form-item label="备注" v-if='is_add'>
+                      <el-input type="textarea" placeholder="请填写备注" v-model="params.entry_way.entry_mess"></el-input>
                     </el-form-item>
+                    <el-form-item label="备注" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.entry_way.entry_mess'>
+                        {{basicInfo_info.basic_info.entry_way.entry_mess}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
                   </el-col>
                 </el-row>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="工作信息" name="second">
-              <el-row>
-                  <!-- <el-col :span="8">
-                    <el-form-item label="公司" required>
-                      <el-input placeholder="请输入公司" size="mini" v-model="params.company"></el-input>
-                    </el-form-item>
-                  </el-col> -->
+                <el-row v-if="editId">
                   <el-col :span="8">
-                    <el-form-item label="部门" required>
-                      <el-input placeholder="请选择" @focus="openOrgan('department_id', 'depart')"
-                                v-model="orgData.department_id"
-                                size="mini">
-                        <el-button slot="append" @click="emptyDepart('department_id')">清空</el-button>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="职位" required>
-                      <el-select v-model="params.duty_id" @change="positionSelect" clearable multiple
-                                 :disabled="duty.length < 1">
-                        <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="岗位" required>
-                      <el-select v-model="params.position_id" clearable multiple :disabled="position.length < 1">
-                        <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="入职时间" required>
-                      <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间"
-                                      value-format="yyyy-MM-dd">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="入职途径">
-                      <el-select v-model="params.entry_way.entry_type" clearable>
-                        <!--multiple-->
-                        <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
+                    <el-form-item label="离职原因" v-if='is_add'>
+                      <el-select v-model="params.dismiss_reason.dismiss_type" clearable>
+                        <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
                                    :label="item.name">{{item.name}}
                         </el-option>
                       </el-select>
                     </el-form-item>
+                    <el-form-item label="离职原因" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.dismiss_reason.dismiss_type'>
+                        {{basicInfo_info.basic_info.dismiss_reason.dismiss_type}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="等级" required>
-                      <el-select v-model="params.level" clearable>
-                        <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
-                                   :label="item.dictionary_name">{{item.dictionary_name}}
-                        </el-option>
-                      </el-select>
-                      <div style="color: #409EFF;font-size: 12px;text-align: right;"
-                           v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
-                        <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
-                        <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
-                        <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
-                      </div>
-                    </el-form-item>
-                  </el-col> 
-                  <el-col :span="8">
-                    <el-form-item label="转正时间">
-                      <el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间"
-                                      value-format="yyyy-MM-dd">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="薪资">
-                      <el-input placeholder="请输入薪资" v-model="params.salary" clearable></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="推荐人">
-                      <el-input placeholder="请填写推荐人" @focus="openOrgan('recommender', 'staff')"
-                                v-model="orgData.recommender" size="mini">
-                        <el-button slot="append" @click="emptyDepart('recommender')">清空</el-button>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="第一次签合同时间">
-                      <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间"
-                                      value-format="yyyy-MM-dd"></el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="第一次合同到期时间">
-                      <el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间"
-                                      value-format="yyyy-MM-dd"></el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                  <!-- <el-col :span="24" v-if="params.entry_way.entry_type == 11">
-                    
-                  </el-col> -->
-                </el-row>
-                <!-- <el-row v-if="editId">
-                  
                   <el-col :span="12">
-                    <el-form-item label="具体描述">
+                    <el-form-item label="具体描述" v-if='is_add'>
                       <el-input type="textarea" placeholder="请填写描述"
                                 v-model="params.dismiss_reason.dismiss_mess"></el-input>
                     </el-form-item>
+                    <el-form-item label="具体描述" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.dismiss_reason.dismiss_mess'>
+                        {{basicInfo_info.basic_info.dismiss_reason.dismiss_mess}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
                   </el-col>
-                </el-row> -->
+                </el-row>
                 <!-- <el-row>
                   <el-form-item label="入职材料">
                     <el-checkbox-group v-model="params.entry_materials">
@@ -256,8 +345,11 @@
                     </el-checkbox-group>
                   </el-form-item>
                 </el-row> -->
-              <el-row>
-                <!-- <el-col :span="8">
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="工作信息" name="second">
+              <!-- <el-row>
+                <el-col :span="8">
                   <el-form-item label="婚姻状况">
                     <el-select v-model="params.marital_status" clearable>
                       <el-option v-for="item in maritalStatusCategory" :label="item.dictionary_name" :key="item.id"
@@ -265,98 +357,232 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                </el-col> -->
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                    <el-form-item label="第二次签合同时间">
-                      <el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间"
-                                      value-format="yyyy-MM-dd"></el-date-picker>
+                </el-col>
+               </el-row> -->
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="部门" required v-if='is_add'>
+                      <el-input placeholder="请选择" @focus="openOrgan('department_id', 'depart')"
+                                v-model="orgData.department_id"
+                                size="mini">
+                        <el-button slot="append" @click="emptyDepart('department_id')">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                     <el-form-item label="部门" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.department_id'>
+                          {{basicInfo_info.basic_info.department_id}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="在职状态">
-                      <el-select v-model="params.statusValue" placeholder="请选择" clearable>
-                        <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-form-item label="职位" required  v-if='is_add'>
+                      <el-select v-model="params.duty_id" @change="positionSelect" clearable multiple
+                                 :disabled="duty.length < 1">
+                        <el-option v-for="(item,index) in duty" :value="item.id" :key="index" :label="item.name">
                         </el-option>
                       </el-select>
                     </el-form-item>
+                    <el-form-item label="职位" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.duty_id'>
+                          {{basicInfo_info.basic_info.duty_id}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
                   </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="岗位" required v-if='is_add'>
+                      <el-select v-model="params.position_id" clearable multiple :disabled="position.length < 1">
+                        <el-option v-for="(item,index) in position" :value="item.id" :key="index" :label="item.name">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="职位" v-if='!is_add'>
+                      <div class="content">
+                        <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.position_id'>
+                          {{basicInfo_info.basic_info.position_id}}
+                        </span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="入职时间" required v-if='is_add'>
+                        <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间"
+                                        value-format="yyyy-MM-dd">
+                        </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="入职时间" v-if='!is_add'>
+                          <div class="content">
+                            <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.enroll'>
+                              {{basicInfo_info.basic_info.enroll}}
+                            </span>
+                            <span v-else>暂无</span>
+                          </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                    <el-form-item label="入职途径" v-if='is_add'>
+                      <el-select v-model="params.entry_way.entry_type" clearable>
+                        <!--multiple-->
+                        <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
+                                   :label="item.name">{{item.name}}
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                     <el-form-item label="入职途径" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.entry_way && basicInfo_info.basic_info.entry_way.entry_type'>
+                            {{basicInfo_info.basic_info.entry_way.entry_type ? entryWayCategory[basicInfo_info.basic_info.entry_way.entry_type-1].name : ''}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                     <el-col :span="8">
+                        <el-form-item label="等级" required v-if='is_add'>
+                        <el-select v-model="params.level" clearable>
+                            <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
+                                    :label="item.dictionary_name">{{item.dictionary_name}}
+                            </el-option>
+                        </el-select>
+                        <div style="color: #409EFF;font-size: 12px;text-align: right;"
+                            v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
+                            <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
+                            <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
+                            <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
+                        </div>
+                        </el-form-item>
+                        <el-form-item label="等级" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.level'>
+                            <span v-for="item in branchBankCategory">{{item.id == basicInfo_info.basic_info.level ? item.dictionary_name : ''}}</span>
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="转正时间" v-if='is_add'>
+                            <el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间"
+                                            value-format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="转正时间" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.forward_time'>
+                            {{basicInfo_info.basic_info.forward_time}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                     <el-col :span="8">
+                    <el-form-item label="薪资" v-if='is_add'>
+                      <el-input placeholder="请输入薪资" v-model="params.salary" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="薪资" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.salary'>
+                            {{basicInfo_info.basic_info.salary}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="推荐人" v-if='is_add'>
+                        <el-input placeholder="请填写推荐人" @focus="openOrgan('recommender', 'staff')"
+                                    v-model="orgData.recommender" size="mini">
+                            <el-button slot="append" @click="emptyDepart('recommender')">清空</el-button>
+                        </el-input>
+                        </el-form-item>
+                        <el-form-item label="推荐人" v-if='!is_add'>
+                        <div class="content">
+                          <span v-if='basicInfo_info.basic_info && basicInfo_info.recommender'>
+                            {{basicInfo_info.basic_info.recommender}}
+                          </span>
+                          <span v-else>暂无</span>
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+              <el-row>
                 <!-- <el-col :span="8">
                   <el-form-item label="企业邮箱">
                     <el-input placeholder="请输入企业邮箱" v-model="params.mail" clearable></el-input>
                   </el-form-item>
                 </el-col> -->
               </el-row>
-              <el-row v-if="isEdit">
-                <el-col :span="8">
-                  <el-form-item label="离职原因">
-                    <el-select v-model="params.dismiss_reason.dismiss_type" clearable placeholder="请选择" size="mini">
-                      <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id"
-                                  :label="item.name">{{item.name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="选择时间">
-                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                 <el-col :span="16">
-                  <el-form-item label="备注">
-                      <el-input type="textarea" placeholder="请填写离职备注" v-model="params.entry_way.entry_mess" size="mini"></el-input>
-                    </el-form-item>
-                </el-col>
-              </el-row>
               <el-row>
-                <el-col :span="24">
-                  <el-form-item label="身份证复印件">
-                    <UpLoad :ID="'copyIDCard'" :isClear="isClear" :editImage="editIDCopy" @getImg="IDcard"></UpLoad>
+                <el-col :span="8">
+                  <el-form-item label="第一次签合同时间"  v-if='is_add'>
+                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间"
+                                    value-format="yyyy-MM-dd"></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="第一次签合同时间" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.agreement_first_time'>
+                        {{basicInfo_info.basic_info.agreement_first_time}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="24">
-                  <el-form-item label="银行卡复印件">
-                    <UpLoad :ID="'copyBankCard'" :isClear="isClear" :editImage="editBank" @getImg="BankCard"></UpLoad>
+                <el-col :span="8">
+                  <el-form-item label="第一次合同到期时间" v-if='is_add'>
+                    <el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间"
+                                    value-format="yyyy-MM-dd"></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="第一次合同到期时间" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.agreement_first_end_time'>
+                        {{basicInfo_info.basic_info.agreement_first_end_time}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="24">
-                  <el-form-item label="劳动合同">
-                    <UpLoad :ID="'copyContract'" :isClear="isClear" :editImage="editContract" @getImg="ContractCard"></UpLoad>
+                <el-col :span="8">
+                  <el-form-item label="第二次签合同时间" v-if='is_add'>
+                    <el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间"
+                                    value-format="yyyy-MM-dd"></el-date-picker>
                   </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="学历复印件">
-                    <UpLoad :ID="'copyEducation'" :isClear="isClear" :editImage="editEducation" @getImg="EducationCard"></UpLoad>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                  <el-form-item label="应聘表">
-                    <UpLoad :ID="'copyApply'" :isClear="isClear" :editImage="editResume" @getImg="ApplyCard"></UpLoad>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                  <el-form-item label="上家离职单位证明">
-                    <UpLoad :ID="'copyDismiss'" :isClear="isClear" :editImage="editResignation" @getImg="DismissCard"></UpLoad>
+                  <el-form-item label="第二次签合同时间" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.agreement_second_time'>
+                        {{basicInfo_info.basic_info.agreement_second_time}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
                   </el-form-item>
                 </el-col>
               </el-row>
               <!-- <el-row>
-                 <el-col :span="24">
+                <el-col :span="24">
                   <el-form-item label="备注">
                     <el-input type="textarea" v-model="params.remark" placeholder="请填写备注"></el-input>
                   </el-form-item>
-                </el-col> 
+                </el-col>
               </el-row> -->
             </el-tab-pane>
           </el-tabs>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addStaffDialogVisible = false" :disabled="disabledBtn">取 消</el-button>
+        <el-button size="small" @click="addStaffDialogVisible = false;is_add = false" :disabled="disabledBtn">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
+        <el-button size="small" type="primary" @click="editInfo" v-if='!is_add' :disabled="disabledBtn">修 改</el-button>
       </span>
     </el-dialog>
 
@@ -366,47 +592,22 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization';
-  import UpLoad from "../../common/UPLOAD.vue"
+  import Organization from '../../../common/organization.vue';
 
   export default {
-    props: ["ids", "addStaffDialog", 'isEdit', 'editId'],
-    components: {Organization, UpLoad},
+    props: ['addStaffDialog', 'isEdit', 'editId', 'id', 'isAdd', 'basicInfo_info'],
+    components: {Organization},
     data() {
       return {
-        isClear: false,
         url: globalConfig.server,
         disabledBtn: false,
         addStaffDialogVisible: false,
-        addEmployDialog: false,    // new
         activeName: 'first',
         currentPosition: [],
         positionDisabled: true,
         postDisabled: true,
         detailData: {},
-        // 新增字段 ========
-        statusOptions:[
-          {value: "1", label: "在职"},
-          {value: "2", label: "离职"},
-          {value: "3", label: "停职留薪"},
-        ],
-        editIDCopy: {},
-        editBank: {},
-        editContract: {},
-        editEducation: {},
-        editResume: {},
-        editResignation: {},
         params: {
-          image_info: {
-            doc_photo: [],   // 身份证
-            bank: [],       // 银行卡
-            resume: [],      // 申请表
-            resignation: [],   //  上家单位离职证明
-            labor_contract: [],  // 劳动合同
-            education: [],  // 学历复印件
-          },
-          statusValue: "",
-          // ================
           duty_id: [],
           position_id: [],
           department_id: [],
@@ -490,32 +691,15 @@
           {id: "3", name: '劝退'},
           {id: "4", name: '开除'},
         ],
+        fertility_status:'',
+        political_status:'',
+        education: '',
+        is_add: ''
       };
     },
     watch: {
-      isClear: function (val) {
-        this.isClear = val;
-      },
-      // addEmployLog(val,id) {
-      //   console.log(val, "22222")
-      //   this.addStaffDialogVisible = val;
-      // },
-      // addEmployDialog(val) {
-      //   if(!val) {
-      //     this.$emit("close")
-      //   }
-      // },
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
-        this.params.image_info = {
-          doc_photo: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
-        // this.isClear = true;
       },
       addStaffDialogVisible(val) {
         if (!val) {
@@ -524,7 +708,6 @@
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          this.isClear = true;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
@@ -551,38 +734,60 @@
             this.params.entry_way.entry_mess = '';
           }
         }
+      },
+      basicInfo_info(val){
+        if(val.basic_info){
+          //生育
+          this.dictionary(231, 1).then(res => {
+            // console.log(res.code)
+            if(res.code === '30010'){
+              // console.log(res.data)
+              // console.log(this.basicInfo_info)
+              res.data.forEach(item => {
+                if(item.id === this.basicInfo_info.basic_info.fertility_status){
+                  this.fertility_status = item.dictionary_name;
+                }
+              })
+            }
+          });
+          //政治面貌
+          this.dictionary(38, 1).then(res => {
+            // console.log(res.code)
+            if(res.code === '30010'){
+              // console.log(res.data)
+              // console.log(this.basicInfo_info)
+              res.data.forEach(item => {
+                if(item.id === this.basicInfo_info.basic_info.political_status){
+                  this.political_status = item.dictionary_name;
+                }
+              })
+            }
+          });
+          //学历
+           this.dictionary(39, 1).then(res => {
+            // console.log(res.code)
+            if(res.code === '30010'){
+              // console.log(res.data)
+              // console.log(this.basicInfo_info)
+              res.data.forEach(item => {
+                if(item.id === this.basicInfo_info.basic_info.education){
+                  this.education = item.dictionary_name;
+                }
+              })
+            }
+          });
+        }
+      },
+      isAdd(val){
+        // console.log(val)
+        this.is_add = val
       }
     },
     mounted() {
       this.getDictionaries();
+      
     },
     methods: {
-      // 图片上传 ================
-      IDcard(val) {
-        this.params.image_info.doc_photo = val[1];
-        // console.log(this.params.image_info.doc_photo, "身份证")
-      },
-      BankCard(val) {
-        this.params.image_info.bank = val[1];
-        // console.log(this.params.image_info.bank, "银行卡")
-      },
-      ContractCard(val) {
-         this.params.image_info.labor_contract = val[1];
-        //  console.log(this.params.image_info.labor_contract, "合同")
-      },
-      EducationCard(val) {
-         this.params.image_info.education = val[1];
-        //  console.log(this.params.image_info.education, "学历")
-      },
-      ApplyCard(val) {
-         this.params.image_info.resume = val[1];
-        //  console.log(this.params.image_info.resume, "申请表")
-      },
-      DismissCard(val) {
-         this.params.image_info.resignation = val[1];
-        //  console.log(this.params.image_info.resignation, "离职证明")
-      },
-      // ========================
       getDictionaries() {
         this.getSex();
         this.getFertilityStatus();
@@ -595,14 +800,6 @@
         this.getOnJobStatus();
       },
       initial() {
-        this.params.image_info = {
-          doc_photo: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -612,7 +809,6 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.statusValue = "";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -680,86 +876,10 @@
       //     this.postDisabled = true;
       //   }
       // },
-      // 
-      // 获取图片
-      getImgList() {
-        this.editEducation = {};
-        this.editBank = {};
-        this.editContract = {};
-        this.editResignation = {};
-        this.editResume = {};
-        this.editIDCopy = {};
-        this.params.image_info = {
-          doc_photo: [],   // 身份证
-          bank: [],       // 银行卡
-          resume: [],      // 申请表
-          resignation: [],   //  上家单位离职证明
-          labor_contract: [],  // 劳动合同
-          education: [],  // 学历复印件
-        }
-        // this.isClear = true;
-         this.$http.get(globalConfig.server + 'hrm/User/userInfo', {params: {user_id: this.editId}}).then(res => {
-           if (res.data.code == 90010) {
-             let obj1 = {};
-             let obj2 = {};
-             let obj3 = {};
-             let obj4 = {};
-             let obj5 = {};
-             let obj6 = {};
-             if(res.data.data.image_info) {
-                for( let key in res.data.data.image_info) {
-                  if(key == "education") {
-                    res.data.data.image_info[key].forEach((item, index) => {
-                      this.params.image_info.education.push(item.id);
-                      obj1[item.id] = item.uri;
-                    })
-                    this.editEducation = obj1;
-                  }
-                  if(key == "bank") {
-                    res.data.data.image_info[key].forEach((item, index) => {
-                      this.params.image_info.bank.push(item.id);
-                      obj2[item.id] = item.uri;
-                    })
-                    this.editBank = obj2;
-                  }
-                  if(key == "labor_contract") {
-                    res.data.data.image_info[key].forEach((item, index) => {
-                      this.params.image_info.labor_contract.push(item.id);
-                      obj3[item.id] = item.uri;
-                    })
-                    this.editContract = obj3;
-                  }
-                  if(key == "resignation") {
-                    res.data.data.image_info[key].forEach((item, index) => {
-                      this.params.image_info.resignation.push(item.id);
-                      obj4[item.id] = item.uri;
-                    })
-                    this.editResignation = obj4;
-                  }
-                  if(key == "resume") {
-                    res.data.data.image_info[key].forEach((item, index) => {
-                      this.params.image_info.resume.push(item.id);
-                      obj5[item.id] = item.uri;
-                    })
-                    this.editResume = obj5;
-                  }
-                  if(key == "doc_photo") {
-                    res.data.data.image_info[key].forEach((item, index) => {
-                      this.params.image_info.doc_photo.push(item.id);
-                      obj6[item.id] = item.uri;
-                    })
-                    this.editIDCopy = obj6;
-                  }
-                }
-              }
-           }
-         })
-      },
       //编辑时获取员工信息
       getStaffInfo() {
         this.$http.get(this.url + 'organization/staff/' + this.editId).then((res) => {
           if (res.data.code === '710910') {
-            this.getImgList();
             this.detailData = res.data.data.detail;
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
@@ -948,15 +1068,17 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          // console.log(this.params, "修改")
-          // return false
-          this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
-            if (res.data.code === '71002') {
-              // this.$emit('close', 'success');
+          this.$http.put(this.url + 'hrm/interview/' + this.id, {
+            update: {
+              basic_info: this.params
+            }
+          }).then((res) => {
+            if (res.data.code === '20030') {
+              this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
-              // this.isClear = true;
               this.initial();
               this.prompt('success', res.data.msg);
+              this.is_add = false;
             } else {
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
@@ -966,16 +1088,16 @@
           });
         } else {
           //新增
-          // console.log(this.params, "新增");
-          // return false
-          this.$http.post(this.url + 'organization/staff', this.params).then((res) => {
-            if (res.data.code === '71002') {
+          this.$http.put(this.url + 'hrm/interview/' + this.id, {
+            update: {
+              basic_info: this.params
+            }
+          }).then((res) => {
+            if (res.data.code === '20030') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
-              // this.isClear = true;
-              this.initial();
-
+              this.is_add = false;
             } else {
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
@@ -984,6 +1106,50 @@
             this.disabledBtn = false;
           });
         }
+        
+      },
+      //修改
+      editInfo(){
+        this.is_add = true;
+        this.params.real_name = this.basicInfo_info.basic_info.real_name;
+        this.params.gender =  this.basicInfo_info.basic_info.gender;
+        this.params.phone = this.basicInfo_info.basic_info.phone;
+        this.params.home_addr = this.basicInfo_info.basic_info.home_addr;
+        this.params.fertility_status = this.basicInfo_info.basic_info.fertility_status;
+        this.params.id_num = this.basicInfo_info.basic_info.id_num;
+        this.params.birthday = this.basicInfo_info.basic_info.birthday;
+        this.params.recommender = this.basicInfo_info.basic_info.recommender;
+        this.params.bank_num = this.basicInfo_info.basic_info.bank_num;
+        this.params.account_bank = this.basicInfo_info.basic_info.account_bank;
+        this.params.branch_bank = this.basicInfo_info.basic_info.branch_bank;
+        this.params.emergency_call = this.basicInfo_info.basic_info.emergency_call;
+        this.params.level =  this.basicInfo_info.basic_info.level;
+        this.params.account_name = this.basicInfo_info.basic_info.account_name;
+        this.params.enroll =  this.basicInfo_info.basic_info.enroll;
+        this.params.salary = this.basicInfo_info.basic_info.salary;
+        this.params.entry_materials = [];
+        this.params.salary = this.basicInfo_info.basic_info.salary;
+        this.params.origin_addr = this.basicInfo_info.basic_info.origin_addr;
+        this.params.marital_status = this.basicInfo_info.basic_info.marital_status;
+        this.params.political_status = this.basicInfo_info.basic_info.political_status;
+        this.params.forward_time = this.basicInfo_info.basic_info.forward_time;
+        this.params.mail = this.basicInfo_info.basic_info.mail;
+        this.params.education = this.basicInfo_info.basic_info.education;
+        this.params.school =  this.basicInfo_info.basic_info.school;
+        this.params.major = this.basicInfo_info.basic_info.major;
+        this.params.graduation_time = this.basicInfo_info.basic_info.graduation_time;
+        this.params.agreement_first_time = this.basicInfo_info.basic_info.agreement_first_time;
+        this.params.agreement_first_end_time = this.basicInfo_info.basic_info.agreement_first_end_time;
+        this.params.agreement_second_time = this.basicInfo_info.basic_info.agreement_second_time;
+        this.params.remark = this.basicInfo_info.basic_info.remark;
+        this.params.entry_way = this.basicInfo_info.basic_info.entry_way ? this.basicInfo_info.basic_info.entry_way : []
+        this.params.department_id = [];
+        this.params.position_id = [];
+        this.currentPosition = [];
+        this.positionArray = [];
+        this.postArray = [];
+        this.positionDisabled = true;
+        this.postDisabled = true;
       },
       selectDepart() {
         this.organizationDialog = true;
@@ -1100,6 +1266,7 @@
           }
         });
       },
+      //
       //在职状态
       getOnJobStatus() {
         this.$http.get(this.url + 'setting/dictionary/559').then((res) => {
@@ -1212,5 +1379,13 @@
       margin-right: 30px;
     }
   }
-
+  .content {
+    padding: 0 10px;
+    min-height: 32px;
+    background: #eef3fc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #727479;
+    line-height: 30px;
+  }
 </style>

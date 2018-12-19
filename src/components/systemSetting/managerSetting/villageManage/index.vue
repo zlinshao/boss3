@@ -7,6 +7,8 @@
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="openVillage('修改小区')">编辑</el-button>
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
+          <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button>
+          <!-- <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="cancelShareBtn" >取消分享</el-button> -->
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -236,6 +238,11 @@
                 <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.department}}<span v-if="scope.row.department.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
               </template>
             </el-table-column>
+            <el-table-column prop="share" label="分享部门">
+              <template slot-scope="scope">
+                <span :class="{activeHeght: isHeight !== scope.row.id }">{{scope.row.share}}<span v-if="scope.row.share.split('，').length>3" style="color: #409eff;cursor: pointer;" @click="collapseShow(scope.row,scope.$index)" class="collapse">{{isHeight !== scope.row.id ? "全部": "收起"}}</span></span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </el-col>
@@ -253,8 +260,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="mergeDialog = false">取 消</el-button>
-        <el-button type="primary" @click="isConfirmMerge">确 定</el-button>
+        <el-button @click="mergeDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="isConfirmMerge" size="mini">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -265,8 +272,10 @@
 
     <VillageSearch :villageDialog="villageDialog" @close="getVillage"></VillageSearch>
 
-     <!-- 组织架构 -->
+     <!-- 分配组织架构 -->
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"  :ids="selectedID"></organization>
+    <!-- 分享组织架构 -->
+    <organization :organizationDialog="shareOrganizationDia" :length="length" :type="type" @close='closeModalShsre' @selectMember="selectMemberShare"  :ids="selectedShareID"></organization>
   </div>
 </template>
 
@@ -300,11 +309,15 @@ export default {
       newAreaList: [], // 区域
       deletedId: "", // 删除ID
       organizationDialog: false,  // 组织架构
+      shareOrganizationDia: false,  // 组织架构
       length: 0,
       type: "",
       organizeVisible: false, // 组织架构
       communityArr: [],  // 小区数组
       orgId: [],
+      cancelShareFrom: {
+        community_id: "",
+      },
       distributionForm: {
         org_id: [],  // 部门ID
         community_id: [] // 小区ID
@@ -361,6 +374,12 @@ export default {
       mergeName: "",
       oldVillageName: "",
       selectedID: [],   // 选中小组
+      selectedShareID: [],   // 选中分享小组
+      communityName: "",  // 选中小区
+      shareFrom: {
+        org_id: "",
+        community_id: "",
+      }
     };
   },
   mounted() {
@@ -396,16 +415,19 @@ export default {
     this.multipleSelection = val;
       // 默认选择所属部门
        this.selectedID = [];
-       console.log(this.selectedID, "1111")
+       this.selectedShareID = [];
        if(val.length) {
+          this.communityName = val[0].village_name;
          this.personalList.forEach((item, index) => {
           if(item.id == val[0].id) {
               item.orgs.forEach((value, key) => {
                 this.selectedID.push(value.id);
               })
+              item.shares.forEach((val, inx) => {
+                this.selectedShareID.push(val.id)
+              })
             }
           })
-                console.log(this.selectedID, "2222")
        }
       val.forEach((item, index) => {
         if(this.communityArr.indexOf(item.id) == -1) {
@@ -444,11 +466,16 @@ export default {
             this.tableData = [];
             for (let i = 0; i < data.length; i++) {
               let list = {};
-              let departStr = ""
+              let departStr = "";
+              let shareStr = "";
               data[i].orgs.forEach((item, index) => {
                 departStr += item.name + '，';
               })
+              data[i].shares.forEach((item, index) => {
+                shareStr += item.name + '，';
+              })
               list.department = departStr.substring(0, departStr.length - 1);
+              list.share = shareStr.substring(0, shareStr.length - 1);
               this.lengthStr = list.department;
               list.id = data[i].id;
               list.village_name = data[i].village_name;
@@ -572,6 +599,54 @@ export default {
     mergeBtn() {
       this.mergeDialog = true;
     },
+    // 取消分享
+    cancelShareBtn() {
+      this.cancelShareFrom.community_id = this.communityArr;
+      this.$http.post(this.urls + "distribution/community/un-share", this.cancelShareFrom).then(res => {
+        console.log(res, "333333")
+        if(res.data.code == "1000") {
+          this.$notify.success({
+            title: "成功",
+            message: res.data.msg
+          })
+          this.myData(1)
+        } else {
+          this.$notify.warning({
+            title: "警告",
+            message: res.data.msg
+          })
+        }
+      })
+    },
+    // 分享
+    shareBtn() {
+      this.shareOrganizationDia = true;
+      this.type = "depart";
+      this.length = 20;
+    },
+    selectMemberShare(val) {
+      this.type = "";
+      this.length = "";
+      this.distributionForm = {org_id: [], community_id: ""};
+      val.forEach((item, index) => {
+       this.distributionForm.org_id.push(item.id)
+      });
+      this.distributionForm.community_id = this.communityArr;
+       this.$http.post(this.urls + "distribution/community/share", this.distributionForm).then(res => {
+         if(res.data.code == "10000") {
+           this.$notify.success({
+              title: "成功",
+              message: res.data.msg
+            });
+            this.myData(1);
+         } else {
+           this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+         }
+       })
+    },
      //选人组件
     openOrganizeModal(id) {
       this.organizationDialog = true;
@@ -604,6 +679,9 @@ export default {
      // 关闭模态框
     closeModal() {
       this.organizationDialog = false;
+    },
+    closeModalShsre() {
+      this.shareOrganizationDia = false;
     },
     choose(val, id) {
       if (val === "city") {
@@ -800,12 +878,12 @@ export default {
     isConfirmMerge() {
       let msg = `<div>
                       此操作将会将<b style="color: #e4393c">${
-                        this.oldVillageName
+                        this.communityName
                       }</b>合并到<b style="color: #e4393c">${
         this.mergeName
       }</b>,
                       <b style="color: #e4393c">${
-                        this.oldVillageName
+                        this.communityName
                       }</b>下的所有房屋以及合同将会转移到<b style="color: #e4393c">${
         this.mergeName
       }</b>下,是否继续?

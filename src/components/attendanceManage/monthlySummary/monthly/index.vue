@@ -175,7 +175,7 @@ export default {
         // 传递参数
         limit: 12,
         page: 1,
-        org_id: "",
+        org_id: [],
         search: "",
         arrange_month: "",
         is_dimission: '0'    // 离职人员
@@ -360,25 +360,29 @@ export default {
     },
     //选人组件
     openOrganizeModal(id) {
-      this.params.org_id = id;
+      // this.params.org_id = id;
       // this.follow_name = '';
       this.organizationDialog = true;
       this.type = "depart";
-      this.length = 1;
+      // this.length = 1;
     },
     selectMember(val) {
       this.type = "";
       this.length = "";
       this.follow_id = "";
       this.follow_name = "";
-      val.forEach(item => {
-        this.follow_id += item.id + ",";
-        this.follow_name = item.name + ",";
+      let arr = [];
+      let str = "";
+      val.forEach((item, index) => {
+       arr.push(item.id);
+        str += item.name + ",";
       });
-      this.params.org_id = this.follow_id.substring(
-        0,
-        this.follow_id.length - 1
-      );
+      this.follow_name = str;
+      this.params.org_id = arr;
+      // this.params.org_id = this.follow_id.substring(
+      //   0,
+      //   this.follow_id.length - 1
+      // );
       // this.params.org_id = this.follow_id;
       this.follow_name = this.follow_name.substring(
         0,
@@ -392,7 +396,7 @@ export default {
     },
     emptyFollowPeople() {
       this.follow_id = "";
-      this.params.org_id = "";
+      this.params.org_id = [];
       this.follow_name = "";
     },
     // 弹窗
@@ -446,13 +450,12 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
-      this.$http
-        .get(globalConfig.server + "attendance/summary", {
-          params: this.params
-        })
-        .then(res => {
+      console.log(this.params, "44444")
+      this.tableData = [];
+      this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
           if (res.data.code == "20000") {
             this.tableData = res.data.data.data;
+            console.log(this.tableData, "555555")
             this.total = Number(res.data.data.count);
             let props = [
               "thingLeave",
@@ -584,7 +587,20 @@ export default {
               title: "警告",
               message: res.data.msg
             });
-          }
+          } else if(res.data.code == "70001") {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+            this.tableData = [];
+            this.total = 0;
+          } 
+          // else if(res.data.code == "70000") {
+          //   this.$notify.success({
+          //     title: "成功",
+          //     message: res.data.msg
+          //   });
+          // }
         });
     },
     // 当月考勤
