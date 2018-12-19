@@ -187,7 +187,7 @@
                         </div>
                       </el-form-item>
                     </el-col>
-                  <el-col :span="8">
+                  <!-- <el-col :span="8">
                       <el-form-item label="银联行号" v-if='is_add'>
                         <el-input placeholder="请输入支行" v-model="params.branch_bank" clearable></el-input>
                         </el-form-item>
@@ -199,7 +199,20 @@
                           <span v-else>暂无</span>
                         </div>
                       </el-form-item>
-                    </el-col>
+                    </el-col> -->
+                    <el-col :span="8">
+                    <el-form-item label="开户名" v-if='is_add'>
+                      <el-input placeholder="请输入开户名" v-model="params.account_name" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="开户名" v-if='!is_add'>
+                    <div class="content">
+                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.account_name'>
+                        {{basicInfo_info.basic_info.account_name}}
+                      </span>
+                      <span v-else>暂无</span>
+                    </div>
+                  </el-form-item>
+                  </el-col>
                   <el-col :span="8">
                   <el-form-item label="籍贯" v-if='is_add'>
                     <el-input placeholder="请输入籍贯" v-model="params.origin_addr" clearable></el-input>
@@ -274,21 +287,6 @@
                 </el-col>
               </el-row>
                 <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="开户名" v-if='is_add'>
-                      <el-input placeholder="请输入开户名" v-model="params.account_name" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="开户名" v-if='!is_add'>
-                    <div class="content">
-                      <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.account_name'>
-                        {{basicInfo_info.basic_info.account_name}}
-                      </span>
-                      <span v-else>暂无</span>
-                    </div>
-                  </el-form-item>
-                  </el-col>
-                  
-                 
                 </el-row>
                 <el-row>
                   <el-col :span="24" v-if="params.entry_way.entry_type == 11">
