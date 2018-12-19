@@ -34,7 +34,7 @@
             </el-form>
         </div>
         <!--招聘详情开始-->
-        <div class="positionList" v-if="positionList.length">
+        <div class="positionList"  v-loading="loadingRecruit" element-loading-text="拼命加载中">
             <div class='positionItem' v-for="(item, index) in positionList" :key="index">
                 <el-container>
                     <el-header>
@@ -137,10 +137,10 @@
                     <el-footer>
                         <el-row :gutter="20" class='data-preview'>
                             <el-button class='button' :span="6" @click='platformManage(item, index)'>{{item.platform ? Object.keys(item.platform).length : 0}}个平台已发布</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.interviewDated ? item.interviewDated  : 0}}人已约面试</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.interviewFinished ? item.interviewFinished  : 0}}人面试完毕</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.toInduct ? item.toInduct  : 0}}人等待入职</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.inducted ? item.inducted  : 0}}人已入职</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.wait_interview ? item.wait_interview  : 0}}人已约面试</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.after_interview ? item.after_interview    : 0}}人面试完毕</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.wait_entry ? item.wait_entry : 0}}人等待入职</el-button>
+                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.after_entry ? item.after_entry : 0}}人已入职</el-button>
                         </el-row>
                     </el-footer>
                 </el-container>
@@ -204,6 +204,7 @@
         components: {Organization, AddNewPosition, VueEditor, Platform, ProcessManage},
         data(){
             return{
+                loadingRecruit: true,
                 newPositionDialog: false,
                 editorDisabled: false,
                 is_loading:true,
@@ -263,7 +264,6 @@
                 organizeVisible: false,
                 organizeType: '',
                 positionList:[],
-                recruitID:[],                                   //招聘id
                 /** 平台*/
                 platformDialog: false,
                 /** 流程**/
@@ -302,7 +302,6 @@
             },
             //搜索
             search(){
-                this.recruitID = [];
                 this.getPositionList();
             },
             //新增职位
@@ -367,7 +366,6 @@
                             type: 'success'
                         });
                         this.togglePositionDialogVisible = false;
-                        this.recruitID = [];
                         this.getPositionList()
                     }else{
                         this.$notify.error({
@@ -400,24 +398,23 @@
             },
             //获取招聘列表
             getPositionList(){
-                this.recruitID = [];
+                // this.positionList = [];
+                this.loadingRecruit = true;
                 this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
-                    if(res.data.code === '10000'){
+                    if(res.data.code === '10000' || res.data.code === '70000'){
+                        this.loadingRecruit = false;
                         this.positionList = res.data.data.data;
                         this.positionList.forEach(item => {
-                            this.recruitID.push(item.id)
                         });
-                        this.getInterviewDated()
+                        // this.getInterviewDated()
                     }else{
                         this.positionList = [];
-                        this.recruitID = [];
                     }
                     // console.log(this.positionList)
                 })
             },
             //获取已约面试/面试结束/等待入职/已经入职数据
             getInterviewDated(){
-                // console.log(this.recruitID);
                 if(this.recruitID.length){
                     this.recruitID.forEach((item, index) => {
                         //已约面试
@@ -609,7 +606,6 @@
                 this.newPositionDialog = false;
                 this.platformDialog = false;
                 this.processDialog = false;
-                this.recruitID = [];
                 this.getPositionList();
             },
            /************************* 平台相关*************************************/

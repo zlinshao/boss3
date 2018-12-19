@@ -36,7 +36,7 @@ const RetreatManage = () => import  ('../components/rentManage/datumMessage/retr
  const StaticDetail = () => import  ('../components/finance/statistics/components/staticDetail');            //统计详情
 // const Statistics =()=> import  ('../components/finance/statistics/index.vue');                            //数据统计
 // const IncomeFlow =()=> import  ('../components/finance/incomeFlow/index');                                //收支流水
-  
+
 
 const FinanceBasicMange=()=>import('../components/financeNew/basicManage');//基本管理
 const FinanceCustomer=()=>import('../components/financeNew/customerMange');//客户管理
@@ -242,6 +242,10 @@ const DetailAcievement = () => import('../components/meritPay/achievement/achiev
 const accountMmanagement = () => import('../components/meritPay/accountMmanagement/index.vue');
 const account = () => import('../components/meritPay/accountMmanagement/components/account.vue');
 
+// 微信开发者
+const weixin = ()=> import('../components/weixin/index.vue');
+const new_media = ()=> import('../components/new_media/index.vue');
+
 Vue.use(Router);
 
 export default new Router({
@@ -253,6 +257,12 @@ export default new Router({
     //   name: 'Index',
     //   redirect: '/main',
     // },
+    {
+      path: '/weixin',
+      component: weixin,
+      name: '',
+      hidden: true
+    },
 
     {
       path: '/login',
@@ -660,6 +670,15 @@ export default new Router({
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
         { path: '/videoDetails', component: videoDetails, name: '教学视频'},
 
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: '新媒体管理',
+      icon: 'iconfont icon--1',
+      children: [
+        {path: '/new_media',component: new_media,name: '邀请赚红包'}
       ]
     },
     {

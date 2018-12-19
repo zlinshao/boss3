@@ -119,7 +119,7 @@
                                     v-model="updateParams.update.interview_status"
                                     @change='updateStatus(scope.row)' 
                                     placeholder="">
-                                    <el-option v-for="(item, index) in interview" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                                    <el-option v-for="(item, index) in interview_unfinished" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
                                 </el-select>
                             </template>
                         </el-table-column>
@@ -393,21 +393,6 @@
                                 <span v-if='!scope.row.basic_info'>添加</span>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                            prop="entry_statuss"
-                            label="入职结果">
-                            <template slot-scope="scope">
-                                <span v-if='is_editing_entry_statuss !== scope.row.id'>{{scope.row.entry_statuss.dictionary_name}}</span>
-                                <el-select 
-                                    v-if='is_editing_entry_statuss === scope.row.id' 
-                                    size='small' 
-                                    v-model="entryStatus.update.entry_status"
-                                    @change='selectEntryStatus(scope.row)'
-                                    placeholder="">
-                                    <el-option v-for="(item, index) in humanresource_entry" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
-                                </el-select>
-                            </template>
-                        </el-table-column>
                     </el-table>
                 </el-tab-pane>
             </el-tabs>
@@ -419,7 +404,9 @@
                     </el-form-item>
                     <el-form-item label="性别">
                         <el-select v-model="newInterviewParams.gender" placeholder="">
-                            <el-option v-for="(item, index) in genders" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                            <!-- <el-option v-for="(item, index) in genders" :key='index' :label='item.dictionary_name' :value='item.id'></el-option> -->
+                            <el-option label='男' value='716'></el-option>
+                            <el-option label='女' value='717'></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="学历">
@@ -452,8 +439,8 @@
                     <el-form-item label="原始简历">
                         <UPLOAD :ID="'first'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click='confirmAddInterviewer'>确定添加</el-button>
+                    <el-form-item class='add-interview'>
+                        <el-button type="primary" @click='confirmAddInterviewer'>确定</el-button>
                         <el-button @click='cancelAdd'>取消</el-button>
                     </el-form-item>
                 </el-form>
@@ -473,7 +460,15 @@
                         <span>{{uninterviewObj.name}}</span>
                     </el-form-item>
                     <el-form-item label="面试结果">
-                        <span>{{uninterviewObj.interview_status}}</span>
+                        <span v-if='!is_editResult'>{{uninterviewObj.interview_status}}</span>
+                         <el-select 
+                            v-if='is_editResult' 
+                            size='small' 
+                            v-model="updateParams.update.interview_status"
+                            @change='confirmIsinterview'
+                            placeholder="">
+                            <el-option v-for="(item, index) in interview_unfinished" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="原因">
                         <span v-if='!is_editResult'>{{uninterviewObj.interview_result}}</span>
@@ -619,7 +614,15 @@
                         <span>{{failEntryObj.name}}</span>
                     </el-form-item>
                     <el-form-item label="入职结果">
-                        <span>{{failEntryObj.entry_status}}</span>
+                        <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_status}}</span>
+                        <el-select 
+                            v-if='is_editing_fail_result' 
+                            size='small' 
+                            v-model="entryStatus.update.entry_status"
+                            @change='confirmIsEntry_'
+                            placeholder="">
+                            <el-option v-for="(item, index) in humanresource_entry" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="原因">
                         <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_result}}</span>
@@ -674,6 +677,7 @@
                 is_editResult: false,
                 is_editing_id:'',
                 is_editing_interview_status:'',
+                is_editing_interview_status_id: '',
                 lookUpResumeDialog : false,
                 album:[],
                 searchParam: '',
@@ -706,6 +710,7 @@
                 uninterviewObj:{
                     id: '',
                     name: '',
+                    genter: '',
                     interview_status: '',
                     interview_result: '',
                 },
@@ -779,6 +784,7 @@
                 basicDetail: {},
                 failEntryDialog: false,
                 is_editing_entry_statuss:'',
+                is_editing_entry_statuss_id: '',
                 entry_other: {
                     entry_time: '',
                     other: '',
@@ -801,6 +807,7 @@
                 is_editing_fail_result: false,
                 /**字典*/
                 interview:[],               //面试状态
+                interview_unfinished: [],
                 interview_finished: [],     //过滤掉未面试状态
                 source:[],                  //简历来源
                 genders: [],                //性别
@@ -952,10 +959,11 @@
                 }
                 //未面试
                 if(column.property === 'interview_status'){
-                    // console.log(row);
+                    this.is_editing_interview_status_id = row.id;
                     if(row.interview_status === 736){
                         this.uninterviewDialog = true;
                         this.uninterviewObj.id = row.id;
+                        this.uninterviewObj.gender = row.gender;
                         this.uninterviewObj.name = row.name;
                         this.uninterviewObj.interview_status = row.interview_statuss.dictionary_name;
                         this.uninterviewObj.interview_result = row.interview_result;
@@ -999,7 +1007,6 @@
             },
             //选择面试状态
             updateStatus(item){
-                // console.log(this.is_editing_interview_status);
                 if(this.updateParams.update.interview_status === 737){
                     this.interviewedDialog = true;
                     this.interviewedObj.id = item.id;
@@ -1011,13 +1018,14 @@
             },
             //修改面试状态
             confirmUpdateStatus(){
-                this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_interview_status, this.updateParams).then(res => {
+                this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_interview_status_id, this.updateParams).then(res => {
                     if(res.data.code === '20030'){
                         this.$notify({
                             title: '成功',
                             message: res.data.msg,
                             type: 'success'
                         });
+                        this.uninterviewDialog = false;
                         this.is_editing_interview_status = '';
                         this.getAllData(this.id);
                     }else{
@@ -1060,6 +1068,17 @@
             //修改未面试原因
             editResult(){
                 this.is_editResult = true;
+                this.updateParams.update.interview_status = this.uninterviewObj.interview_status;
+            },
+            //修改未面试状态-->已面试
+            confirmIsinterview(item){
+                console.log(item)
+                if(item === 737){
+                    this.interviewedDialog = true;
+                    this.interviewedObj.name = this.uninterviewObj.name;
+                    this.interviewedObj.gender = this.uninterviewObj.gender == '716' ? '男' : '女';
+                    this.interviewedObj.id = this.uninterviewObj.id;
+                }
             },
             //提交未面试信息
             confirmEditResult(){
@@ -1316,6 +1335,9 @@
                     this.lookUpResumeDialog = true;
                     this.album = row.album
                 }
+                if(column.property === 'entry_statuss'){
+                    this.is_editing_entry_statuss_id = row.id;
+                }
                 if(column.property === 'entry_other' && row.entry_other){
                     this.IsEntryDialog = true;
                     this.agreeInductParams.update.entry_other.salary = row.entry_other.salary;
@@ -1378,25 +1400,30 @@
                     this.failEntryObj.entry_status = this.humanresource_entry.filter(item => item.id === _id)[0].dictionary_name;
                 }
                 if(this.entryStatus.update.entry_status === 745){
-                    this.$http.put(globalConfig.server + 'hrm/interview/' + item.id, this.entryStatus).then(res => {
-                        if(res.data.code == '20030'){
-                            this.$notify({
-                                title: '成功',
-                                message: res.data.msg,
-                                type: 'success'
-                            });
-                            this.getAllData(this.id);
-                        }else{
-                            this.$notify({
-                                title: '警告',
-                                message: res.data.msg,
-                                type: 'warning'
-                            });
-                        }
-                        this.entryStatus.update.entry_status = '';
-                        this.is_editing_entry_statuss = '';
-                    })
+                    this.confirmEntrySuccess()
                 }
+            },
+            //确定入职成功
+            confirmEntrySuccess(){
+                this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_entry_statuss_id, this.entryStatus).then(res => {
+                    if(res.data.code == '20030' || res.data.code === '71030'){
+                        this.$notify({
+                            title: '成功',
+                            message: res.data.msg,
+                            type: 'success'
+                        });
+                        this.getAllData(this.id);
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
+                    }
+                    this.entryStatus.update.entry_status = '';
+                    this.is_editing_entry_statuss = '';
+                    this.failEntryDialog = false;
+                })
             },
             //确定入职失败信息
             confirmFailEntry(){
@@ -1412,10 +1439,11 @@
                     }
                 })
             },
-            //更新入职成功/失败状态
+            //更新入职失败状态
             updateEntryStatus(){
                 this.$http.put(globalConfig.server + 'hrm/interview/' + this.failEntryObj.id, this.entryStatus).then(res => {
                     if(res.data.code == '20030'){
+                        console.log('调用此接口')
                         this.$notify({
                             title: '成功',
                             message: res.data.msg,
@@ -1424,6 +1452,11 @@
                     }
                     this.getAllData(this.id);
                 })
+            },
+            //从入职失败信息重新更新入职状态
+            confirmIsEntry_(){
+                console.log(555);
+                this.confirmEntrySuccess()
             },
             //编辑入职失败原因
             editFailEntry(){
@@ -1500,7 +1533,10 @@
                         this.interview = res.data;
                         res.data.forEach(item => {
                             if(item.id === 738 || item.id === 739){
-                                this.interview_finished.push(item)
+                                this.interview_finished.push(item);
+                                    //去除待确认状态
+                            }else if(item.id !== 735){
+                                this.interview_unfinished.push(item)
                             }
                         })
                     }
@@ -1573,6 +1609,10 @@
         position: absolute;
         right: 35px;
         top: 0;
+    }
+    .add-interview{
+        display: flex;
+        justify-content: center;
     }
 </style>
 
