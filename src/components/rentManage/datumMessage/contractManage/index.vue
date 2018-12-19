@@ -394,10 +394,15 @@
                     <template slot-scope="scope">
                       <!--<span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>-->
                       <div>
+                        <span v-if="scope.row.annotations" style="color: red;">!</span>
                         <span v-if="scope.row.customer_name === '测试'"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
                         <span v-if="!scope.row.customer_name">暂无</span>
                         <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                          this is notice
+                          <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
+                          <span v-else style="color: red;">拉入黑名单</span>
+                        </div>
+                        <div class="markInfo" :class="{markShow: scope.row.contract_number === markShow ? '' : 'yes'}" v-if="scope.row.annotation">
+                          {{ scope.row.content }}
                         </div>
                       </div>
                     </template>
@@ -1418,6 +1423,17 @@
 
     <Organization :organizationDialog="allotVisible" :type="allotType" :length="allotLength"
                   @close="allotCloseOrganization" @selectMember="allotSelectMember"></Organization>
+    <el-dialog
+      :visible.sync="markInfoVisible"
+      title="备注"
+      width="20%"
+    >
+      <el-input type="textarea" :row="4" v-model="markInfo"></el-input>
+      <div style="text-align: right;margin-top: 15px;">
+        <el-button size="mini" @click="markInfoVisible = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="handleMarkInfo">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -1454,6 +1470,10 @@
     data() {
       return {
         showNotice: '',
+        markInfoVisible: false,
+        markInfo: '',
+        currentScope: '',
+        markShow: '',
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
@@ -1910,19 +1930,58 @@
       // =============================================
     },
     methods: {
+      //备注确定
+      handleMarkInfo() {
+        if (!this.markInfo) {
+          this.$notify.warning({
+            title: '警告',
+            message: '备注信息不能为空'
+          });
+          return false;
+        }
+        this.$http.post(globalConfig.server + '/annotations',{
+          remark_type: 1,
+          remark_id: this.currentScope.row.house_id,
+          content: this.markInfo
+        }).then(res => {
+          console.log(res);
+          if (res.data.code === '20000') {
+            this.markInfoVisible = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.markInfoVisible = false;
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            });
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
+      },
       //拉入黑名单
       handlePullBlack(scope) {
-        console.log(scope);
+        this.currentScope = scope;
+        if (scope.row.annotations) {
+          this.$message('移除黑名单');
+        }else {
+          this.markInfoVisible = true;
+        }
       },
       //鼠标移入
       cellMouseEnter(row,column) {
         if (column.property === "customer_name") {
           this.showNotice = row.contract_number;
+          this.markShow = row.contract_number;
         }
       },
       cellMouseLeave(row,column) {
         if (column.property === 'customer_name') {
           this.showNotice = '';
+          this.markShow = '';
         }
       },
       // 新增方法
@@ -3138,14 +3197,25 @@
     }
     .notice{
       position: absolute;
-      top: 1.5em;
+      top: 2.5em;
       left: 0;
       width: 100%;
-      height: 3em;
-      background-color: #999999;
+      height: 2em;
+      background-color: #bcbcbd;
       text-align: center;
       line-height: 2;
-      color: red;
+    }
+    .markInfo{
+      width: 100%;
+      position: absolute;
+      top: 5em;
+      left: 0;
+      height: 2.5em;
+      color: #409EFF;
+      background-color: white;
+    }
+    .markShow{
+      display: none;
     }
     .isShow{
       display: none;
