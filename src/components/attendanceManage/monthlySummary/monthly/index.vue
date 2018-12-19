@@ -450,14 +450,12 @@ export default {
         .catch(_ => {});
     },
     refresh(page) {
-      // console.log(this.params)
-      this.$http
-        .get(globalConfig.server + "attendance/summary", {
-          params: this.params
-        })
-        .then(res => {
+      console.log(this.params, "44444")
+      this.tableData = [];
+      this.$http.get(globalConfig.server + "attendance/summary", {params: this.params}).then(res => {
           if (res.data.code == "20000") {
             this.tableData = res.data.data.data;
+            console.log(this.tableData, "555555")
             this.total = Number(res.data.data.count);
             let props = [
               "thingLeave",
@@ -589,7 +587,17 @@ export default {
               title: "警告",
               message: res.data.msg
             });
-          }
+          } else if(res.data.code == "70001") {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+            this.tableData = [];
+            this.total = 0;
+          } 
+          // else if(res.data.code == "70000") {
+          //   this.tableData = res.data.data.data;
+          // }
         });
     },
     // 当月考勤

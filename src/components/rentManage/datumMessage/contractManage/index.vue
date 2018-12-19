@@ -620,8 +620,8 @@
                         <el-row v-for="index in newpriceLen" :key="index">
                           <el-col :span="14">
                             <el-form-item label="月单价" v-if="index==1" required>
-                              <el-date-picker
-                              class="hiddenA"
+                              <!-- <el-date-picker
+                                class="hiddenA"
                                 v-model="contractForm.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -634,10 +634,11 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                                 >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item v-if="index!=1" required>
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -650,7 +651,8 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                               >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -666,7 +668,7 @@
                         <el-row v-for="index in newpayForLen" :key="index+111">
                           <el-col :span="14">
                             <el-form-item label="付款方式" required v-if="index==1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -678,10 +680,11 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item required v-if="index!=1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -693,7 +696,8 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -1075,8 +1079,8 @@
                         <el-row v-for="index in newpriceLen" :key="index">
                           <el-col :span="14">
                             <el-form-item label="月单价" v-if="index==1" required>
-                              <el-date-picker
-                              class="hiddenA"
+                              <!-- <el-date-picker
+                                class="hiddenA"
                                 v-model="contractForm2.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1089,10 +1093,11 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                                 >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item v-if="index!=1" required>
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm2.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1105,7 +1110,8 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                               >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -1121,7 +1127,7 @@
                         <el-row v-for="index in newpayForLen" :key="index+111">
                           <el-col :span="14">
                             <el-form-item label="付款方式" required v-if="index==1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm2.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1133,10 +1139,11 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item required v-if="index!=1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm2.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1148,7 +1155,8 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                            <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -1992,6 +2000,28 @@
         this.contractForm.pay_method[1].splice(index, 1);
       },
       newBouncing(val) {
+        if (this.contractForm.unit_price[0].length === this.contractForm.unit_price[1].length) {
+          this.contractForm.unit_price[0].forEach((res, index) => {
+            let obj = {};
+            obj.price = res;
+            obj.period = this.contractForm.unit_price[1][index];
+            this.contractForm.unit_price.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
+        if (this.contractForm.pay_type[0].length === this.contractForm.pay_type[1].length) {
+          this.contractForm.pay_type[0].forEach((res, index) => {
+            let obj = {};
+            obj.period = res;
+            obj.pay_way = this.contractForm.pay_type[1][index];
+            obj.pay_way_str = this.contractForm.pay_type[1][index];
+            this.contractForm.pay_type.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
+        console.log(this.contractForm, "44444")
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {
@@ -2000,7 +2030,6 @@
                 message: res.data.msg
               })
             }
-            
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
@@ -2059,7 +2088,7 @@
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
               this.contractEntryLoading = false;
-               this.allBtn = false;
+              this.allBtn = false;
             //  }
           } 
            else {
@@ -2255,6 +2284,28 @@
         this.getContract2()
       },
       newBouncing2(val) {
+        // 字段处理
+        if (this.contractForm2.unit_price[0].length === this.contractForm2.unit_price[1].length) {
+          this.contractForm2.unit_price[0].forEach((res, index) => {
+            let obj = {};
+            obj.price = res;
+            obj.period = this.contractForm2.unit_price[1][index];
+            this.contractForm2.unit_price.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
+        if (this.contractForm2.pay_type[0].length === this.contractForm2.pay_type[1].length) {
+          this.contractForm2.pay_type[0].forEach((res, index) => {
+            let obj = {};
+            obj.period = res;
+            obj.pay_way = this.contractForm2.pay_type[1][index];
+            obj.pay_way_bet = this.contractForm2.pay_type[1][index];
+            this.contractForm2.pay_type.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm2).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {

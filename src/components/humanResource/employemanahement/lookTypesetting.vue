@@ -16,10 +16,11 @@
               <td v-for="(head, index) in heads" :key="index">{{head}}</td>
           </tr>
           <tr v-for="(week, index) in arr" :key="index">
-              <td v-for="(item, index) in week" :key="index" :class="{'gray': item.prevmonth || item.nextmonth}">
+              <td v-for="(item, index) in week" :key="index" :class="{'gray': item.prevmonth || item.nextmonth}" @click="modifyTypesetting(item.day)">
                 <div>{{month}}月{{item.day}}日</div>
                 <div>
                   <span v-if="item.setting == '早班'">{{item.setting}}(9:00 - 18:00)</span>
+                  <span v-if="item.setting == '网络班'">{{item.setting}}(10:00 - 19:00)</span>
                   <span v-if="item.setting == '晚班'">{{item.setting}}(13:00 - 21:00)</span>
                   <span v-if="item.setting == '休息'">{{item.setting}}</span>
                 </div>
@@ -32,6 +33,20 @@
         <el-button type="primary" @click="typesettingDialog = false" size="mini">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 修改排班 -->
+    <el-dialog title="修改排班" :visible.sync="modifyDialogVisible" width="30%">
+      <div>
+        <p v-for="(tmp,index) in checkList" :key="index">
+          <el-radio v-model="currentArrange" :label="tmp.alias">{{tmp.alias}}:{{tmp.name}} &nbsp;&nbsp;{{tmp.morning_work_time}}
+            - {{tmp.pm_rest_time}}
+          </el-radio>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="modifyDialogVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="submitModify" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -40,6 +55,14 @@ export default {
   props: ["ids","lookTypesettingLog"],
   data() {
     return {
+      currentSort: { //当前排班
+        user_id: "",
+        arrange: [],
+        arrange_month: ""
+      }, 
+      currentArrange: "A",  // 点击后当前班次
+      checkList: [],
+      modifyDialogVisible: false,
       typesettingDialog: false,  
       year: "",
       month: "",
@@ -64,8 +87,12 @@ export default {
         user_id: "",
         date: ""
       },
-      arrange: [],
+      arrangeList: [],
+      modifyDay: ""
     }
+  },
+  mounted() {
+    this.getCheckList();
   },
   created() {
     // this.month = new Date().getMonth() + 1
@@ -76,17 +103,37 @@ export default {
     },
     ids(val) {
       this.params.user_id = val;
+      this.currentSort.user_id = val;
+      console.log(this.params.user_id)
       this.getTypeTime();
     },
     typesettingDialog(val) {
        if (!val) {
         this.$emit('close');
         this.init();
-        this.arr = [];
+        // this.arr = [];
       }
     }
   },
   methods: {
+    getCheckList() {
+        this.$http
+          .get(globalConfig.server + "attendance/classes", {
+            params: {type: "all"}
+          })
+          .then(res => {
+            if (res.status == 200) {
+              if (res.data.code == 20000) {
+                this.checkList = res.data.data.data;
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: "获取失败"
+                })
+              }
+            }
+          });
+      },
     // 清除数据
     init() {
       this.params = {
@@ -96,11 +143,11 @@ export default {
     },
     // 获取排班
     getTypeTime() {
+      this.arr = [];
       // this.$http.get(globalConfig.server + "attendance/sort/sort?user_id=289&arrange_month=2018-11").then(res => {   // 测试数据
       this.$http.get(globalConfig.server + "attendance/sort/sort", {params: this.params}).then(res => {  
-        console.log(res, "6666666")
         if(res.data.code == "20000") {
-          this.arrange = res.data.data.data.arrange;
+          this.arrangeList = res.data.data.data.arrange;
           this.year = res.data.data.year;
           this.month = res.data.data.month;
           this.params = this.year + "-" + this.month;
@@ -158,7 +205,7 @@ export default {
         _arr.push(_week);
       }
       let _this = this;
-      let settingArr = Object.values(this.arrange);
+      let settingArr = Object.values(this.arrangeList);
       _arr.forEach((item, index) => {
         item.forEach((val, key) => {
           if(val.currentmonth) {
@@ -167,9 +214,9 @@ export default {
                   if(a == "A") {
                     _arr[index][key].setting = "早班";
                   } else if(a == "B") {
-                    _arr[index][key].setting = "晚班";
-                  } else if(a == "C") {
                     _arr[index][key].setting = "网络班";
+                  } else if(a == "C") {
+                    _arr[index][key].setting = "晚班";
                   } else if (a == "休") {
                     _arr[index][key].setting = "休息";
                   }
@@ -179,8 +226,36 @@ export default {
         })
       })
       this.arr = _arr;
-      console.log(this.arr, "666666")
     },
+    // 修改排班
+    modifyTypesetting(day) {
+      this.modifyDialogVisible = true;
+      this.modifyDay = day;
+    },
+    submitModify() {
+       this.currentSort.arrange_month = this.year + "-" + this.month;
+       this.arrangeList[this.modifyDay] = this.currentArrange;
+       this.currentSort.arrange = Object.values(this.arrangeList)
+      this.$http.post(globalConfig.server + "attendance/sort", {
+              user_id: this.currentSort.user_id,
+              arrange: this.currentSort.arrange,
+              arrange_month: this.currentSort.arrange_month
+       }).then(res => {
+         if(res.data.code == "20000") {
+           this.$notify.success({
+             title: "成功",
+             message: res.data.msg
+           })
+           this.getTypeTime();
+           this.modifyDialogVisible = false;
+         } else {
+           this.$notify.warning({
+             title: "警告",
+             message: res.data.msg
+           })
+         }
+       })
+    }
   }
 };
 </script>
@@ -213,6 +288,9 @@ export default {
     .gray {
       color: gray;
       overflow: hidden;
+      div {
+        visibility: hidden;
+      }
     }
     .wu {
       height: 50px;

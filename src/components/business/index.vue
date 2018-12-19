@@ -1,52 +1,44 @@
 <template>
     <div id="business">
       <div>
+        <span style="font-weight: bold;">显示：</span>
+        <el-radio-group v-model="params.group">
+          <el-radio label="city">城市</el-radio>
+          <el-radio label="org">片区</el-radio>
+        </el-radio-group>
+      </div>
+      <div style="margin-top: 20px;">
         <el-row :gutter="20">
-          <el-col :span="4">
-            <div>
-              <span style="color: #409EFF;">显示：</span>
-              <el-radio-group v-model="params.group">
-                <el-radio label="city">城市</el-radio>
-                <el-radio label="org">片区</el-radio>
-              </el-radio-group>
+          <el-col :span="16">
+            <span style="font-weight: bold;">城市组成：</span>
+            <div style="display: inline-block;">
+              <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
+                <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
+                <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
+                  <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
+                </el-checkbox-group>
+              </div>
             </div>
           </el-col>
-          <el-col :span="18">
-            <div>
-              <el-row :gutter="20">
-                <el-col :span="16">
-                  <span style="color: #409EFF;">城市组成：</span>
-                  <div style="display: inline-block;">
-                    <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
-                      <el-checkbox label="全部" v-model="cityAll" @change="handleCityCheckAll"></el-checkbox>
-                      <el-checkbox-group v-model="helpParams.city" @change="selectCity" style="margin-left: 30px;">
-                        <el-checkbox v-for="city in cityList" :label="city.name" :key="city.id"></el-checkbox>
-                      </el-checkbox-group>
-                    </div>
-                  </div>
-                </el-col>
-                <el-col :span="8">
-                  <span style="color: #409EFF;">片区组成：</span>
-                  <div style="display: inline-block;">
-                    <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
-                      <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
-                      <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
-                        <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
-                      </el-checkbox-group>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
+          <el-col :span="8">
+            <span style="font-weight: bold;">片区组成：</span>
+            <div style="display: inline-block;">
+              <div style="display: flex;justify-content: space-between;flex-wrap: nowrap;">
+                <el-checkbox label="全部" v-model="helpParams.composeShow" style="margin-right: 30px;" @change="composeAllCheck"></el-checkbox>
+                <el-checkbox-group v-model="helpParams.compose" @change="handleChangeCompose">
+                  <el-checkbox v-for="compose in helpParams.composeList" :label="compose.name" :key="compose.value"></el-checkbox>
+                </el-checkbox-group>
+              </div>
             </div>
           </el-col>
         </el-row>
       </div>
       <!--时间-->
       <div class="container">
-        <div style="margin-top: 20px; width: 60%;">
-          <span>时间：</span>
+        <div style="margin-top: 20px; width: 58%;">
+          <span style="font-weight: bold;">时间：</span>
           <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
-            <el-radio :label="1">最近1天</el-radio>
+            <el-radio :label="0">今天</el-radio>
             <el-radio :label="7">最近7天</el-radio>
             <el-radio :label="30">最近30天</el-radio>
             <el-radio label="day">
@@ -73,8 +65,8 @@
           </el-radio-group>
           <el-button type="primary" size="mini" @click="handleDownFiltrate">筛选</el-button>
         </div>
-        <div style="margin-top: 20px;width: 40%;text-align:center;">
-          <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;" @change="handleAddCompare">增加对比项</el-checkbox>
+        <div style="margin-top: 20px;width: 42%;text-align:left;" class="composeCheck">
+          <el-checkbox v-model="params.auto_compare" size="mini" style="margin-top: 5px;margin-right: 50px;font-weight: bold;" @change="handleAddCompare">增加对比项</el-checkbox>
 
           <el-select v-model="params.order_scope" size="mini" @change="handleOrderScope" style="width:20%;margin: 0 15px;">
             <el-option value="inner" label="区域内排序"></el-option>
@@ -110,7 +102,7 @@
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.group">{{ scope.row.group }}</span>
-                <span v-else>其他</span>
+                <span v-else></span>
                 <el-button v-if="scope.row.first && scope.row.group" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
               </div>
             </template>
@@ -293,7 +285,7 @@
               {name: '新绩效组',value: 'new_perf'},
               {name: '旧绩效组',value: 'ord_perf'},
             ], //数据来源列表
-            time: 1, //天数
+            time: 0, //天数
             days: '',
             chooseDay: false,
             dateTime: '',
@@ -623,7 +615,7 @@
         },
         //筛选时间
         handleChangeDate(val) {
-          if(val === 1 || val === 7 || val === 30){
+          if(val === 0 || val === 7 || val === 30){
             this.handleSetTime(val);
             this.helpParams.chooseDay = false;
             this.helpParams.chooseDate = false;
@@ -644,7 +636,7 @@
           }
         },
         //设置周期
-        handleSetTime(val = 1) {
+        handleSetTime(val = 0) {
           var date = new Date();
           var end_time = date.toLocaleDateString().split("/").join("-");
           var start_time = date.setDate(date.getDate() - val);
@@ -661,7 +653,9 @@
             return "vacancyBg";
           }else if(column.label === '业绩'){
             return "businessBg";
-          }else {
+          }else if(column.label === '区域' || column.label === '时间段') {
+            return "area_time";
+          } else {
             return "otherBg";
           }
         },
@@ -691,7 +685,9 @@
           }
           var obj = {
             chart_field,
-            page_id: this.params.page_id
+            page_id: this.params.page_id,
+            order_field: this.params.order_field, //列表字段排序
+            order_sort: this.params.order_sort, //升序降序 asc升 desc降
           };
           this.getChartData(obj);
         },
@@ -784,6 +780,9 @@
     .otherBg{
       background-color: #EEEEEE !important;
     }
+    .area_time{
+      background-color: #f0f9eb !important;
+    }
     .vacancyBg{
       color: white;
       background-color: #36AA35 !important;
@@ -797,6 +796,11 @@
       display: flex;
       justify-content: space-between;
       flex-wrap: nowrap;
+    }
+    .composeCheck{
+      .el-checkbox__input.is-checked+.el-checkbox__label{
+        color: #787a7e !important;
+      }
     }
   }
 </style>
