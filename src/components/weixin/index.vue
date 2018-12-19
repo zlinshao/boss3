@@ -76,7 +76,11 @@
             <span v-text="scope.row.recommend_type === 1 ? '租房' : '托管'"></span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" prop="recommend_status"></el-table-column>
+        <el-table-column label="状态" prop="recommend_status">
+          <template slot-scope="scope">
+            <span v-text="scope.row.recommend_status === 1 ? '未签约' : scope.row.recommend_status === 2 ? '已签约' : '已结算'"></span>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
