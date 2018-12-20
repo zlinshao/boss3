@@ -108,6 +108,9 @@ export default {
       }
     }
   },
+  created() {
+    window.InitSetInterval = setInterval(this.lookList(),2000)
+  },
   mounted() {
     this.monthOptions = this.getCurrentDate();
   },
@@ -233,7 +236,10 @@ export default {
     download(val) {
       window.open(val.file_id);
     },
-  }
+  },
+  destroyed() {
+    clearInterval(window.InitSetInterval )
+  },
 }
 </script>
 

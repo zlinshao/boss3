@@ -216,7 +216,7 @@ export default {
     RewardDialogVisible(val) {
       if(!val) {
         this.$emit("close");
-        this.form = {};
+        
         // this.isClear = true;
       }
     },
@@ -259,7 +259,8 @@ export default {
     },
     // 获取详情
     gerRewardReord(val) {
-       this.loading = true;
+      // this.form = {};
+      this.loading = true;
       //  this.initParams();
       //  this.initEditParams();
       this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {user_id: val}).then(res => {
@@ -316,6 +317,9 @@ export default {
         })
       } else if(this.isAddOrEdit == "2") {
         this.editParams.remark = this.params[0].remarks[0].remark;
+        this.editParams.type = this.params[0].remarks[0].type;
+        // console.log(this.editParams, "111111")
+        // return false
         this.$http.post(globalConfig.server + 'credit/manage/employeeedit', this.editParams).then(res => {
           if (res.data.code === '100100') {
             this.$notify.success({
