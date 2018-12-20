@@ -466,6 +466,11 @@ export default {
     },
     closeReward() {
       this.lookRewardLog = false;
+      this.class_reward_id = "";
+      this.class_reward_name = "";
+      this.class_reward_org = "";
+      this.class_reward_role = "";
+      this.class_reward_times = "";
     },
     // 查看日报
     lookDaily(val) {
