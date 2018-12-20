@@ -111,7 +111,11 @@
 
           <el-table-column label="收房">
             <el-table-column label="数量/套" prop="lord.count"></el-table-column>
-            <el-table-column label="渠道单比例" prop="lord.agency_percentage"></el-table-column>
+            <el-table-column label="渠道单比例" prop="lord.agency_percentage">
+              <template slot-scope="scope">
+                <span v-if="scope.row.lord && scope.row.lord.agency_percentage && scope.row.lord.agency_percentage != 0">{{ parseFloat(scope.row.lord.agency_percentage) * 100 }}%</span>
+              </template>
+            </el-table-column>
             <el-table-column label="均价/元" prop="lord.price_avg"></el-table-column>
             <el-table-column label="空置期" prop="lord.ready_days_avg"></el-table-column>
             <el-table-column label="总月数" prop="lord.sign_month_avg"></el-table-column>
@@ -119,7 +123,11 @@
           <el-table-column label="租房">
             <el-table-column label="数量/套" prop="renter.count"></el-table-column>
             <el-table-column label="已空置" prop="renter.ready_days_avg"></el-table-column>
-            <el-table-column label="渠道单比例" prop="renter.agency_percentage"></el-table-column>
+            <el-table-column label="渠道单比例" prop="renter.agency_percentage">
+              <template slot-scope="scope">
+                <span v-if="scope.row.renter && scope.row.renter.agency_percentage && scope.row.renter.agency_percentage != 0">{{ parseFloat(scope.row.renter.agency_percentage) * 100 }}%</span>
+              </template>
+            </el-table-column>
             <el-table-column label="均价/元" prop="renter.price_avg"></el-table-column>
             <el-table-column label="回款" prop="renter.pay_back_avg"></el-table-column>
             <el-table-column label="平均差价/元" prop="renter.price_diff_avg"></el-table-column>
@@ -320,7 +328,7 @@
           businessLoading: false,
           businessTotal: 0,
           businessFieldList: [],
-          businessCurrentPageSize: 10,
+          businessCurrentPageSize: 20,
           businessCurrentPage: 1,
           chartTitle: {
             "lord.count": '收房数量变化(套)',
