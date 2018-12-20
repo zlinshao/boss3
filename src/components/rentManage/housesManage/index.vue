@@ -241,10 +241,10 @@
                     <span v-if="scope.row.annotations" style="color: red;">!</span>
                     <span v-if="scope.row.name">{{scope.row.name}}</span>
                     <span v-else="">/</span>
-                    <div class="notice" :class="{isShow: scope.row.id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                      <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
-                      <span v-else style="color: #F56C6C;">拉入黑名单</span>
-                    </div>
+                    <!--<div class="notice" :class="{isShow: scope.row.id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">-->
+                      <!--<span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>-->
+                      <!--<span v-else style="color: #F56C6C;">拉入黑名单</span>-->
+                    <!--</div>-->
                     <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.id === markShow ? '' : 'yes'}">
                       {{ scope.row.annotations.content }}
                     </div>
@@ -680,7 +680,7 @@
       handleMarkInfo() {
         this.$http.post(globalConfig.server + '/annotations',{
           remark_type: 1,
-          remark_id: this.currentScope.row.id,
+          remark_id: this.houseDetail.id,
           content: this.markInfo
         }).then(res => {
           if (res.data.code === '20000') {
@@ -703,10 +703,15 @@
           console.log(err);
         })
       },
-      handlePullBlack(scope) {
-        this.currentScope = scope;
-        if (scope.row.annotations) {
-          this.$http.delete(globalConfig.server + `/annotations/${scope.row.annotations.id}`).then(res => {
+      outBlack() {
+        var row = this.houseDetail;
+        if (row.annotations) {
+          this.$http({
+            method: 'delete',
+            url: globalConfig.server + `/annotations/${row.annotations.id}`,
+            data: {
+              remark_type: 1
+            }}).then(res => {
             if (res.data.code === '20000') {
               this.$notify.success({
                 title: '成功',
@@ -721,8 +726,12 @@
             }
           })
         }else {
-          this.markInfoVisible = true;
+          // this.markInfoVisible = true;
+          this.$message('该房屋不是黑名单用户');
         }
+      },
+      handlePullBlack(scope) {
+        this.currentScope = scope;
       },
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
@@ -928,6 +937,8 @@
           {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
           {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
           {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
+          {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '拉入黑名单'},
+          {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移除黑名单'},
         ];
         this.contextMenuParam(event);
       },
@@ -960,6 +971,10 @@
           case 'merge' :
             this.mergeDialog = true;
             break;
+          case 'outBlack':
+            this.outBlack();
+          case 'inBlack':
+            this.markInfoVisible = true;
         }
       },
       closeModal(val) {
@@ -1190,7 +1205,7 @@
       /*border: 1px solid #525252;*/
       position: absolute;
       text-align: left;
-      top: 5em;
+      top: 4em;
       left: -5em;
       padding: 0 10px;
       border-radius: 5px;
