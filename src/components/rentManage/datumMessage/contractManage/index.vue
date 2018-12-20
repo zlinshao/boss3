@@ -398,7 +398,7 @@
                         <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
                         <span v-if="!scope.row.customer_name">暂无</span>
                         <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                          <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
+                          <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
                           <span v-else style="color: #F56C6C;">拉入黑名单</span>
                         </div>
                         <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
@@ -893,7 +893,7 @@
                         <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
                         <span v-if="!scope.row.customer_name">暂无</span>
                         <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                          <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
+                          <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
                           <span v-else style="color: #F56C6C;">拉入黑名单</span>
                         </div>
                         <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
@@ -1963,7 +1963,7 @@
         } else {
           obj = {
             remark_type: 2,
-            remark_id: this.currentScope.row.contract_number,
+            remark_id: this.currentScope.row.contract_id,
             content: this.markInfo
           };
         }
@@ -1974,6 +1974,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.markInfo = '';
             if (this.activeName === 'first') {
               this.collectDatafunc();
             } else {
@@ -1981,6 +1982,7 @@
             }
           } else {
             this.markInfoVisible = false;
+            this.markInfo = '';
             this.$notify.warning({
               title: '失败',
               message: res.data.msg
@@ -3260,7 +3262,7 @@
       padding: 0 10px;
       border-radius: 5px;
       color: #4F4F4F;
-      background-color: GhostWhite;
+      background-color: #C6E2FF;
       z-index: 99;
     }
     .markShow_style{
