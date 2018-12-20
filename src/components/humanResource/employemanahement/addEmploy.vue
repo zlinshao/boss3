@@ -405,7 +405,7 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
-          statusValue: "",
+          statusValue: "1",
           // ================
           duty_id: [],
           position_id: [],
@@ -536,6 +536,7 @@
           this.title = '新建用户';
         } else {
           this.title = '修改用户';
+          this.params.statusValue = "";
           this.getStaffInfo();
         }
       },
@@ -612,7 +613,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.statusValue = "";
+        this.params.statusValue = "1";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -955,7 +956,7 @@
               // this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               // this.isClear = true;
-              this.initial();
+              // this.initial();
               this.prompt('success', res.data.msg);
             } else {
               this.disabledBtn = false;
@@ -974,7 +975,7 @@
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
               // this.isClear = true;
-              this.initial();
+              // this.initial();
 
             } else {
               this.disabledBtn = false;
