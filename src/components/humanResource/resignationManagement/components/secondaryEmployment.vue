@@ -370,7 +370,7 @@
   import UpLoad from "../../../common/UPLOAD.vue"
 
   export default {
-    props: ["ids", "lookSecondary", 'isEdit', 'editId'],
+    props: ["ids", "lookSecondary", 'isEdit', 'editId', 'editor'],
     components: {Organization, UpLoad},
     data() {
       return {
@@ -953,8 +953,12 @@
           // return false
           this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
-              // this.$emit('close', 'success');
-              this.levelConfirm();
+              if(!this.editor) {
+                this.levelConfirm();
+              } else {
+                // this.$emit('close', 'success');
+                 this.addStaffDialogVisible = false;
+              }
               // this.isClear = true;
               this.initial();
               this.prompt('success', res.data.msg);

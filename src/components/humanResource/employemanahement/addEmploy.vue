@@ -276,7 +276,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="在职状态">
-                      <el-select v-model="params.statusValue" placeholder="请选择" clearable>
+                      <el-select v-model="params.statusValue" placeholder="请选择" clearable @change="whetherToLeave">
                         <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -288,7 +288,7 @@
                   </el-form-item>
                 </el-col> -->
               </el-row>
-              <el-row v-if="isEdit">
+              <!-- <el-row v-if="isEdit">
                 <el-col :span="8">
                   <el-form-item label="离职原因">
                     <el-select v-model="params.dismiss_reason.dismiss_type" clearable placeholder="请选择" size="mini">
@@ -308,7 +308,7 @@
                       <el-input type="textarea" placeholder="请填写离职备注" v-model="params.entry_way.entry_mess" size="mini"></el-input>
                     </el-form-item>
                 </el-col>
-              </el-row>
+              </el-row> -->
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="身份证复印件">
@@ -355,13 +355,35 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addStaffDialogVisible = false" :disabled="disabledBtn">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
+        <el-button size="mini" @click="addStaffDialogVisible = false" :disabled="disabledBtn">取 消</el-button>
+        <el-button size="mini" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
-
+    
     <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
+    <!-- 离职弹窗 -->
+    <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="selectLeaveDateDialog" width="30%">
+      <el-form ref="form" :model="form" onsubmit="return false;" label-width="100px" style="padding: 0 20px;">
+        <el-form-item label="离职时间">
+          <el-date-picker v-model="form.dismiss_time" type="date" placeholder="请选择离职日期" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="离职原因">
+          <el-select v-model="form.dismiss_reason.dismiss_type" clearable>
+            <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id" :label="item.name" size="mini">{{item.name}}</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="离职备注">
+          <el-input type="textarea" placeholder="请填写描述" v-model="form.dismiss_reason.dismiss_mess" size="mini"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="selectLeaveDateDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="leaveDateConfirm" size="mini">只离职</el-button>
+        <el-button size="small" type="primary" @click="leaveSendMsg">离职并发群消息</el-button>
+        <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -385,10 +407,24 @@
         postDisabled: true,
         detailData: {},
         // 新增字段 ========
+        selectLeaveDateDialog: false,
+        form: {
+          dismiss_time: '',
+          dismiss_reason: {
+            dismiss_type: '',
+            dismiss_mess: '',
+          },
+        }, //离职日期
         statusOptions:[
           {value: "1", label: "在职"},
           {value: "2", label: "离职"},
           {value: "3", label: "停职留薪"},
+        ],
+        dismissReasonCategory: [
+          {id: "1", name: '主动离职'},
+          {id: "2", name: '旷工离职'},
+          {id: "3", name: '劝退'},
+          {id: "4", name: '开除'},
         ],
         editIDCopy: {},
         editBank: {},
@@ -526,6 +562,8 @@
           });
           this.isClear = true;
           this.disabledBtn = false;
+          this.emptyDepart("department_id");
+          this.emptyDepart("recommender");
         } else {
           this.editPositionIds = [];
           // this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
@@ -681,7 +719,128 @@
       //     this.postDisabled = true;
       //   }
       // },
-      // 
+      // 选择离职 
+      whetherToLeave(val) {
+        console.log(val)
+        if(val == "2") {
+          this.$confirm("确定将该员工的在职状态改为离职吗？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(() => {
+            this.selectLeaveDateDialog = true;
+          })
+        }
+      },
+      // 只离职
+      leaveDateConfirm() {
+        this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              // this.getPostStaffData();
+              // this.getStaffData();
+              this.getStaffInfo();
+              this.prompt('success', res.data.msg);
+              this.selectLeaveDateDialog = false;
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+
+        });
+      },
+      //离职群发
+      leaveSendMsg() {
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              this.prompt('success', res.data.msg);
+              // this.getPostStaffData();
+              // this.getStaffData();
+              this.getStaffInfo();
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
+                if (res.data.code === "710910") {
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  // this.getPostStaffData();
+                  // this.getStaffData();
+                  this.getStaffInfo();
+                  this.selectLeaveDateDialog = false;
+                } else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.selectLeaveDateDialog = false;
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        })
+      },
+      // 离职并发送短信
+      leaveAndSendMsgConfirm() {
+        this.$confirm('员工在职状态将会改变并且向该员工所负责的客户发送短信, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              this.prompt('success', res.data.msg);
+              // this.getPostStaffData();
+              // this.getStaffData();
+              this.getStaffInfo();
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
+                params: {
+                  id: this.editId,
+                  date: this.sendLeaveMsgForm.date
+                }
+              }).then((res) => {
+                if (res.data.code === '710400') {
+                  this.prompt('success', res.data.msg);
+                  this.selectLeaveDateDialog = false;
+                } else {
+                  this.prompt('warning', res.data.msg);
+                }
+              });
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+        });
+      },
       // 获取图片
       getImgList() {
         this.editEducation = {};
@@ -1020,6 +1179,7 @@
       },
       // 确认选择
       selectMember(val) {
+        console.log(val, "11111")
         let organ = this.organDivision;
         if (organ === 'department_id') {
           this.resetOrg();
