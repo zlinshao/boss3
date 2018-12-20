@@ -395,14 +395,14 @@
                       <!--<span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>-->
                       <div>
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
-                        <span v-if="scope.row.customer_name === '测试'"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
+                        <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
                         <span v-if="!scope.row.customer_name">暂无</span>
                         <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
                           <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
                           <span v-else style="color: red;">拉入黑名单</span>
                         </div>
-                        <div class="markInfo" :class="{markShow: scope.row.contract_number === markShow ? '' : 'yes'}" v-if="scope.row.annotation">
-                          {{ scope.row.content }}
+                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
+                          {{ scope.row.annotations.content }}
                         </div>
                       </div>
                     </template>
@@ -418,6 +418,7 @@
                   <el-table-column
                     label="归属公司"
                     prop="corp_name"
+                    min-width="120px"
                   >
                     <template slot-scope="scope">
                       <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
@@ -845,6 +846,8 @@
                   @cell-click="showComplainList"
                   @row-contextmenu='houseMenu'
                   @selection-change="handleSelection"
+                  @cell-mouse-enter="cellMouseEnter"
+                  @cell-mouse-leave="cellMouseLeave"
                   style="width: 100%">
                   <el-table-column
                     type="selection"
@@ -885,8 +888,18 @@
                     prop="customer_name"
                     label="租客姓名">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
-                      <span v-if="!scope.row.customer_name">暂无</span>
+                      <div>
+                        <span v-if="scope.row.annotations" style="color: red;">!</span>
+                        <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
+                        <span v-if="!scope.row.customer_name">暂无</span>
+                        <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                          <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
+                          <span v-else style="color: red;">拉入黑名单</span>
+                        </div>
+                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
+                          {{ scope.row.annotations.content }}
+                        </div>
+                      </div>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -901,6 +914,7 @@
                   <el-table-column
                     label="归属公司"
                     prop="corp_name"
+                    min-width="120px;"
                   >
                     <template slot-scope="scope">
                       <span v-if="house_name && scope.row.house_id && house_name[scope.row.house_id]">{{house_name[scope.row.house_id].corp_name}}</span>
@@ -1939,18 +1953,32 @@
           });
           return false;
         }
-        this.$http.post(globalConfig.server + '/annotations',{
-          remark_type: 1,
-          remark_id: this.currentScope.row.house_id,
-          content: this.markInfo
-        }).then(res => {
-          console.log(res);
+        var obj = {};
+        if (this.activeName === 'first') {
+          obj = {
+            remark_type: 1,
+            remark_id: this.currentScope.row.house_id,
+            content: this.markInfo
+          };
+        } else {
+          obj = {
+            remark_type: 2,
+            remark_id: this.currentScope.row.contract_number,
+            content: this.markInfo
+          };
+        }
+        this.$http.post(globalConfig.server + '/annotations',obj).then(res => {
           if (res.data.code === '20000') {
             this.markInfoVisible = false;
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
+            if (this.activeName === 'first') {
+              this.collectDatafunc();
+            } else {
+              this.rentDatafunc();
+            }
           } else {
             this.markInfoVisible = false;
             this.$notify.warning({
@@ -1966,7 +1994,24 @@
       handlePullBlack(scope) {
         this.currentScope = scope;
         if (scope.row.annotations) {
-          this.$message('移除黑名单');
+          this.$http.delete(globalConfig.server + `/annotations/${scope.row.annotations.id}`).then(res => {
+            if (res.data.code === '20000') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              if (this.activeName === 'first') {
+                this.collectDatafunc();
+              } else {
+                this.rentDatafunc();
+              }
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              });
+            }
+          })
         }else {
           this.markInfoVisible = true;
         }
@@ -3197,24 +3242,28 @@
     }
     .notice{
       position: absolute;
-      top: 2.5em;
+      top: 30%;
       left: 0;
       width: 100%;
       height: 2em;
+      border-radius: 2px;
       background-color: #bcbcbd;
       text-align: center;
       line-height: 2;
     }
     .markInfo{
-      width: 100%;
+      border: 1px solid #525252;
+      width: 200%;
       position: absolute;
-      top: 5em;
-      left: 0;
-      height: 2.5em;
-      color: #409EFF;
+      top: 4em;
+      left: 2em;
+      height: 2em;
+      border-radius: 3px;
+      color: black;
       background-color: white;
+      z-index: 99;
     }
-    .markShow{
+    .markShow_style{
       display: none;
     }
     .isShow{
