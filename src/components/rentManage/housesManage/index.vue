@@ -730,9 +730,9 @@
           this.$message('该房屋不是黑名单用户');
         }
       },
-      handlePullBlack(scope) {
-        this.currentScope = scope;
-      },
+      // handlePullBlack(scope) {
+      //   this.currentScope = scope;
+      // },
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
           this.all_dic = res.data.data;
@@ -923,23 +923,42 @@
           this.collectId = this.collectData[0].id;
         }
         this.rentData = row.renters;
-        this.lists = [
-          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋属性',},
-          {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
-          {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
-          {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
-          {
-            clickIndex: 'addEarlyWarningDialog',
-            headIcon: 'iconfont icon-tianjiayujingjilu',
-            label: '添加预警状态',
-            disabled: row.status != 0
-          },
-          {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
-          {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
-          {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
-          {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '拉入黑名单'},
-          {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移除黑名单'},
-        ];
+        if (row.annotations) {
+          this.lists = [
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋属性',},
+            {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
+            {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
+            {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
+            {
+              clickIndex: 'addEarlyWarningDialog',
+              headIcon: 'iconfont icon-tianjiayujingjilu',
+              label: '添加预警状态',
+              disabled: row.status != 0
+            },
+            {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
+            {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
+            {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
+            {clickIndex: 'inBlack',headIcon: 'el-icon-upload2',label: '修改黑名单备注'},
+            {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移除黑名单'},
+          ];
+        } else {
+          this.lists = [
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋属性',},
+            {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
+            {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
+            {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
+            {
+              clickIndex: 'addEarlyWarningDialog',
+              headIcon: 'iconfont icon-tianjiayujingjilu',
+              label: '添加预警状态',
+              disabled: row.status != 0
+            },
+            {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
+            {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
+            {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
+            {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '拉入黑名单'},
+          ];
+        }
         this.contextMenuParam(event);
       },
 
@@ -973,8 +992,10 @@
             break;
           case 'outBlack':
             this.outBlack();
+            break;
           case 'inBlack':
             this.markInfoVisible = true;
+            break;
         }
       },
       closeModal(val) {
