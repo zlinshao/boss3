@@ -398,7 +398,8 @@ export default new Router({
 
         {path: '/pendingSettle', component: PendingSettle, name: "结算"},
         {path: '/leaveOffice', component: LeaveOffice, name: '离职短信'},
-
+        // 编辑班次
+        { path: "/editAttendanceShift", component: EditAttendanceShift, name: '编辑班次', meta: { keepAlive: true }},
         // 视屏管理
         { path: '/VideoTeaching', component: VideoTeaching, name: '视频管理', meta: { keepAlive: true }},
 
@@ -407,7 +408,7 @@ export default new Router({
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
-
+        
         },
       ]
     },
@@ -579,7 +580,7 @@ export default new Router({
       children: [
         {path: '/arrangeSetting', component: ArrangeSetting, name: '排班设置'},
         {path: '/punchCard', component: PunchCard, name: '日统计'},
-        {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
+        // {path: '/editAttendanceShift', component: EditAttendanceShift, name: '编辑班次'},
         // {path: '/attendanceRecord', component: attendanceRecord, name: '考勤记录'},
         {path: '/monthlySummary', component: monthlySummary, name: '月度总汇'},
         {path: '/approval',component: Approval, name: '审批管理'}

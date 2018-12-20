@@ -2037,8 +2037,8 @@
         if (this.contractForm.unit_price[0].length === this.contractForm.unit_price[1].length) {
           this.contractForm.unit_price[0].forEach((res, index) => {
             let obj = {};
-            obj.price = res;
-            obj.period = this.contractForm.unit_price[1][index];
+            obj.period = res;
+            obj.price = this.contractForm.unit_price[1][index];
             this.contractForm.unit_price.push(obj)
           })
         }else{
@@ -2055,7 +2055,7 @@
         }else{
           console.log('数量不对');
         }
-        console.log(this.contractForm, "44444")
+        // console.log(this.contractForm, "44444")
         // return false
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
@@ -2328,8 +2328,8 @@
         if (this.contractForm2.unit_price[0].length === this.contractForm2.unit_price[1].length) {
           this.contractForm2.unit_price[0].forEach((res, index) => {
             let obj = {};
-            obj.price = res;
-            obj.period = this.contractForm2.unit_price[1][index];
+            obj.period = res;
+            obj.price = this.contractForm2.unit_price[1][index];
             this.contractForm2.unit_price.push(obj)
           })
         }else{
@@ -2339,8 +2339,8 @@
           this.contractForm2.pay_type[0].forEach((res, index) => {
             let obj = {};
             obj.period = res;
-            obj.pay_way = this.contractForm2.pay_type[1][index];
-            obj.pay_way_bet = this.contractForm2.pay_type[2][index];
+            obj.pay_way_bet = this.contractForm2.pay_type[1][index];
+            obj.pay_way = this.contractForm2.pay_type[2][index];
             this.contractForm2.pay_type.push(obj)
           })
         }else{

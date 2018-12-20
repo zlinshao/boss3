@@ -64,6 +64,7 @@
                     <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
                   </el-form-item>
                   <el-form-item>
+                    <el-button type="primary" size="mini" @click="editAttendance" :loading="exprotLoading">编辑班次</el-button>
                     <el-button type="primary" size="mini" @click="outArrange" v-show="!exportBtnShow" :loading="exprotLoading">导出排班表<i
                       class="el-icon-download el-icon--right"></i></el-button>
                     <el-button type="primary" size="mini" @click="outTemplet" v-show="exportBtnShow" :loading="exprotTemp">导出排班模板<i
@@ -854,6 +855,10 @@
             }
           }
         })
+      },
+      // 编辑班次
+      editAttendance() {
+        this.$router.push({ path: "/EditAttendanceShift" });
       }
     },
     created() {
