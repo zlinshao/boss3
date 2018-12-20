@@ -253,7 +253,7 @@
               </el-table-column>
               <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
               <el-table-column label="姓名" prop="customer"></el-table-column>
-              <el-table-column label="空置期" prop="ready_days"></el-table-column>
+              <el-table-column label="已空置" prop="ready_days"></el-table-column>
               <el-table-column label="业绩" prop="performance"></el-table-column>
               <el-table-column label="位置" prop="city"></el-table-column>
               <el-table-column label="合同">
