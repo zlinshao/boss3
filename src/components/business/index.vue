@@ -38,7 +38,7 @@
         <div style="margin-top: 20px; width: 58%;">
           <span style="font-weight: bold;">时间：</span>
           <el-radio-group v-model="helpParams.time" @change="handleChangeDate">
-            <el-radio :label="0">今天</el-radio>
+            <el-radio :label="1">今天</el-radio>
             <el-radio :label="7">最近7天</el-radio>
             <el-radio :label="30">最近30天</el-radio>
             <el-radio label="day">
@@ -208,7 +208,7 @@
               </el-table-column>
               <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
               <el-table-column label="姓名" prop="customer"></el-table-column>
-              <el-table-column label="空置期" prop="ready_days"></el-table-column>
+              <el-table-column label="已空置" prop="ready_days"></el-table-column>
               <el-table-column label="位置" prop="city"></el-table-column>
               <el-table-column label="合同">
                 <template slot-scope="scope">
@@ -285,7 +285,7 @@
               {name: '新绩效组',value: 'new_perf'},
               {name: '旧绩效组',value: 'old_perf'},
             ], //数据来源列表
-            time: 0, //天数
+            time: 1, //天数
             days: '',
             chooseDay: false,
             dateTime: '',
@@ -615,7 +615,7 @@
         },
         //筛选时间
         handleChangeDate(val) {
-          if(val === 0 || val === 7 || val === 30){
+          if(val === 1 || val === 7 || val === 30){
             this.handleSetTime(val);
             this.helpParams.chooseDay = false;
             this.helpParams.chooseDate = false;
@@ -636,11 +636,19 @@
           }
         },
         //设置周期
-        handleSetTime(val = 0) {
+        handleSetTime(val = 1) {
           var date = new Date();
-          var end_time = date.toLocaleDateString().split("/").join("-");
-          var start_time = date.setDate(date.getDate() - val);
+          var start_time = '';
+          var end_time = '';
+          if (val === 1) {
+            start_time = date.toLocaleDateString().split("/").join("-");
+            end_time = date.setDate(date.getDate() + val);
+          }else {
+            end_time = date.toLocaleDateString().split("/").join("-");
+            start_time = date.setDate(date.getDate() - val);
+          }
           start_time = new Date(start_time).toLocaleDateString().split("/").join("-");
+          end_time = new Date(end_time).toLocaleDateString().split("/").join("-");
           this.params.end_time = end_time;
           this.params.start_time = start_time;
         },
@@ -693,7 +701,12 @@
         },
         //单元格被单击
         handleCellClick(row) {
-          this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} )`;
+          var str = '';
+          this.helpParams.compose.forEach(item => {
+            str += item + '&';
+          });
+          str = str.substring(0,str.length - 1);
+          this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} ${str})`;
           var detailParams = {};
           detailParams.start_time = row.start;
           detailParams.end_time = row.end;
