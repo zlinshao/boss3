@@ -9,7 +9,7 @@
       </div>
       <div style="margin-top: 20px;">
         <el-row :gutter="20">
-          <el-col :span="16">
+          <el-col :span="14">
             <span style="font-weight: bold;font-size: 12px !important;color: rgb(159,155,155)">城市组成：</span>
             <div style="display: inline-block;font-size: 12px !important;" class="font_style">
               <div style="display: flex;justify-content: space-between; flex-wrap: nowrap;">
