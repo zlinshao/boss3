@@ -678,13 +678,6 @@
         }
       },
       handleMarkInfo() {
-        if (!this.markInfo) {
-          this.$notify.warning({
-            title: '警告',
-            message: '备注信息不能为空'
-          });
-          return false;
-        }
         this.$http.post(globalConfig.server + '/annotations',{
           remark_type: 1,
           remark_id: this.currentScope.row.id,

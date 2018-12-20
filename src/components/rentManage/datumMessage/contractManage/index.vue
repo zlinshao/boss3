@@ -1946,13 +1946,6 @@
     methods: {
       //备注确定
       handleMarkInfo() {
-        if (!this.markInfo) {
-          this.$notify.warning({
-            title: '警告',
-            message: '备注信息不能为空'
-          });
-          return false;
-        }
         var obj = {};
         if (this.activeName === 'first') {
           obj = {
