@@ -136,11 +136,26 @@
                     </el-main>
                     <el-footer>
                         <el-row :gutter="20" class='data-preview'>
-                            <el-button class='button' :span="6" @click='platformManage(item, index)'>{{item.platform ? Object.keys(item.platform).length : 0}}个平台已发布</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.wait_interview ? item.wait_interview  : 0}}人已约面试</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.after_interview ? item.after_interview    : 0}}人面试完毕</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.wait_entry ? item.wait_entry : 0}}人等待入职</el-button>
-                            <el-button class='button' :span="6" @click='processManage(item, index)'>{{item.after_entry ? item.after_entry : 0}}人已入职</el-button>
+                            <el-button class='button' :span="6" @click='platformManage(item, index)'>
+                                {{item.platform ? Object.keys(item.platform).length : 0}}
+                                个平台已发布
+                            </el-button>
+                            <el-button class='button first' :span="6" @click='processManage(item, index, $event)'>
+                                {{item.wait_interview ? item.wait_interview : 0}}
+                                人已约面试
+                            </el-button>
+                            <el-button class='button second' :span="6" @click='processManage(item, index, $event)'>
+                                {{item.after_interview ? item.after_interview : 0}}
+                                人面试完毕
+                            </el-button>
+                            <el-button class='button third' :span="6" @click='processManage(item, index, $event)'>
+                                {{item.wait_entry ? item.wait_entry : 0}}
+                                人等待入职
+                            </el-button>
+                            <el-button class='button fourth' :span="6" @click='processManage(item, index, $event)'>
+                                {{item.after_entry ? item.after_entry : 0}}
+                                人已入职
+                            </el-button>
                         </el-row>
                     </el-footer>
                 </el-container>
@@ -189,7 +204,7 @@
         <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
         <AddNewPosition :newPositionDialog="newPositionDialog" @close="closeModal"></AddNewPosition>
         <Platform :platformDialog="platformDialog" @close="closeModal"></Platform>
-        <ProcessManage :processDialog="processDialog" :id='id' @close="closeModal"></ProcessManage>
+        <ProcessManage :processDialog="processDialog" :id='id' :active_name='active_name' @close="closeModal"></ProcessManage>
     </div>
 </template>
 <script>
@@ -204,6 +219,7 @@
         components: {Organization, AddNewPosition, VueEditor, Platform, ProcessManage},
         data(){
             return{
+                active_name:'first',
                 loadingRecruit: true,
                 newPositionDialog: false,
                 editorDisabled: false,
@@ -214,7 +230,6 @@
                 selectPositionDialogVisible:false,
                 position_index:'',
                 position_status:'',
-
                 duty_id:'',
                 duty:[],
                 position:[],
@@ -270,11 +285,6 @@
                 processDialog: false,
                 id:'',
                 /***面试**********/
-                interviewDated:{},                              //已约面试
-                interviewFinished:{},                           //面试结束
-                toInduct:{},                                    //等待入职
-                inducted:{},                                    //已经入职
-
             }
         },
         watch: {
@@ -449,8 +459,6 @@
                         });
                     })
                 }
-                
-                
             },
             handleImageAdded(file, Editor, cursorLocation, resetUploader){
                 let formData = new FormData();
@@ -610,15 +618,27 @@
             },
            /************************* 平台相关*************************************/
            platformManage(item, index){
-            //    console.log(item, index)
                this.platformDialog = true;
                this.$store.dispatch('toEdit',item)
            },
            /************************* 流程管理*************************************/
-           processManage(item, index){
-            //    console.log(item, index);
+           processManage(item, index, event){
+               console.log(item)
+               this.$store.dispatch('savePositionInfo', item)
                this.id = item.id;
                this.processDialog = true;
+               if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
+                   this.active_name = 'first'
+               }
+               if(event.path[1].className.indexOf('second') > -1 || event.target.classList.contains('second')){
+                   this.active_name = 'second'
+               }
+               if(event.path[1].className.indexOf('third') > -1 || event.target.classList.contains('third')){
+                   this.active_name = 'third'
+               }
+               if(event.path[1].className.indexOf('fourth') > -1 ||  event.target.classList.contains('fourth')){
+                   this.active_name = 'fourth'
+               }
            }
         }
     }
@@ -649,6 +669,9 @@
         }
         .position{
             font-weight: 700;
+        }
+        .positionList{
+            margin-top: 50px;
         }
         .text-editor{
             margin: 20px 0;
