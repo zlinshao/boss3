@@ -46,6 +46,8 @@
           <el-table-column prop="name" label="姓名" >
             <template slot-scope="scope">
               <span @click="lookResigntionElempoly(scope.row.id)">{{scope.row.name}}</span>
+              &nbsp;&nbsp;&nbsp;
+               <i class="el-icon-edit" @click="editSecondaryEmployment(scope.row.id)" style="cursor: pointer;"></i>
             </template>
           </el-table-column>
           <el-table-column prop="orgStr" label="部门" ></el-table-column>
@@ -248,7 +250,11 @@ export default {
     editSecondaryEmployment(id) {
       this.lookSecondary = true;
       this.isEdit = true;
-      this.editId = this.secondaryID;
+      if(id) {
+        this.editId = id;
+      } else {
+        this.editId = this.secondaryID;
+      }
     },
     closeSecondary() {
        this.lookSecondary = false;
