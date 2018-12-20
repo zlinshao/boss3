@@ -122,7 +122,7 @@
       <!-- 右键 -->
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperateMore="clickEvent"></RightMenu>
       <!-- 编辑员工 -->
-      <SecondaryEmployment :editId="editId" :isEdit="isEdit" :lookSecondary="lookSecondary" @close="closeSecondary"></SecondaryEmployment>
+      <SecondaryEmployment :editId="editId" :isEdit="isEdit" :lookSecondary="lookSecondary" @close="closeSecondary" :editor="editor"></SecondaryEmployment>
     </div>
     </div>
 </template>
@@ -142,6 +142,7 @@ export default {
       isEdit: false,   // 编辑
       lookSecondary: false,
       editId: "",
+      editor: false,   // 编辑接口
       secondaryID: "",  // 员工id
       rightMenuX: 0,
       rightMenuY: 0,
@@ -252,6 +253,7 @@ export default {
       this.isEdit = true;
       if(id) {
         this.editId = id;
+        this.editor = true;
       } else {
         this.editId = this.secondaryID;
       }
