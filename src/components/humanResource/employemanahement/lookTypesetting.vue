@@ -2,13 +2,17 @@
   <div id="lookTypeseting">
     <el-dialog title="排版" :visible.sync="typesettingDialog" width="60%">
       <div class="top">
-        <el-date-picker v-model="year" type="year" placeholder="请选择年份" size="mini"></el-date-picker>
+        <!-- <el-date-picker v-model="year" type="year" placeholder="请选择年份" size="mini" value-format="yyyy"></el-date-picker> -->
         <!-- <el-date-picker v-model="month" type="month" placeholder="选择月" size="mini"></el-date-picker> -->
+        <el-select v-model="year" placeholder="请选择年份" size="mini">
+          <el-option v-for="item in yearOptions" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
         <el-select v-model="month" placeholder="请选择月份" size="mini">
           <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-        <el-button type="primary" size="mini">搜 索</el-button>
+        <el-button type="primary" size="mini" @click="searchScheduling">搜 索</el-button>
       </div>
       <div class="calendar" v-if="arr.length > 1">
         <table border="1" cellspacing="0" cellpadding="0">
@@ -17,7 +21,7 @@
           </tr>
           <tr v-for="(week, index) in arr" :key="index">
               <td v-for="(item, index) in week" :key="index" :class="{'gray': item.prevmonth || item.nextmonth}" @click="modifyTypesetting(item.day)">
-                <div>{{month}}月{{item.day}}日</div>
+                <div>{{selectmonth}}月{{item.day}}日</div>
                 <div>
                   <span v-if="item.setting == '早班'">{{item.setting}}(9:00 - 18:00)</span>
                   <span v-if="item.setting == '网络班'">{{item.setting}}(10:00 - 19:00)</span>
@@ -64,8 +68,8 @@ export default {
       checkList: [],
       modifyDialogVisible: false,
       typesettingDialog: false,  
-      year: "",
-      month: "",
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
       monthOptions: [
         {value: "1", label: "1"},
         {value: "2", label: "2"},
@@ -80,23 +84,30 @@ export default {
         {value: "11", label: "11"},
         {value: "12", label: "12"},
       ],
+      yearOptions: [
+         {value: "2016", label: "2016"},
+         {value: "2017", label: "2017"},
+         {value: "2018", label: "2018"},
+         {value: "2019", label: "2019"},
+         {value: "2020", label: "2020"},
+         {value: "2021", label: "2021"},
+      ],
       heads: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
       arr: [],
       dayarr: [],
       params: {
         user_id: "",
-        date: ""
+        // date: ""
       },
       arrangeList: [],
-      modifyDay: ""
+      modifyDay: "",
+      selectmonth: new Date().getMonth() + 1,
     }
   },
   mounted() {
     this.getCheckList();
   },
-  created() {
-    // this.month = new Date().getMonth() + 1
-  },
+  created() {},
   watch: {
     lookTypesettingLog(val) {
       this.typesettingDialog = val;
@@ -104,7 +115,6 @@ export default {
     ids(val) {
       this.params.user_id = val;
       this.currentSort.user_id = val;
-      console.log(this.params.user_id)
       this.getTypeTime();
     },
     typesettingDialog(val) {
@@ -148,15 +158,15 @@ export default {
       this.$http.get(globalConfig.server + "attendance/sort/sort", {params: this.params}).then(res => {  
         if(res.data.code == "20000") {
           this.arrangeList = res.data.data.data.arrange;
-          this.year = res.data.data.year;
-          this.month = res.data.data.month;
-          this.params = this.year + "-" + this.month;
-          this.getCalendar(this.year, this.month, true);
+          // this.year = res.data.data.year;
+          // this.selectmonth = res.data.data.month;
+          // this.params.data = this.year + "-" + this.month;
+          this.getCalendar(res.data.data.year, res.data.data.month, true);
         } else {
           this.arr = [];
           this.year = res.data.data.year;
           this.month = res.data.data.month;
-          // // this.params = this.year + "-" + this.month;
+          // // this.params.data = this.year + "-" + this.month;
           // this.getCalendar(this.year, this.month, true);
         }
       })
@@ -231,10 +241,11 @@ export default {
     modifyTypesetting(day) {
       this.modifyDialogVisible = true;
       this.modifyDay = day;
+      
     },
     submitModify() {
        this.currentSort.arrange_month = this.year + "-" + this.month;
-       this.arrangeList[this.modifyDay] = this.currentArrange;
+       this.arrangeList[this.modifyDay - 1] = this.currentArrange;
        this.currentSort.arrange = Object.values(this.arrangeList)
       this.$http.post(globalConfig.server + "attendance/sort", {
               user_id: this.currentSort.user_id,
@@ -255,7 +266,13 @@ export default {
            })
          }
        })
-    }
+    },
+    // 搜索排班
+    searchScheduling() {
+      this.selectmonth = this.month;
+      this.params.arrange_month = this.year + "-" + this.month;
+      this.getTypeTime();
+    },
   }
 };
 </script>

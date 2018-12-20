@@ -596,7 +596,10 @@ export default {
             this.total = 0;
           } 
           // else if(res.data.code == "70000") {
-          //   this.tableData = res.data.data.data;
+          //   this.$notify.success({
+          //     title: "成功",
+          //     message: res.data.msg
+          //   });
           // }
         });
     },

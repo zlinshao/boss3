@@ -366,11 +366,11 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization';
-  import UpLoad from "../../common/UPLOAD.vue"
+  import Organization from '../../../common/organization';
+  import UpLoad from "../../../common/UPLOAD.vue"
 
   export default {
-    props: ["ids", "addStaffDialog", 'isEdit', 'editId'],
+    props: ["ids", "lookSecondary", 'isEdit', 'editId'],
     components: {Organization, UpLoad},
     data() {
       return {
@@ -494,6 +494,7 @@
     },
     watch: {
       isClear: function (val) {
+        console.log(val)
         this.isClear = val;
       },
       // addEmployLog(val,id) {
@@ -505,7 +506,7 @@
       //     this.$emit("close")
       //   }
       // },
-      addStaffDialog(val) {
+      lookSecondary(val) {
         this.addStaffDialogVisible = val;
         this.params.image_info = {
           doc_photo: [],
@@ -524,7 +525,7 @@
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          this.isClear = true;
+          // this.isClear = true;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
@@ -953,7 +954,7 @@
           this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
               // this.$emit('close', 'success');
-              this.addStaffDialogVisible = false;
+              this.levelConfirm();
               // this.isClear = true;
               this.initial();
               this.prompt('success', res.data.msg);
@@ -984,6 +985,17 @@
             this.disabledBtn = false;
           });
         }
+      },
+      // 复职
+      levelConfirm() {
+        this.$http.get(globalConfig.server + 'organization/staff/rehab/' + this.editId + '&level=' + this.params.level).then(res => {
+          if (res.data.code === '710166') {
+            this.prompt('success', res.data.msg);
+            this.addStaffDialogVisible = false;
+          } else {
+            this.prompt('warning', res.data.msg);
+          }
+        })
       },
       selectDepart() {
         this.organizationDialog = true;
@@ -1058,6 +1070,7 @@
         this.resetOrg('position');
         if (val.length > 0) {
           for (let item of val) {
+            console.log(item)
             this.quarters(item);
           }
         }
@@ -1165,6 +1178,7 @@
         this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
+            console.log(this.branchBankCategory)
           } else {
             this.branchBankCategory = [];
           }

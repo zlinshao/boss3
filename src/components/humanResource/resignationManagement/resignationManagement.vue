@@ -1,5 +1,5 @@
 <template>
-    <div id="resignationManagement">
+    <div id="resignationManagement" @click="show = false" @contextmenu="closeMenu">
       <div class="top">
         <el-form ref="params" :model="params" label-width="80px">
           <el-row>
@@ -33,7 +33,16 @@
         </el-form>
       </div>
       <div class="table">
-        <el-table :data="resignationData" border style="width: 100%">
+        <el-table 
+          :data="resignationData" 
+          border 
+          style="width: 100%" 
+          v-loading="Loading"
+          :empty-text="emptyText"  
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
+          @row-contextmenu="openContextMenu">
           <el-table-column prop="name" label="姓名" >
             <template slot-scope="scope">
               <span @click="lookResigntionElempoly(scope.row.id)">{{scope.row.name}}</span>
@@ -108,6 +117,10 @@
     <div class="block pages">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
+      <!-- 右键 -->
+      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperateMore="clickEvent"></RightMenu>
+      <!-- 编辑员工 -->
+      <SecondaryEmployment :editId="editId" :isEdit="isEdit" :lookSecondary="lookSecondary" @close="closeSecondary"></SecondaryEmployment>
     </div>
     </div>
 </template>
@@ -116,10 +129,22 @@
 import Organization from '../../common/organization'  // 组织架构
 import UpLoad from "../../common/UPLOAD"   // 上传文件
 import RetiredEmployeeDetails from "./components/retiredEmployeeDetails"  // 离职员工详情
+import RightMenu from "../../common/rightMenu"  // 右键
+import SecondaryEmployment from "./components/secondaryEmployment"  // 编辑员工
 export default {
-  components: {Organization, UpLoad, RetiredEmployeeDetails},
+  components: {Organization, UpLoad, RetiredEmployeeDetails, RightMenu, SecondaryEmployment},
   data() {
     return {
+      emptyText: " ",
+      Loading: false,
+      isEdit: false,   // 编辑
+      lookSecondary: false,
+      editId: "",
+      secondaryID: "",  // 员工id
+      rightMenuX: 0,
+      rightMenuY: 0,
+      lists: [],  // 右键列表
+      show: false,  // 右键
       ids: "",
       lookResigntion: false,
       viewResignationFrom: false,
@@ -177,6 +202,59 @@ export default {
     }
   },
   methods: {
+    // 二次入职
+    secondaryEmployment() {
+      this.$confirm('将该员工的状态改为二次入职吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.editSecondaryEmployment()
+      })
+    },
+    // 右键
+    openContextMenu(row, event) {
+      this.secondaryID = row.id;
+      this.lists = [
+        {clickIndex: 'edit', headIcon: 'iconfont el-icon-edit', label: '二次入职'},  
+      ];
+      this.contextMenuParam(event);
+    },
+    // 右键回调
+      clickEvent(val) {
+        switch (val.clickIndex) {
+          case 'edit':
+            this.secondaryEmployment();
+          break;
+        }
+      },
+     //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
+    //右键参数
+    contextMenuParam(event) {
+      let e = event || window.event;
+      this.show = false;
+      this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+      this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+      event.preventDefault();
+      event.stopPropagation();
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+    // 二次编辑入职
+    editSecondaryEmployment(id) {
+      this.lookSecondary = true;
+      this.isEdit = true;
+      this.editId = this.secondaryID;
+    },
+    closeSecondary() {
+       this.lookSecondary = false;
+        this.isEdit = false;
+       this.getResignationEmploye();
+    },
     // 查看离职员工详情
     lookResigntionElempoly(id) {
       this.lookResigntion = true;
@@ -220,7 +298,6 @@ export default {
       this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.form.user_id, {
         dismiss_time: this.form.dismiss_time,
         dismiss_reason: this.form.dismiss_reason,
-
         resignation_form: this.form.resignation_form
       }).then(res => {
         if (res.data.code === '710418') {
@@ -245,13 +322,6 @@ export default {
     },
     // 查看离职表
     lookDeparture(row) {
-      // this.params.user_id = id;
-      // this.$http.get(globalConfig.server + "organization/other/staff-list", {params: this.params}).then(res => {
-      //   console.log(res, "6666666")
-      // })
-    console.log(row.resignation_form[0].uri)
-    // this.viewResignationFrom = true;
-    // this.imagesResignationList = row.resignation_form;
     window.open(row.resignation_form[0].uri)
     },
     // 获取合同图片
@@ -272,8 +342,11 @@ export default {
     },
     // 获取数据
     getResignationEmploye() {
+      this.resignationData = [];
+      this.Loading = true;
       this.$http.get(globalConfig.server + 'organization/other/staff-list', {params: this.params}).then(res => {
         if(res.data.code == "70010") {
+          this.emptyText = " ";
           this.resignationData = res.data.data.data;
           this.total = res.data.data.count;
           let strArr = [];
@@ -307,12 +380,14 @@ export default {
             }
 
           })
-            console.log(this.resignationData)
+          this.Loading = false;
+            // console.log(this.resignationData)
         } else if(res.data.code == "70011") {
           this.$notify.warning({
             title: "警告",
             message: res.data.msg
           })
+          this.emptyText = "暂无数据";
           this.resignationData = [];
           this.total = 0;
         }

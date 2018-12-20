@@ -547,7 +547,6 @@ export default {
       }
     },
     ids(val) {
-      console.log(val)
       this.employDetailId = val;
       this.openDetail(val);
     }
@@ -636,7 +635,7 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
-              console.log(res.data.data.image_info, "22222222")
+              // console.log(res.data.data.image_info, "22222222")
               if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
                   if(key == "doc_photo") {

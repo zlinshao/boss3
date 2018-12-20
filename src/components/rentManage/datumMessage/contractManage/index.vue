@@ -1859,25 +1859,46 @@
       },
       // 新赠方法 ====================================
       newpriceLen(val) {
+        console.log("====================")
         let data = this.contractForm.unit_price;
+        let data2 = this.contractForm2.unit_price;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
             if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+        if (data2 && data2[0] && data2[0][0] && data2[0][0].length > 0) {
+          let priceDate = data2[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
             }
           }
         }
       },
       newpayForLen(val) {
         let data = this.contractForm.pay_type;
+        let data2 = this.contractForm2.pay_type;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
             if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+        if (data2 && data2[0] && data2[0][0] && data2[0][0].length > 0) {
+          let priceDate = data2[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
             }
           }
         }
@@ -1888,8 +1909,8 @@
            this.differentShow = "";
            this.differentShow2 = "";
            this.newpriceLen = 1;
-           this.newpayForLen = 1
-          this.newpayTypeLen = 1,
+           this.newpayForLen = 1;
+          this.newpayTypeLen = 1;
           this.allBtn = true;
            this.contractFormClear()
          }
@@ -1900,8 +1921,8 @@
           this.differentShow = "";
           this.differentShow2 = "";
            this.newpriceLen = 1;
-           this.newpayForLen = 1
-          this.newpayTypeLen = 1,
+           this.newpayForLen = 1;
+          this.newpayTypeLen = 1;
            this.allBtn = true;
           this.contractFormClear2()
         }
@@ -1942,19 +1963,19 @@
         this.contractForm.pay_method = [[],[],];
         this.contractForm.has_pay = "";
       },
-      priceChange(n) {
-        let data = this.contractForm.unit_price;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = n; i < this.newpriceLen; i++) {
-            if ((i + 1) < this.newpriceLen) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.contractForm.unit_price[0], priceDate);
-            }
-          }
-        }
-      },
+      // priceChange(n) {
+      //   let data = this.contractForm.unit_price;
+      //   if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+      //     let priceDate = data[0];
+      //     for (var i = n; i < this.newpriceLen; i++) {
+      //       if ((i + 1) < this.newpriceLen) {
+      //         priceDate[i + 1] = [];
+      //         priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //         this.$set(this.contractForm.unit_price[0], priceDate);
+      //       }
+      //     }
+      //   }
+      // },
       addPriceLen(index) {
         this.newpriceLen++;
       },
@@ -1962,20 +1983,22 @@
         this.newpriceLen--;
         this.contractForm.unit_price[0].splice(index, 1);
         this.contractForm.unit_price[1].splice(index, 1);
+        this.contractForm2.unit_price[0].splice(index, 1);
+        this.contractForm2.unit_price[1].splice(index, 1);
       },
-      payTypeChange(n) {
-        let data = this.contractForm.pay_type;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = n; i < this.newpayForLen; i++) {
-            if ((i + 1) < this.newpayForLen) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.contractForm.pay_type[0], priceDate);
-            }
-          }
-        }
-      },
+      // payTypeChange(n) {
+      //   let data = this.contractForm.pay_type;
+      //   if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+      //     let priceDate = data[0];
+      //     for (var i = n; i < this.newpayForLen; i++) {
+      //       if ((i + 1) < this.newpayForLen) {
+      //         priceDate[i + 1] = [];
+      //         priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //         this.$set(this.contractForm.pay_type[0], priceDate);
+      //       }
+      //     }
+      //   }
+      // },
       addPayLen(index) {
         this.newpayForLen++;
       },
@@ -1990,6 +2013,15 @@
           this.contractForm.pay_type[1].splice(index, 1);
           this.contractForm.pay_type[2].splice(index, 1);
         }
+        if (this.activeName == 'first') {
+          this.contractForm2.pay_type[0].splice(index, 1);
+          this.contractForm2.pay_type[1].splice(index, 1);
+        }
+        else {
+          this.contractForm2.pay_type[0].splice(index, 1);
+          this.contractForm2.pay_type[1].splice(index, 1);
+          this.contractForm2.pay_type[2].splice(index, 1);
+        }
       },
       addPayTypeLen(index) {
         this.newpayTypeLen++;
@@ -2000,11 +2032,13 @@
         this.contractForm.pay_method[1].splice(index, 1);
       },
       newBouncing(val) {
+        this.contractForm.unit_price.splice(2,  this.contractForm.unit_price.length - 1)
+        this.contractForm.pay_type.splice(2,  this.contractForm.pay_type.length - 1)
         if (this.contractForm.unit_price[0].length === this.contractForm.unit_price[1].length) {
           this.contractForm.unit_price[0].forEach((res, index) => {
             let obj = {};
-            obj.price = res;
-            obj.period = this.contractForm.unit_price[1][index];
+            obj.period = res;
+            obj.price = this.contractForm.unit_price[1][index];
             this.contractForm.unit_price.push(obj)
           })
         }else{
@@ -2021,7 +2055,8 @@
         }else{
           console.log('数量不对');
         }
-        console.log(this.contractForm, "44444")
+        // console.log(this.contractForm, "44444")
+        // return false
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {
@@ -2039,6 +2074,8 @@
             if(val == "1") {
               this.Inconsistent = true;
               this.contrastContract();
+              // this.contractForm.unit_price = [[],[],];
+              // this.contractForm.pay_type = [[],[],[]];
             }
           } else {
             this.$notify.warning({
@@ -2285,11 +2322,14 @@
       },
       newBouncing2(val) {
         // 字段处理
+         this.contractForm2.unit_price.splice(2,  this.contractForm2.unit_price.length - 1)
+        this.contractForm2.pay_type.splice(3,  this.contractForm2.pay_type.length - 1)
+        console.log()
         if (this.contractForm2.unit_price[0].length === this.contractForm2.unit_price[1].length) {
           this.contractForm2.unit_price[0].forEach((res, index) => {
             let obj = {};
-            obj.price = res;
-            obj.period = this.contractForm2.unit_price[1][index];
+            obj.period = res;
+            obj.price = this.contractForm2.unit_price[1][index];
             this.contractForm2.unit_price.push(obj)
           })
         }else{
@@ -2299,8 +2339,8 @@
           this.contractForm2.pay_type[0].forEach((res, index) => {
             let obj = {};
             obj.period = res;
-            obj.pay_way = this.contractForm2.pay_type[1][index];
             obj.pay_way_bet = this.contractForm2.pay_type[1][index];
+            obj.pay_way = this.contractForm2.pay_type[2][index];
             this.contractForm2.pay_type.push(obj)
           })
         }else{
@@ -2322,7 +2362,8 @@
             if(val == "1") {
               this.Inconsistent2 = true;
               this.contrastContract2();
-              
+              // this.contractForm2.unit_price = [[],[],];
+              // this.contractForm2.pay_type = [[],[],[]];
             }
           } else {
             this.$notify.warning({
