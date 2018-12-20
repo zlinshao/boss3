@@ -216,6 +216,8 @@
               @row-click='clickTable'
               :row-class-name="tableRowCollectName"
               @selection-change="handleSelectionChange"
+              @cell-mouse-enter="cellMouseEnter"
+              @cell-mouse-leave="cellMouseLeave"
               style="width: 100%">
               <el-table-column
                 type="selection"
@@ -231,10 +233,22 @@
               </el-table-column>
 
               <el-table-column
-                label="地址">
+                label="地址"
+                prop="name"
+              >
                 <template slot-scope="scope">
-                  <span v-if="scope.row.name">{{scope.row.name}}</span>
-                  <span v-else="">/</span>
+                  <div>
+                    <span v-if="scope.row.annotations" style="color: red;">!</span>
+                    <span v-if="scope.row.name">{{scope.row.name}}</span>
+                    <span v-else="">/</span>
+                    <div class="notice" :class="{isShow: scope.row.id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                      <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
+                      <span v-else style="color: #F56C6C;">拉入黑名单</span>
+                    </div>
+                    <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.id === markShow ? '' : 'yes'}">
+                      {{ scope.row.annotations.content }}
+                    </div>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -481,6 +495,17 @@
     <Download :downloadPicDialog="downloadPicDialog" :houseId="houseId" @close="closeModal"></Download>
 
     <HouseSearch :houseDialog="houseDialog" @close="getHouseAddress"></HouseSearch>
+    <el-dialog
+      :visible.sync="markInfoVisible"
+      title="备注"
+      width="20%"
+    >
+      <el-input type="textarea" :row="4" v-model="markInfo"></el-input>
+      <div style="text-align: right;margin-top: 15px;">
+        <el-button size="mini" @click="markInfoVisible = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="handleMarkInfo">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -514,6 +539,12 @@
     },
     data() {
       return {
+        showNotice: '',
+        markInfoVisible: false,
+        markInfo: '',
+        currentScope: '',
+        markShow: '',
+        ////
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -633,6 +664,73 @@
 //      });
     },
     methods: {
+      //鼠标移入
+      cellMouseEnter(row,column) {
+        if (column.property === "name") {
+          this.showNotice = row.id;
+          this.markShow = row.id;
+        }
+      },
+      cellMouseLeave(row,column) {
+        if (column.property === 'name') {
+          this.showNotice = '';
+          this.markShow = '';
+        }
+      },
+      handleMarkInfo() {
+        if (!this.markInfo) {
+          this.$notify.warning({
+            title: '警告',
+            message: '备注信息不能为空'
+          });
+          return false;
+        }
+        this.$http.post(globalConfig.server + '/annotations',{
+          remark_type: 1,
+          remark_id: this.currentScope.row.id,
+          content: this.markInfo
+        }).then(res => {
+          if (res.data.code === '20000') {
+            this.markInfoVisible = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.markInfo = '';
+            this.getData();
+          } else {
+            this.markInfoVisible = false;
+            this.markInfo = '';
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            });
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
+      },
+      handlePullBlack(scope) {
+        this.currentScope = scope;
+        if (scope.row.annotations) {
+          this.$http.delete(globalConfig.server + `/annotations/${scope.row.annotations.id}`).then(res => {
+            if (res.data.code === '20000') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getData();
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              });
+            }
+          })
+        }else {
+          this.markInfoVisible = true;
+        }
+      },
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
           this.all_dic = res.data.data;
@@ -1083,6 +1181,35 @@
         }
       }
 
+    }
+    .notice{
+      position: absolute;
+      top: 10%;
+      left: 0;
+      width: 100%;
+      height: 4em;
+      border-radius: 2px;
+      background-color: rgba(188,188,189,.9);
+      text-align: center;
+      line-height: 4;
+    }
+    .markInfo{
+      /*border: 1px solid #525252;*/
+      position: absolute;
+      text-align: left;
+      top: 5em;
+      left: -5em;
+      padding: 0 10px;
+      border-radius: 5px;
+      color: #4F4F4F;
+      background-color: #C6E2FF;
+      z-index: 99;
+    }
+    .markShow_style{
+      display: none;
+    }
+    .isShow{
+      display: none;
     }
   }
 </style>
