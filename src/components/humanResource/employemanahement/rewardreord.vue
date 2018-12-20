@@ -190,6 +190,9 @@ export default {
     }
   },
   watch: {
+    isClear(val) {
+      this.isClear = val;
+    },
     lookRewardLog(val) {
       this.RewardDialogVisible = val;
     },
@@ -214,14 +217,14 @@ export default {
       if(!val) {
         this.$emit("close");
         this.form = {};
-        this.isClear = true;
+        // this.isClear = true;
       }
     },
     editStaffRecordDialogVisible(val) {
       if(!val) {
-        // this.initParams();
+        this.initParams();
         // this.initEditParams();
-        this.isClear = true;
+        this.isClear = !this.isClear;
       }
     }
   },
@@ -242,7 +245,6 @@ export default {
       }]
     },
     initEditParams() {
-      console.log(1)
       this.editParams = {
         detail_id: "",
         remark: "",
@@ -258,8 +260,8 @@ export default {
     // 获取详情
     gerRewardReord(val) {
        this.loading = true;
-       this.initParams();
-       this.initEditParams();
+      //  this.initParams();
+      //  this.initEditParams();
       this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {user_id: val}).then(res => {
         this.loading = false;
         if (res.data.code === "100100") {
@@ -278,8 +280,8 @@ export default {
       })
     },
     addEditReward(val, item) {
-      this.initParams();
-      this.initEditParams();
+      // this.initParams();
+      // this.initEditParams();
       this.editStaffRecordDialogVisible = true;
       if (val == '1') {
         this.titleName = "新增记录";
@@ -302,9 +304,9 @@ export default {
               message: res.data.msg,
             });
             this.editStaffRecordDialogVisible = false;
-            this.isClear = true;
+            // this.isClear = true;
             this.gerRewardReord(this.saveUid);
-            this.initParams();
+            // this.initParams();
           } else {
             this.$notify.warning({
               title: '警告',
@@ -321,9 +323,9 @@ export default {
               message: res.data.msg,
             });
             this.editStaffRecordDialogVisible = false;
-            this.isClear = true;
+            // this.isClear = true;
             this.gerRewardReord(this.saveUid);
-            this.initParams();
+            // this.initParams();
           } else {
             this.$notify.warning({
               title: '警告',
@@ -335,8 +337,8 @@ export default {
     },
     // 获取编辑奖励记录
     editRecord(val) {
-      this.initEditParams()
-      this.initParams();
+      // this.initEditParams()
+      // this.initParams();
       this.params[0].detail_id = val.detail_id;
       this.editParams.detail_id = val.detail_id;
       this.editParams.type = val.type;
