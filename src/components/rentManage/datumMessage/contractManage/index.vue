@@ -487,7 +487,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
+                      <span @click="getImage(scope.row.address, scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -620,8 +620,8 @@
                         <el-row v-for="index in newpriceLen" :key="index">
                           <el-col :span="14">
                             <el-form-item label="月单价" v-if="index==1" required>
-                              <el-date-picker
-                              class="hiddenA"
+                              <!-- <el-date-picker
+                                class="hiddenA"
                                 v-model="contractForm.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -634,10 +634,11 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                                 >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item v-if="index!=1" required>
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -650,7 +651,8 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                               >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -666,7 +668,7 @@
                         <el-row v-for="index in newpayForLen" :key="index+111">
                           <el-col :span="14">
                             <el-form-item label="付款方式" required v-if="index==1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -678,10 +680,11 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item required v-if="index!=1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -693,7 +696,8 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -970,7 +974,7 @@
                   <!-- 新增部分=================================== -->
                   <el-table-column label="行政审核">
                     <template  slot-scope="scope">
-                      <span @click="getImage2(scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
+                      <span @click="getImage2(scope.row.address, scope.row.contract_id)" style="color: rgb(106, 141, 251); cursor: pointer;">{{scope.row.verify_status.name}}</span>
                     </template>
                   </el-table-column>
                   <!-- ========================================= -->
@@ -1075,8 +1079,8 @@
                         <el-row v-for="index in newpriceLen" :key="index">
                           <el-col :span="14">
                             <el-form-item label="月单价" v-if="index==1" required>
-                              <el-date-picker
-                              class="hiddenA"
+                              <!-- <el-date-picker
+                                class="hiddenA"
                                 v-model="contractForm2.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1089,10 +1093,11 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                                 >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item v-if="index!=1" required>
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm2.unit_price[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1105,7 +1110,8 @@
                                 :picker-options="pickerOptions2"
                                 @change="priceChange(index-1)"
                               >
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.unit_price[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                           <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -1121,7 +1127,7 @@
                         <el-row v-for="index in newpayForLen" :key="index+111">
                           <el-col :span="14">
                             <el-form-item label="付款方式" required v-if="index==1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm2.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1133,10 +1139,11 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                             <el-form-item required v-if="index!=1">
-                              <el-date-picker
+                              <!-- <el-date-picker
                                 v-model="contractForm2.pay_type[0][index-1]"
                                 type="daterange"
                                 align="right"
@@ -1148,7 +1155,8 @@
                                 end-placeholder="结束日期"
                                 :picker-options="pickerOptions2"
                                 @change="payTypeChange(index-1)">
-                              </el-date-picker>
+                              </el-date-picker> -->
+                              <el-input v-model="contractForm2.pay_type[0][index-1]" placeholder="请输入月份"></el-input>
                             </el-form-item>
                           </el-col>
                            <el-col :span="2" style="float: right;" v-if="index == 1">
@@ -1167,8 +1175,8 @@
                           <el-col :span="8"  style="float: right; text-align: right;">
                               <span>押</span>
                               <el-select style="width:60px;" size="mini" v-model="contractForm2.pay_type[1][index-1]" clearable>
-                                <el-option v-for="item in 48" :label="item" :key="item"
-                                          :value="item">
+                                <el-option v-for="(item, index) in yaNum" :label="item.label" :key="index"
+                                          :value="item.value">
                                 </el-option>
                               </el-select>
                               <span>付</span>
@@ -1448,6 +1456,19 @@
         // 新增字段 ==========================
         // dialogTotal: "",
         // dialogTotal2: "",
+        yaNum: [
+          {value: "0", label: "0"},
+          {value: "1", label: "1"},
+          {value: "2", label: "2"},
+          {value: "3", label: "3"},
+          {value: "4", label: "4"},
+          {value: "5", label: "5"},
+          {value: "6", label: "6"},
+          {value: "7", label: "7"},
+          {value: "8", label: "8"},
+          {value: "9", label: "9"},
+          {value: "10", label: "10"},
+        ],
         allBtn: true,
         contractEntryLoading2: false,
         contractEntryLoading: false,
@@ -1838,25 +1859,46 @@
       },
       // 新赠方法 ====================================
       newpriceLen(val) {
+        console.log("====================")
         let data = this.contractForm.unit_price;
+        let data2 = this.contractForm2.unit_price;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
             if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+        if (data2 && data2[0] && data2[0][0] && data2[0][0].length > 0) {
+          let priceDate = data2[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
             }
           }
         }
       },
       newpayForLen(val) {
         let data = this.contractForm.pay_type;
+        let data2 = this.contractForm2.pay_type;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
             if ((i + 1) < val) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
+          }
+        }
+        if (data2 && data2[0] && data2[0][0] && data2[0][0].length > 0) {
+          let priceDate = data2[0];
+          for (var i = 0; i < val; i++) {
+            if ((i + 1) < val) {
+              // priceDate[i + 1] = [];
+              // priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
             }
           }
         }
@@ -1867,8 +1909,8 @@
            this.differentShow = "";
            this.differentShow2 = "";
            this.newpriceLen = 1;
-           this.newpayForLen = 1
-          this.newpayTypeLen = 1,
+           this.newpayForLen = 1;
+          this.newpayTypeLen = 1;
           this.allBtn = true;
            this.contractFormClear()
          }
@@ -1879,8 +1921,8 @@
           this.differentShow = "";
           this.differentShow2 = "";
            this.newpriceLen = 1;
-           this.newpayForLen = 1
-          this.newpayTypeLen = 1,
+           this.newpayForLen = 1;
+          this.newpayTypeLen = 1;
            this.allBtn = true;
           this.contractFormClear2()
         }
@@ -1921,19 +1963,19 @@
         this.contractForm.pay_method = [[],[],];
         this.contractForm.has_pay = "";
       },
-      priceChange(n) {
-        let data = this.contractForm.unit_price;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = n; i < this.newpriceLen; i++) {
-            if ((i + 1) < this.newpriceLen) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.contractForm.unit_price[0], priceDate);
-            }
-          }
-        }
-      },
+      // priceChange(n) {
+      //   let data = this.contractForm.unit_price;
+      //   if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+      //     let priceDate = data[0];
+      //     for (var i = n; i < this.newpriceLen; i++) {
+      //       if ((i + 1) < this.newpriceLen) {
+      //         priceDate[i + 1] = [];
+      //         priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //         this.$set(this.contractForm.unit_price[0], priceDate);
+      //       }
+      //     }
+      //   }
+      // },
       addPriceLen(index) {
         this.newpriceLen++;
       },
@@ -1941,20 +1983,22 @@
         this.newpriceLen--;
         this.contractForm.unit_price[0].splice(index, 1);
         this.contractForm.unit_price[1].splice(index, 1);
+        this.contractForm2.unit_price[0].splice(index, 1);
+        this.contractForm2.unit_price[1].splice(index, 1);
       },
-      payTypeChange(n) {
-        let data = this.contractForm.pay_type;
-        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
-          let priceDate = data[0];
-          for (var i = n; i < this.newpayForLen; i++) {
-            if ((i + 1) < this.newpayForLen) {
-              priceDate[i + 1] = [];
-              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.contractForm.pay_type[0], priceDate);
-            }
-          }
-        }
-      },
+      // payTypeChange(n) {
+      //   let data = this.contractForm.pay_type;
+      //   if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+      //     let priceDate = data[0];
+      //     for (var i = n; i < this.newpayForLen; i++) {
+      //       if ((i + 1) < this.newpayForLen) {
+      //         priceDate[i + 1] = [];
+      //         priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //         this.$set(this.contractForm.pay_type[0], priceDate);
+      //       }
+      //     }
+      //   }
+      // },
       addPayLen(index) {
         this.newpayForLen++;
       },
@@ -1969,6 +2013,15 @@
           this.contractForm.pay_type[1].splice(index, 1);
           this.contractForm.pay_type[2].splice(index, 1);
         }
+        if (this.activeName == 'first') {
+          this.contractForm2.pay_type[0].splice(index, 1);
+          this.contractForm2.pay_type[1].splice(index, 1);
+        }
+        else {
+          this.contractForm2.pay_type[0].splice(index, 1);
+          this.contractForm2.pay_type[1].splice(index, 1);
+          this.contractForm2.pay_type[2].splice(index, 1);
+        }
       },
       addPayTypeLen(index) {
         this.newpayTypeLen++;
@@ -1979,6 +2032,31 @@
         this.contractForm.pay_method[1].splice(index, 1);
       },
       newBouncing(val) {
+        this.contractForm.unit_price.splice(2,  this.contractForm.unit_price.length - 1)
+        this.contractForm.pay_type.splice(2,  this.contractForm.pay_type.length - 1)
+        if (this.contractForm.unit_price[0].length === this.contractForm.unit_price[1].length) {
+          this.contractForm.unit_price[0].forEach((res, index) => {
+            let obj = {};
+            obj.price = res;
+            obj.period = this.contractForm.unit_price[1][index];
+            this.contractForm.unit_price.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
+        if (this.contractForm.pay_type[0].length === this.contractForm.pay_type[1].length) {
+          this.contractForm.pay_type[0].forEach((res, index) => {
+            let obj = {};
+            obj.period = res;
+            obj.pay_way = this.contractForm.pay_type[1][index];
+            obj.pay_way_str = this.contractForm.pay_type[1][index];
+            this.contractForm.pay_type.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
+        console.log(this.contractForm, "44444")
+        // return false
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {
@@ -1987,7 +2065,6 @@
                 message: res.data.msg
               })
             }
-            
             // this.confirmAgain = false;
             // this.contractEntry = false;
             // this.contractFormClear();
@@ -1997,6 +2074,8 @@
             if(val == "1") {
               this.Inconsistent = true;
               this.contrastContract();
+              // this.contractForm.unit_price = [[],[],];
+              // this.contractForm.pay_type = [[],[],[]];
             }
           } else {
             this.$notify.warning({
@@ -2046,7 +2125,7 @@
               this.contractForm.ready_days = res.data.data.ready_days;
               this.contractForm.has_pay = res.data.data.has_pay;
               this.contractEntryLoading = false;
-               this.allBtn = false;
+              this.allBtn = false;
             //  }
           } 
            else {
@@ -2122,7 +2201,8 @@
           window.open(href, '_blank', 'width=1920,height=1080');
       },
       // 收房获取图片
-      getImage(val, id) {
+      getImage(address,val, id) {
+        // console.log(address, "111111")
          this.contractEntryLoading = true;
         this.imgList = {};
         this.contractFormClear();
@@ -2131,7 +2211,7 @@
         this.$http.get(globalConfig.server + 'lease/collect/' + val).then(res => {
           if(res.data.code == "61010") {
             this.imgList = res.data.data.photo;
-            this.contractForm.community_name = res.data.data.community_name;
+            this.contractForm.community_name = address;
             this.contractForm.contract_number = res.data.data.contract_number;
             // this.contractForm.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
@@ -2213,7 +2293,7 @@
         this.contractForm2.pay_type = [[], [],[],];
       },
       // 租房获取图片
-      getImage2(val, id) {
+      getImage2(address, val, id) {
          this.contractEntryLoading2 = true;
         this.imgList2 = {};
         this.contractFormClear2();
@@ -2222,7 +2302,7 @@
         this.$http.get(globalConfig.server + 'lease/rent/' + val).then(res => {
           if(res.data.code == "61110") {
             this.imgList2 = res.data.data.photo;
-            this.contractForm2.community_name = res.data.data.community_name;
+            this.contractForm2.community_name = address;
             this.contractForm2.contract_number = res.data.data.contract_number;
             //  this.contractForm2.staff_id = res.data.data.staff_id;
             if(res.data.data.type == "1") {
@@ -2241,6 +2321,31 @@
         this.getContract2()
       },
       newBouncing2(val) {
+        // 字段处理
+         this.contractForm2.unit_price.splice(2,  this.contractForm2.unit_price.length - 1)
+        this.contractForm2.pay_type.splice(3,  this.contractForm2.pay_type.length - 1)
+        console.log()
+        if (this.contractForm2.unit_price[0].length === this.contractForm2.unit_price[1].length) {
+          this.contractForm2.unit_price[0].forEach((res, index) => {
+            let obj = {};
+            obj.price = res;
+            obj.period = this.contractForm2.unit_price[1][index];
+            this.contractForm2.unit_price.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
+        if (this.contractForm2.pay_type[0].length === this.contractForm2.pay_type[1].length) {
+          this.contractForm2.pay_type[0].forEach((res, index) => {
+            let obj = {};
+            obj.period = res;
+            obj.pay_way = this.contractForm2.pay_type[1][index];
+            obj.pay_way_bet = this.contractForm2.pay_type[2][index];
+            this.contractForm2.pay_type.push(obj)
+          })
+        }else{
+          console.log('数量不对');
+        }
         this.$http.post(globalConfig.server + "contract/contract_diff", this.contractForm2).then(res => {
           if(res.data.code == '20010') {
             if(val == "2") {
@@ -2257,7 +2362,8 @@
             if(val == "1") {
               this.Inconsistent2 = true;
               this.contrastContract2();
-              
+              // this.contractForm2.unit_price = [[],[],];
+              // this.contractForm2.pay_type = [[],[],[]];
             }
           } else {
             this.$notify.warning({
