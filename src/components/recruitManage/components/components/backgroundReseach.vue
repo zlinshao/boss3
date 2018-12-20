@@ -54,7 +54,7 @@
 <script>
     export default {
         name: 'backgroundReseach',
-        props: ['backgroundDialog', 'id', 'background_info'],
+        props: ['backgroundDialog', 'id', 'background_info', 'is_editing_bg_'],
         data(){
             return{
                 backgroundDialogVisible: false,
@@ -84,15 +84,21 @@
                 if(!val){
                     this.$emit('close')
                 }
+                if(this.is_editing_bg_){
+                    this.is_editing_bg = true;
+                    this.editBgreseach()
+                }else{
+                    this.is_editing_bg = false;
+                }
             },
             background_info(val){
                 if(val.background_check){
-                    // console.log(val)
+                    console.log(val.background_check)
                     this.prefill(val.background_check)
                 }else{
                     this.initBgParam();
                 }
-            }
+            },
         },
         mounted(){
             

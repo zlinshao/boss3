@@ -3,24 +3,24 @@
         <el-dialog title="新增招聘职位" :visible.sync="newPositionVisible" width="40%">
             <div>
                 <el-form ref="form" :model="form" size='mini' label-width="80px">
-                    <el-form-item label="部门">
+                    <el-form-item label="部门" required>
                         <el-input v-model="department_name" @focus="chooseDepart" placeholder="请选择部门" readonly>
                         <template slot="append">
                             <div style="cursor: pointer;" @click="closeDepart">清空</div>
                         </template>
                     </el-input>
                     </el-form-item>
-                    <el-form-item label="职位">
+                    <el-form-item label="职位" required>
                         <el-select v-model="duty_id" placeholder="请选择职位" @change="selectDuty" :disabled="duty.length < 1">
                             <el-option v-for="(item, index) in duty" :key='index' :label='item.name' :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="岗位名称">
+                    <el-form-item label="岗位名称" required>
                         <el-select v-model="form.position_id" placeholder="请选择岗位" :disabled="position.length < 1">
                             <el-option v-for="(item, index) in position" :key='index' :label='item.name' :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="年龄范围">
+                    <el-form-item label="年龄范围" required>
                         <el-col :span="11">
                             <el-input type='number' v-model="form.year.min"></el-input>
                         </el-col>
@@ -29,12 +29,12 @@
                             <el-input type='number' v-model="form.year.max"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="性别">
+                    <el-form-item label="性别" required>
                         <el-select v-model="form.gender" placeholder="">
                             <el-option v-for="(item, index) in sex" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="薪资范围">
+                    <el-form-item label="薪资范围" required>
                         <el-col :span="11">
                             <el-input type='number' v-model="form.salary.min"></el-input>
                         </el-col>
@@ -43,17 +43,17 @@
                             <el-input type='number' v-model="form.salary.max"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="工作经验">
+                    <el-form-item label="工作经验" required>
                         <el-select v-model="form.experience" placeholder="">
                             <el-option v-for="(item, index) in experience" :key="index" :label="item.dictionary_name" :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="学历">
+                    <el-form-item label="学历" required>
                         <el-select v-model="form.education" placeholder="">
                             <el-option v-for="(item, index) in education" :key="index" :label="item.dictionary_name" :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="需求人数">
+                    <el-form-item label="需求人数" required>
                         <el-col :span="11">
                             <el-input type='number' v-model="form.number.min"></el-input>
                         </el-col>
@@ -62,8 +62,9 @@
                             <el-input type='number' v-model="form.number.max"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="岗位职责">
+                    <el-form-item label="岗位职责" required>
                         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded" v-model="form.content" :disabled="editorDisabled"></vue-editor>
+                        <!-- <el-input  v-model="form.content" type='textarea'></el-input> -->
                     </el-form-item>
                     <!-- <el-form-item label="任职要求">
                         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded" v-model="positionRequire" :disabled="editorDisabled"></vue-editor>
