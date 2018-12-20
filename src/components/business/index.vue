@@ -706,7 +706,13 @@
             str += item + '&';
           });
           str = str.substring(0,str.length - 1);
-          this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} ${str})`;
+          if (row.group === '-') {
+            this.currentDetailTitle = `数据详情 ( ${row._group} ${row.date_range} ${str})`;
+          }else if(!row.group) {
+            this.currentDetailTitle = `数据详情 ( ${row.date_range} ${str})`;
+          } else {
+            this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} ${str})`;
+          }
           var detailParams = {};
           detailParams.start_time = row.start;
           detailParams.end_time = row.end;
