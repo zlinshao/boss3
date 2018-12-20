@@ -399,7 +399,7 @@
                         <span v-if="!scope.row.customer_name">暂无</span>
                         <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
                           <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
-                          <span v-else style="color: red;">拉入黑名单</span>
+                          <span v-else style="color: #F56C6C;">拉入黑名单</span>
                         </div>
                         <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
                           {{ scope.row.annotations.content }}
@@ -894,7 +894,7 @@
                         <span v-if="!scope.row.customer_name">暂无</span>
                         <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
                           <span v-if="scope.row.annotations" style="color: white;">移除黑名单</span>
-                          <span v-else style="color: red;">拉入黑名单</span>
+                          <span v-else style="color: #F56C6C;">拉入黑名单</span>
                         </div>
                         <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
                           {{ scope.row.annotations.content }}
@@ -3247,20 +3247,20 @@
       width: 100%;
       height: 2em;
       border-radius: 2px;
-      background-color: #bcbcbd;
+      background-color: rgba(188,188,189,.9);
       text-align: center;
       line-height: 2;
     }
     .markInfo{
-      border: 1px solid #525252;
-      width: 200%;
+      /*border: 1px solid #525252;*/
       position: absolute;
-      top: 4em;
-      left: 2em;
-      height: 2em;
-      border-radius: 3px;
-      color: black;
-      background-color: white;
+      text-align: left;
+      top: 3.5em;
+      left: -5em;
+      padding: 0 10px;
+      border-radius: 5px;
+      color: #4F4F4F;
+      background-color: GhostWhite;
       z-index: 99;
     }
     .markShow_style{
