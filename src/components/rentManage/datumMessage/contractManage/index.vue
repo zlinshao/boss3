@@ -397,11 +397,11 @@
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
                         <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
                         <span v-if="!scope.row.customer_name">暂无</span>
-                        <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                        <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
                           <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
                           <span v-else style="color: #F56C6C;">拉入黑名单</span>
                         </div>
-                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
+                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_id === markShow ? '' : 'yes'}">
                           {{ scope.row.annotations.content }}
                         </div>
                       </div>
@@ -892,11 +892,11 @@
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
                         <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
                         <span v-if="!scope.row.customer_name">暂无</span>
-                        <div class="notice" :class="{isShow: scope.row.contract_number === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                        <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
                           <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
                           <span v-else style="color: #F56C6C;">拉入黑名单</span>
                         </div>
-                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_number === markShow ? '' : 'yes'}">
+                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_id === markShow ? '' : 'yes'}">
                           {{ scope.row.annotations.content }}
                         </div>
                       </div>
@@ -1989,7 +1989,11 @@
       handlePullBlack(scope) {
         this.currentScope = scope;
         if (scope.row.annotations) {
-          this.$http.delete(globalConfig.server + `/annotations/${scope.row.annotations.id}`).then(res => {
+          this.$http.delete(globalConfig.server + `/annotations/${scope.row.annotations.id}`,{
+            data: {
+              remark_type: this.activeName === 'first' ? 2 : 3
+            }
+          }).then(res => {
             if (res.data.code === '20000') {
               this.$notify.success({
                 title: '成功',
@@ -2014,8 +2018,8 @@
       //鼠标移入
       cellMouseEnter(row,column) {
         if (column.property === "customer_name") {
-          this.showNotice = row.contract_number;
-          this.markShow = row.contract_number;
+          this.showNotice = row.contract_id;
+          this.markShow = row.contract_id;
         }
       },
       cellMouseLeave(row,column) {
