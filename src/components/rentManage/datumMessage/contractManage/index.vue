@@ -1956,8 +1956,8 @@
         var obj = {};
         if (this.activeName === 'first') {
           obj = {
-            remark_type: 1,
-            remark_id: this.currentScope.row.house_id,
+            remark_type: 3,
+            remark_id: this.currentScope.row.contract_id,
             content: this.markInfo
           };
         } else {
