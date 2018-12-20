@@ -405,7 +405,7 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
-          statusValue: "",
+          statusValue: "1",
           // ================
           duty_id: [],
           position_id: [],
@@ -494,7 +494,6 @@
     },
     watch: {
       isClear: function (val) {
-        console.log(val)
         this.isClear = val;
       },
       // addEmployLog(val,id) {
@@ -525,7 +524,7 @@
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          // this.isClear = true;
+          this.isClear = true;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
@@ -537,6 +536,7 @@
           this.title = '新建用户';
         } else {
           this.title = '修改用户';
+          this.params.statusValue = "";
           this.getStaffInfo();
         }
       },
@@ -613,7 +613,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.statusValue = "";
+        this.params.statusValue = "1";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -949,14 +949,14 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          console.log(this.params, "修改")
+          // console.log(this.params, "修改")
           // return false
           this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
               // this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
               // this.isClear = true;
-              this.initial();
+              // this.initial();
               this.prompt('success', res.data.msg);
             } else {
               this.disabledBtn = false;
@@ -975,7 +975,7 @@
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
               // this.isClear = true;
-              this.initial();
+              // this.initial();
 
             } else {
               this.disabledBtn = false;
@@ -1059,7 +1059,6 @@
         this.resetOrg('position');
         if (val.length > 0) {
           for (let item of val) {
-            console.log(item)
             this.quarters(item);
           }
         }
@@ -1167,7 +1166,6 @@
         this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
-            console.log(this.branchBankCategory)
           } else {
             this.branchBankCategory = [];
           }

@@ -632,7 +632,7 @@ export default {
     // 导出Excel表
     exportList() {
       this.$http.post(globalConfig.server + "attendance/summary/excel",this.params).then(res => {
-        if(res.data.code == "70000") {
+        if(res.data.code == "20000") {
           this.$notify.success({
             title: "成功",
             message: res.data.msg

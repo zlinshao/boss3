@@ -97,7 +97,7 @@ export default {
       dayarr: [],
       params: {
         user_id: "",
-        date: ""
+        // date: ""
       },
       arrangeList: [],
       modifyDay: "",
@@ -107,10 +107,7 @@ export default {
   mounted() {
     this.getCheckList();
   },
-  created() {
-    // this.getYear();
-    // this.month = new Date().getMonth() + 1
-  },
+  created() {},
   watch: {
     lookTypesettingLog(val) {
       this.typesettingDialog = val;
@@ -248,11 +245,8 @@ export default {
     },
     submitModify() {
        this.currentSort.arrange_month = this.year + "-" + this.month;
-       console.log(this.currentArrange)
-       this.arrangeList[this.modifyDay] = this.currentArrange;
-       console.log(this.arrangeList)
+       this.arrangeList[this.modifyDay - 1] = this.currentArrange;
        this.currentSort.arrange = Object.values(this.arrangeList)
-       return false;
       this.$http.post(globalConfig.server + "attendance/sort", {
               user_id: this.currentSort.user_id,
               arrange: this.currentSort.arrange,
@@ -263,8 +257,6 @@ export default {
              title: "成功",
              message: res.data.msg
            })
-          //  console.log(this.params, "33333")
-          //  return false
            this.getTypeTime();
            this.modifyDialogVisible = false;
          } else {
@@ -277,15 +269,10 @@ export default {
     },
     // 搜索排班
     searchScheduling() {
-      console.log(this.year, this.month)
       this.selectmonth = this.month;
-      this.params.data = this.year + "-" + this.month;
+      this.params.arrange_month = this.year + "-" + this.month;
       this.getTypeTime();
     },
-    getYear() {
-      this.year = new Date().getFullYear();
-      console.log(this.year)
-    }
   }
 };
 </script>
