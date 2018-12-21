@@ -394,7 +394,7 @@
                     <template slot-scope="scope">
                       <div>
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
-                        <el-tooltip placement="bottom" v-if="scope.row.annotations">
+                        <el-tooltip placement="bottom" v-if="scope.row.annotations && scope.row.annotations.content">
                           <div slot="content">
                             {{ scope.row.annotations.content }}
                           </div>
@@ -409,7 +409,8 @@
                         <span v-else-if="scope.row.customer_name">
                           <span style="color: #409EFF;">{{ scope.row.customer_name }}</span>
                           <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                            <span style="color: #F56C6C;">拉入黑名单</span>
+                            <span style="color: white;" v-if="scope.row.annotations && !scope.row.annotations.content">移出黑名单</span>
+                            <span style="color: #F56C6C;" v-else>拉入黑名单</span>
                           </div>
                         </span>
                         <span v-else>暂无</span>
@@ -922,7 +923,8 @@
                         <span v-else-if="scope.row.customer_name">
                           <span style="color: #409EFF;">{{ scope.row.customer_name }}</span>
                           <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                            <span style="color: #F56C6C;">拉入黑名单</span>
+                            <span style="color: white;" v-if="scope.row.annotations && !scope.row.annotations.content">移出黑名单</span>
+                            <span style="color: #F56C6C;" v-else>拉入黑名单</span>
                           </div>
                         </span>
                         <span v-else>暂无</span>
