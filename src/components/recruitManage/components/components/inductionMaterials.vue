@@ -131,10 +131,12 @@
                             message: res.data.msg,
                             type: 'success'
                         });
-                        this.$nextTick(() => {
-                            this.isClear = true;
-                            this.init()
-                        })
+                        this.isClear = true;
+                        $('.imgItem').remove();
+                        setTimeout(() => {
+                            this.isClear = false;
+                        });
+                        this.init()
                         this.inductionMaterialsDialogVisible = false;
                     }
                 })
