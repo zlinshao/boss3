@@ -98,7 +98,7 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
         >
-          <el-table-column label="区域" min-width="150px;">
+          <el-table-column label="区域" min-width="150px;" prop="group">
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.group">{{ scope.row.group }}</span>
@@ -709,7 +709,10 @@
           this.getChartData(obj);
         },
         //单元格被单击
-        handleCellClick(row) {
+        handleCellClick(row,column) {
+          if (column.property === 'group') {
+            return false;
+          }
           var str = '';
           this.helpParams.compose.forEach(item => {
             str += item + '&';
