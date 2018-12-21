@@ -341,7 +341,8 @@
             "renter.agency_percentage": '租房渠道单比例变化(%)',
             "renter.price_avg":'租房均价变化(元)',
             "rent.pay_back_avg": '租房回款变化(元)',
-            "renter.price_diff_avg": '租房平均差价变化'
+            "renter.price_diff_avg": '租房平均差价变化',
+            "renter.pay_back_avg": '回款数据变化'
           },
           currentTitle: '',
           currentDetailTitle: ''
