@@ -164,6 +164,16 @@
         </div>
         <!--招聘详情结束-->
         <div class="empty" v-if="!positionList.length">暂无数据</div>
+        <div class="block">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-size="12"
+            layout="total, prev, pager, next, jumper"
+            :total="total">
+            </el-pagination>
+        </div>
         <!--切换招聘状态dialog开始-->
         <el-dialog :visible.sync="togglePositionDialogVisible" width="30%" center>
             <div class='close-tips' v-if='position_status === 732'>确定结束该岗位的招聘吗</div>
@@ -220,10 +230,11 @@
         data(){
             return{
                 active_name:'first',
+                page: 1,
+                total:0,
                 loadingRecruit: true,
                 newPositionDialog: false,
                 editorDisabled: false,
-                is_loading:true,
                 is_editing:false,
                 edit_index:'',
                 togglePositionDialogVisible:false,
@@ -234,7 +245,6 @@
                 duty:[],
                 position:[],
                 file:{},
-                options:[],
                 formInline: {
                     company: '',
                     department_id: '',
@@ -242,8 +252,8 @@
                     status: 732,
                 },
                 params:{
-                    limit:'',
-                    page:'',
+                    limit: '12',
+                    page:1,
                     keywords:'',
                     org_id:'',
                     status:732,
@@ -301,14 +311,13 @@
             this.getDictionary();
         },
         methods:{
-            getParent(){
-                this.$http.get(globalConfig.server + 'organization/other/org-tree?id=1').then(res => {
-                    if(res.data.code === '70050'){
-                        res.data.data.children.forEach((item, index) => {
-                            this.options.push({})
-                        })
-                    }
-                });
+            //分頁
+            handleSizeChange(){
+
+            },
+            handleCurrentChange(pagers){
+                this.params.page = pagers;
+                this.search();
             },
             //搜索
             search(){
@@ -413,11 +422,13 @@
                 this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
                     if(res.data.code === '10000' || res.data.code === '70000'){
                         this.loadingRecruit = false;
+                        this.total = res.data.data.count;
                         this.positionList = res.data.data.data;
                         this.positionList.forEach(item => {
                         });
                     }else{
                         this.loadingRecruit = false;
+                        this.total = 0;
                         this.positionList = [];
                     }
                 })
@@ -696,6 +707,9 @@
         }
         .el-header{
             height: 40px !important;
+        }
+        .el-pagination {
+            text-align: right;
         }
     }
 </style>

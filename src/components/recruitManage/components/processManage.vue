@@ -4,7 +4,7 @@
            <el-tabs v-model="activeName" @tab-click="handleClick" class='el-tabs'>
                <el-form inline size='mini' class="search-info">
                     <el-form-item label="">
-                        <el-input v-model='searchParam' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
+                        <el-input v-model='params.search' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  @click='search'>搜索</el-button>
@@ -13,6 +13,9 @@
                 <el-tab-pane label="已约面试" name="first">
                     <el-table
                         :data="interviewDatedData"
+                        v-loading="loading1"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='cellClick'
                         style="width: 100%">
                         <el-table-column
@@ -133,6 +136,9 @@
                 <el-tab-pane label="面试完毕" name="second">
                     <el-table
                         :data="interviewFinishedData"
+                        v-loading="loading2"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='interviewResEdit'
                         style="width: 100%">
                         <el-table-column
@@ -233,6 +239,9 @@
                 <el-tab-pane label="待入职" name="third">
                     <el-table
                         :data="toInductData"
+                        v-loading="loading3"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='checkoutEvent'
                         style="width: 100%">
                         <el-table-column
@@ -320,6 +329,9 @@
                 <el-tab-pane label="已入职" name="fourth">
                     <el-table
                         :data="inductedData"
+                        v-loading="loading4"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='checkoutEvent'
                         style="width: 100%">
                         <el-table-column
@@ -397,6 +409,16 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
+                <div class="block">
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="page"
+                        :page-size="12"
+                        layout="total, prev, pager, next, jumper"
+                        :total="total">
+                    </el-pagination>
+                </div>
             </el-tabs>
             <!--添加面试人开始-->
             <el-dialog width="30%"  :visible.sync="addInterviewerDialog" append-to-body>
@@ -697,10 +719,22 @@
                 uploadResume_id: '',
                 isClear: false,
                 activeName:'first',
+                loading1: true,
+                loading2: true,
+                loading3: true,
+                loading4: true,
+                page: 1,
+                total: 0,
                 interviewDatedData:[],
                 interviewFinishedData:[],
                 toInductData:[],
                 inductedData:[],
+                params: {
+                    search: '',
+                    status: '',
+                    limit: 12,
+                    page: 1,
+                },
                 is_editing:false,
                 is_editResult: false,
                 is_editing_id:'',
@@ -708,7 +742,6 @@
                 is_editing_interview_status_id: '',
                 lookUpResumeDialog : false,
                 album:[],
-                searchParam: '',
                 interviewParams: {
                     name: '',
                     gender: '',
@@ -858,11 +891,12 @@
             },
             processManageDialog(val){
                 if(!val){
-                    this.searchParam = '';
+                    this.params.search = '';
                     this.is_editing_id = '';
                     this.$emit('close');
                 }else{
                     this.activeName = this.active_name;
+                    this.getAllData(this.id)
                 }
             },
             id(val){
@@ -877,6 +911,13 @@
                 if(!val){
                     this.is_editing_interview_status = '';
                 }
+            },
+            IsEntryDialog(val){
+                if(val){
+                    this.editIsEntry();
+                }else{
+                    this.cancelEditCondition()
+                }
             }
         },
         created(){
@@ -884,7 +925,19 @@
         },
         methods: {
             handleClick(){
-                console.log(this.activeName)
+                console.log(this.activeName);
+                this.params.search = '';
+                this.params.limit = 12;
+                this.params.page = 1;
+                this.getAllData(this.id)
+            },
+            //分頁
+            handleCurrentChange(val){
+                this.params.page = val;
+                this.getAllData(this.id)
+            },
+            handleSizeChange(){
+
             },
             //搜索
             search(){
@@ -904,7 +957,7 @@
                         _status = 4;
                         break;
                 }
-                this.$http.get(globalConfig.server + 'hrm/interview?search=' + this.searchParam + '&status=' + _status + '&recruitment_id=' + this.id).then(res => {
+                this.$http.get(globalConfig.server + 'hrm/interview?search=' + this.params.search + '&status=' + _status + '&recruitment_id=' + this.id).then(res => {
                     if(this.activeName === 'first'){
                         if(res.data.code === '20000'){
                             this.interviewDatedData = res.data.data.data
@@ -938,51 +991,77 @@
             },
             //获取数据
             getAllData(id){
-                //已约面试
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=1&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        // console.log(res.data.data);
-                        this.interviewDatedData = res.data.data.data
-                    }else{
-                        this.interviewDatedData = []
-                    }
-                });
-                //面试完毕
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=2&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        // console.log(res.data.data);
-                        this.interviewFinishedData = res.data.data.data
-                    }else{
-                        this.interviewFinishedData = []
-                    }
-                });
-                //待入职
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=3&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        this.toInductData = res.data.data.data;
-                        this.toInductData.forEach(item => {
-                            if(item.entry_other.entry_time && item.entry_other.entry_time.length){
-                                item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-                            }
-                        })
-                    }else{
-                        this.toInductData = []
-                    }
-                });
-                //已入职
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=4&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        // console.log(res.data.data);
-                        this.inductedData = res.data.data.data;
-                        this.inductedData.forEach(item => {
-                            if(item.entry_other.entry_time && item.entry_other.entry_time.length){
-                                item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-                            }
-                        })
-                    }else{
-                        this.inductedData = []
-                    }
-                });
+                console.log(this.activeName);
+                if(this.activeName === 'first'){
+                    //已约面试
+                    this.params.status = 1;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.interviewDatedData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading1 = false;
+                        }else{
+                            this.interviewDatedData = [];
+                            this.total = 0;
+                            this.loading1 = false;
+                        }
+                    });
+                }
+                if(this.activeName === 'second'){
+                    //面试完毕
+                    this.params.status = 2;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.interviewFinishedData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading2 = false;
+                        }else{
+                            this.interviewFinishedData = [];
+                            this.total = 0;
+                            this.loading2 = false;
+                        }
+                    });
+                }
+                if(this.activeName === 'third'){
+                    //待入职
+                    this.params.status = 3;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.toInductData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading3 = false;
+                            this.toInductData.forEach(item => {
+                                if(item.entry_other.entry_time && item.entry_other.entry_time.length){
+                                    item.entry_time = this.timestampToDate(item.entry_other.entry_time)
+                                }
+                            })
+                        }else{
+                            this.toInductData = [];
+                            this.total = 0;
+                            this.loading3 = false;
+                        }
+                    });
+                }
+                if(this.activeName === 'fourth'){
+                     //已入职
+                     this.params.status = 4;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.inductedData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading4 = false;
+                            this.inductedData.forEach(item => {
+                                if(item.entry_other.entry_time && item.entry_other.entry_time.length){
+                                    item.entry_time = this.timestampToDate(item.entry_other.entry_time)
+                                }
+                            })
+                        }else{
+                            this.inductedData = [];
+                            this.total = 0;
+                            this.loading4 = false;
+                        }
+                    });
+                }
             },
             //修改预填数据/查看简历/面试状态
             cellClick(row, column, cell, event){
@@ -1788,6 +1867,10 @@
         color: rgba(63, 81, 181, 1);
         font-size: 14px;
         border: none;
+    }
+    .el-pagination {
+        padding-right: 50px;
+        text-align: right;
     }
 </style>
 
