@@ -78,6 +78,7 @@ export default {
   components: {Organization},
   data() {
     return {
+      InitSetInterval: "",
       monthOptions: [], // 月份
       length: 0,
       type: "",
@@ -109,12 +110,32 @@ export default {
     }
   },
   created() {
-    window.InitSetInterval = setInterval(this.lookList(),2000)
+    // let _this = this;
+    // this.InitSetInterval = setInterval(function(){_this.lookList()},2000);
+    // aaa = setInterval(() => {
+    //   console.log("11111")
+    // }, 2000)
+    this.polling();
   },
+  // beforeRouteLeave() {
+    // window.InitSetInterval = setInterval(this.lookList(),200)
+    // window.clearInterval(window.InitSetInterval);
+    // next()
+  // },
   mounted() {
     this.monthOptions = this.getCurrentDate();
   },
   methods: {
+    // 轮询
+    polling() {
+      let _this = this;
+      this.InitSetInterval = setInterval(function(){_this.lookList()},200);
+    },
+    cancelPolling() {
+      let _this = this;
+      console.log(2222)
+      clearInterval(_this.InitSetInterval)
+    },
     retired(val) {
       if(this.is_dimissionNum) {
         this.params.is_dimission = "1";
@@ -195,7 +216,8 @@ export default {
       this.lookList()
     },
     lookList() {
-      console.log(this.params, "22222")
+      // console.log(this.params, "22222")
+      console.log(11111)
       this.$http.get(globalConfig.server + "attendance/summary/excel-list",{params: this.params}).then(res => {
         if(res.data.code == "20000") {
           this.exportListData = res.data.data;
@@ -205,11 +227,13 @@ export default {
               this.exportListData[index]["ifStatus"] = item.status;
               item.status = "导出完成";
               this.uploadBtn = false;
+              let _this = this;
+              // clearInterval(_this.InitSetInterval);
+              this.cancelPolling();
             } else {
               this.exportListData[index]["ifStatus"] = item.status;
               this.uploadBtn = true;
               item.status = "正在导出";
-              // clearInterval(window.InitSetInterval)
             }
           })
         }
@@ -238,7 +262,7 @@ export default {
     },
   },
   destroyed() {
-    clearInterval(window.InitSetInterval )
+    // clearInterval(window.InitSetInterval )
   },
 }
 </script>
