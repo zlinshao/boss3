@@ -479,6 +479,14 @@
                     </template>
                   </el-table-column>
                   <el-table-column
+                    label="最新提交人"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.submit_staff_info && scope.row.submit_staff_info.name">{{ scope.row.submit_staff_info.name }}</span>
+                       <span v-else>/</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     label="部门">
                     <template slot-scope="scope">
                       <span
@@ -981,6 +989,14 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
                       <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="最新提交人"
+                  >
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.submit_staff_info && scope.row.submit_staff_info.name">{{ scope.row.submit_staff_info.name }}</span>
+                      <span v-else>/</span>
                     </template>
                   </el-table-column>
                   <el-table-column
