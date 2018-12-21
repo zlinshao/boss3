@@ -110,7 +110,7 @@
                             <template slot-scope="scope">
                                 <el-button v-if='is_editing_id !== scope.row.id' size='mini'>修改</el-button>
                                 <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='cancelEdit'>取消</el-button>
-                                <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='confirmEdit'>确定</el-button>
+                                <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='confirmEdit(scope.row)'>确定</el-button>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -474,7 +474,7 @@
             <!--原始简历开始-->
             <el-dialog  :visible.sync="lookUpResumeDialog" append-to-body>
                 <div v-for='(item, index) in album' :key='index'>
-                    <embed :src="item.uri" />
+                    <embed class='embed' :src="item.uri" />
                 </div>
             </el-dialog>
             <!--原始简历结束-->
@@ -1120,7 +1120,13 @@
                 this.interviewParams.resume_source = '';
             },
             //保存修改
-            confirmEdit(){
+            confirmEdit(item){
+                this.interviewParams.album = [];
+                if(item.album.length){
+                    item.album.forEach(i => {
+                        this.interviewParams.album.push(i.id)
+                    })
+                }
                 this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_id, this.interviewParams).then( res => {
                     if(res.data.code === '20030'){
                         this.$notify({
@@ -1871,6 +1877,9 @@
     .el-pagination {
         padding-right: 50px;
         text-align: right;
+    }
+    .embed{
+        max-width: 100%;
     }
 </style>
 

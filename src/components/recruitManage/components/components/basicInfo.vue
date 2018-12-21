@@ -32,7 +32,7 @@
                     <el-form-item label="性别" v-if='!is_add'>
                       <div class="content">
                         <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.gender'>
-                          {{basicInfo_info.basic_info.gender}}
+                          {{basicInfo_info.basic_info.gender === 229 ? '男' : '女'}}
                         </span>
                         <span v-else>暂无</span>
                       </div>
