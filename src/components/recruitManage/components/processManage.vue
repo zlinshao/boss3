@@ -910,6 +910,13 @@
             interviewedDialog(val){
                 if(!val){
                     this.is_editing_interview_status = '';
+                    this.interviewedObj.id = '';
+                    this.interviewedObj.name = '';
+                    this.interviewedObj.gender = '';
+                    this.interviewedObj.interviewer_name = '';
+                    this.interviewedObj.interviewer_id = '';
+                    this.interviewedObj.expect = '';
+                    this.interviewedObj.actual = '';
                 }
             },
             IsEntryDialog(val){

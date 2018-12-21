@@ -39,13 +39,14 @@
                 <el-container>
                     <el-header>
                         <el-row :gutter="20" class="positionTitle">
-                            <el-col :span="6">
-                                <!-- <span>{{item.org.name}}</span> -->
+                            <el-col :span="4">
+                                <span v-if='item.org.corp'>{{item.org.corp.name}}</span>
+                                <span v-if='!item.org.corp'>/</span>
                             </el-col>
-                            <el-col :span="6">
+                            <el-col :span="4">
                                 <span>{{item.org.name}}</span>
                             </el-col>
-                            <el-col :span="6">
+                            <el-col :span="4">
                                 <span>{{item.statuss.dictionary_name}}</span>
                             </el-col>
                         </el-row>
