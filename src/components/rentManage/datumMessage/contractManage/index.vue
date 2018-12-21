@@ -392,18 +392,27 @@
                     prop="customer_name"
                     label="业主姓名">
                     <template slot-scope="scope">
-                      <!--<span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>-->
                       <div>
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
-                        <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
-                        <span v-if="!scope.row.customer_name">暂无</span>
-                        <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                          <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
-                          <span v-else style="color: #F56C6C;">拉入黑名单</span>
-                        </div>
-                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_id === markShow ? '' : 'yes'}">
-                          {{ scope.row.annotations.content }}
-                        </div>
+                        <el-tooltip placement="bottom" v-if="scope.row.annotations">
+                          <div slot="content">
+                            {{ scope.row.annotations.content }}
+                          </div>
+                          <span>
+                            <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                              <span style="color: white;">移出黑名单</span>
+                            </div>
+                            <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
+                            <span v-if="!scope.row.customer_name">暂无</span>
+                          </span>
+                        </el-tooltip>
+                        <span v-else-if="scope.row.customer_name">
+                          <span style="color: #409EFF;">{{ scope.row.customer_name }}</span>
+                          <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                            <span style="color: #F56C6C;">拉入黑名单</span>
+                          </div>
+                        </span>
+                        <span v-else>暂无</span>
                       </div>
                     </template>
                   </el-table-column>
@@ -898,15 +907,25 @@
                     <template slot-scope="scope">
                       <div>
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
-                        <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
-                        <span v-if="!scope.row.customer_name">暂无</span>
-                        <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
-                          <span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>
-                          <span v-else style="color: #F56C6C;">拉入黑名单</span>
-                        </div>
-                        <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.contract_id === markShow ? '' : 'yes'}">
-                          {{ scope.row.annotations.content }}
-                        </div>
+                        <el-tooltip placement="bottom" v-if="scope.row.annotations">
+                          <div slot="content">
+                            {{ scope.row.annotations.content }}
+                          </div>
+                          <span>
+                            <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                              <span style="color: white;">移出黑名单</span>
+                            </div>
+                            <span v-if="scope.row.customer_name"><a style="color: #409EFF;">{{ scope.row.customer_name }}</a></span>
+                            <span v-if="!scope.row.customer_name">暂无</span>
+                          </span>
+                        </el-tooltip>
+                        <span v-else-if="scope.row.customer_name">
+                          <span style="color: #409EFF;">{{ scope.row.customer_name }}</span>
+                          <div class="notice" :class="{isShow: scope.row.contract_id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">
+                            <span style="color: #F56C6C;">拉入黑名单</span>
+                          </div>
+                        </span>
+                        <span v-else>暂无</span>
                       </div>
                     </template>
                   </el-table-column>
