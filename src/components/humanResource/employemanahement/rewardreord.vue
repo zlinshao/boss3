@@ -1,6 +1,6 @@
 <template>
     <div id="rewardreord">
-      <el-dialog title="提示" :visible.sync="RewardDialogVisible" width="60%">
+      <el-dialog title="奖励记录" :visible.sync="RewardDialogVisible" width="60%">
         <div class="top">
           <el-form ref="form" :model="form" label-width="80px">
             <el-row>
@@ -216,7 +216,6 @@ export default {
     RewardDialogVisible(val) {
       if(!val) {
         this.$emit("close");
-        
         // this.isClear = true;
       }
     },
@@ -263,6 +262,10 @@ export default {
       this.loading = true;
       //  this.initParams();
       //  this.initEditParams();
+      this.rewardreForm.praiseNumber = "";
+      this.rewardreForm.criticismNumber = "";
+      this.rewardreForm.doubtNumber = "";
+      this.rewardreForm.otherNumber = "";
       this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {user_id: val}).then(res => {
         this.loading = false;
         if (res.data.code === "100100") {

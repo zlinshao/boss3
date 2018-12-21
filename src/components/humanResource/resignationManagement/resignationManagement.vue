@@ -3,7 +3,7 @@
       <div class="top">
         <el-form ref="params" :model="params" label-width="80px">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <!-- 无意义仅占位 -->
               <div style="visibility: hidden;">无意义仅占位</div>  
             </el-col>
@@ -19,14 +19,15 @@
                 <el-date-picker v-model="params.leave_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-col :span="20">
+            <el-col :span="8">
+              <el-col :span="16">
                 <el-form-item>
                   <el-input v-model="params.keywords" placeholder="请输入关键字" size="mini" @keyup.enter.prevent.native="getResignationEmploye" clearable></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="8">
                   <el-button type="primary" size="mini" @click="getResignationEmploye">搜 索</el-button>
+                  <el-button type="primary" size="mini" @click="resignationSMS">离职短信</el-button>
               </el-col>
             </el-col>
           </el-row>
@@ -205,6 +206,10 @@ export default {
     }
   },
   methods: {
+    // 离职短信
+    resignationSMS() {
+      this.$router.push({path: "/leaveOffice"})
+    },
     // 二次入职
     secondaryEmployment() {
       this.$confirm('将该员工的状态改为二次入职吗?', '提示', {
@@ -256,6 +261,7 @@ export default {
         this.editor = true;
       } else {
         this.editId = this.secondaryID;
+        // this.editor = false;
       }
     },
     closeSecondary() {

@@ -51,7 +51,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="download(scope.row)" size="mini" :disabled="scope.row.file_id ? false : true">下载</el-button>
+            <el-button type="primary" @click="download(scope.row)" size="mini" :disabled="scope.row.status !== '导出完成'" v-loading="loading">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -97,6 +97,7 @@ export default {
       lookListDialog: false,
       exportListData: [],
       dialogTotal: 0,
+      loading: false,
     }
   },
   watch: {
@@ -110,18 +111,8 @@ export default {
     }
   },
   created() {
-    // let _this = this;
-    // this.InitSetInterval = setInterval(function(){_this.lookList()},2000);
-    // aaa = setInterval(() => {
-    //   console.log("11111")
-    // }, 2000)
-    this.polling();
+    // this.polling();
   },
-  // beforeRouteLeave() {
-    // window.InitSetInterval = setInterval(this.lookList(),200)
-    // window.clearInterval(window.InitSetInterval);
-    // next()
-  // },
   mounted() {
     this.monthOptions = this.getCurrentDate();
   },
@@ -129,11 +120,12 @@ export default {
     // 轮询
     polling() {
       let _this = this;
-      this.InitSetInterval = setInterval(function(){_this.lookList()},200);
+      this.InitSetInterval = setInterval(function(){
+        _this.lookList();
+        },4000);
     },
     cancelPolling() {
       let _this = this;
-      console.log(2222)
       clearInterval(_this.InitSetInterval)
     },
     retired(val) {
@@ -217,7 +209,6 @@ export default {
     },
     lookList() {
       // console.log(this.params, "22222")
-      console.log(11111)
       this.$http.get(globalConfig.server + "attendance/summary/excel-list",{params: this.params}).then(res => {
         if(res.data.code == "20000") {
           this.exportListData = res.data.data;
@@ -227,9 +218,7 @@ export default {
               this.exportListData[index]["ifStatus"] = item.status;
               item.status = "导出完成";
               this.uploadBtn = false;
-              let _this = this;
-              // clearInterval(_this.InitSetInterval);
-              this.cancelPolling();
+              // this.cancelPolling();
             } else {
               this.exportListData[index]["ifStatus"] = item.status;
               this.uploadBtn = true;
@@ -247,7 +236,7 @@ export default {
             title: "成功",
             message: res.data.msg
           })
-          this.lookList();
+          this.polling();
         } else {
           this.$notify.warning({
             title: "失败",
@@ -262,7 +251,7 @@ export default {
     },
   },
   destroyed() {
-    // clearInterval(window.InitSetInterval )
+    this.cancelPolling();
   },
 }
 </script>
