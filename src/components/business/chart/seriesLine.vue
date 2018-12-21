@@ -40,13 +40,13 @@
             name: 'line'
           }
         });
-        chart.axis('value', {
-          label: {
-            formatter: function formatter(val) {
-              return val ;
-            }
-          },
-        });
+        // chart.axis('value', {
+        //   label: {
+        //     formatter: function formatter(val) {
+        //       return val ;
+        //     }
+        //   },
+        // });
         chart.line().position('date*value').color('name');
         chart.point().position('date*value').color('name').size(4).shape('circle').style({
           stroke: '#fff',

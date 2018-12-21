@@ -158,6 +158,7 @@ export default {
       this.$http.get(globalConfig.server + "attendance/sort/sort", {params: this.params}).then(res => {  
         if(res.data.code == "20000") {
           this.arrangeList = res.data.data.data.arrange;
+          // console.log(this.arrangeList, "111111")
           // this.year = res.data.data.year;
           // this.selectmonth = res.data.data.month;
           // this.params.data = this.year + "-" + this.month;
@@ -220,7 +221,8 @@ export default {
         item.forEach((val, key) => {
           if(val.currentmonth) {
              settingArr.forEach((a, b) => {
-               if(_arr[index][key].day == b + 1) {
+               
+               if(_arr[index][key].day == b) {
                   if(a == "A") {
                     _arr[index][key].setting = "早班";
                   } else if(a == "B") {
@@ -245,7 +247,7 @@ export default {
     },
     submitModify() {
        this.currentSort.arrange_month = this.year + "-" + this.month;
-       this.arrangeList[this.modifyDay - 1] = this.currentArrange;
+       this.arrangeList[this.modifyDay] = this.currentArrange;
        this.currentSort.arrange = Object.values(this.arrangeList)
       this.$http.post(globalConfig.server + "attendance/sort", {
               user_id: this.currentSort.user_id,

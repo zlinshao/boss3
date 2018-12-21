@@ -9,11 +9,31 @@
                         element-loading-background="rgba(255, 255, 255, 0)">
           <el-table-column prop="sign_date" label="日期"></el-table-column>
           <el-table-column prop="attendance" label="班次"></el-table-column>
-          <el-table-column prop="hugh" label="休息"></el-table-column>
+          <!-- <el-table-column prop="hugh" label="休息"></el-table-column> -->
           <el-table-column prop="goWork" label="上班打卡时间"></el-table-column>
-          <el-table-column prop="resultWork" label="上班打卡结果"></el-table-column>
+          <el-table-column  label="上班打卡结果">
+            <template slot-scope="scope">
+              <div v-if="scope.row.day <= days">
+                <span v-if="scope.row.resultWork == '正常'">{{scope.row.resultWork}}</span>
+                <span v-else-if="scope.row.resultWork == '休息并打卡'">{{scope.row.resultWork}}</span>
+                <span v-else-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
+                <span v-else-if="scope.row.resultWork == '缺卡'">{{scope.row.resultWork}}</span>
+                <span v-else>迟到{{scope.row.resultWork}}分钟</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="goOffWork" label="下班打卡时间"></el-table-column>
-          <el-table-column prop="resultOffWork" label="下班打卡结果"></el-table-column>
+          <el-table-column prop="" label="下班打卡结果">
+            <template slot-scope="scope">
+              <div v-if="scope.row.day <= days">
+                <span v-if="scope.row.resultOffWork == '正常'">{{scope.row.resultOffWork}}</span>
+                <span v-else-if="scope.row.resultOffWork == '休息并打卡'">{{scope.row.resultOffWork}}</span>
+                <span v-else-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
+                <span v-else-if="scope.row.resultOffWork == '缺卡'">{{scope.row.resultOffWork}}</span>
+                <span v-else>早退{{scope.row.resultOffWork}}分钟</span>
+              </div>
+            </template>
+          </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
         <!-- <el-button @click="lookAttendanceDialog = false" size="mini">取 消</el-button> -->
@@ -35,7 +55,8 @@ export default {
       attendanceData: [],   // 考勤时间
       params: {
         user_id: ""
-      }
+      },
+      days: "",
     }
   },
   watch: {
@@ -65,14 +86,14 @@ export default {
           this.emptyText = " ";
           let  year = new Date().getFullYear();
           let month = new Date().getMonth() + 1;
-          let days= new Date().getDate();
+          this.days= new Date().getDate();
           res.data.data.data[0].sort_dimension.forEach((item, index) => {
             obj = {}
             let currentAttendance = false;  // 今天是否有排班
             let currentMon = false;   // 早上是否有 实际打卡
             let currentWan = false;   // 下班是否有 实际打卡 
               item.forEach((a, b) => {
-                if(a.dimensions.day <= days) {
+                if(a.dimensions.day <= this.days) {
                   if(a.event_attribute == 3) {
                     currentAttendance = true;
                   }
@@ -92,6 +113,7 @@ export default {
               })
             item.forEach((val, key) => {
               obj.sign_date = val.sign_date;
+              obj.day = Number(val.sign_date.split("-")[2]);
               if(val.classes) {
                 obj.attendance = val.classes.name
               }
@@ -104,7 +126,8 @@ export default {
                     }
                   })
                 } else if(val.status == 1) {
-                  obj.resultWork = "迟到";
+                  // obj.resultWork = "迟到";
+                  obj.resultWork = 60 - Number(val.dimensions.minute);
                 } 
                 obj.goWork = val.dimensions.hour + ":" + val.dimensions.minute;       // 上班时间
               } else if (val.event_attribute == 2) {
@@ -116,7 +139,8 @@ export default {
                     }
                   })
                 } else if (val.status == 2) {
-                  obj.resultOffWork = "早退";
+                  // obj.resultOffWork = "早退";
+                  obj.resultOffWork = 60 - Number(val.dimensions.minute);
                 }
                  obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
               } else if (val.event_attribute == 3) {
@@ -124,7 +148,7 @@ export default {
               } else if(val.event_attribute == 4) {
                 obj.workOffShift = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班班排版时间
               } else if(val.event_attribute == 5) {
-                obj.hugh = "休息";
+                obj.attendance = "休息";
               }
             })
               this.attendanceData.push(obj)
