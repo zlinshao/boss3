@@ -103,27 +103,22 @@
 
             }
         },
-        mounted(){
-            // console.log(this.induction_info)
-        },
         watch: {
             inductionMaterialsDialog(val){
                 if(val){
                     this.inductionMaterialsDialogVisible = true;
-                    this.edit_pic(this.induction_info.image_info, this.params.update.image_info)
+                    this.$nextTick(() => {
+                        this.edit_pic(this.induction_info.image_info, this.params.update.image_info)
+                    })
                 }
             },
             inductionMaterialsDialogVisible(val){
                 if(!val){
+                    this.init();
                     this.$emit('close');
-                    this.init()
                 }else{
-                    
+                    this.isClear = true;
                 }
-            },
-            induction_info(val){
-                // console.log(val);
-                
             }
         },
         methods: {
@@ -136,9 +131,11 @@
                             message: res.data.msg,
                             type: 'success'
                         });
+                        this.$nextTick(() => {
+                            this.isClear = true;
+                            this.init()
+                        })
                         this.inductionMaterialsDialogVisible = false;
-                        this.isClear = false;
-                        this.init()
                     }
                 })
             },

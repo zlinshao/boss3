@@ -2,7 +2,7 @@
     <div id="process">
         <el-dialog  :visible.sync="processManageDialog" width="80%">
            <el-tabs v-model="activeName" @tab-click="handleClick" class='el-tabs'>
-               <el-form inline size='mini' class="search">
+               <el-form inline size='mini' class="search-info">
                     <el-form-item label="">
                         <el-input v-model='searchParam' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
                     </el-form-item>
@@ -73,8 +73,8 @@
                                     v-if='is_editing_id === scope.row.id' 
                                     v-model="interviewParams.interview_time" 
                                     type="datetime" 
-                                    format='yyyy-MM-dd'
                                     size='small'
+                                    value-format='yyyy-MM-dd-HH-mm-ss'
                                     placeholder="选择日期">
                                 </el-date-picker>
                             </template>
@@ -429,6 +429,7 @@
                             v-model="newInterviewParams.interview_time" 
                             type="datetime" 
                             size='small'
+                            value-format='yyyy-MM-dd-HH-mm-ss'
                             placeholder="选择日期"
                             default-time="12:00:00">
                         </el-date-picker>
@@ -871,6 +872,11 @@
                 if(!val){
                     this.album = []
                 }
+            },
+            interviewedDialog(val){
+                if(!val){
+                    this.is_editing_interview_status = '';
+                }
             }
         },
         created(){
@@ -1008,7 +1014,7 @@
                     this.interviewParams.resume_source = row.resume_source;
                 }
                 //未面试
-                if(column.property === 'interview_status'){
+                if(column.property === 'interview_status'){  
                     this.is_editing_interview_status_id = row.id;
                     if(row.interview_status === 736){
                         this.uninterviewDialog = true;
@@ -1037,7 +1043,6 @@
             //保存修改
             confirmEdit(){
                 this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_id, this.interviewParams).then( res => {
-                    // console.log(res)
                     if(res.data.code === '20030'){
                         this.$notify({
                             title: '成功',
@@ -1062,6 +1067,8 @@
                     this.interviewedObj.id = item.id;
                     this.interviewedObj.name = item.name;
                     this.interviewedObj.gender = item.genders.dictionary_name;
+                }else if(this.updateParams.update.interview_status === 735){
+                    this.is_editing_interview_status = '';
                 }else{
                     this.confirmUpdateStatus();
                 }
@@ -1694,8 +1701,7 @@
                         res.data.forEach(item => {
                             if(item.id === 738 || item.id === 739){
                                 this.interview_finished.push(item);
-                                    //去除待确认状态
-                            }else if(item.id !== 735){
+                            }else{
                                 this.interview_unfinished.push(item)
                             }
                         })
@@ -1769,7 +1775,7 @@
     .el-tabs{
         position: relative;
     }
-    .search{
+    .search-info{
         position: absolute;
         right: 35px;
         top: 0;

@@ -439,7 +439,8 @@
                      <el-form-item label="入职途径" v-if='!is_add'>
                         <div class="content">
                           <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.entry_way && basicInfo_info.basic_info.entry_way.entry_type'>
-                            {{basicInfo_info.basic_info.entry_way.entry_type ? entryWayCategory[basicInfo_info.basic_info.entry_way.entry_type-1].dictionary_name : ''}}
+                            {{entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type).length
+                            ? entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type)[0].dictionary_name : ''}}
                           </span>
                           <span v-else>暂无</span>
                         </div>
@@ -712,6 +713,8 @@
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
           this.disabledBtn = false;
+          this.params.duty_id = [];
+          this.params.position_id = [];
         } else {
           this.editPositionIds = [];
           // this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
@@ -774,9 +777,9 @@
       },
       isAdd(val){
         this.is_add = val;
-        if(val){
+        if(val === true){
           this.prefill();
-        }else{
+        }else if(val === false){
           this.getDepart()
         }
       }
@@ -858,20 +861,58 @@
         this.params.enroll  = this.basicInfo_info.entry_other.entry_time;
         this.params.salary = this.basicInfo_info.entry_other.salary;
         this.params.entry_way.entry_type = this.basicInfo_info.resume_sources.id;
+        this.orgData.department_id = obj.department_name;
         this.params.department_id.push(obj.department_id);
-        this.params.position_id.push(obj.position_id);
         this.params.duty_id.push(obj.duty_id);
+        this.duties(obj.department_id);
+        this.params.position_id.push(obj.position_id);
+        this.quarters(obj.duty_id);
       },
-      //查看时获取员工所在
+      //查看时获取员工
       getDepart(){
-          this.$http.get(globalConfig.server + 'organization/staff/' + this.basicInfo_info.uid).then(res => {
-              if(res.data.code === '710910'){
+          this.$http.get(globalConfig.server + '/organization/other/org-tree?id=' + this.basicInfo_info.basic_info.department_id[0]).then(res => {
+            console.log(res)
+              if(res.data.code === '70050'){
                 let result = res.data.data
-                this.depart_name = result.org[0].name;
-                this.duty_name = result.duties[0].name;
-                this.position_name = result.positions[0].name;
+                this.depart_name = result.name;
+                this.getDuty();
               }
           })
+      },
+      getDuty(){
+          this.$http.get(globalConfig.server + 'organization/duty?org_id=' + this.basicInfo_info.basic_info.department_id[0]).then(res => {
+            if(res.data.code === '20000'){
+              let arr = [];
+              this.basicInfo_info.basic_info.duty_id.forEach(item => {
+                res.data.data.data.forEach(child => {
+                  if(item == child.id){
+                    arr.push(child.name);
+                  }
+                })
+              });
+              this.getPositionBy()
+              this.duty_name = arr.join(",")
+            }
+          })
+      },
+      getPositionBy(){
+        let arr = []
+        this.basicInfo_info.basic_info.duty_id.forEach(item => {
+          this.$http.get(globalConfig.server + 'organization/position?duty_id=' + item).then(res => {
+            console.log(res)
+            if(res.data.code === '20000'){
+              res.data.data.data.forEach(child => {
+                this.basicInfo_info.basic_info.position_id.forEach(grandson => {
+                  if(child.id == grandson){
+                    arr.push(child.name)
+                  }
+                })
+              })
+            }
+            // console.log(arr)
+            this.position_name = arr.join(',')
+          })
+        });
       },
       //编辑时获取员工信息
       getStaffInfo() {
@@ -1117,8 +1158,16 @@
         this.params.agreement_second_time = this.basicInfo_info.basic_info.agreement_second_time;
         this.params.remark = this.basicInfo_info.basic_info.remark;
         this.params.entry_way = this.basicInfo_info.basic_info.entry_way ? this.basicInfo_info.basic_info.entry_way : []
-        this.params.department_id = [];
-        this.params.position_id = [];
+        this.params.department_id = this.basicInfo_info.basic_info.department_id;
+        this.params.position_id = this.basicInfo_info.basic_info.position_id;
+        this.params.duty_id = this.basicInfo_info.basic_info.duty_id;
+        this.orgData.department_id = this.depart_name;
+        this.duty = [];
+        this.position = [];
+        this.duties(this.basicInfo_info.basic_info.department_id[0]);
+        this.basicInfo_info.basic_info.duty_id.forEach(item => {
+          this.quarters(item);
+        })
         this.currentPosition = [];
         this.positionArray = [];
         this.postArray = [];

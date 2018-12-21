@@ -416,11 +416,10 @@
                         this.positionList = res.data.data.data;
                         this.positionList.forEach(item => {
                         });
-                        // this.getInterviewDated()
                     }else{
+                        this.loadingRecruit = false;
                         this.positionList = [];
                     }
-                    // console.log(this.positionList)
                 })
             },
             //获取已约面试/面试结束/等待入职/已经入职数据
@@ -661,7 +660,7 @@
             font-family: SourceHanSansSC;
             font-weight: 400;
             font-size: 14px;
-            color: rgb(16, 16, 16);
+            color: #555;
             font-style: normal;
             letter-spacing: 0px;
             line-height: 20px;
@@ -694,6 +693,9 @@
         .dotted-line{
             border-bottom: dotted 1px rgba(187, 187, 187, 1);
             margin-bottom: 50px;
+        }
+        .el-header{
+            height: 40px !important;
         }
     }
 </style>
