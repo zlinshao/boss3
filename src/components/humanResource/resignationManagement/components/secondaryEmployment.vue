@@ -276,7 +276,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="在职状态">
-                      <el-select v-model="params.statusValue" placeholder="请选择" clearable>
+                      <el-select v-model="params.status" placeholder="请选择" clearable>
                         <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -405,7 +405,7 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
-          statusValue: "",
+          status: "",
           // ================
           duty_id: [],
           position_id: [],
@@ -493,10 +493,10 @@
       };
     },
     watch: {
-      isClear: function (val) {
-        console.log(val)
-        this.isClear = val;
-      },
+      // isClear: function (val) {
+      //   console.log(val)
+      //   this.isClear = val;
+      // },
       // addEmployLog(val,id) {
       //   console.log(val, "22222")
       //   this.addStaffDialogVisible = val;
@@ -516,7 +516,6 @@
           apply: [],
           dismiss: []
         }
-        // this.isClear = true;
       },
       addStaffDialogVisible(val) {
         if (!val) {
@@ -537,7 +536,16 @@
           this.title = '新建用户';
         } else {
           this.title = '修改用户';
+          if(!this.editor) {
+            this.params.status = "1";
+          }
           this.getStaffInfo();
+        }
+      },
+      editor(val) {
+        console.log(val, "11111")
+        if(!val) {
+          this.params.status = "1";
         }
       },
       editPositionIds(val) {
@@ -596,14 +604,20 @@
         this.getOnJobStatus();
       },
       initial() {
-        this.params.image_info = {
-          doc_photo: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
+        this.params.image_info.doc_photo = [];
+        this.params.image_info.bank = [];
+        this.params.image_info.contract = [];
+        this.params.image_info.education = [];
+        this.params.image_info.resume = [];
+        this.params.image_info.dismiss = [];
+        this.params.image_info.resignation = [];
+        this.params.image_info.labor_contract = [];
+        this.editIDCopy = {};
+        this.editBank = {};
+        this.editContract = {};
+        this.editEducation = {};
+        this.editResume = {};
+        this.editResignation = {};
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -613,7 +627,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.statusValue = "";
+        this.params.status = "";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
