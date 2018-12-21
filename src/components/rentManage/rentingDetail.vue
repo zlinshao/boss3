@@ -21,6 +21,7 @@
         <h3>
           {{contractInfo.community_name}} {{contractInfo.doorplate_str}}
           <span v-if="contractInfo.contract_number">（合同编号 : {{contractInfo.contract_number}}）</span>
+          <span v-if="contractInfo.submit_staff_info && contractInfo.submit_staff_info.name">最新提交人：{{ contractInfo.submit_staff_info.name }}</span>
         </h3>
         <h3>
           <div style="display: inline-block" v-if="contractInfo.operation &&

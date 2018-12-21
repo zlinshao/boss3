@@ -938,8 +938,8 @@
             {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
             {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
             {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
-            {clickIndex: 'inBlack',headIcon: 'el-icon-upload2',label: '修改黑名单备注'},
-            {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移除黑名单'},
+            {clickIndex: 'inBlack',headIcon: 'el-icon-upload2',label: '修改低质量备注'},
+            {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移出低质量标记'},
           ];
         } else {
           this.lists = [
@@ -956,7 +956,7 @@
             {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
             {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
             {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
-            {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '拉入黑名单'},
+            {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '低质量标记'},
           ];
         }
         this.contextMenuParam(event);

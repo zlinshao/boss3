@@ -114,9 +114,9 @@
                         max: '',
                     },
                     content: '',
-                    create_time :'',
-                    users:'',
-                    status:''
+                    // create_time :'',
+                    // users:'',
+                    // status:''
 
                 },
                 sex:[],
