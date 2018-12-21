@@ -908,7 +908,7 @@
                     <template slot-scope="scope">
                       <div>
                         <span v-if="scope.row.annotations" style="color: red;">!</span>
-                        <el-tooltip placement="bottom" v-if="scope.row.annotations">
+                        <el-tooltip placement="bottom" v-if="scope.row.annotations && scope.row.annotations.content">
                           <div slot="content">
                             {{ scope.row.annotations.content }}
                           </div>
