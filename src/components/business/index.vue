@@ -148,6 +148,9 @@
           layout="total,prev,pager,next"
           style="text-align: right;margin-top: 20px;"
         ></el-pagination>
+        <div style="text-align: right;">
+          <i class="el-icon-view" style="margin-right: 10px;"></i>{{ currentUv }}
+        </div>
       </div>
       <el-dialog
         title="数据统计"
@@ -345,7 +348,8 @@
             "renter.pay_back_avg": '回款数据变化'
           },
           currentTitle: '',
-          currentDetailTitle: ''
+          currentDetailTitle: '',
+          currentUv: 0,
         }
       },
       mounted() {
@@ -470,6 +474,7 @@
               this.businessList = this.businessList.slice((this.businessCurrentPage - 1) * this.businessCurrentPageSize , this.businessCurrentPage * this.businessCurrentPageSize);
               this.businessTotal = res.data.data.data.length;
               this.params.page_id = res.data.data.page_id;
+              this.currentUv = res.data.data.uv;
               this.params.addition = '';
             }else {
               this.businessLoading = false;
