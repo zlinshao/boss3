@@ -7,7 +7,7 @@
               <el-button type="primary" size="mini" @click="addLookEmploy('1')">新增员工</el-button>
             </div>
             <div class="search">
-              <el-input v-model="params.keywords" placeholder="公司/部门/岗位/姓名/正式" size="mini" @keyup.enter.prevent.native="searchEmploy" clearable></el-input>
+              <el-input v-model="params.keywords" placeholder="姓名" size="mini" @keyup.enter.prevent.native="searchEmploy" clearable></el-input>
               <el-button type="primary" size="mini" @click="searchEmploy">搜 索</el-button>
               <el-button type="primary" size="mini" @click="highGrade">高 级</el-button>
               <el-button type="primary" size="mini" @click="lookImportanAtt">导出考勤</el-button>
@@ -51,7 +51,7 @@
                         </el-col>
                       </el-row>
                     </el-col>
-                    <el-col :span="12">
+                    <!-- <el-col :span="12">
                      <el-row>
                        <el-col :span="8">
                           <div class="el_col_label">职位</div>
@@ -63,8 +63,8 @@
                           </el-select>
                        </el-col>
                      </el-row>
-                    </el-col>
-                    <el-col :span="12">
+                    </el-col> -->
+                    <!-- <el-col :span="12">
                       <el-row>
                         <el-col :span="8">
                           <div class="el_col_label">岗 位</div>
@@ -76,7 +76,7 @@
                             </el-select>
                         </el-col>
                       </el-row>
-                    </el-col>
+                    </el-col> -->
                     <!-- <el-col :span="8">
                       <el-row>
                         <el-col :span="8">
@@ -286,6 +286,7 @@ export default {
       editId: "",  // 新增员工id
       class_empDetail_id: "",  // 查看员工id
       params: {
+        position_id: "",
         keywords: '',
         limit: 12,
         page: 1,
@@ -465,6 +466,11 @@ export default {
     },
     closeReward() {
       this.lookRewardLog = false;
+      this.class_reward_id = "";
+      this.class_reward_name = "";
+      this.class_reward_org = "";
+      this.class_reward_role = "";
+      this.class_reward_times = "";
     },
     // 查看日报
     lookDaily(val) {

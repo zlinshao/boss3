@@ -98,7 +98,7 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
         >
-          <el-table-column label="区域" min-width="150px;">
+          <el-table-column label="区域" min-width="150px;" prop="group">
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.group">{{ scope.row.group }}</span>
@@ -111,7 +111,11 @@
 
           <el-table-column label="收房">
             <el-table-column label="数量/套" prop="lord.count"></el-table-column>
-            <el-table-column label="渠道单比例" prop="lord.agency_percentage"></el-table-column>
+            <el-table-column label="渠道单比例" prop="lord.agency_percentage">
+              <template slot-scope="scope">
+                <span v-if="scope.row.lord && scope.row.lord.agency_percentage && scope.row.lord.agency_percentage != 0">{{ parseFloat(scope.row.lord.agency_percentage) * 100 }}%</span>
+              </template>
+            </el-table-column>
             <el-table-column label="均价/元" prop="lord.price_avg"></el-table-column>
             <el-table-column label="空置期" prop="lord.ready_days_avg"></el-table-column>
             <el-table-column label="总月数" prop="lord.sign_month_avg"></el-table-column>
@@ -119,7 +123,11 @@
           <el-table-column label="租房">
             <el-table-column label="数量/套" prop="renter.count"></el-table-column>
             <el-table-column label="已空置" prop="renter.ready_days_avg"></el-table-column>
-            <el-table-column label="渠道单比例" prop="renter.agency_percentage"></el-table-column>
+            <el-table-column label="渠道单比例" prop="renter.agency_percentage">
+              <template slot-scope="scope">
+                <span v-if="scope.row.renter && scope.row.renter.agency_percentage && scope.row.renter.agency_percentage != 0">{{ parseFloat(scope.row.renter.agency_percentage) * 100 }}%</span>
+              </template>
+            </el-table-column>
             <el-table-column label="均价/元" prop="renter.price_avg"></el-table-column>
             <el-table-column label="回款" prop="renter.pay_back_avg"></el-table-column>
             <el-table-column label="平均差价/元" prop="renter.price_diff_avg"></el-table-column>
@@ -140,6 +148,9 @@
           layout="total,prev,pager,next"
           style="text-align: right;margin-top: 20px;"
         ></el-pagination>
+        <div style="text-align: right;">
+          <i class="el-icon-view" style="margin-right: 10px;"></i>{{ currentUv }}
+        </div>
       </div>
       <el-dialog
         title="数据统计"
@@ -320,7 +331,7 @@
           businessLoading: false,
           businessTotal: 0,
           businessFieldList: [],
-          businessCurrentPageSize: 10,
+          businessCurrentPageSize: 20,
           businessCurrentPage: 1,
           chartTitle: {
             "lord.count": '收房数量变化(套)',
@@ -333,10 +344,12 @@
             "renter.agency_percentage": '租房渠道单比例变化(%)',
             "renter.price_avg":'租房均价变化(元)',
             "rent.pay_back_avg": '租房回款变化(元)',
-            "renter.price_diff_avg": '租房平均差价变化'
+            "renter.price_diff_avg": '租房平均差价变化',
+            "renter.pay_back_avg": '回款数据变化'
           },
           currentTitle: '',
-          currentDetailTitle: ''
+          currentDetailTitle: '',
+          currentUv: 0,
         }
       },
       mounted() {
@@ -461,6 +474,7 @@
               this.businessList = this.businessList.slice((this.businessCurrentPage - 1) * this.businessCurrentPageSize , this.businessCurrentPage * this.businessCurrentPageSize);
               this.businessTotal = res.data.data.data.length;
               this.params.page_id = res.data.data.page_id;
+              this.currentUv = res.data.data.uv;
               this.params.addition = '';
             }else {
               this.businessLoading = false;
@@ -700,13 +714,22 @@
           this.getChartData(obj);
         },
         //单元格被单击
-        handleCellClick(row) {
+        handleCellClick(row,column) {
+          if (column.property === 'group') {
+            return false;
+          }
           var str = '';
           this.helpParams.compose.forEach(item => {
             str += item + '&';
           });
           str = str.substring(0,str.length - 1);
-          this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} ${str})`;
+          if (row.group === '-') {
+            this.currentDetailTitle = `数据详情 ( ${row._group} ${row.date_range} ${str})`;
+          }else if(!row.group) {
+            this.currentDetailTitle = `数据详情 ( ${row.date_range} ${str})`;
+          } else {
+            this.currentDetailTitle = `数据详情 ( ${row.group} ${row.date_range} ${str})`;
+          }
           var detailParams = {};
           detailParams.start_time = row.start;
           detailParams.end_time = row.end;

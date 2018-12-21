@@ -2,9 +2,9 @@
     <div id="process">
         <el-dialog  :visible.sync="processManageDialog" width="80%">
            <el-tabs v-model="activeName" @tab-click="handleClick" class='el-tabs'>
-               <el-form inline size='mini' class="search">
+               <el-form inline size='mini' class="search-info">
                     <el-form-item label="">
-                        <el-input v-model='searchParam' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
+                        <el-input v-model='params.search' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button  @click='search'>搜索</el-button>
@@ -13,6 +13,9 @@
                 <el-tab-pane label="已约面试" name="first">
                     <el-table
                         :data="interviewDatedData"
+                        v-loading="loading1"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='cellClick'
                         style="width: 100%">
                         <el-table-column
@@ -73,8 +76,8 @@
                                     v-if='is_editing_id === scope.row.id' 
                                     v-model="interviewParams.interview_time" 
                                     type="datetime" 
-                                    format='yyyy-MM-dd'
                                     size='small'
+                                    value-format='yyyy-MM-dd-HH-mm-ss'
                                     placeholder="选择日期">
                                 </el-date-picker>
                             </template>
@@ -93,9 +96,11 @@
                         <el-table-column
                             prop="album"
                             label="原始简历"
-                            width='80px'>
+                            width='80px'
+                            class-name='font-color'>
                             <template slot-scope="scope">
-                                <span>查看</span>
+                                <span v-if='scope.row.album.length'>查看</span>
+                                <span v-if='!scope.row.album.length'>上传</span>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -105,7 +110,7 @@
                             <template slot-scope="scope">
                                 <el-button v-if='is_editing_id !== scope.row.id' size='mini'>修改</el-button>
                                 <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='cancelEdit'>取消</el-button>
-                                <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='confirmEdit'>确定</el-button>
+                                <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='confirmEdit(scope.row)'>确定</el-button>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -125,12 +130,15 @@
                         </el-table-column>
                     </el-table>
                     <div class='add-interviewer'>
-                        <el-button size='mini' icon="el-icon-plus" @click='addInterviewerDialog = true'>添加面试人</el-button>
+                        <el-button class='font-color' size='mini' icon="el-icon-plus" @click='addInterviewerDialog = true'>添加面试人</el-button>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="面试完毕" name="second">
                     <el-table
                         :data="interviewFinishedData"
+                        v-loading="loading2"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='interviewResEdit'
                         style="width: 100%">
                         <el-table-column
@@ -231,6 +239,9 @@
                 <el-tab-pane label="待入职" name="third">
                     <el-table
                         :data="toInductData"
+                        v-loading="loading3"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='checkoutEvent'
                         style="width: 100%">
                         <el-table-column
@@ -318,6 +329,9 @@
                 <el-tab-pane label="已入职" name="fourth">
                     <el-table
                         :data="inductedData"
+                        v-loading="loading4"
+                        element-loading-text="加载中"
+                        element-loading-spinner="el-icon-loading"
                         @cell-click='checkoutEvent'
                         style="width: 100%">
                         <el-table-column
@@ -395,48 +409,59 @@
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
+                <div class="block">
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="page"
+                        :page-size="12"
+                        layout="total, prev, pager, next, jumper"
+                        :total="total">
+                    </el-pagination>
+                </div>
             </el-tabs>
             <!--添加面试人开始-->
             <el-dialog width="30%"  :visible.sync="addInterviewerDialog" append-to-body>
                 <el-form  label-width="80px" size='mini' center>
-                    <el-form-item label="姓名">
+                    <el-form-item label="姓名" required>
                         <el-input v-model="newInterviewParams.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="性别">
+                    <el-form-item label="性别" required>
                         <el-select v-model="newInterviewParams.gender" placeholder="">
                             <!-- <el-option v-for="(item, index) in genders" :key='index' :label='item.dictionary_name' :value='item.id'></el-option> -->
                             <el-option label='男' value='716'></el-option>
                             <el-option label='女' value='717'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="学历">
+                    <el-form-item label="学历" required>
                         <el-select v-model="newInterviewParams.education" placeholder="">
                             <el-option v-for="(item, index) in education" :key="index" :label="item.dictionary_name" :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="经验">
+                    <el-form-item label="经验" required>
                         <el-select v-model="newInterviewParams.experience" placeholder="">
                             <el-option v-for="(item, index) in experience" :key="index" :label="item.dictionary_name" :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="联系方式">
+                    <el-form-item label="联系方式" required>
                         <el-input v-model="newInterviewParams.phone"></el-input>
                     </el-form-item>
-                    <el-form-item label="面试时间">
+                    <el-form-item label="面试时间" required>
                         <el-date-picker 
                             v-model="newInterviewParams.interview_time" 
                             type="datetime" 
-                            format='yyyy-MM-dd'
                             size='small'
-                            placeholder="选择日期">
+                            value-format='yyyy-MM-dd-HH-mm-ss'
+                            placeholder="选择日期"
+                            default-time="12:00:00">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="简历来源">
+                    <el-form-item label="简历来源" required>
                         <el-select v-model="newInterviewParams.resume_source" placeholder="">
                             <el-option v-for="(item, index) in source" :key="index" :label="item.dictionary_name" :value='item.id'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="原始简历">
+                    <el-form-item label="原始简历" required>
                         <UPLOAD :ID="'first'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
                     </el-form-item>
                     <el-form-item class='add-interview'>
@@ -449,7 +474,7 @@
             <!--原始简历开始-->
             <el-dialog  :visible.sync="lookUpResumeDialog" append-to-body>
                 <div v-for='(item, index) in album' :key='index'>
-                    <embed :src="item.uri" />
+                    <embed class='embed' :src="item.uri" />
                 </div>
             </el-dialog>
             <!--原始简历结束-->
@@ -531,24 +556,34 @@
                 </div>
             </el-dialog>
             <!--面试通过或未通过结束-->
-            <!--查看面试面试未通过开始-->
+            <!--查看面试未通过开始-->
             <el-dialog :visible.sync="unpassInterviewDialog" append-to-body width="25%">
                 <el-form label-width="80px" center>
                     <el-form-item label="姓名">
                         <span>{{unpassInterviewObj.name}}</span>
                     </el-form-item>
                     <el-form-item label="面试结果">
-                        <span>{{unpassInterviewObj.interview_status}}</span>
+                        <span v-if='!is_editing_unpass'>{{unpassInterviewObj.interview_status_str}}</span>
+                        <el-select  
+                            size='small' 
+                            v-if='is_editing_unpass'
+                            v-model="updateParams_finished.update.interview_status"
+                            @change='editInterviewStatus' 
+                            placeholder="">
+                            <el-option v-for="(item, index) in interview_finished" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="备注">
-                        <el-input v-model="unpassInterviewObj.interview_result" type='textarea' readonly>
+                        <span v-if='!is_editing_unpass'>{{unpassInterviewObj.interview_result}}</span>
+                        <el-input v-if='is_editing_unpass' v-model="unpassInterviewObj.interview_result" type='textarea'>
                     </el-input>
                     </el-form-item>
                 </el-form>
-                <!-- <div class='edit-result'>
-                    <el-button size='mini' @click='cancelPassInterview'>取消</el-button>
-                    <el-button size='mini' @click='confirmPassInterview'>确定</el-button>
-                </div> -->
+                <div class='edit-result'>
+                    <el-button size='mini' @click='cancelEditFromUnpass'>取消</el-button>
+                    <el-button size='mini' @click='confirmEditFromUnpass'>确定</el-button>
+                    <el-button size='mini' @click='editFromUnpass'>修改</el-button>
+                </div>
             </el-dialog>
             <!--人资沟通弹框开始-->
             <el-dialog :visible.sync="IsEntryDialog" append-to-body width="30%">
@@ -640,9 +675,22 @@
                 </el-form>
             </el-dialog>
             <!--入职条件结束-->
+            <!--上传简历开始-->
+            <el-dialog :visible.sync="uploadResumeDialog" append-to-body width="25%">
+                <el-form label-width="80px" center>
+                    <el-form-item label="上传简历" required>
+                        <UPLOAD :ID="'first'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
+                    </el-form-item>
+                    <div class='edit-result'>
+                        <el-button size='mini' @click='cancelUpload'>取消</el-button>
+                        <el-button size='mini' @click='confirmUpload'>确定</el-button>
+                    </div>
+                </el-form>
+            </el-dialog>
+            <!--上传简历结束-->
         </el-dialog>
         <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
-        <BackgroundReseach :backgroundDialog='backgroundDialog' :id='background_id' :background_info='background_info' @close='closeModal'></BackgroundReseach>
+        <BackgroundReseach :backgroundDialog='backgroundDialog' :is_editing_bg_='is_editing_bg_' :id='background_id' :background_info='background_info' @close='closeModal'></BackgroundReseach>
         <InductionMaterials :inductionMaterialsDialog='inductionMaterialsDialog' :id='induction_id' :induction_info='induction_info' @close='closeModal'></InductionMaterials>
         <BasicInfo :addStaffDialog='addStaffDialog' :id='basicInfo_id' :basicInfo_info='basicInfo_info' :isAdd='isAdd' @close='closeModal'></BasicInfo>
         <!-- <BasicDetail :basicDetailDialog='basicDetailDialog' :basicDetail='basicDetail' :id='basicDetail_id'  @close='closeModal'></BasicDetail> -->
@@ -658,7 +706,7 @@
     export default {
         name: 'process',
         components: {UPLOAD, Organization, InductionMaterials, BackgroundReseach, BasicInfo},
-        props: ['processDialog', 'id'],
+        props: ['processDialog', 'id', 'active_name'],
         data(){
             return{
                 organizeVisible: false,
@@ -667,12 +715,26 @@
                 addInterviewerDialog: false,
                 uninterviewDialog: false,
                 interviewedDialog: false,
+                uploadResumeDialog: false,
+                uploadResume_id: '',
                 isClear: false,
                 activeName:'first',
+                loading1: true,
+                loading2: true,
+                loading3: true,
+                loading4: true,
+                page: 1,
+                total: 0,
                 interviewDatedData:[],
                 interviewFinishedData:[],
                 toInductData:[],
                 inductedData:[],
+                params: {
+                    search: '',
+                    status: '',
+                    limit: 12,
+                    page: 1,
+                },
                 is_editing:false,
                 is_editResult: false,
                 is_editing_id:'',
@@ -680,7 +742,6 @@
                 is_editing_interview_status_id: '',
                 lookUpResumeDialog : false,
                 album:[],
-                searchParam: '',
                 interviewParams: {
                     name: '',
                     gender: '',
@@ -729,6 +790,7 @@
                 IsEntryDialog: false,
                 is_editing_condition: false,
                 is_editing_interview_finished: '',
+                is_editing_interview_finished_id: '',
                 is_agree: '1',                           //是否同意入职 1是0否
                 passOrNotStr:'',
                 updateParams_finished: {
@@ -741,9 +803,12 @@
                     name: '',
                     interview_result: ''
                 },
+                is_editing_unpass: false,
                 unpassInterviewObj: {
                     name: '',
-                    interview_status: '',
+                    id: '',
+                    interview_status_str: '',
+                    interview_status:'',
                     interview_result: '',
                 },
                 humansourceObj: {
@@ -791,7 +856,8 @@
                     probation: '',
                     salary: '',
                 },
-                isAdd: false,
+                isAdd: '',
+                is_editing_bg_: true,
                 //入职失败/成功状态
                 entryStatus: {
                     update: {
@@ -825,8 +891,12 @@
             },
             processManageDialog(val){
                 if(!val){
-                    this.searchParam = '';
+                    this.params.search = '';
+                    this.is_editing_id = '';
                     this.$emit('close');
+                }else{
+                    this.activeName = this.active_name;
+                    this.getAllData(this.id)
                 }
             },
             id(val){
@@ -836,6 +906,18 @@
                 if(!val){
                     this.album = []
                 }
+            },
+            interviewedDialog(val){
+                if(!val){
+                    this.is_editing_interview_status = '';
+                }
+            },
+            IsEntryDialog(val){
+                if(val){
+                    this.editIsEntry();
+                }else{
+                    this.cancelEditCondition()
+                }
             }
         },
         created(){
@@ -843,7 +925,19 @@
         },
         methods: {
             handleClick(){
-                console.log(this.activeName)
+                console.log(this.activeName);
+                this.params.search = '';
+                this.params.limit = 12;
+                this.params.page = 1;
+                this.getAllData(this.id)
+            },
+            //分頁
+            handleCurrentChange(val){
+                this.params.page = val;
+                this.getAllData(this.id)
+            },
+            handleSizeChange(){
+
             },
             //搜索
             search(){
@@ -863,7 +957,7 @@
                         _status = 4;
                         break;
                 }
-                this.$http.get(globalConfig.server + 'hrm/interview?search=' + this.searchParam + '&status=' + _status + '&recruitment_id=' + this.id).then(res => {
+                this.$http.get(globalConfig.server + 'hrm/interview?search=' + this.params.search + '&status=' + _status + '&recruitment_id=' + this.id).then(res => {
                     if(this.activeName === 'first'){
                         if(res.data.code === '20000'){
                             this.interviewDatedData = res.data.data.data
@@ -897,51 +991,81 @@
             },
             //获取数据
             getAllData(id){
-                //已约面试
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=1&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        // console.log(res.data.data);
-                        this.interviewDatedData = res.data.data.data
-                    }else{
-                        this.interviewDatedData = []
-                    }
-                });
-                //面试完毕
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=2&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        // console.log(res.data.data);
-                        this.interviewFinishedData = res.data.data.data
-                    }else{
-                        this.interviewFinishedData = []
-                    }
-                });
-                //待入职
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=3&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        this.toInductData = res.data.data.data;
-                        this.toInductData.forEach(item => {
-                            if(item.entry_other.entry_time && item.entry_other.entry_time.length){
-                                item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-                            }
-                        })
-                    }else{
-                        this.toInductData = []
-                    }
-                });
-                //已入职
-                this.$http.get(globalConfig.server + 'hrm/interview?search=&status=4&recruitment_id=' + id).then(res => {
-                    if(res.data.code === '20000'){
-                        // console.log(res.data.data);
-                        this.inductedData = res.data.data.data
-                    }else{
-                        this.inductedData = []
-                    }
-                });
+                console.log(this.activeName);
+                if(this.activeName === 'first'){
+                    //已约面试
+                    this.params.status = 1;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.interviewDatedData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading1 = false;
+                        }else{
+                            this.interviewDatedData = [];
+                            this.total = 0;
+                            this.loading1 = false;
+                        }
+                    });
+                }
+                if(this.activeName === 'second'){
+                    //面试完毕
+                    this.params.status = 2;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.interviewFinishedData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading2 = false;
+                        }else{
+                            this.interviewFinishedData = [];
+                            this.total = 0;
+                            this.loading2 = false;
+                        }
+                    });
+                }
+                if(this.activeName === 'third'){
+                    //待入职
+                    this.params.status = 3;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.toInductData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading3 = false;
+                            this.toInductData.forEach(item => {
+                                if(item.entry_other.entry_time && item.entry_other.entry_time.length){
+                                    item.entry_time = this.timestampToDate(item.entry_other.entry_time)
+                                }
+                            })
+                        }else{
+                            this.toInductData = [];
+                            this.total = 0;
+                            this.loading3 = false;
+                        }
+                    });
+                }
+                if(this.activeName === 'fourth'){
+                     //已入职
+                     this.params.status = 4;
+                    this.$http.get(globalConfig.server + 'hrm/interview?recruitment_id=' + id, {params: this.params}).then(res => {
+                        if(res.data.code === '20000'){
+                            this.inductedData = res.data.data.data;
+                            this.total = res.data.data.count;
+                            this.loading4 = false;
+                            this.inductedData.forEach(item => {
+                                if(item.entry_other.entry_time && item.entry_other.entry_time.length){
+                                    item.entry_time = this.timestampToDate(item.entry_other.entry_time)
+                                }
+                            })
+                        }else{
+                            this.inductedData = [];
+                            this.total = 0;
+                            this.loading4 = false;
+                        }
+                    });
+                }
             },
             //修改预填数据/查看简历/面试状态
             cellClick(row, column, cell, event){
                 if(column.property === 'edit'){
-                    // console.log(row, column)
                     let id = row.id;
                     this.is_editing = true;
                     this.is_editing_id = row.id;
@@ -951,14 +1075,25 @@
                     this.interviewParams.education = row.education;
                     this.interviewParams.experience = row.experience;
                     this.interviewParams.interview_time = row.interview_time;
+                    this.interviewParams.resume_source = row.resume_source;
                 }
-                if(column.property === 'album'){
-                    // console.log(row, column);
+                if(column.property === 'album' && row.album.length){
                     this.lookUpResumeDialog = true;
                     this.album = row.album;
                 }
+                if(column.property === 'album' && !row.album.length){
+                    this.uploadResumeDialog = true;
+                    this.uploadResume_id = row.id;
+                    this.interviewParams.name = row.name;
+                    this.interviewParams.phone = row.phone;
+                    this.interviewParams.gender = row.gender;
+                    this.interviewParams.education = row.education;
+                    this.interviewParams.experience = row.experience;
+                    this.interviewParams.interview_time = row.interview_time;
+                    this.interviewParams.resume_source = row.resume_source;
+                }
                 //未面试
-                if(column.property === 'interview_status'){
+                if(column.property === 'interview_status'){  
                     this.is_editing_interview_status_id = row.id;
                     if(row.interview_status === 736){
                         this.uninterviewDialog = true;
@@ -982,12 +1117,17 @@
                 this.interviewParams.education = '';
                 this.interviewParams.experience = '';
                 this.interviewParams.interview_time = '';
-
+                this.interviewParams.resume_source = '';
             },
             //保存修改
-            confirmEdit(){
+            confirmEdit(item){
+                this.interviewParams.album = [];
+                if(item.album.length){
+                    item.album.forEach(i => {
+                        this.interviewParams.album.push(i.id)
+                    })
+                }
                 this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_id, this.interviewParams).then( res => {
-                    // console.log(res)
                     if(res.data.code === '20030'){
                         this.$notify({
                             title: '成功',
@@ -1012,6 +1152,8 @@
                     this.interviewedObj.id = item.id;
                     this.interviewedObj.name = item.name;
                     this.interviewedObj.gender = item.genders.dictionary_name;
+                }else if(this.updateParams.update.interview_status === 735){
+                    this.is_editing_interview_status = '';
                 }else{
                     this.confirmUpdateStatus();
                 }
@@ -1158,17 +1300,52 @@
                 // console.log(val);
                 this.newInterviewParams.album = val[1]
             },
+            regetImgData(val){
+                this.interviewParams.album = val[1]
+            },
+            //取消重新上传简历
+            cancelUpload(){
+                this.initUpload();
+                this.uploadResumeDialog = false;
+            },
+            //初始化重新上传参数
+            initUpload(){
+                this.interviewParams.name = '';
+                this.interviewParams.phone = '';
+                this.interviewParams.gender = '';
+                this.interviewParams.education = '';
+                this.interviewParams.experience = '';
+                this.interviewParams.interview_time = '';
+                this.interviewParams.resume_source = '';
+                this.interviewParams.album = [];
+            },
+            //确定重新上传简历
+            confirmUpload(){
+                this.$http.put(globalConfig.server + 'hrm/interview/' + this.uploadResume_id, this.interviewParams).then(res => {
+                    if(res.data.code === '20030'){
+                        this.$notify({
+                            title: '成功',
+                            message: res.data.msg,
+                            type: 'success'
+                        });
+                        this.getAllData(this.id);
+                        this.uploadResumeDialog = false;
+                        this.initUpload();
+                    }
+                })
+            },
             /*********************** 面试完毕********************************/
             interviewResEdit(row, column, cell, event){
-                // console.log(row, column)
                 if(column.property === 'interview_statuss'){
+                    this.is_editing_interview_finished_id = row.id;
                     if(row.interview_status === 737){
-                        // console.log(row)
                         this.is_editing_interview_finished = row.id;
                     }else if(row.interview_status === 738){
                         this.unpassInterviewDialog = true;
                         this.unpassInterviewObj.name = row.name;
-                        this.unpassInterviewObj.interview_status = row.interview_statuss.dictionary_name;
+                        this.unpassInterviewObj.id = row.id;
+                        this.unpassInterviewObj.interview_status_str = row.interview_statuss.dictionary_name;
+                        this.unpassInterviewObj.interview_status = row.interview_status;
                         this.unpassInterviewObj.interview_result = row.interview_result;
                     }
                 }else if(column.property === 'entry_statuss' && row.interview_status !== 738){
@@ -1176,6 +1353,7 @@
                     this.is_editing_interview_finished = '';
                     if(row.entry_status === 741 && row.interview_status === 739){
                         this.IsEntryDialog = true;
+                        this.is_editing_condition = true;
                         this.humansourceObj.id = row.id;
                         this.humansourceObj.name = row.name;
                         this.humansourceObj.interview_status = row.interview_statuss.dictionary_name;
@@ -1284,9 +1462,9 @@
                 this.interviewedObj_finished.id = row.id;
                 
             },
-            //确认修改状态
+            //确认修改面试状态
             confirmEditStatus(){
-                this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_interview_finished, this.updateParams_finished).then(res => {
+                this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_interview_finished_id, this.updateParams_finished).then(res => {
                     if(res.data.code === '20030'){
                         this.$notify({
                             title: '成功',
@@ -1299,7 +1477,7 @@
                     }else{
                         this.$notify({
                             title: '警告',
-                            message: res.data.code,
+                            message: res.data.msg,
                             type: 'warning'
                         })
                     }
@@ -1327,6 +1505,70 @@
             //取消通过面试
             cancelPassInterview(){
                 this.passInterviewDialog = false;
+            },
+            //取消修改面试未通过的修改
+            cancelEditFromUnpass(){
+                this.unpassInterviewDialog = false;
+                this.is_editing_unpass = false;
+            },
+            //确定修改面试未通过的修改
+            confirmEditFromUnpass(){
+                this.$http.put(globalConfig.server + 'hrm/interview/' + this.unpassInterviewObj.id, {
+                    update: {
+                        interview_result: this.unpassInterviewObj.interview_result
+                    }
+                }).then(res => {
+                    if(res.data.code === '20030'){
+                        this.passInterviewDialog = false;
+                        this.unpassInterviewDialog = false;
+                        if(this.updateParams_finished.update.interview_status === 739){
+                            this.confirmUndateFromUnpass()
+                        }else{
+                            this.getAllData(this.id)
+                        }
+                        
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        })
+                    }
+                })
+            },
+            //修改未通过信息之后----->修改状态
+            confirmUndateFromUnpass(){
+                this.$http.put(globalConfig.server + 'hrm/interview/' + this.unpassInterviewObj.id, this.updateParams_finished).then(res => {
+                    if(res.data.code === '20030'){
+                        this.$notify({
+                            title: '成功',
+                            message: res.data.msg,
+                            type: 'success'
+                        });
+                        this.is_editing_interview_finished = '';
+                        this.updateParams_finished.update.interview_status = '';
+                        this.unpassInterviewDialog = false;
+                        this.getAllData(this.id)
+                    }else{
+                        this.$notify({   
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        })
+                    }
+                })
+            },
+            //修改面试未通过信息
+            editFromUnpass(){
+                this.is_editing_unpass = true;
+                this.updateParams_finished.update.interview_status = this.unpassInterviewObj.interview_status;
+            },
+            //从面试未通过修改面试通过状态
+            editInterviewStatus(item){
+                console.log(item)
+                if(item === 739){
+                    
+                }
             },
             /*********************** 待入职*********************************/
             checkoutEvent(row, column, cell, event){
@@ -1362,6 +1604,12 @@
                 }
                 //背景调查
                 if(column.property === 'background_check'){
+                    if(!row.background_check){
+                        console.log(1234)
+                        this.is_editing_bg_ = true;
+                    }else{
+                        this.is_editing_bg_ = false;
+                    }
                     this.backgroundDialog = true;
                     this.background_id = row.id;
                     this.background_info = row;
@@ -1376,7 +1624,6 @@
                 if(column.property === 'basic_info'){
                     console.log(row)
                     this.addStaffDialog = true;
-                    // this.basicDetailDialog = true;
                     this.basicInfo_id = row.id;
                     this.basicInfo_info = row;
                     this.basicDetail = row;
@@ -1390,14 +1637,14 @@
             },
             //选择入职状态
             selectEntryStatus(item){
-                // console.log(item);
-                // console.log(this.entryStatus.update.entry_status)
                 if(this.entryStatus.update.entry_status === 744){
                     let _id = this.entryStatus.update.entry_status
                     this.failEntryDialog = true;
+                    this.is_editing_fail_result = true;
                     this.failEntryObj.name = item.name;
                     this.failEntryObj.id = item.id;
                     this.failEntryObj.entry_status = this.humanresource_entry.filter(item => item.id === _id)[0].dictionary_name;
+                    this.editFailEntry();
                 }
                 if(this.entryStatus.update.entry_status === 745){
                     this.confirmEntrySuccess()
@@ -1436,6 +1683,12 @@
                         this.updateEntryStatus();
                         this.failEntryDialog = false;
                         this.is_editing_entry_statuss = false;
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        })
                     }
                 })
             },
@@ -1455,7 +1708,6 @@
             },
             //从入职失败信息重新更新入职状态
             confirmIsEntry_(){
-                console.log(555);
                 this.confirmEntrySuccess()
             },
             //编辑入职失败原因
@@ -1534,8 +1786,7 @@
                         res.data.forEach(item => {
                             if(item.id === 738 || item.id === 739){
                                 this.interview_finished.push(item);
-                                    //去除待确认状态
-                            }else if(item.id !== 735){
+                            }else{
                                 this.interview_unfinished.push(item)
                             }
                         })
@@ -1565,11 +1816,14 @@
             //关闭弹框
             closeModal(){
                 this.inductionMaterialsDialog = false;
+                this.is_editing_id = '';
                 this.backgroundDialog = false;
                 this.addStaffDialog = false;
+                this.isAdd = '';
                 this.basicDetailDialog = false;
                 this.is_editing_entry_statuss = '';
                 this.entryStatus.update.entry_status = '';
+                this.is_editing_bg_ = false;
                 this.getAllData(this.id)
             },
             deepClone(source){
@@ -1589,10 +1843,11 @@
         }
     }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     .add-interviewer{
         text-align: center;
         margin: 10px 0 0 0;
+        border: none;
     }
     .edit-result{
         display: flex;
@@ -1605,7 +1860,7 @@
     .el-tabs{
         position: relative;
     }
-    .search{
+    .search-info{
         position: absolute;
         right: 35px;
         top: 0;
@@ -1613,6 +1868,18 @@
     .add-interview{
         display: flex;
         justify-content: center;
+    }
+    .font-color{
+        color: rgba(63, 81, 181, 1);
+        font-size: 14px;
+        border: none;
+    }
+    .el-pagination {
+        padding-right: 50px;
+        text-align: right;
+    }
+    .embed{
+        max-width: 100%;
     }
 </style>
 

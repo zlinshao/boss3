@@ -82,7 +82,7 @@
           <el-form-item label="离职原因">
             <el-input v-model="dismiss_mess" :disabled="true"></el-input>
           </el-form-item>
-          <el-form-item label="上传文件">
+          <el-form-item label="上传离职图片">
             <UpLoad :ID="'files'" :isClear="isClear"  @getImg="upLoadFiles"></UpLoad>
           </el-form-item>
         </el-form>
@@ -92,16 +92,16 @@
         </span>
       </el-dialog>
       <!-- 查看离职交接表 -->
-      <!-- <el-dialog title="查看离职交接表" :visible.sync="viewResignationFrom" width="30%">
+      <el-dialog title="查看离职交接表" :visible.sync="viewResignationFrom" width="30%">
         <div style="margin-top: 10px;" v-if="imagesResignationList && imagesResignationList.length>0" class="lookImg">
-          <img v-for="img in imagesResignationList" :src="img.uri" :key="img.id" data-magnify="" :data-src="img.uri"> 
-          <a v-for="img in imagesResignationList" :key="img.id" :href="img.uri"></a>
+          <img v-for="img in imagesResignationList" :src="img.uri" :key="img.id" data-magnify="" :data-src="img.uri" style="width: 30%;height: 100px; margin-left: 10px;"> 
+          <!-- <a v-for="img in imagesResignationList" :key="img.id" :href="img.uri"></a> -->
         </div>
         <div v-else>暂无数据</div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="viewResignationFrom = false" size="mini">确 定</el-button>
         </span>
-      </el-dialog>-->
+      </el-dialog>
       <!-- 查看合同 -->
       <el-dialog title="查看合同" :visible.sync="viewContract" width="30%">
         <div style="margin-top: 10px;" v-if="imagesList && imagesList.length>0" class="lookImg">
@@ -122,7 +122,7 @@
       <!-- 右键 -->
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperateMore="clickEvent"></RightMenu>
       <!-- 编辑员工 -->
-      <SecondaryEmployment :editId="editId" :isEdit="isEdit" :lookSecondary="lookSecondary" @close="closeSecondary"></SecondaryEmployment>
+      <SecondaryEmployment :editId="editId" :isEdit="isEdit" :lookSecondary="lookSecondary" @close="closeSecondary" :editor="editor"></SecondaryEmployment>
     </div>
     </div>
 </template>
@@ -142,6 +142,7 @@ export default {
       isEdit: false,   // 编辑
       lookSecondary: false,
       editId: "",
+      editor: false,   // 编辑接口
       secondaryID: "",  // 员工id
       rightMenuX: 0,
       rightMenuY: 0,
@@ -150,9 +151,9 @@ export default {
       ids: "",
       lookResigntion: false,
       viewResignationFrom: false,
-      imagesResignationList: [],
+      imagesResignationList: {},
       viewContract: false,
-      imagesList: [],
+      imagesList: {},
       dismiss_mess: "",
       dismiss_type: "",
       form: {
@@ -252,6 +253,7 @@ export default {
       this.isEdit = true;
       if(id) {
         this.editId = id;
+        this.editor = true;
       } else {
         this.editId = this.secondaryID;
       }
@@ -328,7 +330,9 @@ export default {
     },
     // 查看离职表
     lookDeparture(row) {
-    window.open(row.resignation_form[0].uri)
+    // window.open(row.resignation_form[0].uri)
+      this.imagesResignationList = row.resignation_form;
+      this.viewResignationFrom = true;
     },
     // 获取合同图片
     getImagesContract(user_id) {

@@ -276,7 +276,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="在职状态">
-                      <el-select v-model="params.statusValue" placeholder="请选择" clearable>
+                      <el-select v-model="params.status" placeholder="请选择" clearable @change="whetherToLeave">
                         <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -288,7 +288,7 @@
                   </el-form-item>
                 </el-col> -->
               </el-row>
-              <el-row v-if="isEdit">
+              <!-- <el-row v-if="isEdit">
                 <el-col :span="8">
                   <el-form-item label="离职原因">
                     <el-select v-model="params.dismiss_reason.dismiss_type" clearable placeholder="请选择" size="mini">
@@ -308,7 +308,7 @@
                       <el-input type="textarea" placeholder="请填写离职备注" v-model="params.entry_way.entry_mess" size="mini"></el-input>
                     </el-form-item>
                 </el-col>
-              </el-row>
+              </el-row> -->
               <el-row>
                 <el-col :span="24">
                   <el-form-item label="身份证复印件">
@@ -355,13 +355,51 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addStaffDialogVisible = false" :disabled="disabledBtn">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
+        <el-button size="mini" @click="addStaffDialogVisible = false" :disabled="disabledBtn">取 消</el-button>
+        <el-button size="mini" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
       </span>
     </el-dialog>
-
+    
     <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
+    <!-- 离职弹窗 -->
+    <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="selectLeaveDateDialog" width="30%">
+      <el-form ref="form" :model="form" onsubmit="return false;" label-width="100px" style="padding: 0 20px;">
+        <el-form-item label="离职时间">
+          <el-date-picker v-model="form.dismiss_time" type="date" placeholder="请选择离职日期" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="离职原因">
+          <el-select v-model="form.dismiss_reason.dismiss_type" clearable>
+            <el-option v-for="item in dismissReasonCategory" :value="item.id" :key="item.id" :label="item.name" size="mini">{{item.name}}</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="离职备注">
+          <el-input type="textarea" placeholder="请填写描述" v-model="form.dismiss_reason.dismiss_mess" size="mini"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="selectLeaveDateDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="leaveDateConfirm" size="mini">只离职</el-button>
+        <el-button size="small" type="primary" @click="leaveSendMsg">离职并发群消息</el-button>
+        <el-button size="small" type="primary" @click="leaveAndSendMsgConfirm">离职并发送短信</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :close-on-click-modal="false" :title=" leaveMsg ? '发送群消息' : '发送离职短信'" :visible.sync="sendLeaveMsgDialog" width="30%">
+      <div>
+        <el-form size="mini" onsubmit="return false;" :model="sendLeaveMsgForm" label-width="100px"
+                 style="padding: 0 20px;">
+          <el-form-item label="离职日期" required>
+            <el-date-picker v-model="sendLeaveMsgForm.date" type="date" placeholder="请选择离职日期"
+                            value-format="yyyy-MM-dd">
+            </el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="sendLeaveMsgDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="sendLeaveMsgConfirm">发 送</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -385,10 +423,27 @@
         postDisabled: true,
         detailData: {},
         // 新增字段 ========
+        leaveMsg: false,
+        selectLeaveDateDialog: false,
+        sendLeaveMsgForm: {date: ''},  //发送离职短信 离职日期
+        sendLeaveMsgDialog: false, //发送离职短信模态框
+        form: {
+          dismiss_time: '',
+          dismiss_reason: {
+            dismiss_type: '',
+            dismiss_mess: '',
+          },
+        }, //离职日期
         statusOptions:[
           {value: "1", label: "在职"},
           {value: "2", label: "离职"},
-          {value: "3", label: "停职留薪"},
+          {value: "4", label: "停职留薪"},
+        ],
+        dismissReasonCategory: [
+          {id: "1", name: '主动离职'},
+          {id: "2", name: '旷工离职'},
+          {id: "3", name: '劝退'},
+          {id: "4", name: '开除'},
         ],
         editIDCopy: {},
         editBank: {},
@@ -405,7 +460,7 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
-          statusValue: "1",
+          status: "1",
           // ================
           duty_id: [],
           position_id: [],
@@ -493,9 +548,9 @@
       };
     },
     watch: {
-      isClear: function (val) {
-        this.isClear = val;
-      },
+      // isClear: function (val) {
+      //   this.isClear = val;
+      // },
       // addEmployLog(val,id) {
       //   console.log(val, "22222")
       //   this.addStaffDialogVisible = val;
@@ -507,25 +562,27 @@
       // },
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
-        this.params.image_info = {
-          doc_photo: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
         // this.isClear = true;
       },
       addStaffDialogVisible(val) {
         if (!val) {
           this.initial(); //关闭弹框时清除
           this.$emit('close');
-          this.$http.get(this.url + "special/special/loginInfo").then((res) => {
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
           this.isClear = true;
           this.disabledBtn = false;
+          this.params.image_info = {
+            doc_photo: [],
+            bank: [],
+            contract: [],
+            education: [],
+            apply: [],
+            dismiss: []
+          }
+          this.emptyDepart("department_id");
+          this.emptyDepart("recommender");
         } else {
           this.editPositionIds = [];
           // this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
@@ -536,7 +593,7 @@
           this.title = '新建用户';
         } else {
           this.title = '修改用户';
-          this.params.statusValue = "";
+          this.params.status = "";
           this.getStaffInfo();
         }
       },
@@ -552,7 +609,15 @@
             this.params.entry_way.entry_mess = '';
           }
         }
-      }
+      },
+      //发送离职短信
+      sendLeaveMsgDialog(val) {
+        if (!val) {
+          this.form.dismiss_time = '';
+          this.sendLeaveMsgForm.date = '';
+          this.editId = '';
+        }
+      },
     },
     mounted() {
       this.getDictionaries();
@@ -613,7 +678,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.statusValue = "1";
+        this.params.status = "1";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -681,7 +746,188 @@
       //     this.postDisabled = true;
       //   }
       // },
-      // 
+      // 选择离职 
+      whetherToLeave(val) {
+        console.log(val)
+        if(val == "2") {
+          this.$confirm("确定将该员工的在职状态改为离职吗？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(() => {
+            this.selectLeaveDateDialog = true;
+          })
+        }
+      },
+      // 只离职
+      leaveDateConfirm() {
+        this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              // this.getPostStaffData();
+              // this.getStaffData();
+              this.getStaffInfo();
+              this.prompt('success', res.data.msg);
+              this.selectLeaveDateDialog = false;
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+
+        });
+      },
+      //离职群发
+      leaveSendMsg() {
+        this.leaveMsg = true;
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              this.prompt('success', res.data.msg);
+              // this.getPostStaffData();
+              // this.getStaffData();
+              this.getStaffInfo();
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
+                if (res.data.code === "710910") {
+                  this.$notify.success({
+                    title: '成功',
+                    message: res.data.msg
+                  });
+                  // this.getPostStaffData();
+                  // this.getStaffData();
+                  this.getStaffInfo();
+                  this.selectLeaveDateDialog = false;
+                } else {
+                  this.$notify.warning({
+                    title: '失败',
+                    message: res.data.msg
+                  });
+                  this.selectLeaveDateDialog = false;
+                }
+              }).catch(err => {
+                console.log(err);
+              })
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        })
+      },
+      // 离职并发送短信
+      leaveAndSendMsgConfirm() {
+        this.leaveMsg = false;
+        this.$confirm('员工在职状态将会改变并且向该员工所负责的客户发送短信, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+            dismiss_time: this.form.dismiss_time,
+            dismiss_reason: this.form.dismiss_reason,
+          }).then((res) => {
+            if (res.data.code === '710418') {
+              this.prompt('success', res.data.msg);
+              // this.getPostStaffData();
+              // this.getStaffData();
+              this.getStaffInfo();
+              if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+                this.sendLeaveMsgForm.date = this.form.dismiss_time;
+              }
+              this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
+                params: {
+                  id: this.editId,
+                  date: this.sendLeaveMsgForm.date
+                }
+              }).then((res) => {
+                if (res.data.code === '710400') {
+                  this.prompt('success', res.data.msg);
+                  this.selectLeaveDateDialog = false;
+                } else {
+                  this.prompt('warning', res.data.msg);
+                }
+              });
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
+          });
+        }).catch(() => {
+        });
+      },
+      //发送离职短信
+      sendLeaveMsgConfirm() {
+        var txt = '';
+        if (this.leaveMsg) {
+          txt = '此操作将发送群消息，是否继续?';
+        } else {
+          txt = '此操作将给该员工负责的客户发送短信，是否继续?';
+        }
+        this.$confirm(txt, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+            this.sendLeaveMsgForm.date = this.form.dismiss_time;
+          }
+          if (!this.leaveMsg) {
+            this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
+              params: {
+                id: this.editId,
+                date: this.sendLeaveMsgForm.date
+              }
+            }).then((res) => {
+              if (res.data.code === '710400') {
+                this.prompt('success', res.data.msg);
+                this.sendLeaveMsgDialog = false;
+                this.selectLeaveDateDialog = false;
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+            });
+          } else {
+            this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
+              if (res.data.code === "710910") {
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                this.getPostStaffData();
+                this.getStaffData();
+                this.sendLeaveMsgDialog = false;
+                this.selectLeaveDateDialog = false;
+              } else {
+                this.$notify.warning({
+                  title: '失败',
+                  message: res.data.msg
+                });
+                this.sendLeaveMsgDialog = false;
+                this.selectLeaveDateDialog = false;
+              }
+            }).catch(err => {
+              console.log(err);
+            })
+          }
+        }).catch(() => {
+
+        });
+      },
       // 获取图片
       getImgList() {
         this.editEducation = {};
@@ -758,7 +1004,7 @@
       },
       //编辑时获取员工信息
       getStaffInfo() {
-        this.$http.get(this.url + 'organization/staff/' + this.editId).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/staff/' + this.editId).then((res) => {
           if (res.data.code === '710910') {
             this.getImgList();
             this.detailData = res.data.data.detail;
@@ -769,6 +1015,7 @@
             this.params.position_id = [];
             this.duty = [];
             this.position = [];
+            this.params.status = String(res.data.data.status);
             if (val.duties) {// 职务
               for (let item of val.duties) {
                 this.params.duty_id.push(item.id);
@@ -890,7 +1137,7 @@
       },
       //获取职位
       getPosition(id) {
-        this.$http.get(this.url + 'organization/duty?org_id=' + id).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let position = {};
@@ -907,7 +1154,7 @@
       //获取岗位
       getPositions(id) {
         this.postArrayIds = [];
-        this.$http.get(this.url + 'organization/position?duty_id=' + id).then((res) => {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let data = {};
@@ -934,7 +1181,7 @@
           closeOnClickModal: false,
           type: 'warning',
         }).then(() => {
-          this.$http.get(this.url + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
+          this.$http.get(globalConfig.server + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
             if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
               this.detailData.send_info = 2;
@@ -949,9 +1196,9 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          // console.log(this.params, "修改")
+          console.log(this.params, "修改")
           // return false
-          this.$http.put(this.url + 'organization/staff/' + this.editId, this.params).then((res) => {
+          this.$http.put(globalConfig.server + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
               // this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
@@ -969,7 +1216,7 @@
           //新增
           // console.log(this.params, "新增");
           // return false
-          this.$http.post(this.url + 'organization/staff', this.params).then((res) => {
+          this.$http.post(globalConfig.server + 'organization/staff', this.params).then((res) => {
             if (res.data.code === '71002') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
@@ -1020,6 +1267,7 @@
       },
       // 确认选择
       selectMember(val) {
+        console.log(val, "11111")
         let organ = this.organDivision;
         if (organ === 'department_id') {
           this.resetOrg();
@@ -1043,7 +1291,7 @@
       },
       // 职务
       duties(id) {
-        this.$http.get(this.url + 'organization/duty?org_id=' + id).then(res => {
+        this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then(res => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach(item => {
               this.duty.push(item);
@@ -1065,7 +1313,7 @@
       },
       // 岗位
       quarters(id) {
-        this.$http.get(this.url + 'organization/position?duty_id=' + id).then(res => {
+        this.$http.get(globalConfig.server + 'organization/position?duty_id=' + id).then(res => {
           if (res.data.code === '20000') {
             for (let item of res.data.data.data) {
               this.position.push(item);
@@ -1093,7 +1341,7 @@
       },
       //生育状况
       getFertilityStatus() {
-        this.$http.get(this.url + 'setting/dictionary/231').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/231').then((res) => {
           if (res.data.code === '30010') {
             this.fertilityStatusCategory = res.data.data;
           } else {
@@ -1103,7 +1351,7 @@
       },
       //在职状态
       getOnJobStatus() {
-        this.$http.get(this.url + 'setting/dictionary/559').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/559').then((res) => {
           if (res.data.code === '30010') {
             this.jobStatusCategory = res.data.data;
           } else {
@@ -1113,7 +1361,7 @@
       },
       //账号状态
       getAccountStatus() {
-        this.$http.get(this.url + 'setting/dictionary/40').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/40').then((res) => {
           if (res.data.code === '30010') {
             this.accountStatusCategory = res.data.data;
           } else {
@@ -1123,7 +1371,7 @@
       },
       //入职材料
       getEntryMaterials() {
-        this.$http.get(this.url + 'setting/dictionary/515').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/515').then((res) => {
           if (res.data.code === '30010') {
             this.entryMaterialsCategory = res.data.data;
           } else {
@@ -1133,7 +1381,7 @@
       },
       //婚姻状况
       getMaritalStatus() {
-        this.$http.get(this.url + 'setting/dictionary/33').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/33').then((res) => {
           if (res.data.code === '30010') {
             this.maritalStatusCategory = res.data.data;
           } else {
@@ -1143,7 +1391,7 @@
       },
       //政治面貌
       getPoliticalStatus() {
-        this.$http.get(this.url + 'setting/dictionary/38').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/38').then((res) => {
           if (res.data.code === '30010') {
             this.politicalStatusCategoey = res.data.data;
           } else {
@@ -1153,7 +1401,7 @@
       },
       //学历
       getEducation() {
-        this.$http.get(this.url + 'setting/dictionary/39').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/39').then((res) => {
           if (res.data.code === '30010') {
             this.educationCategory = res.data.data;
           } else {
@@ -1163,7 +1411,7 @@
       },
       //等级
       getBranchBank() {
-        this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
           } else {
@@ -1173,7 +1421,7 @@
       },
       //校验身份证号
       checkIDNumData() {
-        this.$http.get(this.url + 'manager/staff/info?id_num=' + this.params.id_num).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/staff/info?id_num=' + this.params.id_num).then((res) => {
           if (res.data.code === '10050') {
             let data = res && res.data && res.data.data;
             if (data.birthday && !this.params.birthday) {
@@ -1189,7 +1437,7 @@
       },
       //校验银行卡号
       checkBankData() {
-        this.$http.get(this.url + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
           if (res.data.code === '10050') {
             let data = res && res.data && res.data.data;
             if (data.bankname && !this.params.account_bank) {
