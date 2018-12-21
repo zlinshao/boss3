@@ -98,7 +98,7 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
         >
-          <el-table-column label="区域" min-width="150px;">
+          <el-table-column label="区域" min-width="150px;" prop="group">
             <template slot-scope="scope">
               <div>
                 <span v-if="scope.row.group">{{ scope.row.group }}</span>
@@ -148,6 +148,9 @@
           layout="total,prev,pager,next"
           style="text-align: right;margin-top: 20px;"
         ></el-pagination>
+        <div style="text-align: right;">
+          <i class="el-icon-view" style="margin-right: 10px;"></i>{{ currentUv }}
+        </div>
       </div>
       <el-dialog
         title="数据统计"
@@ -341,10 +344,12 @@
             "renter.agency_percentage": '租房渠道单比例变化(%)',
             "renter.price_avg":'租房均价变化(元)',
             "rent.pay_back_avg": '租房回款变化(元)',
-            "renter.price_diff_avg": '租房平均差价变化'
+            "renter.price_diff_avg": '租房平均差价变化',
+            "renter.pay_back_avg": '回款数据变化'
           },
           currentTitle: '',
-          currentDetailTitle: ''
+          currentDetailTitle: '',
+          currentUv: 0,
         }
       },
       mounted() {
@@ -469,6 +474,7 @@
               this.businessList = this.businessList.slice((this.businessCurrentPage - 1) * this.businessCurrentPageSize , this.businessCurrentPage * this.businessCurrentPageSize);
               this.businessTotal = res.data.data.data.length;
               this.params.page_id = res.data.data.page_id;
+              this.currentUv = res.data.data.uv;
               this.params.addition = '';
             }else {
               this.businessLoading = false;
@@ -708,7 +714,10 @@
           this.getChartData(obj);
         },
         //单元格被单击
-        handleCellClick(row) {
+        handleCellClick(row,column) {
+          if (column.property === 'group') {
+            return false;
+          }
           var str = '';
           this.helpParams.compose.forEach(item => {
             str += item + '&';
