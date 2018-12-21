@@ -4,6 +4,7 @@ const platform = {
         platform_obj: '',
         position_obj: {
             department_id: '',
+            department_name: '',
             position_id: '',
             duty_id: '',
         }
@@ -17,6 +18,7 @@ const platform = {
             state.position_obj.department_id = view.org_id;
             state.position_obj.position_id = view.position_id;
             state.position_obj.duty_id = view.role.duty_id;
+            state.position_obj.department_name = view.org.name;
         }
     },
     actions: {

@@ -12,15 +12,16 @@
           <el-option v-for="item in monthOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-        <el-button type="primary" size="mini" @click="searchScheduling">搜 索</el-button>
+        <el-button type="primary" size="mini" @click="searchScheduling" :disable="isTrue">搜 索</el-button>
       </div>
       <div class="calendar" v-if="arr.length > 1">
+      <!-- <div class="calendar" > -->
         <table border="1" cellspacing="0" cellpadding="0">
           <tr class='head'>
               <td v-for="(head, index) in heads" :key="index">{{head}}</td>
           </tr>
           <tr v-for="(week, index) in arr" :key="index">
-              <td v-for="(item, index) in week" :key="index" :class="{'gray': item.prevmonth || item.nextmonth}" @click="modifyTypesetting(item.day)">
+              <td v-for="(item, index) in week" :key="index" :class="{'gray': item.prevmonth || item.nextmonth}" @click="modifyTypesetting(item)">
                 <div>{{selectmonth}}月{{item.day}}日</div>
                 <div>
                   <span v-if="item.setting == '早班'">{{item.setting}}(9:00 - 18:00)</span>
@@ -59,6 +60,7 @@ export default {
   props: ["ids","lookTypesettingLog"],
   data() {
     return {
+      isTrue: false,
       currentSort: { //当前排班
         user_id: "",
         arrange: [],
@@ -97,7 +99,7 @@ export default {
       dayarr: [],
       params: {
         user_id: "",
-        // date: ""
+        arrange_month: ""
       },
       arrangeList: [],
       modifyDay: "",
@@ -146,19 +148,22 @@ export default {
       },
     // 清除数据
     init() {
+      this.year = new Date().getFullYear();
+      this.month = new Date().getMonth() + 1;
+      this.selectmonth = new Date().getMonth() + 1,
       this.params = {
         user_id: "",
-        date: ""
+        arrange_month: ""
       }
     },
     // 获取排班
     getTypeTime() {
+      this.isTrue = true;
       this.arr = [];
       // this.$http.get(globalConfig.server + "attendance/sort/sort?user_id=289&arrange_month=2018-11").then(res => {   // 测试数据
       this.$http.get(globalConfig.server + "attendance/sort/sort", {params: this.params}).then(res => {  
         if(res.data.code == "20000") {
           this.arrangeList = res.data.data.data.arrange;
-          // console.log(this.arrangeList, "111111")
           // this.year = res.data.data.year;
           // this.selectmonth = res.data.data.month;
           // this.params.data = this.year + "-" + this.month;
@@ -215,14 +220,20 @@ export default {
         }
         _arr.push(_week);
       }
+      console.log(_arr, "55555")
       let _this = this;
-      let settingArr = Object.values(this.arrangeList);
+      // let settingArr = Object.values(this.arrangeList);
+      let settingArr = [];
+      if(this.arrangeList instanceof Array) {
+        settingArr = this.arrangeList;
+      } else {
+        settingArr = Object.values(this.arrangeList);
+      }
       _arr.forEach((item, index) => {
         item.forEach((val, key) => {
           if(val.currentmonth) {
              settingArr.forEach((a, b) => {
-               
-               if(_arr[index][key].day == b) {
+               if(_arr[index][key].day == b + 1) {
                   if(a == "A") {
                     _arr[index][key].setting = "早班";
                   } else if(a == "B") {
@@ -238,17 +249,25 @@ export default {
         })
       })
       this.arr = _arr;
+      this.isTrue = false;
     },
     // 修改排班
-    modifyTypesetting(day) {
-      this.modifyDialogVisible = true;
-      this.modifyDay = day;
-      
+    modifyTypesetting(item) {
+      if(item.currentmonth) {
+        this.modifyDialogVisible = true;
+        this.modifyDay = item.day;
+      }
     },
     submitModify() {
        this.currentSort.arrange_month = this.year + "-" + this.month;
        this.arrangeList[this.modifyDay] = this.currentArrange;
-       this.currentSort.arrange = Object.values(this.arrangeList)
+      //  this.arrangeList.forEach((item, index) => {
+
+      //  })
+      //  console.log(this.arrangeList, "77777")
+      //  return false;
+      //  this.currentSort.arrange = Object.values(this.arrangeList)
+       this.currentSort.arrange = this.arrangeList;
       this.$http.post(globalConfig.server + "attendance/sort", {
               user_id: this.currentSort.user_id,
               arrange: this.currentSort.arrange,
@@ -302,6 +321,7 @@ export default {
       text-align: center;
       td {
         width: 173px;
+        height: 33px;
       }
     }
     .gray {

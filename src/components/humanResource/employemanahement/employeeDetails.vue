@@ -544,10 +544,15 @@ export default {
     staffDetail(val) {
       if(!val) {
         this.$emit("close");
+       this.IDimgList = [];
+       this.BankimgList = [];
+       this.ContractimgList = [];
+       this.EducationimgList = [];
+       this.ApplyimgList = [];
+       this.DismissimgList = [];
       }
     },
     ids(val) {
-      console.log(val)
       this.employDetailId = val;
       this.openDetail(val);
     }
@@ -569,7 +574,7 @@ export default {
       this.$http.get(globalConfig.server + 'organization/staff/' + id).then((res) => {
         this.getDuty(res.data.data.id, true);
         if (res.data.data.detail.recommender) {
-          this.getDuty(res.data.data.detail.recommender, false);
+        this.getDuty(res.data.data.detail.recommender, false);
         } else {
           this.recommender = "暂无";
         }
@@ -577,8 +582,11 @@ export default {
         this.currentPost = this.currentPosition = '';
         if (res.data.code === '710910') {
           let detail = res.data.data.detail;
+          // console.log(res.data.data)
+          // return false
           this.staffDetailData = res.data.data;
           this.entry_materials = [];
+           
           // this.ContractimgList = res.data.data.image_info.labor_contract;
           // this.EducationimgList  = res.data.data.image_info.education;
           // this.DismissimgList = res.data.data.image_info.resignation;
@@ -636,7 +644,6 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
-              console.log(res.data.data.image_info, "22222222")
               if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
                   if(key == "doc_photo") {
