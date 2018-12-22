@@ -126,6 +126,10 @@
                     this.params.update.image_info.resignation = [];
                     this.params.update.image_info.labor_contract = [];
                     this.params.update.image_info.bank = [];
+                    $('.imgItem').remove();
+                        setTimeout(() => {
+                            this.isClear = false;
+                    }, 300);
                 }
             }
         },
@@ -143,7 +147,7 @@
                         $('.imgItem').remove();
                             setTimeout(() => {
                                 this.isClear = false;
-                        });
+                        }, 300);
                         this.init();
                         this.inductionMaterialsDialogVisible = false;
                     }

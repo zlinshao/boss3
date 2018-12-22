@@ -936,8 +936,10 @@
                 if(val){
                     // this.editIsEntry();
                 }else{
-                    this.cancelEditCondition();
+                    // this.cancelEditCondition();
                     this.cancelIsEntry();
+                    this.communicate_status = '';
+                    this.is_editing_condition = ''
                 }
             },
             passInterviewDialog(val){
@@ -1125,6 +1127,11 @@
                     this.interviewParams.resume_source = row.resume_source;
                 }
                 if(column.property === 'album' && row.album.length){
+                    // row.album.forEach(item => {
+                    //     if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)$/i.test(item.uri)){
+                    //         this.lookUpResumeDialog = true;
+                    //     }
+                    // })
                     this.lookUpResumeDialog = true;
                     this.album = row.album;
                 }
@@ -1437,6 +1444,11 @@
                         this.disAgreeInductParams.update.entry_result = row.entry_result
                     }
                 }else if(column.property === 'album' && row.album.length){
+                    // row.album.forEach(item => {
+                    //     if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)$/i.test(item.uri)){
+                    //         this.lookUpResumeDialog = true;
+                    //     }
+                    // })
                     this.lookUpResumeDialog = true;
                     this.album = row.album;
                 }
@@ -1482,6 +1494,8 @@
                             type: 'success'
                         })
                     }
+                    this.communicate_status = '';
+                    this.is_editing_condition = '';
                     this.IsEntryDialog = false;
                     this.getAllData(this.id);
                     this.initHumanSource();
@@ -1652,6 +1666,7 @@
                 }
                 if(column.property === 'entry_other' && row.entry_other){
                     this.IsEntryDialog = true;
+                    this.communicate_status = 742;
                     this.agreeInductParams.update.entry_other.salary = row.entry_other.salary;
                     this.agreeInductParams.update.entry_other.entry_time = row.entry_other.entry_time.length ? row.entry_other.entry_time : '';
                     this.agreeInductParams.update.entry_other.probation = row.entry_other.probation;
