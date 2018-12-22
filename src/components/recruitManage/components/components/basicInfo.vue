@@ -853,7 +853,7 @@
       },
       //添加员时预填信息
       prefill(){
-        console.log(this.$store)
+        // console.log(this.$store)
         let obj = this.$store.state.platform.position_obj;
         this.params.real_name = this.basicInfo_info.name;
         this.params.gender = this.basicInfo_info.gender === 716 ? 229 : 230;
@@ -871,7 +871,7 @@
       //查看时获取员工
       getDepart(){
           this.$http.get(globalConfig.server + '/organization/other/org-tree?id=' + this.basicInfo_info.basic_info.department_id[0]).then(res => {
-            console.log(res)
+            // console.log(res)
               if(res.data.code === '70050'){
                 let result = res.data.data
                 this.depart_name = result.name;
@@ -899,7 +899,7 @@
         let arr = []
         this.basicInfo_info.basic_info.duty_id.forEach(item => {
           this.$http.get(globalConfig.server + 'organization/position?duty_id=' + item).then(res => {
-            console.log(res)
+            // console.log(res)
             if(res.data.code === '20000'){
               res.data.data.data.forEach(child => {
                 this.basicInfo_info.basic_info.position_id.forEach(grandson => {

@@ -634,7 +634,7 @@
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-               console.log(item)
+            //    console.log(item)
                this.$store.dispatch('savePositionInfo', item)
                this.id = item.id;
                this.processDialog = true;
