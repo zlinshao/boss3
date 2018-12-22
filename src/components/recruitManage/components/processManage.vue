@@ -110,11 +110,12 @@
                         <el-table-column
                             prop="edit"
                             label="操作"
-                            width='150px'>
+                            width='150px'
+                            class-name='font-color'>
                             <template slot-scope="scope">
-                                <el-button v-if='is_editing_id !== scope.row.id' size='mini'>修改</el-button>
-                                <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='cancelEdit'>取消</el-button>
-                                <el-button v-if='is_editing_id === scope.row.id' size='mini' @click.stop='confirmEdit(scope.row)'>确定</el-button>
+                                <el-button class='font-color' v-if='is_editing_id !== scope.row.id' size='mini'>修改</el-button>
+                                <el-button class='font-color' v-if='is_editing_id === scope.row.id' size='mini' @click.stop='cancelEdit'>取消</el-button>
+                                <el-button class='font-color' v-if='is_editing_id === scope.row.id' size='mini' @click.stop='confirmEdit(scope.row)'>确定</el-button>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -1181,7 +1182,8 @@
                     this.interviewedDialog = true;
                     this.interviewedObj.id = item.id;
                     this.interviewedObj.name = item.name;
-                    this.interviewedObj.gender = item.genders.dictionary_name;
+                    // this.interviewedObj.gender = item.genders.dictionary_name;
+                    this.interviewedObj.gender = item.gender === 716 ? '男' : '女';
                 }else if(this.updateParams.update.interview_status === 735){
                     this.is_editing_interview_status = '';
                 }else{
@@ -1361,6 +1363,10 @@
                             title: '成功',
                             message: res.data.msg,
                             type: 'success'
+                        });
+                        $('.imgItem').remove();
+                            setTimeout(() => {
+                                this.isClear = false;
                         });
                         this.getAllData(this.id);
                         this.uploadResumeDialog = false;
@@ -1887,6 +1893,9 @@
     }
 </script>
 <style lang="scss">
+    #process{
+        font-size: 14px;
+    }
     .add-interviewer{
         text-align: center;
         margin: 10px 0 0 0;
