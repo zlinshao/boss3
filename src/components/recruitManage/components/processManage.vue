@@ -511,7 +511,7 @@
                 <div class='edit-result'>
                     <el-button size='mini' @click='cancelEditResult'>取消</el-button>
                     <el-button size='mini' @click='confirmEditResult'>确定</el-button>
-                    <el-button size='mini' @click='editResult'>修改</el-button>
+                    <el-button size='mini' @click='editResult' v-if='!is_editResult'>修改</el-button>
                 </div>
             </el-dialog>
             <!--未面试结束-->
@@ -929,6 +929,9 @@
                     this.interviewedObj.expect = '';
                     this.interviewedObj.actual = '';
                 }
+            },
+            uninterviewDialog(val){
+                this.is_editResult = '';
             },
             IsEntryDialog(val){
                 if(val){
@@ -1419,7 +1422,7 @@
                         this.humansourceObj.interview_status = row.interview_statuss.dictionary_name;
                         this.disAgreeInductParams.update.entry_result = row.entry_result
                     }
-                }else if(column.property === 'album'){
+                }else if(column.property === 'album' && row.album.length){
                     this.lookUpResumeDialog = true;
                     this.album = row.album;
                 }
@@ -1626,7 +1629,7 @@
             /*********************** 待入职*********************************/
             cellClick3(row, column, cell, event){
                 // console.log(row, column)
-                if(column.property === 'album'){
+                if(column.property === 'album' && row.album.length){
                     this.lookUpResumeDialog = true;
                     this.album = row.album
                 }
@@ -1897,7 +1900,7 @@
             setFont({row, column, rowIndex, columnIndex}){
                 let columnList = ['album', 'edit', 'interview_status', 'interview_statuss', 'entry_statuss', 'entry_other', 'background_check', 'image_info', 'basic_info']
                 if(columnList.includes(column.property)){
-                    return "color: rgba(63, 81, 181, 1)"
+                    return "color: rgba(63, 81, 181, 1);cursor: pointer"
                 }
             }
         }
