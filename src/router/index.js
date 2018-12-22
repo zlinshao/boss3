@@ -243,7 +243,6 @@ const accountMmanagement = () => import('../components/meritPay/accountMmanageme
 const account = () => import('../components/meritPay/accountMmanagement/components/account.vue');
 
 // 微信开发者
-const weixin = ()=> import('../components/weixin/index.vue');
 const new_media = ()=> import('../components/new_media/index.vue');
 
 Vue.use(Router);
@@ -257,12 +256,6 @@ export default new Router({
     //   name: 'Index',
     //   redirect: '/main',
     // },
-    {
-      path: '/weixin',
-      component: weixin,
-      name: '',
-      hidden: true
-    },
 
     {
       path: '/login',
@@ -408,7 +401,7 @@ export default new Router({
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
-        
+
         },
       ]
     },

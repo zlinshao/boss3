@@ -319,6 +319,9 @@
             handleCurrentChange(pagers){
                 this.params.page = pagers;
                 this.search();
+                this.$nextTick(() => {
+                    document.documentElement.scrollTop = 0;
+                })
             },
             //搜索
             search(){
@@ -634,7 +637,7 @@
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-               console.log(item)
+            //    console.log(item)
                this.$store.dispatch('savePositionInfo', item)
                this.id = item.id;
                this.processDialog = true;

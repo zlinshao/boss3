@@ -239,15 +239,21 @@
                 <template slot-scope="scope">
                   <div>
                     <span v-if="scope.row.annotations" style="color: red;">!</span>
-                    <span v-if="scope.row.name">{{scope.row.name}}</span>
-                    <span v-else="">/</span>
+                    <el-tooltip placement="bottom"  v-if="scope.row.annotations">
+                      <div slot="content">
+                          {{ scope.row.annotations.content }}
+                      </div>
+                      <span v-if="scope.row.name">{{scope.row.name}}</span>
+                      <span v-else="">/</span>
+                    </el-tooltip>
+                    <span v-else>{{scope.row.name}}</span>
                     <!--<div class="notice" :class="{isShow: scope.row.id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">-->
                       <!--<span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>-->
                       <!--<span v-else style="color: #F56C6C;">拉入黑名单</span>-->
                     <!--</div>-->
-                    <div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.id === markShow ? '' : 'yes'}">
-                      {{ scope.row.annotations.content }}
-                    </div>
+                    <!--<div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.id === markShow ? '' : 'yes'}">-->
+                      <!--{{ scope.row.annotations.content }}-->
+                    <!--</div>-->
                   </div>
                 </template>
               </el-table-column>
