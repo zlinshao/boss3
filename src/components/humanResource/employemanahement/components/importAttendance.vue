@@ -51,7 +51,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="download(scope.row)" size="mini" :disabled="scope.row.status !== '导出完成'" v-loading="loading">下载</el-button>
+            <el-button type="primary" @click="download(scope.row)" size="mini" :disabled="scope.row.status !== '导出完成'" v-loading="scope.row.status !== '导出完成'" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0)">下载</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Organization from '../../common/organization'  // 组织架构
+import Organization from '../../../common/organization'  // 组织架构
 export default {
   props:["lookImportAttendance"],
   components: {Organization},
@@ -268,6 +268,12 @@ export default {
     .is-in-pagination {
       width: 40px;
     }
+  }
+  .el-loading-spinner i {
+    color: #ff0000;
+  }
+  .el-loading-spinner {
+    top: 30%;
   }
 }
 </style>

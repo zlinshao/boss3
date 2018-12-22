@@ -66,8 +66,8 @@
           </el-table-column>
           <el-table-column label="合同" >
             <template slot-scope="scope">
-              <!-- <el-button type="text" @click="addUploadFiles('2', scope.row.id)" v-if="true">添 加</el-button> -->
-              <el-button type="text" @click="getImagesContract(scope.row.id)">查 看</el-button>
+              <!-- <el-button type="text" @click="addUploadFiles('2', scope.row)" v-if="!scope.row.staff_extends.image_info || scope.row.staff_extends.image_info.length == 0">添 加</el-button> -->
+              <el-button type="text" @click="getImagesContract(scope.row)">查 看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -95,7 +95,7 @@
       <!-- 查看离职交接表 -->
       <el-dialog title="查看离职交接表" :visible.sync="viewResignationFrom" width="30%">
         <div style="margin-top: 10px;" v-if="imagesResignationList && imagesResignationList.length>0" class="lookImg">
-          <img v-for="img in imagesResignationList" :src="img.uri" :key="img.id" data-magnify="" :data-src="img.uri" style="width: 30%;height: 100px; margin-left: 10px;"> 
+          <img v-for="(img, index) in imagesResignationList" :src="img" :key="index" data-magnify="" :data-src="img" style="width: 30%;height: 100px; margin-left: 10px;"> 
           <!-- <a v-for="img in imagesResignationList" :key="img.id" :href="img.uri"></a> -->
         </div>
         <div v-else>暂无数据</div>
@@ -106,7 +106,7 @@
       <!-- 查看合同 -->
       <el-dialog title="查看合同" :visible.sync="viewContract" width="30%">
         <div style="margin-top: 10px;" v-if="imagesList && imagesList.length>0" class="lookImg">
-          <img v-for="img in imagesList" :src="img.url" :key="img.id" data-magnify="" :data-src="img.url">
+          <img v-for="(img, index) in imagesList" :src="img" :key="index" data-magnify="" :data-src="img" style="width: 30%;height: 100px; margin-left: 10px;">
         </div>
         <div v-else>暂无数据</div>
         <span slot="footer" class="dialog-footer">
@@ -152,9 +152,9 @@ export default {
       ids: "",
       lookResigntion: false,
       viewResignationFrom: false,
-      imagesResignationList: {},
+      imagesResignationList: [],
       viewContract: false,
-      imagesList: {},
+      imagesList: [],
       dismiss_mess: "",
       dismiss_type: "",
       form: {
@@ -202,6 +202,16 @@ export default {
           dismiss_time: "",
           dismiss_reason: "",
         }
+      }
+    },
+    viewResignationFrom(val) {
+      if(!val) {
+        this.imagesResignationList = [];
+      }
+    },
+    viewContract(val) {
+      if(!val) {
+        this.imagesList = [];
       }
     }
   },
@@ -279,6 +289,7 @@ export default {
       this.getResignationEmploye();
     },
     addUploadFiles(val, row) {
+      // console.log(row, "666666")
       this.form.user_id = row.id;
       let dismiss_reason = row.staffs.dismiss_reason;
       this.form.dismiss_reason = row.staffs.dismiss_reason;
@@ -336,26 +347,40 @@ export default {
     },
     // 查看离职表
     lookDeparture(row) {
-    // window.open(row.resignation_form[0].uri)
-      this.imagesResignationList = row.resignation_form;
+    // window.open(row.resignation_form)
+      row.resignation_form.forEach((item, index) => {
+        this.imagesResignationList.push(item.uri)
+      })
       this.viewResignationFrom = true;
     },
-    // 获取合同图片
-    getImagesContract(user_id) {
-      // this.params.user_id = id;
-      this.viewContract = true;
-      this.$http.get(globalConfig.server + 'hrm/User/userInfo',{params: {user_id}}).then(res => {
-        if(res.data.code == "90010") {
-          if(res.data.data.image_info) {
-            for(let key in res.data.data.image_info) {
-              if(key == "labor_contract") {
-                this.imagesList =  res.data.data.image_info[key]
-              }
-            }
-          }
+    // 查看合同图片
+    getImagesContract(row) {
+      if(row.staff_extends.image_info || !row.staff_extends.image_info instanceof Array) {
+         if( row.staff_extends.image_info.labor_contract) {
+          row.staff_extends.image_info.labor_contract.forEach((item, index) => {
+            this.imagesList.push(item.uri)
+          })
         }
-      })
+      }
+      this.viewContract = true;
     },
+    // 获取合同图片
+    // getImagesContract(user_id) {
+    //   // this.params.user_id = id;
+    //   this.viewContract = true;
+    //   // let user_id = row.id;
+    //   this.$http.get(globalConfig.server + 'hrm/User/userInfo',{params: {user_id}}).then(res => {
+    //     if(res.data.code == "90010") {
+    //       if(res.data.data.image_info) {
+    //         for(let key in res.data.data.image_info) {
+    //           if(key == "labor_contract") {
+    //             this.imagesList =  res.data.data.image_info[key]
+    //           }
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     // 获取数据
     getResignationEmploye() {
       this.resignationData = [];
