@@ -686,7 +686,7 @@
             <el-dialog :visible.sync="uploadResumeDialog" append-to-body width="25%">
                 <el-form label-width="80px" center>
                     <el-form-item label="上传简历" required>
-                        <UPLOAD :ID="'first'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
+                        <UPLOAD :ID="'second'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
                     </el-form-item>
                     <div class='edit-result'>
                         <el-button size='mini' @click='cancelUpload'>取消</el-button>
@@ -954,6 +954,16 @@
                     this.entryStatus.update.entry_status = '';
                     this.entry_status_id = '';
                     this.is_editing_fail_result = '';
+                }
+            },
+            uploadResumeDialog(val){
+                if(!val){
+                    this.isClear = true;
+                    $('.imgItem').remove();
+                        setTimeout(() => {
+                            this.isClear = false;
+                    },300);
+                    this.interviewParams.album = [];
                 }
             }
         },
@@ -1308,7 +1318,7 @@
                         $('.imgItem').remove();
                             setTimeout(() => {
                                 this.isClear = false;
-                        });
+                        }, 300);
                         this.getAllData(this.id);
                         this.initNewInterviewerParams();
                     }else{
@@ -1340,10 +1350,15 @@
             },
             getImgData(val){
                 // console.log(val);
-                this.newInterviewParams.album = val[1]
+                this.newInterviewParams.album = this.toNum(val[1])
             },
             regetImgData(val){
-                this.interviewParams.album = val[1]
+                console.log(val)
+                this.interviewParams.album = this.toNum(val[1])
+            },
+            //转成number类型
+            toNum(arr){
+                return arr.map(item => Number(item))
             },
             //取消重新上传简历
             cancelUpload(){
@@ -1373,7 +1388,7 @@
                         $('.imgItem').remove();
                             setTimeout(() => {
                                 this.isClear = false;
-                        });
+                        }, 300);
                         this.getAllData(this.id);
                         this.uploadResumeDialog = false;
                         this.initUpload();
