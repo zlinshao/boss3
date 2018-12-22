@@ -20,7 +20,7 @@
                                 <i @click="cancelEdit" v-if="is_editing && editing_platform_val === value" class='el-icon-circle-close'></i>
                                 <i @click="saveEdit(value, key)" v-if="is_editing && editing_platform_val === value" class="el-icon-circle-check"></i>
                                 <i @click="deletePlatform(value, key)" v-if="is_editing && editing_platform_val === value" class="el-icon-delete"></i>
-                                <i class='el-icon-edit'  @click="editPlatform(value,key)" v-if="editing_platform_val !== value"></i>
+                                <i class='el-icon-edit'  @click="editPlatform(value, key)" v-if="editing_platform_val !== value"></i>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@ export default {
             }else{
                 this.platform = Object.assign({},this.$store.state.platform.platform_obj)
                 this.id = this.$store.state.platform.id;
-                console.log(this.platform)
+                // console.log(this.platform)
             }
         }
     },
@@ -100,6 +100,7 @@ export default {
     methods:{
         //编辑
         editPlatform(value, key){
+            // console.log(value,key)
             this.is_adding = false;
             this.is_editing = true;
             this.editing_platform_val = value;
@@ -115,11 +116,18 @@ export default {
         },
         //保存编辑
         saveEdit(value, key){
-            delete this.platform[key];
-            this.platform[this.platform_name] = this.platform_host;
-            this.platform = Object.assign({}, this.platform);
-            this.is_editing = false;
-            this.editing_platform_val = '';
+            // console.log(value, key)
+            if(Object.keys(this.platform).includes(this.platform_name) || Object.values(this.platform).includes(this.platform_host)){
+                this.$alert('平台或地址已经存在', '', {
+                    confirmButtonText: '确定',
+                });
+            }else{
+                delete this.platform[key];
+                this.platform[this.platform_name] = this.platform_host;
+                this.platform = Object.assign({}, this.platform);
+                this.is_editing = false;
+                this.editing_platform_val = '';
+            }
         },
         //删除品台
         deletePlatform(value, key){
@@ -141,7 +149,9 @@ export default {
         confirmPlatform(){
             if(this.platform_name && this.platform_host){
                 if(Object.keys(this.platform).includes(this.platform_name) || Object.values(this.platform).includes(this.platform_host)){
-                    alert('地址已经添加')
+                    this.$alert('平台或地址已经存在', '', {
+                        confirmButtonText: '确定',
+                    });
                 }else{
                     this.platform[this.platform_name] = this.platform_host;
                     this.platform = Object.assign({}, this.platform);
