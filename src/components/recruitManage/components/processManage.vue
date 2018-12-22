@@ -110,8 +110,7 @@
                         <el-table-column
                             prop="edit"
                             label="操作"
-                            width='150px'
-                            class-name='font-color'>
+                            width='150px'>
                             <template slot-scope="scope">
                                 <el-button class='font-color' v-if='is_editing_id !== scope.row.id' size='mini'>修改</el-button>
                                 <el-button class='font-color' v-if='is_editing_id === scope.row.id' size='mini' @click.stop='cancelEdit'>取消</el-button>
