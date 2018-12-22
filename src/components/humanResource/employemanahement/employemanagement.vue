@@ -237,14 +237,14 @@
 
 <script>
 import Organization from '../../common/organization'  // 组织架构
-import ImportAttendance from './importAttendance'  // 导出考勤
-import addEmploy from './addEmploy'   // 新增员工
-import EmployeeDetails from './employeeDetails'  // 员工详情
-import LookAttendanceChild from './lookAttendance'  // 查看排班
-import employemanagement from './lookTypesetting'  // 查看考勤
-import Approval from './approval'    // 审批
-import Rewardreord from './rewardreord'
-import Daily from './daily'  // 日报
+import ImportAttendance from './components/importAttendance'  // 导出考勤
+import addEmploy from './components/addEmploy'   // 新增员工
+import EmployeeDetails from './components/employeeDetails'  // 员工详情
+import LookAttendanceChild from './components/lookAttendance'  // 查看排班
+import employemanagement from './components/lookTypesetting'  // 查看考勤
+import Approval from './components/approval'    // 审批
+import Rewardreord from './components/rewardreord'
+import Daily from './components/daily'  // 日报
 // import AddStaff from '../../organizationNew/addStaff.vue'  // 右键
 export default {
   components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance, Organization},
@@ -371,8 +371,12 @@ export default {
             let orgStr = "";
             let roleStr = "";
             item.org.forEach((val, key) => {
-             orgStr += val.name + " ";
+             orgStr += val.name;
+            if(val.corp) {
+              orgStr = `${orgStr} ${val.corp.name}`
+            }
              this.staffDate[index].orgStr = orgStr;
+
             })
             item.roles.forEach((val, key) => {
               roleStr += val.display_name + " ";

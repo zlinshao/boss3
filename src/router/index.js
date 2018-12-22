@@ -243,7 +243,6 @@ const accountMmanagement = () => import('../components/meritPay/accountMmanageme
 const account = () => import('../components/meritPay/accountMmanagement/components/account.vue');
 
 // 微信开发者
-const weixin = ()=> import('../components/weixin/index.vue');
 const new_media = ()=> import('../components/new_media/index.vue');
 
 Vue.use(Router);
@@ -257,12 +256,6 @@ export default new Router({
     //   name: 'Index',
     //   redirect: '/main',
     // },
-    {
-      path: '/weixin',
-      component: weixin,
-      name: '',
-      hidden: true
-    },
 
     {
       path: '/login',
@@ -408,7 +401,7 @@ export default new Router({
         //业绩详情
         {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
 
-        
+
         },
       ]
     },
@@ -564,11 +557,11 @@ export default new Router({
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构'},
         {path: '/integralManage', component: IntegralManage, name: '积分管理'},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案'},
-        {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
+        // {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
-        { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
-        { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
+        // { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
+        // { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
       ]
     },
     //write by shuisheng 2018-10-24

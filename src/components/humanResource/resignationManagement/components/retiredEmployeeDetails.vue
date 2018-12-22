@@ -368,6 +368,11 @@
                             {{DRCategory[staffDetailData.detail.dismiss_reason.dismiss_type]}}</span>
                           <span v-else>暂无</span>
                         </div>
+                        <div>
+                          <el-button type="text" @click="sendMessage(1)">已发送群消息</el-button>
+                          <el-button type="text">和</el-button>
+                          <el-button type="text" @click="sendMessage(2)">离职短信</el-button>
+                        </div>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -490,6 +495,8 @@
           <el-button size="mini" type="primary" @click="staffDetail = false">确 定</el-button>
         </span>
       </el-dialog>
+      <!-- 发送离职消息 -->
+
     </div>
 </template>
 
@@ -555,6 +562,50 @@ export default {
     this.getBranchBank();
   },
   methods: {
+    // 发送群消息
+    sendMessage(val) {
+      if(val == 1) {
+        this.$confirm('员工在职状态将会改变并且向群里发送消息，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+           this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.employDetailId}?dismiss_time=${this.staffDetailData.detail.dismiss_time}`).then((res) => {
+            if(res.data.code == "710910") {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              });
+            }
+          })
+        })
+      } else if (val == 2) {
+         this.$confirm('员工已离职是否发送短信，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(globalConfig.server + 'organization/staff/leave-sms', { params: {id: this.employDetailId, date: this.staffDetailData.detail.dismiss_time}}).then(res => {
+            if (res.data.code === "710910") { 
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              });
+            }
+          })
+        })
+      }
+    },
     // 查看图片
     allowDrop(e) {
       e.preventDefault();

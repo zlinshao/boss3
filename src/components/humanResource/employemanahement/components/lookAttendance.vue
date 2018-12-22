@@ -13,7 +13,7 @@
           <el-table-column prop="goWork" label="上班打卡时间"></el-table-column>
           <el-table-column  label="上班打卡结果">
             <template slot-scope="scope">
-              <div v-if="scope.row.day <= days">
+              <div v-if="scope.row.day <= days && scope.row.resultWork">
                 <span v-if="scope.row.resultWork == '正常'">{{scope.row.resultWork}}</span>
                 <span v-else-if="scope.row.resultWork == '休息并打卡'">{{scope.row.resultWork}}</span>
                 <span v-else-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
@@ -25,7 +25,7 @@
           <el-table-column prop="goOffWork" label="下班打卡时间"></el-table-column>
           <el-table-column prop="" label="下班打卡结果">
             <template slot-scope="scope">
-              <div v-if="scope.row.day <= days">
+              <div v-if="scope.row.day <= days && scope.row.resultOffWork">
                 <span v-if="scope.row.resultOffWork == '正常'">{{scope.row.resultOffWork}}</span>
                 <span v-else-if="scope.row.resultOffWork == '休息并打卡'">{{scope.row.resultOffWork}}</span>
                 <span v-else-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
@@ -87,30 +87,34 @@ export default {
           let  year = new Date().getFullYear();
           let month = new Date().getMonth() + 1;
           this.days= new Date().getDate();
+          if(!res.data.data.data[0].sort_dimension.length) {
+            this.isLoading = false;
+            this.emptyText = "暂无数据";
+          }
           res.data.data.data[0].sort_dimension.forEach((item, index) => {
             obj = {}
             let currentAttendance = false;  // 今天是否有排班
             let currentMon = false;   // 早上是否有 实际打卡
             let currentWan = false;   // 下班是否有 实际打卡 
-              item.forEach((a, b) => {
-                if(a.dimensions.day <= this.days) {
-                  if(a.event_attribute == 3) {
-                    currentAttendance = true;
-                  }
-                  if(a.event_attribute == 1) {
-                    currentMon = true;
-                  }
-                  if(a.event_attribute == 2)   {
-                    currentWan = true;
-                  }
-                  if(currentAttendance && !currentMon) {
-                    obj.resultWork = "缺卡";
-                  }
-                  if(currentAttendance && !currentWan) {
-                    obj.resultOffWork = "缺卡";
-                  }
+            item.forEach((a, b) => {
+              if(a.dimensions.day <= this.days) {
+                if(a.event_attribute == 3) {
+                  currentAttendance = true;
                 }
-              })
+                if(a.event_attribute == 1) {
+                  currentMon = true;
+                }
+                if(a.event_attribute == 2)   {
+                  currentWan = true;
+                }
+                if(currentAttendance && !currentMon) {
+                  obj.resultWork = "缺卡";
+                }
+                if(currentAttendance && !currentWan) {
+                  obj.resultOffWork = "缺卡";
+                }
+              }
+            })
             item.forEach((val, key) => {
               obj.sign_date = val.sign_date;
               obj.day = Number(val.sign_date.split("-")[2]);

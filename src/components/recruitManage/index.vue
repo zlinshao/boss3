@@ -39,13 +39,14 @@
                 <el-container>
                     <el-header>
                         <el-row :gutter="20" class="positionTitle">
-                            <el-col :span="6">
-                                <!-- <span>{{item.org.name}}</span> -->
+                            <el-col :span="4">
+                                <span v-if='item.org.corp'>{{item.org.corp.name}}</span>
+                                <span v-if='!item.org.corp'>/</span>
                             </el-col>
-                            <el-col :span="6">
+                            <el-col :span="4">
                                 <span>{{item.org.name}}</span>
                             </el-col>
-                            <el-col :span="6">
+                            <el-col :span="4">
                                 <span>{{item.statuss.dictionary_name}}</span>
                             </el-col>
                         </el-row>
@@ -318,6 +319,9 @@
             handleCurrentChange(pagers){
                 this.params.page = pagers;
                 this.search();
+                this.$nextTick(() => {
+                    document.documentElement.scrollTop = 0;
+                })
             },
             //搜索
             search(){
@@ -633,7 +637,7 @@
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-               console.log(item)
+            //    console.log(item)
                this.$store.dispatch('savePositionInfo', item)
                this.id = item.id;
                this.processDialog = true;

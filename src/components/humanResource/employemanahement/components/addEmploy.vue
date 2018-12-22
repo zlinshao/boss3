@@ -194,8 +194,8 @@
                       </el-select>
                       <div style="color: #409EFF;font-size: 12px;text-align: right;"
                            v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
-                        <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
-                        <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
+                        <span v-if="detailData.send_info && detailData.send_info == 2">已发过转正祝贺</span>
+                        <span v-if="detailData.send_info && !detailData.send_info == 1">未发过转正祝贺 </span>
                         <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
                       </div>
                     </el-form-item>
@@ -363,7 +363,7 @@
     <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
     <!-- 离职弹窗 -->
-    <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="selectLeaveDateDialog" width="30%">
+    <el-dialog :close-on-click-modal="false" title="离职时间" :visible.sync="selectLeaveDateDialog" width="30%">
       <el-form ref="form" :model="form" onsubmit="return false;" label-width="100px" style="padding: 0 20px;">
         <el-form-item label="离职时间">
           <el-date-picker v-model="form.dismiss_time" type="date" placeholder="请选择离职日期" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
@@ -404,8 +404,8 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization';
-  import UpLoad from "../../common/UPLOAD.vue"
+  import Organization from '../../../common/organization.vue';
+  import UpLoad from "../../../common/UPLOAD.vue"
 
   export default {
     props: ["ids", "addStaffDialog", 'isEdit', 'editId'],
@@ -548,9 +548,9 @@
       };
     },
     watch: {
-      // isClear: function (val) {
-      //   this.isClear = val;
-      // },
+      isClear: function (val) {
+        this.isClear = val;
+      },
       // addEmployLog(val,id) {
       //   console.log(val, "22222")
       //   this.addStaffDialogVisible = val;
@@ -571,16 +571,16 @@
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          this.isClear = true;
+          this.isClear = !this.isClear;
           this.disabledBtn = false;
-          this.params.image_info = {
-            doc_photo: [],
-            bank: [],
-            contract: [],
-            education: [],
-            apply: [],
-            dismiss: []
-          }
+          // this.params.image_info = {
+          //   doc_photo: [],
+          //   bank: [],
+          //   contract: [],
+          //   education: [],
+          //   apply: [],
+          //   dismiss: []
+          // }
           this.emptyDepart("department_id");
           this.emptyDepart("recommender");
         } else {
@@ -618,6 +618,13 @@
           this.editId = '';
         }
       },
+      selectLeaveDateDialog(val) {
+        if(!val) {
+          this.form.dismiss_time = "";
+          this.form.dismiss_reason.dismiss_type = "";
+          this.form.dismiss_reason.dismiss_mess = "";
+        }
+      }
     },
     mounted() {
       this.getDictionaries();
@@ -661,14 +668,20 @@
         this.getOnJobStatus();
       },
       initial() {
-        this.params.image_info = {
-          doc_photo: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
+        this.params.image_info.doc_photo = [];
+        this.params.image_info.bank = [];
+        this.params.image_info.contract = [];
+        this.params.image_info.education = [];
+        this.params.image_info.resume = [];
+        this.params.image_info.dismiss = [];
+        this.params.image_info.resignation = [];
+        this.params.image_info.labor_contract = [];
+         this.editIDCopy = {};
+         this.editBank = {};
+         this.editContract = {};
+         this.editEducation = {};
+         this.editResume = {};
+         this.editResignation = {};
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -748,7 +761,6 @@
       // },
       // 选择离职 
       whetherToLeave(val) {
-        console.log(val)
         if(val == "2") {
           this.$confirm("确定将该员工的在职状态改为离职吗？", "提示", {
             confirmButtonText: "确定",
@@ -930,20 +942,20 @@
       },
       // 获取图片
       getImgList() {
-        this.editEducation = {};
-        this.editBank = {};
-        this.editContract = {};
-        this.editResignation = {};
-        this.editResume = {};
-        this.editIDCopy = {};
-        this.params.image_info = {
-          doc_photo: [],   // 身份证
-          bank: [],       // 银行卡
-          resume: [],      // 申请表
-          resignation: [],   //  上家单位离职证明
-          labor_contract: [],  // 劳动合同
-          education: [],  // 学历复印件
-        }
+        // this.editEducation = {};
+        // this.editBank = {};
+        // this.editContract = {};
+        // this.editResignation = {};
+        // this.editResume = {};
+        // this.editIDCopy = {};
+        // this.params.image_info = {
+        //   doc_photo: [],   // 身份证
+        //   bank: [],       // 银行卡
+        //   resume: [],      // 申请表
+        //   resignation: [],   //  上家单位离职证明
+        //   labor_contract: [],  // 劳动合同
+        //   education: [],  // 学历复印件
+        // }
         // this.isClear = true;
          this.$http.get(globalConfig.server + 'hrm/User/userInfo', {params: {user_id: this.editId}}).then(res => {
            if (res.data.code == 90010) {
@@ -1170,7 +1182,7 @@
       },
       sendPositive() {
         let content;
-        if (this.detailData && this.detailData.send_info == 1) {
+        if (this.detailData && !this.detailData.send_info == 1) {
           content = '您想要发送转正祝贺吗?';
         } else if (this.detailData && this.detailData.send_info == 2) {
           content = '该员工已发过转正祝贺，您想要重新发送转正祝贺吗?';
@@ -1196,7 +1208,7 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          console.log(this.params, "修改")
+          // console.log(this.params, "修改")
           // return false
           this.$http.put(globalConfig.server + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
@@ -1267,7 +1279,6 @@
       },
       // 确认选择
       selectMember(val) {
-        console.log(val, "11111")
         let organ = this.organDivision;
         if (organ === 'department_id') {
           this.resetOrg();

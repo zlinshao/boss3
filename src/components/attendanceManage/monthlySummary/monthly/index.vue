@@ -35,7 +35,7 @@
       <el-checkbox v-model="checked">离职员工(3个月以内)</el-checkbox>
     </div> -->
     <!-- 搜索 -->
-    <div class="search">
+    <div class="monthly_search">
       <span>搜索：</span>
       <el-input v-model="params.search" placeholder="请输入搜索内容" size="mini" @keydown.enter="refresh()"></el-input>
     </div>
@@ -679,12 +679,12 @@ export default {
   .resignation,
   .btn,
   .disclaimer,
-  .search {
+  .monthly_search {
     display: inline-block;
     vertical-align: top;
     margin-right: 10px;
   }
-  .search {
+  .monthly_search {
     padding-top: 0;
   }
   .selectTips {
@@ -706,7 +706,7 @@ export default {
   .nameInput .el-input {
     width: auto;
   }
-  .search .el-input {
+  .monthly_search .el-input {
     width: auto;
   }
   .resignation {

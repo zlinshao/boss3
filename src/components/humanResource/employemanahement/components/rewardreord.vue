@@ -1,6 +1,6 @@
 <template>
     <div id="rewardreord">
-      <el-dialog title="提示" :visible.sync="RewardDialogVisible" width="60%">
+      <el-dialog title="奖励记录" :visible.sync="RewardDialogVisible" width="60%">
         <div class="top">
           <el-form ref="form" :model="form" label-width="80px">
             <el-row>
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import UPLOAD from "../../common/UPLOAD.vue"
+import UPLOAD from "../../../common/UPLOAD.vue"
 export default {
   props: ["ids", "lookRewardLog", "names", "orgs", "roles", "times"],
   components: {UPLOAD},
@@ -216,7 +216,6 @@ export default {
     RewardDialogVisible(val) {
       if(!val) {
         this.$emit("close");
-        
         // this.isClear = true;
       }
     },
@@ -263,6 +262,10 @@ export default {
       this.loading = true;
       //  this.initParams();
       //  this.initEditParams();
+      this.rewardreForm.praiseNumber = "";
+      this.rewardreForm.criticismNumber = "";
+      this.rewardreForm.doubtNumber = "";
+      this.rewardreForm.otherNumber = "";
       this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {user_id: val}).then(res => {
         this.loading = false;
         if (res.data.code === "100100") {
@@ -343,21 +346,22 @@ export default {
     editRecord(val) {
       // this.initEditParams()
       // this.initParams();
+      // console.log(val, "11111")
       this.params[0].detail_id = val.detail_id;
       this.editParams.detail_id = val.detail_id;
       this.editParams.type = val.type;
       this.$http.post(globalConfig.server + 'credit/manage/getonerecorddetail', {detail_id:  val.detail_id}).then(res => {
         if (res.data.code === '10000') {
+          this.params[0].remarks[0].type = res.data.data.type;
+          this.params[0].remarks[0].remark = res.data.data.remark;
           if (res.data.data && res.data.data.images.length > 0) {
-            this.params[0].remarks[0].type = res.data.data.type;
-            this.params[0].remarks[0].remark = res.data.data.remark;
             let data = {};
             res.data.data.images.forEach((item) => {
               this.params[0].remarks[0].images.push(item.id);
               data[item.id] = item.url;
             });
             this.editImage = data;
-            console.log(this.editImage)
+            // console.log(this.editImage)
           }
         } else {
           this.$notify.warning({
