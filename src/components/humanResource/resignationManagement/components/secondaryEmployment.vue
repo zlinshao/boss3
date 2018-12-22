@@ -542,12 +542,12 @@
           this.getStaffInfo();
         }
       },
-      editor(val) {
-        console.log(val, "11111")
-        if(!val) {
-          this.params.status = "1";
-        }
-      },
+      // editor(val) {
+      //   console.log(val, "11111")
+      //   if(!val) {
+      //     this.params.status = "1";
+      //   }
+      // },
       editPositionIds(val) {
         for (let i = 0; i < this.editPositionIds.length; i++) {
           this.getPositions(this.editPositionIds[i]);
@@ -1088,7 +1088,6 @@
         this.resetOrg('position');
         if (val.length > 0) {
           for (let item of val) {
-            console.log(item)
             this.quarters(item);
           }
         }
@@ -1196,7 +1195,6 @@
         this.$http.get(this.url + 'setting/dictionary/234').then((res) => {
           if (res.data.code === '30010') {
             this.branchBankCategory = res.data.data;
-            console.log(this.branchBankCategory)
           } else {
             this.branchBankCategory = [];
           }

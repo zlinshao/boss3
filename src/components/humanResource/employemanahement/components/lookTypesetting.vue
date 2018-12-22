@@ -220,7 +220,7 @@ export default {
         }
         _arr.push(_week);
       }
-      console.log(_arr, "55555")
+      // console.log(_arr, "55555")
       let _this = this;
       // let settingArr = Object.values(this.arrangeList);
       let settingArr = [];
