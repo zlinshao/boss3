@@ -319,6 +319,9 @@
             handleCurrentChange(pagers){
                 this.params.page = pagers;
                 this.search();
+                this.$nextTick(() => {
+                    document.documentElement.scrollTop = 0;
+                })
             },
             //搜索
             search(){
