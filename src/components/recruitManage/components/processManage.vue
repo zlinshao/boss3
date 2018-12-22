@@ -28,13 +28,13 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="genders"
+                            prop="gender"
                             label="性别">
                             <template slot-scope="scope">
-                                <span v-if='is_editing_id !== scope.row.id && scope.row.genders'>
-                                    {{scope.row.genders.id == '716' ? '男' : '女'}}
+                                <span v-if='is_editing_id !== scope.row.id && scope.row.gender'>
+                                    {{scope.row.gender == '716' ? '男' : '女'}}
                                 </span>
-                                <span v-if='is_editing_id !== scope.row.id && !scope.row.genders'>/</span>
+                                <span v-if='is_editing_id !== scope.row.id && !scope.row.gender'>/</span>
                                 <el-select v-if='is_editing_id === scope.row.id' size='small' v-model="interviewParams.gender" placeholder="">
                                     <!-- <el-option v-for="(item, index) in genders" :key='index' :label='item.dictionary_name' :value='item.id'></el-option> -->
                                     <el-option label='男' value='716'></el-option>
@@ -121,7 +121,7 @@
                             prop="interview_status"
                             label="是否面试">
                             <template slot-scope="scope">
-                                <span v-if='is_editing_interview_status !== scope.row.id'>{{scope.row.interview_statuss.dictionary_name}}</span>
+                                <span v-if='is_editing_interview_status !== scope.row.id && scope.row.interview_statuss'>{{scope.row.interview_statuss.dictionary_name}}</span>
                                 <el-select 
                                     v-if='is_editing_interview_status === scope.row.id' 
                                     size='small' 
@@ -319,7 +319,7 @@
                             prop="entry_statuss"
                             label="入职结果">
                             <template slot-scope="scope">
-                                <span v-if='is_editing_entry_statuss !== scope.row.id'>{{scope.row.entry_statuss.dictionary_name}}</span>
+                                <span v-if='is_editing_entry_statuss !== scope.row.id && scope.row.entry_statuss'>{{scope.row.entry_statuss.dictionary_name}}</span>
                                 <el-select 
                                     v-if='is_editing_entry_statuss === scope.row.id' 
                                     size='small' 
