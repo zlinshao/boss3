@@ -17,6 +17,7 @@
                         element-loading-text="加载中"
                         element-loading-spinner="el-icon-loading"
                         @cell-click='cellClick1'
+                        :cell-style='setFont'
                         style="width: 100%">
                         <el-table-column
                             prop="name"
@@ -100,8 +101,7 @@
                         <el-table-column
                             prop="album"
                             label="原始简历"
-                            width='80px'
-                            class-name='font-color'>
+                            width='80px'>
                             <template slot-scope="scope">
                                 <span v-if='scope.row.album.length'>查看</span>
                                 <span v-if='!scope.row.album.length'>上传</span>
@@ -120,8 +120,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="interview_status"
-                            label="是否面试"
-                            class-name='font-color'>
+                            label="是否面试">
                             <template slot-scope="scope">
                                 <span v-if='is_editing_interview_status !== scope.row.id'>{{scope.row.interview_statuss.dictionary_name}}</span>
                                 <el-select 
@@ -146,6 +145,7 @@
                         element-loading-text="加载中"
                         element-loading-spinner="el-icon-loading"
                         @cell-click='cellClick2'
+                        :cell-style='setFont'
                         style="width: 100%">
                         <el-table-column
                             prop="name"
@@ -157,8 +157,7 @@
                         <el-table-column
                             prop="album"
                             label="原始简历"
-                            width='80px'
-                            class-name='font-color'>
+                            width='80px'>
                             <template slot-scope="scope">
                                 <span v-if="scope.row.album.length">查看</span>
                                 <span v-if="!scope.row.album.length">/</span>
@@ -213,8 +212,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="interview_statuss"
-                            label="面试结果"
-                            class-name='font-color'>
+                            label="面试结果">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.interview_statuss && is_editing_interview_finished !== scope.row.id'>{{scope.row.interview_statuss.dictionary_name}}</span>
                                 <el-select 
@@ -229,8 +227,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="entry_statuss"
-                            label="人资沟通"
-                            class-name='font-color'>
+                            label="人资沟通">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.entry_statuss && scope.row.interview_status === 739'>{{scope.row.entry_statuss.dictionary_name}}</span>
                                 <!-- <el-select 
@@ -252,6 +249,7 @@
                         element-loading-text="加载中"
                         element-loading-spinner="el-icon-loading"
                         @cell-click='cellClick3'
+                        :cell-style='setFont'
                         style="width: 100%">
                         <el-table-column
                             prop="name"
@@ -262,8 +260,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="album"
-                            label="原始简历"
-                            class-name='font-color'>
+                            label="原始简历">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.album.length'>查看</span>
                                 <span v-if='!scope.row.album.length'>/</span>
@@ -279,8 +276,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="entry_other"
-                            label="入职条件"
-                            class-name='font-color'>
+                            label="入职条件">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.entry_other'>查看</span>
                                 <span v-if='!scope.row.interviewers'>/</span>
@@ -298,8 +294,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="background_check"
-                            label="背景调查"
-                            class-name='font-color'>
+                            label="背景调查">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.background_check'>查看</span>
                                 <span v-if='!scope.row.background_check'>添加</span>
@@ -307,8 +302,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="image_info"
-                            label="入职材料"
-                            class-name='font-color'>
+                            label="入职材料">
                             <template slot-scope="scope">
                                 <span v-if='!scope.row.image_info || scope.row.image_info.length === 0'>添加</span>
                                 <span v-else>查看</span>
@@ -316,8 +310,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="basic_info"
-                            label="基本信息"
-                            class-name='font-color'>
+                            label="基本信息">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.basic_info'>查看</span>
                                 <span v-if='!scope.row.basic_info'>添加</span>
@@ -325,8 +318,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="entry_statuss"
-                            label="入职结果"
-                            class-name='font-color'>
+                            label="入职结果">
                             <template slot-scope="scope">
                                 <span v-if='is_editing_entry_statuss !== scope.row.id'>{{scope.row.entry_statuss.dictionary_name}}</span>
                                 <el-select 
@@ -348,6 +340,7 @@
                         element-loading-text="加载中"
                         element-loading-spinner="el-icon-loading"
                         @cell-click='cellClick3'
+                        :cell-style='setFont'
                         style="width: 100%">
                         <el-table-column
                             prop="name"
@@ -358,8 +351,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="album"
-                            label="原始简历"
-                            class-name='font-color'>
+                            label="原始简历">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.album.length'>查看</span>
                                 <span v-if='!scope.row.album.length'>/</span>
@@ -383,8 +375,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="entry_other"
-                            label="入职条件"
-                            class-name='font-color'>
+                            label="入职条件">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.entry_other'>查看</span>
                                 <span v-if='!scope.row.interviewers'>/</span>
@@ -402,8 +393,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="background_check"
-                            label="背景调查"
-                            class-name='font-color'>
+                            label="背景调查">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.background_check'>查看</span>
                                 <span v-if='!scope.row.background_check'>添加</span>
@@ -411,8 +401,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="image_info"
-                            label="入职材料"
-                            class-name='font-color'>
+                            label="入职材料">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.image_info'>查看</span>
                                 <span v-if='!scope.row.image_info'>添加</span>
@@ -420,8 +409,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="basic_info"
-                            label="基本信息"
-                            class-name='font-color'>
+                            label="基本信息">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.basic_info'>查看</span>
                                 <span v-if='!scope.row.basic_info'>添加</span>
@@ -1905,6 +1893,13 @@
                 }
                 return targetObj;
             },
+            //设置列颜色
+            setFont({row, column, rowIndex, columnIndex}){
+                let columnList = ['album', 'edit', 'interview_status', 'interview_statuss', 'entry_statuss', 'entry_other', 'background_check', 'image_info', 'basic_info']
+                if(columnList.includes(column.property)){
+                    return "color: rgba(63, 81, 181, 1)"
+                }
+            }
         }
     }
 </script>
