@@ -194,8 +194,8 @@
                       </el-select>
                       <div style="color: #409EFF;font-size: 12px;text-align: right;"
                            v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
-                        <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
-                        <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
+                        <span v-if="detailData.send_info && detailData.send_info.forward_group">已发过转正祝贺</span>
+                        <span v-if="detailData.send_info && !detailData.send_info.forward_group">未发过转正祝贺 </span>
                         <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
                       </div>
                     </el-form-item>
@@ -363,7 +363,7 @@
     <Organization :organizationDialog="organizationDialog" :type="organizeType" :length="lengths"
                   @close="closeOrgan" @selectMember="selectMember"></Organization>
     <!-- 离职弹窗 -->
-    <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="selectLeaveDateDialog" width="30%">
+    <el-dialog :close-on-click-modal="false" title="离职时间" :visible.sync="selectLeaveDateDialog" width="30%">
       <el-form ref="form" :model="form" onsubmit="return false;" label-width="100px" style="padding: 0 20px;">
         <el-form-item label="离职时间">
           <el-date-picker v-model="form.dismiss_time" type="date" placeholder="请选择离职日期" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
@@ -573,14 +573,14 @@
           });
           this.isClear = true;
           this.disabledBtn = false;
-          this.params.image_info = {
-            doc_photo: [],
-            bank: [],
-            contract: [],
-            education: [],
-            apply: [],
-            dismiss: []
-          }
+          // this.params.image_info = {
+          //   doc_photo: [],
+          //   bank: [],
+          //   contract: [],
+          //   education: [],
+          //   apply: [],
+          //   dismiss: []
+          // }
           this.emptyDepart("department_id");
           this.emptyDepart("recommender");
         } else {
@@ -618,6 +618,13 @@
           this.editId = '';
         }
       },
+      selectLeaveDateDialog(val) {
+        if(!val) {
+          this.form.dismiss_time = "";
+          this.form.dismiss_reason.dismiss_type = "";
+          this.form.dismiss_reason.dismiss_mess = "";
+        }
+      }
     },
     mounted() {
       this.getDictionaries();
@@ -661,14 +668,20 @@
         this.getOnJobStatus();
       },
       initial() {
-        this.params.image_info = {
-          doc_photo: [],
-          bank: [],
-          contract: [],
-          education: [],
-          apply: [],
-          dismiss: []
-        }
+        this.params.image_info.doc_photo = [];
+        this.params.image_info.bank = [];
+        this.params.image_info.contract = [];
+        this.params.image_info.education = [];
+        this.params.image_info.resume = [];
+        this.params.image_info.dismiss = [];
+        this.params.image_info.resignation = [];
+        this.params.image_info.labor_contract = [];
+         this.editIDCopy = {};
+         this.editBank = {};
+         this.editContract = {};
+         this.editEducation = {};
+         this.editResume = {};
+         this.editResignation = {};
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
@@ -748,7 +761,6 @@
       // },
       // 选择离职 
       whetherToLeave(val) {
-        console.log(val)
         if(val == "2") {
           this.$confirm("确定将该员工的在职状态改为离职吗？", "提示", {
             confirmButtonText: "确定",
@@ -1170,9 +1182,9 @@
       },
       sendPositive() {
         let content;
-        if (this.detailData && this.detailData.send_info == 1) {
+        if (this.detailData.send_info && !this.detailData.send_info.forward_group) {
           content = '您想要发送转正祝贺吗?';
-        } else if (this.detailData && this.detailData.send_info == 2) {
+        } else if (this.detailData.send_info && this.detailData.send_info.forward_group) {
           content = '该员工已发过转正祝贺，您想要重新发送转正祝贺吗?';
         }
         this.$confirm(content, '确认信息', {
@@ -1184,7 +1196,7 @@
           this.$http.get(globalConfig.server + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
             if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
-              this.detailData.send_info = 2;
+              this.detailData.send_info.forward_group = 1;
             } else {
               this.prompt('warning', res.data.msg);
             }
@@ -1196,7 +1208,7 @@
         this.disabledBtn = true;
         if (this.isEdit) {
           //修改
-          console.log(this.params, "修改")
+          // console.log(this.params, "修改")
           // return false
           this.$http.put(globalConfig.server + 'organization/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '71002') {
@@ -1267,7 +1279,6 @@
       },
       // 确认选择
       selectMember(val) {
-        console.log(val, "11111")
         let organ = this.organDivision;
         if (organ === 'department_id') {
           this.resetOrg();
