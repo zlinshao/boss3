@@ -13,8 +13,8 @@
                             
                             <div class='platform-href'>
                                 <span>岗位链接</span>
-                                <div>
-                                    <span v-if="editing_platform_val !== value">{{value}}</span>
+                                <div class='wrap'>
+                                    <span class='platform-location' @click='turnto(value)' v-if="editing_platform_val !== value">{{value}}</span>
                                     <el-input size='mini' v-model="platform_host" v-if="is_editing && editing_platform_val === value" class='input-host'></el-input>
                                 </div>
                                 <i @click="cancelEdit" v-if="is_editing && editing_platform_val === value" class='el-icon-circle-close'></i>
@@ -151,6 +151,11 @@ export default {
                 }
             }
         },
+        //跳转
+        turnto(item){
+            // console.log(item);
+            window.open(item)
+        },
         //取消新加
         cancelAddPlatform(){
             this.is_adding = false;
@@ -261,11 +266,15 @@ export default {
         font-size: 14px;
         line-height: 30px;
         width: 350px;
+        height: 30px;
         display: flex;
         justify-content: space-between;
     }
     .platform-href i{
         line-height: 30px;
+    }
+    .wrap{
+        height: 30px;
     }
     .input-name{
         width: 160px !important;
@@ -273,5 +282,17 @@ export default {
     .imput-host{
         width: 160px !important;
     }
+    .el-icon-edit,.el-icon-circle-close, .el-icon-circle-check, .el-icon-delete, .platform-location{
+        cursor: pointer;
+    }
+    .platform-location{
+        width: 200px;
+        display: inline-block;
+        height: 30px;
+        max-width: 200px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        }
 </style>
 

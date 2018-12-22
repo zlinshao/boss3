@@ -1782,13 +1782,6 @@
                 this.is_editing_fail_result = false;
                 this.failEntryObj = Object.assign({}, this.failEntryObj_clone)
             },
-
-
-
-
-
-
-
             /*********************** 公共***********************************/
             //选择成员
             selectMember(val){
