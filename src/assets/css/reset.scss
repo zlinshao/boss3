@@ -258,6 +258,7 @@
 //高级搜索
 .highRanking {
   position: relative;
+  z-index: 1;
   .highSearch {
     display: flex;
     justify-content: flex-end;
