@@ -24,8 +24,8 @@ const HousesManage = () => import  ('../components/rentManage/housesManage/index
 const RepairManage = () => import  ('../components/rentManage/repairManage/index.vue');        //维修管理
 const ClientManage = () => import  ('../components/rentManage/datumMessage/clientManage/index.vue');         //客户管理
 const ContractManage = () => import  ('../components/rentManage/datumMessage/contractManage/index.vue');     //合同管理
-// const WorkOrderManage = () => import  ('../components/rentManage/datumMessage/workOrderManage/index.vue');   //工单管理
-// const RetreatManage = () => import  ('../components/rentManage/datumMessage/retreatManage/index.vue'); //退租管理
+const WorkOrderManage = () => import  ('../components/rentManage/datumMessage/workOrderManage/index.vue');   //工单管理
+const RetreatManage = () => import  ('../components/rentManage/datumMessage/retreatManage/index.vue'); //退租管理
 
 // 财务账本
 // const Foundation =()=> import  ('../components/finance/foundation/index');                                //基础管理
@@ -560,8 +560,8 @@ export default new Router({
         {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
         // {path: '/achievement', component: Achievement, name: '业绩工资'},
-        { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
-        { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
+        // { path: '/Employemanagement', component: Employemanagement, name: '员工管理'},
+        // { path: '/ResignationManagement', component: ResignationManagement, name: '离职管理'},
       ]
     },
     //write by shuisheng 2018-10-24
