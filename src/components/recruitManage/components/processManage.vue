@@ -87,7 +87,7 @@
                   v-model="interviewParams.interview_time"
                   type="datetime"
                   size='small'
-                  value-format='yyyy-MM-dd'
+                  value-format='yyyy-MM-dd-HH-mm-ss'
                   placeholder="选择日期"
                   default-time="12:00:00">
                 </el-date-picker>
@@ -1168,7 +1168,7 @@
           this.interviewParams.gender = row.gender + '';
           this.interviewParams.education = row.education;
           this.interviewParams.experience = row.experience;
-          this.interviewParams.interview_time = row.interview_time;
+        //   this.interviewParams.interview_time = row.interview_time;
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
@@ -1193,7 +1193,7 @@
           this.interviewParams.gender = row.gender;
           this.interviewParams.education = row.education;
           this.interviewParams.experience = row.experience;
-          this.interviewParams.interview_time = row.interview_time;
+        //   this.interviewParams.interview_time = row.interview_time;
           this.interviewParams.resume_source = row.resume_source;
         }
         //未面试
