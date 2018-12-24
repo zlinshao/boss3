@@ -1641,6 +1641,11 @@
             if (this.updateParams_finished.update.interview_status === 739) {
               this.confirmUndateFromUnpass()
             } else {
+              this.$notify({
+                  title: '成功',
+                  message: res.data.msg,
+                  type: 'success'
+              })
               this.getAllData(this.id)
             }
 
