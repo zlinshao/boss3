@@ -500,7 +500,7 @@
       <!--原始简历开始-->
       <el-dialog :visible.sync="lookUpResumeDialog" append-to-body>
         <div v-for='(item, index) in album' :key='index'>
-          <embed class='embed' :src="item.uri"/>
+          <embed id='embed-process' :src="item.uri"/>
         </div>
       </el-dialog>
       <!--原始简历结束-->
@@ -1165,13 +1165,19 @@
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
-          // row.album.forEach(item => {
-          //     if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)$/i.test(item.uri)){
-          //         this.lookUpResumeDialog = true;
-          //     }
-          // })
-          this.lookUpResumeDialog = true;
-          this.album = row.album;
+            console.log('0000')
+            this.lookUpResumeDialog = true;
+            this.album = row.album;
+            row.album.forEach(item => {
+                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                    console.log(123)
+                    this.lookUpResumeDialog = true;
+                }else{
+                    setTimeout(() => {
+                        this.lookUpResumeDialog = false;
+                    }, 1000)
+                }
+            })
         }
         if (column.property === 'album' && !row.album.length) {
           this.uploadResumeDialog = true;
@@ -1482,13 +1488,18 @@
             this.disAgreeInductParams.update.entry_result = row.entry_result
           }
         } else if (column.property === 'album' && row.album.length) {
-          // row.album.forEach(item => {
-          //     if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)$/i.test(item.uri)){
-          //         this.lookUpResumeDialog = true;
-          //     }
-          // })
           this.lookUpResumeDialog = true;
           this.album = row.album;
+          row.album.forEach(item => {
+                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                    console.log(123)
+                    this.lookUpResumeDialog = true;
+                }else{
+                    setTimeout(() => {
+                        this.lookUpResumeDialog = false;
+                    }, 1000)
+                }
+            })
         }
       },
       //确定是否入职
@@ -1697,7 +1708,17 @@
         // console.log(row, column)
         if (column.property === 'album' && row.album.length) {
           this.lookUpResumeDialog = true;
-          this.album = row.album
+          this.album = row.album;
+          row.album.forEach(item => {
+                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                    console.log(123)
+                    this.lookUpResumeDialog = true;
+                }else{
+                    setTimeout(() => {
+                        this.lookUpResumeDialog = false;
+                    }, 1000)
+                }
+            })
         }
         if (column.property === 'entry_statuss') {
           this.is_editing_entry_statuss_id = row.id;
@@ -2003,8 +2024,9 @@
       text-align: right;
     }
   }
-    .embed {
+    #embed-process {
       max-width: 100% !important;
+      text-align: center;
     }
 
 </style>
