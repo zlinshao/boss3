@@ -87,8 +87,9 @@
                   v-model="interviewParams.interview_time"
                   type="datetime"
                   size='small'
-                  value-format='yyyy-MM-dd-HH-mm-ss'
-                  placeholder="选择日期">
+                  value-format='yyyy-MM-dd'
+                  placeholder="选择日期"
+                  default-time="12:00:00">
                 </el-date-picker>
               </template>
             </el-table-column>
@@ -523,14 +524,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="原因">
-            <span v-if='!is_editResult'>{{uninterviewObj.interview_result}}</span>
-            <el-input v-if='is_editResult' type="textarea" v-model="uninterviewObj.interview_result"></el-input>
+            <span v-if='!is_editResult && !first_edit'>{{uninterviewObj.interview_result}}</span>
+            <el-input v-if='is_editResult || first_edit' type="textarea" v-model="uninterviewObj.interview_result"></el-input>
           </el-form-item>
         </el-form>
         <div class='edit-result'>
           <el-button size='mini' @click='cancelEditResult'>取消</el-button>
           <el-button size='mini' @click='confirmEditResult'>确定</el-button>
-          <el-button size='mini' @click='editResult' v-if='!is_editResult'>修改</el-button>
+          <el-button size='mini' @click='editResult' v-if='!is_editResult && !first_edit'>修改</el-button>
         </div>
       </el-dialog>
       <!--未面试结束-->
@@ -813,6 +814,7 @@
                     expect: '',
                     actual: '',
                 },
+                first_edit: false,
                 /**面试完毕*/
                 passInterviewDialog: false,
                 unpassInterviewDialog: false,
@@ -956,7 +958,13 @@
                 }
             },
             uninterviewDialog(val){
-                this.is_editResult = '';
+                
+                if(!val){
+                    this.first_edit = false;
+                    this.is_editResult = '';
+                    this.is_editing_interview_status = '';
+                }
+                
             },
             IsEntryDialog(val){
                 if(val){
@@ -1252,7 +1260,14 @@
         } else if (this.updateParams.update.interview_status === 735) {
           this.is_editing_interview_status = '';
         } else {
-          this.confirmUpdateStatus();
+        //   this.confirmUpdateStatus();
+            this.uninterviewDialog = true;
+            this.uninterviewObj.id = item.id;
+            this.uninterviewObj.gender = item.gender;
+            this.uninterviewObj.name = item.name;
+            this.uninterviewObj.interview_status = '未面试';
+            this.uninterviewObj.interview_result = '';
+            this.first_edit = true;
         }
       },
       //修改面试状态
@@ -1326,14 +1341,19 @@
           }
         }).then(res => {
           if (res.data.code === '20030') {
-            this.$notify({
-              title: '成功',
-              message: res.data.msg,
-              type: 'success'
-            });
-            this.is_editResult = false;
-            this.uninterviewDialog = false;
-            this.getAllData(this.id)
+            if(this.first_edit){
+                this.confirmUpdateStatus();
+            }else{
+                this.$notify({
+                    title: '成功',
+                    message: res.data.msg,
+                    type: 'success'
+                });
+                this.is_editResult = false;
+                this.uninterviewDialog = false;
+                this.getAllData(this.id)
+            }
+            
           } else {
             this.$notify({
               title: '警告',
