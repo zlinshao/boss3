@@ -2002,10 +2002,10 @@
       padding-right: 50px;
       text-align: right;
     }
-    .embed {
-      max-width: 100%;
-    }
   }
+    .embed {
+      max-width: 100% !important;
+    }
 
 </style>
 
