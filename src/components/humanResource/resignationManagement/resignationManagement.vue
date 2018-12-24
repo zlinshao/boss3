@@ -60,8 +60,10 @@
           <el-table-column prop="dismiss_type" label="离职类型" ></el-table-column>
           <el-table-column label="离职交接单" >
             <template slot-scope="scope">
-              <el-button type="text" @click="addUploadFiles('1', scope.row)" v-if="!scope.row.resignation_form">添 加</el-button>
-              <el-button type="text" @click="lookDeparture(scope.row)" v-else>查 看</el-button>
+              <el-button type="text" @click="addUploadFiles('1', scope.row)">编 辑</el-button>
+              <!-- <el-button type="text" @click="addUploadFiles('1', scope.row)" v-if="!scope.row.resignation_form">添 加</el-button>
+              <el-button type="text" @click="lookDeparture(scope.row)" v-else>查 看</el-button> -->
+              <!-- <el-button type="text" @click="editDeparture(scope.row)" >修 改</el-button> -->
             </template>
           </el-table-column>
           <el-table-column label="合同" >
@@ -84,7 +86,7 @@
             <el-input v-model="dismiss_mess" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="上传离职图片">
-            <UpLoad :ID="'files'" :isClear="isClear"  @getImg="upLoadFiles"></UpLoad>
+            <UpLoad :ID="'files'" :isClear="isClear" :editImage="editImage"  @getImg="upLoadFiles"></UpLoad>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -93,16 +95,15 @@
         </span>
       </el-dialog>
       <!-- 查看离职交接表 -->
-      <el-dialog title="查看离职交接表" :visible.sync="viewResignationFrom" width="30%">
+      <!-- <el-dialog title="查看离职交接表" :visible.sync="viewResignationFrom" width="30%">
         <div style="margin-top: 10px;" v-if="imagesResignationList && imagesResignationList.length>0" class="lookImg">
           <img v-for="(img, index) in imagesResignationList" :src="img" :key="index" data-magnify="" :data-src="img" style="width: 30%;height: 100px; margin-left: 10px;"> 
-          <!-- <a v-for="img in imagesResignationList" :key="img.id" :href="img.uri"></a> -->
         </div>
         <div v-else>暂无数据</div>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="viewResignationFrom = false" size="mini">确 定</el-button>
         </span>
-      </el-dialog>
+      </el-dialog> -->
       <!-- 查看合同 -->
       <el-dialog title="查看合同" :visible.sync="viewContract" width="30%">
         <div style="margin-top: 10px;" v-if="imagesList && imagesList.length>0" class="lookImg">
@@ -138,6 +139,7 @@ export default {
   components: {Organization, UpLoad, RetiredEmployeeDetails, RightMenu, SecondaryEmployment},
   data() {
     return {
+      editImage: {},
       emptyText: " ",
       Loading: false,
       isEdit: false,   // 编辑
@@ -158,7 +160,7 @@ export default {
       dismiss_mess: "",
       dismiss_type: "",
       form: {
-        resignation_form: 1,
+        resignation_form: [],
         user_id: "",
         dismiss_time: "",
         dismiss_reason: "",
@@ -191,18 +193,18 @@ export default {
     this.getResignationEmploye();
   },
   watch: {
+    isClear: function (val) {
+      this.isClear = val;
+    },
     upLoadDialogVisible(val) {
       if(!val) {
-        this.isClear = true;
+        this.isClear = !this.isClear;
         this.dismiss_mess = "";
         this.dismiss_type = "";
-        this.form = {
-          resignation_form: [],
-          user_id: "",
-          dismiss_time: "",
-          dismiss_reason: "",
-        }
       }
+    },
+    editImage: function (val) {
+      this.editImage = val;
     },
     viewResignationFrom(val) {
       if(!val) {
@@ -288,12 +290,27 @@ export default {
       this.lookResigntion = false;
       this.getResignationEmploye();
     },
+    // 上传文件
+    upLoadFiles(val) {
+      // console.log(val, "44444")
+      this.form.resignation_form = val[1];
+      // console.log(this.form.resignation_form, "55555")
+    },
     addUploadFiles(val, row) {
       // console.log(row, "666666")
       this.form.user_id = row.id;
       let dismiss_reason = row.staffs.dismiss_reason;
       this.form.dismiss_reason = row.staffs.dismiss_reason;
-      this.form.dismiss_time = row.staffs.dismiss_time
+      this.form.dismiss_time = row.staffs.dismiss_time;
+      let obj  = {};
+      if(row.resignation_form) {
+        row.resignation_form.forEach((item, index) => {
+          this.form.resignation_form.push(item.id)
+          obj[item.id] = item.uri;
+        })
+        this.editImage = obj;
+      }
+      // console.log(this.editImage, "7777")
       for (let key in dismiss_reason) {
         if(key == "dismiss_mess") {
           this.dismiss_mess = row.dismiss_mess;
@@ -318,6 +335,15 @@ export default {
       }
       this.upLoadDialogVisible = true;
     },
+    // 修改图片
+    // editDeparture(row) {
+    //   console.log(row)
+    //   row.resignation_form.forEach((item ,index) => {
+    //     let obj = {};
+    //     obj[item.id] = item.uri;
+    //   })
+    //   this.upLoadDialogVisible = true;
+    // },
     // 添加离职表格
     addResigntionTable() {
       this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.form.user_id, {
@@ -331,7 +357,7 @@ export default {
             message: res.data.msg
           })
           this.getResignationEmploye();
-          this.isClear = true;
+          // this.isClear = true;
           this.upLoadDialogVisible = false;
         } else {
           this.$notify.warning({
@@ -341,10 +367,7 @@ export default {
         }
       })
     },
-    // 上传文件
-    upLoadFiles(val) {
-      this.form.resignation_form = val[1];
-    },
+    
     // 查看离职表
     lookDeparture(row) {
     // window.open(row.resignation_form)

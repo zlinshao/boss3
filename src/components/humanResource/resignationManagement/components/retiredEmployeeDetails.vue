@@ -616,6 +616,11 @@ export default {
     //员工详情
     openDetail(id) {
       // this.staffDetail = true;
+      this.ContractimgList = [];
+      this.EducationimgList  = [];
+      this.DismissimgList = [];
+      this.ApplyimgList = [];
+      this.IDimgList = [];
       this.$http.get(globalConfig.server + 'organization/staff/' + id).then((res) => {
         this.getDuty(res.data.data.id, true);
         if (res.data.data.detail.recommender) {
