@@ -43,9 +43,9 @@
                     <el-button size='mini' @click='confirmEditingBg'>确定</el-button> -->
                 </div>
                 <div class='edit-result'>
-                    <el-button size='mini' @click='cancelBgReseach'>取消</el-button>
-                    <el-button size='mini' @click='confirmBgReseach'>确定</el-button>
-                    <el-button size='mini' @click='editBgreseach' v-if='!is_editing_bg'>修改</el-button>
+                    <el-button size='mini' @click='cancelBgReseach' v-if='allow_edit'>取消</el-button>
+                    <el-button size='mini' @click='confirmBgReseach' v-if='allow_edit'>确定</el-button>
+                    <el-button size='mini' @click='editBgreseach' v-if='!is_editing_bg && allow_edit'>修改</el-button>
                 </div>
             </el-form>
         </el-dialog>
@@ -58,6 +58,7 @@
         data(){
             return{
                 backgroundDialogVisible: false,
+                allow_edit: true,
                 is_editing_bg: false,
                 backgroundRadio: {
                     update: {
@@ -83,6 +84,13 @@
             backgroundDialogVisible(val){
                 if(!val){
                     this.$emit('close')
+                }else{
+                    console.log(this.$store.state.platform.active_name);
+                    if(this.$store.state.platform.active_name == 'fourth'){
+                        this.allow_edit = false;
+                    }else{
+                        this.allow_edit = true;
+                    }
                 }
                 if(this.is_editing_bg_){
                     this.is_editing_bg = true;

@@ -432,7 +432,7 @@
                       <el-select v-model="params.entry_way.entry_type" clearable>
                         <!--multiple-->
                         <el-option v-for="item in entryWayCategory" :value="item.id" :key="item.id"
-                                   :label="item.dictionary_name">{{item.dictionary_name}}
+                                   :label="item.name">{{item.name}}
                         </el-option>
                       </el-select>
                     </el-form-item>
@@ -581,9 +581,10 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addStaffDialogVisible = false;is_add = false" :disabled="disabledBtn">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn">确 定</el-button>
-        <el-button size="small" type="primary" @click="editInfo" v-if='!is_add' :disabled="disabledBtn">修 改</el-button>
+        <el-button size="small" @click="addStaffDialogVisible = false;is_add = false" :disabled="disabledBtn" v-if='allow_edit'>取 消</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd" :disabled="disabledBtn" v-if='allow_edit'>确 定</el-button>
+        <el-button size="small" type="primary" @click="addStaffDialogVisible = false;is_add = false" v-if='!allow_edit'>确定</el-button>
+        <el-button size="small" type="primary" @click="editInfo" v-if='!is_add && allow_edit' :disabled="disabledBtn">修 改</el-button>
       </span>
     </el-dialog>
 
@@ -604,10 +605,12 @@
         disabledBtn: false,
         addStaffDialogVisible: false,
         activeName: 'first',
+        allow_edit: true,
         currentPosition: [],
         positionDisabled: true,
         postDisabled: true,
         detailData: {},
+        show_btn: false,
         params: {
           duty_id: [],
           position_id: [],
@@ -674,17 +677,17 @@
         jobStatusCategory: [],
         editPositionIds: [],
         entryWayCategory: [
-          // {id: "1", name: '智联招聘'},
-          // {id: "2", name: '前程无忧'},
-          // {id: "3", name: '58同城'},
-          // {id: "4", name: 'BOSS直聘'},
-          // {id: "5", name: '猎聘网'},
-          // {id: "6", name: '首席信才'},
-          // {id: "7", name: '德盛人才'},
-          // {id: "8", name: '校园招聘会'},
-          // {id: "9", name: '社会招聘会'},
-          // {id: "10", name: '推荐'},
-          // {id: "11", name: '其他'},
+          {id: "1", name: '智联招聘'},
+          {id: "2", name: '前程无忧'},
+          {id: "3", name: '58同城'},
+          {id: "4", name: 'BOSS直聘'},
+          {id: "5", name: '猎聘网'},
+          {id: "6", name: '首席信才'},
+          {id: "7", name: '德盛人才'},
+          {id: "8", name: '校园招聘会'},
+          {id: "9", name: '社会招聘会'},
+          {id: "10", name: '推荐'},
+          {id: "11", name: '其他'},
         ],
         dismissReasonCategory: [
           {id: "1", name: '主动离职'},
@@ -707,6 +710,7 @@
       },
       addStaffDialogVisible(val) {
         if (!val) {
+          
           this.initial(); //关闭弹框时清除
           this.$emit('close');
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
@@ -717,6 +721,11 @@
           this.params.position_id = [];
         } else {
           this.editPositionIds = [];
+          if(this.$store.state.platform.active_name === "fourth"){
+            this.allow_edit = false;
+          }else{
+            this.allow_edit = true;
+          }
           // this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
         }
       },
@@ -777,6 +786,7 @@
       },
       isAdd(val){
         this.is_add = val;
+        this.show_btn = true;
         if(val === true){
           this.prefill();
         }else if(val === false){
@@ -800,7 +810,7 @@
         this.getEducation();
         this.getBranchBank();
         this.getOnJobStatus();
-        this.getEntryWay();
+        // this.getEntryWay();
       },
       initial() {
         this.params.entry_way = {

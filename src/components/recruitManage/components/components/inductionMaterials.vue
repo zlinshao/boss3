@@ -6,56 +6,80 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="面试表">
-                                <UPLOAD :ID="'resume'" :isClear="isClear" :editImage="resume" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'resume'" :isClear="isClear" :editImage="resume" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in resume' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="保密协议">
-                                <UPLOAD :ID="'con_agree'" :isClear="isClear" :editImage="con_agree" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'con_agree'" :isClear="isClear" :editImage="con_agree" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in con_agree' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="证件照">
-                                <UPLOAD :ID="'doc_photo'" :isClear="isClear" :editImage="doc_photo" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'doc_photo'" :isClear="isClear" :editImage="doc_photo" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in doc_photo' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="学历复印件">
-                                <UPLOAD :ID="'education'" :isClear="isClear" :editImage="education" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'education'" :isClear="isClear" :editImage="education" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in education' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="承诺书">
-                                <UPLOAD :ID="'commitment'" :isClear="isClear" :editImage="commitment" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'commitment'" :isClear="isClear" :editImage="commitment" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in commitment' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="上家公司离职证明">
-                                <UPLOAD :ID="'resignation'" :isClear="isClear" :editImage="resignation" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'resignation'" :isClear="isClear" :editImage="resignation" @getImg="getImgData"></UPLOAD>
+                                 <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in resignation' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="劳动合同">
-                                <UPLOAD :ID="'labor_contract'" :isClear="isClear" :editImage="labor_contract" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'labor_contract'" :isClear="isClear" :editImage="labor_contract" @getImg="getImgData"></UPLOAD>
+                                 <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in labor_contract' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="银行卡">
-                                <UPLOAD :ID="'bank'" :isClear="isClear" :editImage="bank" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'bank'" :isClear="isClear" :editImage="bank" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in bank' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -63,7 +87,8 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="inductionMaterialsDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmAdd">确 定</el-button>
+                <el-button type="primary" @click="confirmAdd" v-if='allow_edit'>确 定</el-button>
+                <el-button type="primary" @click="inductionMaterialsDialogVisible = false" v-if='!allow_edit'>确定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -99,7 +124,8 @@
                 commitment: {},
                 resignation: {},
                 labor_contract: {},
-                bank: {}
+                bank: {},
+                allow_edit: true,
 
             }
         },
@@ -116,6 +142,10 @@
                 if(!val){
                     this.init();
                     this.$emit('close');
+                    $('.imgItem').remove();
+                        setTimeout(() => {
+                            this.isClear = false;
+                    });
                 }else{
                     this.isClear = true;
                     this.params.update.image_info.resume = [];
@@ -126,10 +156,17 @@
                     this.params.update.image_info.resignation = [];
                     this.params.update.image_info.labor_contract = [];
                     this.params.update.image_info.bank = [];
-                    $('.imgItem').remove();
-                        setTimeout(() => {
-                            this.isClear = false;
-                    }, 300);
+                    
+                    console.log(this.$store.state.platform.active_name);
+                    if(this.$store.state.platform.active_name === 'fourth'){
+                        this.allow_edit = false;
+                        // this.$nextTick(() => {
+                        //     // $('.pickfiles').hide();
+                        //     // $('.remove').hide()
+                        // })
+                    }else{
+                        this.allow_edit = true;
+                    }
                 }
             }
         },
@@ -273,5 +310,8 @@
     }
 </script>
 <style lang="scss" scoped>
-
+    .img{
+        width: 120px;
+        height: 120px;
+    }
 </style>

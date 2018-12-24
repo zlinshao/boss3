@@ -643,9 +643,9 @@
                     </div>
                 </el-form>
                 <div class='edit-result' >
-                    <el-button size='mini' @click='cancelIsEntry'>取消</el-button>
-                    <el-button size='mini' @click='confirmIsEntry'>确定</el-button>
-                    <el-button size='mini' @click='editIsEntry' v-if='communicate_status === 742 && !is_editing_condition'>修改</el-button>
+                    <el-button size='mini' @click='cancelIsEntry' v-if='allow_edit'>取消</el-button>
+                    <el-button size='mini' @click='confirmIsEntry' v-if='allow_edit'>确定</el-button>
+                    <el-button size='mini' @click='editIsEntry' v-if='communicate_status === 742 && !is_editing_condition && allow_edit'>修改</el-button>
                 </div>
             </el-dialog>
             <!--人资沟通弹框结束-->
@@ -847,6 +847,7 @@
                 backgroundDialog: false,
                 addStaffDialog: false,
                 basicDetailDialog: false,
+                allow_edit: true,
                 background_id:'',
                 induction_id: '',
                 basicInfo_id:'',
@@ -935,6 +936,12 @@
             IsEntryDialog(val){
                 if(val){
                     // this.editIsEntry();
+                    console.log(this.$store.state.platform.active_name)
+                    if(this.$store.state.platform.active_name === 'fourth'){
+                        this.allow_edit = false;
+                    }else{
+                        this.allow_edit = true;
+                    }
                 }else{
                     // this.cancelEditCondition();
                     this.cancelIsEntry();
@@ -973,12 +980,15 @@
             this.getDictionary()
         },
         methods: {
-            handleClick(){
+            handleClick(item){
+                // console.log(item.name)
+                this.$store.dispatch('setActiveName', item.name)
+                // this.$store.dispatch('toEdit',item)
                 // console.log(this.activeName);
                 this.params.search = '';
                 this.params.limit = 12;
                 this.params.page = 1;
-                this.getAllData(this.id)
+                this.getAllData(this.id);
             },
             //分頁
             handleCurrentChange(val){
