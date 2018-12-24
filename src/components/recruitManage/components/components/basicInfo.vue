@@ -1149,6 +1149,11 @@
             } else {
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
+              this.$notify({
+                title: '警告',
+                message: res.data.msg,
+                type: 'warning'
+              });
             }
           }).catch(err => {
             this.disabledBtn = false;
