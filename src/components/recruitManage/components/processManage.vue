@@ -500,7 +500,7 @@
       <!--原始简历开始-->
       <el-dialog :visible.sync="lookUpResumeDialog" append-to-body>
         <div v-for='(item, index) in album' :key='index'>
-          <embed class='embed' :src="item.uri"/>
+          <embed id='embed-process' :src="item.uri"/>
         </div>
       </el-dialog>
       <!--原始简历结束-->
@@ -641,385 +641,392 @@
               <span v-if='!is_editing_condition'>
                                 {{agreeInductParams.update.entry_other.entry_time ? this.timestampToDate(agreeInductParams.update.entry_other.entry_time) : ''}}
                             </span>
-            </el-form-item>
-            <el-form-item label="试用期">
-              <el-input v-if='is_editing_condition' size='mini'
-                        v-model="agreeInductParams.update.entry_other.probation"></el-input>
-              <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.probation}}</span>
-            </el-form-item>
-            <el-form-item label="其他条件">
-              <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other"
-                        type='textarea'></el-input>
-              <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
-            </el-form-item>
-            <!-- <div class='edit-condition' v-if='is_editing_condition'>
-                <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
-                <el-button size='mini' @click='is_editing_condition = false'>确定</el-button>
-            </div> -->
-          </div>
-          <div v-if='is_agree == "0"'>
-            <el-form-item label="原因">
-              <el-input v-if='is_editing_condition' v-model="disAgreeInductParams.update.entry_result"
-                        type='textarea'></el-input>
-              <span v-if='!is_editing_condition'>{{disAgreeInductParams.update.entry_result}}</span>
-            </el-form-item>
-            <!-- <div class='edit-condition' v-if='is_editing_condition'>
-                <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
-                <el-button size='mini' @click='is_editing_condition = false'>确定</el-button>
-            </div> -->
-          </div>
-        </el-form>
-        <div class='edit-result'>
-          <el-button size='mini' @click='cancelIsEntry'>取消</el-button>
-          <el-button size='mini' @click='confirmIsEntry'>确定</el-button>
-          <el-button size='mini' @click='editIsEntry' v-if='communicate_status === 742 && !is_editing_condition'>修改
-          </el-button>
-        </div>
-      </el-dialog>
-      <!--人资沟通弹框结束-->
-      <!--入职条件开始-->
-      <el-dialog :visible.sync="failEntryDialog" append-to-body width="25%">
-        <el-form label-width="80px" center>
-          <el-form-item label="姓名">
-            <span>{{failEntryObj.name}}</span>
-          </el-form-item>
-          <el-form-item label="入职结果">
-            <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_status}}</span>
-            <el-select
-              v-if='is_editing_fail_result'
-              size='small'
-              v-model="entryStatus.update.entry_status"
-              @change='confirmIsEntry_'
-              placeholder="">
-              <el-option v-for="(item, index) in humanresource_entry" :key='index' :label='item.dictionary_name'
-                         :value='item.id'></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="原因">
-            <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_result}}</span>
-            <el-input v-if='is_editing_fail_result' v-model="failEntryObj.entry_result" type='textarea'></el-input>
-          </el-form-item>
-          <div class='edit-condition' v-if='is_editing_fail_result'>
-            <!-- <el-button size='mini' @click='cancelEditFailResult'>取消</el-button>
-            <el-button size='mini' @click='is_editing_fail_result = false'>确定</el-button> -->
-          </div>
-          <div class='edit-result'>
-            <el-button size='mini' @click='cancelFailEntry'>取消</el-button>
-            <el-button size='mini' @click='confirmFailEntry'>确定</el-button>
-            <el-button size='mini' @click='editFailEntry' v-if='entry_status_id !== 743 && !is_editing_fail_result'>修改
-            </el-button>
-          </div>
-        </el-form>
-      </el-dialog>
-      <!--入职条件结束-->
-      <!--上传简历开始-->
-      <el-dialog :visible.sync="uploadResumeDialog" append-to-body width="25%">
-        <el-form label-width="80px" center>
-          <el-form-item label="上传简历" required>
-            <UPLOAD :ID="'second'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
-          </el-form-item>
-          <div class='edit-result'>
-            <el-button size='mini' @click='cancelUpload'>取消</el-button>
-            <el-button size='mini' @click='confirmUpload'>确定</el-button>
-          </div>
-        </el-form>
-      </el-dialog>
-      <!--上传简历结束-->
-    </el-dialog>
-    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
-                  @selectMember="selectMember"></organization>
-    <BackgroundReseach :backgroundDialog='backgroundDialog' :is_editing_bg_='is_editing_bg_' :id='background_id'
-                       :background_info='background_info' @close='closeModal'></BackgroundReseach>
-    <InductionMaterials :inductionMaterialsDialog='inductionMaterialsDialog' :id='induction_id'
-                        :induction_info='induction_info' @close='closeModal'></InductionMaterials>
-    <BasicInfo :addStaffDialog='addStaffDialog' :id='basicInfo_id' :basicInfo_info='basicInfo_info' :isAdd='isAdd'
-               @close='closeModal'></BasicInfo>
-    <!-- <BasicDetail :basicDetailDialog='basicDetailDialog' :basicDetail='basicDetail' :id='basicDetail_id'  @close='closeModal'></BasicDetail> -->
-  </div>
+                        </el-form-item>
+                        <el-form-item label="试用期">
+                            <el-input v-if='is_editing_condition' size='mini' v-model="agreeInductParams.update.entry_other.probation" ></el-input>
+                            <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.probation}}</span>
+                        </el-form-item>
+                        <el-form-item label="其他条件">
+                            <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other" type='textarea'></el-input>
+                            <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
+                        </el-form-item>
+                        <!-- <div class='edit-condition' v-if='is_editing_condition'>
+                            <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
+                            <el-button size='mini' @click='is_editing_condition = false'>确定</el-button>
+                        </div> -->
+                    </div>
+                    <div v-if='is_agree == "0"'>
+                        <el-form-item label="原因">
+                            <el-input v-if='is_editing_condition' v-model="disAgreeInductParams.update.entry_result" type='textarea'></el-input>
+                            <span v-if='!is_editing_condition'>{{disAgreeInductParams.update.entry_result}}</span>
+                        </el-form-item>
+                        <!-- <div class='edit-condition' v-if='is_editing_condition'>
+                            <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
+                            <el-button size='mini' @click='is_editing_condition = false'>确定</el-button>
+                        </div> -->
+                    </div>
+                </el-form>
+                <div class='edit-result' >
+                    <el-button size='mini' @click='cancelIsEntry' v-if='allow_edit'>取消</el-button>
+                    <el-button size='mini' @click='confirmIsEntry' v-if='allow_edit'>确定</el-button>
+                    <el-button size='mini' @click='editIsEntry' v-if='communicate_status === 742 && !is_editing_condition && allow_edit'>修改</el-button>
+                </div>
+            </el-dialog>
+            <!--人资沟通弹框结束-->
+            <!--入职条件开始-->
+            <el-dialog :visible.sync="failEntryDialog" append-to-body width="25%">
+                <el-form label-width="80px" center>
+                    <el-form-item label="姓名">
+                        <span>{{failEntryObj.name}}</span>
+                    </el-form-item>
+                    <el-form-item label="入职结果">
+                        <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_status}}</span>
+                        <el-select 
+                            v-if='is_editing_fail_result' 
+                            size='small' 
+                            v-model="entryStatus.update.entry_status"
+                            @change='confirmIsEntry_'
+                            placeholder="">
+                            <el-option v-for="(item, index) in humanresource_entry" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="原因">
+                        <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_result}}</span>
+                        <el-input v-if='is_editing_fail_result' v-model="failEntryObj.entry_result" type='textarea'></el-input>
+                    </el-form-item>
+                    <div class='edit-condition' v-if='is_editing_fail_result'>
+                        <!-- <el-button size='mini' @click='cancelEditFailResult'>取消</el-button>
+                        <el-button size='mini' @click='is_editing_fail_result = false'>确定</el-button> -->
+                    </div>
+                    <div class='edit-result'>
+                        <el-button size='mini' @click='cancelFailEntry'>取消</el-button>
+                        <el-button size='mini' @click='confirmFailEntry'>确定</el-button>
+                        <el-button size='mini' @click='editFailEntry' v-if='entry_status_id !== 743 && !is_editing_fail_result'>修改</el-button>
+                    </div>
+                </el-form>
+            </el-dialog>
+            <!--入职条件结束-->
+            <!--上传简历开始-->
+            <el-dialog :visible.sync="uploadResumeDialog" append-to-body width="25%">
+                <el-form label-width="80px" center>
+                    <el-form-item label="上传简历" required>
+                        <UPLOAD :ID="'second'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
+                    </el-form-item>
+                    <div class='edit-result'>
+                        <el-button size='mini' @click='cancelUpload'>取消</el-button>
+                        <el-button size='mini' @click='confirmUpload'>确定</el-button>
+                    </div>
+                </el-form>
+            </el-dialog>
+            <!--上传简历结束-->
+        </el-dialog>
+        <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
+        <BackgroundReseach :backgroundDialog='backgroundDialog' :is_editing_bg_='is_editing_bg_' :id='background_id' :background_info='background_info' @close='closeModal'></BackgroundReseach>
+        <InductionMaterials :inductionMaterialsDialog='inductionMaterialsDialog' :id='induction_id' :induction_info='induction_info' @close='closeModal'></InductionMaterials>
+        <BasicInfo :addStaffDialog='addStaffDialog' :id='basicInfo_id' :basicInfo_info='basicInfo_info' :isAdd='isAdd' @close='closeModal'></BasicInfo>
+        <!-- <BasicDetail :basicDetailDialog='basicDetailDialog' :basicDetail='basicDetail' :id='basicDetail_id'  @close='closeModal'></BasicDetail> -->
+    </div>
 </template>
 <script>
-  import UPLOAD from '../../common/UPLOAD.vue'
-  import Organization from '../../common/organization.vue';
-  import InductionMaterials from './components/inductionMaterials.vue';
-  import BackgroundReseach from './components/backgroundReseach.vue';
-  import BasicInfo from './components/basicInfo.vue';
-  // import BasicDetail from './components/BasicDetail.vue';
-  export default {
-    name: 'process',
-    components: {UPLOAD, Organization, InductionMaterials, BackgroundReseach, BasicInfo},
-    props: ['processDialog', 'id', 'active_name'],
-    data() {
-      return {
-        organizeVisible: false,
-        organizeType: '',
-        processManageDialog: false,
-        addInterviewerDialog: false,
-        uninterviewDialog: false,
-        interviewedDialog: false,
-        uploadResumeDialog: false,
-        uploadResume_id: '',
-        isClear: false,
-        activeName: 'first',
-        loading1: true,
-        loading2: true,
-        loading3: true,
-        loading4: true,
-        page: 1,
-        total: 0,
-        interviewDatedData: [],
-        interviewFinishedData: [],
-        toInductData: [],
-        inductedData: [],
-        params: {
-          search: '',
-          status: '',
-          limit: 12,
-          page: 1,
-        },
-        is_editing: false,
-        is_editResult: false,
-        is_editing_id: '',
-        is_editing_interview_status: '',
-        is_editing_interview_status_id: '',
-        lookUpResumeDialog: false,
-        album: [],
-        interviewParams: {
-          name: '',
-          gender: '',
-          education: '',
-          experience: '',
-          phone: '',
-          interview_time: '',
-          resume_source: '',
-          album: []
-        },
-        newInterviewParams: {
-          recruitment_id: '',
-          name: '',
-          gender: '',
-          education: '',
-          experience: '',
-          phone: '',
-          interview_time: '',
-          resume_source: '',
-          album: []
-        },
-        updateParams: {
-          update: {
-            interview_status: ''
-          }
-        },
-        uninterviewObj: {
-          id: '',
-          name: '',
-          genter: '',
-          interview_status: '',
-          interview_result: '',
-        },
-        interviewedObj: {
-          id: '',
-          name: '',
-          gender: '',
-          interviewer_name: '',
-          interviewer_id: '',
-          expect: '',
-          actual: '',
-        },
-        /**面试完毕*/
-        passInterviewDialog: false,
-        unpassInterviewDialog: false,
-        IsEntryDialog: false,
-        is_editing_condition: false,
-        is_editing_interview_finished: '',
-        is_editing_interview_finished_id: '',
-        is_agree: '1',                           //是否同意入职 1是0否
-        passOrNotStr: '',
-        communicate_status: '',
-        updateParams_finished: {
-          update: {
-            interview_status: ''
-          }
-        },
-        interviewedObj_finished: {
-          id: '',
-          name: '',
-          interview_result: ''
-        },
-        is_editing_unpass: false,
-        unpassInterviewObj: {
-          name: '',
-          id: '',
-          interview_status_str: '',
-          interview_status: '',
-          interview_result: '',
-        },
-        humansourceObj: {
-          id: '',
-          name: '',
-          interview_status: '',
-        },
-        agreeInductParams: {
-          update: {
-            entry_other: {
-              salary: "",
-              entry_time: "",
-              probation: "",
-              other: ""
+    import UPLOAD from '../../common/UPLOAD.vue'
+    import Organization from '../../common/organization.vue';
+    import InductionMaterials from './components/inductionMaterials.vue';
+    import BackgroundReseach from './components/backgroundReseach.vue';
+    import BasicInfo from './components/basicInfo.vue';
+    // import BasicDetail from './components/BasicDetail.vue';
+    export default {
+        name: 'process',
+        components: {UPLOAD, Organization, InductionMaterials, BackgroundReseach, BasicInfo},
+        props: ['processDialog', 'id', 'active_name'],
+        data(){
+            return{
+                organizeVisible: false,
+                organizeType:'',
+                processManageDialog: false,
+                addInterviewerDialog: false,
+                uninterviewDialog: false,
+                interviewedDialog: false,
+                uploadResumeDialog: false,
+                uploadResume_id: '',
+                isClear: false,
+                activeName:'first',
+                loading1: true,
+                loading2: true,
+                loading3: true,
+                loading4: true,
+                page: 1,
+                total: 0,
+                interviewDatedData:[],
+                interviewFinishedData:[],
+                toInductData:[],
+                inductedData:[],
+                params: {
+                    search: '',
+                    status: '',
+                    limit: 12,
+                    page: 1,
+                },
+                is_editing:false,
+                is_editResult: false,
+                is_editing_id:'',
+                is_editing_interview_status:'',
+                is_editing_interview_status_id: '',
+                lookUpResumeDialog : false,
+                album:[],
+                interviewParams: {
+                    name: '',
+                    gender: '',
+                    education: '',
+                    experience: '',
+                    phone: '',
+                    interview_time: '',
+                    resume_source: '',
+                    album: []
+                },
+                newInterviewParams: {
+                    recruitment_id:'',
+                    name: '',
+                    gender: '',
+                    education: '',
+                    experience: '',
+                    phone: '',
+                    interview_time: '',
+                    resume_source: '',
+                    album: []
+                },
+                updateParams: {
+                    update: {
+                        interview_status : ''
+                    }
+                },
+                uninterviewObj:{
+                    id: '',
+                    name: '',
+                    genter: '',
+                    interview_status: '',
+                    interview_result: '',
+                },
+                interviewedObj:{
+                    id: '',
+                    name: '',
+                    gender: '',
+                    interviewer_name:'',
+                    interviewer_id: '',
+                    expect: '',
+                    actual: '',
+                },
+                /**面试完毕*/
+                passInterviewDialog: false,
+                unpassInterviewDialog: false,
+                IsEntryDialog: false,
+                is_editing_condition: false,
+                is_editing_interview_finished: '',
+                is_editing_interview_finished_id: '',
+                is_agree: '1',                           //是否同意入职 1是0否
+                passOrNotStr:'',
+                communicate_status: '',
+                updateParams_finished: {
+                    update: {
+                        interview_status : ''
+                    }
+                },
+                interviewedObj_finished: {
+                    id: '',
+                    name: '',
+                    interview_result: ''
+                },
+                is_editing_unpass: false,
+                unpassInterviewObj: {
+                    name: '',
+                    id: '',
+                    interview_status_str: '',
+                    interview_status:'',
+                    interview_result: '',
+                },
+                humansourceObj: {
+                    id: '',
+                    name: '',
+                    interview_status:'',
+                },
+                agreeInductParams: {
+                    update: {
+                        entry_other: {
+                            salary: "",
+                            entry_time: "",
+                            probation: "",
+                            other: ""
+                        }
+                    }
+                },
+                agreeInductParams_clone:{},
+                disAgreeInductParams: {
+                    update: {
+                        entry_result: '',
+                    }
+                },
+                disAgreeInductParams_clone: {},
+                is_edit_humansource:'',
+                /***********待入职******************/
+                inductionMaterialsDialog: false,
+                backgroundDialog: false,
+                addStaffDialog: false,
+                basicDetailDialog: false,
+                allow_edit: true,
+                background_id:'',
+                induction_id: '',
+                basicInfo_id:'',
+                basicDetail_id: '',
+                induction_info: {},
+                background_info: {},
+                basicInfo_info: {},
+                basicDetail: {},
+                failEntryDialog: false,
+                entry_status_id: '',
+                is_editing_entry_statuss:'',
+                is_editing_entry_statuss_id: '',
+                entry_other: {
+                    entry_time: '',
+                    other: '',
+                    probation: '',
+                    salary: '',
+                },
+                isAdd: '',
+                is_editing_bg_: true,
+                //入职失败/成功状态
+                entryStatus: {
+                    update: {
+                        entry_status:''
+                    }
+                },
+                failEntryObj: {
+                    name: '',
+                    entry_status: '',
+                    entry_result: ''
+                },
+                failEntryObj_clone: {},
+                is_editing_fail_result: false,
+                /**字典*/
+                interview:[],               //面试状态
+                interview_unfinished: [],
+                interview_finished: [],     //过滤掉未面试状态
+                source:[],                  //简历来源
+                genders: [],                //性别
+                education: [],              //学历
+                experience: [],             //经验
+                humanresource: [],          //人资
+                humanresource_entry: [],    //入职成功/失败
             }
-          }
         },
-        agreeInductParams_clone: {},
-        disAgreeInductParams: {
-          update: {
-            entry_result: '',
-          }
+        created(){
+            this.getDictionary()
         },
-        disAgreeInductParams_clone: {},
-        is_edit_humansource: '',
-        /***********待入职******************/
-        inductionMaterialsDialog: false,
-        backgroundDialog: false,
-        addStaffDialog: false,
-        basicDetailDialog: false,
-        background_id: '',
-        induction_id: '',
-        basicInfo_id: '',
-        basicDetail_id: '',
-        induction_info: {},
-        background_info: {},
-        basicInfo_info: {},
-        basicDetail: {},
-        failEntryDialog: false,
-        entry_status_id: '',
-        is_editing_entry_statuss: '',
-        is_editing_entry_statuss_id: '',
-        entry_other: {
-          entry_time: '',
-          other: '',
-          probation: '',
-          salary: '',
-        },
-        isAdd: '',
-        is_editing_bg_: true,
-        //入职失败/成功状态
-        entryStatus: {
-          update: {
-            entry_status: ''
-          }
-        },
-        failEntryObj: {
-          name: '',
-          entry_status: '',
-          entry_result: ''
-        },
-        failEntryObj_clone: {},
-        is_editing_fail_result: false,
-        /**字典*/
-        interview: [],               //面试状态
-        interview_unfinished: [],
-        interview_finished: [],     //过滤掉未面试状态
-        source: [],                  //简历来源
-        genders: [],                //性别
-        education: [],              //学历
-        experience: [],             //经验
-        humanresource: [],          //人资
-        humanresource_entry: [],    //入职成功/失败
-      }
-    },
-    watch: {
-      processDialog(val) {
-        if (val) {
-          this.processManageDialog = true
-        }
-      },
-      processManageDialog(val) {
-        if (!val) {
-          this.params.search = '';
-          this.is_editing_id = '';
-          this.is_editing_interview_finished = '';
-          this.$emit('close');
-        } else {
-          this.activeName = this.active_name;
-          this.getAllData(this.id)
-        }
-      },
-      id(val) {
-        this.getAllData(val)
-      },
-      lookUpResumeDialog(val) {
-        if (!val) {
-          this.album = []
-        }
-      },
-      interviewedDialog(val) {
-        if (!val) {
-          this.is_editing_interview_status = '';
-          this.interviewedObj.id = '';
-          this.interviewedObj.name = '';
-          this.interviewedObj.gender = '';
-          this.interviewedObj.interviewer_name = '';
-          this.interviewedObj.interviewer_id = '';
-          this.interviewedObj.expect = '';
-          this.interviewedObj.actual = '';
-        }
-      },
-      uninterviewDialog(val) {
-        this.is_editResult = '';
-      },
-      IsEntryDialog(val) {
-        if (val) {
-          // this.editIsEntry();
-        } else {
-          // this.cancelEditCondition();
-          this.cancelIsEntry();
-          this.communicate_status = '';
-          this.is_editing_condition = ''
-        }
-      },
-      passInterviewDialog(val) {
-        if (!val) {
-          this.interviewedObj_finished.interview_result = '';
-          this.is_editing_interview_finished = '';
-          // this.updateParams_finished.update.interview_status = '';
-        }
-      },
-      failEntryDialog(val) {
-        if (!val) {
-          this.is_editing_entry_statuss = '';
-          this.failEntryObj.entry_result = '';
-          this.entryStatus.update.entry_status = '';
-          this.entry_status_id = '';
-          this.is_editing_fail_result = '';
-        }
-      },
-      uploadResumeDialog(val) {
-        if (!val) {
-          this.isClear = true;
-          $('.imgItem').remove();
-          setTimeout(() => {
-            this.isClear = false;
-          }, 300);
-          this.interviewParams.album = [];
-        }
-      }
-    },
-    created() {
-      this.getDictionary()
-    },
-    methods: {
-      handleClick() {
-        // console.log(this.activeName);
-        this.params.search = '';
-        this.params.limit = 12;
-        this.params.page = 1;
-        this.getAllData(this.id)
-      },
-      //分頁
-      handleCurrentChange(val) {
-        this.params.page = val;
-        this.getAllData(this.id)
-      },
-      handleSizeChange() {
+        watch:{
+            processDialog(val){
+                if(val){
+                    this.processManageDialog  = true
+                }
+            },
+            processManageDialog(val){
+                if(!val){
+                    this.params.search = '';
+                    this.is_editing_id = '';
+                    this.is_editing_interview_finished = '';
+                    this.$emit('close');
+                }else{
+                    this.activeName = this.active_name;
+                    this.getAllData(this.id)
+                }
+            },
+            id(val){
+                this.getAllData(val)
+            },
+            lookUpResumeDialog(val){
+                if(!val){
+                    this.album = []
+                }
+            },
+            interviewedDialog(val){
+                if(!val){
+                    this.is_editing_interview_status = '';
+                    this.interviewedObj.id = '';
+                    this.interviewedObj.name = '';
+                    this.interviewedObj.gender = '';
+                    this.interviewedObj.interviewer_name = '';
+                    this.interviewedObj.interviewer_id = '';
+                    this.interviewedObj.expect = '';
+                    this.interviewedObj.actual = '';
+                }
+            },
+            uninterviewDialog(val){
+                this.is_editResult = '';
+            },
+            IsEntryDialog(val){
+                if(val){
+                    // this.editIsEntry();
+                    // console.log(this.$store.state.platform.active_name)
+                    if(this.$store.state.platform.active_name === 'fourth'){
+                        this.allow_edit = false;
+                    }else{
+                        this.allow_edit = true;
+                    }
+                }else{
+                    // this.cancelEditCondition();
+                    this.cancelIsEntry();
+                    this.communicate_status = '';
+                    this.is_editing_condition = ''
+                }
+            },
+            passInterviewDialog(val){
+                if(!val){
+                    this.interviewedObj_finished.interview_result = '';
+                    this.is_editing_interview_finished = '';
+                    // this.updateParams_finished.update.interview_status = '';
+                }
+            },
+            failEntryDialog(val){
+                if(!val){
+                    this.is_editing_entry_statuss = '';
+                    this.failEntryObj.entry_result = '';
+                    this.entryStatus.update.entry_status = '';
+                    this.entry_status_id = '';
+                    this.is_editing_fail_result = '';
+                }
+            },
+            uploadResumeDialog(val){
+                if(!val){
+                    this.isClear = true;
+                    $('.imgItem').remove();
+                        setTimeout(() => {
+                            this.isClear = false;
+                    },300);
+                    this.interviewParams.album = [];
+                }
+            }
+          },
+        // },
+        // agreeInductParams_clone: {},
+        // disAgreeInductParams: {
+        //   update: {
+        //     entry_result: '',
+        //   }
+        // },
+        methods: {
+            handleClick(item){
+                // console.log(item.name)
+                this.$store.dispatch('setActiveName', item.name)
+                // this.$store.dispatch('toEdit',item)
+                // console.log(this.activeName);
+                this.params.search = '';
+                this.params.limit = 12;
+                this.params.page = 1;
+                this.getAllData(this.id);
+            },
+            //分頁
+            handleCurrentChange(val){
+                this.params.page = val;
+                this.getAllData(this.id)
+            },
+            handleSizeChange(){
 
       },
       //搜索
@@ -1161,13 +1168,18 @@
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
-          // row.album.forEach(item => {
-          //     if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)$/i.test(item.uri)){
-          //         this.lookUpResumeDialog = true;
-          //     }
-          // })
-          this.lookUpResumeDialog = true;
-          this.album = row.album;
+            // console.log('0000')
+            this.lookUpResumeDialog = true;
+            this.album = row.album;
+            row.album.forEach(item => {
+                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                    this.lookUpResumeDialog = true;
+                }else{
+                    setTimeout(() => {
+                        this.lookUpResumeDialog = false;
+                    }, 1000)
+                }
+            })
         }
         if (column.property === 'album' && !row.album.length) {
           this.uploadResumeDialog = true;
@@ -1394,7 +1406,7 @@
         this.newInterviewParams.album = this.toNum(val[1])
       },
       regetImgData(val) {
-        console.log(val)
+        // console.log(val)
         this.interviewParams.album = this.toNum(val[1])
       },
       //转成number类型
@@ -1478,13 +1490,17 @@
             this.disAgreeInductParams.update.entry_result = row.entry_result
           }
         } else if (column.property === 'album' && row.album.length) {
-          // row.album.forEach(item => {
-          //     if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)$/i.test(item.uri)){
-          //         this.lookUpResumeDialog = true;
-          //     }
-          // })
           this.lookUpResumeDialog = true;
           this.album = row.album;
+          row.album.forEach(item => {
+                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                    this.lookUpResumeDialog = true;
+                }else{
+                    setTimeout(() => {
+                        this.lookUpResumeDialog = false;
+                    }, 1000)
+                }
+            })
         }
       },
       //确定是否入职
@@ -1693,7 +1709,16 @@
         // console.log(row, column)
         if (column.property === 'album' && row.album.length) {
           this.lookUpResumeDialog = true;
-          this.album = row.album
+          this.album = row.album;
+          row.album.forEach(item => {
+                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                    this.lookUpResumeDialog = true;
+                }else{
+                    setTimeout(() => {
+                        this.lookUpResumeDialog = false;
+                    }, 1000)
+                }
+            })
         }
         if (column.property === 'entry_statuss') {
           this.is_editing_entry_statuss_id = row.id;
@@ -1998,10 +2023,11 @@
       padding-right: 50px;
       text-align: right;
     }
-    .embed {
-      max-width: 100%;
-    }
   }
+    #embed-process {
+      max-width: 100% !important;
+      text-align: center;
+    }
 
 </style>
 

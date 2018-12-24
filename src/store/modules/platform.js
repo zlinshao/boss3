@@ -7,7 +7,8 @@ const platform = {
             department_name: '',
             position_id: '',
             duty_id: '',
-        }
+        },
+        active_name: '',
     },
     mutations: {
         EDIT_PLATFORM: (state, view) => {
@@ -19,6 +20,9 @@ const platform = {
             state.position_obj.position_id = view.position_id;
             state.position_obj.duty_id = view.role.duty_id;
             state.position_obj.department_name = view.org.name;
+        },
+        SET_ACTIVE_NAME(state, view){
+            state.active_name = view;
         }
     },
     actions: {
@@ -27,6 +31,9 @@ const platform = {
         },
         savePositionInfo({commit}, view){
             commit('SAVE_POSITION_INFO', view)
+        },
+        setActiveName({commit}, view){
+            commit('SET_ACTIVE_NAME', view)
         }
     }
 }
