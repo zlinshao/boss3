@@ -724,7 +724,6 @@
         <BackgroundReseach :backgroundDialog='backgroundDialog' :is_editing_bg_='is_editing_bg_' :id='background_id' :background_info='background_info' @close='closeModal'></BackgroundReseach>
         <InductionMaterials :inductionMaterialsDialog='inductionMaterialsDialog' :id='induction_id' :induction_info='induction_info' @close='closeModal'></InductionMaterials>
         <BasicInfo :addStaffDialog='addStaffDialog' :id='basicInfo_id' :basicInfo_info='basicInfo_info' :isAdd='isAdd' @close='closeModal'></BasicInfo>
-        <!-- <BasicDetail :basicDetailDialog='basicDetailDialog' :basicDetail='basicDetail' :id='basicDetail_id'  @close='closeModal'></BasicDetail> -->
     </div>
 </template>
 <script>
@@ -733,7 +732,6 @@
     import InductionMaterials from './components/inductionMaterials.vue';
     import BackgroundReseach from './components/backgroundReseach.vue';
     import BasicInfo from './components/basicInfo.vue';
-    // import BasicDetail from './components/BasicDetail.vue';
     export default {
         name: 'process',
         components: {UPLOAD, Organization, InductionMaterials, BackgroundReseach, BasicInfo},
@@ -1009,14 +1007,7 @@
                     this.interviewParams.album = [];
                 }
             }
-          },
-        // },
-        // agreeInductParams_clone: {},
-        // disAgreeInductParams: {
-        //   update: {
-        //     entry_result: '',
-        //   }
-        // },
+        },
         methods: {
             handleClick(item){
                 // console.log(item.name)
@@ -1035,12 +1026,11 @@
             },
             handleSizeChange(){
 
-      },
+            },
       //搜索
       search() {
         let _status = '';
         switch (this.activeName) {
-
           case 'first' :
             _status = 1;
             break;
@@ -1088,7 +1078,6 @@
       },
       //获取数据
       getAllData(id) {
-        // console.log(this.activeName);
         if (this.activeName === 'first') {
           //已约面试
           this.params.status = 1;
@@ -1322,7 +1311,6 @@
       },
       //修改未面试状态-->已面试
       confirmIsinterview(item) {
-        // console.log(item)
         if (item === 737) {
           this.interviewedDialog = true;
           this.interviewedObj.name = this.uninterviewObj.name;
@@ -1473,7 +1461,7 @@
           this.is_edit_humansource = row.id;
           this.is_editing_interview_finished = '';
           if (row.entry_status === 741 && row.interview_status === 739) {
-            //面試完畢->人資溝通->待溝通
+            //面试完毕->人资沟通->待沟通
             this.communicate_status = 741;
             this.IsEntryDialog = true;
             this.is_editing_condition = true;
@@ -1560,7 +1548,6 @@
         this.agreeInductParams = Object.assign({}, this.agreeInductParams_clone);
         this.disAgreeInductParams = Object.assign({}, this.disAgreeInductParams_clone);
         this.is_editing_condition = false;
-        // console.log(this.agreeInductParams.update.entry_other.entry_time);
       },
       //取消人资沟通
       cancelIsEntry() {
@@ -1590,8 +1577,7 @@
         this.passInterviewDialog = true;
         this.interviewedObj_finished.name = row.name;
         this.interviewedObj_finished.id = row.id;
-
-      },
+     },
       //确认修改面试状态
       confirmEditStatus() {
         this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_interview_finished_id, this.updateParams_finished).then(res => {
@@ -1703,7 +1689,6 @@
       },
       /*********************** 待入职*********************************/
       cellClick3(row, column, cell, event) {
-        // console.log(row, column)
         if (column.property === 'album' && row.album.length) {
           this.lookUpResumeDialog = true;
           this.album = row.album;
