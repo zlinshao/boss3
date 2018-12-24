@@ -151,8 +151,7 @@
     width: 100% !important;
     padding: 0 !important; } }
 .highRanking {
-  position: relative;
-  z-index: 12; }
+  position: relative; }
   .highRanking .highSearch {
     display: flex;
     justify-content: flex-end;

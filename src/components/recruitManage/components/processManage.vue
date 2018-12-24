@@ -610,7 +610,7 @@
         <div class='edit-result'>
           <el-button size='mini' @click='cancelEditFromUnpass'>取消</el-button>
           <el-button size='mini' @click='confirmEditFromUnpass'>确定</el-button>
-          <el-button size='mini' @click='editFromUnpass'>修改</el-button>
+          <el-button size='mini' @click='editFromUnpass' v-if='!is_editing_unpass'>修改</el-button>
         </div>
       </el-dialog>
       <!--人资沟通弹框开始-->
@@ -981,6 +981,13 @@
                     this.interviewedObj_finished.interview_result = '';
                     this.is_editing_interview_finished = '';
                     // this.updateParams_finished.update.interview_status = '';
+                }
+            },
+            unpassInterviewDialog(val){
+                if(!val){
+                    this.is_editing_interview_finished = '';
+                    this.updateParams_finished.update.interview_status = '';
+                    this.is_editing_unpass = false;
                 }
             },
             failEntryDialog(val){
@@ -1508,11 +1515,6 @@
         if (this.is_agree == '1') {
           this.$http.put(globalConfig.server + 'hrm/interview/' + this.humansourceObj.id, this.agreeInductParams).then(res => {
             if (res.data.code === '20030') {
-              // this.$notify({
-              //     title: '成功',
-              //     message: res.data.msg,
-              //     type: 'success'
-              // })
               this.updateHumanResource()
             }
           })
@@ -1520,11 +1522,6 @@
         if (this.is_agree == '0') {
           this.$http.put(globalConfig.server + 'hrm/interview/' + this.humansourceObj.id, this.disAgreeInductParams).then(res => {
             if (res.data.code === '20030') {
-              // this.$notify({
-              //     title: '成功',
-              //     message: res.data.msg,
-              //     type: 'success'
-              // })
               this.updateHumanResource()
             }
           })
@@ -1987,7 +1984,7 @@
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   #process {
     font-size: 14px;
     .add-interviewer {
@@ -1995,10 +1992,7 @@
       margin: 10px 0 0 0;
       border: none;
     }
-    .edit-result {
-      display: flex;
-      justify-content: center;
-    }
+    
     .edit-condition {
       display: flex;
       justify-content: center;
@@ -2025,8 +2019,12 @@
     }
   }
     #embed-process {
-      max-width: 100% !important;
-      text-align: center;
+        max-width: 100% !important;
+        text-align: center;
+    }
+    .edit-result {
+      display: flex;
+      justify-content: center;
     }
 
 </style>
