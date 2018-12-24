@@ -13,14 +13,14 @@
                             
                             <div class='platform-href'>
                                 <span>岗位链接</span>
-                                <div>
-                                    <span v-if="editing_platform_val !== value">{{value}}</span>
+                                <div class='wrap'>
+                                    <span class='platform-location' @click='turnto(value)' v-if="editing_platform_val !== value">{{value}}</span>
                                     <el-input size='mini' v-model="platform_host" v-if="is_editing && editing_platform_val === value" class='input-host'></el-input>
                                 </div>
                                 <i @click="cancelEdit" v-if="is_editing && editing_platform_val === value" class='el-icon-circle-close'></i>
                                 <i @click="saveEdit(value, key)" v-if="is_editing && editing_platform_val === value" class="el-icon-circle-check"></i>
                                 <i @click="deletePlatform(value, key)" v-if="is_editing && editing_platform_val === value" class="el-icon-delete"></i>
-                                <i class='el-icon-edit'  @click="editPlatform(value,key)" v-if="editing_platform_val !== value"></i>
+                                <i class='el-icon-edit'  @click="editPlatform(value, key)" v-if="editing_platform_val !== value"></i>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@ export default {
             }else{
                 this.platform = Object.assign({},this.$store.state.platform.platform_obj)
                 this.id = this.$store.state.platform.id;
-                console.log(this.platform)
+                // console.log(this.platform)
             }
         }
     },
@@ -100,6 +100,7 @@ export default {
     methods:{
         //编辑
         editPlatform(value, key){
+            // console.log(value,key)
             this.is_adding = false;
             this.is_editing = true;
             this.editing_platform_val = value;
@@ -115,11 +116,18 @@ export default {
         },
         //保存编辑
         saveEdit(value, key){
-            delete this.platform[key];
-            this.platform[this.platform_name] = this.platform_host;
-            this.platform = Object.assign({}, this.platform);
-            this.is_editing = false;
-            this.editing_platform_val = '';
+            // console.log(value, key)
+            if(Object.keys(this.platform).includes(this.platform_name) || Object.values(this.platform).includes(this.platform_host)){
+                this.$alert('平台或地址已经存在', '', {
+                    confirmButtonText: '确定',
+                });
+            }else{
+                delete this.platform[key];
+                this.platform[this.platform_name] = this.platform_host;
+                this.platform = Object.assign({}, this.platform);
+                this.is_editing = false;
+                this.editing_platform_val = '';
+            }
         },
         //删除品台
         deletePlatform(value, key){
@@ -141,7 +149,9 @@ export default {
         confirmPlatform(){
             if(this.platform_name && this.platform_host){
                 if(Object.keys(this.platform).includes(this.platform_name) || Object.values(this.platform).includes(this.platform_host)){
-                    alert('地址已经添加')
+                    this.$alert('平台或地址已经存在', '', {
+                        confirmButtonText: '确定',
+                    });
                 }else{
                     this.platform[this.platform_name] = this.platform_host;
                     this.platform = Object.assign({}, this.platform);
@@ -150,6 +160,11 @@ export default {
                     this.platform_host = '';
                 }
             }
+        },
+        //跳转
+        turnto(item){
+            // console.log(item);
+            window.open(item)
         },
         //取消新加
         cancelAddPlatform(){
@@ -261,11 +276,15 @@ export default {
         font-size: 14px;
         line-height: 30px;
         width: 350px;
+        height: 30px;
         display: flex;
         justify-content: space-between;
     }
     .platform-href i{
         line-height: 30px;
+    }
+    .wrap{
+        height: 30px;
     }
     .input-name{
         width: 160px !important;
@@ -273,5 +292,17 @@ export default {
     .imput-host{
         width: 160px !important;
     }
+    .el-icon-edit,.el-icon-circle-close, .el-icon-circle-check, .el-icon-delete, .platform-location{
+        cursor: pointer;
+    }
+    .platform-location{
+        width: 200px;
+        display: inline-block;
+        height: 30px;
+        max-width: 200px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        }
 </style>
 

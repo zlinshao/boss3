@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import ApprovalPeople from '../../approval/components/approvalDetail';
+import ApprovalPeople from '../../../approval/components/approvalDetail';
 export default {
   props: ["ids", "lookApprovalLog", "names", "orgs", "roles"],
   data() {

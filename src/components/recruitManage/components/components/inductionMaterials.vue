@@ -6,56 +6,80 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="面试表">
-                                <UPLOAD :ID="'resume'" :isClear="isClear" :editImage="resume" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'resume'" :isClear="isClear" :editImage="resume" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in resume' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="保密协议">
-                                <UPLOAD :ID="'con_agree'" :isClear="isClear" :editImage="con_agree" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'con_agree'" :isClear="isClear" :editImage="con_agree" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in con_agree' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="证件照">
-                                <UPLOAD :ID="'doc_photo'" :isClear="isClear" :editImage="doc_photo" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'doc_photo'" :isClear="isClear" :editImage="doc_photo" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in doc_photo' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="学历复印件">
-                                <UPLOAD :ID="'education'" :isClear="isClear" :editImage="education" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'education'" :isClear="isClear" :editImage="education" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in education' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="承诺书">
-                                <UPLOAD :ID="'commitment'" :isClear="isClear" :editImage="commitment" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'commitment'" :isClear="isClear" :editImage="commitment" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in commitment' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="上家公司离职证明">
-                                <UPLOAD :ID="'resignation'" :isClear="isClear" :editImage="resignation" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'resignation'" :isClear="isClear" :editImage="resignation" @getImg="getImgData"></UPLOAD>
+                                 <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in resignation' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="劳动合同">
-                                <UPLOAD :ID="'labor_contract'" :isClear="isClear" :editImage="labor_contract" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'labor_contract'" :isClear="isClear" :editImage="labor_contract" @getImg="getImgData"></UPLOAD>
+                                 <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in labor_contract' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="银行卡">
-                                <UPLOAD :ID="'bank'" :isClear="isClear" :editImage="bank" @getImg="getImgData"></UPLOAD>
+                                <UPLOAD v-if="allow_edit" :ID="'bank'" :isClear="isClear" :editImage="bank" @getImg="getImgData"></UPLOAD>
+                                <el-col :span='4' v-if="!allow_edit" v-for='(value, key) in bank' :key='key'>
+                                    <img :src='value'  data-magnify :data-src='value' class='img'/>
+                                </el-col>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -63,7 +87,8 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="inductionMaterialsDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmAdd">确 定</el-button>
+                <el-button type="primary" @click="confirmAdd" v-if='allow_edit'>确 定</el-button>
+                <el-button type="primary" @click="inductionMaterialsDialogVisible = false" v-if='!allow_edit'>确定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -99,7 +124,8 @@
                 commitment: {},
                 resignation: {},
                 labor_contract: {},
-                bank: {}
+                bank: {},
+                allow_edit: true,
 
             }
         },
@@ -116,8 +142,31 @@
                 if(!val){
                     this.init();
                     this.$emit('close');
+                    $('.imgItem').remove();
+                        setTimeout(() => {
+                            this.isClear = false;
+                    });
                 }else{
                     this.isClear = true;
+                    this.params.update.image_info.resume = [];
+                    this.params.update.image_info.con_agree = [];
+                    this.params.update.image_info.doc_photo = [];
+                    this.params.update.image_info.education = [];
+                    this.params.update.image_info.commitment = [];
+                    this.params.update.image_info.resignation = [];
+                    this.params.update.image_info.labor_contract = [];
+                    this.params.update.image_info.bank = [];
+                    
+                    // console.log(this.$store.state.platform.active_name);
+                    if(this.$store.state.platform.active_name === 'fourth'){
+                        this.allow_edit = false;
+                        // this.$nextTick(() => {
+                        //     // $('.pickfiles').hide();
+                        //     // $('.remove').hide()
+                        // })
+                    }else{
+                        this.allow_edit = true;
+                    }
                 }
             }
         },
@@ -133,10 +182,10 @@
                         });
                         this.isClear = true;
                         $('.imgItem').remove();
-                        setTimeout(() => {
-                            this.isClear = false;
-                        });
-                        this.init()
+                            setTimeout(() => {
+                                this.isClear = false;
+                        }, 300);
+                        this.init();
                         this.inductionMaterialsDialogVisible = false;
                     }
                 })
@@ -159,7 +208,7 @@
                             obj.resume = [];
                             imgInfo[key].forEach(item => {
                                 this.resume[item.id] = item.uri;
-                                obj.resume.push(item.id)
+                                obj.resume.push(Number(item.id))
                             });
                             this.resume = Object.assign({}, this.resume)
                         }
@@ -167,7 +216,7 @@
                             obj.resignation = [];
                             imgInfo[key].forEach(item => {
                                 this.resignation[item.id] = item.uri;
-                                obj.resignation.push(item.id)
+                                obj.resignation.push(Number(item.id))
                             });
                             this.resignation = Object.assign({}, this.resignation)
                         }
@@ -175,7 +224,7 @@
                             obj.labor_contract = [];
                             imgInfo[key].forEach(item => {
                                 this.labor_contract[item.id] = item.uri;
-                                obj.labor_contract.push(item.id)
+                                obj.labor_contract.push(Number(item.id))
                             });
                             this.labor_contract = Object.assign({}, this.labor_contract)
                         }
@@ -183,7 +232,7 @@
                             obj.education = [];
                             imgInfo[key].forEach(item => {
                                 this.education[item.id] = item.uri;
-                                obj.education.push(item.id)
+                                obj.education.push(Number(item.id))
                             });
                             this.education = Object.assign({}, this.education)
                         }
@@ -191,7 +240,7 @@
                             obj.doc_photo = [];
                             imgInfo[key].forEach(item => {
                                 this.doc_photo[item.id] = item.uri;
-                                obj.doc_photo.push(item.id)
+                                obj.doc_photo.push(Number(item.id))
                             });
                             this.doc_photo = Object.assign({}, this.doc_photo)
                         }
@@ -199,7 +248,7 @@
                             obj.con_agree = [];
                             imgInfo[key].forEach(item => {
                                 this.con_agree[item.id] = item.uri;
-                                obj.con_agree.push(item.id)
+                                obj.con_agree.push(Number(item.id))
                             });
                             this.con_agree = Object.assign({}, this.con_agree)
                         }
@@ -207,7 +256,7 @@
                             obj.commitment = [];
                             imgInfo[key].forEach(item => {
                                 this.commitment[item.id] = item.uri;
-                                obj.commitment.push(item.id)
+                                obj.commitment.push(Number(item.id))
                             });
                             this.commitment = Object.assign({}, this.commitment)
                         }
@@ -215,7 +264,7 @@
                             obj.bank = [];
                             imgInfo[key].forEach(item => {
                                 this.bank[item.id] = item.uri;
-                                obj.bank.push(item.id)
+                                obj.bank.push(Number(item.id))
                             });
                             this.bank = Object.assign({}, this.bank)
                         }
@@ -226,36 +275,43 @@
             getImgData(val){
                 switch (val[0]) {
                     case 'resume':
-                        this.params.update.image_info.resume = val[1];
+                        this.params.update.image_info.resume = this.toNum(val[1]);
                         break;
                     case 'con_agree':
-                        this.params.update.image_info.con_agree = val[1];
+                        this.params.update.image_info.con_agree = this.toNum(val[1])
                         break;
                     case 'doc_photo':
-                        this.params.update.image_info.doc_photo = val[1];
+                        this.params.update.image_info.doc_photo = this.toNum(val[1])
                         break;
                     case 'education':
-                        this.params.update.image_info.education = val[1]
+                        this.params.update.image_info.education = this.toNum(val[1])
                         break;
                     case 'commitment':
-                        this.params.update.image_info.commitment = val[1]
+                        this.params.update.image_info.commitment = this.toNum(val[1])
                         break;
                     case 'resignation':
-                        this.params.update.image_info.resignation = val[1]
+                        this.params.update.image_info.resignation = this.toNum(val[1])
                         break;
                     case 'labor_contract':
-                        this.params.update.image_info.labor_contract = val[1]
+                        this.params.update.image_info.labor_contract = this.toNum(val[1])
                         break;
                     case 'bank':
-                        this.params.update.image_info.bank = val[1]
+                        this.params.update.image_info.bank = this.toNum(val[1])
                         break;
                     default:
                         break;
                 }
+            },
+            //字符串轉數組
+            toNum(arr){
+                return arr.map(item => Number(item))
             }
         }
     }
 </script>
 <style lang="scss" scoped>
-
+    .img{
+        width: 120px;
+        height: 120px;
+    }
 </style>

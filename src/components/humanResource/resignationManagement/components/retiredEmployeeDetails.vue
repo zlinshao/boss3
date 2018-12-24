@@ -585,18 +585,24 @@ export default {
           })
         })
       } else if (val == 2) {
-        this.$http.get(globalConfig.server + 'organization/staff/leave-sms', { params: {id: this.employDetailId, date: this.staffDetailData.detail.dismiss_time}}).then(res => {
-          if (res.data.code === "710910") { 
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-          } else {
-            this.$notify.warning({
-              title: '失败',
-              message: res.data.msg
-            });
-          }
+         this.$confirm('员工已离职是否发送短信，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(globalConfig.server + 'organization/staff/leave-sms', { params: {id: this.employDetailId, date: this.staffDetailData.detail.dismiss_time}}).then(res => {
+            if (res.data.code === "710910") { 
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              });
+            }
+          })
         })
       }
     },

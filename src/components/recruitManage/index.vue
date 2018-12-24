@@ -34,7 +34,7 @@
             </el-form>
         </div>
         <!--招聘详情开始-->
-        <div class="positionList"  v-loading="loadingRecruit" element-loading-text="拼命加载中">
+        <div class="positionList"  v-loading="loadingRecruit"  element-loading-text="加载中" element-loading-spinner="el-icon-loading">
             <div class='positionItem' v-for="(item, index) in positionList" :key="index">
                 <el-container>
                     <el-header>
@@ -164,7 +164,7 @@
             </div>
         </div>
         <!--招聘详情结束-->
-        <div class="empty" v-if="!positionList.length">暂无数据</div>
+        <div class="empty" v-if="!positionList.length && !loadingRecruit">暂无数据</div>
         <div class="block">
             <el-pagination
             @size-change="handleSizeChange"
@@ -319,6 +319,9 @@
             handleCurrentChange(pagers){
                 this.params.page = pagers;
                 this.search();
+                this.$nextTick(() => {
+                    document.documentElement.scrollTop = 0;
+                })
             },
             //搜索
             search(){
@@ -418,7 +421,7 @@
             },
             //获取招聘列表
             getPositionList(){
-                // this.positionList = [];
+                this.positionList = [];
                 this.loadingRecruit = true;
                 this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
                     if(res.data.code === '10000' || res.data.code === '70000'){
@@ -634,7 +637,7 @@
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-               console.log(item)
+            //    console.log(item)
                this.$store.dispatch('savePositionInfo', item)
                this.id = item.id;
                this.processDialog = true;
@@ -656,6 +659,8 @@
 </script>
 <style lang="scss" scoped>
     #recruitManage{
+        min-height: 790px;
+        position: relative;
         height: 100%;
         padding: 0 30px;
         .positionTitle{
@@ -711,6 +716,11 @@
         }
         .el-pagination {
             text-align: right;
+        }
+        .block{
+            position: absolute;
+            bottom: 0;
+            right: 0;
         }
     }
 </style>

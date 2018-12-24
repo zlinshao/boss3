@@ -544,12 +544,7 @@ export default {
     staffDetail(val) {
       if(!val) {
         this.$emit("close");
-       this.IDimgList = [];
-       this.BankimgList = [];
-       this.ContractimgList = [];
-       this.EducationimgList = [];
-       this.ApplyimgList = [];
-       this.DismissimgList = [];
+       
       }
     },
     ids(val) {
@@ -634,6 +629,12 @@ export default {
     },
     //获取职位岗位
     getDuty(user_id, status) {
+      this.IDimgList = [];
+      this.BankimgList = [];
+      this.ContractimgList = [];
+      this.EducationimgList = [];
+      this.ApplyimgList = [];
+      this.DismissimgList = [];
       this.$http.get(globalConfig.server + 'hrm/User/userInfo', {
         params: {
           user_id

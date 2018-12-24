@@ -87,6 +87,10 @@ export default {
           let  year = new Date().getFullYear();
           let month = new Date().getMonth() + 1;
           this.days= new Date().getDate();
+          if(!res.data.data.data[0].sort_dimension.length) {
+            this.isLoading = false;
+            this.emptyText = "暂无数据";
+          }
           res.data.data.data[0].sort_dimension.forEach((item, index) => {
             obj = {}
             let currentAttendance = false;  // 今天是否有排班
@@ -127,7 +131,7 @@ export default {
                   })
                 } else if(val.status == 1) {
                   // obj.resultWork = "迟到";
-                  obj.resultWork = 60 - Number(val.dimensions.minute);
+                  obj.resultWork = Number(val.dimensions.minute);
                 } 
                 obj.goWork = val.dimensions.hour + ":" + val.dimensions.minute;       // 上班时间
               } else if (val.event_attribute == 2) {

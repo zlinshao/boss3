@@ -4,8 +4,8 @@
             <el-form label-width="180px" center>
                 <el-form-item label="工作经验是否与简历所述相符">
                     <template>
-                        <el-radio v-model="backgroundRadio.update.background_check.is_experience" label="1">是</el-radio>
-                        <el-radio v-model="backgroundRadio.update.background_check.is_experience" label="2">否</el-radio>
+                        <el-radio :disabled='!is_editing_bg' v-model="backgroundRadio.update.background_check.is_experience" label="1">是</el-radio>
+                        <el-radio :disabled='!is_editing_bg' v-model="backgroundRadio.update.background_check.is_experience" label="2">否</el-radio>
                     </template>
                 </el-form-item>
                 <div v-if='backgroundRadio.update.background_check.is_experience == "2"'>
@@ -16,8 +16,8 @@
                 </div>
                 <el-form-item label="岗位内容是否与简历所述相符">
                     <template>
-                        <el-radio v-model="backgroundRadio.update.background_check.is_resume" label="1">是</el-radio>
-                        <el-radio v-model="backgroundRadio.update.background_check.is_resume" label="2">否</el-radio>
+                        <el-radio :disabled='!is_editing_bg' v-model="backgroundRadio.update.background_check.is_resume" label="1">是</el-radio>
+                        <el-radio :disabled='!is_editing_bg' v-model="backgroundRadio.update.background_check.is_resume" label="2">否</el-radio>
                     </template>
                 </el-form-item>
                 <div v-if='backgroundRadio.update.background_check.is_resume == "2"'>
@@ -28,8 +28,8 @@
                 </div>
                 <el-form-item label="离职原因是否与简历所述相符">
                     <template>
-                        <el-radio v-model="backgroundRadio.update.background_check.is_dismiss" label="1">是</el-radio>
-                        <el-radio v-model="backgroundRadio.update.background_check.is_dismiss" label="2">否</el-radio>
+                        <el-radio :disabled='!is_editing_bg' v-model="backgroundRadio.update.background_check.is_dismiss" label="1">是</el-radio>
+                        <el-radio :disabled='!is_editing_bg' v-model="backgroundRadio.update.background_check.is_dismiss" label="2">否</el-radio>
                     </template>
                 </el-form-item>
                 <div v-if='backgroundRadio.update.background_check.is_dismiss == "2"'>
@@ -39,13 +39,13 @@
                     </el-form-item >
                 </div>
                 <div class='edit-result' v-if='is_editing_bg'>
-                    <el-button size='mini' @click='cancelEditingBg'>取消</el-button>
-                    <el-button size='mini' @click='confirmEditingBg'>确定</el-button>
+                    <!-- <el-button size='mini' @click='cancelEditingBg'>取消</el-button>
+                    <el-button size='mini' @click='confirmEditingBg'>确定</el-button> -->
                 </div>
-                <div class='edit-result' v-if='!is_editing_bg'>
-                    <el-button size='mini' @click='cancelBgReseach'>取消</el-button>
-                    <el-button size='mini' @click='confirmBgReseach'>确定</el-button>
-                    <el-button size='mini' @click='editBgreseach'>修改</el-button>
+                <div class='edit-result'>
+                    <el-button size='mini' @click='cancelBgReseach' v-if='allow_edit'>取消</el-button>
+                    <el-button size='mini' @click='confirmBgReseach' v-if='allow_edit'>确定</el-button>
+                    <el-button size='mini' @click='editBgreseach' v-if='!is_editing_bg && allow_edit'>修改</el-button>
                 </div>
             </el-form>
         </el-dialog>
@@ -58,6 +58,7 @@
         data(){
             return{
                 backgroundDialogVisible: false,
+                allow_edit: true,
                 is_editing_bg: false,
                 backgroundRadio: {
                     update: {
@@ -83,6 +84,13 @@
             backgroundDialogVisible(val){
                 if(!val){
                     this.$emit('close')
+                }else{
+                    // console.log(this.$store.state.platform.active_name);
+                    if(this.$store.state.platform.active_name == 'fourth'){
+                        this.allow_edit = false;
+                    }else{
+                        this.allow_edit = true;
+                    }
                 }
                 if(this.is_editing_bg_){
                     this.is_editing_bg = true;
@@ -93,7 +101,7 @@
             },
             background_info(val){
                 if(val.background_check){
-                    console.log(val.background_check)
+                    // console.log(val.background_check)
                     this.prefill(val.background_check)
                 }else{
                     this.initBgParam();
