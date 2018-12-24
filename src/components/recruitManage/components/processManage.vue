@@ -1013,6 +1013,7 @@
                             this.isClear = false;
                     },300);
                     this.interviewParams.album = [];
+                    this.cancelUpload()
                 }
             }
         },
