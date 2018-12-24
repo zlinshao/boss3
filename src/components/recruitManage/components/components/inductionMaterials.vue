@@ -157,7 +157,7 @@
                     this.params.update.image_info.labor_contract = [];
                     this.params.update.image_info.bank = [];
                     
-                    console.log(this.$store.state.platform.active_name);
+                    // console.log(this.$store.state.platform.active_name);
                     if(this.$store.state.platform.active_name === 'fourth'){
                         this.allow_edit = false;
                         // this.$nextTick(() => {

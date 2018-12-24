@@ -960,7 +960,7 @@
             IsEntryDialog(val){
                 if(val){
                     // this.editIsEntry();
-                    console.log(this.$store.state.platform.active_name)
+                    // console.log(this.$store.state.platform.active_name)
                     if(this.$store.state.platform.active_name === 'fourth'){
                         this.allow_edit = false;
                     }else{
@@ -1165,12 +1165,11 @@
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
-            console.log('0000')
+            // console.log('0000')
             this.lookUpResumeDialog = true;
             this.album = row.album;
             row.album.forEach(item => {
                 if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
-                    console.log(123)
                     this.lookUpResumeDialog = true;
                 }else{
                     setTimeout(() => {
@@ -1404,7 +1403,7 @@
         this.newInterviewParams.album = this.toNum(val[1])
       },
       regetImgData(val) {
-        console.log(val)
+        // console.log(val)
         this.interviewParams.album = this.toNum(val[1])
       },
       //转成number类型
@@ -1492,7 +1491,6 @@
           this.album = row.album;
           row.album.forEach(item => {
                 if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
-                    console.log(123)
                     this.lookUpResumeDialog = true;
                 }else{
                     setTimeout(() => {
@@ -1711,7 +1709,6 @@
           this.album = row.album;
           row.album.forEach(item => {
                 if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
-                    console.log(123)
                     this.lookUpResumeDialog = true;
                 }else{
                     setTimeout(() => {

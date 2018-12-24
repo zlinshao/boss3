@@ -85,7 +85,7 @@
                 if(!val){
                     this.$emit('close')
                 }else{
-                    console.log(this.$store.state.platform.active_name);
+                    // console.log(this.$store.state.platform.active_name);
                     if(this.$store.state.platform.active_name == 'fourth'){
                         this.allow_edit = false;
                     }else{
