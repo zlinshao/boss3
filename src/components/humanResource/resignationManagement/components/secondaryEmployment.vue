@@ -192,12 +192,12 @@
                                    :label="item.dictionary_name">{{item.dictionary_name}}
                         </el-option>
                       </el-select>
-                      <div style="color: #409EFF;font-size: 12px;text-align: right;"
+                      <!-- <div style="color: #409EFF;font-size: 12px;text-align: right;"
                            v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
                         <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
                         <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
                         <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
-                      </div>
+                      </div> -->
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
@@ -405,7 +405,7 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
-          status: "",
+          status: "1",
           // ================
           duty_id: [],
           position_id: [],
@@ -627,7 +627,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.status = "";
+        this.params.status = "1";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';

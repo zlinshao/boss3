@@ -8,11 +8,11 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(255, 255, 255, 0)">
           <el-table-column prop="sign_date" label="日期"></el-table-column>
-          <el-table-column prop="attendance" label="班次">
+          <el-table-column label="班次">
             <template slot-scope="scope">
-              <span v-if="scope.row.resultWork == '早班'">{{scope.row.resultWork + "9:00 - 18:00"}}</span>
-              <span v-if="scope.row.resultWork == '休息'">{{scope.row.resultWork}}</span>
-              <span v-if="scope.row.resultWork == '晚班'">{{scope.row.resultWork + "13:00 - 21:00"}}</span>
+              <span v-if="scope.row.attendance == '早班'">{{scope.row.attendance + "9:00 - 18:00"}}</span>
+              <span v-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
+              <span v-if="scope.row.attendance == '晚班'">{{scope.row.attendance + "13:00 - 21:00"}}</span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="hugh" label="休息"></el-table-column> -->

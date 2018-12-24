@@ -1196,7 +1196,8 @@
           this.$http.get(globalConfig.server + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
             if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
-              this.detailData.send_info.forward_group = 2;
+              console.log(this.detailData.send_info.forward_group)
+              // this.detailData.send_info.forward_group = 2;
             } else {
               this.prompt('warning', res.data.msg);
             }
