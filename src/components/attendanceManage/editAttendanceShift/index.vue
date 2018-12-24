@@ -53,7 +53,7 @@
         </el-form-item> -->
         <el-row>
           <el-col :span="12">
-            <el-form-item label="上午上班时间" class="workingHours" size="mini">
+            <el-form-item label="上午上班时间" prop="morning_work_time" class="workingHours" size="mini">
               <!-- @change="selectedAmTime" -->
               <el-time-select v-model="form.morning_work_time" :picker-options="{
                 start: '01:00',
@@ -64,7 +64,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="上午下班时间" class="workingHours" size="mini"> 
+            <el-form-item label="上午下班时间" prop="morning_rest_time" class="workingHours" size="mini"> 
               <!-- start: am_off_start,@change="selectedAmOffTime" -->
               <el-time-select v-model="form.morning_rest_time" :picker-options="{
                 start: '01:00',
