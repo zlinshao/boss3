@@ -431,6 +431,7 @@ export default {
           this.emptyText = "暂无数据";
           this.resignationData = [];
           this.total = 0;
+          this.Loading = false;
         }
       })
     },
