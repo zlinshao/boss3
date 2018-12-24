@@ -159,7 +159,7 @@
                     <span v-if="scope.row.status == '1'">在职</span>
                     <span v-if="scope.row.status == '2'">离职</span>
                     <span v-if="scope.row.status == '3'">禁用</span>
-                    <span v-if="scope.row.status == '4'">停止留薪</span>
+                    <span v-if="scope.row.status == '4'">停职留薪</span>
                   </div>
                 </template>
               </el-table-column>

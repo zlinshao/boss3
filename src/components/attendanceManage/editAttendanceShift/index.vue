@@ -53,22 +53,24 @@
         </el-form-item> -->
         <el-row>
           <el-col :span="12">
-            <el-form-item label="上午上班时间" class="workingHours" prop="morning_work_time" size="mini">
+            <el-form-item label="上午上班时间" class="workingHours" size="mini">
+              <!-- @change="selectedAmTime" -->
               <el-time-select v-model="form.morning_work_time" :picker-options="{
                 start: '01:00',
                 step: '1:00',
                 end: '24:00'
-              }" placeholder="选择时间" class="workingHours" @change="selectedAmTime">
+              }" placeholder="选择时间" class="workingHours" >
               </el-time-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="上午下班时间" class="workingHours" prop="morning_rest_time" size="mini">
+            <el-form-item label="上午下班时间" class="workingHours" size="mini"> 
+              <!-- start: am_off_start,@change="selectedAmOffTime" -->
               <el-time-select v-model="form.morning_rest_time" :picker-options="{
-                start: am_off_start,
+                start: '01:00',
                 step: '1:00',
                 end: '24:00'
-              }" placeholder="选择时间" class="workingHours" @change="selectedAmOffTime">
+              }" placeholder="选择时间" class="workingHours" >
               </el-time-select>
             </el-form-item>
           </el-col>
@@ -76,18 +78,20 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="下午上班时间" class="workingHours" prop="pm_work_time" size="mini">
+                <!-- start: pm_start, @change="selectedPmTime"-->
                 <el-time-select v-model="form.pm_work_time" :picker-options="{
-                  start: pm_start,
+                  start: '01:00',
                   step: '1:00',
                   end: '24:00'
-                }" placeholder="选择时间" class="workingHours" @change="selectedPmTime">
+                }" placeholder="选择时间" class="workingHours" >
                 </el-time-select>
           </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="下午下班时间" class="workingHours" prop="pm_rest_time" size="mini">
+                <!-- start: pm_off_start, -->
                 <el-time-select v-model="form.pm_rest_time" :picker-options="{
-                  start: pm_off_start,
+                  start: '01:00',
                   step: '1:00',
                   end: '24:00'
                 }" placeholder="选择时间" class="workingHours">
@@ -375,9 +379,9 @@ export default {
               allow_late_number: data.data.allow_late_number
             };
             // this.am_off_start = 
-            this.selectedAmTime(data.data.morning_work_time);
-            this.selectedAmOffTime(data.data.morning_rest_time);
-            this.selectedPmTime(data.data.pm_work_time);
+            // this.selectedAmTime(data.data.morning_work_time);
+            // this.selectedAmOffTime(data.data.morning_rest_time);
+            // this.selectedPmTime(data.data.pm_work_time);
           }
         });
     },

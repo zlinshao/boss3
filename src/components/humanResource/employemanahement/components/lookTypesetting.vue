@@ -116,6 +116,7 @@ export default {
     },
     ids(val) {
       this.params.user_id = val;
+      // console.log(this.params.user_id, "1111")
       this.currentSort.user_id = val;
       this.getTypeTime();
     },
@@ -150,11 +151,7 @@ export default {
     init() {
       this.year = new Date().getFullYear();
       this.month = new Date().getMonth() + 1;
-      this.selectmonth = new Date().getMonth() + 1,
-      this.params = {
-        user_id: "",
-        arrange_month: ""
-      }
+      this.selectmonth = new Date().getMonth() + 1;
     },
     // 获取排班
     getTypeTime() {

@@ -275,12 +275,12 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="在职状态">
+                    <!-- <el-form-item label="在职状态">
                       <el-select v-model="params.status" placeholder="请选择" clearable>
                         <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                   </el-col>
                 <!-- <el-col :span="8">
                   <el-form-item label="企业邮箱">
