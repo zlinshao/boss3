@@ -139,6 +139,12 @@
                             type: 'success'
                         });
                         this.backgroundDialogVisible = false;
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
                     }
                 })
             },

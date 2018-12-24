@@ -1526,6 +1526,12 @@
           this.$http.put(globalConfig.server + 'hrm/interview/' + this.humansourceObj.id, this.agreeInductParams).then(res => {
             if (res.data.code === '20030') {
               this.updateHumanResource()
+            }else{
+                this.$notify({
+                    title: '警告',
+                    message: res.data.msg,
+                    type: 'warning'
+                });
             }
           })
         }
@@ -1533,6 +1539,12 @@
           this.$http.put(globalConfig.server + 'hrm/interview/' + this.humansourceObj.id, this.disAgreeInductParams).then(res => {
             if (res.data.code === '20030') {
               this.updateHumanResource()
+            }else{
+                this.$notify({
+                    title: '警告',
+                    message: res.data.msg,
+                    type: 'warning'
+                });
             }
           })
         }
