@@ -233,6 +233,7 @@
                 active_name:'first',
                 page: 1,
                 total:0,
+                scrollTop: 0,
                 loadingRecruit: true,
                 newPositionDialog: false,
                 editorDisabled: false,
@@ -300,7 +301,6 @@
         },
         watch: {
             togglePositionDialogVisible(val){
-                // console.log(val);
                 if(!val){
                     this.position_index = '';
                     this.position_status = '';
@@ -428,7 +428,8 @@
                         this.loadingRecruit = false;
                         this.total = res.data.data.count;
                         this.positionList = res.data.data.data;
-                        this.positionList.forEach(item => {
+                        this.$nextTick(() => {
+                            document.documentElement.scrollTop = this.scrollTop;
                         });
                     }else{
                         this.loadingRecruit = false;
@@ -526,7 +527,6 @@
                 let str = ''
                 this.status.forEach(item => {
                     if(item.id === _id){
-                        // console.log(item.dictionary_name)
                         str = item.dictionary_name;
                         return str 
                     }
@@ -550,7 +550,6 @@
             //选择部门
             selectMember(val){
                 if(!this.selectPositionDialogVisible){
-                    // console.log(val);
                     this.params.org_id = val[0].id;
                     this.department_name_search = val[0].name;
                 }else{
@@ -568,7 +567,6 @@
                 this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then((res) => {
                     if (res.data.code === '20000') {
                         this.duty = res.data.data.data;
-                        // console.log(res.data.data.data)
                     }
                 });
             },
@@ -637,8 +635,8 @@
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-            //    console.log(item)
-               this.$store.dispatch('savePositionInfo', item)
+               this.scrollTop = window.pageYOffset;
+               this.$store.dispatch('savePositionInfo', item);
                this.id = item.id;
                this.processDialog = true;
                if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
