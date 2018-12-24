@@ -984,7 +984,7 @@
             unpassInterviewDialog(val){
                 if(!val){
                     this.is_editing_interview_finished = '';
-                    this.updateParams_finished.update.interview_status = '';
+                    // this.updateParams_finished.update.interview_status = '';
                     this.is_editing_unpass = false;
                 }
             },
