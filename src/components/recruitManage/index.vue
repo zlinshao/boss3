@@ -610,16 +610,20 @@
                this.id = item.id;
                this.processDialog = true;
                if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
-                   this.active_name = 'first'
+                   this.active_name = 'first';
+                   this.$store.dispatch('setActiveName', 'first')
                }
                if(event.path[1].className.indexOf('second') > -1 || event.target.classList.contains('second')){
-                   this.active_name = 'second'
+                   this.active_name = 'second';
+                   this.$store.dispatch('setActiveName', 'second')
                }
                if(event.path[1].className.indexOf('third') > -1 || event.target.classList.contains('third')){
-                   this.active_name = 'third'
+                   this.active_name = 'third';
+                   this.$store.dispatch('setActiveName', 'third')
                }
                if(event.path[1].className.indexOf('fourth') > -1 ||  event.target.classList.contains('fourth')){
-                   this.active_name = 'fourth'
+                   this.active_name = 'fourth';
+                   this.$store.dispatch('setActiveName', 'fourth')
                }
            }
         }

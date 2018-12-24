@@ -1193,7 +1193,7 @@
           this.interviewParams.gender = row.gender;
           this.interviewParams.education = row.education;
           this.interviewParams.experience = row.experience;
-        //   this.interviewParams.interview_time = row.interview_time;
+          this.interviewParams.interview_time = row.interview_time;
           this.interviewParams.resume_source = row.resume_source;
         }
         //未面试
