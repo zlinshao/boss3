@@ -312,7 +312,7 @@
             this.getDictionary();
         },
         methods:{
-            //分頁
+            //分页
             handleSizeChange(){
 
             },
@@ -437,43 +437,6 @@
                         this.positionList = [];
                     }
                 })
-            },
-            //获取已约面试/面试结束/等待入职/已经入职数据
-            getInterviewDated(){
-                if(this.recruitID.length){
-                    this.recruitID.forEach((item, index) => {
-                        //已约面试
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=1&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'interviewDated', res.data.data.count)
-                            }
-                        });
-                        //面试完毕
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=2&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'interviewFinished', res.data.data.count)
-                            }else{
-                                this.interviewFinished = {}
-                            }
-                        });
-                        //等待入职
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=3&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'toInduct', res.data.data.count)
-                            }else{
-                                this.toInduct = {}
-                            }
-                        });
-                        //已经入职
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=4&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'inducted', res.data.data.count)
-                            }else{
-                                this.inducted = {}
-                            }
-                        });
-                    })
-                }
             },
             handleImageAdded(file, Editor, cursorLocation, resetUploader){
                 let formData = new FormData();
