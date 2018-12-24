@@ -187,6 +187,12 @@
                         }, 300);
                         this.init();
                         this.inductionMaterialsDialogVisible = false;
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
                     }
                 })
             },
