@@ -440,7 +440,7 @@
                         <div class="content">
                           <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.entry_way && basicInfo_info.basic_info.entry_way.entry_type'>
                             {{entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type).length
-                            ? entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type)[0].dictionary_name : ''}}
+                            ? entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type)[0].name : ''}}
                           </span>
                           <span v-else>暂无</span>
                         </div>

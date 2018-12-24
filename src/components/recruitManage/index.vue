@@ -34,7 +34,7 @@
             </el-form>
         </div>
         <!--招聘详情开始-->
-        <div class="positionList"  v-loading="loadingRecruit" element-loading-text="拼命加载中">
+        <div class="positionList"  v-loading="loadingRecruit"  element-loading-text="加载中" element-loading-spinner="el-icon-loading">
             <div class='positionItem' v-for="(item, index) in positionList" :key="index">
                 <el-container>
                     <el-header>
@@ -164,7 +164,7 @@
             </div>
         </div>
         <!--招聘详情结束-->
-        <div class="empty" v-if="!positionList.length">暂无数据</div>
+        <div class="empty" v-if="!positionList.length && !loadingRecruit">暂无数据</div>
         <div class="block">
             <el-pagination
             @size-change="handleSizeChange"
@@ -233,6 +233,7 @@
                 active_name:'first',
                 page: 1,
                 total:0,
+                scrollTop: 0,
                 loadingRecruit: true,
                 newPositionDialog: false,
                 editorDisabled: false,
@@ -300,7 +301,6 @@
         },
         watch: {
             togglePositionDialogVisible(val){
-                // console.log(val);
                 if(!val){
                     this.position_index = '';
                     this.position_status = '';
@@ -421,14 +421,15 @@
             },
             //获取招聘列表
             getPositionList(){
-                // this.positionList = [];
+                this.positionList = [];
                 this.loadingRecruit = true;
                 this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
                     if(res.data.code === '10000' || res.data.code === '70000'){
                         this.loadingRecruit = false;
                         this.total = res.data.data.count;
                         this.positionList = res.data.data.data;
-                        this.positionList.forEach(item => {
+                        this.$nextTick(() => {
+                            document.documentElement.scrollTop = this.scrollTop;
                         });
                     }else{
                         this.loadingRecruit = false;
@@ -526,7 +527,6 @@
                 let str = ''
                 this.status.forEach(item => {
                     if(item.id === _id){
-                        // console.log(item.dictionary_name)
                         str = item.dictionary_name;
                         return str 
                     }
@@ -550,7 +550,6 @@
             //选择部门
             selectMember(val){
                 if(!this.selectPositionDialogVisible){
-                    // console.log(val);
                     this.params.org_id = val[0].id;
                     this.department_name_search = val[0].name;
                 }else{
@@ -568,7 +567,6 @@
                 this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then((res) => {
                     if (res.data.code === '20000') {
                         this.duty = res.data.data.data;
-                        // console.log(res.data.data.data)
                     }
                 });
             },
@@ -637,8 +635,8 @@
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-            //    console.log(item)
-               this.$store.dispatch('savePositionInfo', item)
+               this.scrollTop = window.pageYOffset;
+               this.$store.dispatch('savePositionInfo', item);
                this.id = item.id;
                this.processDialog = true;
                if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
@@ -659,6 +657,8 @@
 </script>
 <style lang="scss" scoped>
     #recruitManage{
+        min-height: 790px;
+        position: relative;
         height: 100%;
         padding: 0 30px;
         .positionTitle{
@@ -714,6 +714,11 @@
         }
         .el-pagination {
             text-align: right;
+        }
+        .block{
+            position: absolute;
+            bottom: 0;
+            right: 0;
         }
     }
 </style>
