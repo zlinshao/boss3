@@ -113,7 +113,7 @@
             <el-table-column label="数量/套" prop="lord.count"></el-table-column>
             <el-table-column label="渠道单比例" prop="lord.agency_percentage">
               <template slot-scope="scope">
-                <span v-if="scope.row.lord && scope.row.lord.agency_percentage && scope.row.lord.agency_percentage != 0">{{ parseFloat(scope.row.lord.agency_percentage) * 100 }}%</span>
+                <span v-if="scope.row.lord && scope.row.lord.agency_percentage && scope.row.lord.agency_percentage != 0">{{ parseFloat(scope.row.lord.agency_percentage).toFixed(2) * 100 }}%</span>
               </template>
             </el-table-column>
             <el-table-column label="均价/元" prop="lord.price_avg"></el-table-column>
@@ -125,7 +125,7 @@
             <el-table-column label="已空置" prop="renter.ready_days_avg"></el-table-column>
             <el-table-column label="渠道单比例" prop="renter.agency_percentage">
               <template slot-scope="scope">
-                <span v-if="scope.row.renter && scope.row.renter.agency_percentage && scope.row.renter.agency_percentage != 0">{{ parseFloat(scope.row.renter.agency_percentage) * 100 }}%</span>
+                <span v-if="scope.row.renter && scope.row.renter.agency_percentage && scope.row.renter.agency_percentage != 0">{{ parseFloat(scope.row.renter.agency_percentage).toFixed(2) * 100 }}%</span>
               </template>
             </el-table-column>
             <el-table-column label="均价/元" prop="renter.price_avg"></el-table-column>
@@ -155,7 +155,7 @@
       <el-dialog
         title="数据统计"
         :visible.sync="statisticalVisible"
-        width="40%"
+        width="55%"
       >
           <div style="width:100%;text-align: center;">
             <h3 style="text-align: left;margin-left: 10%;">{{ chartTitle[currentTitle] }}</h3>
