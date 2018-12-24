@@ -366,6 +366,13 @@
                             message: res.data.msg,
                             type: 'warning'
                         });
+                    }else{
+                        this.$notify({
+                            title:'警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
+                        this.initData();
                     }
                 })
             },

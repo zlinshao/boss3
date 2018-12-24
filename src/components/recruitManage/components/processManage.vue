@@ -649,7 +649,7 @@
                         </el-form-item>
                         <el-form-item label="其他条件">
                             <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other" type='textarea'></el-input>
-                            <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
+                            <span class='test-condition' v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
                         </el-form-item>
                         <!-- <div class='edit-condition' v-if='is_editing_condition'>
                             <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
@@ -1241,11 +1241,12 @@
             this.is_editing_id = '';
             this.getAllData(this.id)
           } else {
-            this.notify({
+            this.$notify({
               title: '警告',
               message: res.data.msg,
               type: 'warning'
-            })
+            });
+            this.is_editing_id = '';
           }
         })
       },
@@ -2026,6 +2027,9 @@
     .el-pagination {
       padding-right: 50px;
       text-align: right;
+    }
+    .test-condition{
+        word-break: break-all;
     }
   }
     #embed-process {
