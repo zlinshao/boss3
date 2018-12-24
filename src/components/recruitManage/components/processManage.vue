@@ -917,6 +917,9 @@
                 humanresource_entry: [],    //入职成功/失败
             }
         },
+        created(){
+            this.getDictionary()
+        },
         watch:{
             processDialog(val){
                 if(val){
