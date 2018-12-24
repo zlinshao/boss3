@@ -131,7 +131,7 @@ export default {
                   })
                 } else if(val.status == 1) {
                   // obj.resultWork = "迟到";
-                  obj.resultWork = 60 - Number(val.dimensions.minute);
+                  obj.resultWork = Number(val.dimensions.minute);
                 } 
                 obj.goWork = val.dimensions.hour + ":" + val.dimensions.minute;       // 上班时间
               } else if (val.event_attribute == 2) {

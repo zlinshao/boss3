@@ -373,7 +373,8 @@ export default {
             item.org.forEach((val, key) => {
              orgStr += val.name;
             if(val.corp) {
-              orgStr = `${orgStr} ${val.corp.name}`
+              // orgStr = `<span>${orgStr}</span><br /><span> ${val.corp.name}</span>`;
+              orgStr = `${orgStr} ${val.corp.name}`;
             }
              this.staffDate[index].orgStr = orgStr;
 

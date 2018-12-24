@@ -37,7 +37,7 @@
             </el-select> -->
           </el-form-item>
           <el-form-item label="班次代号" class="shiftCode" prop="alias">
-            <el-input v-model="form.alias" size="small"></el-input>
+            <el-input v-model="form.alias" size="small" :disabled="checkTitle"></el-input>
             <!-- <el-select v-model="form.alias" placeholder="请选择班次代号" size="mini">
               <el-option v-for="item in  aliasOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -51,28 +51,50 @@
             </el-radio-group>
           </div>
         </el-form-item> -->
-          <el-form-item label="上班时间" class="workingHours" prop="morning_work_time" size="mini">
-            <el-time-select v-model="form.morning_work_time" :picker-options="{
-              start: '01:00',
-              step: '1:00',
-              end: '24:00'
-            }" placeholder="选择时间" class="workingHours">
-            </el-time-select>
-            <!-- <span>可提前</span>
-          <el-input v-model="form.workingTimeBefore" size="mini"></el-input>
-          <span>分钟打卡</span> -->
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="上午上班时间" class="workingHours" prop="morning_work_time" size="mini">
+              <el-time-select v-model="form.morning_work_time" :picker-options="{
+                start: '01:00',
+                step: '1:00',
+                end: '24:00'
+              }" placeholder="选择时间" class="workingHours" @change="selectedAmTime">
+              </el-time-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="上午下班时间" class="workingHours" prop="morning_rest_time" size="mini">
+              <el-time-select v-model="form.morning_rest_time" :picker-options="{
+                start: am_off_start,
+                step: '1:00',
+                end: '24:00'
+              }" placeholder="选择时间" class="workingHours" @change="selectedAmOffTime">
+              </el-time-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="下午上班时间" class="workingHours" prop="pm_work_time" size="mini">
+                <el-time-select v-model="form.pm_work_time" :picker-options="{
+                  start: pm_start,
+                  step: '1:00',
+                  end: '24:00'
+                }" placeholder="选择时间" class="workingHours" @change="selectedPmTime">
+                </el-time-select>
           </el-form-item>
-          <el-form-item label="下班时间" class="workingHours" prop="pm_rest_time" size="mini">
-            <el-time-select v-model="form.pm_rest_time" :picker-options="{
-              start: '01:00',
-              step: '1:00',
-              end: '24:00'
-            }" placeholder="选择时间" class="workingHours">
-            </el-time-select>
-            <!-- <span>可延迟</span>
-          <el-input v-model="form.workingOffTimeAfter" size="mini"></el-input>
-          <span>分钟打卡</span> -->
-          </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="下午下班时间" class="workingHours" prop="pm_rest_time" size="mini">
+                <el-time-select v-model="form.pm_rest_time" :picker-options="{
+                  start: pm_off_start,
+                  step: '1:00',
+                  end: '24:00'
+                }" placeholder="选择时间" class="workingHours">
+                </el-time-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- <el-form-item label="休息时间" class="workingRest">
           <span>从</span>
           <el-time-select v-model="form.workingRest1" :picker-options="{
@@ -110,6 +132,10 @@
           <el-form-item class="beLateSeriousMin error" prop="warring_late_minute">
             <p class="bigWidth">严重迟到分钟数</p>
             <el-input v-model="form.warring_late_minute" size="mini" class="samllWidth"></el-input>
+          </el-form-item>
+          <el-form-item class="beLateSeriousMin error" prop="relief_late_minute">
+            <p class="bigWidth">免责迟到次数</p>
+            <el-input v-model="form.allow_late_number" size="mini" class="samllWidth"></el-input>
           </el-form-item>
           <el-form-item class="beLateSeriousMin error" prop="relief_late_minute">
             <p class="bigWidth">免责迟到分钟数</p>
@@ -182,6 +208,10 @@ export default {
       }
     };
     return {
+      time: "",
+      am_off_start: "",
+      pm_start: "",
+      pm_off_start: "",
       nameOptions: [
         { value: "早班", label: "早班" },
         { value: "正常班", label: "正常班" },
@@ -204,11 +234,19 @@ export default {
           { required: true, message: "请输入班次代号", trigger: "change" },
           { required: true, validator: checkShiftCode, trigger: "change" }
         ],
-        pm_rest_time: [
+        pm_work_time: [
+          { required: true, message: "请选择时间", trigger: "change" },
+          { required: true, validator: checkPmTime, trigger: "change" }
+        ],
+         pm_rest_time: [
           { required: true, message: "请选择时间", trigger: "change" },
           { required: true, validator: checkPmTime, trigger: "change" }
         ],
         morning_work_time: [
+          { required: true, message: "请选择时间", trigger: "change" },
+          { required: true, validator: checkAmTime, trigger: "change" }
+        ],
+        morning_rest_time: [
           { required: true, message: "请选择时间", trigger: "change" },
           { required: true, validator: checkAmTime, trigger: "change" }
         ],
@@ -266,16 +304,46 @@ export default {
       form: {
         name: "", //班次名称
         alias: "", //检查班次代号
-        morning_work_time: "", // 上班时间
-        pm_rest_time: "", // 下班可提前打卡
+        morning_work_time: "", // 上午上班时间
+        morning_rest_time: "", // 上午下班时间
+        pm_work_time: "", // 下午上班时间
+        pm_rest_time: "", // 下午下班时间
         warring_late_minute: "", //严重迟到分钟数
         cheat_half_minute: "", //旷工半天
         cheat_day_minute: "", //旷工一天
-        relief_late_minute: "" // 免责迟到分钟数
+        relief_late_minute: "", // 免责迟到分钟数
+        allow_late_number: "",  // 免责迟到次数
       }
     };
   },
   methods: {
+    selectedAmTime(val) {
+      if(val) {
+         if(Number(val.split(":")[0]) < 9) {
+            this.am_off_start = ("0" + (Number(val.split(":")[0]) + 1)) + ":" + val.split(":")[1];
+          } else {
+            this.am_off_start = (Number(val.split(":")[0]) + 1) + ":" + val.split(":")[1];
+          }
+      }
+    },
+    selectedAmOffTime(val) {
+      if(val) {
+        if(Number(val.split(":")[0]) < 9) {
+          this.pm_start = ("0" + (Number(val.split(":")[0]) + 1)) + ":" + val.split(":")[1];
+        } else {
+          this.pm_start = (Number(val.split(":")[0]) + 1) + ":" + val.split(":")[1];
+        }
+      }
+    },
+    selectedPmTime(val) {
+      if(val) {
+        if(Number(val.split(":")[0]) < 9) {
+          this.pm_off_start = ("0" + (Number(val.split(":")[0]) + 1)) + ":" + val.split(":")[1];
+        } else {
+          this.pm_off_start = (Number(val.split(":")[0]) + 1) + ":" + val.split(":")[1];
+        }
+      }
+    },
     addAttendanceShift() {
       this.checkTitle = false;
       this.editAttendance = true;
@@ -297,12 +365,19 @@ export default {
               name: data.data.name,
               alias: data.data.alias,
               morning_work_time: data.data.morning_work_time,
+              morning_rest_time: data.data.morning_rest_time,
+              pm_work_time: data.data.pm_work_time,
               pm_rest_time: data.data.pm_rest_time,
               warring_late_minute: data.data.warring_late_minute,
               cheat_half_minute: data.data.cheat_half_minute,
               cheat_day_minute: data.data.cheat_day_minute,
-              relief_late_minute: data.data.relief_late_minute
+              relief_late_minute: data.data.relief_late_minute,
+              allow_late_number: data.data.allow_late_number
             };
+            // this.am_off_start = 
+            this.selectedAmTime(data.data.morning_work_time);
+            this.selectedAmOffTime(data.data.morning_rest_time);
+            this.selectedPmTime(data.data.pm_work_time);
           }
         });
     },
@@ -311,7 +386,7 @@ export default {
       this.$refs.form.resetFields();
     },
     addAttendanceSubmit(alias, name, id) {
-
+      console.log(this.form, "1111111")
       this.$http
         .post(globalConfig.server + "/attendance/classes", this.form)
         .then(res => {
@@ -444,6 +519,23 @@ export default {
     editAttendance(val) {
       if (!val) {
         this.$refs.form.resetFields();
+        this.am_off_start = "";
+        this.pm_start = "";
+        this.pm_start = "";
+        this.pm_off_start = "";
+        this.form = {
+           name: "", //班次名称
+          alias: "", //检查班次代号
+          morning_work_time: "", // 上午上班时间
+          morning_rest_time: "", // 上午下班时间
+          pm_work_time: "", // 下午上班时间
+          pm_rest_time: "", // 下午下班时间
+          warring_late_minute: "", //严重迟到分钟数
+          cheat_half_minute: "", //旷工半天
+          cheat_day_minute: "", //旷工一天
+          relief_late_minute: "", // 免责迟到分钟数
+          allow_late_number: "",  // 免责迟到次数
+        }
       }
     }
   }
@@ -490,12 +582,12 @@ export default {
   }
   .workingHours {
     .el-input {
-      width: 30%;
+      width: 65%;
     }
   }
   .workingRest {
     .el-input {
-      width: 30%;
+      width: 65%;
     }
   }
   .totalTime {
