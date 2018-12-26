@@ -4,33 +4,9 @@
     <div class="addAllocation">
       <el-button type="primary" size="mini" @click="deleteAccount" :disabled="multipleSelection.length == 0">删除
       </el-button>
-      <el-button type="primary" size="mini" @click="allocationDialog = true"><i class="el-icon-plus"></i>&nbsp;新增分配
+      <el-button type="success" size="mini" @click="handleNewAllot"><i class="el-icon-plus"></i>&nbsp;新增分配
       </el-button>
     </div>
-    <!-- 新增分配弹出框 -->
-    <el-dialog title="账户分配" :visible.sync="allocationDialog" width="30%">
-      <el-form :label-position="labelPosition" label-width="80px" :model="formAllocation" size="mini" ref="form">
-        <el-form-item label="部门">
-          <el-input type="textarea" v-model="org_name" :disabled="true" style="resize:none"></el-input>
-        </el-form-item>
-        <el-form-item label="账户类型">
-          <el-select v-model="displayName" clearable placeholder="请选择账户类型" @change="getAccount">
-            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="账号">
-          <el-select multiple v-model="formAllocation.account_id " clearable placeholder="请选择" ref="bbbb">
-            <el-option v-for="item in accountNumOptions" :key="item.value" data-num='123' :label="item.label"
-                       :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="allocationDialog = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="addAllocation()" size="mini">确 定</el-button>
-      </span>
-    </el-dialog>
     <el-row :gutter="20">
       <el-col :span="8">
         <div class="border left">
@@ -65,7 +41,12 @@
       <el-col :span="16">
         <div class="grid-content bg-purple">
           <el-table :data="accountTable" style="width: 100%" class="urban-division"
-                    @selection-change="handleSelectionChange" ref="multipleTable">
+                    @selection-change="handleSelectionChange" ref="multipleTable" element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(255, 255, 255, 0)"
+                    v-loading="accountLoading"
+                    :empty-text="emptyAccount"
+          >
             <el-table-column type="selection"></el-table-column>
             <el-table-column prop="org_id.name" label="部门"></el-table-column>
             <el-table-column prop="account.account_num" label="账号"></el-table-column>
@@ -76,7 +57,7 @@
           </el-table>
           <!-- 分页 -->
           <div class="block pages">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            <el-pagination @current-change="handleCurrentChange"
                            :current-page="currentPage" :page-size="15"
                            layout="total, prev, pager, next" :total="total">
             </el-pagination>
@@ -105,6 +86,31 @@
         <el-button type="primary" size="mini" @click="addAccountNameOwner">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 新增分配弹出框 -->
+    <el-dialog title="账户分配" :visible.sync="allocationDialog" width="30%">
+      <el-form :label-position="labelPosition" label-width="80px" :model="formAllocation" size="mini" ref="form">
+        <el-form-item label="部门">
+          <el-input v-model="org_name" :disabled="true" style="resize:none"></el-input>
+        </el-form-item>
+        <el-form-item label="账户类型">
+          <el-select v-model="displayName" clearable placeholder="请选择账户类型" @change="getAccount">
+            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="账号">
+          <el-select multiple filterable v-model="formAllocation.account_id " clearable placeholder="请选择">
+            <el-option v-for="item in accountNumOptions" :key="item.id" :label="item.name"
+                       :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="allocationDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="addAllocation" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -120,19 +126,15 @@
           display_name: "",
           account_owner: ""
         },
+        accountLoading: false,
+        emptyAccount: '',
         add_account_display: false,
         add_account_num: "",
         add_display_name: "",
         add_account_owner: "",
         addAccount: false,
-        table: [{city: [], country: []}],
-        ind1: 0,
-        ind2: 0,
-        ind3: 0,
         org_name: "",
         labelPosition: "right", // form表单右对齐
-        areaTable: [],
-        groupTable: [],
         accountTable: [], //账户
         allocationDialog: false,
         formAllocation: {
@@ -140,7 +142,7 @@
           org_id: [],
           account_id: [],
         },
-        displayName: "1",
+        displayName: "",
         accountNumOptions: [], //选择账号
         accountTypeOption: [
           //账号类型
@@ -161,8 +163,6 @@
           limit: 10,
           page: 1,
           org_id: 1,
-          entry_time: [],
-          leave_time: [],
         },
         defaultExpandKeys: [], //默认展开节点列表
         defaultProps: {
@@ -177,67 +177,58 @@
     },
     watch: {},
     methods: {
+      handleNewAllot() {
+        if (!this.org_name) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择部门'
+          });
+          return false;
+        } else {
+          this.allocationDialog = true;
+        }
+      },
       //   获取银行账户
       getAccount(val) {
-        this.accountNumOptions = [];
-        let id = "";
-        id = val || 1;
-        this.$http
-          .get(globalConfig.server + "financial/account?all=1&cate=" + id)
-          .then(res => {
-            let obj = null;
-            if ((res.data.code = "20000")) {
-              res.data.data.data.forEach((item, index) => {
-                obj = {};
-                obj["value"] = item.id;
-                obj["label"] = item.display_name + " - " + item.account_owner + " - " + item.account_num;
-                obj["account_owner"] = item.account_owner;
-                obj["display_name"] = item.display_name;
-                this.accountNumOptions.push(obj);
-              });
-            }
-          });
+        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
+          params: {
+            cate: parseInt(val),
+            all: 1
+          }
+        }).then(res => {
+          this.accountNumOptions = res.data.data.data;
+        })
       },
       // 获取列表数据
-      getAccountList(id) {
+      getAccountList() {
+        this.accountLoading = true;
         this.$http
           .get(globalConfig.finance_server + "account/allocation/index", {
             params: this.params
           })
           .then(res => {
             if (res.data.success) {
+              this.accountLoading = false;
+              this.emptyAccount = ' ';
               this.accountTable = res.data.data.data;
               this.total = res.data.data.count;
+            }else {
+              this.accountLoading = false;
+              this.emptyAccount = "暂无数据";
             }
           });
       },
       // 删除账号
       handleSelectionChange(val) {
-        let _this = this;
-        let arr = this.$refs.multipleTable.data;
         this.multipleSelection = [];
-        if (arr.length !== val.length) {
-          val.forEach((item, index) => {
-            arr.forEach((val, key) => {
-              if (val.id == item.id) {
-                _this.multipleSelection.push(item.id);
-              }
-            })
-          })
-        } else {
-          val.forEach((item, index) => {
-            if (!_this.multipleSelection.includes(item.id)) {
-              _this.multipleSelection.push(item.id);
-            }
-          })
-        }
+        val.map(item => {
+          this.multipleSelection.push(item.id);
+        });
       },
+
       deleteAccount() {
-        console.log(this.multipleSelection);
-        return false;
-        this.$http.post(globalConfig.finance_server + "account/allocation/delete", {account_id: this.multipleSelection}).then(res => {
+        this.$http.post(globalConfig.finance_server + "account/allocation/delete", {id: this.multipleSelection}).then(res => {
           if (res.data.success) {
-            console.log(res);
             this.$notify.success({
               title: "成功",
               message: res.data.msg
@@ -253,44 +244,7 @@
       },
       // 新增分配
       addAllocation() {
-        this.$http
-          .post(
-            globalConfig.server + "financial/account_alloc",
-            this.formAllocation
-          )
-          .then(res => {
-            if (res.data.code == "20000") {
-              this.$notify.success({
-                title: "成功",
-                message: res.data.msg
-              });
-              this.getAccountList(this.selectId);
-              // this.org_name = "";
-              this.formAllocation.account_id = [];
-              this.allocationDialog = false;
-            } else if (res.data.code == "20001") {
-              this.addAccount = true;
-              this.accountId = res.data.info.cate;
-              this.addAccountFrom.account_name = res.data.info.name;
-              this.addAccountFrom.account_id = res.data.info.id;
-              this.addAccountFrom.account_num = res.data.info.account_num;
-              if (res.data.info.cate == 2) {
-                this.addAccountFrom.display_name = "支付宝";
-                this.add_account_display = true;
-              } else if (res.data.info.cate == 3) {
-                this.addAccountFrom.display_name = "微信";
-                this.add_account_display = true;
-              } else {
-                this.addAccountFrom.display_name = res.data.info.display_name;
-                this.addAccountFrom.account_owner = res.data.info.account_owner
-              }
-            } else if (res.data.code == "20012") {
-              this.$notify.warning({
-                title: "警告",
-                message: res.data.msg
-              });
-            }
-          });
+        console.log(this.formAllocation);
       },
       // 新增账户人或账户
       addAccountNameOwner() {
@@ -311,32 +265,30 @@
           }
         })
       },
-      handleSizeChange(val) {
-        this.params.limit = val;
-        this.getAccountList();
-        console.log(`每页 ${val} 条`);
-      },
+
       handleCurrentChange(val) {
         this.params.page = val;
         this.getAccountList();
-        console.log(`当前页: ${val}`);
       },
       // 新的获取城市数据
+
       //点击节点
-      nodeClick(data, node, store) {
+      nodeClick(data) {
         this.org_name = data.name;
         this.formAllocation.org_id = data.id;
         this.params.org_id = data.id;
         this.params.page = '1';
         this.getAccountList()
       },
-      nodeExpand(data, node, store) {
+
+      nodeExpand(data) {
         //展开
         if (this.defaultExpandKeys.indexOf(data.id) < 0) {
           this.defaultExpandKeys.push(data.id);
         }
       },
-      nodeCollapse(data, node, store) {
+
+      nodeCollapse(data) {
         //收起
         this.defaultExpandKeys.splice(this.defaultExpandKeys.indexOf(data.id), 1);
         data.children.forEach((item) => {
@@ -364,29 +316,16 @@
                 this.defaultExpandKeys.push(item.id);
               }
             });
-            this.getStaffData();
+            this.getAccountList();
           } else {
             this.collectStatus = '暂无数据';
             this.setTree = [];
           }
         });
       },
-      //获取员工数据列表
-      getStaffData() {
-        this.userCollectLoading = true;
-        if (!this.params.entry_time) {
-          this.params.entry_time = [];
-        }
-        if (!this.params.leave_time) {
-          this.params.leave_time = [];
-        }
-      },
     },
     mounted() {
       this.getDepart();
-    },
-    created() {
-      this.getAccount();
     }
   };
 </script>
