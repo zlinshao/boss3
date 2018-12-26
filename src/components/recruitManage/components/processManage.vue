@@ -87,7 +87,7 @@
                   v-model="interviewParams.interview_time"
                   type="datetime"
                   size='small'
-                  value-format='yyyy-MM-dd-HH-mm-ss'
+                  value-format='yyyy-MM-dd-HH-mm'
                   placeholder="选择日期"
                   default-time="12:00:00">
                 </el-date-picker>
@@ -472,7 +472,7 @@
               v-model="newInterviewParams.interview_time"
               type="datetime"
               size='small'
-              value-format='yyyy-MM-dd-HH-mm-ss'
+              value-format='yyyy-MM-dd-HH-mm'
               placeholder="选择日期"
               default-time="12:00:00">
             </el-date-picker>
@@ -1156,7 +1156,7 @@
                   this.show_entry_other_2 = true;
               }
               this.inductedData.forEach(item => {
-                if (item.entry_other.entry_time && item.entry_other.entry_time.length) {
+                if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
                   item.entry_time = this.timestampToDate(item.entry_other.entry_time)
                 }
               })
@@ -1179,7 +1179,7 @@
           this.interviewParams.gender = row.gender + '';
           this.interviewParams.education = row.education;
           this.interviewParams.experience = row.experience;
-        //   this.interviewParams.interview_time = row.interview_time;
+          this.interviewParams.interview_time = row.interview_time.replace(' ', '-').replace(':', '-');
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
