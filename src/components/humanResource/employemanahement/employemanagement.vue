@@ -383,7 +383,7 @@ export default {
       // }).then(() => {
         
       // })
-      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.secondaryID, {
           dismiss_time: this.form.dismiss_time,
           dismiss_reason: this.form.dismiss_reason,
         }).then((res) => {
@@ -395,7 +395,7 @@ export default {
             if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
               this.sendLeaveMsgForm.date = this.form.dismiss_time;
             }
-            this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
+            this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.secondaryID}?dismiss_time=${this.form.dismiss_time}`).then(res => {
               if (res.data.code === "710910") {
                 this.$notify.success({
                   title: '成功',
@@ -431,7 +431,7 @@ export default {
         
       // }).catch(() => {
       // });
-      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
+      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.secondaryID, {
           dismiss_time: this.form.dismiss_time,
           dismiss_reason: this.form.dismiss_reason,
         }).then((res) => {
@@ -445,7 +445,7 @@ export default {
             }
             this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
               params: {
-                id: this.editId,
+                id: this.secondaryID,
                 date: this.sendLeaveMsgForm.date
               }
             }).then((res) => {
@@ -480,7 +480,7 @@ export default {
         if (!this.leaveMsg) {
           this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
             params: {
-              id: this.editId,
+              id: this.secondaryID,
               date: this.sendLeaveMsgForm.date
             }
           }).then((res) => {
@@ -493,7 +493,7 @@ export default {
             }
           });
         } else {
-          this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
+          this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.secondaryID}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
             if (res.data.code === "710910") {
               this.$notify.success({
                 title: '成功',

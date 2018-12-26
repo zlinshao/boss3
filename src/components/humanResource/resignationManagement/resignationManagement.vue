@@ -283,6 +283,7 @@ export default {
     closeSecondary() {
        this.lookSecondary = false;
         this.isEdit = false;
+        this.editor = false;
        this.getResignationEmploye();
     },
     // 查看离职员工详情

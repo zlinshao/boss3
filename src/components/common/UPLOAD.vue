@@ -39,7 +39,6 @@
       }
     },
     mounted() {
-      console.log(this.editImage);
       let _this = this;
       $(document).on('click', '#pickfiles' + this.ID + ' ' + '.pic_delete', function () {
         let id = $(this).attr("data-val");
@@ -71,7 +70,6 @@
       editImage: {
         deep: true,
         handler(val, old) {
-          console.log(val)
           this.editImg = val;
           this.imgId = [];
           for (let key in val) {

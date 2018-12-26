@@ -321,6 +321,7 @@ export default {
       } else if(this.isAddOrEdit == "2") {
         this.editParams.remark = this.params[0].remarks[0].remark;
         this.editParams.type = this.params[0].remarks[0].type;
+        this.editParams.images = this.params[0].remarks[0].images;
         // console.log(this.editParams, "111111")
         // return false
         this.$http.post(globalConfig.server + 'credit/manage/employeeedit', this.editParams).then(res => {
