@@ -635,7 +635,7 @@
                               v-model="agreeInductParams.update.entry_other.entry_time" type="date"
                               value-format='yyyy-MM-dd'
                               placeholder="选择日期"></el-date-picker>
-              <span v-if='!is_editing_condition'>
+                            <span v-if='!is_editing_condition'>
                                 {{agreeInductParams.update.entry_other.entry_time}}
                             </span>
                         </el-form-item>
@@ -647,20 +647,12 @@
                             <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other" type='textarea'></el-input>
                             <span class='test-condition' v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
                         </el-form-item>
-                        <!-- <div class='edit-condition' v-if='is_editing_condition'>
-                            <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
-                            <el-button size='mini' @click='is_editing_condition = false'>确定</el-button>
-                        </div> -->
                     </div>
                     <div v-if='is_agree == "0"'>
                         <el-form-item label="原因">
                             <el-input v-if='is_editing_condition' v-model="disAgreeInductParams.update.entry_result" type='textarea'></el-input>
                             <span v-if='!is_editing_condition'>{{disAgreeInductParams.update.entry_result}}</span>
                         </el-form-item>
-                        <!-- <div class='edit-condition' v-if='is_editing_condition'>
-                            <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
-                            <el-button size='mini' @click='is_editing_condition = false'>确定</el-button>
-                        </div> -->
                     </div>
                 </el-form>
                 <div class='edit-result' >
@@ -1134,11 +1126,6 @@
               }else{
                   this.show_entry_other_1 = true;
               }
-              // this.toInductData.forEach(item => {
-              //   if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
-              //     item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-              //   }
-              // })
             } else {
               this.toInductData = [];
               this.total = 0;
@@ -1159,11 +1146,6 @@
               }else{
                   this.show_entry_other_2 = true;
               }
-              // this.inductedData.forEach(item => {
-              //   if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
-              //     item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-              //   }
-              // })
             } else {
               this.inductedData = [];
               this.total = 0;
@@ -1764,7 +1746,7 @@
           this.IsEntryDialog = true;
           this.communicate_status = 742;
           this.agreeInductParams.update.entry_other.salary = row.entry_other.salary;
-          this.agreeInductParams.update.entry_other.entry_time = row.entry_time ? row.entry_time.split(' ')[0] : '/';
+          this.agreeInductParams.update.entry_other.entry_time = row.entry_time ? row.entry_time.split(' ')[0] : '';
           this.agreeInductParams.update.entry_other.probation = row.entry_other.probation;
           this.agreeInductParams.update.entry_other.other = row.entry_other.other;
           this.humansourceObj.name = row.name;
