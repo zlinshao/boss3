@@ -743,7 +743,10 @@
           this.$http.get(this.url + 'organization/staff/live-sms/' + this.editId + '&to_user=1').then((res) => {
             if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
-              this.detailData.send_info = 2;
+              // this.detailData.send_info = 2;
+              if(this.detailData.send_info) {
+                this.detailData.send_info.forward_group = 1;
+              }
             } else {
               this.prompt('warning', res.data.msg);
             }

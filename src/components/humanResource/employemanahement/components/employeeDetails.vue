@@ -554,7 +554,9 @@ export default {
     },
     ids(val) {
       this.employDetailId = val;
-      this.openDetail(val);
+      if(val) {
+        this.openDetail(val);
+      }
     }
   },
   mounted() {

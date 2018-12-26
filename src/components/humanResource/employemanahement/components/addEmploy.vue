@@ -799,7 +799,7 @@
           if (res.data.code === '710910') {
             this.getImgList();
             this.detailData = res.data.data.detail;
-            console.log(this.detailData, "11111")
+            // console.log(this.detailData, "11111")
             this.params.phone = res.data.data.phone;
             this.params.real_name = res.data.data.name;
             let val = res.data.data;
@@ -993,8 +993,10 @@
             if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
               console.log(this.detailData.send_info, "444444")
-              this.getStaffInfo();
-              // this.detailData.send_info.forward_group = 2;
+              // this.getStaffInfo();
+              if(this.detailData.send_info) {
+                this.detailData.send_info.forward_group = 1;
+              }
             } else {
               this.prompt('warning', res.data.msg);
             }

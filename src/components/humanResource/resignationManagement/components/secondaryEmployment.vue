@@ -832,7 +832,11 @@
               this.params.level = detail.level;
               this.params.account_name = detail.account_name;
               this.params.enroll = detail.enroll;
-              this.params.salary = detail.salary;
+              if(detail.salary == "0") {
+                this.params.salary = "";
+              } else {
+                this.params.salary = detail.salary;
+              }
               this.params.entry_materials = [];
               let mate = detail.entry_materials;
               if (mate && mate !== 'null' && mate.length > 0) {
@@ -840,13 +844,21 @@
                   this.params.entry_materials.push(Number(mate[i]));
                 }
               }
-              this.params.salary = detail.salary;
+              // this.params.salary = detail.salary;
               this.params.origin_addr = detail.origin_addr;
               this.params.marital_status = detail.marital_status;
-              this.params.political_status = detail.political_status;
+              if(detail.political_status == "0") {
+                this.params.political_status = "";
+              } else {
+                this.params.political_status = detail.political_status;
+              }
               this.params.forward_time = detail.forward_time;
               this.params.mail = detail.mail;
-              this.params.education = detail.education;
+              if(detail.education == "0") {
+                this.params.education = ""
+                } else {
+                this.params.education = detail.education;
+              }
               this.params.school = detail.school;
               this.params.major = detail.major;
               this.params.graduation_time = detail.graduation_time;
