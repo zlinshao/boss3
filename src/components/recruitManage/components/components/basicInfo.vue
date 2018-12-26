@@ -868,8 +868,8 @@
         this.params.real_name = this.basicInfo_info.name;
         this.params.gender = this.basicInfo_info.gender === 716 ? 229 : 230;
         this.params.phone = this.basicInfo_info.phone;
-        this.params.enroll  = this.basicInfo_info.entry_other.entry_time;
-        this.params.salary = this.basicInfo_info.entry_other.salary;
+        this.params.enroll  = this.basicInfo_info.entry_time;
+        this.params.salary = this.basicInfo_info.entry_other ? this.basicInfo_info.entry_other.salary : '';
         this.params.entry_way.entry_type = this.exchangeEntryWay(this.basicInfo_info.resume_sources.id);
         this.orgData.department_id = obj.department_name;
         this.params.department_id.push(obj.department_id);

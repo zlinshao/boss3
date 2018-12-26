@@ -69,8 +69,8 @@
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="newPositionVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmAdd">确 定</el-button>
+                <el-button size='small' @click="newPositionVisible = false">取 消</el-button>
+                <el-button size='small' type="primary" @click="confirmAdd" :disabled='add_disabled'>确 定</el-button>
             </span>
         </el-dialog>
         <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
@@ -92,6 +92,7 @@
                 duty_id:'',
                 duty:[],
                 position:[],
+                add_disabled: false,
                 form:{
                     org_id:'',
                     position_id: '',
@@ -189,6 +190,7 @@
             },
             //提交表单
             confirmAdd(){
+                this.add_disabled = true;
                 this.$http.post(globalConfig.server + 'hrm/recruitment', this.form).then(res => {
                     if(res.data.code === '10010'){
                         this.$notify({
@@ -205,6 +207,7 @@
                             type: 'warning'
                         });
                     }
+                    this.add_disabled = false;
                 })
             },
             //初始化表单
@@ -280,6 +283,14 @@
     }
 </script>
 <style lang="scss" scoped>
-
+    #newPosition{
+        .dialog-footer{
+            display: flex;
+            justify-content: center;
+        }
+        .line{
+            text-align: center;
+        }
+    }
 </style>
 

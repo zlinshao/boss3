@@ -435,9 +435,9 @@
                         this.loadingRecruit = false;
                         this.total = res.data.data.count;
                         this.positionList = res.data.data.data;
-                        this.$nextTick(() => {
-                            document.documentElement.scrollTop = this.scrollTop;
-                        });
+                        // this.$nextTick(() => {
+                        //     document.documentElement.scrollTop = this.scrollTop;
+                        // });
                     }else{
                         this.loadingRecruit = false;
                         this.total = 0;
@@ -596,11 +596,26 @@
                 this.newPositionDialog = false;
                 this.platformDialog = false;
                 this.processDialog = false;
-                this.getPositionList();
+                // this.getPositionList();
+                this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
+                    if(res.data.code === '10000' || res.data.code === '70000'){
+                        this.total = res.data.data.count;
+                        this.positionList = res.data.data.data;
+                        this.$nextTick(() => {
+                            document.documentElement.scrollTop = this.scrollTop;
+                        });
+                    }else{
+                        this.total = 0;
+                        this.positionList = [];
+                    }
+                })
             },
            /************************* 发布平台*************************************/
            platformManage(item, index){
                this.scrollTop = window.pageYOffset;
+               setTimeout(() => {
+                   document.documentElement.scrollTop = this.scrollTop;
+               }, 80)
                this.platformDialog = true;
                this.$store.dispatch('toEdit', item)
            },
@@ -610,6 +625,9 @@
                this.$store.dispatch('savePositionInfo', item);
                this.id = item.id;
                this.processDialog = true;
+               setTimeout(() => {
+                   document.documentElement.scrollTop = this.scrollTop;
+               }, 1000)
                if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
                    this.active_name = 'first';
                    this.$store.dispatch('setActiveName', 'first')
@@ -636,9 +654,6 @@
         position: relative;
         height: 100%;
         padding: 0 30px;
-        .el-loading-mask{
-            // background: none !important;
-        }
         .positionTitle{
             font-weight: 700;
             font-size: 16px;
@@ -697,6 +712,9 @@
             position: absolute;
             bottom: 0;
             right: 0;
+        }
+        .line{
+            text-align: center;
         }
     }
 </style>
