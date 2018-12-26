@@ -1,6 +1,6 @@
 <template>
   <div id="lookTypeseting">
-    <el-dialog title="排版" :visible.sync="typesettingDialog" width="60%">
+    <el-dialog title="排班" :visible.sync="typesettingDialog" width="60%">
       <div class="top">
         <!-- <el-date-picker v-model="year" type="year" placeholder="请选择年份" size="mini" value-format="yyyy"></el-date-picker> -->
         <!-- <el-date-picker v-model="month" type="month" placeholder="选择月" size="mini"></el-date-picker> -->

@@ -60,7 +60,6 @@ export default {
         })
         this.editImage = obj;
       }
-       console.log(this.editImage, "7777")
      
       for (let key in dismiss_reason) {
         if(key == "dismiss_mess") {

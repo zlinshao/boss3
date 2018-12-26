@@ -299,13 +299,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="选择时间">
-                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
+                  <el-form-item label="离职时间">
+                    <el-date-picker v-model="params.dismiss_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
                   </el-form-item>
                 </el-col>
                  <el-col :span="16">
                   <el-form-item label="备注">
-                      <el-input type="textarea" placeholder="请填写离职备注" v-model="params.entry_way.entry_mess" size="mini"></el-input>
+                      <el-input type="textarea" placeholder="请填写离职备注" v-model="params.dismiss_reason.dismiss_mess" size="mini"></el-input>
                     </el-form-item>
                 </el-col>
               </el-row>
@@ -406,6 +406,7 @@
             education: [],  // 学历复印件
           },
           status: "1",
+          dismiss_time: "",
           // ================
           duty_id: [],
           position_id: [],
@@ -493,10 +494,10 @@
       };
     },
     watch: {
-      // isClear: function (val) {
-      //   console.log(val)
-      //   this.isClear = val;
-      // },
+      isClear: function (val) {
+        console.log(val)
+        this.isClear = val;
+      },
       // addEmployLog(val,id) {
       //   console.log(val, "22222")
       //   this.addStaffDialogVisible = val;
@@ -524,7 +525,7 @@
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          // this.isClear = true;
+          this.isClear = !this.isClear;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
@@ -604,6 +605,7 @@
         this.getOnJobStatus();
       },
       initial() {
+        this.params.dismiss_time = "";
         this.params.image_info.doc_photo = [];
         this.params.image_info.bank = [];
         this.params.image_info.contract = [];
@@ -721,6 +723,7 @@
              let obj4 = {};
              let obj5 = {};
              let obj6 = {};
+             this.params.dismiss_time = res.data.data.dismiss_time;
              if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
                   if(key == "education") {

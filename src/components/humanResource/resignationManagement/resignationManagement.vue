@@ -52,12 +52,12 @@
             </template>
           </el-table-column>
           <el-table-column prop="orgStr" label="部门" ></el-table-column>
-          <el-table-column prop="roleStr" label="职位" ></el-table-column>
+          <el-table-column prop="roleStr" label="岗位" ></el-table-column>
           <el-table-column prop="enroll" label="入职时间" ></el-table-column>
           <el-table-column prop="dismiss_time" label="离职时间" ></el-table-column>
           <el-table-column prop="phone" label="手机号码" ></el-table-column>
-          <el-table-column prop="dismiss_mess" label="离职备注" ></el-table-column>
           <el-table-column prop="dismiss_type" label="离职类型" ></el-table-column>
+          <el-table-column prop="dismiss_mess" label="离职备注" ></el-table-column>
           <el-table-column label="离职交接单" >
             <template slot-scope="scope">
               <el-button type="text" @click="addUploadFiles('1', scope.row)">编 辑</el-button>
@@ -424,6 +424,7 @@ export default {
               roleStr += val.display_name + " ";
               this.resignationData[index].roleStr = roleStr;
             })
+
             let dismiss_reason = item.staffs.dismiss_reason;
             for(let key in dismiss_reason) {
               if(key == "dismiss_mess") {
