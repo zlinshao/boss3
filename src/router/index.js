@@ -36,7 +36,6 @@ const FinanceRunning=()=>import('../components/financeNew/runningAccount');//收
 const AccountPayable=()=>import('../components/financeNew/accountPayable');//应付款项
 const AccountReceivable=()=>import('../components/financeNew/accountReceivable');//应收款项
 const PendingItem = () => import  ('../components/financeNew/pendingItem');
-const AccountManage = () => import('../components/financeNew/accountManage/index.vue');
 
 
 // 微信管理
@@ -509,6 +508,7 @@ export default new Router({
       children: [
         {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
         {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
+        {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
@@ -717,8 +717,6 @@ export default new Router({
       icon: 'iconfont icon-shezhi1',
       children: [
         {path: '/moduleSetting', component: ModuleSetting, name: '模块设置' },
-        {path: "/accountMmanagement", component: accountMmanagement, name: "账户管理" },
-
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志'},
         // {path: '/userDictionary', component: UserDictionary, name: '用户字典'},
