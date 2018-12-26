@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import AccountManage from './accountMange/index.vue'
+  import AccountManage from '../accountManage/index.vue'
   import SubjectManage from './subjectManage/index.vue'
 
   export default {

@@ -508,7 +508,6 @@ export default new Router({
       icon: 'iconfont icon-caiwu1',
       children: [
         {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
-        {path: '/accountManage',component: AccountManage , name: '账户管理'},
         {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
