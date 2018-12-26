@@ -8,17 +8,23 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(255, 255, 255, 0)">
           <el-table-column prop="sign_date" label="日期"></el-table-column>
-          <el-table-column prop="attendance" label="班次"></el-table-column>
+          <el-table-column label="班次">
+            <template slot-scope="scope">
+              <span v-if="scope.row.attendance == '早班'">{{scope.row.attendance + "9:00 - 18:00"}}</span>
+              <span v-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
+              <span v-if="scope.row.attendance == '晚班'">{{scope.row.attendance + "13:00 - 21:00"}}</span>
+            </template>
+          </el-table-column>
           <!-- <el-table-column prop="hugh" label="休息"></el-table-column> -->
           <el-table-column prop="goWork" label="上班打卡时间"></el-table-column>
           <el-table-column  label="上班打卡结果">
             <template slot-scope="scope">
               <div v-if="scope.row.day <= days && scope.row.resultWork">
                 <span v-if="scope.row.resultWork == '正常'">{{scope.row.resultWork}}</span>
-                <span v-else-if="scope.row.resultWork == '休息并打卡'">{{scope.row.resultWork}}</span>
+                <span style="color: #ff00b1;" v-else-if="scope.row.resultWork == '休息并打卡'">{{scope.row.resultWork}}</span>
                 <span v-else-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
-                <span v-else-if="scope.row.resultWork == '缺卡'">{{scope.row.resultWork}}</span>
-                <span v-else>迟到{{scope.row.resultWork}}分钟</span>
+                <span style="color: #fd0c0c;" v-else-if="scope.row.resultWork == '缺卡'">{{scope.row.resultWork}}</span>
+                <span style="color: red;" v-else>迟到{{scope.row.resultWork}}分钟</span>
               </div>
             </template>
           </el-table-column>
@@ -27,10 +33,10 @@
             <template slot-scope="scope">
               <div v-if="scope.row.day <= days && scope.row.resultOffWork">
                 <span v-if="scope.row.resultOffWork == '正常'">{{scope.row.resultOffWork}}</span>
-                <span v-else-if="scope.row.resultOffWork == '休息并打卡'">{{scope.row.resultOffWork}}</span>
+                <span style="color: #ff00b1;" v-else-if="scope.row.resultOffWork == '休息并打卡'">{{scope.row.resultOffWork}}</span>
                 <span v-else-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
-                <span v-else-if="scope.row.resultOffWork == '缺卡'">{{scope.row.resultOffWork}}</span>
-                <span v-else>早退{{scope.row.resultOffWork}}分钟</span>
+                <span style="color: #fd0c0c;" v-else-if="scope.row.resultOffWork == '缺卡'">{{scope.row.resultOffWork}}</span>
+                <span style="color: red;" v-else>早退{{scope.row.resultOffWork}}分钟</span>
               </div>
             </template>
           </el-table-column>

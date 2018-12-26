@@ -24,7 +24,7 @@
 import UpLoad from '../../../common/UPLOAD'
 export default {
   components: {UpLoad},
-  props:["row"],
+  props:["row", "editUpload"],
   data() {
     return {
       isClear: false,
@@ -44,8 +44,41 @@ export default {
     }
   },
   watch: {
-    row(val) {
-
+    editUpload(val) {
+      this.upLoadDialogVisible = val;
+    },
+    row(row) {
+      this.form.user_id = row.id;
+      let dismiss_reason = row.staffs.dismiss_reason;
+      this.form.dismiss_reason = row.staffs.dismiss_reason;
+      this.form.dismiss_time = row.staffs.dismiss_time;
+       if(row.resignation_form) {
+      let obj  = {};
+        row.resignation_form.forEach((item, index) => {
+          this.form.resignation_form.push(item.id)
+          obj[item.id] = item.uri;
+        })
+        this.editImage = obj;
+      }
+       console.log(this.editImage, "7777")
+     
+      for (let key in dismiss_reason) {
+        if(key == "dismiss_mess") {
+          this.dismiss_mess = row.dismiss_mess;
+          this.form.dismiss_mess = row.dismiss_mess;
+        } else if(key == "dismiss_type") {
+          if(dismiss_reason[key] == "1") {
+            this.dismiss_type = "主动离职";
+          } else if(dismiss_reason[key] == "2") {
+            this.dismiss_type = "旷工离职";
+          } else if(dismiss_reason[key] == "3") {
+            this.dismiss_type = "劝退";
+          } else if(dismiss_reason[key] == "4") {
+            this.dismiss_type = "开除";
+          }
+          // this.form.dismiss_type = dismiss_reason[key];
+        }
+      }
     },
     upLoadDialogVisible(val) {
       if(!val) {

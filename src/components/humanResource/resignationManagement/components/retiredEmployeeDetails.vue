@@ -369,7 +369,7 @@
                           <span v-else>暂无</span>
                         </div>
                         <div>
-                          <el-button type="text" @click="sendMessage(1)">已发送群消息</el-button>
+                          <el-button type="text" @click="sendMessage(1)">发送群消息</el-button>
                           <el-button type="text">和</el-button>
                           <el-button type="text" @click="sendMessage(2)">离职短信</el-button>
                         </div>
