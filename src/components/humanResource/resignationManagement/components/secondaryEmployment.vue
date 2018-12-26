@@ -520,7 +520,7 @@
       },
       addStaffDialogVisible(val) {
         if (!val) {
-          this.initial(); //关闭弹框时清除
+          this.initial(); // 关闭弹框时清除
           this.$emit('close');
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
@@ -723,7 +723,7 @@
              let obj4 = {};
              let obj5 = {};
              let obj6 = {};
-             this.params.dismiss_time = res.data.data.dismiss_time;
+            
              if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
                   if(key == "education") {
@@ -811,6 +811,7 @@
               }
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
+               this.params.dismiss_time = detail.dismiss_time;
               this.params.fertility_status = Number(detail.fertility_status);
               this.params.id_num = detail.id_num;
               this.params.birthday = detail.birthday;
@@ -977,7 +978,7 @@
                  this.addStaffDialogVisible = false;
               }
               // this.isClear = true;
-              this.initial();
+              // this.initial();
               this.prompt('success', res.data.msg);
             } else {
               this.disabledBtn = false;
@@ -996,7 +997,7 @@
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
               // this.isClear = true;
-              this.initial();
+              // this.initial();
 
             } else {
               this.disabledBtn = false;

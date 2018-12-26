@@ -194,7 +194,7 @@
                       </el-select>
                       <div style="color: #409EFF;font-size: 12px;text-align: right;"
                            v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
-                        <span v-if="detailData.send_info && detailData.send_info.forward_group">已发过转正祝贺</span>
+                        <span v-if="detailData.send_info && detailData.send_info.forward_group == 1">已发过转正祝贺</span>
                         <span v-if="detailData.send_info && !detailData.send_info.forward_group">未发过转正祝贺 </span>
                         <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
                       </div>
@@ -401,7 +401,7 @@
         }, //离职日期
         statusOptions:[
           {value: "1", label: "在职"},
-          {value: "2", label: "离职"},
+          // {value: "2", label: "离职"},
           {value: "4", label: "停职留薪"},
         ],
         
@@ -807,7 +807,11 @@
             this.params.position_id = [];
             this.duty = [];
             this.position = [];
-            this.params.status = String(res.data.data.status);
+            if(String(res.data.data.status) == "0" || String(res.data.data.status) == "2") {
+              this.params.status = "1";
+            } else {
+              this.params.status = String(res.data.data.status);
+            }
             if (val.duties) {// 职务
               for (let item of val.duties) {
                 this.params.duty_id.push(item.id);
@@ -853,7 +857,11 @@
               this.params.level = detail.level;
               this.params.account_name = detail.account_name;
               this.params.enroll = detail.enroll;
-              this.params.salary = detail.salary;
+              if(detail.salary == "0") {
+                this.params.salary = "";
+              } else {
+                this.params.salary = detail.salary;
+              }
               this.params.entry_materials = [];
               let mate = detail.entry_materials;
               if (mate && mate !== 'null' && mate.length > 0) {
@@ -861,13 +869,21 @@
                   this.params.entry_materials.push(Number(mate[i]));
                 }
               }
-              this.params.salary = detail.salary;
+              // this.params.salary = detail.salary;
               this.params.origin_addr = detail.origin_addr;
               this.params.marital_status = detail.marital_status;
-              this.params.political_status = detail.political_status;
+              if(detail.political_status == "0") {
+                this.params.political_status = "";
+              } else {
+                this.params.political_status = detail.political_status;
+              }
               this.params.forward_time = detail.forward_time;
               this.params.mail = detail.mail;
-              this.params.education = detail.education;
+              if(detail.education == "0") {
+                this.params.education = "";
+              } else {
+                this.params.education = detail.education;
+              }
               this.params.school = detail.school;
               this.params.major = detail.major;
               this.params.graduation_time = detail.graduation_time;
@@ -962,9 +978,9 @@
       },
       sendPositive() {
         let content;
-        if (this.detailData.send_info && !this.detailData.send_info.forward_group) {
+        if (!this.detailData.send_info ) {
           content = '您想要发送转正祝贺吗?';
-        } else if (this.detailData.send_info && this.detailData.send_info.forward_group) {
+        } else if (this.detailData.send_info && this.detailData.send_info) {
           content = '该员工已发过转正祝贺，您想要重新发送转正祝贺吗?';
         }
         this.$confirm(content, '确认信息', {
@@ -977,7 +993,8 @@
             if (res.data.code === '710800') {
               this.prompt('success', res.data.msg);
               console.log(this.detailData.send_info, "444444")
-              this.detailData.send_info.forward_group = 2;
+              this.getStaffInfo();
+              // this.detailData.send_info.forward_group = 2;
             } else {
               this.prompt('warning', res.data.msg);
             }
