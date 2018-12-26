@@ -88,7 +88,8 @@
                   type="datetime"
                   size='small'
                   value-format='yyyy-MM-dd-HH-mm-ss'
-                  placeholder="选择日期">
+                  placeholder="选择日期"
+                  default-time="12:00:00">
                 </el-date-picker>
               </template>
             </el-table-column>
@@ -240,18 +241,11 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if='show_entry_status'
               prop="entry_statuss"
               label="人资沟通">
               <template slot-scope="scope">
                 <span v-if='scope.row.entry_statuss && scope.row.interview_status === 739'>{{scope.row.entry_statuss.dictionary_name}}</span>
-                <!-- <el-select
-                    v-if='is_edit_humansource === scope.row.id'
-                    size='small'
-                    v-model="updateParams_finished.update.interview_status"
-                    @change='selectStatus(scope.row)'
-                    placeholder="">
-                    <el-option v-for="(item, index) in humanresource" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
-                </el-select> -->
               </template>
             </el-table-column>
           </el-table>
@@ -289,6 +283,7 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if='show_entry_other'
               prop="entry_other"
               label="入职条件">
               <template slot-scope="scope">
@@ -300,9 +295,9 @@
               prop=""
               label="入职时间">
               <template slot-scope="scope">
-                                <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
-                                    {{scope.row.entry_time}}
-                                </span>
+                    <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
+                        {{scope.row.entry_time}}
+                    </span>
                 <span v-else>/</span>
               </template>
             </el-table-column>
@@ -400,9 +395,9 @@
               prop=""
               label="入职时间">
               <template slot-scope="scope">
-                                <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
-                                    {{scope.row.entry_time}}
-                                </span>
+                    <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
+                        {{scope.row.entry_time}}
+                    </span>
                 <span v-else>/</span>
               </template>
             </el-table-column>
@@ -523,14 +518,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="原因">
-            <span v-if='!is_editResult'>{{uninterviewObj.interview_result}}</span>
-            <el-input v-if='is_editResult' type="textarea" v-model="uninterviewObj.interview_result"></el-input>
+            <span v-if='!is_editResult && !first_edit'>{{uninterviewObj.interview_result}}</span>
+            <el-input v-if='is_editResult || first_edit' type="textarea" v-model="uninterviewObj.interview_result"></el-input>
           </el-form-item>
         </el-form>
         <div class='edit-result'>
           <el-button size='mini' @click='cancelEditResult'>取消</el-button>
           <el-button size='mini' @click='confirmEditResult'>确定</el-button>
-          <el-button size='mini' @click='editResult' v-if='!is_editResult'>修改</el-button>
+          <el-button size='mini' @click='editResult' v-if='!is_editResult && !first_edit'>修改</el-button>
         </div>
       </el-dialog>
       <!--未面试结束-->
@@ -648,7 +643,7 @@
                         </el-form-item>
                         <el-form-item label="其他条件">
                             <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other" type='textarea'></el-input>
-                            <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
+                            <span class='test-condition' v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
                         </el-form-item>
                         <!-- <div class='edit-condition' v-if='is_editing_condition'>
                             <el-button size='mini' @click='cancelEditCondition'>取消</el-button>
@@ -813,6 +808,7 @@
                     expect: '',
                     actual: '',
                 },
+                first_edit: false,
                 /**面试完毕*/
                 passInterviewDialog: false,
                 unpassInterviewDialog: false,
@@ -864,6 +860,8 @@
                 },
                 disAgreeInductParams_clone: {},
                 is_edit_humansource:'',
+                show_entry_status: true,
+                show_entry_other: true,
                 /***********待入职******************/
                 inductionMaterialsDialog: false,
                 backgroundDialog: false,
@@ -929,6 +927,8 @@
                     this.params.search = '';
                     this.is_editing_id = '';
                     this.is_editing_interview_finished = '';
+                    this.is_editing_entry_statuss = '';
+                    this.is_editing_interview_status = '';
                     this.$emit('close');
                 }else{
                     this.activeName = this.active_name;
@@ -956,12 +956,16 @@
                 }
             },
             uninterviewDialog(val){
-                this.is_editResult = '';
+                if(!val){
+                    this.first_edit = false;
+                    this.is_editResult = '';
+                    this.is_editing_interview_status = '';
+                }
+                
             },
             IsEntryDialog(val){
                 if(val){
                     // this.editIsEntry();
-                    // console.log(this.$store.state.platform.active_name)
                     if(this.$store.state.platform.active_name === 'fourth'){
                         this.allow_edit = false;
                     }else{
@@ -984,7 +988,7 @@
             unpassInterviewDialog(val){
                 if(!val){
                     this.is_editing_interview_finished = '';
-                    this.updateParams_finished.update.interview_status = '';
+                    // this.updateParams_finished.update.interview_status = '';
                     this.is_editing_unpass = false;
                 }
             },
@@ -1005,21 +1009,19 @@
                             this.isClear = false;
                     },300);
                     this.interviewParams.album = [];
+                    this.cancelUpload()
                 }
             }
         },
         methods: {
             handleClick(item){
-                // console.log(item.name)
-                this.$store.dispatch('setActiveName', item.name)
-                // this.$store.dispatch('toEdit',item)
-                // console.log(this.activeName);
+                this.$store.dispatch('setActiveName', item.name);
                 this.params.search = '';
                 this.params.limit = 12;
                 this.params.page = 1;
                 this.getAllData(this.id);
             },
-            //分頁
+            //分页
             handleCurrentChange(val){
                 this.params.page = val;
                 this.getAllData(this.id)
@@ -1101,6 +1103,11 @@
               this.interviewFinishedData = res.data.data.data;
               this.total = res.data.data.count;
               this.loading2 = false;
+              if(res.data.data.entry_status === false){
+                  this.show_entry_status = false;
+              }else{
+                  this.show_entry_status = true;
+              }
             } else {
               this.interviewFinishedData = [];
               this.total = 0;
@@ -1116,8 +1123,13 @@
               this.toInductData = res.data.data.data;
               this.total = res.data.data.count;
               this.loading3 = false;
+              if(res.data.data.entry_other === false){
+                  this.show_entry_other = false;
+              }else{
+                  this.show_entry_other = true;
+              }
               this.toInductData.forEach(item => {
-                if (item.entry_other.entry_time && item.entry_other.entry_time.length) {
+                if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
                   item.entry_time = this.timestampToDate(item.entry_other.entry_time)
                 }
               })
@@ -1160,7 +1172,7 @@
           this.interviewParams.gender = row.gender + '';
           this.interviewParams.education = row.education;
           this.interviewParams.experience = row.experience;
-          this.interviewParams.interview_time = row.interview_time;
+        //   this.interviewParams.interview_time = row.interview_time;
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
@@ -1233,11 +1245,12 @@
             this.is_editing_id = '';
             this.getAllData(this.id)
           } else {
-            this.notify({
+            this.$notify({
               title: '警告',
               message: res.data.msg,
               type: 'warning'
-            })
+            });
+            this.is_editing_id = '';
           }
         })
       },
@@ -1252,7 +1265,14 @@
         } else if (this.updateParams.update.interview_status === 735) {
           this.is_editing_interview_status = '';
         } else {
-          this.confirmUpdateStatus();
+        //   this.confirmUpdateStatus();
+            this.uninterviewDialog = true;
+            this.uninterviewObj.id = item.id;
+            this.uninterviewObj.gender = item.gender;
+            this.uninterviewObj.name = item.name;
+            this.uninterviewObj.interview_status = '未面试';
+            this.uninterviewObj.interview_result = '';
+            this.first_edit = true;
         }
       },
       //修改面试状态
@@ -1326,14 +1346,19 @@
           }
         }).then(res => {
           if (res.data.code === '20030') {
-            this.$notify({
-              title: '成功',
-              message: res.data.msg,
-              type: 'success'
-            });
-            this.is_editResult = false;
-            this.uninterviewDialog = false;
-            this.getAllData(this.id)
+            if(this.first_edit){
+                this.confirmUpdateStatus();
+            }else{
+                this.$notify({
+                    title: '成功',
+                    message: res.data.msg,
+                    type: 'success'
+                });
+                this.is_editResult = false;
+                this.uninterviewDialog = false;
+                this.getAllData(this.id)
+            }
+            
           } else {
             this.$notify({
               title: '警告',
@@ -1504,6 +1529,12 @@
           this.$http.put(globalConfig.server + 'hrm/interview/' + this.humansourceObj.id, this.agreeInductParams).then(res => {
             if (res.data.code === '20030') {
               this.updateHumanResource()
+            }else{
+                this.$notify({
+                    title: '警告',
+                    message: res.data.msg,
+                    type: 'warning'
+                });
             }
           })
         }
@@ -1511,6 +1542,12 @@
           this.$http.put(globalConfig.server + 'hrm/interview/' + this.humansourceObj.id, this.disAgreeInductParams).then(res => {
             if (res.data.code === '20030') {
               this.updateHumanResource()
+            }else{
+                this.$notify({
+                    title: '警告',
+                    message: res.data.msg,
+                    type: 'warning'
+                });
             }
           })
         }
@@ -1641,6 +1678,11 @@
             if (this.updateParams_finished.update.interview_status === 739) {
               this.confirmUndateFromUnpass()
             } else {
+              this.$notify({
+                  title: '成功',
+                  message: res.data.msg,
+                  type: 'success'
+              })
               this.getAllData(this.id)
             }
 
@@ -1822,7 +1864,6 @@
       updateEntryStatus() {
         this.$http.put(globalConfig.server + 'hrm/interview/' + this.failEntryObj.id, this.entryStatus).then(res => {
           if (res.data.code == '20030') {
-            // console.log('调用此接口')
             this.$notify({
               title: '成功',
               message: res.data.msg,
@@ -1998,9 +2039,15 @@
       color: rgba(63, 81, 181, 1);
       border: none;
     }
+    .block{
+        position: static;
+    }
     .el-pagination {
       padding-right: 50px;
       text-align: right;
+    }
+    .test-condition{
+        word-break: break-all;
     }
   }
     #embed-process {

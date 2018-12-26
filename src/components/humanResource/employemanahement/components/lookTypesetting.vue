@@ -1,6 +1,6 @@
 <template>
   <div id="lookTypeseting">
-    <el-dialog title="排版" :visible.sync="typesettingDialog" width="60%">
+    <el-dialog title="排班" :visible.sync="typesettingDialog" width="60%">
       <div class="top">
         <!-- <el-date-picker v-model="year" type="year" placeholder="请选择年份" size="mini" value-format="yyyy"></el-date-picker> -->
         <!-- <el-date-picker v-model="month" type="month" placeholder="选择月" size="mini"></el-date-picker> -->
@@ -116,6 +116,7 @@ export default {
     },
     ids(val) {
       this.params.user_id = val;
+      // console.log(this.params.user_id, "1111")
       this.currentSort.user_id = val;
       this.getTypeTime();
     },
@@ -150,11 +151,7 @@ export default {
     init() {
       this.year = new Date().getFullYear();
       this.month = new Date().getMonth() + 1;
-      this.selectmonth = new Date().getMonth() + 1,
-      this.params = {
-        user_id: "",
-        arrange_month: ""
-      }
+      this.selectmonth = new Date().getMonth() + 1;
     },
     // 获取排班
     getTypeTime() {

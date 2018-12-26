@@ -404,5 +404,26 @@ export default {
         margin: 0 10px 10px 0;
       }
     }
+    .circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+      float: left;
+      margin-left: -9px;
+      margin-top: 10px;
+    }
+    .praises {
+      background: #58d788;
+    }
+    .criticisms {
+      background: #ff4545;
+    }
+    .doubts {
+      background: #FF9900;
+    }
+    .others {
+      background: #409EFF;
+    }
   }
 </style>
