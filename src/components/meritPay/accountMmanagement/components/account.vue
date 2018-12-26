@@ -211,6 +211,7 @@
           infinite: 20,
         },
         userCollectLoading: false,
+        currentRow: '',
       };
     },
     watch: {},
@@ -221,7 +222,6 @@
         this.editValue = '';
       },
       handleEditOk() {
-        console.log(this.editCate,this.editValue);
         if (!this.editValue) {
           this.$notify.warning({
             title: '警告',
@@ -229,11 +229,27 @@
           });
           return false;
         } else {
-
+          this.$http.post(globalConfig.finance_server + `account/allocation/update/${this.currentRow.id}`,{
+            account_id: this.editValue
+          }).then(res => {
+            if (res.data.success) {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message
+              });
+              this.getAccountList();
+            }else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.message
+              });
+            }
+            this.cancelEdit();
+          })
         }
       },
       clickEvent(index) {
-       console.log(index);
+       this.currentRow = index.data;
        if (index.clickIndex === 'EditInfo') {
          this.editAccountVisible = true;
        }
