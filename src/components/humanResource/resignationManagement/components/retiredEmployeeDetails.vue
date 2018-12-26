@@ -564,7 +564,9 @@ export default {
     },
     ids(val) {
       this.employDetailId = val;
-      this.openDetail(val);
+      if(val) {
+        this.openDetail(val);
+      }
     }
   },
   mounted() {
@@ -601,7 +603,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$http.get(globalConfig.server + 'organization/staff/leave-sms', { params: {id: this.employDetailId, date: this.staffDetailData.detail.dismiss_time}}).then(res => {
-            if (res.data.code === "710910") { 
+            if (res.data.code === "710400") { 
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -698,8 +700,10 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
-              if(res.data.data.send_info) {
+              if(res.data.data.send_info && res.data.data.send_info.dismiss_group) {
                 this.dismiss_group =  res.data.data.send_info.dismiss_group;
+              }
+              if(res.data.data.send_info && res.data.data.send_info.dismiss_sms) {
                 this.dismiss_sms =  res.data.data.send_info.dismiss_sms;
               }
               // console.log(res.data.data.image_info, "22222222")

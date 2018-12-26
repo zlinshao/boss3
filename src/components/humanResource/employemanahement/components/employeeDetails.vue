@@ -234,8 +234,9 @@
                     <el-col :span="8">
                       <el-form-item label="在职状态">
                         <div class="content">
-                          <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
-                          <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span>
+                          {{status}}
+                          <!-- <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
+                          <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span> -->
                         </div>
                       </el-form-item>
                     </el-col>
@@ -498,6 +499,7 @@ export default {
   props: ["ids", "lookEmployDetailLog"],
   data() {
     return {
+      status: "",
       IDimgList: [],           // ID图片
       BankimgList: [],        // 银行卡图片
       ContractimgList: [],   // 合同图片
@@ -554,7 +556,9 @@ export default {
     },
     ids(val) {
       this.employDetailId = val;
-      this.openDetail(val);
+      if(val) {
+        this.openDetail(val);
+      }
     }
   },
   mounted() {
@@ -646,6 +650,12 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
+              // this.status = ;
+              if(res.data.data.status == "1") {
+                this.status = "在职";
+              } else if(res.data.data.status == "4") {
+                this.status = "留职停薪";
+              }
               console.log(res.data.data.image_info, "4444")
               if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {

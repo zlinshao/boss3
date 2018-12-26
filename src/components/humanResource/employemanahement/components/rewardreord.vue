@@ -276,10 +276,10 @@ export default {
           this.rewardreForm.otherNumber = res.data.data.others;
         } else {
           this.detail = {};
-          this.$notify.warning({
-            title: '警告',
-            message: res.data.msg,
-          });
+          // this.$notify.warning({
+          //   title: '警告',
+          //   message: res.data.msg,
+          // });
         }
       })
     },
@@ -311,13 +311,12 @@ export default {
             // this.isClear = true;
             this.gerRewardReord(this.saveUid);
             // this.initParams();
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
           }
-          //  else {
-          //   this.$notify.warning({
-          //     title: '警告',
-          //     message: res.data.msg,
-          //   });
-          // }
         })
       } else if(this.isAddOrEdit == "2") {
         this.editParams.remark = this.params[0].remarks[0].remark;
