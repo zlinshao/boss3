@@ -618,6 +618,53 @@
         <!--</el-tab-pane>-->
         <!--</el-tabs>-->
       </el-tab-pane>
+      <el-tab-pane label="暂不处理" name="seventh">
+        <div class="tableLeft">
+          <el-table
+            :empty-text='emptyContent'
+            v-loading="examineLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
+            :data="tableData"
+            @row-dblclick="dblClickTable"
+            :row-class-name="rowBackground"
+            :cell-class-name="colTag"
+            style="width: 100%">
+            <el-table-column
+              label="#"
+              width="40">
+            </el-table-column>
+            <el-table-column
+              prop="created_at"
+              label="发起时间">
+            </el-table-column>
+            <el-table-column
+              prop="bulletin"
+              label="报备类型">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="报备人">
+            </el-table-column>
+            <el-table-column
+              prop="house_name"
+              label="房屋地址">
+            </el-table-column>
+            <el-table-column
+              prop="places"
+              label="状态">
+              <template slot-scope="scope">
+                <el-tag :type="statusStyle(scope.row)" size="mini">{{ scope.row.places }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="finish_at"
+              label="完成时间">
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-tab-pane>
       <el-tab-pane label="抄送我的" name="fifth">
         <el-badge slot="label" :is-dot="false" class="item">抄送我的</el-badge>
 
@@ -1008,6 +1055,10 @@
             this.params.read_at = 0;
             this.myData(this.params, 1);
             break;
+          case 'seventh':
+            this.params.type = 5;
+            this.myData(this.params, 1);
+            break;
         }
       },
       childActive(val, read) {
@@ -1047,13 +1098,14 @@
         }).then((res) => {
           this.examineLoading = false;
           if (res.data.code === '20000' && res.data.data.data.length !== 0) {
+            console.log(res.data.data.data);
             let data = res.data.data.data;
             this.paging = res.data.data.count;
             let dataList = [];
             let house_id = [];
             for (let i = 0; i < data.length; i++) {
               let user = {};
-              if (val.type === 3) {
+              if (val.type === 3 || val.type === 5) {
                 house_id.push(data[i].house_id);
                 user.house_id = data[i].house_id;
                 user.is_receipt = data[i].content.is_receipt
@@ -1116,6 +1168,7 @@
               dataList.push(user);
             }
             this.tableData = dataList;
+            console.log(this.tableData);
             this.getName(house_id);
           } else {
             this.tableData = [];
