@@ -2039,6 +2039,9 @@
       color: rgba(63, 81, 181, 1);
       border: none;
     }
+    .block{
+        position: static;
+    }
     .el-pagination {
       padding-right: 50px;
       text-align: right;
