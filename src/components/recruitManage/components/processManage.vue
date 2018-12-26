@@ -87,7 +87,7 @@
                   v-model="interviewParams.interview_time"
                   type="datetime"
                   size='small'
-                  value-format='yyyy-MM-dd-HH-mm-ss'
+                  value-format='yyyy-MM-dd-HH-mm'
                   placeholder="选择日期"
                   default-time="12:00:00">
                 </el-date-picker>
@@ -283,7 +283,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if='show_entry_other'
+              v-if='show_entry_other_1'
               prop="entry_other"
               label="入职条件">
               <template slot-scope="scope">
@@ -385,6 +385,7 @@
             </el-table-column>
             <el-table-column
               prop="entry_other"
+              v-if='show_entry_other_2'
               label="入职条件">
               <template slot-scope="scope">
                 <span v-if='scope.row.entry_other'>查看</span>
@@ -471,7 +472,7 @@
               v-model="newInterviewParams.interview_time"
               type="datetime"
               size='small'
-              value-format='yyyy-MM-dd-HH-mm-ss'
+              value-format='yyyy-MM-dd-HH-mm'
               placeholder="选择日期"
               default-time="12:00:00">
             </el-date-picker>
@@ -861,7 +862,8 @@
                 disAgreeInductParams_clone: {},
                 is_edit_humansource:'',
                 show_entry_status: true,
-                show_entry_other: true,
+                show_entry_other_1: true,
+                show_entry_other_2: true,
                 /***********待入职******************/
                 inductionMaterialsDialog: false,
                 backgroundDialog: false,
@@ -1124,9 +1126,9 @@
               this.total = res.data.data.count;
               this.loading3 = false;
               if(res.data.data.entry_other === false){
-                  this.show_entry_other = false;
+                  this.show_entry_other_1 = false;
               }else{
-                  this.show_entry_other = true;
+                  this.show_entry_other_1 = true;
               }
               this.toInductData.forEach(item => {
                 if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
@@ -1148,8 +1150,13 @@
               this.inductedData = res.data.data.data;
               this.total = res.data.data.count;
               this.loading4 = false;
+              if(res.data.data.entry_other === false){
+                  this.show_entry_other_2 = false;
+              }else{
+                  this.show_entry_other_2 = true;
+              }
               this.inductedData.forEach(item => {
-                if (item.entry_other.entry_time && item.entry_other.entry_time.length) {
+                if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
                   item.entry_time = this.timestampToDate(item.entry_other.entry_time)
                 }
               })
@@ -1172,7 +1179,7 @@
           this.interviewParams.gender = row.gender + '';
           this.interviewParams.education = row.education;
           this.interviewParams.experience = row.experience;
-        //   this.interviewParams.interview_time = row.interview_time;
+          this.interviewParams.interview_time = row.interview_time.replace(' ', '-').replace(':', '-');
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
@@ -2038,6 +2045,9 @@
     .font-color {
       color: rgba(63, 81, 181, 1);
       border: none;
+    }
+    .block{
+        position: static;
     }
     .el-pagination {
       padding-right: 50px;
