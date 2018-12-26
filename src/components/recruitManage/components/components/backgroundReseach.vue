@@ -85,7 +85,6 @@
                 if(!val){
                     this.$emit('close')
                 }else{
-                    // console.log(this.$store.state.platform.active_name);
                     if(this.$store.state.platform.active_name == 'fourth'){
                         this.allow_edit = false;
                     }else{
@@ -101,7 +100,6 @@
             },
             background_info(val){
                 if(val.background_check){
-                    // console.log(val.background_check)
                     this.prefill(val.background_check)
                 }else{
                     this.initBgParam();
@@ -173,7 +171,6 @@
             },
             //预填背调信息
             prefill(obj){
-                // console.log(obj)
                 this.backgroundRadio.update.background_check.is_experience = obj.is_experience + '';
                 this.backgroundRadio.update.background_check.is_resume = obj.is_resume + '';
                 this.backgroundRadio.update.background_check.is_dismiss = obj.is_dismiss + '';
