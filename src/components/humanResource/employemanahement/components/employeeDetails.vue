@@ -654,7 +654,7 @@ export default {
               if(res.data.data.status == "1") {
                 this.status = "在职";
               } else if(res.data.data.status == "4") {
-                this.status = "留职停薪";
+                this.status = "停职留薪";
               }
               console.log(res.data.data.image_info, "4444")
               if(res.data.data.image_info) {
