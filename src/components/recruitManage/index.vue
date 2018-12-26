@@ -598,10 +598,11 @@
                 this.processDialog = false;
                 this.getPositionList();
             },
-           /************************* 平台相关*************************************/
+           /************************* 发布平台*************************************/
            platformManage(item, index){
+               this.scrollTop = window.pageYOffset;
                this.platformDialog = true;
-               this.$store.dispatch('toEdit',item)
+               this.$store.dispatch('toEdit', item)
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
@@ -629,12 +630,15 @@
         }
     }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     #recruitManage{
         min-height: 790px;
         position: relative;
         height: 100%;
         padding: 0 30px;
+        .el-loading-mask{
+            // background: none !important;
+        }
         .positionTitle{
             font-weight: 700;
             font-size: 16px;

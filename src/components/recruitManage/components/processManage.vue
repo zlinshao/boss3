@@ -241,18 +241,11 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if='show_entry_status'
               prop="entry_statuss"
               label="人资沟通">
               <template slot-scope="scope">
                 <span v-if='scope.row.entry_statuss && scope.row.interview_status === 739'>{{scope.row.entry_statuss.dictionary_name}}</span>
-                <!-- <el-select
-                    v-if='is_edit_humansource === scope.row.id'
-                    size='small'
-                    v-model="updateParams_finished.update.interview_status"
-                    @change='selectStatus(scope.row)'
-                    placeholder="">
-                    <el-option v-for="(item, index) in humanresource" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
-                </el-select> -->
               </template>
             </el-table-column>
           </el-table>
@@ -290,6 +283,7 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if='show_entry_other'
               prop="entry_other"
               label="入职条件">
               <template slot-scope="scope">
@@ -301,9 +295,9 @@
               prop=""
               label="入职时间">
               <template slot-scope="scope">
-                                <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
-                                    {{scope.row.entry_time}}
-                                </span>
+                    <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
+                        {{scope.row.entry_time}}
+                    </span>
                 <span v-else>/</span>
               </template>
             </el-table-column>
@@ -401,9 +395,9 @@
               prop=""
               label="入职时间">
               <template slot-scope="scope">
-                                <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
-                                    {{scope.row.entry_time}}
-                                </span>
+                    <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
+                        {{scope.row.entry_time}}
+                    </span>
                 <span v-else>/</span>
               </template>
             </el-table-column>
@@ -866,6 +860,8 @@
                 },
                 disAgreeInductParams_clone: {},
                 is_edit_humansource:'',
+                show_entry_status: true,
+                show_entry_other: true,
                 /***********待入职******************/
                 inductionMaterialsDialog: false,
                 backgroundDialog: false,
@@ -931,6 +927,8 @@
                     this.params.search = '';
                     this.is_editing_id = '';
                     this.is_editing_interview_finished = '';
+                    this.is_editing_entry_statuss = '';
+                    this.is_editing_interview_status = '';
                     this.$emit('close');
                 }else{
                     this.activeName = this.active_name;
@@ -958,7 +956,6 @@
                 }
             },
             uninterviewDialog(val){
-                
                 if(!val){
                     this.first_edit = false;
                     this.is_editResult = '';
@@ -969,7 +966,6 @@
             IsEntryDialog(val){
                 if(val){
                     // this.editIsEntry();
-                    // console.log(this.$store.state.platform.active_name)
                     if(this.$store.state.platform.active_name === 'fourth'){
                         this.allow_edit = false;
                     }else{
@@ -1019,16 +1015,13 @@
         },
         methods: {
             handleClick(item){
-                // console.log(item.name)
-                this.$store.dispatch('setActiveName', item.name)
-                // this.$store.dispatch('toEdit',item)
-                // console.log(this.activeName);
+                this.$store.dispatch('setActiveName', item.name);
                 this.params.search = '';
                 this.params.limit = 12;
                 this.params.page = 1;
                 this.getAllData(this.id);
             },
-            //分頁
+            //分页
             handleCurrentChange(val){
                 this.params.page = val;
                 this.getAllData(this.id)
@@ -1110,6 +1103,11 @@
               this.interviewFinishedData = res.data.data.data;
               this.total = res.data.data.count;
               this.loading2 = false;
+              if(res.data.data.entry_status === false){
+                  this.show_entry_status = false;
+              }else{
+                  this.show_entry_status = true;
+              }
             } else {
               this.interviewFinishedData = [];
               this.total = 0;
@@ -1125,8 +1123,13 @@
               this.toInductData = res.data.data.data;
               this.total = res.data.data.count;
               this.loading3 = false;
+              if(res.data.data.entry_other === false){
+                  this.show_entry_other = false;
+              }else{
+                  this.show_entry_other = true;
+              }
               this.toInductData.forEach(item => {
-                if (item.entry_other.entry_time && item.entry_other.entry_time.length) {
+                if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
                   item.entry_time = this.timestampToDate(item.entry_other.entry_time)
                 }
               })
@@ -1861,7 +1864,6 @@
       updateEntryStatus() {
         this.$http.put(globalConfig.server + 'hrm/interview/' + this.failEntryObj.id, this.entryStatus).then(res => {
           if (res.data.code == '20030') {
-            // console.log('调用此接口')
             this.$notify({
               title: '成功',
               message: res.data.msg,
