@@ -438,7 +438,7 @@
             this.addForm.account_owner = index.data.account_owner;
             this.addForm.cate = index.data.cate.toString();
             this.addForm.account_num = index.data.account_num;
-            this.addForm.bank = index.data.bank.toString();
+            this.addForm.bank = index.data.bank === 0 ? '' : index.data.bank.toString();
             this.addForm.sub_bank = index.data.sub_bank;
             this.addForm.amount_base = index.data.amount_base;
             this.addForm.remark = index.data.remark;
@@ -707,7 +707,6 @@
     .detail_option{
       display: inline-block;
       width: 60%;
-      height: 30px;
       line-height: 30px;
       text-align: center;
       margin-left: 15px;
