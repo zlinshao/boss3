@@ -295,8 +295,8 @@
               prop=""
               label="入职时间">
               <template slot-scope="scope">
-                    <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
-                        {{scope.row.entry_time}}
+                    <span v-if='scope.row.entry_time'>
+                        {{scope.row.entry_time.split(' ')[0]}}
                     </span>
                 <span v-else>/</span>
               </template>
@@ -396,8 +396,8 @@
               prop=""
               label="入职时间">
               <template slot-scope="scope">
-                    <span v-if='scope.row.entry_other && scope.row.entry_other.entry_time.length'>
-                        {{scope.row.entry_time}}
+                    <span v-if='scope.row.entry_time'>
+                        {{scope.row.entry_time.split(' ')[0]}}
                     </span>
                 <span v-else>/</span>
               </template>
@@ -440,7 +440,7 @@
         </div>
       </el-tabs>
       <!--添加面试人开始-->
-      <el-dialog width="30%" :visible.sync="addInterviewerDialog" append-to-body>
+      <el-dialog width="30%" :visible.sync="addInterviewerDialog" title='添加面试人' append-to-body>
         <el-form label-width="80px" size='mini' center>
           <el-form-item label="姓名" required>
             <el-input v-model="newInterviewParams.name"></el-input>
@@ -486,8 +486,8 @@
           <el-form-item label="原始简历" required>
             <UPLOAD :ID="'first'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
           </el-form-item>
-          <el-form-item class='add-interview'>
-            <el-button type="primary" @click='confirmAddInterviewer'>确定</el-button>
+          <el-form-item class='add-interview' style="display: flex;justify-content: center">
+            <el-button type="primary" @click='confirmAddInterviewer' :disabled='newInterview_disabled'>确定</el-button>
             <el-button @click='cancelAdd'>取消</el-button>
           </el-form-item>
         </el-form>
@@ -633,9 +633,10 @@
             <el-form-item label="入职时间">
               <el-date-picker v-if='is_editing_condition' size='mini'
                               v-model="agreeInductParams.update.entry_other.entry_time" type="date"
+                              value-format='yyyy-MM-dd'
                               placeholder="选择日期"></el-date-picker>
               <span v-if='!is_editing_condition'>
-                                {{agreeInductParams.update.entry_other.entry_time ? this.timestampToDate(agreeInductParams.update.entry_other.entry_time) : ''}}
+                                {{agreeInductParams.update.entry_other.entry_time}}
                             </span>
                         </el-form-item>
                         <el-form-item label="试用期">
@@ -750,10 +751,12 @@
                 loading4: true,
                 page: 1,
                 total: 0,
+                /***数据*/
                 interviewDatedData:[],
                 interviewFinishedData:[],
                 toInductData:[],
                 inductedData:[],
+                /***参数 */
                 params: {
                     search: '',
                     status: '',
@@ -788,6 +791,7 @@
                     resume_source: '',
                     album: []
                 },
+                newInterview_disabled: false,
                 updateParams: {
                     update: {
                         interview_status : ''
@@ -1130,11 +1134,11 @@
               }else{
                   this.show_entry_other_1 = true;
               }
-              this.toInductData.forEach(item => {
-                if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
-                  item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-                }
-              })
+              // this.toInductData.forEach(item => {
+              //   if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
+              //     item.entry_time = this.timestampToDate(item.entry_other.entry_time)
+              //   }
+              // })
             } else {
               this.toInductData = [];
               this.total = 0;
@@ -1155,11 +1159,11 @@
               }else{
                   this.show_entry_other_2 = true;
               }
-              this.inductedData.forEach(item => {
-                if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
-                  item.entry_time = this.timestampToDate(item.entry_other.entry_time)
-                }
-              })
+              // this.inductedData.forEach(item => {
+              //   if (item.entry_other && item.entry_other.entry_time && item.entry_other.entry_time.length) {
+              //     item.entry_time = this.timestampToDate(item.entry_other.entry_time)
+              //   }
+              // })
             } else {
               this.inductedData = [];
               this.total = 0;
@@ -1387,6 +1391,7 @@
       //添加面试人
       confirmAddInterviewer() {
         this.newInterviewParams.recruitment_id = this.id;
+        this.newInterview_disabled = true;
         this.$http.post(globalConfig.server + 'hrm/interview', this.newInterviewParams).then(res => {
           if (res.data.code === '20010') {
             this.$notify({
@@ -1408,6 +1413,7 @@
               type: 'warning'
             })
           }
+          this.newInterview_disabled = false;
         })
       },
       //取消添加面试人
@@ -1758,7 +1764,7 @@
           this.IsEntryDialog = true;
           this.communicate_status = 742;
           this.agreeInductParams.update.entry_other.salary = row.entry_other.salary;
-          this.agreeInductParams.update.entry_other.entry_time = row.entry_other.entry_time.length ? row.entry_other.entry_time : '';
+          this.agreeInductParams.update.entry_other.entry_time = row.entry_time ? row.entry_time.split(' ')[0] : '/';
           this.agreeInductParams.update.entry_other.probation = row.entry_other.probation;
           this.agreeInductParams.update.entry_other.other = row.entry_other.other;
           this.humansourceObj.name = row.name;
