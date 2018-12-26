@@ -622,6 +622,7 @@ export default {
       this.$http.get(globalConfig.server + 'manager/staff/growth/' +id).then((res) => {
         if (res.data.code === '10070') {
           this.growthData = res.data.data;
+          console.log(this.growthData)
         } else {
           this.growthData = [];
         }
