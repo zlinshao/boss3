@@ -370,11 +370,11 @@
                         </div>
                         <div>
                           <div style="display: inline-block;">
-                            <el-button type="text" v-if="dismiss_group == 1" @click="sendMessage(1)">已经往群里发过离职信息</el-button>
+                            <el-button type="text" v-if="dismiss_group == 1" @click="sendMessage(1)">已发送群信息</el-button>
                             <el-button type="text" @click="sendMessage(1)" v-else>发送群消息</el-button>
                           </div>
                           <div style="display: inline-block;">
-                            <el-button type="text" v-if="dismiss_sms == 1" @click="sendMessage(2)">向客户发过离职短信</el-button>
+                            <el-button type="text" v-if="dismiss_sms == 1" @click="sendMessage(2)">已发送离职短信</el-button>
                             <el-button type="text" @click="sendMessage(2)" v-else>离职短信</el-button>
                           </div>
                         </div>
@@ -627,12 +627,6 @@ export default {
     //员工详情
     openDetail(id) {
       // this.staffDetail = true;
-      this.ContractimgList = [];
-      this.EducationimgList  = [];
-      this.DismissimgList = [];
-      this.ApplyimgList = [];
-      this.IDimgList = [];
-      this.BankimgList = [];
       this.$http.get(globalConfig.server + 'organization/staff/' + id).then((res) => {
         this.getDuty(res.data.data.id, true);
         if (res.data.data.detail.recommender) {
@@ -646,11 +640,6 @@ export default {
           let detail = res.data.data.detail;
           this.staffDetailData = res.data.data;
           this.entry_materials = [];
-          // this.ContractimgList = res.data.data.image_info.labor_contract;
-          // this.EducationimgList  = res.data.data.image_info.education;
-          // this.DismissimgList = res.data.data.image_info.resignation;
-          // this.ApplyimgList = res.data.data.image_info.resume;
-          // this.IDimgList = res.data.data.image_info.doc_photo;
           //入职材料
           if (detail && detail.entry_materials && detail.entry_materials.length > 0) {
             for (let i = 0; i < detail.entry_materials.length; i++) {
@@ -693,6 +682,12 @@ export default {
     },
     //获取职位岗位
     getDuty(user_id, status) {
+      this.ContractimgList = [];
+      this.EducationimgList  = [];
+      this.DismissimgList = [];
+      this.ApplyimgList = [];
+      this.IDimgList = [];
+      this.BankimgList = [];
       this.$http.get(globalConfig.server + 'hrm/User/userInfo', {
         params: {
           user_id

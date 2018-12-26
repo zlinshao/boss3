@@ -311,12 +311,13 @@ export default {
             // this.isClear = true;
             this.gerRewardReord(this.saveUid);
             // this.initParams();
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
           }
+          //  else {
+          //   this.$notify.warning({
+          //     title: '警告',
+          //     message: res.data.msg,
+          //   });
+          // }
         })
       } else if(this.isAddOrEdit == "2") {
         this.editParams.remark = this.params[0].remarks[0].remark;

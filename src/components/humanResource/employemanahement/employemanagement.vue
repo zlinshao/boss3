@@ -642,6 +642,7 @@ export default {
     },
     closeEmployDetail() {
       this.lookEmployDetailLog = false;
+      this.class_empDetail_id = "";
       this.getEmploy();
     },
     // 查看考勤

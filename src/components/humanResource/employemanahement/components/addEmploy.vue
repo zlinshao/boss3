@@ -401,7 +401,7 @@
         }, //离职日期
         statusOptions:[
           {value: "1", label: "在职"},
-          {value: "2", label: "离职"},
+          // {value: "2", label: "离职"},
           {value: "4", label: "停职留薪"},
         ],
         
@@ -807,7 +807,7 @@
             this.params.position_id = [];
             this.duty = [];
             this.position = [];
-            if(String(res.data.data.status) == "0") {
+            if(String(res.data.data.status) == "0" || String(res.data.data.status) == "2") {
               this.params.status = "1";
             } else {
               this.params.status = String(res.data.data.status);

@@ -293,6 +293,7 @@ export default {
     },
     closeResigntion() {
       this.lookResigntion = false;
+      this.ids = "";
       this.getResignationEmploye();
     },
     // 上传文件

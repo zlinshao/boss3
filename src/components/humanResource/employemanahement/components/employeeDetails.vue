@@ -544,7 +544,12 @@ export default {
     staffDetail(val) {
       if(!val) {
         this.$emit("close");
-       
+        this.IDimgList = [];
+        this.BankimgList = [];
+        this.ContractimgList = [];
+        this.EducationimgList = [];
+        this.ApplyimgList = [];
+        this.DismissimgList = [];
       }
     },
     ids(val) {
@@ -581,12 +586,6 @@ export default {
           // return false
           this.staffDetailData = res.data.data;
           this.entry_materials = [];
-           
-          // this.ContractimgList = res.data.data.image_info.labor_contract;
-          // this.EducationimgList  = res.data.data.image_info.education;
-          // this.DismissimgList = res.data.data.image_info.resignation;
-          // this.ApplyimgList = res.data.data.image_info.resume;
-          // this.IDimgList = res.data.data.image_info.doc_photo;
           //入职材料
           if (detail && detail.entry_materials && detail.entry_materials.length > 0) {
             for (let i = 0; i < detail.entry_materials.length; i++) {
@@ -622,7 +621,7 @@ export default {
       this.$http.get(globalConfig.server + 'manager/staff/growth/' +id).then((res) => {
         if (res.data.code === '10070') {
           this.growthData = res.data.data;
-          console.log(this.growthData)
+          console.log(this.growthData, "66666")
         } else {
           this.growthData = [];
         }
@@ -636,6 +635,7 @@ export default {
       this.EducationimgList = [];
       this.ApplyimgList = [];
       this.DismissimgList = [];
+      console.log("11111")
       this.$http.get(globalConfig.server + 'hrm/User/userInfo', {
         params: {
           user_id
@@ -646,6 +646,7 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
+              console.log(res.data.data.image_info, "4444")
               if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
                   if(key == "doc_photo") {
