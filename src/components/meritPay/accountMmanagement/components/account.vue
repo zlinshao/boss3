@@ -1,5 +1,5 @@
 <template>
-  <div id="account">
+  <div id="account" @click="show = false">
     <!-- 新增分配 -->
     <div class="addAllocation">
       <el-button type="primary" size="mini" @click="deleteAccount" :disabled="multipleSelection.length == 0">删除
@@ -46,6 +46,7 @@
                     element-loading-background="rgba(255, 255, 255, 0)"
                     v-loading="accountLoading"
                     :empty-text="emptyAccount"
+                    @row-contextmenu="openRightMenu"
           >
             <el-table-column type="selection"></el-table-column>
             <el-table-column prop="org_id.name" label="部门"></el-table-column>
@@ -111,15 +112,52 @@
         <el-button type="primary" @click="addAllocation" size="mini">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!--右击-->
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperateMore="clickEvent"></RightMenu>
+
+    <!--修改-->
+    <el-dialog
+      :visible.sync="editAccountVisible"
+      title="修改账户"
+      width="25%"
+    >
+      <div style="text-align: center">
+        <p>
+          账户类型：<el-select v-model="editCate" @change="changeEditCate" size="mini" style="width: 70%">
+          <el-option v-for="item in accountTypeOption" :value="item.value" :label="item.label" :key="item.value"></el-option>
+        </el-select>
+        </p>
+        <p>
+          账户名称：<el-select v-model="editValue" size="mini" style="width: 70%">
+          <el-option v-for="(item,key) in accountList" :key="key" :value="item.id" :label="item.name"></el-option>
+        </el-select>
+        </p>
+      </div>
+      <div style="text-align: right">
+        <el-button size="mini" @click="cancelEdit">取消</el-button>
+        <el-button size="mini" type="primary" @click="handleEditOk">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import organization from "../../../common/organization"; //组织架构
+  import RightMenu from '../../../common/rightMenu';
   export default {
-    components: {organization},
+    components: {organization,RightMenu},
     data() {
       return {
+        lists: [],
+        show: false,
+        rightMenuX: 0,
+        rightMenuY: 0,
+        editAccountVisible: false,
+        editCate: '',
+        editValue: '',
+        accountList: [],
         accountId: "",
         addAccountFrom: {
           account_id: "",
@@ -177,6 +215,61 @@
     },
     watch: {},
     methods: {
+      cancelEdit() {
+        this.editAccountVisible = false;
+        this.editCate = '';
+        this.editValue = '';
+      },
+      handleEditOk() {
+        console.log(this.editCate,this.editValue);
+        if (!this.editValue) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择账户'
+          });
+          return false;
+        } else {
+
+        }
+      },
+      clickEvent(index) {
+       console.log(index);
+       if (index.clickIndex === 'EditInfo') {
+         this.editAccountVisible = true;
+       }
+      },
+      changeEditCate() {
+        this.handleEditChange();
+      },
+      handleEditChange() {
+        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
+          params: {
+            cate: this.editCate,
+            all: 1
+          }
+        }).then(res => {
+          this.accountList = res.data.data.data;
+        })
+      },
+      //右击
+      openRightMenu(row,event) {
+        this.lists = [
+          {clickIndex: 'EditInfo', headIcon: 'el-icon-edit', label: '修改', data: row},
+        ];
+        this.contextParams(event);
+      },
+      //********************右键配置操作函数****************
+      contextParams(event) {
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
       handleNewAllot() {
         if (!this.org_name) {
           this.$notify.warning({
@@ -244,8 +337,32 @@
       },
       // 新增分配
       addAllocation() {
-        console.log(this.formAllocation);
+        if (this.formAllocation.account_id.length < 1) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择账户'
+          });
+          return false;
+        }
+        this.$http.post(globalConfig.finance_server + 'account/allocation/add',this.formAllocation).then(res => {
+          if (res.data.success) {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.message
+            });
+            this.getAccountList();
+          }else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.message
+            });
+          }
+          this.allocationDialog = false;
+        }).catch(err => {
+          console.log(err);
+        })
       },
+
       // 新增账户人或账户
       addAccountNameOwner() {
         this.$http.post(globalConfig.server + "financial/account_alloc/complement", this.addAccountFrom).then(res => {
