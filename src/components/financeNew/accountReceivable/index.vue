@@ -446,7 +446,7 @@
       width="30%"
     >
       <div style="width: 85%;text-align: center;">
-        <el-form :model="addForm" ref="addPayForm" label-width="100px" size="small">
+        <el-form :model="addForm" :rules="addFormRules" ref="addPayForm" label-width="100px" size="small">
           <el-form-item label="客户名称" prop="customer_name">
             <el-select v-model="addForm.customer_name">
               <el-option value="111" label="小王"></el-option>
@@ -459,12 +459,24 @@
               <el-option :value="3" label="未知租客"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="应收金额" prop="amount_receivable">
+            <el-input type="number" v-model="addForm.amount_receivable"></el-input>
+          </el-form-item>
           <el-form-item label="付款日期" prop="pay_date">
             <el-date-picker
               v-model="addForm.pay_date"
               type="date"
               placeholder="选择日期">
             </el-date-picker>
+          </el-form-item>
+          <el-form-item label="科目">
+            <el-input @focus="openSubjectTree" clearable v-model="addSubjectName"></el-input>
+          </el-form-item>
+          <el-form-item label="描述" prop="description">
+            <el-input v-model="addForm.description" type="textarea" :row="8" placeholder="请输入描述"></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="addForm.remark" type="textarea" :row="8" placeholder="请输入备注"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button size="mini" @click="addPayVisible = false">取消</el-button>
@@ -585,6 +597,31 @@
           customer_name: '',
           identity: '',
           pay_date: '',
+          description: '',
+          amount_receivable: '',
+          subject_id: '',
+          remark: ''
+        },
+        addSubjectName: '',
+        addFormRules: {
+          remark: [
+            { required: true, message: '请输入备注', trigger: 'blur' },
+          ],
+          description: [
+            { required: true, message: '请输入描述', trigger: 'blur' },
+          ],
+          pay_date: [
+            { required: true, message: '请选择付款时间', trigger: 'blur' },
+          ],
+          customer_name: [
+            { required: true, message: '请选择客户', trigger: 'blur' },
+          ],
+          identity: [
+            { required: true, message: '请选择客户身份', trigger: 'blur' },
+          ],
+          amount_receivable: [
+            { required: true, message: '请输入应收金额', trigger: 'blur' },
+          ]
         }
       }
     },
@@ -732,8 +769,13 @@
         this.subjectVisible = true;
       },
       selectSubject(val) {
-        this.form.subject_id = val.id;
-        this.subject_name = val.name;
+        if (this.addPayVisible) {
+          this.addForm.subject_id  = val.id;
+          this.addSubjectName = val.name;
+        } else {
+          this.form.subject_id = val.id;
+          this.subject_name = val.name;
+        }
       },
       closeOrganize() {
         this.organizeVisible = false;
