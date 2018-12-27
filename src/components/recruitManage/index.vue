@@ -34,7 +34,7 @@
             </el-form>
         </div>
         <!--招聘详情开始-->
-        <div class="positionList"  v-loading="loadingRecruit" element-loading-text="拼命加载中">
+        <div class="positionList"  v-loading="loadingRecruit"  element-loading-text="加载中" element-loading-spinner="el-icon-loading">
             <div class='positionItem' v-for="(item, index) in positionList" :key="index">
                 <el-container>
                     <el-header>
@@ -164,7 +164,7 @@
             </div>
         </div>
         <!--招聘详情结束-->
-        <div class="empty" v-if="!positionList.length">暂无数据</div>
+        <div class="empty" v-if="!positionList.length && !loadingRecruit">暂无数据</div>
         <div class="block">
             <el-pagination
             @size-change="handleSizeChange"
@@ -233,6 +233,7 @@
                 active_name:'first',
                 page: 1,
                 total:0,
+                scrollTop: 0,
                 loadingRecruit: true,
                 newPositionDialog: false,
                 editorDisabled: false,
@@ -300,7 +301,6 @@
         },
         watch: {
             togglePositionDialogVisible(val){
-                // console.log(val);
                 if(!val){
                     this.position_index = '';
                     this.position_status = '';
@@ -312,7 +312,7 @@
             this.getDictionary();
         },
         methods:{
-            //分頁
+            //分页
             handleSizeChange(){
 
             },
@@ -366,6 +366,13 @@
                             message: res.data.msg,
                             type: 'warning'
                         });
+                    }else{
+                        this.$notify({
+                            title:'警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
+                        this.initData();
                     }
                 })
             },
@@ -421,58 +428,22 @@
             },
             //获取招聘列表
             getPositionList(){
-                // this.positionList = [];
+                this.positionList = [];
                 this.loadingRecruit = true;
                 this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
                     if(res.data.code === '10000' || res.data.code === '70000'){
                         this.loadingRecruit = false;
                         this.total = res.data.data.count;
                         this.positionList = res.data.data.data;
-                        this.positionList.forEach(item => {
-                        });
+                        // this.$nextTick(() => {
+                        //     document.documentElement.scrollTop = this.scrollTop;
+                        // });
                     }else{
                         this.loadingRecruit = false;
                         this.total = 0;
                         this.positionList = [];
                     }
                 })
-            },
-            //获取已约面试/面试结束/等待入职/已经入职数据
-            getInterviewDated(){
-                if(this.recruitID.length){
-                    this.recruitID.forEach((item, index) => {
-                        //已约面试
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=1&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'interviewDated', res.data.data.count)
-                            }
-                        });
-                        //面试完毕
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=2&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'interviewFinished', res.data.data.count)
-                            }else{
-                                this.interviewFinished = {}
-                            }
-                        });
-                        //等待入职
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=3&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'toInduct', res.data.data.count)
-                            }else{
-                                this.toInduct = {}
-                            }
-                        });
-                        //已经入职
-                        this.$http.get(globalConfig.server + 'hrm/interview?search=&status=4&recruitment_id=' + item).then(res => {
-                            if(res.data.code === '20000'){
-                                this.$set(this.positionList[index], 'inducted', res.data.data.count)
-                            }else{
-                                this.inducted = {}
-                            }
-                        });
-                    })
-                }
             },
             handleImageAdded(file, Editor, cursorLocation, resetUploader){
                 let formData = new FormData();
@@ -526,7 +497,6 @@
                 let str = ''
                 this.status.forEach(item => {
                     if(item.id === _id){
-                        // console.log(item.dictionary_name)
                         str = item.dictionary_name;
                         return str 
                     }
@@ -550,7 +520,6 @@
             //选择部门
             selectMember(val){
                 if(!this.selectPositionDialogVisible){
-                    // console.log(val);
                     this.params.org_id = val[0].id;
                     this.department_name_search = val[0].name;
                 }else{
@@ -568,7 +537,6 @@
                 this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then((res) => {
                     if (res.data.code === '20000') {
                         this.duty = res.data.data.data;
-                        // console.log(res.data.data.data)
                     }
                 });
             },
@@ -628,37 +596,62 @@
                 this.newPositionDialog = false;
                 this.platformDialog = false;
                 this.processDialog = false;
-                this.getPositionList();
+                // this.getPositionList();
+                this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
+                    if(res.data.code === '10000' || res.data.code === '70000'){
+                        this.total = res.data.data.count;
+                        this.positionList = res.data.data.data;
+                        this.$nextTick(() => {
+                            document.documentElement.scrollTop = this.scrollTop;
+                        });
+                    }else{
+                        this.total = 0;
+                        this.positionList = [];
+                    }
+                })
             },
-           /************************* 平台相关*************************************/
+           /************************* 发布平台*************************************/
            platformManage(item, index){
+               this.scrollTop = window.pageYOffset;
+               setTimeout(() => {
+                   document.documentElement.scrollTop = this.scrollTop;
+               }, 80)
                this.platformDialog = true;
-               this.$store.dispatch('toEdit',item)
+               this.$store.dispatch('toEdit', item)
            },
            /************************* 流程管理*************************************/
            processManage(item, index, event){
-            //    console.log(item)
-               this.$store.dispatch('savePositionInfo', item)
+               this.scrollTop = window.pageYOffset;
+               this.$store.dispatch('savePositionInfo', item);
                this.id = item.id;
                this.processDialog = true;
+               setTimeout(() => {
+                   document.documentElement.scrollTop = this.scrollTop;
+               }, 1000)
                if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
-                   this.active_name = 'first'
+                   this.active_name = 'first';
+                   this.$store.dispatch('setActiveName', 'first')
                }
                if(event.path[1].className.indexOf('second') > -1 || event.target.classList.contains('second')){
-                   this.active_name = 'second'
+                   this.active_name = 'second';
+                   this.$store.dispatch('setActiveName', 'second')
                }
                if(event.path[1].className.indexOf('third') > -1 || event.target.classList.contains('third')){
-                   this.active_name = 'third'
+                   this.active_name = 'third';
+                   this.$store.dispatch('setActiveName', 'third')
                }
                if(event.path[1].className.indexOf('fourth') > -1 ||  event.target.classList.contains('fourth')){
-                   this.active_name = 'fourth'
+                   this.active_name = 'fourth';
+                   this.$store.dispatch('setActiveName', 'fourth')
                }
            }
         }
     }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     #recruitManage{
+        min-height: 790px;
+        position: relative;
         height: 100%;
         padding: 0 30px;
         .positionTitle{
@@ -714,6 +707,14 @@
         }
         .el-pagination {
             text-align: right;
+        }
+        .block{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+        .line{
+            text-align: center;
         }
     }
 </style>

@@ -38,10 +38,6 @@
                         <span v-if='!is_editing_bg'>{{backgroundRadio.update.background_check.dismiss_description}}</span>
                     </el-form-item >
                 </div>
-                <div class='edit-result' v-if='is_editing_bg'>
-                    <!-- <el-button size='mini' @click='cancelEditingBg'>取消</el-button>
-                    <el-button size='mini' @click='confirmEditingBg'>确定</el-button> -->
-                </div>
                 <div class='edit-result'>
                     <el-button size='mini' @click='cancelBgReseach' v-if='allow_edit'>取消</el-button>
                     <el-button size='mini' @click='confirmBgReseach' v-if='allow_edit'>确定</el-button>
@@ -85,7 +81,6 @@
                 if(!val){
                     this.$emit('close')
                 }else{
-                    // console.log(this.$store.state.platform.active_name);
                     if(this.$store.state.platform.active_name == 'fourth'){
                         this.allow_edit = false;
                     }else{
@@ -101,7 +96,6 @@
             },
             background_info(val){
                 if(val.background_check){
-                    // console.log(val.background_check)
                     this.prefill(val.background_check)
                 }else{
                     this.initBgParam();
@@ -139,6 +133,12 @@
                             type: 'success'
                         });
                         this.backgroundDialogVisible = false;
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
                     }
                 })
             },
@@ -146,15 +146,6 @@
             editBgreseach(){
                 this.is_editing_bg = true;
                 this.backgroundRadio_clone = this.deepClone(this.backgroundRadio);
-            },
-            //取消背景调查修改
-            cancelEditingBg(){
-                this.is_editing_bg = false;
-                this.backgroundRadio = Object.assign({}, this.backgroundRadio_clone);
-            },
-            //确定背景调查修改
-            confirmEditingBg(){
-                this.is_editing_bg = false;
             },
             //初始化参数
             initBgParam(){
@@ -167,7 +158,6 @@
             },
             //预填背调信息
             prefill(obj){
-                // console.log(obj)
                 this.backgroundRadio.update.background_check.is_experience = obj.is_experience + '';
                 this.backgroundRadio.update.background_check.is_resume = obj.is_resume + '';
                 this.backgroundRadio.update.background_check.is_dismiss = obj.is_dismiss + '';

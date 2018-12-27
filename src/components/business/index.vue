@@ -155,7 +155,7 @@
       <el-dialog
         title="数据统计"
         :visible.sync="statisticalVisible"
-        width="40%"
+        width="55%"
       >
           <div style="width:100%;text-align: center;">
             <h3 style="text-align: left;margin-left: 10%;">{{ chartTitle[currentTitle] }}</h3>

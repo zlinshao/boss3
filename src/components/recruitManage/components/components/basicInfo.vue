@@ -440,7 +440,7 @@
                         <div class="content">
                           <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.entry_way && basicInfo_info.basic_info.entry_way.entry_type'>
                             {{entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type).length
-                            ? entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type)[0].dictionary_name : ''}}
+                            ? entryWayCategory.filter(item => item.id === basicInfo_info.basic_info.entry_way.entry_type)[0].name : ''}}
                           </span>
                           <span v-else>暂无</span>
                         </div>
@@ -868,15 +868,57 @@
         this.params.real_name = this.basicInfo_info.name;
         this.params.gender = this.basicInfo_info.gender === 716 ? 229 : 230;
         this.params.phone = this.basicInfo_info.phone;
-        this.params.enroll  = this.basicInfo_info.entry_other.entry_time;
-        this.params.salary = this.basicInfo_info.entry_other.salary;
-        this.params.entry_way.entry_type = this.basicInfo_info.resume_sources.id;
+        this.params.enroll  = this.basicInfo_info.entry_time;
+        this.params.salary = this.basicInfo_info.entry_other ? this.basicInfo_info.entry_other.salary : '';
+        this.params.entry_way.entry_type = this.exchangeEntryWay(this.basicInfo_info.resume_sources.id);
         this.orgData.department_id = obj.department_name;
         this.params.department_id.push(obj.department_id);
         this.params.duty_id.push(obj.duty_id);
         this.duties(obj.department_id);
         this.params.position_id.push(obj.position_id);
         this.quarters(obj.duty_id);
+      },
+      //入职渠道字典=>前端固定
+      exchangeEntryWay(id){
+        let _id = '';
+        switch(id){
+          case 747 : 
+            _id = '1';
+            break;
+          case 748 : 
+            _id = '2';
+            break;
+          case 749 : 
+            _id = '3';
+            break;
+          case 750 : 
+            _id = '4';
+            break;
+          case 751 : 
+            _id = '5';
+            break;
+          case 752 : 
+            _id = '6';
+            break;
+          case 753 : 
+            _id = '7';
+            break;
+          case 754 : 
+            _id = '8';
+            break;
+          case 755 : 
+            _id = '9';
+            break;
+          case 756 : 
+            _id = '10';
+            break;
+          case 757 : 
+            _id = '11';
+            break;
+          default:
+            break;
+        }
+        return _id;
       },
       //查看时获取员工
       getDepart(){
@@ -1107,6 +1149,11 @@
             } else {
               this.disabledBtn = false;
               this.prompt('warning', res.data.msg);
+              this.$notify({
+                title: '警告',
+                message: res.data.msg,
+                type: 'warning'
+              });
             }
           }).catch(err => {
             this.disabledBtn = false;

@@ -74,7 +74,6 @@ export default {
     },
     watch:{
         platformDialog(val){
-            // console.log(val)
             if(val){
                 this.platformDialogVisible = true
             }
@@ -90,17 +89,15 @@ export default {
             }else{
                 this.platform = Object.assign({},this.$store.state.platform.platform_obj)
                 this.id = this.$store.state.platform.id;
-                // console.log(this.platform)
             }
         }
     },
     created(){
-        // console.log(this.$store)
+        
     },
     methods:{
         //编辑
         editPlatform(value, key){
-            // console.log(value,key)
             this.is_adding = false;
             this.is_editing = true;
             this.editing_platform_val = value;
@@ -116,8 +113,7 @@ export default {
         },
         //保存编辑
         saveEdit(value, key){
-            // console.log(value, key)
-            if(Object.keys(this.platform).includes(this.platform_name) || Object.values(this.platform).includes(this.platform_host)){
+            if(Object.keys(this.platform).filter(item => item != key).includes(this.platform_name) || Object.values(this.platform).filter(item => item != value).includes(this.platform_host)){
                 this.$alert('平台或地址已经存在', '', {
                     confirmButtonText: '确定',
                 });
@@ -125,9 +121,9 @@ export default {
                 delete this.platform[key];
                 this.platform[this.platform_name] = this.platform_host;
                 this.platform = Object.assign({}, this.platform);
-                this.is_editing = false;
-                this.editing_platform_val = '';
             }
+            this.is_editing = false;
+            this.editing_platform_val = '';
         },
         //删除品台
         deletePlatform(value, key){
@@ -163,7 +159,6 @@ export default {
         },
         //跳转
         turnto(item){
-            // console.log(item);
             window.open(item)
         },
         //取消新加
@@ -174,7 +169,7 @@ export default {
         },
         //确定添加
         confirmAdd(){
-            this.platform[this.platform_name] = this.platform_host
+            // this.platform[this.platform_name] = this.platform_host
             this.$http.put(globalConfig.server + 'hrm/recruitment/' + this.id, {
                 update:{
                     platform: this.platform

@@ -192,12 +192,12 @@
                                    :label="item.dictionary_name">{{item.dictionary_name}}
                         </el-option>
                       </el-select>
-                      <div style="color: #409EFF;font-size: 12px;text-align: right;"
+                      <!-- <div style="color: #409EFF;font-size: 12px;text-align: right;"
                            v-if="params.level != 235 && params.level != 236 && params.level != 247 && params.level != 248 && params.level != 249 && params.level != ''">
                         <span v-if="detailData && detailData.send_info==2">已发过转正祝贺</span>
                         <span v-if="detailData && detailData.send_info==1">未发过转正祝贺 </span>
                         <span style="cursor: pointer;margin-left: 10px;" @click="sendPositive">点击发送</span>
-                      </div>
+                      </div> -->
                     </el-form-item>
                   </el-col> 
                   <el-col :span="8">
@@ -275,12 +275,12 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="在职状态">
+                    <!-- <el-form-item label="在职状态">
                       <el-select v-model="params.status" placeholder="请选择" clearable>
                         <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                   </el-col>
                 <!-- <el-col :span="8">
                   <el-form-item label="企业邮箱">
@@ -299,13 +299,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="选择时间">
-                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
+                  <el-form-item label="离职时间">
+                    <el-date-picker v-model="params.dismiss_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" size="mini"></el-date-picker>
                   </el-form-item>
                 </el-col>
                  <el-col :span="16">
                   <el-form-item label="备注">
-                      <el-input type="textarea" placeholder="请填写离职备注" v-model="params.entry_way.entry_mess" size="mini"></el-input>
+                      <el-input type="textarea" placeholder="请填写离职备注" v-model="params.dismiss_reason.dismiss_mess" size="mini"></el-input>
                     </el-form-item>
                 </el-col>
               </el-row>
@@ -405,7 +405,8 @@
             labor_contract: [],  // 劳动合同
             education: [],  // 学历复印件
           },
-          status: "",
+          status: "1",
+          dismiss_time: "",
           // ================
           duty_id: [],
           position_id: [],
@@ -493,10 +494,10 @@
       };
     },
     watch: {
-      // isClear: function (val) {
-      //   console.log(val)
-      //   this.isClear = val;
-      // },
+      isClear: function (val) {
+        console.log(val)
+        this.isClear = val;
+      },
       // addEmployLog(val,id) {
       //   console.log(val, "22222")
       //   this.addStaffDialogVisible = val;
@@ -519,12 +520,12 @@
       },
       addStaffDialogVisible(val) {
         if (!val) {
-          this.initial(); //关闭弹框时清除
+          this.initial(); // 关闭弹框时清除
           this.$emit('close');
           this.$http.get(this.url + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-          // this.isClear = true;
+          this.isClear = !this.isClear;
           this.disabledBtn = false;
         } else {
           this.editPositionIds = [];
@@ -604,6 +605,7 @@
         this.getOnJobStatus();
       },
       initial() {
+        this.params.dismiss_time = "";
         this.params.image_info.doc_photo = [];
         this.params.image_info.bank = [];
         this.params.image_info.contract = [];
@@ -627,7 +629,7 @@
           dismiss_mess: '',
         };
         this.organData = {};
-        this.params.status = "";
+        this.params.status = "1";
         this.params.real_name = '';
         this.params.gender = '';
         this.params.phone = '';
@@ -721,6 +723,7 @@
              let obj4 = {};
              let obj5 = {};
              let obj6 = {};
+            
              if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
                   if(key == "education") {
@@ -808,6 +811,7 @@
               }
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
+               this.params.dismiss_time = detail.dismiss_time;
               this.params.fertility_status = Number(detail.fertility_status);
               this.params.id_num = detail.id_num;
               this.params.birthday = detail.birthday;
@@ -828,7 +832,11 @@
               this.params.level = detail.level;
               this.params.account_name = detail.account_name;
               this.params.enroll = detail.enroll;
-              this.params.salary = detail.salary;
+              if(detail.salary == "0") {
+                this.params.salary = "";
+              } else {
+                this.params.salary = detail.salary;
+              }
               this.params.entry_materials = [];
               let mate = detail.entry_materials;
               if (mate && mate !== 'null' && mate.length > 0) {
@@ -836,13 +844,21 @@
                   this.params.entry_materials.push(Number(mate[i]));
                 }
               }
-              this.params.salary = detail.salary;
+              // this.params.salary = detail.salary;
               this.params.origin_addr = detail.origin_addr;
               this.params.marital_status = detail.marital_status;
-              this.params.political_status = detail.political_status;
+              if(detail.political_status == "0") {
+                this.params.political_status = "";
+              } else {
+                this.params.political_status = detail.political_status;
+              }
               this.params.forward_time = detail.forward_time;
               this.params.mail = detail.mail;
-              this.params.education = detail.education;
+              if(detail.education == "0") {
+                this.params.education = ""
+                } else {
+                this.params.education = detail.education;
+              }
               this.params.school = detail.school;
               this.params.major = detail.major;
               this.params.graduation_time = detail.graduation_time;
@@ -974,7 +990,7 @@
                  this.addStaffDialogVisible = false;
               }
               // this.isClear = true;
-              this.initial();
+              // this.initial();
               this.prompt('success', res.data.msg);
             } else {
               this.disabledBtn = false;
@@ -993,7 +1009,7 @@
               this.addStaffDialogVisible = false;
               this.prompt('success', res.data.msg);
               // this.isClear = true;
-              this.initial();
+              // this.initial();
 
             } else {
               this.disabledBtn = false;

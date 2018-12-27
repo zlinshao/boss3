@@ -66,14 +66,11 @@
                         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded" v-model="form.content" :disabled="editorDisabled"></vue-editor>
                         <!-- <el-input  v-model="form.content" type='textarea'></el-input> -->
                     </el-form-item>
-                    <!-- <el-form-item label="任职要求">
-                        <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded" v-model="positionRequire" :disabled="editorDisabled"></vue-editor>
-                    </el-form-item> -->
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="newPositionVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmAdd">确 定</el-button>
+                <el-button size='small' @click="newPositionVisible = false">取 消</el-button>
+                <el-button size='small' type="primary" @click="confirmAdd" :disabled='add_disabled'>确 定</el-button>
             </span>
         </el-dialog>
         <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
@@ -95,6 +92,7 @@
                 duty_id:'',
                 duty:[],
                 position:[],
+                add_disabled: false,
                 form:{
                     org_id:'',
                     position_id: '',
@@ -114,9 +112,6 @@
                         max: '',
                     },
                     content: '',
-                    // create_time :'',
-                    // users:'',
-                    // status:''
 
                 },
                 sex:[],
@@ -124,20 +119,17 @@
                 education: [],
                 editorDisabled: false,
                 positionRespons:'',
-                // positionRequire:'',
                 file:{},
             }
         },
         watch: {
             newPositionDialog(val){
-                // console.log(val);
                 if(val){
                     this.newPositionVisible = true;
                     this.getDictionary()
                 }
             },
             newPositionVisible(val){
-                // console.log(val);
                 if(!val){
                     this.$emit('close');
                     this.init()
@@ -150,7 +142,6 @@
                 this.$http.get(globalConfig.server + 'organization/duty?org_id=' + id).then((res) => {
                     if (res.data.code === '20000') {
                         this.duty = res.data.data.data;
-                        // console.log(res.data.data.data)
                     }
                 });
             },
@@ -199,34 +190,29 @@
             },
             //提交表单
             confirmAdd(){
-                // this.form.content = this.positionRespons + '</br>' + this.positionRequire;
-                // this.form.create_time = this.timestampToTime(new Date());
-                // this.form.users = JSON.parse(localStorage.personal).id;
-                // this.form.status = '招聘中';
-                this.$http.post(globalConfig.server + 'hrm/recruitment', this.form)
-                    .then(res => {
-                        if(res.data.code === '10010'){
-                            this.$notify({
-                                title:'成功',
-                                message:res.data.msg,
-                                type: 'success'
-                            });
-                            this.newPositionVisible = false;
-                            this.init();
-                        }else if(res.data.code == '10012'){
-                            this.$notify({
-                                title: '警告',
-                                message: res.data.msg,
-                                type: 'warning'
-                            });
-                        }
-                    })
-                // console.log(this.form)
+                this.add_disabled = true;
+                this.$http.post(globalConfig.server + 'hrm/recruitment', this.form).then(res => {
+                    if(res.data.code === '10010'){
+                        this.$notify({
+                            title:'成功',
+                            message:res.data.msg,
+                            type: 'success'
+                        });
+                        this.newPositionVisible = false;
+                        this.init();
+                    }else{
+                        this.$notify({
+                            title: '警告',
+                            message: res.data.msg,
+                            type: 'warning'
+                        });
+                    }
+                    this.add_disabled = false;
+                })
             },
             //初始化表单
             init(){
                 this.positionRespons = ''
-                // this.positionRequire = ''
                 this.department_name = '';
                 this.duty_id = '';
                 this.file = {};
@@ -269,9 +255,9 @@
                     }
                 });
                 //状态
-                this.dictionary(731).then((res) => {
-                    // console.log(res)
-                });
+                // this.dictionary(731).then((res) => {
+
+                // });
             },
             handleImageAdded(file, Editor, cursorLocation, resetUploader){
                 let formData = new FormData();
@@ -297,6 +283,14 @@
     }
 </script>
 <style lang="scss" scoped>
-
+    #newPosition{
+        .dialog-footer{
+            display: flex;
+            justify-content: center;
+        }
+        .line{
+            text-align: center;
+        }
+    }
 </style>
 

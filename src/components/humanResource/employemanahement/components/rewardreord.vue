@@ -276,10 +276,10 @@ export default {
           this.rewardreForm.otherNumber = res.data.data.others;
         } else {
           this.detail = {};
-          this.$notify.warning({
-            title: '警告',
-            message: res.data.msg,
-          });
+          // this.$notify.warning({
+          //   title: '警告',
+          //   message: res.data.msg,
+          // });
         }
       })
     },
@@ -321,6 +321,7 @@ export default {
       } else if(this.isAddOrEdit == "2") {
         this.editParams.remark = this.params[0].remarks[0].remark;
         this.editParams.type = this.params[0].remarks[0].type;
+        this.editParams.images = this.params[0].remarks[0].images;
         // console.log(this.editParams, "111111")
         // return false
         this.$http.post(globalConfig.server + 'credit/manage/employeeedit', this.editParams).then(res => {
@@ -403,6 +404,27 @@ export default {
         border-radius: 6px;
         margin: 0 10px 10px 0;
       }
+    }
+    .circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+      float: left;
+      margin-left: -9px;
+      margin-top: 10px;
+    }
+    .praises {
+      background: #58d788;
+    }
+    .criticisms {
+      background: #ff4545;
+    }
+    .doubts {
+      background: #FF9900;
+    }
+    .others {
+      background: #409EFF;
     }
   }
 </style>

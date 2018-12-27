@@ -369,17 +369,24 @@
                           <span v-else>暂无</span>
                         </div>
                         <div>
-                          <el-button type="text" @click="sendMessage(1)">已发送群消息</el-button>
-                          <el-button type="text">和</el-button>
-                          <el-button type="text" @click="sendMessage(2)">离职短信</el-button>
+                          <div style="display: inline-block;">
+                            <el-button type="text" v-if="dismiss_group == 1" @click="sendMessage(1)">已发送群信息</el-button>
+                            <el-button type="text" @click="sendMessage(1)" v-else>发送群消息</el-button>
+                          </div>
+                          <div style="display: inline-block;">
+                            <el-button type="text" v-if="dismiss_sms == 1" @click="sendMessage(2)">已发送离职短信</el-button>
+                            <el-button type="text" @click="sendMessage(2)" v-else>离职短信</el-button>
+                          </div>
                         </div>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="离职备注">
                         <div class="content">
-                          <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.remark">
-                            {{staffDetailData && staffDetailData.detail && staffDetailData.detail.remark}}</span>
+                          <!-- <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.remark">
+                            {{staffDetailData && staffDetailData.detail && staffDetailData.detail.remark}}</span> -->
+                            <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_reason && staffDetailData.detail.dismiss_reason !== 'null'">
+                            {{staffDetailData.detail.dismiss_reason.dismiss_mess}}</span>
                           <span v-else>暂无</span>
                         </div>
                       </el-form-item>
@@ -505,6 +512,8 @@ export default {
   props: ["ids", "lookResigntion"],
   data() {
     return {
+      dismiss_sms: "",
+      dismiss_group: "",
       IDimgList: [],           // ID图片
       BankimgList: [],        // 银行卡图片
       ContractimgList: [],   // 合同图片
@@ -555,7 +564,9 @@ export default {
     },
     ids(val) {
       this.employDetailId = val;
-      this.openDetail(val);
+      if(val) {
+        this.openDetail(val);
+      }
     }
   },
   mounted() {
@@ -576,6 +587,7 @@ export default {
                 title: '成功',
                 message: res.data.msg
               });
+              this.openDetail(this.employDetailId);
             } else {
               this.$notify.warning({
                 title: '失败',
@@ -591,11 +603,12 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$http.get(globalConfig.server + 'organization/staff/leave-sms', { params: {id: this.employDetailId, date: this.staffDetailData.detail.dismiss_time}}).then(res => {
-            if (res.data.code === "710910") { 
+            if (res.data.code === "710400") { 
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
               });
+              this.openDetail(this.employDetailId);
             } else {
               this.$notify.warning({
                 title: '失败',
@@ -629,11 +642,6 @@ export default {
           let detail = res.data.data.detail;
           this.staffDetailData = res.data.data;
           this.entry_materials = [];
-          // this.ContractimgList = res.data.data.image_info.labor_contract;
-          // this.EducationimgList  = res.data.data.image_info.education;
-          // this.DismissimgList = res.data.data.image_info.resignation;
-          // this.ApplyimgList = res.data.data.image_info.resume;
-          // this.IDimgList = res.data.data.image_info.doc_photo;
           //入职材料
           if (detail && detail.entry_materials && detail.entry_materials.length > 0) {
             for (let i = 0; i < detail.entry_materials.length; i++) {
@@ -676,6 +684,12 @@ export default {
     },
     //获取职位岗位
     getDuty(user_id, status) {
+      this.ContractimgList = [];
+      this.EducationimgList  = [];
+      this.DismissimgList = [];
+      this.ApplyimgList = [];
+      this.IDimgList = [];
+      this.BankimgList = [];
       this.$http.get(globalConfig.server + 'hrm/User/userInfo', {
         params: {
           user_id
@@ -686,6 +700,12 @@ export default {
             if (status) {
               this.currentDuty = res.data.data.dutyInfoNames;
               this.currentPosi = res.data.data.positionInfoNames;
+              if(res.data.data.send_info && res.data.data.send_info.dismiss_group) {
+                this.dismiss_group =  res.data.data.send_info.dismiss_group;
+              }
+              if(res.data.data.send_info && res.data.data.send_info.dismiss_sms) {
+                this.dismiss_sms =  res.data.data.send_info.dismiss_sms;
+              }
               // console.log(res.data.data.image_info, "22222222")
               if(res.data.data.image_info) {
                 for( let key in res.data.data.image_info) {
