@@ -13,7 +13,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
+            <el-button type="primary"><i class="el-icon-refresh" @click="getTableData"></i></el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
@@ -420,13 +420,11 @@
     },
     methods: {
       getTableData() {
+        this.isHigh = false;
         this.collectLoading = true;
         this.collectStatus = ' ';
         let params = this.form;
-        console.log(this.form);
-        return false;
         this.$http.get(this.url + 'account/receivable/index', {params: params}).then((res) => {
-          console.log(res);
           if (res.data.success) {
             this.collectData = res.data.data.data;
             this.totalNum = res.data.data.count;
@@ -488,7 +486,23 @@
       },
       // 重置
       resetting() {
-        this.form.keywords = '';
+        this.form = {
+          staff_ids: [],
+            department_ids: [],
+            status: '',
+            startRange: '',//应收开始时间
+            endRange: '',//应收结束时间
+            tag_status: '',//催缴状态
+            startTag: '',//催缴开始时间
+            endTag: '',//催缴结束时间
+            subject_id: '',//科目id
+            search: '',//搜索框
+            minPrice: '',//剩余款项最小区间
+            maxPrice: '',//剩余款项最大区间
+            page: 1,
+            limit: 12
+        }
+        this.subject_name = '';
       },
       // 高级筛选
       highGrade() {
