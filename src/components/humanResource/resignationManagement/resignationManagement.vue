@@ -283,6 +283,7 @@ export default {
     closeSecondary() {
        this.lookSecondary = false;
         this.isEdit = false;
+        this.editor = false;
        this.getResignationEmploye();
     },
     // 查看离职员工详情
@@ -292,6 +293,7 @@ export default {
     },
     closeResigntion() {
       this.lookResigntion = false;
+      this.ids = "";
       this.getResignationEmploye();
     },
     // 上传文件

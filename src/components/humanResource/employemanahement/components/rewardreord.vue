@@ -276,10 +276,10 @@ export default {
           this.rewardreForm.otherNumber = res.data.data.others;
         } else {
           this.detail = {};
-          this.$notify.warning({
-            title: '警告',
-            message: res.data.msg,
-          });
+          // this.$notify.warning({
+          //   title: '警告',
+          //   message: res.data.msg,
+          // });
         }
       })
     },
@@ -321,6 +321,7 @@ export default {
       } else if(this.isAddOrEdit == "2") {
         this.editParams.remark = this.params[0].remarks[0].remark;
         this.editParams.type = this.params[0].remarks[0].type;
+        this.editParams.images = this.params[0].remarks[0].images;
         // console.log(this.editParams, "111111")
         // return false
         this.$http.post(globalConfig.server + 'credit/manage/employeeedit', this.editParams).then(res => {

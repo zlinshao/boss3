@@ -173,7 +173,7 @@
                     </div>
                   </el-col>
 
-                  <el-col :span="8" v-show="is_display">
+                  <el-col :span="8">
                     <div class="signTime">
                       <el-form-item label="签约时长">
                         <el-input v-model="form.rent_sign_month" placeholder="请输入签约时长" size="mini"></el-input>
@@ -317,7 +317,7 @@
       rent_type(val){
         if(val==2){
           this.is_display=false;
-          this.form.rent_sign_month=12;
+          // this.form.rent_sign_month=12;
           this.form.lord_duration=4;
           this.is_disabled=true;
         }else{
@@ -400,6 +400,7 @@
               this.form.rent_pay_way=data.rent.rent_pay_way;
               this.form.rent_agency_count=data.rent.rent_agency_count;
               this.form.rent_vacancy_date=data.rent.rent_vacancy_date;
+              this.form.rent_sign_month=data.rent.rent_sign_month;
             }
             
           }else{

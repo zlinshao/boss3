@@ -293,6 +293,7 @@ export default {
           this.form.dismiss_time = "";
           this.form.dismiss_reason.dismiss_type = "";
           this.form.dismiss_reason.dismiss_mess = "";
+          this.resignationList = [];
         }
       }
   },
@@ -338,7 +339,7 @@ export default {
     },
     // 只离职
     leaveDateConfirm() {
-      console.log(this.resignationList)
+      // console.log(this.resignationList)
       // return false
       this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -346,31 +347,36 @@ export default {
         type: 'warning'
       }).then(() => {
         if(!this.resignationList.length) {
-          this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.secondaryID, {
-            dismiss_time: this.form.dismiss_time,
-            dismiss_reason: this.form.dismiss_reason,
-          }).then((res) => {
-            if (res.data.code === '710418') {
-              // this.getPostStaffData();
-              // this.getStaffData();
-              this.getEmploy();
-              this.prompt('success', res.data.msg);
-              this.selectLeaveDateDialog = false;
-            } else {
-              this.prompt('warning', res.data.msg);
-            }
-          });
+          this.leaveOne();
         } else if(this.resignationList.includes("离职并发群消息") && this.resignationList.length == 1) {
+          this.leaveOne();
           this.leaveSendMsg();
         } else if(this.resignationList.includes("离职并发送短信") && this.resignationList.length == 1) {
+          this.leaveOne();
           this.leaveAndSendMsgConfirm();
         } else if(this.resignationList.length == 2) {
+          this.leaveOne();
           this.leaveSendMsg();
           this.leaveAndSendMsgConfirm();
         }
         
       }).catch(() => {
 
+      });
+    },
+    // 离职
+    leaveOne() {
+      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.secondaryID, {
+        dismiss_time: this.form.dismiss_time,
+        dismiss_reason: this.form.dismiss_reason,
+      }).then((res) => {
+        if (res.data.code === '710418') {
+          this.getEmploy();
+          this.prompt('success', res.data.msg);
+          this.selectLeaveDateDialog = false;
+        } else {
+          this.prompt('warning', res.data.msg);
+        }
       });
     },
     //离职群发
@@ -383,83 +389,76 @@ export default {
       // }).then(() => {
         
       // })
-      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-          dismiss_time: this.form.dismiss_time,
-          dismiss_reason: this.form.dismiss_reason,
-        }).then((res) => {
-          if (res.data.code === '710418') {
-            this.prompt('success', res.data.msg);
-            // this.getPostStaffData();
-            // this.getStaffData();
-            this.getEmploy();
-            if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
-              this.sendLeaveMsgForm.date = this.form.dismiss_time;
-            }
-            this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.form.dismiss_time}`).then(res => {
-              if (res.data.code === "710910") {
-                this.$notify.success({
-                  title: '成功',
-                  message: res.data.msg
-                });
-                // this.getPostStaffData();
-                // this.getStaffData();
-                // this.getEmploy();
-                this.selectLeaveDateDialog = false;
-              } else {
-                this.$notify.warning({
-                  title: '失败',
-                  message: res.data.msg
-                });
-                this.selectLeaveDateDialog = false;
-              }
-            }).catch(err => {
-              console.log(err);
-            })
-          } else {
-            this.prompt('warning', res.data.msg);
-          }
-        });
+      // if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+      //   this.sendLeaveMsgForm.date = this.form.dismiss_time;
+      // }
+      this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.secondaryID}?dismiss_time=${this.form.dismiss_time}`).then(res => {
+        if (res.data.code === "710910") {
+          this.$notify.success({
+            title: '成功',
+            message: res.data.msg
+          });
+          this.getEmploy();
+          this.selectLeaveDateDialog = false;
+        } else {
+          this.$notify.warning({
+            title: '失败',
+            message: res.data.msg
+          });
+          this.selectLeaveDateDialog = false;
+        }
+      }).catch(err => {
+        console.log(err);
+      })
+      // this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.secondaryID, {
+      //     dismiss_time: this.form.dismiss_time,
+      //     dismiss_reason: this.form.dismiss_reason,
+      //   }).then((res) => {
+      //     if (res.data.code === '710418') {
+      //       this.prompt('success', res.data.msg);
+      //       // this.getPostStaffData();
+      //       // this.getStaffData();
+      //       this.getEmploy();
+            
+      //     } else {
+      //       this.prompt('warning', res.data.msg);
+      //     }
+      //   });
     },
     // 离职并发送短信
     leaveAndSendMsgConfirm() {
       this.leaveMsg = false;
-      // this.$confirm('员工在职状态将会改变并且向该员工所负责的客户发送短信, 是否继续?', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-        
-      // }).catch(() => {
-      // });
-      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.editId, {
-          dismiss_time: this.form.dismiss_time,
-          dismiss_reason: this.form.dismiss_reason,
-        }).then((res) => {
-          if (res.data.code === '710418') {
-            this.prompt('success', res.data.msg);
-            // this.getPostStaffData();
-            // this.getStaffData();
-            this.getEmploy();
-            if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
-              this.sendLeaveMsgForm.date = this.form.dismiss_time;
-            }
-            this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
-              params: {
-                id: this.editId,
-                date: this.sendLeaveMsgForm.date
-              }
-            }).then((res) => {
-              if (res.data.code === '710400') {
-                this.prompt('success', res.data.msg);
-                this.selectLeaveDateDialog = false;
-              } else {
-                this.prompt('warning', res.data.msg);
-              }
-            });
-          } else {
-            this.prompt('warning', res.data.msg);
-          }
-        });
+      // if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
+      //   }
+        this.sendLeaveMsgForm.date = this.form.dismiss_time;
+      this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
+        params: {
+          id: this.secondaryID,
+          date: this.sendLeaveMsgForm.date
+        }
+      }).then((res) => {
+        if (res.data.code === '710400') {
+          this.prompt('success', res.data.msg);
+          this.getEmploy();
+          this.selectLeaveDateDialog = false;
+        } else {
+          this.prompt('warning', res.data.msg);
+        }
+      });
+      // this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.secondaryID, {
+      //     dismiss_time: this.form.dismiss_time,
+      //     dismiss_reason: this.form.dismiss_reason,
+      //   }).then((res) => {
+      //     if (res.data.code === '710418') {
+      //       this.prompt('success', res.data.msg);
+      //       // this.getPostStaffData();
+      //       // this.getStaffData();
+      //       this.getEmploy();
+            
+      //     } else {
+      //       this.prompt('warning', res.data.msg);
+      //     }
+      //   });
     },
     //发送离职群消息
     sendLeaveMsgConfirm() {
@@ -480,7 +479,7 @@ export default {
         if (!this.leaveMsg) {
           this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
             params: {
-              id: this.editId,
+              id: this.secondaryID,
               date: this.sendLeaveMsgForm.date
             }
           }).then((res) => {
@@ -493,7 +492,7 @@ export default {
             }
           });
         } else {
-          this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.editId}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
+          this.$http.get(globalConfig.server + `organization/staff/leave-group/${this.secondaryID}?dismiss_time=${this.sendLeaveMsgForm.date}`).then(res => {
             if (res.data.code === "710910") {
               this.$notify.success({
                 title: '成功',
@@ -642,6 +641,7 @@ export default {
     },
     closeEmployDetail() {
       this.lookEmployDetailLog = false;
+      this.class_empDetail_id = "";
       this.getEmploy();
     },
     // 查看考勤
