@@ -36,7 +36,7 @@
       <div class="table">
         <el-table 
           :data="resignationData" 
-          border 
+          stripe
           style="width: 100%" 
           v-loading="Loading"
           :empty-text="emptyText"  
@@ -46,15 +46,20 @@
           @row-contextmenu="openContextMenu">
           <el-table-column prop="name" label="姓名" >
             <template slot-scope="scope">
-              <span @click="lookResigntionElempoly(scope.row.id)">{{scope.row.name}}</span>
+              <span @click="lookResigntionElempoly(scope.row.id)" style="cursor: pointer;">{{scope.row.name}}</span>
               &nbsp;&nbsp;&nbsp;
-               <i class="el-icon-edit" @click="editSecondaryEmployment(scope.row.id)" style="cursor: pointer;"></i>
+               <i class="el-icon-edit" @click="editSecondaryEmployment(scope.row.id)" style="cursor: pointer;color: #cec9c9"></i>
             </template>
           </el-table-column>
           <el-table-column prop="orgStr" label="部门" ></el-table-column>
           <el-table-column prop="roleStr" label="岗位" ></el-table-column>
           <el-table-column prop="enroll" label="入职时间" ></el-table-column>
           <el-table-column prop="dismiss_time" label="离职时间" ></el-table-column>
+          <el-table-column label="离职操作时间" >
+            <template slot-scope="scope">
+              <span style="color: #f5b24d">{{scope.row.is_on_job}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="phone" label="手机号码" ></el-table-column>
           <el-table-column prop="dismiss_type" label="离职类型" ></el-table-column>
           <el-table-column prop="dismiss_mess" label="离职备注" ></el-table-column>
@@ -72,8 +77,58 @@
               <el-button type="text" @click="getImagesContract(scope.row)">查 看</el-button>
             </template>
           </el-table-column>
+          <el-table-column  label="离职短信">
+            <template slot-scope="scope">
+              <el-button type="text" @click="messageList(scope.row.id)">查 看</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
+      <!-- 离职短信 -->
+      <el-dialog title="离职短信" :visible.sync="messageDialogVisible" width="60%">
+        <div class="blueTable">
+        <el-table
+          :data="tableData"
+          :empty-text='tableStatus'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
+          style="width: 100%">
+          <el-table-column
+            prop="create_time"
+            label="时间">
+          </el-table-column>
+          <el-table-column
+            prop="staffs.name"
+            label="离职员工">
+          </el-table-column>
+          <el-table-column
+            prop="operators.name"
+            label="操作人">
+          </el-table-column>
+          <el-table-column
+            prop="operators"
+            label="操作人部门">
+            <template slot-scope="scope">
+              <div v-for="(item, index) in scope.row.operators.org" :key="index">{{item.name}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="status"
+            label="状态">
+            <template slot-scope="scope">
+              <div v-if="scope.row.status === 1">发送失败</div>
+              <div v-if="scope.row.status === 2">发送成功</div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+        <span slot="footer" class="dialog-footer">
+          <!-- <el-button @click="messageDialogVisible = false" size="mini">取 消</el-button> -->
+          <el-button type="primary" @click="messageDialogVisible = false" size="mini">确 定</el-button>
+        </span>
+      </el-dialog>
       <!-- 组织架构 -->
       <Organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></Organization>
       <!-- 上传文件 -->
@@ -119,7 +174,7 @@
       <RetiredEmployeeDetails :ids="ids" :lookResigntion="lookResigntion" @close="closeResigntion"></RetiredEmployeeDetails>
       <!-- 分页 -->
     <div class="block pages">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[30, 60, 90, 120]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
       <!-- 右键 -->
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperateMore="clickEvent"></RightMenu>
@@ -139,6 +194,17 @@ export default {
   components: {Organization, UpLoad, RetiredEmployeeDetails, RightMenu, SecondaryEmployment},
   data() {
     return {
+      tableStatus: ' ',
+      messageParams: {
+        staff_id: "",
+        page: 1,
+        limit: 12,
+        time: [],
+        search: '',   //模糊搜索
+      },
+      tableLoading: false,
+      tableData: [],
+      messageDialogVisible: false,
       editImage: {},
       emptyText: " ",
       Loading: false,
@@ -165,6 +231,7 @@ export default {
         dismiss_time: "",
         dismiss_reason: "",
         dismiss_mess: "",
+        // is_ob_job: "",
         // dismiss_type: "",
       },
       titleName: "",
@@ -176,11 +243,12 @@ export default {
       type: "",
       length: 0,
       params: {
+        infinite: 20,  // 需要权限
         leave_time: [],
         keywords: "",
         org_id: 1,
         is_dimission: 1,
-        limit: 12,
+        limit: 30,
         page: 1,
         user_id: "",
         resignation_form: 1,
@@ -222,6 +290,30 @@ export default {
     }
   },
   methods: {
+    // 离职短信表格
+    messageList(id) {
+      this.messageDialogVisible = true;
+      this.tableLoading = true;
+      this.tableStatus = ' ';
+      this.messageParams.staff_id = id;
+      this.$http.get(globalConfig.server + 'core/customer/smslist', {params: this.messageParams}).then((res) => {
+        this.isHigh = false;
+        this.tableLoading = false;
+        if (res.data.code === '10000') {
+          this.tableData = res.data.data.data;
+          this.totalNum = res.data.data.count;
+          if (res.data.data.data.length < 1) {
+            this.tableStatus = '暂无数据';
+            this.tableData = [];
+            this.totalNum = 0;
+          }
+        } else {
+          this.tableStatus = '暂无数据';
+          this.tableData = [];
+          this.totalNum = 0;
+        }
+      });
+    },
     // 离职短信
     resignationSMS() {
       this.$router.push({path: "/leaveOffice"})
@@ -448,7 +540,7 @@ export default {
           })
           this.Loading = false;
             // console.log(this.resignationData)
-        } else if(res.data.code == "70011") {
+        } else if(res.data.code == "70011" || res.data.code == "70088") {
           this.$notify.warning({
             title: "警告",
             message: res.data.msg
@@ -457,7 +549,7 @@ export default {
           this.resignationData = [];
           this.total = 0;
           this.Loading = false;
-        }
+        } 
       })
     },
     //选人组件

@@ -59,7 +59,7 @@
                   </div>
                 </el-form>
               </div>
-            <el-table :data="staffDate"  border style="width: 100%"
+            <el-table :data="staffDate"  stripe style="width: 100%"
                             v-loading="isLoading" 
                             :empty-text="emptyText"  
                             element-loading-text="拼命加载中"
@@ -70,13 +70,17 @@
                 <template slot-scope="scope">
                   <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
                   &nbsp;&nbsp;&nbsp;
-                  <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;"></i>
+                  <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;color: #cec9c9"></i>
                   &nbsp;&nbsp;&nbsp;
                   <!-- <i class="el-icon-close" @click="deletedEmploy(scope.row.id)" style="cursor: pointer;"></i> -->
                 </template>
               </el-table-column>
               <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
-              <el-table-column prop="roleStr" label="岗位名称" ></el-table-column>
+              <el-table-column label="岗位名称" >
+                 <template slot-scope="scope">
+                  <span style="color: #f5b24d">{{scope.row.roleStr}}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="enroll" label="入职时间" ></el-table-column>
               <el-table-column prop="created_at" label="在职状态">
                 <template slot-scope="scope">
@@ -596,7 +600,7 @@ export default {
             })
           })
           this.isLoading = false;
-        } else if(res.data.code == "70011") {
+        } else if(res.data.code == "70011" || res.data.code == "70088") {
           this.$notify.warning({
             title: "警告",
             message: res.data.msg
