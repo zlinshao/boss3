@@ -38,10 +38,6 @@
                         <span v-if='!is_editing_bg'>{{backgroundRadio.update.background_check.dismiss_description}}</span>
                     </el-form-item >
                 </div>
-                <div class='edit-result' v-if='is_editing_bg'>
-                    <!-- <el-button size='mini' @click='cancelEditingBg'>取消</el-button>
-                    <el-button size='mini' @click='confirmEditingBg'>确定</el-button> -->
-                </div>
                 <div class='edit-result'>
                     <el-button size='mini' @click='cancelBgReseach' v-if='allow_edit'>取消</el-button>
                     <el-button size='mini' @click='confirmBgReseach' v-if='allow_edit'>确定</el-button>
@@ -150,15 +146,6 @@
             editBgreseach(){
                 this.is_editing_bg = true;
                 this.backgroundRadio_clone = this.deepClone(this.backgroundRadio);
-            },
-            //取消背景调查修改
-            cancelEditingBg(){
-                this.is_editing_bg = false;
-                this.backgroundRadio = Object.assign({}, this.backgroundRadio_clone);
-            },
-            //确定背景调查修改
-            confirmEditingBg(){
-                this.is_editing_bg = false;
             },
             //初始化参数
             initBgParam(){
