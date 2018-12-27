@@ -187,8 +187,8 @@
       },
       // 重置
       resetting() {
-
-        this.search();
+        this.params.time = "";
+        // this.search();
       },
       handleSizeChange(val) {
 
