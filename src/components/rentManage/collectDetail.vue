@@ -439,7 +439,7 @@
               </el-col>
             </el-row>
 
-            <el-row>
+            <el-row v-if="!contractInfo.agency_info || !contractInfo.agency_info[0]">
               <el-col :span="8">
                 <el-form-item label="中介名称">
                   <div class="content">
@@ -467,6 +467,17 @@
                       v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
                        {{contractInfo.agency_info[0].agency_username}}
                     </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row v-else>
+              <el-col :span="8" v-if="contractInfo.agency_info && contractInfo.agency_info[0].agency_account_info"
+                      v-for="(item,key) in contractInfo.agency_info[0].agency_account_info" :key="key">
+                <el-form-item :label="key">
+                  <div class="content">
+                    <div v-for="(value,innerKey) in item" :key="innerKey">{{ innerKey }}: {{ value }}</div>
                   </div>
                 </el-form-item>
               </el-col>
