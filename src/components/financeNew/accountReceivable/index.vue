@@ -16,7 +16,7 @@
             <el-button type="primary" @click="getTableData"><i class="el-icon-refresh"></i></el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="handleAddReceive"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
+            <el-button type="primary" @click="addPayVisible = true"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown trigger="click" @command="leadingOut">
@@ -28,6 +28,9 @@
                 <el-dropdown-item command="rent">催缴导出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="success" @click="sendMsgVisible = true" icon="el-icon-message" :disabled="currentSelectIds.length > 0 ? false : true">发送短信</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -173,14 +176,19 @@
         @cell-click="showDetail"
         @row-contextmenu="collectMenu"
         @header-click="selectPrice"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           label="收款时间"
           prop="pay_date">
         </el-table-column>
         <el-table-column
           label="客户姓名"
-          prop="info.customer"
+          prop="customer.customer_name"
         ></el-table-column>
         <el-table-column
           label="地址"
@@ -273,14 +281,8 @@
     <organization :organizationDialog="organizeVisible" @close="closeOrganize" :type="organizeType"
                   @selectMember="selectMember"></organization>
 
-    <!--新增-->
-    <ChargeModule :module="chargeVisible" @close="closeCharge" :title="titles"></ChargeModule>
-
-    <!--编辑付款/收款时间-->
-    <ReviseTime :module="payTimeVisible" :date="payTimes" @close="closePayTime" :title="titles"></ReviseTime>
-
     <!--编辑补齐时间-->
-    <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime"></PolishTime>
+    <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime" @ok="handleOkTime"></PolishTime>
 
     <!-- 科目搜索 -->
     <subjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
@@ -295,7 +297,7 @@
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">客户姓名：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.customer ">{{ DetailCurrentRow.description.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.customer_name ">{{ DetailCurrentRow.customer.customer_name }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
@@ -310,7 +312,7 @@
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">汇款方式：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.account_type ">{{ DetailCurrentRow.account_type }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
         </el-row>
@@ -322,56 +324,56 @@
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">收款人姓名：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_owner ">{{ DetailCurrentRow.customer.account_owner }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">收款时间：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.deal_date ">{{ DetailCurrentRow.customer.deal_date }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">开户行：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.account_bank ">{{ DetailCurrentRow.account_bank }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">补齐时间：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.complete_date ">{{ DetailCurrentRow.complete_date }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">支行：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_subbank ">{{ DetailCurrentRow.customer.account_subbank }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">收入科目：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.subject ">{{ DetailCurrentRow.subject }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">账号：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_num ">{{ DetailCurrentRow.customer.account_num }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">备注：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.remark ">{{ DetailCurrentRow.remark }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">详情：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description ">{{ DetailCurrentRow.description.description }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">历史收款记录：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_history ">{{ DetailCurrentRow.customer.account_history }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
@@ -395,6 +397,82 @@
         <el-button type="primary" size="mini" @click="handleAddRemark">确定</el-button>
       </div>
     </el-dialog>
+
+    <!--催缴导出-->
+    <el-dialog
+      :visible.sync="fastOutVisible"
+      title="催缴导出"
+      width="30%"
+    >
+      <el-date-picker
+        v-model="fastOutDate"
+        type="daterange"
+        align="right"
+        size="small"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions">
+      </el-date-picker>
+      <div style="margin-top: 30px;text-align: right;">
+        <el-button @click="fastOutVisible = false" size="mini">取消</el-button>
+        <el-button @click="goFastOut" size="mini" type="primary">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!--发送短信-->
+    <el-dialog
+      :visible.sync="sendMsgVisible"
+      title="发送短信"
+      width="30%"
+    >
+      发送类型：
+      <el-select v-model="selectMsgType" size="mini" style="width: 80%">
+        <el-option :value="1" label="催缴"></el-option>
+        <el-option :value="2" label="到期"></el-option>
+        <el-option :value="3" label="逾期"></el-option>
+      </el-select>
+      <div style="margin-top: 30px;text-align: right">
+        <el-button size="mini" @click="sendMsgVisible = false">取消</el-button>
+        <el-button size="mini" @click="OkSendMsg" type="primary">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!--新增应收-->
+    <el-dialog
+      :visible.sync="addPayVisible"
+      title="新增应付"
+      width="30%"
+    >
+      <div style="width: 85%;text-align: center;">
+        <el-form :model="addForm" ref="addPayForm" label-width="100px" size="small">
+          <el-form-item label="客户名称" prop="customer_name">
+            <el-select v-model="addForm.customer_name">
+              <el-option value="111" label="小王"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="客户身份" prop="identity">
+            <el-select v-model="addForm.identity">
+              <el-option :value="1" label="房东"></el-option>
+              <el-option :value="2" label="租客"></el-option>
+              <el-option :value="3" label="未知租客"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="付款日期" prop="pay_date">
+            <el-date-picker
+              v-model="addForm.pay_date"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button size="mini" @click="addPayVisible = false">取消</el-button>
+            <el-button size="mini" type="primary" @click="handleAddPay">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -402,18 +480,18 @@
   import organization from '../../common/organization.vue'
   import RightMenu from '../../common/rightMenu.vue'    //右键
   import subjectTree from '../components/subjectTree.vue'
-  import ChargeModule from '../components/chargeModule.vue'
-  import ReviseTime from '../components/reviseTime.vue'
   import PolishTime from '../components/polishTime.vue'
 
   export default {
     name: "index",
-    components: {organization, RightMenu, subjectTree, ChargeModule, PolishTime, ReviseTime},
+    components: {organization, RightMenu, subjectTree, PolishTime},
     data() {
       return {
-        detailVisible: false,
-        add_remark: '',
-        DetailCurrentRow: '',
+        fastOutVisible: false, //催缴导出显示
+        fastOutDate: '',
+        detailVisible: false, //详情显示
+        add_remark: '', //添加备注信息
+        DetailCurrentRow: '', //点击详情当前行
         subjectType: '',
         subjectVisible: false,
         url: globalConfig.finance_server,
@@ -430,9 +508,7 @@
         titles: '',
         currentPage: 1,
         remarkVisible: false,
-        payTimeVisible: false,
         polishTimeVisible: false,
-        chargeVisible: false,
         filterModule: false,
         organizeVisible: false,
         values: ['待入账', '待结清', '已结清', '已超额',],
@@ -499,13 +575,92 @@
         collectData: [],
         restaurants: [],
         state: '',
-        rightMenuRow: '',
+        rightMenuRow: '', //右击当前行
+        currentSelectIds: [],
+        sendMsgVisible: false,
+        selectMsgType: '',
+        //新增应收
+        addPayVisible: false,
+        addForm: {
+          customer_name: '',
+          identity: '',
+          pay_date: '',
+        }
       }
     },
     mounted() {
       this.getTableData();
     },
     methods: {
+      handleAddPay(){
+        console.log(this.addForm);
+      },
+      //发送短信
+      OkSendMsg() {
+        if (!this.selectMsgType) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择发送类型'
+          });
+          return false;
+        }
+        this.$http.post(this.url + 'account/receivable/notify',{
+          ids: this.currentSelectIds,
+          type: this.selectMsgType
+        }).then(res => {
+          this.handleSuccess(res);
+          this.sendMsgVisible = false;
+        }).catch(err => {
+          console.log(err);
+        });
+      },
+      //列表多选
+      handleSelectionChange(val){
+        this.currentSelectIds = [];
+        val.map(item => {
+          this.currentSelectIds.push(item.id);
+        });
+      },
+      goFastOut() {
+        if (!this.fastOutDate || this.fastOutDate.length < 2) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择日期'
+          });
+          return false;
+        } else {
+          var date1 = new Date(this.fastOutDate[0]).toLocaleDateString().split('/').join('-');
+          var date2 = new Date(this.fastOutDate[1]).toLocaleDateString().split('/').join('-');
+          console.log(date1,date2);
+          this.$http.get(this.url + 'account/receivable/export',{params: {date: `${date1},${date2}`}}).then(res =>{
+            console.log(res);
+          }).catch(err => {
+            console.log(err);
+          })
+        }
+      },
+      handleSuccess(res) {
+        if (res.data.success) {
+          this.$notify.success({
+            title: '成功',
+            message: res.data.message
+          });
+          this.getTableData();
+        } else {
+          this.$notify.warning({
+            title: '失败',
+            message: res.data.message
+          });
+        }
+      },
+      handleOkTime(date) {
+        this.$http.put(this.url + `account/receivable/editCompleteDate/${this.rightMenuRow.id}`,{complete_date: date}).then(res => {
+          this.handleSuccess(res);
+          this.closePolishTime();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       //取消备注
       cancelRemark() {
         this.remarkVisible = false;
@@ -521,17 +676,7 @@
           return false;
         }
         this.$http.put(this.url + `account/receivable/addTag/${this.rightMenuRow.id}`,{content: this.add_remark}).then(res => {
-          if (res.data.success) {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.message
-            });
-          } else {
-            this.$notify.warning({
-              title: '失败',
-              message: res.data.message
-            });
-          }
+          this.handleSuccess(res);
           this.cancelRemark();
         }).catch(err => {
           console.log(err);
@@ -543,7 +688,6 @@
         this.$http.get(this.url + `account/receivable/read/${scope.row.id}`).then(res => {
           if (res.data.success) {
             this.DetailCurrentRow = res.data.data;
-            console.log(this.DetailCurrentRow);
             this.detailVisible = true;
           } else {
             this.$notify.warning({
@@ -555,11 +699,6 @@
         }).catch(err => {
           console.log(err);
         });
-      },
-
-      handleAddReceive() {
-        this.titles = '新增应收';
-        this.chargeVisible = true;
       },
 
       getTableData() {
@@ -655,10 +794,9 @@
       // 导出
       leadingOut(val) {
         console.log(val);
-      },
-
-      closeCharge() {
-        this.chargeVisible = false;
+        if (val === 'rent') {
+          this.fastOutVisible = true;
+        }
       },
       handleSelect(item) {
         console.log(item);
@@ -698,31 +836,19 @@
         if (val === 'delete') {
           this.openDelete();
         }
-        if (val === 'collectWay') {
-          this.chargeVisible = true;
-        }
-        if (val === 'rentWay') {
-          this.chargeVisible = true;
-        }
-        if (val === 'revisePay' || val === 'reviseCollect') {
-          this.payTimeVisible = true;
+        if (val === 'reviseCollect') {
           this.payTimes = ['1990-01-01', '1990-02-01', '1990-03-01', '1990-04-01', '1990-06-01', '1990-06-01'];
         }
         if (val === 'lookPay' || val === 'lookCollect') {
-          this.payTimeVisible = true;
           this.payTimes = ['1992-01-01', '1992-02-01', '1992-03-01', '1992-04-01', '1992-06-01', '1992-06-01'];
         }
         if (val === 'collectPolish' || val === 'payPolish') {
           this.polishTimeVisible = true;
-          this.polishTime = '1992-01-01';
+          this.polishTime = this.rightMenuRow.complete_date;
         }
         if (val === 'collectRemark' || val === 'payRemark') {
           this.remarkVisible = true;
         }
-      },
-      // 关闭付款/收款时间
-      closePayTime() {
-        this.payTimeVisible = false;
       },
       // 关闭补齐时间
       closePolishTime() {
@@ -751,19 +877,30 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+          console.log(this.rightMenuRow);
+          this.$http.get(this.url + `account/receivable/delete/${this.rightMenuRow.id}`).then(res => {
+            console.log(res);
+            if (res.data.success) {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message
+              });
+              this.getTableData();
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.message
+              });
+            }
+          }).catch(err => {
+            console.log(err);
           });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
+        }).catch(() => { });
       },
+
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.form.page = val;
+        this.getTableData();
       },
     },
   }
@@ -785,6 +922,7 @@
     }
     .receive_title{
       display: inline-block;
+      vertical-align: top;
       width: 25%;
       text-align: right;
     }
