@@ -151,14 +151,6 @@
                     this.pic_list.forEach(item => {
                         this.params.update.image_info[item] = [];
                     })
-                    // this.params.update.image_info.resume = [];
-                    // this.params.update.image_info.con_agree = [];
-                    // this.params.update.image_info.doc_photo = [];
-                    // this.params.update.image_info.education = [];
-                    // this.params.update.image_info.commitment = [];
-                    // this.params.update.image_info.resignation = [];
-                    // this.params.update.image_info.labor_contract = [];
-                    // this.params.update.image_info.bank = [];
                     if(this.$store.state.platform.active_name === 'fourth'){
                         this.allow_edit = false;
                     }else{
@@ -197,14 +189,6 @@
                 this.pic_list.forEach(item => {
                     this[item] = {};
                 });
-                // this.resume = {};
-                // this.con_agree = {};
-                // this.doc_photo = {};
-                // this.education = {};
-                // this.commitment = {};
-                // this.resignation = {};
-                // this.labor_contract = {};
-                // this.bank = {};
             },
             //照片修改
             edit_pic(imgInfo, obj){
@@ -220,70 +204,6 @@
                                 this[i] = Object.assign({}, this[i])
                             }
                         })
-                        // if(key === 'resume'){
-                        //     obj.resume = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.resume[item.id] = item.uri;
-                        //         obj.resume.push(Number(item.id))
-                        //     });
-                        //     this.resume = Object.assign({}, this.resume)
-                        // }
-                        // if(key === 'resignation'){
-                        //     obj.resignation = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.resignation[item.id] = item.uri;
-                        //         obj.resignation.push(Number(item.id))
-                        //     });
-                        //     this.resignation = Object.assign({}, this.resignation)
-                        // }
-                        // if(key === 'labor_contract'){
-                        //     obj.labor_contract = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.labor_contract[item.id] = item.uri;
-                        //         obj.labor_contract.push(Number(item.id))
-                        //     });
-                        //     this.labor_contract = Object.assign({}, this.labor_contract)
-                        // }
-                        // if(key === 'education'){
-                        //     obj.education = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.education[item.id] = item.uri;
-                        //         obj.education.push(Number(item.id))
-                        //     });
-                        //     this.education = Object.assign({}, this.education)
-                        // }
-                        // if(key === 'doc_photo'){
-                        //     obj.doc_photo = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.doc_photo[item.id] = item.uri;
-                        //         obj.doc_photo.push(Number(item.id))
-                        //     });
-                        //     this.doc_photo = Object.assign({}, this.doc_photo)
-                        // }
-                        // if(key === 'con_agree'){
-                        //     obj.con_agree = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.con_agree[item.id] = item.uri;
-                        //         obj.con_agree.push(Number(item.id))
-                        //     });
-                        //     this.con_agree = Object.assign({}, this.con_agree)
-                        // }
-                        // if(key === 'commitment'){
-                        //     obj.commitment = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.commitment[item.id] = item.uri;
-                        //         obj.commitment.push(Number(item.id))
-                        //     });
-                        //     this.commitment = Object.assign({}, this.commitment)
-                        // }
-                        // if(key === 'bank'){
-                        //     obj.bank = [];
-                        //     imgInfo[key].forEach(item => {
-                        //         this.bank[item.id] = item.uri;
-                        //         obj.bank.push(Number(item.id))
-                        //     });
-                        //     this.bank = Object.assign({}, this.bank)
-                        // }
                     }
                 }    
             },
