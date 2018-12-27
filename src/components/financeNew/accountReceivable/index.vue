@@ -5,7 +5,7 @@
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.search" size="mini" clearable
-            @keyup.enter.native.prevent="getTableData">
+                      @keyup.enter.native.prevent="getTableData">
               <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
             </el-input>
           </el-form-item>
@@ -46,7 +46,6 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.status" clearable size="mini">
-                      <el-option label="请选择" value=""></el-option>
                       <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
@@ -86,13 +85,13 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.tag_status" clearable size="mini">
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in tag_status" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in tag_status" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
-            </el-col>  
+            </el-col>
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
@@ -126,11 +125,11 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-input v-model="subject_name" @focus="openSubjectTree" placeholder="请选择"
-                                readonly>
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="clearSubjectTree">清空</div>
-                        </template>
-                      </el-input>
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="clearSubjectTree">清空</div>
+                      </template>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -142,13 +141,13 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                        <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择员工"
-                                readonly>
-                        <template slot="append">
-                            <div style="cursor: pointer;" @click="closeStaff">清空</div>
-                        </template>
-                        </el-input>
-                    </el-form-item>
+                    <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择员工"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
                 </el-col>
               </el-row>
             </el-col>
@@ -161,11 +160,10 @@
         </el-form>
       </div>
     </div>
-
     <!--应收-->
     <div class="border_table" v-show="lookType === 'all' || lookType === 'collect'">
       <el-table
-       :empty-text='collectStatus'
+        :empty-text='collectStatus'
         v-loading="collectLoading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
@@ -174,8 +172,8 @@
         width="100%"
         @cell-click="showDetail"
         @row-contextmenu="collectMenu"
-         @header-click="selectPrice"
-        >
+        @header-click="selectPrice"
+      >
         <el-table-column
           label="收款时间"
           prop="pay_date"
@@ -206,7 +204,7 @@
         <el-table-column
           label="补齐时间"
           prop="complete_date"
-          >
+        >
         </el-table-column>
         <el-table-column
           label="状态"
@@ -221,9 +219,10 @@
         <el-table-column
           label="催缴备注"
           prop="remarks">
-        <template slot-scope="scope">
-            <span v-if="scope.row.remarks[0]">{{scope.row.remarks[0].create_time}}/{{scope.row.remarks[0].content}}</span>  
-        </template>
+          <template slot-scope="scope">
+            <span
+              v-if="scope.row.remarks[0]">{{scope.row.remarks[0].create_time}}/{{scope.row.remarks[0].content}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="明细详情"
@@ -233,7 +232,7 @@
                      {{scope.row.description.months}}/{{scope.row.description.description}}/
                      {{scope.row.description.staff}}
                  </span>
-          </template>  
+          </template>
         </el-table-column>
         <el-table-column
           label="备注"
@@ -242,9 +241,9 @@
                  <span v-if="scope.row.tags[0]">{{scope.row.tags[0].create_time}}
                      {{scope.row.tags[0].content}}
                  </span>
-          </template> 
+          </template>
         </el-table-column>
-         <el-table-column
+        <el-table-column
           label="手机号"
           prop="customer.contact"
           width="100px">
@@ -267,18 +266,18 @@
         </span>
         </div>
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[12,20,40]"
           :page-size="12"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="totalNum">
         </el-pagination>
       </div>
     </div>
+
     <el-dialog title="收货地址" :visible.sync="addrDetail">
-    <el-table :data="addrDetails">
+      <el-table :data="addrDetails">
         <el-table-column property="addr" label="客户姓名" width="150"></el-table-column>
         <el-table-column property="customer.contract" label="手机号" width="200"></el-table-column>
         <el-table-column property="addr" label="租房月数"></el-table-column>
@@ -287,17 +286,15 @@
         <el-table-column property="addr" label="合同时间周期"></el-table-column>
         <el-table-column property="addr" label="开单人"></el-table-column>
         <el-table-column property="addr" label="部门"></el-table-column>
-    </el-table>
+      </el-table>
     </el-dialog>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
     <!--组织架构-->
-    <organization :organizationDialog="organizeVisible" @close="closeOrganize" :type="organizeType"  @selectMember="selectMember"></organization>
-
-    <!--高级筛选-->
-    <!-- <FilterModule :module="filterModule" @close="closeFilter"></FilterModule> -->
+    <organization :organizationDialog="organizeVisible" @close="closeOrganize" :type="organizeType"
+                  @selectMember="selectMember"></organization>
 
     <!--新增-->
     <ChargeModule :module="chargeVisible" @close="closeCharge" :title="titles"></ChargeModule>
@@ -311,16 +308,15 @@
     <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
 
     <!-- 科目搜索 -->
-    <subjectTree :subjectDialog="subjectVisible"  :types="subjectType" @close="closeSubjectTree"
-                    @selectSubject="selectSubject"></subjectTree>
+    <subjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
+                 @selectSubject="selectSubject"></subjectTree>
   </div>
 </template>
 
 <script>
   import organization from '../../common/organization.vue'
   import RightMenu from '../../common/rightMenu.vue'    //右键
-  import subjectTree from '../components/subjectTree.vue'  
-//   import FilterModule from './components/advancedFilter'
+  import subjectTree from '../components/subjectTree.vue'
   import ChargeModule from '../components/chargeModule.vue'
   import ReviseTime from '../components/reviseTime.vue'
   import PolishTime from '../components/polishTime.vue'
@@ -328,12 +324,12 @@
 
   export default {
     name: "index",
-    components: {organization, RightMenu,Remarks,subjectTree,ChargeModule,PolishTime,ReviseTime},
+    components: {organization, RightMenu, Remarks, subjectTree, ChargeModule, PolishTime, ReviseTime},
     data() {
       return {
-        subjectType:'',
-        subjectVisible:false,
-        url:globalConfig.finance_server,
+        subjectType: '',
+        subjectVisible: false,
+        url: globalConfig.finance_server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -354,39 +350,39 @@
         filterModule: false,
         organizeVisible: false,
         values: ['待入账', '待结清', '已结清', '已超额',],
-        tag_status: ['违约', '延期', '贴条', '换锁','维修','资金','炸弹','调房','特殊情况'],
+        tag_status: ['违约', '延期', '贴条', '换锁', '维修', '资金', '炸弹', '调房', '特殊情况'],
         form: {
-            staff_ids:[],
-            department_ids:[],
-            status: '',
-            startRange:'',//应收开始时间
-            endRange:'',//应收结束时间
-            tag_status:'',//催缴状态
-            startTag:'',//催缴开始时间
-            endTag:'',//催缴结束时间
-            subject_id:'',//科目id
-            search:'',//搜索框
-            minPrice:'',//剩余款项最小区间
-            maxPrice:'',//剩余款项最大区间
-            page:1,
-            limit:12
+          staff_ids: [],
+          department_ids: [],
+          status: '',
+          startRange: '',//应收开始时间
+          endRange: '',//应收结束时间
+          tag_status: '',//催缴状态
+          startTag: '',//催缴开始时间
+          endTag: '',//催缴结束时间
+          subject_id: '',//科目id
+          search: '',//搜索框
+          minPrice: '',//剩余款项最小区间
+          maxPrice: '',//剩余款项最大区间
+          page: 1,
+          limit: 12
         },
-        sum:{
-          balance_sum:'',//剩余款项
-          receivable_sum:'',//应收金额
-          received_sum:''//实收金额
+        sum: {
+          balance_sum: '',//剩余款项
+          receivable_sum: '',//应收金额
+          received_sum: ''//实收金额
         },
-        addrDetail:false,
-        addrDetails:[],
-        totalNum:0,
-        rangeDate:'',
-        tagDate:'',
-        subject_name:'',
-        department_name:'',
-        collectLoading:false,
-        collectStatus:'',
-        organizeType:'',
-        staff_name:'',
+        addrDetail: false,
+        addrDetails: [],
+        totalNum: 0,
+        rangeDate: '',
+        tagDate: '',
+        subject_name: '',
+        department_name: '',
+        collectLoading: false,
+        collectStatus: '',
+        organizeType: '',
+        staff_name: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -422,83 +418,74 @@
     mounted() {
       this.getTableData();
     },
-    watch: {
-
-    },
     methods: {
-        getTableData(){
-            this.collectLoading = true;
-            this.collectStatus = ' ';
-            let params=this.form;
-            this.$http.get(this.url+'account/receivable/index',{params:params}).then((res)=>{
-                if(res.data.success){
-                    if  (res.data.data.count){
-                        this.isHigh=false;
-                        this.collectLoading=false;
-                        console.log(res);
-                        this.collectData=res.data.data.data;
-                        this.totalNum=res.data.data.count;
-                        this.sum=res.data.data.sum;
-                    }else{
-                        this.collectStatus='暂无数据';
-                        this.collectData=[];
-                        this.totalNum=0;
-                    }
-                    
-                }else{
-                    this.collectStatus='暂无数据';
-                    this.collectData=[];
-                    this.totalNum=0;
-                }
-            });
-        },
-        closeSubjectTree(){
-            this.subjectVisible=false;
-        },
-        clearSubjectTree(){
-             this.form.subject_id='';
-            this.subject_name='';
-        },
-        openSubjectTree(){
-            this.subjectType='next';
-            this.subjectVisible=true;
-        },
-        selectSubject(val){
-            this.form.subject_id=val.id;
-            this.subject_name=val.name;
-        },
-        closeOrganize() {
-            this.organizeVisible = false;
-          },
-         // 员工筛选
-        chooseStaff() {
-            this.organizeVisible = true;
-            this.organizeType = 'staff';
-        },
-        // 清空员工
-        closeStaff() {
-            this.form.staff_ids = [];
-            this.staff_name = '';
-        },
-        selectMember(val) {
-            if (this.organizeType === 'depart') {
-              for (var i = 0; i < val.length; i++) {
-                this.department_name = this.department_name === "" ? val[i].name : this.department_name + "," + val[i].name;
-                this.form.depart_ids.push(val[i].id);
-              }
-            } else if (this.organizeType === 'staff') {
-              for (var i = 0; i < val.length; i++) {
-                this.staff_name = this.staff_name === "" ? val[i].name : this.staff_name + "," + val[i].name;
-                this.form.staff_ids.push(val[i].id);
-              }
-            }
-          },
-        selectPrice(column,event){
-            if(column.property==="balance"){
-                alert(1);
-            }
-            
-        },  
+      getTableData() {
+        this.collectLoading = true;
+        this.collectStatus = ' ';
+        let params = this.form;
+        console.log(this.form);
+        return false;
+        this.$http.get(this.url + 'account/receivable/index', {params: params}).then((res) => {
+          console.log(res);
+          if (res.data.success) {
+            this.collectData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+            this.sum = res.data.data.sum;
+          } else {
+            this.collectStatus = '暂无数据';
+            this.collectData = [];
+            this.totalNum = 0;
+          }
+          this.collectLoading = false;
+        });
+      },
+      closeSubjectTree() {
+        this.subjectVisible = false;
+      },
+      clearSubjectTree() {
+        this.form.subject_id = '';
+        this.subject_name = '';
+      },
+      openSubjectTree() {
+        this.subjectType = 'next';
+        this.subjectVisible = true;
+      },
+      selectSubject(val) {
+        this.form.subject_id = val.id;
+        this.subject_name = val.name;
+      },
+      closeOrganize() {
+        this.organizeVisible = false;
+      },
+      // 员工筛选
+      chooseStaff() {
+        this.organizeVisible = true;
+        this.organizeType = 'staff';
+      },
+      // 清空员工
+      closeStaff() {
+        this.form.staff_ids = [];
+        this.staff_name = '';
+      },
+      selectMember(val) {
+        if (this.organizeType === 'depart') {
+          for (var i = 0; i < val.length; i++) {
+            this.department_name = this.department_name === "" ? val[i].name : this.department_name + "," + val[i].name;
+            this.form.depart_ids.push(val[i].id);
+          }
+        } else if (this.organizeType === 'staff') {
+          for (var i = 0; i < val.length; i++) {
+            this.staff_name = this.staff_name === "" ? val[i].name : this.staff_name + "," + val[i].name;
+            this.form.staff_ids.push(val[i].id);
+          }
+        }
+      },
+      selectPrice(column, event) {
+        if (column.property === "balance") {
+          alert(1);
+        }
+
+      },
       // 重置
       resetting() {
         this.form.keywords = '';
@@ -511,7 +498,7 @@
       leadingOut(val) {
         console.log(val);
       },
-     
+
       closeCharge() {
         this.chargeVisible = false;
       },
@@ -521,17 +508,13 @@
       close_() {
         console.log(1);
       },
-      // 
-      showDetail(row, column, cell, event) {
-          if(column.property==="addr"){//显示详情
+      //
+      showDetail(row, column) {
+        if (column.property === "addr") {//显示详情
           console.log(row);
-            this.addrDetails.push(row);
-            this.addrDetail=true;
-          }
-        // console.log(row);
-        // console.log(column);
-        // console.log(cell);
-        // console.log(event);
+          this.addrDetails.push(row);
+          this.addrDetail = true;
+        }
       },
       // 右键 收
       collectMenu(row, event) {
@@ -550,7 +533,7 @@
         ];
         this.contextMenuParam(event);
       },
-      
+
       // 右键回调
       clickEvent(val) {
         this.titles = val;
@@ -624,9 +607,6 @@
             message: '已取消删除'
           });
         });
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
