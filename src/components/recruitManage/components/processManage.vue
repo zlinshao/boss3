@@ -684,8 +684,6 @@
                         <el-input v-if='is_editing_fail_result' v-model="failEntryObj.entry_result" type='textarea'></el-input>
                     </el-form-item>
                     <div class='edit-condition' v-if='is_editing_fail_result'>
-                        <!-- <el-button size='mini' @click='cancelEditFailResult'>取消</el-button>
-                        <el-button size='mini' @click='is_editing_fail_result = false'>确定</el-button> -->
                     </div>
                     <div class='edit-result'>
                         <el-button size='mini' @click='cancelFailEntry'>取消</el-button>
@@ -1169,7 +1167,6 @@
           this.interviewParams.resume_source = row.resume_source;
         }
         if (column.property === 'album' && row.album.length) {
-            // console.log('0000')
             this.lookUpResumeDialog = true;
             this.album = row.album;
             row.album.forEach(item => {
@@ -1417,11 +1414,9 @@
         this.newInterviewParams.album = [];
       },
       getImgData(val) {
-        // console.log(val);
         this.newInterviewParams.album = this.toNum(val[1])
       },
       regetImgData(val) {
-        // console.log(val)
         this.interviewParams.album = this.toNum(val[1])
       },
       //转成number类型
@@ -1493,7 +1488,6 @@
           //沟通失败再次选择是否入职
           if (row.entry_status === 742) {
             this.communicate_status = 742;
-            // console.log(5678)
             this.IsEntryDialog = true;
             this.editIsEntry();
             this.is_editing_condition = false;
@@ -1600,7 +1594,6 @@
       },
       //选择面试状态
       selectStatus(row) {
-        // console.log(row)
         this.interview_finished.forEach(i => {
           if (i.id === this.updateParams_finished.update.interview_status) {
             this.passOrNotStr = i.dictionary_name
@@ -1719,10 +1712,9 @@
       },
       //从面试未通过修改面试通过状态
       editInterviewStatus(item) {
-        // console.log(item)
-        if (item === 739) {
+        // if (item === 739) {
 
-        }
+        // }
       },
       /*********************** 待入职*********************************/
       cellClick3(row, column, cell, event) {
@@ -1785,7 +1777,6 @@
         }
         //基本信息
         if (column.property === 'basic_info') {
-          // console.log(row)
           this.addStaffDialog = true;
           this.basicInfo_id = row.id;
           this.basicInfo_info = row;
@@ -1892,7 +1883,6 @@
       /*********************** 公共***********************************/
       //选择成员
       selectMember(val) {
-        // console.log(val);
         this.interviewedObj.interviewer_id = val[0].id;
         this.interviewedObj.interviewer_name = val[0].name;
       },
@@ -1931,9 +1921,8 @@
           }
         });
         //状态
-        this.dictionary(731).then((res) => {
-          // console.log(res)
-        });
+        // this.dictionary(731).then((res) => {
+        // });
         //面试状态
         this.dictionary(734).then((res) => {
           if (res.code === '30010') {
@@ -1946,14 +1935,12 @@
               }
             })
           }
-          // console.log(res)
         });
         //简历来源
         this.dictionary(746).then((res) => {
           if (res.code === '30010') {
             this.source = res.data
           }
-          // console.log(res)
         });
         //人资沟通
         this.dictionary(740).then((res) => {
@@ -1965,7 +1952,6 @@
               }
             })
           }
-          // console.log(res)
         });
       },
       //关闭弹框
