@@ -55,7 +55,11 @@
           <el-table-column prop="roleStr" label="岗位" ></el-table-column>
           <el-table-column prop="enroll" label="入职时间" ></el-table-column>
           <el-table-column prop="dismiss_time" label="离职时间" ></el-table-column>
-          <el-table-column prop="is_on_job" label="离职操作时间" ></el-table-column>
+          <el-table-column label="离职操作时间" >
+            <template slot-scope="scope">
+              <span style="color: #f5b24d">{{scope.row.is_on_job}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="phone" label="手机号码" ></el-table-column>
           <el-table-column prop="dismiss_type" label="离职类型" ></el-table-column>
           <el-table-column prop="dismiss_mess" label="离职备注" ></el-table-column>
