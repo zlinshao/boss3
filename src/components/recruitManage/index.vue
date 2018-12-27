@@ -40,8 +40,8 @@
                     <el-header>
                         <el-row :gutter="20" class="positionTitle">
                             <el-col :span="4">
-                                <span v-if='item.org.corp'>{{item.org.corp.name}}</span>
-                                <span v-if='!item.org.corp'>/</span>
+                                <span v-if='item.org.company_id === 0'>南京乐伽商业管理有限公司</span>
+                                <span v-else>{{item.org.corp ? item.org.corp.name : '/'}}</span>
                             </el-col>
                             <el-col :span="4">
                                 <span>{{item.org.name}}</span>
