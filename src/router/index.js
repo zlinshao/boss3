@@ -203,7 +203,7 @@ const DailyRecord = () => import  ('../components/dailyRecord/index.vue');      
 const SthToDo = () => import  ('../components/OAWork/sthToDo/index.vue');                              //待办事项
 
 
-const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue');         // 积分明细
+// const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue');         // 积分明细
 
 const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue');                //相册管理
 const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue');                //创建相册
@@ -353,7 +353,7 @@ export default new Router({
         {path: '/infodetails', component: Infodetails, name: '详情', selfLoading: true},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         // {path: '/sthToDo', component: SthToDo, name: '报备管理'},
-        {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
+        // {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
         {path: '/pictureManage', component: PictureManage, name: '相册管理'},
         {path: '/createAlbum', component: CreateAlbum, name: "创建相册"},
         {path: '/choosePictures', component: ChoosePictures, name: "选择照片"},
@@ -434,7 +434,7 @@ export default new Router({
         {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         // {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
-        {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
+        // {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
 
       ]
     },
@@ -555,7 +555,7 @@ export default new Router({
         // {path: '/staffManage', component: StaffManage, name: '用户管理'},
         // {path: '/organization', component: Organization, name: '组织架构'},
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构'},
-        {path: '/integralManage', component: IntegralManage, name: '积分管理'},
+        // {path: '/integralManage', component: IntegralManage, name: '积分管理'},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案'},
         {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
