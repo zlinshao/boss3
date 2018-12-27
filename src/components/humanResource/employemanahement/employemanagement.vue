@@ -70,7 +70,7 @@
                 <template slot-scope="scope">
                   <span @click="lookEmployeDetails(scope.row.id)" style="cursor: pointer">{{scope.row.name}}</span>
                   &nbsp;&nbsp;&nbsp;
-                  <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;"></i>
+                  <i class="el-icon-edit" @click="addLookEmploy('2',scope.row.id)" style="cursor: pointer;color: #cec9c9"></i>
                   &nbsp;&nbsp;&nbsp;
                   <!-- <i class="el-icon-close" @click="deletedEmploy(scope.row.id)" style="cursor: pointer;"></i> -->
                 </template>

@@ -46,9 +46,9 @@
           @row-contextmenu="openContextMenu">
           <el-table-column prop="name" label="姓名" >
             <template slot-scope="scope">
-              <span @click="lookResigntionElempoly(scope.row.id)">{{scope.row.name}}</span>
+              <span @click="lookResigntionElempoly(scope.row.id)" style="cursor: pointer;">{{scope.row.name}}</span>
               &nbsp;&nbsp;&nbsp;
-               <i class="el-icon-edit" @click="editSecondaryEmployment(scope.row.id)" style="cursor: pointer;"></i>
+               <i class="el-icon-edit" @click="editSecondaryEmployment(scope.row.id)" style="cursor: pointer;color: #cec9c9"></i>
             </template>
           </el-table-column>
           <el-table-column prop="orgStr" label="部门" ></el-table-column>
