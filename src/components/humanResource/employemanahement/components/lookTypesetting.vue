@@ -149,9 +149,14 @@ export default {
       },
     // 清除数据
     init() {
+      console.log("444444")
       this.year = new Date().getFullYear();
       this.month = new Date().getMonth() + 1;
       this.selectmonth = new Date().getMonth() + 1;
+      this.params = {
+        user_id: "",
+        arrange_month: ""
+      }
     },
     // 获取排班
     getTypeTime() {
@@ -217,31 +222,47 @@ export default {
         }
         _arr.push(_week);
       }
-      // console.log(_arr, "55555")
       let _this = this;
       // let settingArr = Object.values(this.arrangeList);
       let settingArr = [];
-      if(this.arrangeList instanceof Array) {
-        settingArr = this.arrangeList;
-      } else {
-        settingArr = Object.values(this.arrangeList);
-      }
+      // if(this.arrangeList instanceof Array) {
+      //   settingArr = this.arrangeList;
+      // } else {
+      //   settingArr = Object.values(this.arrangeList);
+      // }
+      // for(let key in this.arrangeList) {
+      //   settingArr.push(this.arrangeList[key])
+      // }
       _arr.forEach((item, index) => {
         item.forEach((val, key) => {
           if(val.currentmonth) {
-             settingArr.forEach((a, b) => {
-               if(_arr[index][key].day == b + 1) {
-                  if(a == "A") {
-                    _arr[index][key].setting = "早班";
-                  } else if(a == "B") {
-                    _arr[index][key].setting = "网络班";
-                  } else if(a == "C") {
-                    _arr[index][key].setting = "晚班";
-                  } else if (a == "休") {
-                    _arr[index][key].setting = "休息";
-                  }
+            //  settingArr.forEach((a, b) => {
+            //    if(_arr[index][key].day == b + 1) {
+            //       if(a == "A") {
+            //         _arr[index][key].setting = "早班";
+            //       } else if(a == "B") {
+            //         _arr[index][key].setting = "网络班";
+            //       } else if(a == "C") {
+            //         _arr[index][key].setting = "晚班";
+            //       } else if (a == "休") {
+            //         _arr[index][key].setting = "休息";
+            //       }
+            //     }
+            // })
+            for(let ids in _this.arrangeList) {
+              // console.log(ids, "3333")
+              if(_arr[index][key].day == ids) {
+                if(_this.arrangeList[ids] == "A") {
+                  _arr[index][key].setting = "早班";
+                } else if(_this.arrangeList[ids] == "B") {
+                  _arr[index][key].setting = "网络班";
+                } else if(_this.arrangeList[ids] == "C") {
+                  _arr[index][key].setting = "晚班";
+                } else if (_this.arrangeList[ids] == "休") {
+                  _arr[index][key].setting = "休息";
                 }
-            })
+              }
+            }
           }
         })
       })
