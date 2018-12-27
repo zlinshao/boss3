@@ -61,6 +61,14 @@
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
+                    <el-form-item v-if="index.includes('渠道信息')" :label="index">
+                      <div class="special" v-if="value">
+                        <div v-for="(info,infoKey) in value">{{ infoKey }} : {{ info }}</div>
+                      </div>
+                      <div v-else class="special">
+                        暂无
+                      </div>
+                    </el-form-item>
                     <el-form-item v-if="value && Array.isArray(value) && index !== 'receiptUri'" :label="index">
                       <div class="special">
                         <div
@@ -73,7 +81,7 @@
                         </div>
                       </div>
                     </el-form-item>
-                    <el-form-item v-if="value && value.constructor === Object" :label="index" class="detailTitle">
+                    <el-form-item v-if="value && value.constructor === Object && !index.includes('渠道信息')" :label="index" class="detailTitle">
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
@@ -814,6 +822,7 @@
       },
       setProcess(data) {
         this.show_content = JSON.parse(data.process.content.show_content_compress);
+        console.log(this.show_content);
         this.reportDetailData = data.process.content;
         this.processable_id = data.process.processable_id;
         this.operation = data.operation;
