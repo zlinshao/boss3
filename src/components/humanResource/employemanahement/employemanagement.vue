@@ -660,6 +660,7 @@ export default {
     },
     closeTypesetting() {
       this.lookTypesettingLog = false;
+       this.class_type_id = "";
     },
     // 查看审批
     lookApproval(name, org, role, id) {

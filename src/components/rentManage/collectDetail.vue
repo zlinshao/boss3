@@ -441,32 +441,9 @@
 
             <el-row v-if="!contractInfo.agency_info || !contractInfo.agency_info[0]">
               <el-col :span="8">
-                <el-form-item label="中介名称">
+                <el-form-item label="渠道信息">
                   <div class="content">
-                    <span
-                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_name}}
-                    </span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="中介电话">
-                  <div class="content">
-                    <span
-                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_phone}}
-                    </span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="中介人">
-                  <div class="content">
-                    <span
-                      v-if="contractInfo.agency_info && Array.isArray(contractInfo.agency_info)&&contractInfo.agency_info.length>0">
-                       {{contractInfo.agency_info[0].agency_username}}
-                    </span>
+                    暂无
                   </div>
                 </el-form-item>
               </el-col>
