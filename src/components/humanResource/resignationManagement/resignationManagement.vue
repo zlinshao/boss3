@@ -174,7 +174,7 @@
       <RetiredEmployeeDetails :ids="ids" :lookResigntion="lookResigntion" @close="closeResigntion"></RetiredEmployeeDetails>
       <!-- 分页 -->
     <div class="block pages">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[12,24, 36,48]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="params.page" :page-sizes="[30, 60, 90, 120]" :page-size="params.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
       <!-- 右键 -->
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperateMore="clickEvent"></RightMenu>
@@ -248,7 +248,7 @@ export default {
         keywords: "",
         org_id: 1,
         is_dimission: 1,
-        limit: 12,
+        limit: 30,
         page: 1,
         user_id: "",
         resignation_form: 1,
