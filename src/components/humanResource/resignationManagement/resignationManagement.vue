@@ -36,7 +36,7 @@
       <div class="table">
         <el-table 
           :data="resignationData" 
-          border 
+          stripe
           style="width: 100%" 
           v-loading="Loading"
           :empty-text="emptyText"  

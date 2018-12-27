@@ -59,7 +59,7 @@
                   </div>
                 </el-form>
               </div>
-            <el-table :data="staffDate"  border style="width: 100%"
+            <el-table :data="staffDate"  stripe style="width: 100%"
                             v-loading="isLoading" 
                             :empty-text="emptyText"  
                             element-loading-text="拼命加载中"
@@ -76,7 +76,11 @@
                 </template>
               </el-table-column>
               <el-table-column prop="orgStr" label="公司和部门" ></el-table-column>
-              <el-table-column prop="roleStr" label="岗位名称" ></el-table-column>
+              <el-table-column label="岗位名称" >
+                 <template slot-scope="scope">
+                  <span style="color: #f5b24d">{{scope.row.roleStr}}</span>
+                </template>
+              </el-table-column>
               <el-table-column prop="enroll" label="入职时间" ></el-table-column>
               <el-table-column prop="created_at" label="在职状态">
                 <template slot-scope="scope">
