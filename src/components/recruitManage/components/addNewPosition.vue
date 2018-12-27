@@ -64,7 +64,6 @@
                     </el-form-item>
                     <el-form-item label="岗位职责" required>
                         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded" v-model="form.content" :disabled="editorDisabled"></vue-editor>
-                        <!-- <el-input  v-model="form.content" type='textarea'></el-input> -->
                     </el-form-item>
                 </el-form>
             </div>
@@ -254,10 +253,6 @@
                         this.experience = res.data
                     }
                 });
-                //状态
-                // this.dictionary(731).then((res) => {
-
-                // });
             },
             handleImageAdded(file, Editor, cursorLocation, resetUploader){
                 let formData = new FormData();
