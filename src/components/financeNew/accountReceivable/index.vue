@@ -13,10 +13,10 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"><i class="el-icon-refresh" @click="getTableData"></i></el-button>
+            <el-button type="primary" @click="getTableData"><i class="el-icon-refresh"></i></el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
+            <el-button type="primary" @click="handleAddReceive"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown trigger="click" @command="leadingOut">
@@ -160,8 +160,9 @@
         </el-form>
       </div>
     </div>
+
     <!--应收-->
-    <div class="border_table" v-show="lookType === 'all' || lookType === 'collect'">
+    <div>
       <el-table
         :empty-text='collectStatus'
         v-loading="collectLoading"
@@ -169,20 +170,21 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="collectData"
-        width="100%"
         @cell-click="showDetail"
         @row-contextmenu="collectMenu"
         @header-click="selectPrice"
       >
         <el-table-column
           label="收款时间"
-          prop="pay_date"
-          width="90px">
+          prop="pay_date">
         </el-table-column>
         <el-table-column
           label="客户姓名"
-          prop="addr"
-          width="90px">
+          prop="info.customer"
+        ></el-table-column>
+        <el-table-column
+          label="地址"
+          prop="addr">
         </el-table-column>
         <el-table-column
           label="收入科目"
@@ -190,8 +192,7 @@
         </el-table-column>
         <el-table-column
           label="应收金额"
-          prop="amount_receivable"
-          width="70px">
+          prop="amount_receivable">
         </el-table-column>
         <el-table-column
           label="实收金额"
@@ -210,46 +211,22 @@
           label="状态"
           prop="status">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
-            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
-            <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
-            <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="催缴备注"
-          prop="remarks">
-          <template slot-scope="scope">
-            <span
-              v-if="scope.row.remarks[0]">{{scope.row.remarks[0].create_time}}/{{scope.row.remarks[0].content}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="明细详情"
-          prop="description">
-          <template slot-scope="scope">
-                 <span>{{scope.row.description.customer}}/
-                     {{scope.row.description.months}}/{{scope.row.description.description}}/
-                     {{scope.row.description.staff}}
-                 </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="备注"
-          prop="tags">
-          <template slot-scope="scope">
-                 <span v-if="scope.row.tags[0]">{{scope.row.tags[0].create_time}}
-                     {{scope.row.tags[0].content}}
-                 </span>
+            <el-button v-if="scope.row.status === '待入账'" type="danger" size="mini">待入账</el-button>
+            <el-button v-if="scope.row.status === '待结清'" type="warning" size="mini">待结清</el-button>
+            <el-button v-if="scope.row.status === '已结清'" type="success" size="mini">已结清</el-button>
+            <el-button v-if="scope.row.status === '已超额'" type="primary" size="mini">已超额</el-button>
           </template>
         </el-table-column>
         <el-table-column
           label="手机号"
-          prop="customer.contact"
-          width="100px">
+          prop="customer.contact">
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" @click="handleCtrlDetail(scope)">详情</el-button>
+          </template>
         </el-table-column>
       </el-table>
-
       <div class="block pages">
         <div>
         <span>
@@ -305,11 +282,119 @@
     <!--编辑补齐时间-->
     <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime"></PolishTime>
 
-    <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
-
     <!-- 科目搜索 -->
     <subjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
                  @selectSubject="selectSubject"></subjectTree>
+    <!--应收详情-->
+    <el-dialog
+      :visible.sync="detailVisible"
+      title="详情"
+      width="80%"
+    >
+      <div>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">客户姓名：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.customer ">{{ DetailCurrentRow.description.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">应收金额：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.amount_receivable">{{ DetailCurrentRow.amount_receivable }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">实收金额：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.amount_received">{{ DetailCurrentRow.amount_received }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">汇款方式：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">剩余款项：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.balance ">{{ DetailCurrentRow.balance }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">收款人姓名：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">收款时间：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">开户行：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">补齐时间：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">支行：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">收入科目：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">账号：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">备注：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">详情：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">历史收款记录：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">地址：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.address ">{{ DetailCurrentRow.address }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+      </div>
+    </el-dialog>
+
+    <!--添加备注-->
+    <el-dialog
+      :visible.sync="remarkVisible"
+      title="添加备注"
+      width="40%"
+    >
+      <el-input type="textarea" :row="12" v-model="add_remark" placeholder="请输入备注信息"></el-input>
+      <div style="margin-top: 20px;text-align: right">
+        <el-button size="mini" @click="cancelRemark">取消</el-button>
+        <el-button type="primary" size="mini" @click="handleAddRemark">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -320,13 +405,15 @@
   import ChargeModule from '../components/chargeModule.vue'
   import ReviseTime from '../components/reviseTime.vue'
   import PolishTime from '../components/polishTime.vue'
-  import Remarks from '../../common/remarks.vue'
 
   export default {
     name: "index",
-    components: {organization, RightMenu, Remarks, subjectTree, ChargeModule, PolishTime, ReviseTime},
+    components: {organization, RightMenu, subjectTree, ChargeModule, PolishTime, ReviseTime},
     data() {
       return {
+        detailVisible: false,
+        add_remark: '',
+        DetailCurrentRow: '',
         subjectType: '',
         subjectVisible: false,
         url: globalConfig.finance_server,
@@ -336,7 +423,6 @@
         lists: [],
 
         isHigh: false,
-        lookType: 'all',
         pageNumber: 5,
 
         payTimes: [],
@@ -412,13 +498,70 @@
         },
         collectData: [],
         restaurants: [],
-        state: ''
+        state: '',
+        rightMenuRow: '',
       }
     },
     mounted() {
       this.getTableData();
     },
     methods: {
+      //取消备注
+      cancelRemark() {
+        this.remarkVisible = false;
+        this.add_remark = '';
+      },
+      //添加备注
+      handleAddRemark() {
+        if (!this.add_remark) {
+          this.$notify.warning({
+            title: '警告',
+            message: '备注不能为空！'
+          });
+          return false;
+        }
+        this.$http.put(this.url + `account/receivable/addTag/${this.rightMenuRow.id}`,{content: this.add_remark}).then(res => {
+          if (res.data.success) {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.message
+            });
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.message
+            });
+          }
+          this.cancelRemark();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+
+      //请求详情
+      handleCtrlDetail(scope){
+        this.$http.get(this.url + `account/receivable/read/${scope.row.id}`).then(res => {
+          if (res.data.success) {
+            this.DetailCurrentRow = res.data.data;
+            console.log(this.DetailCurrentRow);
+            this.detailVisible = true;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: '获取详情失败，请重试！'
+            });
+            return false;
+          }
+        }).catch(err => {
+          console.log(err);
+        });
+      },
+
+      handleAddReceive() {
+        this.titles = '新增应收';
+        this.chargeVisible = true;
+      },
+
       getTableData() {
         this.isHigh = false;
         this.collectLoading = true;
@@ -437,6 +580,7 @@
           this.collectLoading = false;
         });
       },
+
       closeSubjectTree() {
         this.subjectVisible = false;
       },
@@ -501,7 +645,7 @@
             maxPrice: '',//剩余款项最大区间
             page: 1,
             limit: 12
-        }
+        };
         this.subject_name = '';
       },
       // 高级筛选
@@ -532,9 +676,10 @@
       },
       // 右键 收
       collectMenu(row, event) {
+        this.rightMenuRow = row;
         this.lists = [
-          {clickIndex: 'collectWay', headIcon: 'el-icon-edit-outline', label: '应收入账',},
-          {clickIndex: 'collectRemark', headIcon: 'el-icon-edit', label: '备注',},
+          {clickIndex: 'collectWay', headIcon: 'el-icon-edit-outline', label: '应收入账'},
+          {clickIndex: 'collectRemark', headIcon: 'el-icon-edit', label: '备注'},
           {
             clickIndex: '', headIcon: 'el-icon-date', tailIcon: 'el-icon-arrow-right', label: '收款时间',
             children: [
@@ -550,9 +695,7 @@
 
       // 右键回调
       clickEvent(val) {
-        this.titles = val;
         if (val === 'delete') {
-          console.log(val);
           this.openDelete();
         }
         if (val === 'collectWay') {
@@ -584,9 +727,6 @@
       // 关闭补齐时间
       closePolishTime() {
         this.polishTimeVisible = false;
-      },
-      closeRemark() {
-        this.remarkVisible = false;
       },
       //关闭右键菜单
       closeMenu() {
@@ -631,41 +771,31 @@
 
 <style lang="scss">
   #receivable {
-    .btn {
-      float: left;
-      border: 0;
-      color: #FFFFFF;
-      cursor: default;
-    }
-
-    .btn1 {
-      background-color: #fc0;
-    }
-
-    .btn2 {
-      background-color: #f99;
-    }
-
-    .btn3 {
-      background-color: #78cd51;
-    }
-
-    .btn4 {
-      background-color: #F04D3D;
-    }
-
     .block.pages {
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .border_table {
       box-shadow: 0 0 10px 0 #bbb;
       padding: 8px;
       border-radius: 3px;
       margin-bottom: 24px;
+    }
+    .receive_title{
+      display: inline-block;
+      width: 25%;
+      text-align: right;
+    }
+    .receive_detail{
+      display: inline-block;
+      width: 60%;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 4px;
+      color: white;
+      background-color: #aec1fc;
     }
   }
 </style>

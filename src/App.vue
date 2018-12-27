@@ -135,6 +135,7 @@
     color: #787a7e;
     font-size: 14px;
     background-color: #f4f3f6;
+    padding-right: 0 !important;
     #app {
       height: 100%;
       .lookVideo {
