@@ -596,7 +596,7 @@ export default {
             })
           })
           this.isLoading = false;
-        } else if(res.data.code == "70011") {
+        } else if(res.data.code == "70011" || res.data.code == "70088") {
           this.$notify.warning({
             title: "警告",
             message: res.data.msg
