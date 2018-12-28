@@ -124,7 +124,7 @@ export default {
             this.is_editing = false;
             this.editing_platform_val = '';
         },
-        //删除品台
+        //删除平台
         deletePlatform(value, key){
             delete this.platform[key];
             this.platform_name = '';
@@ -203,100 +203,102 @@ export default {
     }
 }
 </script>
-<style  scoped>
-    .main{
-        padding: 0 0 0 50px;
-        /* text-align: center; */
-        margin: 20px 0;
-        height: 30px;
-    }
-    .main span{
-        margin: 0 10px;
-    }
-    .main .container{
-        display:  flex;
-        justify-content: flex-start;
-    }
-    .add-btn{
-        display: flex;
-        justify-content: center;
-    }
-    .add-platform{
-        border: none;
-        font-family: SourceHanSansSC;
-        font-weight: 700;font-size: 14px;
-        color: rgba(23, 52, 213, 1);
-        font-style: normal;
-        letter-spacing: 0px;
-        line-height: 20px;
-        text-decoration: none;
-    }
-    .edit-playform{
-        display: flex;
-        width: 200px;
-        justify-content: space-around;
-        align-items: center;
-    }
-    .edit-playform i{
-        font-size: 20px !important;
-    }
-    .edit-playform .el-input__inner{
-        width: 120px;
-    }
-    .dialog-footer{
-        display: flex;
-        justify-content: center;
-    }
-    .edit-platform{
-        background-color: rgb(179, 178, 178);
-    }
-    .platform-info{
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-    }
-    .platform-name{
-        font-size: 22px;
-        line-height: 30px;
-        width: 200px;
-        margin: 0 10px;
-    }
-    .edit-name{
-        font-size: 22px;
-        line-height: 30px;
-        width: 150px !important;
-    }
-    .platform-href{
-        font-size: 14px;
-        line-height: 30px;
-        width: 350px;
-        height: 30px;
-        display: flex;
-        justify-content: space-between;
-    }
-    .platform-href i{
-        line-height: 30px;
-    }
-    .wrap{
-        height: 30px;
-    }
-    .input-name{
-        width: 160px !important;
-    }
-    .imput-host{
-        width: 160px !important;
-    }
-    .el-icon-edit,.el-icon-circle-close, .el-icon-circle-check, .el-icon-delete, .platform-location{
-        cursor: pointer;
-    }
-    .platform-location{
-        width: 200px;
-        display: inline-block;
-        height: 30px;
-        max-width: 200px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
+<style lang="scss" scoped>
+    #platform{
+        .main{
+            padding: 0 0 0 50px;
+            /* text-align: center; */
+            margin: 20px 0;
+            height: 30px;
         }
+        .main span{
+            margin: 0 10px;
+        }
+        .main .container{
+            display:  flex;
+            justify-content: flex-start;
+        }
+        .add-btn{
+            display: flex;
+            justify-content: center;
+        }
+        .add-platform{
+            border: none;
+            font-family: SourceHanSansSC;
+            font-weight: 700;font-size: 14px;
+            color: rgba(23, 52, 213, 1);
+            font-style: normal;
+            letter-spacing: 0px;
+            line-height: 20px;
+            text-decoration: none;
+        }
+        .edit-playform{
+            display: flex;
+            width: 200px;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .edit-playform i{
+            font-size: 20px !important;
+        }
+        .edit-playform .el-input__inner{
+            width: 120px;
+        }
+        .dialog-footer{
+            display: flex;
+            justify-content: center;
+        }
+        .edit-platform{
+            background-color: rgb(179, 178, 178);
+        }
+        .platform-info{
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .platform-name{
+            font-size: 22px;
+            line-height: 30px;
+            width: 200px;
+            margin: 0 10px;
+        }
+        .edit-name{
+            font-size: 22px;
+            line-height: 30px;
+            width: 150px !important;
+        }
+        .platform-href{
+            font-size: 14px;
+            line-height: 30px;
+            width: 350px;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .platform-href i{
+            line-height: 30px;
+        }
+        .wrap{
+            height: 30px;
+        }
+        .input-name{
+            width: 160px !important;
+        }
+        .imput-host{
+            width: 160px !important;
+        }
+        .el-icon-edit,.el-icon-circle-close, .el-icon-circle-check, .el-icon-delete, .platform-location{
+            cursor: pointer;
+        }
+        .platform-location{
+            width: 200px;
+            display: inline-block;
+            height: 30px;
+            max-width: 200px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
 </style>
 

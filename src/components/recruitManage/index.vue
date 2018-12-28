@@ -43,39 +43,46 @@
                                 <span v-if='item.org.company_id === 0'>南京乐伽商业管理有限公司</span>
                                 <span v-else>{{item.org.corp ? item.org.corp.name : '/'}}</span>
                             </el-col>
-                            <el-col :span="4">
+                            <el-col :span="4" class="duty-name">
                                 <span>{{item.org.name}}</span>
                             </el-col>
-                            <el-col :span="4">
+                            <el-col :span="3" class="position-name">
                                 <span>{{item.statuss.dictionary_name}}</span>
                             </el-col>
+                            <el-button class='el-button' size="mini" @click="editPosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>编辑职位信息</el-button>
+                            <el-button class='el-button margin-left' size="mini" @click="togglePosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>
+                                <span v-if='item.status === 732'>结束该职位招聘</span>
+                                <span v-if='item.status === 733'>开始该职位招聘</span>
+                            </el-button>
+                            <el-button class='el-button' size="mini" @click="saveEdit(item.id)" v-if='is_editing && (edit_index === index)'>保存修改</el-button>
+                            <el-button class='el-button' size="mini" @click="cancelEdit" v-if='is_editing && (edit_index === index)'>取消修改</el-button>
                         </el-row>
                     </el-header>
                     <el-main>
-                        <el-row class='position-info'>
+                        <el-row class='position-info' >
                             <el-col :span='2' v-if='(edit_index !== index)'>
                                 <span class='position'>{{item.role.name}}</span>
                             </el-col>
-                            <el-col :span='2' v-if='is_editing && (edit_index === index)'>
+                            <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
                                 <el-input size='mini' v-model='position_name' v-if='is_editing && (edit_index === index)' @focus="openSelectPositionDialog"></el-input>
                             </el-col>
-                            <el-col :span='3' v-if='(edit_index !== index)'>
+                            <el-col :span='2' v-if='(edit_index !== index)'>
                                 <span>{{item.year.min}}~{{item.year.max}}岁</span>
                             </el-col>
-                            <el-col :span='3' v-if='is_editing && (edit_index === index)'>
-                                <el-col :span='8'>
+                            <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
+                                <el-col :span='11'>
                                     <el-input type='number' v-model="form.year.min" size='mini'></el-input>
                                 </el-col>
                                 <el-col class="line" :span="2">-</el-col>
-                                <el-col :span='8'>
+                                <el-col :span='11'>
                                     <el-input type='number' v-model="form.year.max" size='mini'></el-input>
                                 </el-col>
                             </el-col>
-                            <el-col :span='3' v-if='(edit_index !== index)'>
-                                <span v-if='item.genders'>{{item.genders.dictionary_name}}</span>
+                            <el-col :span='2' v-if='(edit_index !== index)'>
+                                <span v-if='item.genders'>{{item.genders.dictionary_name === "不限" ? "性别" + item.genders.dictionary_name : item.genders.dictionary_name}}</span>
                                 <span v-if='!item.genders'>/</span>
                             </el-col>
-                            <el-col :span='3' v-if='is_editing && (edit_index === index)'>
+                            <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
                                 <el-select size='mini' v-model='form.gender'>
                                     <el-option v-for='(item, index) in sex' :key='index' :value='item.id' :label='item.dictionary_name'></el-option>
                                 </el-select>
@@ -83,52 +90,45 @@
                             <el-col :span='3' v-if='(edit_index !== index)'>
                                 <span>{{item.salary.min}}~{{item.salary.max}}元/月</span>
                             </el-col>
-                            <el-col :span='4' v-if='is_editing && (edit_index === index)'>
-                                <el-col :span='8'>
+                            <el-col :span='3' v-if='is_editing && (edit_index === index)' class="margin-right">
+                                <el-col :span='11'>
                                     <el-input type='number' v-model="form.salary.min" size='mini'></el-input>
                                 </el-col>
                                 <el-col class="line" :span="2">-</el-col>
-                                <el-col :span='8'>
+                                <el-col :span='11'>
                                     <el-input type='number' v-model="form.salary.max" size='mini'></el-input>
                                 </el-col>
                             </el-col>
-                            <el-col :span='3' v-if='(edit_index !== index)'>
-                                <span v-if="item.experiences">{{item.experiences.dictionary_name}}</span>
+                            <el-col :span='2' v-if='(edit_index !== index)'>
+                                <span v-if="item.experiences">经验{{item.experiences.dictionary_name}}</span>
                                 <span v-if="!item.experiences">/</span>
                             </el-col>
-                            <el-col :span='3' v-if='is_editing && (edit_index === index)'>
+                            <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
                                 <el-select size='mini' v-model='form.experience'>
                                     <el-option v-for='(item, index) in experience' :key='index' :value='item.id' :label='item.dictionary_name'></el-option>
                                 </el-select>
                             </el-col>
-                            <el-col :span='3' v-if='(edit_index !== index)'>
-                                <span v-if='item.educations'>{{item.educations.dictionary_name}}</span>
+                            <el-col :span='2' v-if='(edit_index !== index)'>
+                                <span v-if='item.educations'>{{item.educations.dictionary_name === "不限" ? "学历" + item.educations.dictionary_name : item.educations.dictionary_name}}</span>
                                 <span v-if='!item.educations'>/</span>
                             </el-col>
-                            <el-col :span='3' v-if='is_editing && (edit_index === index)'>
+                            <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
                                 <el-select size='mini' v-model='form.education'>
                                     <el-option v-for='(item, index) in education' :key='index' :value='item.id' :label='item.dictionary_name'></el-option>
                                 </el-select>
                             </el-col>
-                            <el-col :span='3' v-if='(edit_index !== index)'>
-                                <span>{{item.number.min}}~{{item.number.max}}人</span>
+                            <el-col :span='2' v-if='(edit_index !== index)'>
+                                <span>招聘{{item.number.min}}~{{item.number.max}}人</span>
                             </el-col>
-                            <el-col :span='3' v-if='is_editing && (edit_index === index)'>
-                                <el-col :span='8'>
+                            <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
+                                <el-col :span='11'>
                                     <el-input type='number' v-model="form.number.min" size='mini'></el-input>
                                 </el-col>
                                 <el-col class="line" :span="2">-</el-col>
-                                <el-col :span='8'>
+                                <el-col :span='11'>
                                     <el-input type='number' v-model="form.number.max" size='mini'></el-input>
                                 </el-col>
                             </el-col>
-                            <el-button size="mini" @click="editPosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>编辑职位信息</el-button>
-                            <el-button size="mini" @click="togglePosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>
-                                <span v-if='item.status === 732'>结束该职位招聘</span>
-                                <span v-if='item.status === 733'>开始该职位招聘</span>
-                            </el-button>
-                            <el-button size="mini" @click="saveEdit(item.id)" v-if='is_editing && (edit_index === index)'>保存修改</el-button>
-                            <el-button size="mini" @click="cancelEdit" v-if='is_editing && (edit_index === index)'>取消修改</el-button>
                         </el-row>
                         <el-row class="text-editor">
                             <el-col v-html='item.content' v-if='(edit_index !== index)'></el-col>
@@ -136,8 +136,8 @@
                         </el-row>
                     </el-main>
                     <el-footer>
-                        <el-row :gutter="20" class='data-preview'>
-                            <el-button class='button' :span="6" @click='platformManage(item, index)'>
+                        <el-row  class='data-preview'>
+                            <el-button class='button first-child' :span="6" @click='platformManage(item, index)'>
                                 {{item.platform ? Object.keys(item.platform).length : 0}}
                                 个平台已发布
                             </el-button>
@@ -359,7 +359,17 @@
                             type: 'success'
                         });
                         this.initData();
-                        this.getPositionList();
+                        this.$http.get(globalConfig.server + 'hrm/recruitment', {params:this.params}).then(res => {
+                            if(res.data.code === '10000' || res.data.code === '70000'){
+                                this.loadingRecruit = false;
+                                this.total = res.data.data.count;
+                                this.positionList = res.data.data.data;
+                            }else{
+                                this.loadingRecruit = false;
+                                this.total = 0;
+                                this.positionList = [];
+                            }
+                        })
                     }else if(res.data.code == '10032'){
                         this.$notify({
                             title:'警告',
@@ -627,20 +637,21 @@
                this.processDialog = true;
                setTimeout(() => {
                    document.documentElement.scrollTop = this.scrollTop;
-               }, 1000)
-               if(event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
+               }, 1000);
+               var event = event || window.event;
+               if(event.path && event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
                    this.active_name = 'first';
                    this.$store.dispatch('setActiveName', 'first')
                }
-               if(event.path[1].className.indexOf('second') > -1 || event.target.classList.contains('second')){
+               if(event.path && event.path[1].className.indexOf('second') > -1 || event.target.classList.contains('second')){
                    this.active_name = 'second';
                    this.$store.dispatch('setActiveName', 'second')
                }
-               if(event.path[1].className.indexOf('third') > -1 || event.target.classList.contains('third')){
+               if(event.path && event.path[1].className.indexOf('third') > -1 || event.target.classList.contains('third')){
                    this.active_name = 'third';
                    this.$store.dispatch('setActiveName', 'third')
                }
-               if(event.path[1].className.indexOf('fourth') > -1 ||  event.target.classList.contains('fourth')){
+               if(event.path && event.path[1].className.indexOf('fourth') > -1 ||  event.target.classList.contains('fourth')){
                    this.active_name = 'fourth';
                    this.$store.dispatch('setActiveName', 'fourth')
                }
@@ -653,26 +664,43 @@
         min-height: 790px;
         position: relative;
         height: 100%;
-        padding: 0 30px;
+        padding: 10px 30px 0 30px;
         .positionTitle{
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            font-size: 16px;
-            color: rgb(16, 16, 16);
+            color: rgb(64, 158, 255);
             font-style: normal;
             letter-spacing: 0px;
             line-height: 24px;
+            .position-name{
+                font-size: 14px;
+            }
+            .duty-name{
+                margin-left: -4px;
+            }
+            .el-button{
+                width: 114px;
+                text-align: center;
+            }
+            .margin-left{
+                margin-left: 25px;
+                text-align: center;
+            }
         }
         .position-info{
             font-family: SourceHanSansSC;
             font-weight: 400;
-            font-size: 14px;
+            // text-align: center;
+            font-size: 13px;
             color: #555;
             font-style: normal;
             letter-spacing: 0px;
             line-height: 20px;
             text-decoration: none;
+            .margin-right{
+                margin-right: 10px;
+            }
         }
         .position{
             font-weight: 700;
@@ -680,8 +708,14 @@
         .positionList{
             margin-top: 50px;
         }
+        #editor{
+            font-family: "楷体";
+            color: rgb(192,192,192)
+        }
         .text-editor{
             margin: 20px 0;
+            font-family: "楷体";
+            color: rgb(192,192,192);
         }
         .close-tips{
             text-align: center;
@@ -696,6 +730,9 @@
                 border: none;
                 color: rgb(0, 150, 136);
                 margin: 0 60px 0 0;
+            }
+            .first-child{
+                margin-left: -19px;
             }
         }
         .dotted-line{

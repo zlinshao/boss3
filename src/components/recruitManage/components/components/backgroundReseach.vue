@@ -1,6 +1,6 @@
 <template>
     <div id="backgroundReseach">
-        <el-dialog :visible.sync="backgroundDialogVisible" append-to-body width="25%">
+        <el-dialog :visible.sync="backgroundDialogVisible" title='背景调查' append-to-body width="25%">
             <el-form label-width="180px" center>
                 <el-form-item label="工作经验是否与简历所述相符">
                     <template>

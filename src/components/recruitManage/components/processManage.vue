@@ -492,14 +492,14 @@
       </el-dialog>
       <!--添加面试人结束-->
       <!--原始简历开始-->
-      <el-dialog :visible.sync="lookUpResumeDialog" append-to-body>
+      <el-dialog :visible.sync="lookUpResumeDialog" title="原始简历" append-to-body>
         <div v-for='(item, index) in album' :key='index'>
           <embed id='embed-process' :src="item.uri"/>
         </div>
       </el-dialog>
       <!--原始简历结束-->
       <!--未面试开始-->
-      <el-dialog :visible.sync="uninterviewDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="uninterviewDialog" title="未面试信息" append-to-body width="25%">
         <el-form label-width="170px" center>
           <el-form-item label="姓名">
             <span>{{uninterviewObj.name}}</span>
@@ -529,7 +529,7 @@
       </el-dialog>
       <!--未面试结束-->
       <!--已面试信息开始-->
-      <el-dialog :visible.sync="interviewedDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="interviewedDialog" title="已面试信息" append-to-body width="25%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{interviewedObj.name}}</span>
@@ -558,7 +558,7 @@
       </el-dialog>
       <!--已面试信息结束-->
       <!--面试通过或未通过开始-->
-      <el-dialog :visible.sync="passInterviewDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="passInterviewDialog" title="面试信息" append-to-body width="25%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{interviewedObj_finished.name}}</span>
@@ -578,7 +578,7 @@
       </el-dialog>
       <!--面试通过或未通过结束-->
       <!--查看面试未通过开始-->
-      <el-dialog :visible.sync="unpassInterviewDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="unpassInterviewDialog" title="面试未通过详情" append-to-body width="25%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{unpassInterviewObj.name}}</span>
@@ -607,7 +607,7 @@
         </div>
       </el-dialog>
       <!--人资沟通弹框开始-->
-      <el-dialog :visible.sync="IsEntryDialog" append-to-body width="30%">
+      <el-dialog :visible.sync="IsEntryDialog" title="入职条件" append-to-body width="30%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{humansourceObj.name}}</span>
@@ -661,7 +661,7 @@
       </el-dialog>
       <!--人资沟通弹框结束-->
       <!--入职条件开始-->
-      <el-dialog :visible.sync="failEntryDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="failEntryDialog" title="入职详情" append-to-body width="25%">
         <el-form label-width="80px" center>
             <el-form-item label="姓名">
                 <span>{{failEntryObj.name}}</span>
@@ -692,7 +692,7 @@
       </el-dialog>
       <!--入职条件结束-->
       <!--上传简历开始-->
-      <el-dialog :visible.sync="uploadResumeDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="uploadResumeDialog" title="上传简历" append-to-body width="25%">
           <el-form label-width="80px" center>
               <el-form-item label="上传简历" required>
                   <UPLOAD :ID="'second'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
@@ -930,7 +930,10 @@
                     this.$emit('close');
                 }else{
                     this.activeName = this.active_name;
-                    this.getAllData(this.id)
+                    this.getAllData(this.id);
+                    this.$nextTick(() => {
+                      this.removeWarning(this.total)
+                    });
                 }
             },
             id(val){
@@ -1014,6 +1017,17 @@
           this.params.limit = 12;
           this.params.page = 1;
           this.getAllData(this.id);
+          this.$nextTick(() => {
+            this.removeWarning(this.total)
+          })
+      },
+      //火狐分页跳转页警告提示
+      removeWarning(total){
+        if(total === 0){
+          if(document.querySelector("#process .block input.el-input__inner").max == 0){
+            document.querySelector("#process .block input.el-input__inner").max = 1
+          }
+        }
       },
       //分页
       handleCurrentChange(val){
@@ -1973,7 +1987,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   #process {
     font-size: 14px;
     .add-interviewer {
@@ -1981,7 +1995,6 @@
       margin: 10px 0 0 0;
       border: none;
     }
-    
     .edit-condition {
       display: flex;
       justify-content: center;
@@ -2004,6 +2017,9 @@
     }
     .block{
         position: static;
+        .el-input__inner{
+          width: 80px;
+        }
     }
     .el-pagination {
       padding-right: 50px;
