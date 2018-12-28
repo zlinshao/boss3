@@ -4,14 +4,15 @@
             <div>
                 <div v-for='(value, key) in platform' :key="key" class="main">
                     <div class='container'>
-                        <el-button class='edit-platform'></el-button>
+                        <!-- <el-button class='edit-platform'></el-button> -->
+                        <span class="platform-name-tips">平台名称</span>
                         <div class='platform-info'>
                             <div class='platform-name'>
                                 <span v-if="editing_platform_val !== value">{{key}}</span>
                                 <el-input size='mini' v-model="platform_name" class='edit-name'  v-if="is_editing && editing_platform_val === value"></el-input>
                             </div>
                             <div class='platform-href'>
-                                <span>岗位链接</span>
+                                <span class="position-href">岗位链接</span>
                                 <div class='wrap'>
                                     <span class='platform-location' @click='turnto(value)' v-if="editing_platform_val !== value">{{value}}</span>
                                     <el-input size='mini' v-model="platform_host" v-if="is_editing && editing_platform_val === value" class='input-host'></el-input>
@@ -27,13 +28,14 @@
                 <div v-if="is_adding" class="new-platform">
                     <div class="main">
                         <div class='container'>
-                            <el-button class='edit-platform'></el-button>
+                            <!-- <el-button class='edit-platform'></el-button> -->
+                            <span class="platform-name-tips">平台名称</span>
                             <div class='platform-info'>
                                 <div class='platform-name'>
                                     <el-input size='mini' v-model="platform_name" class='edit-name'></el-input>
                                 </div>
                                 <div class='platform-href'>
-                                    <span>岗位链接</span>
+                                    <span class='position-href'>岗位链接</span>
                                     <div>
                                         <el-input size='mini' v-model="platform_host" class='input-host'></el-input>
                                     </div>
@@ -206,7 +208,7 @@ export default {
 <style lang="scss" scoped>
     #platform{
         .main{
-            padding: 0 0 0 50px;
+            // padding: 0 0 0 50px;
             /* text-align: center; */
             margin: 20px 0;
             height: 30px;
@@ -217,6 +219,12 @@ export default {
         .main .container{
             display:  flex;
             justify-content: flex-start;
+            .platform-name-tips{
+                font-size: 14px;
+                width: 106px;
+                line-height: 30px;
+                color: #C0C4CC;
+            }
         }
         .add-btn{
             display: flex;
@@ -226,7 +234,7 @@ export default {
             border: none;
             font-family: SourceHanSansSC;
             font-weight: 700;font-size: 14px;
-            color: rgba(23, 52, 213, 1);
+            color: #409EFF;
             font-style: normal;
             letter-spacing: 0px;
             line-height: 20px;
@@ -257,8 +265,9 @@ export default {
             justify-content: flex-start;
         }
         .platform-name{
-            font-size: 22px;
+            font-size: 14px;
             line-height: 30px;
+            // color: #409EFF;
             width: 200px;
             margin: 0 10px;
         }
@@ -274,6 +283,9 @@ export default {
             height: 30px;
             display: flex;
             justify-content: space-between;
+            .position-href{
+                color: #C0C4CC;
+            }
         }
         .platform-href i{
             line-height: 30px;
