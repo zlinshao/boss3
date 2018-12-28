@@ -10,7 +10,6 @@
                                 <span v-if="editing_platform_val !== value">{{key}}</span>
                                 <el-input size='mini' v-model="platform_name" class='edit-name'  v-if="is_editing && editing_platform_val === value"></el-input>
                             </div>
-                            
                             <div class='platform-href'>
                                 <span>岗位链接</span>
                                 <div class='wrap'>

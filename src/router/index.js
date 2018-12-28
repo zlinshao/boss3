@@ -177,6 +177,7 @@ const ManagerSetting = () => import  ('../components/systemSetting/managerSettin
 // 业绩工资
 const PeriodicTable = () => import  ('../components/meritPay/periodicTable/index');
 const Achievement = () => import  ('../components/meritPay/achievement/index');
+const Achv = () => import  ('../components/meritPay/achievement/achv.vue');
 // const PersonalSalary = () => import  ('../components/meritPay/personalSalary/index');
 const PersonalSalary = () => import  ('../components/meritPay/personalSalaryNew/index');
 const CollectDetail = () => import  ('../components/rentManage/collectDetail.vue');
@@ -682,7 +683,7 @@ export default new Router({
       icon: 'iconfont icon--',
       children: [
         {path: '/periodicTable', component: PeriodicTable, name: '周期表'},
-        {path: '/achievement', component: Achievement, name: '业绩'},
+        {path: '/achievement', component: Achv, name: '业绩'},
         {path: '/personalSalary', component: PersonalSalary, name: '工资'},
 
       ]

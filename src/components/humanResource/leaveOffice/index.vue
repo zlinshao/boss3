@@ -68,17 +68,17 @@
             prop="staffs.name"
             label="离职员工">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="operators.name"
             label="操作人">
-          </el-table-column>
-          <el-table-column
+          </el-table-column> -->
+          <!-- <el-table-column
             prop="operators"
             label="操作人部门">
             <template slot-scope="scope">
               <div v-for="item in scope.row.operators.org">{{item.name}}</div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="status"
             label="状态">
