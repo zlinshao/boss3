@@ -177,6 +177,7 @@ const ManagerSetting = () => import  ('../components/systemSetting/managerSettin
 // 业绩工资
 const PeriodicTable = () => import  ('../components/meritPay/periodicTable/index');
 const Achievement = () => import  ('../components/meritPay/achievement/index');
+const Achv = () => import  ('../components/meritPay/achievement/achv.vue');
 // const PersonalSalary = () => import  ('../components/meritPay/personalSalary/index');
 const PersonalSalary = () => import  ('../components/meritPay/personalSalaryNew/index');
 const CollectDetail = () => import  ('../components/rentManage/collectDetail.vue');
@@ -579,24 +580,24 @@ export default new Router({
         {path: '/approval',component: Approval, name: '审批管理'}
       ]
     },
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: 'HRM',
-    //   icon: 'iconfont icon-renzi',
-    //   children: [
-    //     {
-    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
-    //       children: [
-    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
-    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-    //         {path: '/dimission', component: Dimission, name: '离职管理'},
-    //       ],
-    //     },
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: 'HRM',
+      icon: 'iconfont icon-renzi',
+      children: [
+        {
+          path: '/teamManage', component: TeamManage, name: '人员信息管理',
+          children: [
+            {path: '/teamManage/roster', component: Roster, name: '花名册'},
+            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+            {path: '/dimission', component: Dimission, name: '离职管理'},
+          ],
+        },
+      ]
+    },
     {
       path: '/staffDetail',
       component: StaffDetail,
@@ -682,7 +683,7 @@ export default new Router({
       icon: 'iconfont icon--',
       children: [
         {path: '/periodicTable', component: PeriodicTable, name: '周期表'},
-        {path: '/achievement', component: Achievement, name: '业绩'},
+        {path: '/achievement', component: Achv, name: '业绩'},
         {path: '/personalSalary', component: PersonalSalary, name: '工资'},
 
       ]
