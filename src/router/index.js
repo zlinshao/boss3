@@ -36,6 +36,7 @@ const FinanceRunning=()=>import('../components/financeNew/runningAccount');//收
 const AccountPayable=()=>import('../components/financeNew/accountPayable');//应付款项
 const AccountReceivable=()=>import('../components/financeNew/accountReceivable');//应收款项
 const PendingItem = () => import  ('../components/financeNew/pendingItem');
+const DailyLog = () => import ('../components/financeNew/dailyLog'); //日志管理
 
 
 // 微信管理
@@ -513,6 +514,7 @@ export default new Router({
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
         {path: '/PendingItem', component: PendingItem, name: '待处理项'},
+        {path: '/dailyLog', component: DailyLog, name: '日志管理'},
       ]
     },
 

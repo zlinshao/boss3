@@ -32,6 +32,9 @@
           <el-form-item>
             <el-button type="success" @click="sendMsgVisible = true" icon="el-icon-message" :disabled="currentSelectIds.length > 0 ? false : true">发送短信</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="danger" @click="createVisible = true" icon="el-icon-printer" :disabled="createShow > 0 ? false : true">生成违约金</el-button>
+          </el-form-item>
         </el-form>
       </div>
 
@@ -173,10 +176,10 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="collectData"
-        @cell-click="showDetail"
         @row-contextmenu="collectMenu"
-        @header-click="selectPrice"
         @selection-change="handleSelectionChange"
+        highlight-current-row
+        @current-change="handleListCurrentChange"
       >
         <el-table-column
           type="selection"
@@ -260,19 +263,6 @@
         </el-pagination>
       </div>
     </div>
-
-    <el-dialog title="收货地址" :visible.sync="addrDetail">
-      <el-table :data="addrDetails">
-        <el-table-column property="addr" label="客户姓名" width="150"></el-table-column>
-        <el-table-column property="customer.contract" label="手机号" width="200"></el-table-column>
-        <el-table-column property="addr" label="租房月数"></el-table-column>
-        <el-table-column property="addr" label="付款方式"></el-table-column>
-        <el-table-column property="addr" label="月单价"></el-table-column>
-        <el-table-column property="addr" label="合同时间周期"></el-table-column>
-        <el-table-column property="addr" label="开单人"></el-table-column>
-        <el-table-column property="addr" label="部门"></el-table-column>
-      </el-table>
-    </el-dialog>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -362,16 +352,6 @@
         </el-row>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
-            <span style="color: #409EFF;" class="receive_title">备注：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.remark ">{{ DetailCurrentRow.remark }}</span>
-            <span class="receive_detail" v-else>/</span>
-          </el-col>
-          <el-col :span="6">
-            <span style="color: #409EFF;" class="receive_title">详情：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description ">{{ DetailCurrentRow.description.description }}</span>
-            <span class="receive_detail" v-else>/</span>
-          </el-col>
-          <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">历史收款记录：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_history ">{{ DetailCurrentRow.customer.account_history }}</span>
             <span class="receive_detail" v-else>/</span>
@@ -381,6 +361,27 @@
             <span class="receive_detail" v-if="DetailCurrentRow.address ">{{ DetailCurrentRow.address }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">详情：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description ">{{ DetailCurrentRow.description.description }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">备注：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.tags && DetailCurrentRow.tags.length > 0" style="text-align: left">
+              <span v-for="(item,key) in DetailCurrentRow.tags">{{key + 1}}：{{ item.content }}<br></span>
+            </span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">催缴备注：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.remarks && DetailCurrentRow.remarks.length > 0" style="text-align: left">
+              <span v-for="(item,key) in DetailCurrentRow.remarks">{{key + 1}}：{{ item.content }}<br></span>
+            </span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
         </el-row>
       </div>
     </el-dialog>
@@ -388,10 +389,19 @@
     <!--添加备注-->
     <el-dialog
       :visible.sync="remarkVisible"
-      title="添加备注"
+      title="备注"
       width="40%"
+      @close="cancelRemark"
     >
-      <el-input type="textarea" :row="12" v-model="add_remark" placeholder="请输入备注信息"></el-input>
+      <div v-if="isFastMark">
+        <span>催缴类型：</span>
+        <el-select v-model="remarkType" clearable size="mini" style="margin-bottom: 20px;width: 80%">
+          <el-option v-for="(key,index) in tag_status" :label="key" :value="index + 1"
+                     :key="index"></el-option>
+        </el-select>
+      </div>
+      <span>备注信息：</span>
+      <el-input type="textarea" :row="12" v-model="add_remark" placeholder="请输入备注信息" style="width: 80%;vertical-align: top"></el-input>
       <div style="margin-top: 20px;text-align: right">
         <el-button size="mini" @click="cancelRemark">取消</el-button>
         <el-button type="primary" size="mini" @click="handleAddRemark">确定</el-button>
@@ -410,6 +420,7 @@
         align="right"
         size="small"
         unlink-panels
+        value-format="yyyy-MM-dd"
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
@@ -442,15 +453,13 @@
     <!--新增应收-->
     <el-dialog
       :visible.sync="addPayVisible"
-      title="新增应付"
+      title="新增应收"
       width="30%"
     >
       <div style="width: 85%;text-align: center;">
-        <el-form :model="addForm" :rules="addFormRules" ref="addPayForm" label-width="100px" size="small">
+        <el-form :model="addForm" :rules="addFormRules" ref="addPayForm" status-icon label-width="100px" size="small">
           <el-form-item label="客户名称" prop="customer_name">
-            <el-select v-model="addForm.customer_name">
-              <el-option value="111" label="小王"></el-option>
-            </el-select>
+            <el-input @focus="customer_list_visible = true" size="mini" v-model="customer_name" placeholder="点击选择"></el-input>
           </el-form-item>
           <el-form-item label="客户身份" prop="identity">
             <el-select v-model="addForm.identity">
@@ -466,6 +475,7 @@
             <el-date-picker
               v-model="addForm.pay_date"
               type="date"
+              value-format="yyyy-MM-dd"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -479,10 +489,125 @@
             <el-input v-model="addForm.remark" type="textarea" :row="8" placeholder="请输入备注"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button size="mini" @click="addPayVisible = false">取消</el-button>
-            <el-button size="mini" type="primary" @click="handleAddPay">确定</el-button>
+            <el-button size="mini" @click="handleAddPayCancel">取消</el-button>
+            <el-button size="mini" type="primary" @click="handleAddPay('addPayForm')">确定</el-button>
           </el-form-item>
         </el-form>
+      </div>
+    </el-dialog>
+
+    <!--获取客户列表-->
+    <el-dialog
+      :visible="customer_list_visible"
+      title="用户列表"
+      width="35%"
+    >
+      <div>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            类型：<el-select size="mini" style="width: 200px" v-model="customer_params.type">
+            <el-option :value="1" label="房东"></el-option>
+            <el-option :value="2" label="租客"></el-option>
+            <el-option :value="3" label="未知租客"></el-option>
+          </el-select>
+          </el-col>
+          <el-col :span="12">
+            <el-input size="mini" style="width: 200px" v-model="customer_params.search" placeholder="请输入需求搜索的内容"></el-input>
+            <el-button type="primary" size="mini" @click="search_customer_list">搜索</el-button>
+          </el-col>
+        </el-row>
+      </div>
+      <div style="margin: 15px 0">
+        <el-table
+          :data="customer_list"
+          highlight-current-row
+          @current-change="customer_list_select"
+        >
+          <el-table-column label="客户名称" prop="customer_name"></el-table-column>
+          <el-table-column label="身份" prop="ident"></el-table-column>
+          <el-table-column label="房屋地址" prop="address" min-width="150px"></el-table-column>
+          <el-table-column label="账户" prop="account_owner"></el-table-column>
+          <el-table-column label="账号" prop="account_num"></el-table-column>
+          <el-table-column label="开单人" prop="staff.name"></el-table-column>
+        </el-table>
+      </div>
+      <el-pagination style="text-align: right" :current-page="customer_params.page" :total="customer_list_count"
+        layout="total,prev,pager,next" @current-change="customer_page_change"
+      ></el-pagination>
+      <div style="text-align: center">
+        <el-button size="mini" @click="customer_list_visible = false">取消</el-button>
+        <el-button size="mini" type="primary" @click="OkSelectCustomer">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!--应收入账-->
+    <el-dialog
+      :visible="collectMoneyShow"
+      title="应收入账"
+      width="35%"
+    >
+      <div style="width: 90%;margin: 0 auto">
+        <el-form :model="collectMoneyForm" ref="collectForm" :rules="collectRules" size="mini">
+          <el-form-item label="收款时间" prop="pay_date">
+            <el-date-picker
+              v-model="collectMoneyForm.pay_date"
+              value-format="yyyy-MM-dd HH-mm-ss"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="账户类型">
+            <el-select v-model="collectMoneyForm.accountType" @change="getCollectAccount">
+              <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="账户" prop="account_id">
+            <el-select v-model="collectMoneyForm.account_id" :disabled="!canSel">
+              <el-option v-for="(item,key) in accountList" :key="key" :value="item.id" :label="item.name"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="实收金额" prop="amount_received">
+            <el-input type="number" v-model="collectMoneyForm.amount_received"></el-input>
+          </el-form-item>
+          <el-form-item label="补齐时间" prop="complete_date">
+            <el-date-picker
+              v-model="collectMoneyForm.complete_date"
+              value-format="yyyy-MM-dd HH-mm-ss"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input type="textarea" v-model="collectMoneyForm.remark" placeholder="请输入备注"></el-input>
+          </el-form-item>
+          <el-form-item align="right">
+            <el-button @click="collectMoneyShow = false">取消</el-button>
+            <el-button type="primary" @click="OkCreateCollect('collectForm')">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
+
+    <!--生成违约金-->
+    <el-dialog
+      :visible="createVisible"
+      title="生成日期"
+      width="30%"
+    >
+      <div style="text-align: center;margin: 0 auto">
+        日期：
+        <el-date-picker
+          v-model="exit_date"
+          size="mini"
+          style="width: 80%"
+          value-format="yyyy-MM-dd"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+        <div style="text-align: right;margin-top: 20px">
+          <el-button size="mini" @click="createVisible = false">取消</el-button>
+          <el-button size="mini" type="primary" @click="createDedit">确定</el-button>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -499,6 +624,11 @@
     components: {organization, RightMenu, subjectTree, PolishTime},
     data() {
       return {
+        collectMoneyShow: false,
+        isChangeSubject: false,
+        customer_list_visible: false,
+        customer_list: [],
+        customer_list_count: 0,
         fastOutVisible: false, //催缴导出显示
         fastOutDate: '',
         detailVisible: false, //详情显示
@@ -548,7 +678,6 @@
           received_sum: ''//实收金额
         },
         addrDetail: false,
-        addrDetails: [],
         totalNum: 0,
         rangeDate: '',
         tagDate: '',
@@ -595,13 +724,20 @@
         //新增应收
         addPayVisible: false,
         addForm: {
-          customer_name: '',
+          customer_id: '',
           identity: '',
           pay_date: '',
           description: '',
           amount_receivable: '',
           subject_id: '',
           remark: ''
+        },
+        customer_name: '',
+        customer_params: {
+          type: 1,
+          search: '',
+          page: 1,
+          limit: 10
         },
         addSubjectName: '',
         addFormRules: {
@@ -614,24 +750,168 @@
           pay_date: [
             { required: true, message: '请选择付款时间', trigger: 'blur' },
           ],
-          customer_name: [
-            { required: true, message: '请选择客户', trigger: 'blur' },
-          ],
           identity: [
             { required: true, message: '请选择客户身份', trigger: 'blur' },
           ],
           amount_receivable: [
             { required: true, message: '请输入应收金额', trigger: 'blur' },
           ]
-        }
+        },
+        currentSelectCustomer: '',
+        isFastMark: false, //是否为催缴备注
+        remarkType: 1,
+
+        //应收入账参数
+        collectMoneyForm: {
+          accountType: '',
+          pay_date: '', //收款时间
+          account_id: '', //账户
+          amount_received: '', //实收金额
+          complete_date: '', //补齐时间
+          remark: '', //备注
+        },
+        collectRules: {
+          pay_date: [
+            { required: true, message: '请选择收款时间', trigger: 'blur' },
+          ],
+          account_id: [
+            { required: true, message: '请选择账户', trigger: 'blur' },
+          ],
+          amount_received: [
+            { required: true, message: '请输入实收金额', trigger: 'blur' },
+          ],
+          complete_date: [
+            { required: true, message: '请选择补齐时间', trigger: 'blur' },
+          ],
+          remark: [
+            { required: true, message: '请输入备注', trigger: 'blur' },
+          ],
+        },
+        createShow: false,
+        createCurrentRow: '',
+        createVisible: false,
+        exit_date: '',
+        accountTypeOption: [
+          //账号类型
+          {value: 1, label: "银行卡"},
+          {value: 2, label: "支付宝"},
+          {value: 3, label: "微信"}
+        ],
+        accountList: [],
+        canSel: false
       }
     },
     mounted() {
       this.getTableData();
     },
     methods: {
-      handleAddPay(){
-        console.log(this.addForm);
+      OkCreateCollect(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$http.post(this.url + `account/receivable/receive/${this.rightMenuRow.id}`,this.collectMoneyForm).then(res => {
+              this.handleSuccess(res);
+              this.collectMoneyShow = false;
+            }).catch(err => {
+              console.log(err);
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      getCollectAccount(val) {
+        this.accountList = [];
+        this.collectMoneyForm.account_id = '';
+        this.canSel = false;
+        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
+          params: {
+            cate: val,
+            all: 1
+          }
+        }).then(res => {
+          this.accountList = res.data.data.data;
+          this.canSel = true;
+        })
+      },
+      handleListCurrentChange(val) {
+        if (val) {
+          this.createShow = true;
+          this.createCurrentRow = val;
+        } else {
+          this.createShow = false;
+        }
+      },
+      createDedit() {
+        if (!this.exit_date) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择日期'
+          });
+          return false;
+        }
+        this.$http.put(this.url + `account/receivable/dedit/${this.createCurrentRow.id}`,{
+          exit_date: this.exit_date
+        }).then(res => {
+          this.handleSuccess(res);
+          this.createVisible = false;
+          this.createShow = false;
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      OkSelectCustomer() {
+        if (!this.currentSelectCustomer) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择客户'
+          });
+          return false;
+        } else {
+          this.customer_list_visible = false;
+          this.customer_name = this.currentSelectCustomer.customer_name;
+          this.addForm.customer_id = this.currentSelectCustomer.id;
+        }
+      },
+      customer_list_select(val) {
+        this.currentSelectCustomer = val;
+      },
+      customer_page_change(val) {
+        this.customer_params.page = val;
+        this.search_customer_list();
+      },
+      search_customer_list() {
+        this.$http.get(this.url + 'account/receivable/customer',{params: this.customer_params}).then(res => {
+          if (res.data.success) {
+            this.customer_list = res.data.data.data;
+            this.customer_list_count = res.data.data.count;
+          }
+        })
+      },
+      handleAddPayCancel() {
+        var keys = Object.keys(this.addForm);
+        for (var i = 0;i<keys.length;i++) {
+          this.addForm[keys[i]] = "";
+        }
+        this.customer_name = "";
+        this.subject_name = "";
+        this.addPayVisible = false;
+      },
+      handleAddPay(formName){
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.addForm.amount_receivable = parseFloat(this.addForm.amount_receivable);
+            this.$http.post(this.url + 'account/receivable/add',this.addForm).then(res => {
+              this.handleSuccess(res);
+              this.handleAddPayCancel();
+            }).catch(err => {
+              console.log(err);
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
       },
       //发送短信
       OkSendMsg() {
@@ -667,9 +947,7 @@
           });
           return false;
         } else {
-          var date1 = new Date(this.fastOutDate[0]).toLocaleDateString().split('/').join('-');
-          var date2 = new Date(this.fastOutDate[1]).toLocaleDateString().split('/').join('-');
-          this.$http.get(this.url + 'account/receivable/export',{responseType: 'arraybuffer',params: {date: `${date1},${date2}`}}).then(res =>{
+          this.$http.get(this.url + 'account/receivable/export',{responseType: 'arraybuffer',params: {date: `${this.fastOutDate[0]},${this.fastOutDate[1]}`}}).then(res =>{
             this.$exportData(res.data);
             this.fastOutVisible = false;
           }).catch(err => {
@@ -702,6 +980,7 @@
       //取消备注
       cancelRemark() {
         this.remarkVisible = false;
+        this.isFastMark = false;
         this.add_remark = '';
       },
       //添加备注
@@ -713,7 +992,15 @@
           });
           return false;
         }
-        this.$http.put(this.url + `account/receivable/addTag/${this.rightMenuRow.id}`,{content: this.add_remark}).then(res => {
+        var obj = {
+          content: this.add_remark
+        };
+        var root = 'account/receivable/addTag/';
+        if (this.isFastMark) {
+          root = "account/receivable/addUrgeTag/";
+          obj.category = this.remarkType;
+        }
+        this.$http.put(this.url + `${root}${this.rightMenuRow.id}`,obj).then(res => {
           this.handleSuccess(res);
           this.cancelRemark();
         }).catch(err => {
@@ -759,6 +1046,7 @@
       },
 
       closeSubjectTree() {
+        this.isChangeSubject = false;
         this.subjectVisible = false;
       },
       clearSubjectTree() {
@@ -773,7 +1061,14 @@
         if (this.addPayVisible) {
           this.addForm.subject_id  = val.id;
           this.addSubjectName = val.name;
-        } else {
+        } else if (this.isChangeSubject) {
+          this.$http.put(this.url + `account/receivable/subject/${this.rightMenuRow.id}`,{subject_id: val.id}).then(res =>{
+            this.handleSuccess(res);
+          }).catch(err => {
+            console.log(err);
+          })
+        }
+        else {
           this.form.subject_id = val.id;
           this.subject_name = val.name;
         }
@@ -803,12 +1098,6 @@
             this.form.staff_ids.push(val[i].id);
           }
         }
-      },
-      selectPrice(column, event) {
-        if (column.property === "balance") {
-          alert(1);
-        }
-
       },
       // 重置
       resetting() {
@@ -846,34 +1135,15 @@
           });
         }
       },
-
-      handleSelect(item) {
-        console.log(item);
-      },
-      close_() {
-        console.log(1);
-      },
-      //
-      showDetail(row, column) {
-        if (column.property === "addr") {//显示详情
-          console.log(row);
-          this.addrDetails.push(row);
-          this.addrDetail = true;
-        }
-      },
       // 右键 收
       collectMenu(row, event) {
         this.rightMenuRow = row;
         this.lists = [
           {clickIndex: 'collectWay', headIcon: 'el-icon-edit-outline', label: '应收入账'},
           {clickIndex: 'collectRemark', headIcon: 'el-icon-edit', label: '备注'},
-          {
-            clickIndex: '', headIcon: 'el-icon-date', tailIcon: 'el-icon-arrow-right', label: '收款时间',
-            children: [
-              {clickIndex: 'reviseCollect', label: '编辑',},
-              {clickIndex: 'lookCollect', label: '查看',}
-            ]
-          },
+          {clickIndex: 'fastRemark', headIcon: 'el-icon-edit', label: '催缴备注'},
+          {clickIndex: 'changeMoney', headIcon: 'el-icon-refresh', label: '修改应收金额'},
+          {clickIndex: 'changeSubject', headIcon: 'el-icon-refresh', label: '修改款项科目'},
           {clickIndex: 'collectPolish', headIcon: 'el-icon-date', label: '修改补齐时间',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
         ];
@@ -885,19 +1155,51 @@
         if (val === 'delete') {
           this.openDelete();
         }
-        if (val === 'reviseCollect') {
-          this.payTimes = ['1990-01-01', '1990-02-01', '1990-03-01', '1990-04-01', '1990-06-01', '1990-06-01'];
-        }
-        if (val === 'lookPay' || val === 'lookCollect') {
-          this.payTimes = ['1992-01-01', '1992-02-01', '1992-03-01', '1992-04-01', '1992-06-01', '1992-06-01'];
-        }
         if (val === 'collectPolish' || val === 'payPolish') {
           this.polishTimeVisible = true;
           this.polishTime = this.rightMenuRow.complete_date;
         }
-        if (val === 'collectRemark' || val === 'payRemark') {
+        if (val === 'collectRemark') {
           this.remarkVisible = true;
         }
+        if (val === 'fastRemark') {
+          this.isFastMark = true;
+          this.remarkVisible = true
+        }
+        if (val === 'changeMoney') {
+          this.handleEditMoney();
+        }
+        if (val === 'changeSubject') {
+          this.isChangeSubject = true;
+          this.openSubjectTree();
+        }
+        if (val === 'collectWay') {
+          this.collectMoneyShow = true
+        }
+      },
+      handleEditMoney() {
+        this.$prompt('请输入应收金额','提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValue: this.rightMenuRow.amount_receivable,
+          inputPattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+          inputErrorMessage: '格式不正确'
+        }).then(({value}) => {
+          this.$http.put(this.url + `account/receivable/amount/${this.rightMenuRow.id}`,{amount: value}).then(res => {
+            if (res.data.success) {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message
+              });
+              this.getTableData();
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.message
+              })
+            }
+          })
+        }).catch(() => { })
       },
       // 关闭补齐时间
       closePolishTime() {
