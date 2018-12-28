@@ -539,7 +539,8 @@
           minPrice: '',//剩余款项最小区间
           maxPrice: '',//剩余款项最大区间
           page: 1,
-          limit: 12
+          limit: 12,
+          export: '',
         },
         sum: {
           balance_sum: '',//剩余款项
@@ -668,9 +669,9 @@
         } else {
           var date1 = new Date(this.fastOutDate[0]).toLocaleDateString().split('/').join('-');
           var date2 = new Date(this.fastOutDate[1]).toLocaleDateString().split('/').join('-');
-          console.log(date1,date2);
-          this.$http.get(this.url + 'account/receivable/export',{params: {date: `${date1},${date2}`}}).then(res =>{
-            console.log(res);
+          this.$http.get(this.url + 'account/receivable/export',{responseType: 'arraybuffer',params: {date: `${date1},${date2}`}}).then(res =>{
+            this.$exportData(res.data);
+            this.fastOutVisible = false;
           }).catch(err => {
             console.log(err);
           })
@@ -835,11 +836,17 @@
       },
       // 导出
       leadingOut(val) {
-        console.log(val);
         if (val === 'rent') {
           this.fastOutVisible = true;
+        } else {
+          this.form.export = 1;
+          this.$http.get(this.url + 'account/receivable/index',{responseType: 'arraybuffer',params: this.form}).then(res => {
+            this.$exportData(res.data);
+            this.form.export = '';
+          });
         }
       },
+
       handleSelect(item) {
         console.log(item);
       },
