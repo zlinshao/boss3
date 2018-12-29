@@ -10,6 +10,7 @@
         <el-button size="mini" type="primary" @click="isHigh = !isHigh">高级</el-button>
         <el-button size="mini" type="primary" icon="el-icon-refresh" @click="getPayableList"></el-button>
         <el-button size="mini" type="success" icon="el-icon-plus" @click="plusPayVisible = true">新增应付</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleOutData">导出</el-button>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" onsubmit="return false" :model="params" size="mini" label-width="100px">
@@ -184,6 +185,82 @@
     <!--右击菜单-->
     <RightMenu :startX="rightMenuX + 'px'" :startY="rightMenuY + 'px'" :show="rightMenuShow" :list="rightList" @clickOperateMore="rightClickBack"></RightMenu>
 
+    <!--修改补齐时间-->
+    <div>
+      <el-dialog
+        :visible.sync="editPayDateVisible"
+        title="修改补齐时间"
+        width="25%"
+      >
+        <div style="text-align: center">
+          <span>补齐时间</span>
+          <el-date-picker
+            v-model="complete_date"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择补齐时间"
+            size="mini"
+            style="width: 70%"
+          ></el-date-picker>
+          <div style="text-align:right;margin-top: 20px">
+            <el-button size="mini" @click="editPayDateVisible = false">取消</el-button>
+            <el-button size="mini" type="primary" @click="handleChangeCompleteDate">确定</el-button>
+          </div>
+        </div>
+      </el-dialog>
+    </div>
+
+    <!--应付入账-->
+    <div>
+      <el-dialog
+        :visible.sync="payMoneyVisible"
+        title="应付入账"
+        width="30%"
+      >
+        <div style="text-align: center">
+          <el-form :model="payMoneyParams" ref="payMoneyForm" :rules="payMoneyRules" label-width="100px" size="mini">
+            <el-form-item label="付款方式" prop="account_id"></el-form-item>
+            <el-form-item label="付款账号" prop="account_id"></el-form-item>
+            <el-form-item label="账户类型">
+              <el-select v-model="payMoneyParams.customer_account_type" disabled>
+                <el-option label="银行卡" :value="1"></el-option>
+                <el-option label="支付宝" :value="2"></el-option>
+                <el-option label="微信" :value="3"></el-option>
+                <el-option label="存折" :value="4"></el-option>
+                <el-option label="现金" :value="5"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="客户账户">
+              <el-input v-model="payMoneyParams.customer_account_num" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="实付" prop="amount_paid">
+              <el-input v-model="payMoneyParams.amount_paid" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="付款时间" prop="pay_date">
+              <el-date-picker
+                v-model="payMoneyParams.pay_date"
+                type="date"
+                placeholder="请选择付款时间"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="补齐时间" prop="complete_date">
+              <el-date-picker
+                v-model="payMoneyParams.complete_date"
+                type="date"
+                placeholder="请选择补齐时间"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="备注" prop="remark">
+              <el-input type="textarea" :row="8" v-model="payMoneyParams.remark" placeholder="请输入备注"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="handleCancelPayMoney">取消</el-button>
+              <el-button type="primary" @click="handleSubmitPayMoney('payMoneyForm')">确定</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -238,20 +315,80 @@
         rightMenuY: 0,
         rightMenuShow:false,
         rightList: [],
+        rightCurrentRow: '',
 
+        //修改补齐时间
+        editPayDateVisible: false,
+        complete_date: '',
+
+        //修改科目
+        isChangeSubject: false,
+
+        //应付入账
+        payMoneyVisible: false,
+        payMoneyParams: {
+          customer_account_num: '',
+          customer_account_type: '',
+          account_id: '',
+          amount_paid: '',
+          remark: '',
+          pay_date: '',
+          complete_date: ''
+        },
+        payMoneyRules: {
+          account_id: [
+            {required: true,message: '请选择账户',trigger: 'blur'}
+          ],
+          amount_paid: [
+            {required: true,message: '请输入实付金额',trigger: 'blur'}
+          ],
+          remark: [
+            {required: false,message: '请输入备注',trigger: 'blur'}
+          ],
+          pay_date: [
+            {required: true,message: '请选择付款时间',trigger: 'blur'}
+          ],
+          complete_date: [
+            {required: true,message: '请选择补齐时间',trigger: 'blur'}
+          ],
+
+        },
       }
     },
     mounted() {
       this.getPayableList();
     },
     methods: {
+      //应付入账
+      handleCancelPayMoney() {
+        this.payMoneyVisible = false;
+        this.$refs['payMoneyForm'].resetFields();
+      },
+      handleSubmitPayMoney(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            console.log(this.payMoneyParams);
+          } else {
+            this.$message.warning('params error');
+          }
+        })
+      },
+      //导出数据
+      handleOutData() {
+        this.$http.get(this.url + 'account/payable/export',{responseType: 'arraybuffer',params: this.params}).then(res => {
+          this.$exportData(res.data);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       //修改弹出确认框
-      handleConfirmDialog(id,title,placeholder,val,reg = null,regMsg,callback) {
+      handleConfirmDialog(id,title,placeholder,val,type = 'text',reg = null,regMsg,callback) {
         this.$prompt(title, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: reg,
           inputValue: val,
+          inputType: type,
           inputErrorMessage: regMsg
         }).then(({ value }) => {
           callback(id,value);
@@ -260,7 +397,12 @@
       //右击菜单
       handleRowRightClick(row,event) {
         this.rightList = [
-          {clickIndex: 'editPayMoney',icon: 'el-icon-edit',label: '修改应付金额',data: row}
+          {clickIndex: 'payMoney',headIcon: 'el-icon-edit',label: '应付入账',data: row},
+          {clickIndex: 'editPayMoney',headIcon: 'el-icon-edit',label: '修改应付金额',data: row},
+          {clickIndex: 'addMark',headIcon: 'el-icon-edit',label: '添加备注',data: row},
+          {clickIndex: 'changeDate',headIcon: 'el-icon-edit',label: '修改补齐时间',data: row},
+          {clickIndex: 'changeSubject',headIcon: 'el-icon-edit',label: '修改科目',data: row},
+          {clickIndex: 'delete',headIcon: 'el-icon-delete',label: '删除',data: row},
         ];
         this.rightClickParams(event);
       },
@@ -276,11 +418,43 @@
         })
       },
       rightClickBack(val) {
+        this.rightCurrentRow = val.data;
         if (val.clickIndex === 'editPayMoney') {
           var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
           var money = parseFloat(val.data.balance);
-          this.handleConfirmDialog(val.data.id,'修改应付金额','请输入', money , reg ,'请输入应付金额',this.handleChangePayMoney);
+          this.handleConfirmDialog(val.data.id,'修改应付金额','请输入', money , 'text', reg ,'请输入应付金额',this.handleChangePayMoney);
         }
+        if (val.clickIndex === 'delete') {
+          this.handleDelete(val.data.id);
+        }
+        if (val.clickIndex === 'addMark') {
+          var reg1 = null;
+          var defaultValue = '';
+          this.handleConfirmDialog(val.data.id,'添加备注','请输入',defaultValue, 'textarea' ,reg1,null,this.handleAddMark);
+        }
+        if (val.clickIndex === 'changeDate') {
+          this.complete_date = val.data.complete_date;
+          this.editPayDateVisible = true;
+        }
+        if (val.clickIndex === 'changeSubject') {
+          this.isChangeSubject = true;
+          this.highSubjectVisible = true;
+        }
+        if (val.clickIndex === 'payMoney') {
+          this.payMoneyParams.amount_paid = val.data.amount_paid;
+          this.payMoneyParams.pay_date = val.data.pay_date;
+          this.payMoneyParams.complete_date = val.data.complete_date;
+          this.payMoneyParams.customer_account_num = val.data.customer_account_num;
+          this.payMoneyParams.customer_account_type = val.data.customer_account_type;
+          this.payMoneyVisible = true;
+        }
+      },
+      //修改科目
+      handleChangeSubject(subject_id) {
+        this.$http.post(this.url + `account/payable/editSubject/${this.rightCurrentRow.id}`,{subject_id}).then(res => {
+          this.handleCallback(res);
+          this.isChangeSubject = false;
+        })
       },
       //修改应付金额
       handleChangePayMoney(id,amount_payable) {
@@ -288,6 +462,33 @@
           this.handleCallback(res);
         }).catch(err => {
           console.log(err);
+        })
+      },
+      //删除
+      handleDelete(id) {
+        this.$confirm('你确定删除吗？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(this.url + `account/payable/delete/${id}`).then(res => {
+            console.log(res);
+            this.handleCallback(res);
+          })
+        }).catch(() => { })
+      },
+      //添加备注
+      handleAddMark(id,content) {
+        this.$http.post(this.url + `account/payable/tag/${id}`,{content}).then(res => {
+          console.log(res);
+          this.handleCallback(res);
+        })
+      },
+      //修改补齐时间
+      handleChangeCompleteDate() {
+        this.$http.post(this.url + `account/payable/editCompleteDate/${this.rightCurrentRow.id}`,{complete_date: this.complete_date}).then(res => {
+          this.handleCallback(res);
+          this.editPayDateVisible = false;
         })
       },
       //http callback
@@ -348,8 +549,12 @@
         this.highSubjectVisible = false;
       },
       selectSubject(val) {
-        this.assistParams.subject_name = val.name;
-        this.params.subject_id = parseInt(val.id);
+        if (this.isChangeSubject) {
+          this.handleChangeSubject(parseInt(val.id));
+        }else {
+          this.assistParams.subject_name = val.name;
+          this.params.subject_id = parseInt(val.id);
+        }
       },
 
       //高级
@@ -369,6 +574,7 @@
         this.isHigh = false;
         this.$http.get(this.url + 'account/payable/index', {params: this.params}).then(res => {
           if (res.data.success) {
+            console.log(res);
             this.payableList = res.data.data.data;
             this.payableCount = res.data.data.count;
             this.balanceSum = res.data.data.balanceSum;
