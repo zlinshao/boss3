@@ -31,9 +31,9 @@
               prop="gender"
               label="性别">
               <template slot-scope="scope">
-                                <span v-if='is_editing_id !== scope.row.id && scope.row.gender'>
-                                    {{scope.row.gender == '716' ? '男' : '女'}}
-                                </span>
+                <span v-if='is_editing_id !== scope.row.id && scope.row.gender'>
+                    {{scope.row.gender == '716' ? '男' : '女'}}
+                </span>
                 <span v-if='is_editing_id !== scope.row.id && !scope.row.gender'>/</span>
                 <el-select v-if='is_editing_id === scope.row.id' size='small' v-model="interviewParams.gender"
                            placeholder="">
@@ -49,10 +49,8 @@
               <template slot-scope="scope">
                 <span v-if='is_editing_id !== scope.row.id && scope.row.educations'>{{scope.row.educations.dictionary_name}}</span>
                 <span v-if='is_editing_id !== scope.row.id && !scope.row.educations'>/</span>
-                <el-select v-if='is_editing_id === scope.row.id' size='small' v-model="interviewParams.education"
-                           placeholder="">
-                  <el-option v-for="(item, index) in education" :key='index' :label='item.dictionary_name'
-                             :value='item.id'></el-option>
+                <el-select v-if='is_editing_id === scope.row.id' size='small' v-model="interviewParams.education" placeholder="">
+                  <el-option v-for="(item, index) in education" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
                 </el-select>
               </template>
             </el-table-column>
@@ -292,7 +290,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop=""
+              prop="entry_time"
               label="入职时间">
               <template slot-scope="scope">
                     <span v-if='scope.row.entry_time'>
@@ -393,7 +391,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop=""
+              prop="entry_time"
               label="入职时间">
               <template slot-scope="scope">
                     <span v-if='scope.row.entry_time'>
@@ -494,14 +492,14 @@
       </el-dialog>
       <!--添加面试人结束-->
       <!--原始简历开始-->
-      <el-dialog :visible.sync="lookUpResumeDialog" append-to-body>
+      <el-dialog :visible.sync="lookUpResumeDialog" title="原始简历" append-to-body>
         <div v-for='(item, index) in album' :key='index'>
           <embed id='embed-process' :src="item.uri"/>
         </div>
       </el-dialog>
       <!--原始简历结束-->
       <!--未面试开始-->
-      <el-dialog :visible.sync="uninterviewDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="uninterviewDialog" title="未面试信息" append-to-body width="25%">
         <el-form label-width="170px" center>
           <el-form-item label="姓名">
             <span>{{uninterviewObj.name}}</span>
@@ -531,7 +529,7 @@
       </el-dialog>
       <!--未面试结束-->
       <!--已面试信息开始-->
-      <el-dialog :visible.sync="interviewedDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="interviewedDialog" title="已面试信息" append-to-body width="25%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{interviewedObj.name}}</span>
@@ -560,7 +558,7 @@
       </el-dialog>
       <!--已面试信息结束-->
       <!--面试通过或未通过开始-->
-      <el-dialog :visible.sync="passInterviewDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="passInterviewDialog" title="面试信息" append-to-body width="25%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{interviewedObj_finished.name}}</span>
@@ -580,7 +578,7 @@
       </el-dialog>
       <!--面试通过或未通过结束-->
       <!--查看面试未通过开始-->
-      <el-dialog :visible.sync="unpassInterviewDialog" append-to-body width="25%">
+      <el-dialog :visible.sync="unpassInterviewDialog" title="面试未通过详情" append-to-body width="25%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{unpassInterviewObj.name}}</span>
@@ -591,7 +589,6 @@
               size='small'
               v-if='is_editing_unpass'
               v-model="updateParams_finished.update.interview_status"
-              @change='editInterviewStatus'
               placeholder="">
               <el-option v-for="(item, index) in interview_finished" :key='index' :label='item.dictionary_name'
                          :value='item.id'></el-option>
@@ -610,7 +607,7 @@
         </div>
       </el-dialog>
       <!--人资沟通弹框开始-->
-      <el-dialog :visible.sync="IsEntryDialog" append-to-body width="30%">
+      <el-dialog :visible.sync="IsEntryDialog" title="入职条件" append-to-body width="30%">
         <el-form label-width="80px" center>
           <el-form-item label="姓名">
             <span>{{humansourceObj.name}}</span>
@@ -631,87 +628,92 @@
               <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.salary}}</span>
             </el-form-item>
             <el-form-item label="入职时间">
-              <el-date-picker v-if='is_editing_condition' size='mini'
-                              v-model="agreeInductParams.update.entry_other.entry_time" type="date"
-                              value-format='yyyy-MM-dd'
-                              placeholder="选择日期"></el-date-picker>
-                            <span v-if='!is_editing_condition'>
-                                {{agreeInductParams.update.entry_other.entry_time}}
-                            </span>
-                        </el-form-item>
-                        <el-form-item label="试用期">
-                            <el-input v-if='is_editing_condition' size='mini' v-model="agreeInductParams.update.entry_other.probation" ></el-input>
-                            <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.probation}}</span>
-                        </el-form-item>
-                        <el-form-item label="其他条件">
-                            <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other" type='textarea'></el-input>
-                            <span class='test-condition' v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
-                        </el-form-item>
-                    </div>
-                    <div v-if='is_agree == "0"'>
-                        <el-form-item label="原因">
-                            <el-input v-if='is_editing_condition' v-model="disAgreeInductParams.update.entry_result" type='textarea'></el-input>
-                            <span v-if='!is_editing_condition'>{{disAgreeInductParams.update.entry_result}}</span>
-                        </el-form-item>
-                    </div>
-                </el-form>
-                <div class='edit-result' >
-                    <el-button size='mini' @click='cancelIsEntry' v-if='allow_edit'>取消</el-button>
-                    <el-button size='mini' @click='confirmIsEntry' v-if='allow_edit'>确定</el-button>
-                    <el-button size='mini' @click='editIsEntry' v-if='communicate_status === 742 && !is_editing_condition && allow_edit'>修改</el-button>
-                </div>
-            </el-dialog>
-            <!--人资沟通弹框结束-->
-            <!--入职条件开始-->
-            <el-dialog :visible.sync="failEntryDialog" append-to-body width="25%">
-                <el-form label-width="80px" center>
-                    <el-form-item label="姓名">
-                        <span>{{failEntryObj.name}}</span>
-                    </el-form-item>
-                    <el-form-item label="入职结果">
-                        <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_status}}</span>
-                        <el-select 
-                            v-if='is_editing_fail_result' 
-                            size='small' 
-                            v-model="entryStatus.update.entry_status"
-                            @change='confirmIsEntry_'
-                            placeholder="">
-                            <el-option v-for="(item, index) in humanresource_entry" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="原因">
-                        <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_result}}</span>
-                        <el-input v-if='is_editing_fail_result' v-model="failEntryObj.entry_result" type='textarea'></el-input>
-                    </el-form-item>
-                    <div class='edit-condition' v-if='is_editing_fail_result'>
-                    </div>
-                    <div class='edit-result'>
-                        <el-button size='mini' @click='cancelFailEntry'>取消</el-button>
-                        <el-button size='mini' @click='confirmFailEntry'>确定</el-button>
-                        <el-button size='mini' @click='editFailEntry' v-if='entry_status_id !== 743 && !is_editing_fail_result'>修改</el-button>
-                    </div>
-                </el-form>
-            </el-dialog>
-            <!--入职条件结束-->
-            <!--上传简历开始-->
-            <el-dialog :visible.sync="uploadResumeDialog" append-to-body width="25%">
-                <el-form label-width="80px" center>
-                    <el-form-item label="上传简历" required>
-                        <UPLOAD :ID="'second'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
-                    </el-form-item>
-                    <div class='edit-result'>
-                        <el-button size='mini' @click='cancelUpload'>取消</el-button>
-                        <el-button size='mini' @click='confirmUpload'>确定</el-button>
-                    </div>
-                </el-form>
-            </el-dialog>
-            <!--上传简历结束-->
-        </el-dialog>
-        <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
-        <BackgroundReseach :backgroundDialog='backgroundDialog' :is_editing_bg_='is_editing_bg_' :id='background_id' :background_info='background_info' @close='closeModal'></BackgroundReseach>
-        <InductionMaterials :inductionMaterialsDialog='inductionMaterialsDialog' :id='induction_id' :induction_info='induction_info' @close='closeModal'></InductionMaterials>
-        <BasicInfo :addStaffDialog='addStaffDialog' :id='basicInfo_id' :basicInfo_info='basicInfo_info' :isAdd='isAdd' @close='closeModal'></BasicInfo>
-    </div>
+              <el-date-picker 
+                v-if='is_editing_condition' 
+                size='mini'
+                v-model="agreeInductParams.update.entry_other.entry_time" type="date"
+                value-format='yyyy-MM-dd'
+                placeholder="选择日期">
+              </el-date-picker>
+              <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.entry_time}}</span>
+             </el-form-item>
+            <el-form-item label="试用期">
+              <el-input v-if='is_editing_condition' size='mini' v-model="agreeInductParams.update.entry_other.probation" ></el-input>
+              <span v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.probation}}</span>
+            </el-form-item>
+            <el-form-item label="其他条件">
+              <el-input v-if='is_editing_condition' v-model="agreeInductParams.update.entry_other.other" type='textarea'></el-input>
+              <span class='test-condition' v-if='!is_editing_condition'>{{agreeInductParams.update.entry_other.other}}</span>
+            </el-form-item>
+          </div>
+          <div v-if='is_agree == "0"'>
+            <el-form-item label="原因">
+              <el-input v-if='is_editing_condition' v-model="disAgreeInductParams.update.entry_result" type='textarea'></el-input>
+              <span v-if='!is_editing_condition'>{{disAgreeInductParams.update.entry_result}}</span>
+            </el-form-item>
+          </div>
+        </el-form>
+        <div class='edit-result' >
+          <el-button size='mini' @click='cancelIsEntry' v-if='allow_edit'>取消</el-button>
+          <el-button size='mini' @click='confirmIsEntry' v-if='allow_edit'>确定</el-button>
+          <el-button size='mini' @click='editIsEntry' v-if='communicate_status === 742 && !is_editing_condition && allow_edit'>修改</el-button>
+        </div>
+      </el-dialog>
+      <!--人资沟通弹框结束-->
+      <!--入职条件开始-->
+      <el-dialog :visible.sync="failEntryDialog" title="入职详情" append-to-body width="25%">
+        <el-form label-width="80px" center>
+            <el-form-item label="姓名">
+                <span>{{failEntryObj.name}}</span>
+            </el-form-item>
+            <el-form-item label="入职结果">
+                <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_status}}</span>
+                <el-select 
+                    v-if='is_editing_fail_result' 
+                    size='small' 
+                    v-model="entryStatus.update.entry_status"
+                    @change='confirmIsEntry_'
+                    placeholder="">
+                    <el-option v-for="(item, index) in humanresource_entry" :key='index' :label='item.dictionary_name' :value='item.id'></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="原因">
+                <span v-if='!is_editing_fail_result'>{{failEntryObj.entry_result}}</span>
+                <el-input v-if='is_editing_fail_result' v-model="failEntryObj.entry_result" type='textarea'></el-input>
+            </el-form-item>
+            <div class='edit-condition' v-if='is_editing_fail_result'>
+            </div>
+            <div class='edit-result'>
+                <el-button size='mini' @click='cancelFailEntry'>取消</el-button>
+                <el-button size='mini' @click='confirmFailEntry'>确定</el-button>
+                <el-button size='mini' @click='editFailEntry' v-if='entry_status_id !== 743 && !is_editing_fail_result'>修改</el-button>
+            </div>
+        </el-form>
+      </el-dialog>
+      <!--入职条件结束-->
+      <!--上传简历开始-->
+      <el-dialog :visible.sync="uploadResumeDialog" title="上传简历" append-to-body width="25%">
+          <el-form label-width="80px" center>
+              <el-form-item label="上传简历" required>
+                  <UPLOAD :ID="'second'" :isClear="isClear" @getImg="regetImgData"></UPLOAD>
+              </el-form-item>
+              <div class='edit-result'>
+                  <el-button size='mini' @click='cancelUpload'>取消</el-button>
+                  <el-button size='mini' @click='confirmUpload'>确定</el-button>
+              </div>
+          </el-form>
+      </el-dialog>
+      <!--上传简历结束-->
+    </el-dialog>
+    <!--组织架构-->
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
+    <!--背景调查-->
+    <BackgroundReseach :backgroundDialog='backgroundDialog' :is_editing_bg_='is_editing_bg_' :id='background_id' :background_info='background_info' @close='closeModal'></BackgroundReseach>
+    <!--入职材料-->
+    <InductionMaterials :inductionMaterialsDialog='inductionMaterialsDialog' :id='induction_id' :induction_info='induction_info' @close='closeModal'></InductionMaterials>
+    <!--基本信息-->
+    <BasicInfo :addStaffDialog='addStaffDialog' :id='basicInfo_id' :basicInfo_info='basicInfo_info' :isAdd='isAdd' @close='closeModal'></BasicInfo>
+  </div>
 </template>
 <script>
     import UPLOAD from '../../common/UPLOAD.vue'
@@ -928,7 +930,10 @@
                     this.$emit('close');
                 }else{
                     this.activeName = this.active_name;
-                    this.getAllData(this.id)
+                    this.getAllData(this.id);
+                    this.$nextTick(() => {
+                      this.removeWarning(this.total)
+                    });
                 }
             },
             id(val){
@@ -961,14 +966,12 @@
             },
             IsEntryDialog(val){
                 if(val){
-                    // this.editIsEntry();
                     if(this.$store.state.platform.active_name === 'fourth'){
                         this.allow_edit = false;
                     }else{
                         this.allow_edit = true;
                     }
                 }else{
-                    // this.cancelEditCondition();
                     this.cancelIsEntry();
                     this.communicate_status = '';
                     this.is_editing_condition = ''
@@ -978,13 +981,11 @@
                 if(!val){
                     this.interviewedObj_finished.interview_result = '';
                     this.is_editing_interview_finished = '';
-                    // this.updateParams_finished.update.interview_status = '';
                 }
             },
             unpassInterviewDialog(val){
                 if(!val){
                     this.is_editing_interview_finished = '';
-                    // this.updateParams_finished.update.interview_status = '';
                     this.is_editing_unpass = false;
                 }
             },
@@ -1009,22 +1010,33 @@
                 }
             }
         },
-        methods: {
-            handleClick(item){
-                this.$store.dispatch('setActiveName', item.name);
-                this.params.search = '';
-                this.params.limit = 12;
-                this.params.page = 1;
-                this.getAllData(this.id);
-            },
-            //分页
-            handleCurrentChange(val){
-                this.params.page = val;
-                this.getAllData(this.id)
-            },
-            handleSizeChange(){
+  methods: {
+      handleClick(item){
+          this.$store.dispatch('setActiveName', item.name);
+          this.params.search = '';
+          this.params.limit = 12;
+          this.params.page = 1;
+          this.getAllData(this.id);
+          this.$nextTick(() => {
+            this.removeWarning(this.total)
+          })
+      },
+      //火狐分页跳转页警告提示
+      removeWarning(total){
+        if(total === 0){
+          if(document.querySelector("#process .block input.el-input__inner").max == 0){
+            document.querySelector("#process .block input.el-input__inner").max = 1
+          }
+        }
+      },
+      //分页
+      handleCurrentChange(val){
+          this.params.page = val;
+          this.getAllData(this.id)
+      },
+      handleSizeChange(){
 
-            },
+      },
       //搜索
       search() {
         let _status = '';
@@ -1491,7 +1503,6 @@
             this.IsEntryDialog = true;
             this.editIsEntry();
             this.is_editing_condition = false;
-
             this.is_agree = '0';
             this.humansourceObj.id = row.id;
             this.humansourceObj.name = row.name;
@@ -1519,11 +1530,11 @@
             if (res.data.code === '20030') {
               this.updateHumanResource()
             }else{
-                this.$notify({
-                    title: '警告',
-                    message: res.data.msg,
-                    type: 'warning'
-                });
+              this.$notify({
+                  title: '警告',
+                  message: res.data.msg,
+                  type: 'warning'
+              });
             }
           })
         }
@@ -1532,11 +1543,11 @@
             if (res.data.code === '20030') {
               this.updateHumanResource()
             }else{
-                this.$notify({
-                    title: '警告',
-                    message: res.data.msg,
-                    type: 'warning'
-                });
+              this.$notify({
+                  title: '警告',
+                  message: res.data.msg,
+                  type: 'warning'
+              });
             }
           })
         }
@@ -1569,12 +1580,6 @@
         this.disAgreeInductParams_clone = this.deepClone(this.disAgreeInductParams);
         this.agreeInductParams_clone.update.entry_other.entry_time = this.agreeInductParams.update.entry_other.entry_time
       },
-      //取消编辑同意入职/不同意入职条件
-      cancelEditCondition() {
-        this.agreeInductParams = Object.assign({}, this.agreeInductParams_clone);
-        this.disAgreeInductParams = Object.assign({}, this.disAgreeInductParams_clone);
-        this.is_editing_condition = false;
-      },
       //取消人资沟通
       cancelIsEntry() {
         this.initHumanSource()
@@ -1602,7 +1607,7 @@
         this.passInterviewDialog = true;
         this.interviewedObj_finished.name = row.name;
         this.interviewedObj_finished.id = row.id;
-     },
+      },
       //确认修改面试状态
       confirmEditStatus() {
         this.$http.put(globalConfig.server + 'hrm/interview/' + this.is_editing_interview_finished_id, this.updateParams_finished).then(res => {
@@ -1709,12 +1714,6 @@
       editFromUnpass() {
         this.is_editing_unpass = true;
         this.updateParams_finished.update.interview_status = this.unpassInterviewObj.interview_status;
-      },
-      //从面试未通过修改面试通过状态
-      editInterviewStatus(item) {
-        // if (item === 739) {
-
-        // }
       },
       /*********************** 待入职*********************************/
       cellClick3(row, column, cell, event) {
@@ -1920,9 +1919,6 @@
             this.experience = res.data
           }
         });
-        //状态
-        // this.dictionary(731).then((res) => {
-        // });
         //面试状态
         this.dictionary(734).then((res) => {
           if (res.code === '30010') {
@@ -1991,7 +1987,7 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   #process {
     font-size: 14px;
     .add-interviewer {
@@ -1999,7 +1995,6 @@
       margin: 10px 0 0 0;
       border: none;
     }
-    
     .edit-condition {
       display: flex;
       justify-content: center;
@@ -2022,6 +2017,9 @@
     }
     .block{
         position: static;
+        .el-input__inner{
+          width: 80px;
+        }
     }
     .el-pagination {
       padding-right: 50px;

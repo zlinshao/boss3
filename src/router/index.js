@@ -172,6 +172,7 @@ const ManagerSetting = () => import  ('../components/systemSetting/managerSettin
 // 业绩工资
 const PeriodicTable = () => import  ('../components/meritPay/periodicTable/index');
 const Achievement = () => import  ('../components/meritPay/achievement/index');
+const Achv = () => import  ('../components/meritPay/achievement/achv.vue');
 // const PersonalSalary = () => import  ('../components/meritPay/personalSalary/index');
 const PersonalSalary = () => import  ('../components/meritPay/personalSalaryNew/index');
 const CollectDetail = () => import  ('../components/rentManage/collectDetail.vue');
@@ -198,7 +199,7 @@ const DailyRecord = () => import  ('../components/dailyRecord/index.vue');      
 const SthToDo = () => import  ('../components/OAWork/sthToDo/index.vue');                              //待办事项
 
 
-const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue');         // 积分明细
+// const Integraldetail = () => import  ('../components/integraldetail/integraldetail.vue');         // 积分明细
 
 const PictureManage = () => import  ('../components/pictureManage/pictureManage.vue');                //相册管理
 const CreateAlbum = () => import  ('../components/pictureManage/createAlbum.vue');                //创建相册
@@ -348,7 +349,7 @@ export default new Router({
         {path: '/infodetails', component: Infodetails, name: '详情', selfLoading: true},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         // {path: '/sthToDo', component: SthToDo, name: '报备管理'},
-        {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
+        // {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
         {path: '/pictureManage', component: PictureManage, name: '相册管理'},
         {path: '/createAlbum', component: CreateAlbum, name: "创建相册"},
         {path: '/choosePictures', component: ChoosePictures, name: "选择照片"},
@@ -429,7 +430,7 @@ export default new Router({
         {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         // {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
-        {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
+        // {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
 
       ]
     },
@@ -552,7 +553,7 @@ export default new Router({
         // {path: '/staffManage', component: StaffManage, name: '用户管理'},
         // {path: '/organization', component: Organization, name: '组织架构'},
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构'},
-        {path: '/integralManage', component: IntegralManage, name: '积分管理'},
+        // {path: '/integralManage', component: IntegralManage, name: '积分管理'},
         {path: '/staffRecords', component: StaffRecords, name: '员工档案'},
         {path: '/recruitManage', component: RecruitManage, name: '招聘管理'},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表'},
@@ -576,24 +577,24 @@ export default new Router({
         {path: '/approval',component: Approval, name: '审批管理'}
       ]
     },
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: 'HRM',
-    //   icon: 'iconfont icon-renzi',
-    //   children: [
-    //     {
-    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
-    //       children: [
-    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
-    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-    //         {path: '/dimission', component: Dimission, name: '离职管理'},
-    //       ],
-    //     },
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: 'HRM',
+      icon: 'iconfont icon-renzi',
+      children: [
+        {
+          path: '/teamManage', component: TeamManage, name: '人员信息管理',
+          children: [
+            {path: '/teamManage/roster', component: Roster, name: '花名册'},
+            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+            {path: '/dimission', component: Dimission, name: '离职管理'},
+          ],
+        },
+      ]
+    },
     {
       path: '/staffDetail',
       component: StaffDetail,
@@ -679,7 +680,7 @@ export default new Router({
       icon: 'iconfont icon--',
       children: [
         {path: '/periodicTable', component: PeriodicTable, name: '周期表'},
-        {path: '/achievement', component: Achievement, name: '业绩'},
+        {path: '/achievement', component: Achv, name: '业绩'},
         {path: '/personalSalary', component: PersonalSalary, name: '工资'},
 
       ]

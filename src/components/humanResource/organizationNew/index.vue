@@ -660,7 +660,13 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.entry_way && staffDetailData.detail.entry_way !== 'null'">
+                          v-if="staffDetailData && 
+                                staffDetailData.detail && 
+                                staffDetailData.detail.entry_way && 
+                                staffDetailData.detail.entry_way !== 'null' &&
+                                staffDetailData.detail.entry_way.entry_type &&
+                                staffDetailData.detail.entry_way.entry_type != '[]' 
+                                ">
                             {{staffDetailData.detail.entry_way.entry_type ? entryWayCategory[staffDetailData.detail.entry_way.entry_type-1].name : ''}}
                         </span>
                         <span v-else>暂无</span>

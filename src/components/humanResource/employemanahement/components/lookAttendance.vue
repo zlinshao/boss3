@@ -52,6 +52,7 @@
 
 <script>
 export default {
+  name: 'lookAttendance',
   props: ['ids', 'lookAttendanceLog'], 
   data() {
     return {
@@ -103,21 +104,24 @@ export default {
             let currentMon = false;   // 早上是否有 实际打卡
             let currentWan = false;   // 下班是否有 实际打卡 
             item.forEach((a, b) => {
-              if(a.dimensions.day <= this.days) {
-                if(a.event_attribute == 3) {
-                  currentAttendance = true;
-                }
-                if(a.event_attribute == 1) {
-                  currentMon = true;
-                }
-                if(a.event_attribute == 2)   {
-                  currentWan = true;
-                }
-                if(currentAttendance && !currentMon) {
-                  obj.resultWork = "缺卡";
-                }
-                if(currentAttendance && !currentWan) {
-                  obj.resultOffWork = "缺卡";
+              // console.log(a.dimensions.day)
+              if(a.dimensions && a.dimensions.day){
+                if(a.dimensions.day <= this.days) {
+                  if(a.event_attribute == 3) {
+                    currentAttendance = true;
+                  }
+                  if(a.event_attribute == 1) {
+                    currentMon = true;
+                  }
+                  if(a.event_attribute == 2)   {
+                    currentWan = true;
+                  }
+                  if(currentAttendance && !currentMon) {
+                    obj.resultWork = "缺卡";
+                  }
+                  if(currentAttendance && !currentWan) {
+                    obj.resultOffWork = "缺卡";
+                  }
                 }
               }
             })
@@ -154,9 +158,14 @@ export default {
                 }
                  obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
               } else if (val.event_attribute == 3) {
-                obj.workShift = val.dimensions.hour + ":" + val.dimensions.minute;  // 上班排班时间
+                if(val.dimensions && val.dimensions.hour){
+                  obj.workShift = val.dimensions.hour + ":" + val.dimensions.minute;  // 上班排班时间
+                }
+                
               } else if(val.event_attribute == 4) {
-                obj.workOffShift = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班班排版时间
+                if(val.dimensions && val.dimensions.hour){
+                  obj.workOffShift = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班班排版时间
+                }
               } else if(val.event_attribute == 5) {
                 obj.attendance = "休息";
               }

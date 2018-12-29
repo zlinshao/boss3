@@ -1,6 +1,6 @@
 <template>
     <div id="inductionMaterials">
-        <el-dialog :visible.sync="inductionMaterialsDialogVisible" width="60%">
+        <el-dialog :visible.sync="inductionMaterialsDialogVisible" title="入职材料" width="60%">
             <div>
                 <el-form size="small" :model="params" label-width="100px">
                     <el-row>

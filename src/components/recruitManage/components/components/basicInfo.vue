@@ -465,7 +465,9 @@
                         <el-form-item label="等级" v-if='!is_add'>
                         <div class="content">
                           <span v-if='basicInfo_info.basic_info && basicInfo_info.basic_info.level'>
-                            <span v-for="item in branchBankCategory">{{item.id == basicInfo_info.basic_info.level ? item.dictionary_name : ''}}</span>
+                            <span v-for="(item, index) in branchBankCategory" :key="index">
+                              {{item.id == basicInfo_info.basic_info.level ? item.dictionary_name : ''}}
+                            </span>
                           </span>
                           <span v-else>暂无</span>
                         </div>

@@ -24,10 +24,15 @@
               <td v-for="(item, index) in week" :key="index" :class="{'gray': item.prevmonth || item.nextmonth}" @click="modifyTypesetting(item)">
                 <div>{{selectmonth}}月{{item.day}}日</div>
                 <div>
-                  <span v-if="item.setting == '早班'">{{item.setting}}(9:00 - 18:00)</span>
+                  <!-- <span v-if="item.setting == '早班'">{{item.setting}}(9:00 - 18:00)</span>
                   <span v-if="item.setting == '网络班'">{{item.setting}}(10:00 - 19:00)</span>
                   <span v-if="item.setting == '晚班'">{{item.setting}}(13:00 - 21:00)</span>
                   <span v-if="item.setting == '休息'">{{item.setting}}</span>
+                  <span v-if="item.setting == '夜班'">{{item.setting}}(16:00 - 24:00)</span> -->
+                  <span v-if="checkList.filter(i => i.name == item.setting).length">
+                    {{checkList.filter(i => i.name == item.setting)[0].name}}
+                    ({{checkList.filter(i => i.name == item.setting)[0].morning_work_time}} - {{checkList.filter(i => i.name == item.setting)[0].pm_rest_time}})
+                  </span>
                 </div>
               </td>
           </tr>
@@ -57,6 +62,7 @@
 
 <script>
 export default {
+  name: 'lookTypesetting',
   props: ["ids","lookTypesettingLog"],
   data() {
     return {
@@ -126,6 +132,11 @@ export default {
         this.init();
         // this.arr = [];
       }
+    },
+    modifyDialogVisible(val){
+      if(!val){
+        this.currentArrange = 'A'
+      }
     }
   },
   methods: {
@@ -149,9 +160,14 @@ export default {
       },
     // 清除数据
     init() {
+      console.log("444444")
       this.year = new Date().getFullYear();
       this.month = new Date().getMonth() + 1;
       this.selectmonth = new Date().getMonth() + 1;
+      this.params = {
+        user_id: "",
+        arrange_month: ""
+      }
     },
     // 获取排班
     getTypeTime() {
@@ -217,31 +233,55 @@ export default {
         }
         _arr.push(_week);
       }
-      // console.log(_arr, "55555")
       let _this = this;
       // let settingArr = Object.values(this.arrangeList);
       let settingArr = [];
-      if(this.arrangeList instanceof Array) {
-        settingArr = this.arrangeList;
-      } else {
-        settingArr = Object.values(this.arrangeList);
-      }
+      // if(this.arrangeList instanceof Array) {
+      //   settingArr = this.arrangeList;
+      // } else {
+      //   settingArr = Object.values(this.arrangeList);
+      // }
+      // for(let key in this.arrangeList) {
+      //   settingArr.push(this.arrangeList[key])
+      // }
+      console.log(_arr)
       _arr.forEach((item, index) => {
         item.forEach((val, key) => {
           if(val.currentmonth) {
-             settingArr.forEach((a, b) => {
-               if(_arr[index][key].day == b + 1) {
-                  if(a == "A") {
-                    _arr[index][key].setting = "早班";
-                  } else if(a == "B") {
-                    _arr[index][key].setting = "网络班";
-                  } else if(a == "C") {
-                    _arr[index][key].setting = "晚班";
-                  } else if (a == "休") {
-                    _arr[index][key].setting = "休息";
-                  }
+            //  settingArr.forEach((a, b) => {
+            //    if(_arr[index][key].day == b + 1) {
+            //       if(a == "A") {
+            //         _arr[index][key].setting = "早班";
+            //       } else if(a == "B") {
+            //         _arr[index][key].setting = "网络班";
+            //       } else if(a == "C") {
+            //         _arr[index][key].setting = "晚班";
+            //       } else if (a == "休") {
+            //         _arr[index][key].setting = "休息";
+            //       }
+            //     }
+            // })
+            for(let ids in _this.arrangeList) {
+              // console.log(ids, "3333")
+              if(_arr[index][key].day == ids) {
+                console.log(_this.arrangeList[ids])
+                // if(_this.arrangeList[ids] == "A") {
+                //   _arr[index][key].setting = this.checkList.filter(item => item.alias === _arr[index][key].setting)[0].name;
+                // } else if(_this.arrangeList[ids] == "B") {
+                //   _arr[index][key].setting = "网络班";
+                // } else if(_this.arrangeList[ids] == "C") {
+                //   _arr[index][key].setting = "晚班";
+                // } else if (_this.arrangeList[ids] == "休") {
+                //   _arr[index][key].setting = "休息";
+                // }else if(_this.arrangeList[ids] == "E"){
+                //   _arr[index][key].setting = "夜班";
+                // }
+                console.log(_this.checkList)
+                if(_this.checkList.filter(item => item.alias === _this.arrangeList[ids]).length){
+                  _arr[index][key].setting = _this.checkList.filter(item => item.alias === _this.arrangeList[ids])[0].name;
                 }
-            })
+              }
+            }
           }
         })
       })
@@ -264,7 +304,7 @@ export default {
       //  console.log(this.arrangeList, "77777")
       //  return false;
       //  this.currentSort.arrange = Object.values(this.arrangeList)
-       this.currentSort.arrange = this.arrangeList;
+      this.currentSort.arrange = this.arrangeList;
       this.$http.post(globalConfig.server + "attendance/sort", {
               user_id: this.currentSort.user_id,
               arrange: this.currentSort.arrange,
