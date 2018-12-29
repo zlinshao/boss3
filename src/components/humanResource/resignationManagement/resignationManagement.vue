@@ -20,7 +20,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-col :span="16">
+              <el-col :span="12">
                 <el-form-item>
                   <el-input v-model="params.keywords" placeholder="请输入关键字" size="mini" @keyup.enter.prevent.native="getResignationEmploye" clearable></el-input>
                 </el-form-item>

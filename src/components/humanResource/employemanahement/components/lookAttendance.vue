@@ -14,7 +14,7 @@
               <span v-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
               <span v-if="scope.row.attendance == '晚班'">{{scope.row.attendance + "13:00 - 21:00"}}</span>
               <span v-if="scope.row.attendance == '夜班'">{{scope.row.attendance + "18:00 - 23:00"}}</span> -->
-              <span>
+              <span v-if="allAttendance.filter(item => item.name === scope.row.attendance).length">
                 {{allAttendance.filter(item => item.name === scope.row.attendance)[0].name}}
                 {{allAttendance.filter(item => item.name === scope.row.attendance)[0].morning_work_time}}
                 {{allAttendance.filter(item => item.name === scope.row.attendance)[0].pm_rest_time}}
@@ -166,7 +166,13 @@ export default {
                   // console.log(val)
                   // obj.resultOffWork = "早退";
                   // obj.resultOffWork = 60 - Number(val.dimensions.minute);
-                  obj.resultOffWork = this.exchangeHour(item[0].classes.pm_rest_time, val.dimensions.hour + ":" + val.dimensions.minute);
+                  // console.log(val)
+                  item.forEach(i => {
+                    if(i.classes){
+                      obj.resultOffWork = this.exchangeHour(i.classes.pm_rest_time, val.dimensions.hour + ":" + val.dimensions.minute);
+                    }
+                  })
+                  
                 }
                  obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
               } else if (val.event_attribute == 3) {
@@ -192,7 +198,7 @@ export default {
         }
       })
     },
-    //时间转换
+    //早退时间
     exchangeHour(prev, next){
       var hour1 = +prev.split(":")[0],
           minute1 = /^0/.test(prev.split(":")[1]) ? +prev.split(":")[1].replace("0", "") : +prev.split(":")[1],
