@@ -1,14 +1,15 @@
 <template>
-  <div id="accountPayable">
+  <div id="accountPayable" @click="rightMenuShow = false">
     <!--高级-->
     <div class="highRanking">
       <div style="text-align: right;margin-bottom: 10px">
         <el-input style="width: 15%" v-model="params.search" @keyup.enter.native="getPayableList" size="mini" placeholder="请输入需求搜索的内容" clearable>
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="getPayableList"></el-button>
         </el-input>
 
         <el-button size="mini" type="primary" @click="isHigh = !isHigh">高级</el-button>
         <el-button size="mini" type="primary" icon="el-icon-refresh" @click="getPayableList"></el-button>
+        <el-button size="mini" type="success" icon="el-icon-plus" @click="plusPayVisible = true">新增应付</el-button>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" onsubmit="return false" :model="params" size="mini" label-width="100px">
@@ -109,7 +110,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="goSearch">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getPayableList">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -125,6 +126,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="payableList"
+        @row-contextmenu="handleRowRightClick"
       >
         <el-table-column label="付款时间" prop="pay_date"></el-table-column>
         <el-table-column label="客户姓名" prop="info.customer"></el-table-column>
@@ -149,6 +151,14 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :total="payableCount"
+        layout="total,prev,pager,next"
+        :current-page="params.page"
+        :page-size="params.limit"
+        @current-change="handlePageChange"
+        style="text-align: right"
+      ></el-pagination>
     </div>
 
     <!--科目-->
@@ -167,15 +177,24 @@
       @selectMember="handleSelectDepart"
       @close="handleCloseDepart"
     ></Organization>
+
+    <!--新增应付-->
+    <PlusPay :PayVisible="plusPayVisible" :title="'新增应付'" @close="plusPayVisible = false" @plusAddPay="handleAddPlusPay"></PlusPay>
+
+    <!--右击菜单-->
+    <RightMenu :startX="rightMenuX + 'px'" :startY="rightMenuY + 'px'" :show="rightMenuShow" :list="rightList" @clickOperateMore="rightClickBack"></RightMenu>
+
   </div>
 </template>
 <script>
   import SubjectTree from '../components/subjectTree.vue';
   import Organization from '../../common/organization.vue';
+  import PlusPay from './components/plusPay.vue';
+  import RightMenu from '../../common/rightMenu.vue';
 
   export default {
     name: 'accountPayable',
-    components: {SubjectTree,Organization},
+    components: {SubjectTree,Organization,PlusPay,RightMenu},
     data() {
       return {
         url: globalConfig.finance_server,
@@ -211,12 +230,91 @@
         payableSum: 0, //剩余
         paidSum: 0, //实付
 
+        //新增应付
+        plusPayVisible: false,
+
+        //右击菜单
+        rightMenuX: 0,
+        rightMenuY: 0,
+        rightMenuShow:false,
+        rightList: [],
+
       }
     },
     mounted() {
       this.getPayableList();
     },
     methods: {
+      //修改弹出确认框
+      handleConfirmDialog(id,title,placeholder,val,reg = null,regMsg,callback) {
+        this.$prompt(title, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: reg,
+          inputValue: val,
+          inputErrorMessage: regMsg
+        }).then(({ value }) => {
+          callback(id,value);
+        }).catch(() => { });
+      },
+      //右击菜单
+      handleRowRightClick(row,event) {
+        this.rightList = [
+          {clickIndex: 'editPayMoney',icon: 'el-icon-edit',label: '修改应付金额',data: row}
+        ];
+        this.rightClickParams(event);
+      },
+      rightClickParams(event) {
+        let e = event || window.event;
+        this.rightMenuShow = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.rightMenuShow = true
+        })
+      },
+      rightClickBack(val) {
+        if (val.clickIndex === 'editPayMoney') {
+          var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+          var money = parseFloat(val.data.balance);
+          this.handleConfirmDialog(val.data.id,'修改应付金额','请输入', money , reg ,'请输入应付金额',this.handleChangePayMoney);
+        }
+      },
+      //修改应付金额
+      handleChangePayMoney(id,amount_payable) {
+        this.$http.put(this.url + `account/payable/edit/${id}`,{amount_payable}).then(res => {
+          this.handleCallback(res);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      //http callback
+      handleCallback(res) {
+        if (res.data.success) {
+          this.$notify.success({
+            title: '成功',
+            message: res.data.message
+          });
+          this.getPayableList();
+        } else {
+          this.$notify.warning({
+            title: '失败',
+            message: res.data.message
+          });
+        }
+      },
+      //新增应付
+      handleAddPlusPay(params) {
+        this.$http.post(this.url + 'account/payable/add',params).then(res => {
+          this.handleCallback(res);
+          this.plusPayVisible = false;
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+
       //部门
       handleOpenDepart(type) {
         this.highOrganizationVisible = true;
@@ -255,9 +353,6 @@
       },
 
       //高级
-      goSearch() {
-        console.log(this.params);
-      },
       resetting() {},
       highGrade() {
         this.isHigh = false;
@@ -271,8 +366,8 @@
       //列表数据
       getPayableList() {
         this.payLoading = true;
+        this.isHigh = false;
         this.$http.get(this.url + 'account/payable/index', {params: this.params}).then(res => {
-          console.log(res);
           if (res.data.success) {
             this.payableList = res.data.data.data;
             this.payableCount = res.data.data.count;
@@ -287,12 +382,16 @@
           console.log(err);
         })
       },
+      handlePageChange(page) {
+        this.params.page = page;
+        this.getPayableList();
+      }
     }
   }
 
 </script>
 <style lang="scss">
   #accountPayable{
-    position: relative;
+    /*position: relative;*/
   }
 </style>
