@@ -43,7 +43,7 @@
                                 <span v-if='item.org.company_id === 0'>南京乐伽商业管理有限公司</span>
                                 <span v-else>{{item.org.corp ? item.org.corp.name : '/'}}</span>
                             </el-col>
-                            <el-col :span="2" class="duty-name">
+                            <el-col :span="3" class="duty-name">
                                 <span>{{item.org.name}}</span>
                             </el-col>
                             <el-col :span="3" class="position-name">
@@ -108,7 +108,7 @@
                                     <el-option v-for='(item, index) in experience' :key='index' :value='item.id' :label='item.dictionary_name'></el-option>
                                 </el-select>
                             </el-col>
-                            <el-col :span='2' v-if='(edit_index !== index)'>
+                            <el-col :span='2' class='require-education' v-if='(edit_index !== index)'>
                                 <span v-if='item.educations'>学历{{item.educations.dictionary_name}}</span>
                                 <span v-if='!item.educations'>/</span>
                             </el-col>
@@ -117,7 +117,7 @@
                                     <el-option v-for='(item, index) in education' :key='index' :value='item.id' :label='item.dictionary_name'></el-option>
                                 </el-select>
                             </el-col>
-                            <el-col :span='2' v-if='(edit_index !== index)'>
+                            <el-col :span='2' class="require-num" v-if='(edit_index !== index)'>
                                 <span>招聘{{item.number.min}}~{{item.number.max}}人</span>
                             </el-col>
                             <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
@@ -696,6 +696,9 @@
             text-decoration: none;
             .margin-right{
                 margin-right: 10px;
+            }
+            .require-num, .require-education{
+                text-align: right;
             }
         }
         .position{
