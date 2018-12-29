@@ -44,7 +44,7 @@
                 <span style="color: #fd0c0c;" v-else-if="scope.row.resultOffWork == '缺卡'">{{scope.row.resultOffWork}}</span>
                 <span style="color: red;" v-else>早退{{scope.row.resultOffWork}}分钟</span>
               </div>
-            </template>
+            </template>   
           </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
@@ -162,8 +162,11 @@ export default {
                     }
                   })
                 } else if (val.status == 2) {
+                  // console.log(item)
+                  // console.log(val)
                   // obj.resultOffWork = "早退";
-                  obj.resultOffWork = 60 - Number(val.dimensions.minute);
+                  // obj.resultOffWork = 60 - Number(val.dimensions.minute);
+                  obj.resultOffWork = this.exchangeHour(item[0].classes.pm_rest_time, val.dimensions.hour + ":" + val.dimensions.minute);
                 }
                  obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
               } else if (val.event_attribute == 3) {
@@ -189,11 +192,22 @@ export default {
         }
       })
     },
+    //时间转换
+    exchangeHour(prev, next){
+      var hour1 = +prev.split(":")[0],
+          minute1 = /^0/.test(prev.split(":")[1]) ? +prev.split(":")[1].replace("0", "") : +prev.split(":")[1],
+          hour2 = +next.split(":")[0],
+          minute2 = /^0/.test(next.split(":")[1]) ? +next.split(":")[1].replace("0", "") : next.split(":")[1],
+          res = 0;
+      if(hour1 > hour2){
+        res = (hour1 - hour2) * 60 + (minute1 - minute2)
+      }
+      return res
+    },
     getAllAttendance(){
       this.$http.get(globalConfig.server + 'attendance/classes?type=all').then(res => {
-        console.log(res)
         if(res.data.code === '20000'){
-          console.log(123)
+          // console.log(123)
           this.allAttendance = res.data.data.data;
         }
       })
