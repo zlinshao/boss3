@@ -545,13 +545,14 @@
       :visible="collectMoneyShow"
       title="应收入账"
       width="35%"
+      @close="cancelCreateCollect"
     >
       <div style="width: 90%;margin: 0 auto">
         <el-form :model="collectMoneyForm" ref="collectForm" :rules="collectRules" size="mini">
           <el-form-item label="收款时间" prop="pay_date">
             <el-date-picker
               v-model="collectMoneyForm.pay_date"
-              value-format="yyyy-MM-dd HH-mm-ss"
+              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期">
             </el-date-picker>
@@ -572,7 +573,7 @@
           <el-form-item label="补齐时间" prop="complete_date">
             <el-date-picker
               v-model="collectMoneyForm.complete_date"
-              value-format="yyyy-MM-dd HH-mm-ss"
+              value-format="yyyy-MM-dd"
               type="date"
               placeholder="选择日期">
             </el-date-picker>
@@ -581,7 +582,7 @@
             <el-input type="textarea" v-model="collectMoneyForm.remark" placeholder="请输入备注"></el-input>
           </el-form-item>
           <el-form-item align="right">
-            <el-button @click="collectMoneyShow = false">取消</el-button>
+            <el-button @click="cancelCreateCollect">取消</el-button>
             <el-button type="primary" @click="OkCreateCollect('collectForm')">确定</el-button>
           </el-form-item>
         </el-form>
@@ -805,12 +806,20 @@
       this.getTableData();
     },
     methods: {
+      cancelCreateCollect() {
+        var keys = Object.keys(this.collectMoneyForm);
+        for (var i =0;i<keys.length;i++) {
+          this.collectMoneyForm[keys[i]] = "";
+        }
+        this.collectMoneyShow = false;
+        this.$refs['collectForm'].resetFields();
+      },
       OkCreateCollect(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$http.post(this.url + `account/receivable/receive/${this.rightMenuRow.id}`,this.collectMoneyForm).then(res => {
               this.handleSuccess(res);
-              this.collectMoneyShow = false;
+              this.cancelCreateCollect();
             }).catch(err => {
               console.log(err);
             })
