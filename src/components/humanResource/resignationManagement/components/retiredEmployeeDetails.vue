@@ -509,6 +509,7 @@
 
 <script>
 export default {
+  name: 'employeeDetails',
   props: ["ids", "lookResigntion"],
   data() {
     return {
@@ -563,6 +564,7 @@ export default {
       }
     },
     ids(val) {
+      console.log(val)
       this.employDetailId = val;
       if(val) {
         this.openDetail(val);

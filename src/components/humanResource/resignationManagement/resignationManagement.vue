@@ -14,7 +14,7 @@
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="离职时间">
                 <el-date-picker v-model="params.leave_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
               </el-form-item>
@@ -398,6 +398,7 @@ export default {
       // console.log(this.form.resignation_form, "55555")
     },
     addUploadFiles(val, row) {
+      this.upLoadDialogVisible = true;
       this.editImage = {};
       // console.log(row, "666666")
       this.form.user_id = row.id;
@@ -410,6 +411,14 @@ export default {
           this.form.resignation_form.push(item.id)
           obj[item.id] = item.uri;
         })
+      }
+      if(this.upLoadDialogVisible) {
+        this.$nextTick(() => {
+          this.editImage = Object.assign({}, obj);
+        })
+        
+      } else {
+        this.editImage = [];
       }
       for (let key in dismiss_reason) {
         if(key == "dismiss_mess") {
@@ -432,12 +441,6 @@ export default {
         this.titleName = "上传离职交接单";
       } else if(val == "2") {
         this.titleName = "上传合同";
-      }
-      this.upLoadDialogVisible = true;
-      if(this.upLoadDialogVisible) {
-        this.editImage = obj;
-      } else {
-        this.editImage = [];
       }
     },
     // 添加离职表格

@@ -10,9 +10,15 @@
           <el-table-column prop="sign_date" label="日期"></el-table-column>
           <el-table-column label="班次">
             <template slot-scope="scope">
-              <span v-if="scope.row.attendance == '早班'">{{scope.row.attendance + "9:00 - 18:00"}}</span>
+              <!-- <span v-if="scope.row.attendance == '早班'">{{scope.row.attendance + "9:00 - 18:00"}}</span>
               <span v-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
               <span v-if="scope.row.attendance == '晚班'">{{scope.row.attendance + "13:00 - 21:00"}}</span>
+              <span v-if="scope.row.attendance == '夜班'">{{scope.row.attendance + "18:00 - 23:00"}}</span> -->
+              <span>
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].name}}
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].morning_work_time}}
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].pm_rest_time}}
+              </span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="hugh" label="休息"></el-table-column> -->
@@ -64,6 +70,7 @@ export default {
         user_id: ""
       },
       days: "",
+      allAttendance: [],
     }
   },
   watch: {
@@ -77,6 +84,8 @@ export default {
     lookAttendanceDialog(val) {
       if (!val) {
         this.$emit('close');
+      }else{
+        this.getAllAttendance()
       }
     }
   },
@@ -171,11 +180,21 @@ export default {
               }
             })
               this.attendanceData.push(obj)
+              // console.log(this.attendanceData)
               this.isLoading = false;
           })
         } else {
           this.isLoading = false;
           this.emptyText = "暂无数据";
+        }
+      })
+    },
+    getAllAttendance(){
+      this.$http.get(globalConfig.server + 'attendance/classes?type=all').then(res => {
+        console.log(res)
+        if(res.data.code === '20000'){
+          console.log(123)
+          this.allAttendance = res.data.data.data;
         }
       })
     }

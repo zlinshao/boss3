@@ -93,7 +93,7 @@
                 <el-time-select v-model="form.pm_rest_time" :picker-options="{
                   start: '01:00',
                   step: '1:00',
-                  end: '24:00'
+                  end: '23:00'
                 }" placeholder="选择时间" class="workingHours">
                 </el-time-select>
               </el-form-item>

@@ -160,7 +160,7 @@ export default {
       },
     // 清除数据
     init() {
-      console.log("444444")
+      // console.log("444444")
       this.year = new Date().getFullYear();
       this.month = new Date().getMonth() + 1;
       this.selectmonth = new Date().getMonth() + 1;
@@ -244,7 +244,7 @@ export default {
       // for(let key in this.arrangeList) {
       //   settingArr.push(this.arrangeList[key])
       // }
-      console.log(_arr)
+      // console.log(_arr)
       _arr.forEach((item, index) => {
         item.forEach((val, key) => {
           if(val.currentmonth) {
@@ -264,7 +264,7 @@ export default {
             for(let ids in _this.arrangeList) {
               // console.log(ids, "3333")
               if(_arr[index][key].day == ids) {
-                console.log(_this.arrangeList[ids])
+                // console.log(_this.arrangeList[ids])
                 // if(_this.arrangeList[ids] == "A") {
                 //   _arr[index][key].setting = this.checkList.filter(item => item.alias === _arr[index][key].setting)[0].name;
                 // } else if(_this.arrangeList[ids] == "B") {
@@ -276,7 +276,7 @@ export default {
                 // }else if(_this.arrangeList[ids] == "E"){
                 //   _arr[index][key].setting = "夜班";
                 // }
-                console.log(_this.checkList)
+                // console.log(_this.checkList)
                 if(_this.checkList.filter(item => item.alias === _this.arrangeList[ids]).length){
                   _arr[index][key].setting = _this.checkList.filter(item => item.alias === _this.arrangeList[ids])[0].name;
                 }
