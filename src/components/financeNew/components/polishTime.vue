@@ -5,7 +5,7 @@
         <el-form-item label="补齐时间">
           <div class="block">
             <el-date-picker
-              v-model="date"
+              v-model="currentDate"
               type="date"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
@@ -16,7 +16,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
+        <el-button size="small" type="primary" @click="handleOkTime">确&nbsp;定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -29,11 +29,15 @@
     data() {
       return {
         dialogVisible: false,
+        currentDate: ''
       }
     },
     mounted() {
     },
     watch: {
+      date(val){
+        this.currentDate = val;
+      },
       module(val) {
         this.dialogVisible = val;
       },
@@ -41,9 +45,22 @@
         if (!val) {
           this.$emit('close');
         }
+      },
+    },
+    methods: {
+      handleOkTime() {
+        let _this = this;
+        if (this.currentDate) {
+          this.$emit('ok',_this.currentDate);
+        }else {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择时间'
+          });
+          return false;
+        }
       }
     },
-    methods: {},
   }
 </script>
 
