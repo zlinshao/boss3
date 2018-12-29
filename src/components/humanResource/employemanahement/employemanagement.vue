@@ -435,7 +435,7 @@ export default {
       this.leaveMsg = false;
       // if (this.selectLeaveDateDialog && !this.sendLeaveMsgDialog) {
       //   }
-        this.sendLeaveMsgForm.date = this.form.dismiss_time;
+      this.sendLeaveMsgForm.date = this.form.dismiss_time;
       this.$http.get(globalConfig.server + 'organization/staff/leave-sms', {
         params: {
           id: this.secondaryID,

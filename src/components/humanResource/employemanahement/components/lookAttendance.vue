@@ -10,9 +10,15 @@
           <el-table-column prop="sign_date" label="日期"></el-table-column>
           <el-table-column label="班次">
             <template slot-scope="scope">
-              <span v-if="scope.row.attendance == '早班'">{{scope.row.attendance + "9:00 - 18:00"}}</span>
+              <!-- <span v-if="scope.row.attendance == '早班'">{{scope.row.attendance + "9:00 - 18:00"}}</span>
               <span v-if="scope.row.attendance == '休息'">{{scope.row.attendance}}</span>
               <span v-if="scope.row.attendance == '晚班'">{{scope.row.attendance + "13:00 - 21:00"}}</span>
+              <span v-if="scope.row.attendance == '夜班'">{{scope.row.attendance + "18:00 - 23:00"}}</span> -->
+              <span v-if="allAttendance.filter(item => item.name === scope.row.attendance).length">
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].name}}(
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].morning_work_time}} -
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].pm_rest_time}})
+              </span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="hugh" label="休息"></el-table-column> -->
@@ -38,7 +44,7 @@
                 <span style="color: #fd0c0c;" v-else-if="scope.row.resultOffWork == '缺卡'">{{scope.row.resultOffWork}}</span>
                 <span style="color: red;" v-else>早退{{scope.row.resultOffWork}}分钟</span>
               </div>
-            </template>
+            </template>   
           </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
@@ -64,6 +70,7 @@ export default {
         user_id: ""
       },
       days: "",
+      allAttendance: [],
     }
   },
   watch: {
@@ -77,6 +84,8 @@ export default {
     lookAttendanceDialog(val) {
       if (!val) {
         this.$emit('close');
+      }else{
+        this.getAllAttendance()
       }
     }
   },
@@ -153,8 +162,17 @@ export default {
                     }
                   })
                 } else if (val.status == 2) {
+                  // console.log(item)
+                  // console.log(val)
                   // obj.resultOffWork = "早退";
-                  obj.resultOffWork = 60 - Number(val.dimensions.minute);
+                  // obj.resultOffWork = 60 - Number(val.dimensions.minute);
+                  // console.log(val)
+                  item.forEach(i => {
+                    if(i.classes){
+                      obj.resultOffWork = this.exchangeHour(i.classes.pm_rest_time, val.dimensions.hour + ":" + val.dimensions.minute);
+                    }
+                  })
+                  
                 }
                  obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
               } else if (val.event_attribute == 3) {
@@ -171,11 +189,32 @@ export default {
               }
             })
               this.attendanceData.push(obj)
+              // console.log(this.attendanceData)
               this.isLoading = false;
           })
         } else {
           this.isLoading = false;
           this.emptyText = "暂无数据";
+        }
+      })
+    },
+    //早退时间
+    exchangeHour(prev, next){
+      var hour1 = +prev.split(":")[0],
+          minute1 = /^0/.test(prev.split(":")[1]) ? +prev.split(":")[1].replace("0", "") : +prev.split(":")[1],
+          hour2 = +next.split(":")[0],
+          minute2 = /^0/.test(next.split(":")[1]) ? +next.split(":")[1].replace("0", "") : next.split(":")[1],
+          res = 0;
+      if(hour1 > hour2){
+        res = (hour1 - hour2) * 60 + (minute1 - minute2)
+      }
+      return res
+    },
+    getAllAttendance(){
+      this.$http.get(globalConfig.server + 'attendance/classes?type=all').then(res => {
+        if(res.data.code === '20000'){
+          // console.log(123)
+          this.allAttendance = res.data.data.data;
         }
       })
     }
