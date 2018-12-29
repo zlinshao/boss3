@@ -709,12 +709,12 @@
             margin-top: 50px;
         }
         #editor{
-            font-family: "楷体";
+            font-family: "KaiTi";
             color: rgb(192,192,192)
         }
         .text-editor{
             margin: 20px 0;
-            font-family: "楷体";
+            font-family: "KaiTi";
             color: rgb(192,192,192);
         }
         .close-tips{
@@ -728,7 +728,7 @@
         .data-preview{
             .button{
                 border: none;
-                color: rgb(0, 150, 136);
+                color: rgb(255, 208, 75);
                 margin: 0 60px 0 0;
             }
             .first-child{
