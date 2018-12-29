@@ -1,12 +1,33 @@
 <template>
-  <div id="account" @click="show = false">
+  <div id="account">
     <!-- 新增分配 -->
     <div class="addAllocation">
-      <el-button type="primary" size="mini" @click="deleteAccount" :disabled="multipleSelection.length == 0">删除
-      </el-button>
-      <el-button type="success" size="mini" @click="handleNewAllot"><i class="el-icon-plus"></i>&nbsp;新增分配
-      </el-button>
+      <el-button type="primary" size="mini" @click="deleteAccount" :disabled="multipleSelection.length == 0">删除</el-button>
+      <el-button type="primary" size="mini" @click="allocationDialog = true"><i class="el-icon-plus"></i>&nbsp;新增分配</el-button>
     </div>
+    <!-- 新增分配弹出框 -->
+    <el-dialog title="账户分配" :visible.sync="allocationDialog" width="30%">
+      <el-form :label-position="labelPosition" label-width="80px" :model="formAllocation" size="mini" ref="form">
+        <el-form-item label="部门">
+          <el-input type="textarea" v-model="org_name" :disabled="true" style="resize:none"></el-input>
+        </el-form-item>
+        <el-form-item label="账户类型">
+          <el-select v-model="displayName" clearable placeholder="请选择账户类型" @change="getAccount">
+            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="账号">
+          <el-select multiple  v-model="formAllocation.account_id " clearable placeholder="请选择"  ref="bbbb">
+            <el-option v-for="item in accountNumOptions" :key="item.value"  data-num='123' :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="allocationDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="addAllocation()" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
     <el-row :gutter="20">
       <el-col :span="8">
         <div class="border left">
@@ -40,27 +61,25 @@
       </el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple">
-          <el-table :data="accountTable" style="width: 100%" class="urban-division"
-                    @selection-change="handleSelectionChange" ref="multipleTable" element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(255, 255, 255, 0)"
-                    v-loading="accountLoading"
-                    :empty-text="emptyAccount"
-                    @row-contextmenu="openRightMenu"
-          >
-            <el-table-column type="selection"></el-table-column>
-            <el-table-column prop="org_id.name" label="部门"></el-table-column>
-            <el-table-column prop="account.account_num" label="账号"></el-table-column>
-            <el-table-column prop="account.cate" label="账户类型"></el-table-column>
-            <el-table-column prop="account.display_name" label="开户行"></el-table-column>
-            <el-table-column prop="account.sub_bank" label="支行"></el-table-column>
-            <el-table-column prop="account.account_owner" label="开户人"></el-table-column>
+          <el-table :data="accountTable" style="width: 100%" class="urban-division"  @selection-change="handleSelectionChange" ref="multipleTable">
+            <el-table-column type="selection">
+            </el-table-column>
+            <el-table-column prop="org.name" label="部门">
+            </el-table-column>
+            <el-table-column prop="account.cate" label="账户类型">
+            </el-table-column>
+            <el-table-column prop="account.display_name" label="开户行">
+            </el-table-column>
+            <el-table-column prop="account.account_owner" label="开户人">
+            </el-table-column>
+            <el-table-column prop="account.account_num" label="账号">
+            </el-table-column>
+            <!-- <el-table-column prop="account_owner" label="操作人">
+                        </el-table-column> -->
           </el-table>
           <!-- 分页 -->
           <div class="block pages">
-            <el-pagination @current-change="handleCurrentChange"
-                           :current-page="currentPage" :page-size="15"
-                           layout="total, prev, pager, next" :total="total">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
           </div>
         </div>
@@ -68,7 +87,7 @@
     </el-row>
     <!-- 新增账户 -->
     <el-dialog title="补全账户信息" :visible.sync="addAccount" width="30%">
-      <el-form :label-position="labelPosition" label-width="80px" :model="addAccountFrom" size="mini" ref="form">
+      <el-form :label-position="labelPosition"  label-width="80px" :model="addAccountFrom" size="mini" ref="form">
         <el-form-item label="账户名称">
           <el-input v-model="addAccountFrom.account_name" :disabled="true"></el-input>
         </el-form-item>
@@ -79,7 +98,7 @@
           <el-input v-model="addAccountFrom.display_name" :disabled="add_account_display"></el-input>
         </el-form-item>
         <el-form-item label="开户人">
-          <el-input v-model="addAccountFrom.account_owner"></el-input>
+          <el-input  v-model="addAccountFrom.account_owner"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -87,92 +106,36 @@
         <el-button type="primary" size="mini" @click="addAccountNameOwner">确 定</el-button>
       </span>
     </el-dialog>
-
-    <!-- 新增分配弹出框 -->
-    <el-dialog title="账户分配" :visible.sync="allocationDialog" width="30%">
-      <el-form :label-position="labelPosition" label-width="80px" :model="formAllocation" size="mini" ref="form">
-        <el-form-item label="部门">
-          <el-input v-model="org_name" :disabled="true" style="resize:none"></el-input>
-        </el-form-item>
-        <el-form-item label="账户类型">
-          <el-select v-model="displayName" clearable placeholder="请选择账户类型" @change="getAccount">
-            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="账号">
-          <el-select multiple filterable v-model="formAllocation.account_id " clearable placeholder="请选择">
-            <el-option v-for="item in accountNumOptions" :key="item.id" :label="item.name"
-                       :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="allocationDialog = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="addAllocation" size="mini">确 定</el-button>
-      </span>
-    </el-dialog>
-
-    <!--右击-->
-    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperateMore="clickEvent"></RightMenu>
-
-    <!--修改-->
-    <el-dialog
-      :visible.sync="editAccountVisible"
-      title="修改账户"
-      width="25%"
-    >
-      <div style="text-align: center">
-        <p>
-          账户类型：<el-select v-model="editCate" @change="changeEditCate" size="mini" style="width: 70%">
-          <el-option v-for="item in accountTypeOption" :value="item.value" :label="item.label" :key="item.value"></el-option>
-        </el-select>
-        </p>
-        <p>
-          账户名称：<el-select v-model="editValue" size="mini" style="width: 70%">
-          <el-option v-for="(item,key) in accountList" :key="key" :value="item.id" :label="item.name"></el-option>
-        </el-select>
-        </p>
-      </div>
-      <div style="text-align: right">
-        <el-button size="mini" @click="cancelEdit">取消</el-button>
-        <el-button size="mini" type="primary" @click="handleEditOk">确定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
   import organization from "../../../common/organization"; //组织架构
-  import RightMenu from '../../../common/rightMenu';
+  import TreeRender from "../../../humanResource/organizationNew/components/treeRender"
   export default {
-    components: {organization,RightMenu},
+    components: { organization },
     data() {
       return {
-        lists: [],
-        show: false,
-        rightMenuX: 0,
-        rightMenuY: 0,
-        editAccountVisible: false,
-        editCate: '',
-        editValue: '',
-        accountList: [],
         accountId: "",
         addAccountFrom: {
           account_id: "",
           display_name: "",
           account_owner: ""
         },
-        accountLoading: false,
-        emptyAccount: '',
         add_account_display: false,
         add_account_num: "",
         add_display_name: "",
         add_account_owner: "",
         addAccount: false,
+        table: [{ city: [], country: [] }],
+        ind1: 0,
+        ind2: 0,
+        ind3: 0,
         org_name: "",
         labelPosition: "right", // form表单右对齐
+        organizationTable: [], //组织架构
+        areaTable: [],
+        groupTable: [],
         accountTable: [], //账户
         allocationDialog: false,
         formAllocation: {
@@ -180,13 +143,13 @@
           org_id: [],
           account_id: [],
         },
-        displayName: "",
+        displayName: "1",
         accountNumOptions: [], //选择账号
         accountTypeOption: [
           //账号类型
-          {value: "1", label: "银行卡"},
-          {value: "2", label: "支付宝"},
-          {value: "3", label: "微信"}
+          { value: "1", label: "银行卡" },
+          { value: "2", label: "支付宝" },
+          { value: "3", label: "微信" }
         ],
         currentPage: 1,
         total: 0,
@@ -198,9 +161,16 @@
         tableEmpty: "",
         collectLoading: false,
         params: {
+          keywords: '',
           limit: 10,
           page: 1,
           org_id: 1,
+          is_dimission: '',
+          infinite: 20,         //需要权限
+          forward: '',
+          is_recursion: 1,
+          entry_time: [],
+          leave_time: [],
         },
         defaultExpandKeys: [], //默认展开节点列表
         defaultProps: {
@@ -211,133 +181,102 @@
           infinite: 20,
         },
         userCollectLoading: false,
-        currentRow: '',
       };
     },
     watch: {},
     methods: {
-      cancelEdit() {
-        this.editAccountVisible = false;
-        this.editCate = '';
-        this.editValue = '';
-      },
-      handleEditOk() {
-        if (!this.editValue) {
-          this.$notify.warning({
-            title: '警告',
-            message: '请选择账户'
-          });
-          return false;
-        } else {
-          this.$http.post(globalConfig.finance_server + `account/allocation/update/${this.currentRow.id}`,{
-            account_id: this.editValue
-          }).then(res => {
-            if (res.data.success) {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message
-              });
-              this.getAccountList();
-            }else {
-              this.$notify.warning({
-                title: '失败',
-                message: res.data.message
-              });
-            }
-            this.cancelEdit();
-          })
-        }
-      },
-      clickEvent(index) {
-       this.currentRow = index.data;
-       if (index.clickIndex === 'EditInfo') {
-         this.editAccountVisible = true;
-       }
-      },
-      changeEditCate() {
-        this.handleEditChange();
-      },
-      handleEditChange() {
-        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
-          params: {
-            cate: this.editCate,
-            all: 1
-          }
-        }).then(res => {
-          this.accountList = res.data.data.data;
-        })
-      },
-      //右击
-      openRightMenu(row,event) {
-        this.lists = [
-          {clickIndex: 'EditInfo', headIcon: 'el-icon-edit', label: '修改', data: row},
-        ];
-        this.contextParams(event);
-      },
-      //********************右键配置操作函数****************
-      contextParams(event) {
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
-        })
-      },
-      handleNewAllot() {
-        if (!this.org_name) {
-          this.$notify.warning({
-            title: '警告',
-            message: '请选择部门'
-          });
-          return false;
-        } else {
-          this.allocationDialog = true;
-        }
-      },
       //   获取银行账户
       getAccount(val) {
-        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
-          params: {
-            cate: parseInt(val),
-            all: 1
-          }
-        }).then(res => {
-          this.accountNumOptions = res.data.data.data;
-        })
+        this.accountNumOptions = [];
+        let id = "";
+        id = val || 1;
+        this.$http
+          .get(globalConfig.server + "financial/account?all=1&cate=" + id)
+          .then(res => {
+            let obj = null;
+            if ((res.data.code = "20000")) {
+              res.data.data.data.forEach((item, index) => {
+                obj = {};
+                obj["value"] = item.id;
+                obj["label"] = item.display_name + " - " + item.account_owner + " - " + item.account_num;
+                obj["account_owner"] = item.account_owner;
+                obj["display_name"] = item.display_name;
+                this.accountNumOptions.push(obj);
+              });
+            }
+          });
       },
       // 获取列表数据
-      getAccountList() {
-        this.accountLoading = true;
+      getAccountList(id) {
         this.$http
-          .get(globalConfig.finance_server + "account/allocation/index", {
+          .get(globalConfig.server + "financial/account_alloc", {
             params: this.params
           })
           .then(res => {
-            if (res.data.success) {
-              this.accountLoading = false;
-              this.emptyAccount = ' ';
-              this.accountTable = res.data.data.data;
+            if (res.data.code == "20000") {
+              let isArray = res.data.data.data instanceof Array;
+              let _this = this;
+              if(!isArray) {
+                _this.accountTable = [];
+                for(let i in res.data.data.data) {
+                  _this.accountTable.push( res.data.data.data[i])
+                }
+              } else {
+                _this.accountTable = res.data.data.data;
+              }
+              this.accountTable.forEach((item, index) => {
+                if (item.account.cate == 1) {
+                  item.account.cate = "银行卡";
+                } else if (item.account.cate == 2) {
+                  item.account.cate = "支付宝";
+                } else if (item.account.cate == 3) {
+                  item.account.cate = "微信";
+                }
+              });
               this.total = res.data.data.count;
-            }else {
-              this.accountLoading = false;
-              this.emptyAccount = "暂无数据";
+            } else if(res.data.code == "20001") {
+              this.accountTable = [];
+              this.tableEmpty = res.data.msg;
             }
           });
       },
-      // 删除账号
-      handleSelectionChange(val) {
-        this.multipleSelection = [];
-        val.map(item => {
-          this.multipleSelection.push(item.id);
-        });
+      // 获取城市
+      getOrganization() {
+        this.accountTable = [];
+        this.$http
+          .get(globalConfig.server + "organization/other/org-tree?id=331")
+          .then(res => {
+            if (res.data.code == "70050") {
+              res.data.data.children.pop();
+              this.organizationTable = res.data.data.children;
+            }
+          });
       },
 
+      // 删除账号
+      handleSelectionChange(val) {
+        let _this = this;
+        let arr = this.$refs.multipleTable.data;
+        this.multipleSelection = [];
+        if(arr.length !== val.length) {
+          val.forEach((item, index) => {
+            arr.forEach((val, key) => {
+              if(val.id == item.id) {
+                _this.multipleSelection.push(item.id);
+              }
+            })
+          })
+        } else {
+          val.forEach((item, index) => {
+            if(!_this.multipleSelection.includes(item.id)) {
+              _this.multipleSelection.push(item.id);
+            }
+          })
+        }
+      },
       deleteAccount() {
-        this.$http.post(globalConfig.finance_server + "account/allocation/delete", {id: this.multipleSelection}).then(res => {
-          if (res.data.success) {
+        this.$http.post(globalConfig.server + "financial/account_alloc/delete", {account_id: this.multipleSelection}).then(res => {
+          if(res.data.code == "20040") {
             this.$notify.success({
               title: "成功",
               message: res.data.msg
@@ -353,36 +292,50 @@
       },
       // 新增分配
       addAllocation() {
-        if (this.formAllocation.account_id.length < 1) {
-          this.$notify.warning({
-            title: '警告',
-            message: '请选择账户'
+        this.$http
+          .post(
+            globalConfig.server + "financial/account_alloc",
+            this.formAllocation
+          )
+          .then(res => {
+            if (res.data.code == "20000") {
+              this.$notify.success({
+                title: "成功",
+                message: res.data.msg
+              });
+              this.getAccountList(this.selectId);
+              // this.org_name = "";
+              this.formAllocation.account_id = [];
+              this.allocationDialog = false;
+            } else if(res.data.code == "20001") {
+              this.addAccount = true;
+              this.accountId = res.data.info.cate;
+              this.addAccountFrom.account_name = res.data.info.name;
+              this.addAccountFrom.account_id = res.data.info.id;
+              this.addAccountFrom.account_num = res.data.info.account_num;
+              if(res.data.info.cate == 2) {
+                this.addAccountFrom.display_name = "支付宝";
+                this.add_account_display = true;
+              } else if(res.data.info.cate == 3) {
+                this.addAccountFrom.display_name = "微信";
+                this.add_account_display = true;
+              } else {
+                this.addAccountFrom.display_name = res.data.info.display_name;
+                this.addAccountFrom.account_owner = res.data.info.account_owner
+              }
+            } else if(res.data.code == "20012") {
+              this.$notify.warning({
+                title: "警告",
+                message: res.data.msg
+              });
+            }
           });
-          return false;
-        }
-        this.$http.post(globalConfig.finance_server + 'account/allocation/add',this.formAllocation).then(res => {
-          if (res.data.success) {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.message
-            });
-            this.getAccountList();
-          }else {
-            this.$notify.warning({
-              title: '失败',
-              message: res.data.message
-            });
-          }
-          this.allocationDialog = false;
-        }).catch(err => {
-          console.log(err);
-        })
       },
-
       // 新增账户人或账户
       addAccountNameOwner() {
+        // this.addAccountFrom.account_id = this.formAllocation.account_id;
         this.$http.post(globalConfig.server + "financial/account_alloc/complement", this.addAccountFrom).then(res => {
-          if (res.data.code == "20000") {
+          if(res.data.code == "20000") {
             this.$notify.success({
               title: "成功",
               message: res.data.msg
@@ -398,30 +351,45 @@
           }
         })
       },
-
+      // getBankAccount(val) {
+      //   this.accountNumOptions.forEach((item, index) => {
+      //     if (item.value == val) {
+      //       if (!item.account_owner || !item.display_name) {
+      //         this.$notify.warning({
+      //           title: "警告",
+      //           message: "开户人或者开户行为空"
+      //         });
+      //         this.formAllocation.account_id = [];
+      //       }
+      //     }
+      //   });
+      // },
+      handleSizeChange(val) {
+        this.params.limit = val;
+        this.getAccountList();
+        console.log(`每页 ${val} 条`);
+      },
       handleCurrentChange(val) {
         this.params.page = val;
         this.getAccountList();
+        console.log(`当前页: ${val}`);
       },
       // 新的获取城市数据
-
       //点击节点
-      nodeClick(data) {
+      nodeClick(data, node, store) {
         this.org_name = data.name;
         this.formAllocation.org_id = data.id;
         this.params.org_id = data.id;
         this.params.page = '1';
         this.getAccountList()
       },
-
-      nodeExpand(data) {
+      nodeExpand(data, node, store) {
         //展开
         if (this.defaultExpandKeys.indexOf(data.id) < 0) {
           this.defaultExpandKeys.push(data.id);
         }
       },
-
-      nodeCollapse(data) {
+      nodeCollapse(data, node, store) {
         //收起
         this.defaultExpandKeys.splice(this.defaultExpandKeys.indexOf(data.id), 1);
         data.children.forEach((item) => {
@@ -433,6 +401,22 @@
           }
         })
       },
+      // renderContent(h, {node, data, store}) { //加载节点
+      //     let that = this;
+      //     return h(TreeRender, {
+      //       props: {
+      //         DATA: data,
+      //         NODE: node,
+      //         STORE: store,
+      //       },
+      //       on: {
+      //         nodeSet: ((s, d, n) => that.handleSet(s, d, n)),
+      //         nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
+      //         nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
+      //         nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
+      //       }
+      //     });
+      //   },
       //获取部门数据
       getDepart() {
         this.collectLoading = true;
@@ -449,16 +433,65 @@
                 this.defaultExpandKeys.push(item.id);
               }
             });
-            this.getAccountList();
+            this.getStaffData();
           } else {
             this.collectStatus = '暂无数据';
             this.setTree = [];
           }
         });
       },
+      //获取员工数据列表
+      getStaffData() {
+        this.userCollectLoading = true;
+        this.userCollectStatus = ' ';
+        if (!this.params.entry_time) {
+          this.params.entry_time = [];
+        }
+        if (!this.params.leave_time) {
+          this.params.leave_time = [];
+        }
+        // this.$http.get(globalConfig.server + "financial/account_alloc", {params: this.params}).then((res) => {
+        //   this.userCollectLoading = false;
+        //   this.isHigh = false;
+        //   if (res.data.code === '20000') {
+        //     this.accountTable = res.data.data.data;
+        //     this.accountTable.forEach((item, index) => {
+        //       if(item.account.cate == 1) {
+        //         item.account.cate = "银行卡"
+        //       } else if(item.account.cate == 2) {
+        //         item.account.cate = "支付宝"
+        //       } else if(item.account.cate == 3) {
+        //         item.account.cate = "微信"
+        //       }
+        //     })
+        //     if (this.accountTable.length < 1) {
+        //       this.userCollectStatus = '暂无数据';
+        //     }
+        //   } else {
+        //     this.userCollectStatus = '暂无数据';
+
+        //   }
+        // })
+        // this.getAccountList()
+      },
+      initExpand() {
+        this.setTree.map((a) => {
+//          this.defaultExpandKeys.push(a.id)
+        });
+        this.isLoadingTree = true;
+      },
+      // aaaa(e) {
+      //   console.log(this.$refs["bbbb"]["selected"])
+      //   console.log(this.$refs.bbbb)
+      // }
     },
     mounted() {
+      this.initExpand();
       this.getDepart();
+    },
+    created() {
+      this.getAccount();
+      this.getOrganization();
     }
   };
 </script>
