@@ -109,7 +109,7 @@
                                 </el-select>
                             </el-col>
                             <el-col :span='2' v-if='(edit_index !== index)'>
-                                <span v-if='item.educations'>{{item.educations.dictionary_name === "不限" ? "学历" + item.educations.dictionary_name : item.educations.dictionary_name}}</span>
+                                <span v-if='item.educations'>学历{{item.educations.dictionary_name}}</span>
                                 <span v-if='!item.educations'>/</span>
                             </el-col>
                             <el-col :span='2' v-if='is_editing && (edit_index === index)' class="margin-right">
