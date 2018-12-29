@@ -2,11 +2,11 @@
     <div id="resignationManagement" @click="show = false" @contextmenu="closeMenu">
       <div class="top">
         <el-form ref="params" :model="params" label-width="80px">
-          <el-row>
-            <el-col :span="6">
+          <el-row type="flex" justify="end">
+            <!-- <el-col :span="6"> -->
               <!-- 无意义仅占位 -->
-              <div style="visibility: hidden;">无意义仅占位</div>  
-            </el-col>
+              <!-- <div style="visibility: hidden;">无意义仅占位</div>  
+            </el-col> -->
             <el-col :span="5">
               <el-form-item label="部门">
                 <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal()" size="mini">
@@ -191,6 +191,7 @@ import RetiredEmployeeDetails from "./components/retiredEmployeeDetails"  // 离
 import RightMenu from "../../common/rightMenu"  // 右键
 import SecondaryEmployment from "./components/secondaryEmployment"  // 编辑员工
 export default {
+  name: "resigationManagement",
   components: {Organization, UpLoad, RetiredEmployeeDetails, RightMenu, SecondaryEmployment},
   data() {
     return {
@@ -269,6 +270,8 @@ export default {
         this.isClear = !this.isClear;
         this.dismiss_mess = "";
         this.dismiss_type = "";
+        this.editImage = {};
+        this.form.resignation_form = [];
       }
     },
     editImage: {
@@ -439,12 +442,14 @@ export default {
     },
     // 添加离职表格
     addResigntionTable() {
-      this.$http.post(globalConfig.server + 'organization/staff/dismisse/' + this.form.user_id, {
+      this.$http.put(globalConfig.server + 'organization/staff/resignation-form/' + this.form.user_id, {
         dismiss_time: this.form.dismiss_time,
-        dismiss_reason: this.form.dismiss_reason,
-        resignation_form: this.form.resignation_form
+        // dismiss_reason: this.form.dismiss_reason,
+        resignation_form: 
+        this.form.resignation_form
+        // []
       }).then(res => {
-        if (res.data.code === '710418') {
+        if (res.data.code === '71000') {
           this.$notify.success({
             title: "成功",
             message: res.data.msg
@@ -505,6 +510,10 @@ export default {
         if(res.data.code == "70010") {
           this.emptyText = " ";
           this.resignationData = res.data.data.data;
+          // this.resignationData.forEach(item => {
+          //   console.log(item.resignation_form)
+          // })
+          
           this.total = res.data.data.count;
           let strArr = [];
           res.data.data.data.forEach((item, index) => {

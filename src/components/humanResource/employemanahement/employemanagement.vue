@@ -209,6 +209,7 @@ import Daily from './components/daily'  // 日报
 // import AddStaff from '../../organizationNew/addStaff.vue'  // 右键
 import RightMenu from "../../common/rightMenu"  // 右键
 export default {
+  name: 'Employemanagement',
   components: {EmployeeDetails, addEmploy, LookAttendanceChild, employemanagement, Approval, Rewardreord, Daily, ImportAttendance, Organization, RightMenu},
   data() {
     return {
