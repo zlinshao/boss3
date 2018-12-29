@@ -22,24 +22,6 @@
             label="备注人">
           </el-table-column>
 
-          <!--<el-table-column-->
-          <!--label="操作"-->
-          <!--width="150px">-->
-          <!--<template slot-scope="scope">-->
-          <!--<el-button-->
-          <!--size="mini"-->
-          <!--type="text"-->
-          <!--@click="handleEdit(scope.$index, scope.row)">编辑-->
-          <!--</el-button>-->
-          <!--<el-button-->
-          <!--size="mini"-->
-          <!--type="text"-->
-          <!--style="color: red"-->
-          <!--@click="openDelete(scope.$index, scope.row)">删除-->
-          <!--</el-button>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
-
         </el-table>
       </div>
       <div slot="footer" class="dialog-footer">

@@ -28,22 +28,17 @@ const WorkOrderManage = () => import  ('../components/rentManage/datumMessage/wo
 const RetreatManage = () => import  ('../components/rentManage/datumMessage/retreatManage/index.vue'); //退租管理
 
 // 财务账本
-// const Foundation =()=> import  ('../components/finance/foundation/index');                                //基础管理
-// const FundMessage =()=> import  ('../components/finance/fundMessage/index.vue');                          //款项管理
-//  const ClientMessage = () => import  ('../components/finance/clientMessage/index.vue');                         //客户管理
-//  const PendingItem = () => import  ('../components/finance/pendingItem/index.vue');                             //待处理项
- const PendingSettle = () => import  ('../components/finance/pendingItem/components/pendingSettle.vue');        //结算
- const StaticDetail = () => import  ('../components/finance/statistics/components/staticDetail');            //统计详情
-// const Statistics =()=> import  ('../components/finance/statistics/index.vue');                            //数据统计
-// const IncomeFlow =()=> import  ('../components/finance/incomeFlow/index');                                //收支流水
-
-
+const PendingSettle = () => import  ('../components/finance/pendingItem/components/pendingSettle.vue');        //结算
+const StaticDetail = () => import  ('../components/finance/statistics/components/staticDetail');            //统计详情
 const FinanceBasicMange=()=>import('../components/financeNew/basicManage');//基本管理
 const FinanceCustomer=()=>import('../components/financeNew/customerMange');//客户管理
 const FinanceRunning=()=>import('../components/financeNew/runningAccount');//收支流水
 const AccountPayable=()=>import('../components/financeNew/accountPayable');//应付款项
 const AccountReceivable=()=>import('../components/financeNew/accountReceivable');//应收款项
 const PendingItem = () => import  ('../components/financeNew/pendingItem');
+const DailyLog = () => import ('../components/financeNew/dailyLog'); //日志管理
+
+
 // 微信管理
 // const Reimbursement =()=> import  ('../comments/wechatMessage/reimbursement/index1.vue');            //微信报销
 // const Complain =()=> import  ('../comments/wechatMessage/complain/index1.vue');                      //微信投诉
@@ -500,20 +495,22 @@ export default new Router({
       ]
     },
 
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: '财务账本',
-    //   icon: 'iconfont icon-caiwu1',
-    //   children: [
-    //     {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
-    //     {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
-    //     {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
-    //     {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
-    //     {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
-    //     {path: '/PendingItem', component: PendingItem, name: '待处理项'},
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: '财务账本',
+      icon: 'iconfont icon-caiwu1',
+      children: [
+        // {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
+        {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
+        {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
+        {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
+        // {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
+        // {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
+        // {path: '/PendingItem', component: PendingItem, name: '待处理项'},
+        {path: '/dailyLog', component: DailyLog, name: '日志管理'},
+      ]
+    },
 
     {
       path: '/statistics/staticDetail',
@@ -716,8 +713,6 @@ export default new Router({
       icon: 'iconfont icon-shezhi1',
       children: [
         {path: '/moduleSetting', component: ModuleSetting, name: '模块设置' },
-        {path: "/accountMmanagement", component: accountMmanagement, name: "账户管理" },
-
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志'},
         // {path: '/userDictionary', component: UserDictionary, name: '用户字典'},
