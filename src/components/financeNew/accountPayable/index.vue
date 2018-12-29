@@ -219,8 +219,20 @@
       >
         <div style="text-align: center">
           <el-form :model="payMoneyParams" ref="payMoneyForm" :rules="payMoneyRules" label-width="100px" size="mini">
-            <el-form-item label="付款方式" prop="account_id"></el-form-item>
-            <el-form-item label="付款账号" prop="account_id"></el-form-item>
+            <el-form-item label="付款方式">
+              <el-select v-model="payMoneyExtraParams.account_type" @change="handleGetAccountList">
+                <el-option label="银行卡" :value="1"></el-option>
+                <el-option label="支付宝" :value="2"></el-option>
+                <el-option label="微信" :value="3"></el-option>
+                <el-option label="存折" :value="4"></el-option>
+                <el-option label="现金" :value="5"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="付款账号" prop="account_id">
+              <el-select v-model="payMoneyParams.account_id">
+                <el-option></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="账户类型">
               <el-select v-model="payMoneyParams.customer_account_type" disabled>
                 <el-option label="银行卡" :value="1"></el-option>
@@ -326,6 +338,9 @@
 
         //应付入账
         payMoneyVisible: false,
+        payMoneyExtraParams: {
+          account_type: '',
+        },
         payMoneyParams: {
           customer_account_num: '',
           customer_account_type: '',
@@ -359,6 +374,8 @@
       this.getPayableList();
     },
     methods: {
+      //获取账户列表
+      handleGetAccountList() {},
       //应付入账
       handleCancelPayMoney() {
         this.payMoneyVisible = false;
