@@ -65,9 +65,11 @@
       },
       methods: {
         handlePickerDate(date) {
-          this.params.start_time = date[0];
-          this.params.end_time = date[1];
-          this.getLogList();
+          if (date && date.length > 1) {
+            this.params.start_time = date[0];
+            this.params.end_time = date[1];
+            this.getLogList();
+          }
         },
         handlePageChange(num) {
           this.params.num = num;
