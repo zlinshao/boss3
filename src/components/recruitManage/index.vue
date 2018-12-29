@@ -43,7 +43,7 @@
                                 <span v-if='item.org.company_id === 0'>南京乐伽商业管理有限公司</span>
                                 <span v-else>{{item.org.corp ? item.org.corp.name : '/'}}</span>
                             </el-col>
-                            <el-col :span="4" class="duty-name">
+                            <el-col :span="2" class="duty-name">
                                 <span>{{item.org.name}}</span>
                             </el-col>
                             <el-col :span="3" class="position-name">
@@ -138,24 +138,19 @@
                     <el-footer>
                         <el-row  class='data-preview'>
                             <el-button class='button first-child' :span="6" @click='platformManage(item, index)'>
-                                {{item.platform ? Object.keys(item.platform).length : 0}}
-                                个平台已发布
+                                {{item.platform ? Object.keys(item.platform).length : 0}}个平台已发布
                             </el-button>
                             <el-button class='button first' :span="6" @click='processManage(item, index, $event)'>
-                                {{item.wait_interview ? item.wait_interview : 0}}
-                                人已约面试
+                                {{item.wait_interview ? item.wait_interview : 0}}人已约面试
                             </el-button>
                             <el-button class='button second' :span="6" @click='processManage(item, index, $event)'>
-                                {{item.after_interview ? item.after_interview : 0}}
-                                人面试完毕
+                                {{item.after_interview ? item.after_interview : 0}}人面试完毕
                             </el-button>
                             <el-button class='button third' :span="6" @click='processManage(item, index, $event)'>
-                                {{item.wait_entry ? item.wait_entry : 0}}
-                                人等待入职
+                                {{item.wait_entry ? item.wait_entry : 0}}人等待入职
                             </el-button>
                             <el-button class='button fourth' :span="6" @click='processManage(item, index, $event)'>
-                                {{item.after_entry ? item.after_entry : 0}}
-                                人已入职
+                                {{item.after_entry ? item.after_entry : 0}}人已入职
                             </el-button>
                         </el-row>
                     </el-footer>
@@ -167,12 +162,12 @@
         <div class="empty" v-if="!positionList.length && !loadingRecruit">暂无数据</div>
         <div class="block">
             <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="page"
-            :page-size="12"
-            layout="total, prev, pager, next, jumper"
-            :total="total">
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="page"
+                :page-size="12"
+                layout="total, prev, pager, next, jumper"
+                :total="total">
             </el-pagination>
         </div>
         <!--切换招聘状态dialog开始-->
@@ -445,9 +440,6 @@
                         this.loadingRecruit = false;
                         this.total = res.data.data.count;
                         this.positionList = res.data.data.data;
-                        // this.$nextTick(() => {
-                        //     document.documentElement.scrollTop = this.scrollTop;
-                        // });
                     }else{
                         this.loadingRecruit = false;
                         this.total = 0;
@@ -523,9 +515,8 @@
                     this.department_name_search = '';
                 }else{
                     this.form.org_id = '';
-                    this.department_name_form = ''
+                    this.department_name_form = '';
                 }
-                
             },
             //选择部门
             selectMember(val){
@@ -675,13 +666,18 @@
             line-height: 24px;
             .position-name{
                 font-size: 14px;
+                margin-right: 70px;
             }
             .duty-name{
                 margin-left: -4px;
             }
             .el-button{
                 width: 114px;
+                margin-left: 30px;
                 text-align: center;
+                border: none;
+                background-color: rgba(238, 238, 238, 86);
+                color: #4F4D4D;
             }
             .margin-left{
                 margin-left: 25px;
