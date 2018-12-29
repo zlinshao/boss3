@@ -15,9 +15,9 @@
               <span v-if="scope.row.attendance == '晚班'">{{scope.row.attendance + "13:00 - 21:00"}}</span>
               <span v-if="scope.row.attendance == '夜班'">{{scope.row.attendance + "18:00 - 23:00"}}</span> -->
               <span v-if="allAttendance.filter(item => item.name === scope.row.attendance).length">
-                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].name}}
-                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].morning_work_time}}
-                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].pm_rest_time}}
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].name}}(
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].morning_work_time}} -
+                {{allAttendance.filter(item => item.name === scope.row.attendance)[0].pm_rest_time}})
               </span>
             </template>
           </el-table-column>
