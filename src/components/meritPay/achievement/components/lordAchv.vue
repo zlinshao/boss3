@@ -11,6 +11,10 @@
                             <el-button type="primary" @click="exportData">导出</el-button>
                         </el-form-item>
                     </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" size="mini" @click="importShow = true">导入重定价<i
+                                class="el-icon-upload el-icon--right"></i></el-button>
+                    </el-form-item>
                 </el-form>
             </div>
         </div>
@@ -150,6 +154,18 @@
                     :total="totalNum">
             </el-pagination>
         </div>
+        <div>
+            <el-dialog
+                    title="导入"
+                    :visible.sync="importShow"
+                    width="20%">
+                <Upload :ID="'uploadExcel'" :isClear="isClear" @getImg="getImg"></Upload>
+                <div style="width:100%;text-align:right;">
+                    <el-button size="mini" @click="cencelUpload">取消</el-button>
+                    <el-button size="mini" type="primary" @click="importExl" :loading="importTmp">确定</el-button>
+                </div>
+            </el-dialog>
+        </div>
         <!--组织架构-->
         <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                       @selectMember="selectMember"></organization>
@@ -159,9 +175,10 @@
 
 <script>
     import Organization from '../../../common/organization'
+    import Upload from '../../../common/UPLOAD.vue'
     export default {
         name: "lordAchv",
-        components:{Organization},
+        components:{Organization,Upload},
         data() {
             return {
                 isHigh:false,
@@ -174,6 +191,9 @@
                     end_time:'',
                     export:0
                 },
+                importShow:false,
+                importTmp:false,
+                isClear: false,
                 depart_name:'',
                 staff_name:'',
                 date:'',
@@ -216,6 +236,21 @@
             this.getTableData();
         },
         methods:{
+            cencelUpload() {
+                this.importTmp= false;
+                this.importShow = false;
+            },
+            getImg(val) {
+                console.log(val);
+                if (val[1].length > 1) {
+                    this.$notify.warning({
+                        title: '警告',
+                        message: '仅支持单个文件上传'
+                    });
+                    return false;
+                }
+                this.file_id = val[1][0];
+            },
             getTableData(){
                 if (this.date){
                     this.form.start_time=this.date[0];
@@ -294,7 +329,35 @@
             handleCurrentChange(val){
                 this.form.page=val;
                 this.getTableData();
-            }
+            },
+            importExl() {
+                this.importTmp = true;
+                this.$http.post(globalConfig.server + "salary/sala/imprtSuggestPrice/",
+                    {file_id: this.file_id }
+                    ).then(res => {
+                    if (res.status === 200) {
+                        if (Number(res.data.code) %10 ===0) {
+                            this.isClear = true;
+                            this.importTmp = false;
+                            this.$notify.success({
+                                title: "成功",
+                                message: res.data.msg
+                            });
+                            this.cencelUpload();
+                        } else {
+                            this.isClear = true;
+                            this.importTmp = false;
+                            this.$notify({
+                                title: "警告",
+                                duration: 0,
+                                dangerouslyUseHTMLString: true,
+                                message: res.data.msg
+                            });
+                            this.cencelUpload();
+                        }
+                    }
+                })
+            },
         }
     }
 </script>
