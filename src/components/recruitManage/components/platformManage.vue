@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="add-btn" v-if="!is_adding">
-                    <el-button class='add-platform' size="mini" @click='addNewPlatform'>添加平台</el-button>
+                    <i class='add-platform el-icon-plus' size="mini" @click='addNewPlatform'></i>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -118,6 +118,14 @@ export default {
                 this.$alert('平台或地址已经存在', '', {
                     confirmButtonText: '确定',
                 });
+            }else if(!this.platform_name){
+                this.$alert('名称不能为空', '', {
+                    confirmButtonText: '确定',
+                });
+            }else if(!this.platform_host){
+                this.$alert('地址不能为空', '', {
+                    confirmButtonText: '确定',
+                });
             }else{
                 delete this.platform[key];
                 this.platform[this.platform_name] = this.platform_host;
@@ -156,6 +164,14 @@ export default {
                     this.platform_name = '';
                     this.platform_host = '';
                 }
+            }else if(!this.platform_name){
+                this.$alert('请输入名称', '', {
+                    confirmButtonText: '确定',
+                });
+            }else if(!this.platform_host){
+                this.$alert('请输入地址', '', {
+                    confirmButtonText: '确定',
+                });
             }
         },
         //跳转
@@ -228,17 +244,21 @@ export default {
         }
         .add-btn{
             display: flex;
-            justify-content: center;
+            justify-content:flex-start;
         }
         .add-platform{
             border: none;
+            margin-left: 10px;
             font-family: SourceHanSansSC;
             font-weight: 700;font-size: 14px;
             color: #409EFF;
-            font-style: normal;
             letter-spacing: 0px;
             line-height: 20px;
             text-decoration: none;
+            cursor: pointer;
+        }
+        .add-platform::before{
+            font-size: 20px;
         }
         .edit-playform{
             display: flex;
@@ -272,7 +292,7 @@ export default {
             margin: 0 10px;
         }
         .edit-name{
-            font-size: 22px;
+            font-size: 14px;
             line-height: 30px;
             width: 150px !important;
         }

@@ -133,7 +133,7 @@
       <Organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></Organization>
       <!-- 上传文件 -->
       <el-dialog :title="titleName" :visible.sync="upLoadDialogVisible" width="30%">
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="离职类型">
             <el-input v-model="dismiss_type" :disabled="true"></el-input>
           </el-form-item>
