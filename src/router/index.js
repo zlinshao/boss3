@@ -496,22 +496,22 @@ export default new Router({
       ]
     },
 
-    {
-      path: '/',
-      component: Index,
-      name: '财务账本',
-      icon: 'iconfont icon-caiwu1',
-      children: [
-        // {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
-        {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
-        {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
-        {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
-        // {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
-        // {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
-        // {path: '/PendingItem', component: PendingItem, name: '待处理项'},
-        {path: '/dailyLog', component: DailyLog, name: '日志管理'},
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '财务账本',
+    //   icon: 'iconfont icon-caiwu1',
+    //   children: [
+    //     // {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
+    //     // {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
+    //     {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
+    //     // {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
+    //     // {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
+    //     // {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
+    //     // {path: '/PendingItem', component: PendingItem, name: '待处理项'},
+    //     // {path: '/dailyLog', component: DailyLog, name: '日志管理'},
+    //   ]
+    // },
 
     {
       path: '/statistics/staticDetail',
@@ -577,24 +577,24 @@ export default new Router({
         {path: '/approval',component: Approval, name: '审批管理'}
       ]
     },
-    {
-      path: '/',
-      component: Index,
-      name: 'HRM',
-      icon: 'iconfont icon-renzi',
-      children: [
-        {
-          path: '/teamManage', component: TeamManage, name: '人员信息管理',
-          children: [
-            {path: '/teamManage/roster', component: Roster, name: '花名册'},
-            // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
-            {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
-            {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
-            {path: '/dimission', component: Dimission, name: '离职管理'},
-          ],
-        },
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: 'HRM',
+    //   icon: 'iconfont icon-renzi',
+    //   children: [
+    //     {
+    //       path: '/teamManage', component: TeamManage, name: '人员信息管理',
+    //       children: [
+    //         {path: '/teamManage/roster', component: Roster, name: '花名册'},
+    //         // {path: '/teamManage/entryManage', component: EntryManage, name: '入职管理'},
+    //         {path: '/becomeFormal', component: BecomeFormal, name: '转正管理'},
+    //         {path: '/transferPosition', component: TransferPosition, name: '调岗管理'},
+    //         {path: '/dimission', component: Dimission, name: '离职管理'},
+    //       ],
+    //     },
+    //   ]
+    // },
     {
       path: '/staffDetail',
       component: StaffDetail,
@@ -719,8 +719,8 @@ export default new Router({
         // {path: '/userDictionary', component: UserDictionary, name: '用户字典'},
         // {path: '/roleManage', component: RoleManage, name: '角色管理'},
         // {path: '/powerManage', component: PowerManage, name: '权限管理'},
+        {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
         {path: '/managerSetting', component: ManagerSetting, name: '管理员设置'},
-
         // {path: '/recycle', component: Recycle, name: '回收站'},
         // {path: '/contractModule', component: ContractModule, name: '合同模板'},
         // {path: '/exportManage', component: ExportManage, name: '导出管理'},
