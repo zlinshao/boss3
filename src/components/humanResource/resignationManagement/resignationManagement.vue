@@ -19,13 +19,13 @@
                 <el-date-picker v-model="params.leave_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-col :span="12">
                 <el-form-item>
                   <el-input v-model="params.keywords" placeholder="请输入关键字" size="mini" @keyup.enter.prevent.native="getResignationEmploye" clearable></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="12">
                   <el-button type="primary" size="mini" @click="getResignationEmploye">搜 索</el-button>
                   <el-button type="primary" size="mini" @click="resignationSMS">离职短信</el-button>
               </el-col>
