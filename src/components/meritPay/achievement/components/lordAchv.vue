@@ -258,6 +258,7 @@
                 }
                 this.collectLoading = true;
                 this.collectStatus = ' ';
+                this.form.export=0;
                 this.$http.get(globalConfig.server + 'salary/achv/lordAchv',{params:this.form}).then((res) => {
                     this.isHigh = false;
                     this.collectLoading = false;
