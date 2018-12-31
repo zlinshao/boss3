@@ -375,7 +375,16 @@
     },
     methods: {
       //获取账户列表
-      handleGetAccountList() {},
+      handleGetAccountList(cate) {
+        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
+          params: {
+            cate,
+            all: 1
+          }
+        }).then(res => {
+          console.log(res);
+        })
+      },
       //应付入账
       handleCancelPayMoney() {
         this.payMoneyVisible = false;
