@@ -1,8 +1,13 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu" id="customerManage">
-    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
+    <div class="highRanking">
       <div class="highSearch">
         <el-form :model="params" :inline="true" size="mini">
+          <el-form-item>
+            <span class="repeat_phone"></span><span class="repeat_text">手机</span>
+            <span class="repeat_name"></span><span class="repeat_text">姓名</span>
+            <span class="repeat_address"></span><span class="repeat_text">地址</span>
+          </el-form-item>
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="params.search" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
@@ -10,6 +15,9 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="danger" @click="handleCancelMark">取消重复标记</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -24,24 +32,54 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">支付方式</div>
+                  <div class="el_col_label">开始时间</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="params.payWay" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option label="银行卡" value="1"></el-option>
-                      <el-option label="支付宝" value="2"></el-option>
-                      <el-option label="微信" value="3"></el-option>
-                      <el-option label="现金" value="4"></el-option>
-                    </el-select>
+                    <el-date-picker
+                      v-model="params.startRange"
+                      value-format="yyyy-MM-dd"
+                      placeholder="请选择开始时间"
+                    ></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">结束时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="params.endRange"
+                      value-format="yyyy-MM-dd"
+                      placeholder="请选择结束时间"
+                    ></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="extraParams.depart_name" @focus="departVisible = true" placeholder="点击选择">
+                      <el-button @click="handleCancelDepart" slot="append">清空</el-button>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="goSearch">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -51,26 +89,82 @@
 
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
       <el-tab-pane label="房东管理" name="first">
-        <LandLordManage></LandLordManage>
+        <div id="landlordManage">
+          <el-table
+            :data="landLordList"
+            @selection-change="handleSelectionChange"
+            @row-contextmenu="customerMenu"
+          >
+            <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column>
+            <el-table-column label="重复">
+              <template slot-scope="scope">
+                <div v-if="scope.row.suppress_dup === 1">
+                  <span><i class="el-icon-view"></i>忽略重复</span>
+                </div>
+                <div v-else>
+                  <span class="repeat_phone" v-if="scope.row.dup_field && scope.row.dup_field.contact"></span>
+                  <span class="repeat_name" v-if="scope.row.dup_field && scope.row.dup_field.customer_name"></span>
+                  <span class="repeat_address" v-if="scope.row.dup_field && scope.row.dup_field.address"></span>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="生成时间" prop="create_time" min-width="120px"></el-table-column>
+            <el-table-column label="房屋地址" prop="address"></el-table-column>
+            <el-table-column label="客户姓名" prop="account_owner"></el-table-column>
+            <el-table-column label="手机号" prop="contact"></el-table-column>
+            <el-table-column label="收房月数	" prop="months"></el-table-column>
+            <el-table-column label="付款方式	" prop="payType"></el-table-column>
+            <el-table-column label="月单价" prop="prices[0]"></el-table-column>
+            <el-table-column label="待签约日期" prop="deal_date"></el-table-column>
+            <el-table-column label="第一次打房租日期" prop="first_pay_date"></el-table-column>
+            <el-table-column label="客户付款方式" prop="account_type"></el-table-column>
+            <el-table-column label="账号" prop="account_num" min-width="120px"></el-table-column>
+            <el-table-column label="签约人" prop="staff.name"></el-table-column>
+            <el-table-column label="状态" prop="customer_status"></el-table-column>
+            <el-table-column label="操作">
+              <template slot.scope="scope">
+                <el-button type="text" @click="handleOpenDetail(scope.row)">详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            :total="landLordCount"
+            layout="total,prev,pager,next"
+            :page-size="params.limit"
+            :current-page="params.page"
+            style="text-align: right"
+          ></el-pagination>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="租客管理" name="second">租客管理</el-tab-pane>
     </el-tabs>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
+    <!--部门-->
+    <Organization
+      :organizationDialog="departVisible"
+      :length="length"
+      :type="type"
+      @selectMember="handleSelectDepart"
+      @close="handleCloseDepart"
+    ></Organization>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'               //右键
-  import LandLordManage from './landlordManage.vue';
+  import Organization from '../../common/organization.vue';
 
   export default {
     name: "index",
-    components: { RightMenu , LandLordManage },
+    components: { RightMenu ,Organization},
     data() {
       return {
-        url: globalConfig.server,
+        url: globalConfig.finance_server,
 
         //右击菜单
         rightMenuX: 0,
@@ -79,49 +173,178 @@
         lists: [],
 
         //房东
+        extraParams: {
+          depart_name: '',
+        },
         params: {
           search: '',
-          payWay: '',
+          startRange: '',
+          endRange: '',
+          page: 1,
+          limit: 12,
+          department_ids: [],
         },
         //高级
         isHigh: false,
+        departVisible: false,
+        length: 1,
+        type: 'depart',
 
-        activeName: 'first'
+        activeName: 'first',
+
+        landLordList: [],
+        landLordCount: 0,
+
+        //取消重复标记array
+        markArr: []
       }
     },
     mounted() {
-
+      this.getLandLordList();
     },
     methods: {
+      handleOpenDetail(row) {
+        console.log(row);
+        this.$http.get(this.url + `customer/landlord/read/${row.id}`).then(res => {
+          console.log(res);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleCancelDepart() {
+        this.params.department_ids = "";
+        this.extraParams.depart_name = "";
+      },
+      handleSelectDepart(val) {
+        this.extraParams.depart_name = "";
+        this.params.department_ids = [];
+        val.map(item => {
+          this.extraParams.depart_name += item.name + ',';
+          this.params.department_ids.push(item.id);
+        });
+        this.extraParams.depart_name = this.extraParams.depart_name.substring(0,this.extraParams.depart_name.length - 1);
+      },
+      handleCloseDepart() {
+        this.departVisible = false;
+      },
+      SuccessCallBack(res) {
+        if (res.data.success) {
+          this.$notify.success({
+            title: '成功',
+            message: res.data.message
+          });
+        } else {
+          this.$notify.warning({
+            title: '失败',
+            message: res.data.message
+          });
+        }
+        this.getLandLordList();
+      },
+      handleRenewMark(id) {
+        this.$http.put(this.url + `customer/landlord/duplication/${id}`).then(res => {
+          this.SuccessCallBack(res);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleCancelMark() {
+        if (this.markArr.length < 1) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择需要取消的数据'
+          });
+          return false;
+        } else {
+          this.$http.post(this.url + 'customer/landlord/suppress',{ids: this.markArr}).then(res => {
+            this.SuccessCallBack(res);
+          }).catch(err => {
+            console.log(err);
+          })
+        }
+      },
+      handleSelectionChange(val) {
+        this.markArr = [];
+        val.map(item => {
+          this.markArr.push(item.id);
+        })
+      },
+      //房东管理列表
+      getLandLordList() {
+        const session = JSON.parse(localStorage.getItem('personal')).session_id;
+        this.$http.get(this.url + 'customer/landlord/index',{params: this.params,headers: {Session: session}}).then(res => {
+          if (res.data.success) {
+            this.landLordList = res.data.data.data;
+            this.landLordCount = res.data.data.count;
+          }
+        })
+      },
       handleTabClick(val) {
         this.activeName = val.name;
+      },
+      goSearch() {
+        if (this.activeName === 'first') {
+          this.getLandLordList();
+        }
+        this.highGrade();
       },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
       resetting() {
-
+        this.params = {
+          search: '',
+          startRange: '',
+          endRange: '',
+          page: 1,
+          limit: 12,
+          department_ids: [],
+        };
+        this.extraParams.depart_name = "";
       },
       // 右键
       customerMenu(row, event) {
         this.lists = [
-          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
-          {clickIndex: 'pendTenant', headIcon: 'iconfont icon-fangdongtuifang', label: '转为待处理项',},
+          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',data: row},
+          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',data: row},
+          {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
+          {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
+          {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row}
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
-        if (val === 'delete') {
-          this.openDelete();
+        if (val.clickIndex === 'delete') {
+          this.openDelete(val.data.id);
         }
-        if (val === 'revise') {
+        if (val.clickIndex === 'revise') {
           this.openAccount();
         }
-        if (val === 'pendTenant') {
+        if (val.clickIndex === 'pendTenant') {
           this.pendTenant();
         }
+        if (val.clickIndex === 'renewMark') {
+          this.handleRenewMark(val.data.id);
+        }
+        if (val.clickIndex === 'goWait') {
+          this.handleGoWait(val.data.id);
+        }
+        if (val.clickIndex === 'backWait') {
+          this.handleBackWait(val.data.id);
+          console.log(val.data);
+        }
+      },
+      handleGoWait(id) {
+        this.$http.put(this.url + `account/pending/lord/${id}`).then(res => {
+          console.log(res);
+          this.SuccessCallBack(res);
+        })
+      },
+      handleBackWait(id) {
+        this.$http.put(this.url + `account/pending/recover/${id}`,{identity: 1}).then(res => {
+          console.log(res);
+        })
       },
       //关闭右键菜单
       closeMenu() {
@@ -140,16 +363,17 @@
         })
       },
       // 删除
-      openDelete() {
+      openDelete(id) {
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this.$http.get(this.url + `customer/landlord/delete/${id}`).then(res => {
+            this.SuccessCallBack(res);
+          }).catch(err => {
+            console.log(err);
+          })
         }).catch(() => {
 
         });
@@ -175,6 +399,26 @@
 
 <style lang="scss">
   #customerManage{
-
+    .repeat_phone,.repeat_name,.repeat_address{
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .repeat_phone{
+      background-color: #14e731;
+    }
+    .repeat_name{
+      background-color: #E6A23C;
+    }
+    .repeat_address{
+      background-color: #F56C6C;
+    }
+    .repeat_text{
+      margin-right: 15px;
+      vertical-align: middle;
+    }
   }
 </style>
