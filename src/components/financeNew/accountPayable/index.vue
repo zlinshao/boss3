@@ -500,7 +500,22 @@
     methods: {
       //回滚
       handleCallBackDelete(row) {
-        console.log(row);
+        var arr = [];
+        if (row.running_account_record) {
+          for (var key in row.running_account_record) {
+            arr.push(parseInt(key));
+          }
+          this.$http.post(this.url + `account/payable/revert/${row.id}`,{running_account_ids: arr}).then(res => {
+            this.handleCallback(res);
+          }).catch(err => {
+            console.log(err);
+          })
+        }else {
+          this.$notify.warning({
+            title: '警告',
+            message: '暂无需要回滚的应付入账'
+          })
+        }
       },
       //表头样式
       handleHeaderStyle() {
@@ -556,7 +571,6 @@
       handleSubmitPayMoney(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            console.log(this.payMoneyParams);
             this.$http.post(this.url + `account/payable/transfer/${this.rightCurrentRow.id}`,this.payMoneyParams).then(res => {
               if (res.data.success) {
                 this.$notify.success({
@@ -602,11 +616,6 @@
       },
       //右击菜单
       handleRowRightClick(row,event) {
-        if (this.isDeleteBin) {
-          this.rightList = [
-            {clickIndex: 'callDelete',headIcon: 'el-icon-refresh',label: '回滚',data: row},
-          ]
-        } else {
           this.rightList = [
             {clickIndex: 'payMoney',headIcon: 'el-icon-edit',label: '应付入账',data: row},
             {clickIndex: 'editPayMoney',headIcon: 'el-icon-edit',label: '修改应付金额',data: row},
@@ -614,8 +623,8 @@
             {clickIndex: 'changeDate',headIcon: 'el-icon-edit',label: '修改补齐时间',data: row},
             {clickIndex: 'changeSubject',headIcon: 'el-icon-edit',label: '修改科目',data: row},
             {clickIndex: 'delete',headIcon: 'el-icon-delete',label: '删除',data: row},
+            {clickIndex: 'callDelete',headIcon: 'el-icon-refresh',label: '回滚',data: row},
           ];
-        }
         this.rightClickParams(event);
       },
       rightClickParams(event) {
@@ -798,7 +807,6 @@
       //查看详情
       LookPayableDetail(row) {
         this.$http.get(this.url + `account/payable/detail/${row.id}`).then(res => {
-          console.log(res);
           if (res.data.success) {
             this.DetailCurrentRow = res.data.data;
             this.payableDetailVisible = true;
@@ -816,7 +824,6 @@
         }
         this.$http.get(this.url + root, {params: this.params}).then(res => {
           if (res.data.success) {
-            console.log(res);
             this.payableList = res.data.data.data;
             this.payableCount = res.data.data.count;
             this.balanceSum = res.data.data.balanceSum;
