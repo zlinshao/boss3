@@ -27,6 +27,7 @@
               <a class="textStyle" @click="textDetail(scope.row)">{{scope.row.house_where}}</a>
             </template>
           </el-table-column>
+          <el-table-column label="创建时间" prop="create_time"></el-table-column>
           <el-table-column label="状态" prop="recommend_status">
             <template slot-scope="scope">
               <span v-text="scope.row.recommend_status === 1 ? '未签约' : scope.row.recommend_status === 2 ? '已签约' : '已结算'"></span>
