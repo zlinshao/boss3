@@ -496,22 +496,22 @@ export default new Router({
       ]
     },
 
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: '财务账本',
-    //   icon: 'iconfont icon-caiwu1',
-    //   children: [
-    //     {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
-    //     {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
-    //     {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
-    //     {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
-    //     {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
+    {
+      path: '/',
+      component: Index,
+      name: '财务账本',
+      icon: 'iconfont icon-caiwu1',
+      children: [
+        {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
+        {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
+        {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
+        {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
+        {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         // {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
         // {path: '/PendingItem', component: PendingItem, name: '待处理项'},
         // {path: '/dailyLog', component: DailyLog, name: '日志管理'},
-    //   ]
-    // },
+      ]
+    },
 
     {
       path: '/statistics/staticDetail',
