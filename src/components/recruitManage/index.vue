@@ -49,10 +49,10 @@
                             <el-col :span="3" class="position-name">
                                 <span>{{item.statuss.dictionary_name}}</span>
                             </el-col>
-                            <el-button class='el-button' size="mini" @click="editPosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>编辑职位信息</el-button>
+                            <el-button class='el-button ' size="mini" @click="editPosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>编辑信息</el-button>
                             <el-button class='el-button margin-left' size="mini" @click="togglePosition(index)" v-if='(edit_index !== index)' :disabled='is_editing'>
-                                <span v-if='item.status === 732'>结束该职位招聘</span>
-                                <span v-if='item.status === 733'>开始该职位招聘</span>
+                                <span v-if='item.status === 732'>结束招聘</span>
+                                <span v-if='item.status === 733'>开始招聘</span>
                             </el-button>
                             <el-button class='el-button' size="mini" @click="saveEdit(item.id)" v-if='is_editing && (edit_index === index)'>保存修改</el-button>
                             <el-button class='el-button' size="mini" @click="cancelEdit" v-if='is_editing && (edit_index === index)'>取消修改</el-button>
@@ -672,23 +672,26 @@
                 margin-left: -4px;
             }
             .el-button{
-                width: 114px;
-                margin-left: 30px;
+                width: 80px;
+                margin-left: 58px;
                 text-align: center;
                 border: none;
                 background-color: rgba(238, 238, 238, 86);
                 color: #4F4D4D;
             }
-            .margin-left{
-                margin-left: 25px;
-                text-align: center;
+            .el-button:first-of-type{
+                margin-left: 66px;
             }
+            // .margin-left{
+            //     margin-left: 25px;
+            //     text-align: center;
+            // }
         }
         .position-info{
-            font-family: SourceHanSansSC;
+            font-family: 'KaiTi';
             font-weight: 400;
             // text-align: center;
-            font-size: 13px;
+            font-size: 15px;
             color: #555;
             font-style: normal;
             letter-spacing: 0px;
@@ -707,14 +710,19 @@
         .positionList{
             margin-top: 50px;
         }
-        #editor{
-            font-family: "KaiTi";
-            color: rgb(192,192,192)
+        #editor,.text-editor{
+            // font-family: "KaiTi";
+            p{
+                span{
+                    color: rgb(192,192,192) !important;
+                }
+            }
+            
         }
         .text-editor{
             margin: 20px 0;
-            font-family: "KaiTi";
-            color: rgb(192,192,192);
+            // font-family: "KaiTi";
+            color: rgb(192,192,192) !important;
         }
         .close-tips{
             text-align: center;

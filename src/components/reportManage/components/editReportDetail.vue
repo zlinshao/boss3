@@ -673,7 +673,6 @@
       createElectronicReceipt(name) {
         this.electronicReceiptVisible = true;
         let params = {};
-
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
@@ -695,6 +694,7 @@
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
         params.sum = this.trim(params.sum);
+        // return false;
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
@@ -822,8 +822,8 @@
       },
       setProcess(data) {
         this.show_content = JSON.parse(data.process.content.show_content_compress);
-        console.log(this.show_content);
         this.reportDetailData = data.process.content;
+        console.log(this.reportDetailData);
         this.processable_id = data.process.processable_id;
         this.operation = data.operation;
         this.deal = data.deal;
@@ -880,10 +880,17 @@
           if (this.bulletinType === "尾款报备") {
             this.electronicReceiptParam.payer = data.process.content.customer_name;
             this.electronicReceiptParam.sign_at = data.process.content.retainage_date;
+            // return false;
+            // this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
+            //   return item.split(':')[1];
+            // }).join(",");
             this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
-              return item.split(':')[1];
+              return `${item.price}元`;
             }).join(",");
-            this.electronicReceiptParam.pay_way = data.process.content.payWay.join(',')
+            // this.electronicReceiptParam.pay_way = data.process.content.payWay.join(',')
+            this.electronicReceiptParam.pay_way = data.process.content.pay_way.map(item => {
+              return `${item.pay_way_str} ${item.begin_date}-${item.end_date}`;
+            }).join(",");
           } else {
             this.electronicReceiptParam.payer = data.process.content.name;
             this.electronicReceiptParam.sign_at = data.process.content.sign_date;

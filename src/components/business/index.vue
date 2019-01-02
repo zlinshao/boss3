@@ -84,6 +84,7 @@
 
         </div>
       </div>
+      
       <div style="margin-top: 30px;">
         <el-table
           :header-cell-class-name="headerStyle"
@@ -98,19 +99,22 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
         >
-          <el-table-column label="区域" min-width="150px;" prop="group">
-            <template slot-scope="scope">
-              <div>
-                <span v-if="scope.row.group">{{ scope.row.group }}</span>
-                <span v-else></span>
-                <el-button v-if="scope.row.first && scope.row.group" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
-              </div>
-            </template>
+          <el-table-column class-name="column-arealabel">
+            <el-table-column label="区域" min-width="150px;" prop="group" class-name="column-area">
+              <template slot-scope="scope">
+                <div>
+                  <span v-if="scope.row.group">{{ scope.row.group }}</span>
+                  <span v-else></span>
+                  <el-button v-if="scope.row.first && scope.row.group" type="text" size="mini" icon="el-icon-plus" @click.stop="handleAddClick(scope)">时间段</el-button>
+                </div>
+              </template>
+            </el-table-column>
           </el-table-column>
-          <el-table-column label="时间段" prop="date_range" min-width="125px;"></el-table-column>
-
+          <el-table-column  class-name="column-datelabel">
+            <el-table-column label="时间段" prop="date_range" min-width="125px;" class-name="column-date"></el-table-column>
+          </el-table-column>
           <el-table-column label="收房">
-            <el-table-column label="数量/套" prop="lord.count"></el-table-column>
+            <el-table-column label="数量/套" prop="lord.count" class-name="column-numcollect"></el-table-column>
             <el-table-column label="渠道单比例" prop="lord.agency_percentage">
               <template slot-scope="scope">
                 <span v-if="scope.row.lord && scope.row.lord.agency_percentage && scope.row.lord.agency_percentage != 0">{{ parseFloat(scope.row.lord.agency_percentage) * 100 }}%</span>
@@ -118,12 +122,12 @@
             </el-table-column>
             <el-table-column label="均价/元" prop="lord.price_avg"></el-table-column>
             <el-table-column label="空置期" prop="lord.ready_days_avg"></el-table-column>
-            <el-table-column label="总月数" prop="lord.sign_month_avg"></el-table-column>
+            <el-table-column label="总月数" prop="lord.sign_month_avg" class-name="column-month"></el-table-column>
           </el-table-column>
           <el-table-column label="租房">
-            <el-table-column label="数量/套" prop="renter.count"></el-table-column>
+            <el-table-column label="数量/套" prop="renter.count" class-name="column-numrent"></el-table-column>
             <el-table-column label="已空置" prop="renter.ready_days_avg"></el-table-column>
-            <el-table-column label="渠道单比例" prop="renter.agency_percentage">
+            <el-table-column label="渠道单比例" prop="renter.agency_percentage" class-name="column-agency">
               <template slot-scope="scope">
                 <span v-if="scope.row.renter && scope.row.renter.agency_percentage && scope.row.renter.agency_percentage != 0">{{ parseFloat(scope.row.renter.agency_percentage) * 100 }}%</span>
               </template>
@@ -133,11 +137,11 @@
             <el-table-column label="平均差价/元" prop="renter.price_diff_avg"></el-table-column>
           </el-table-column>
           <el-table-column label="空置">
-            <el-table-column label="空置房源(套)" prop="vacant.count"></el-table-column>
-            <el-table-column label="平均已空置/天" prop="vacant.vacant_day_avg"></el-table-column>
+            <el-table-column label="空置房源(套)" prop="vacant.count" class-name="column-vacant"></el-table-column>
+            <el-table-column label="平均已空置/天" prop="vacant.vacant_day_avg" class-name="column-day"></el-table-column>
           </el-table-column>
           <el-table-column label="业绩">
-            <el-table-column label="总业绩" prop="performance.performance"></el-table-column>
+            <el-table-column label="总业绩" prop="performance.performance" class-name="column-total"></el-table-column>
           </el-table-column>
         </el-table>
         <el-pagination
@@ -173,15 +177,16 @@
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
           <el-tab-pane label="收房" name="first">
             <el-table
+              stripe
               :data="detailData.lord"
               :cell-style="DetailCellStyle"
               :header-cell-class-name="headerDetailStyle"
             >
               <el-table-column label="日期" prop="bulletin_date" min-width="120px"></el-table-column>
-              <el-table-column label="员工" prop="user"></el-table-column>
+              <el-table-column label="员工" prop="user" class-name='user'></el-table-column>
               <el-table-column label="月单价" prop="month_price"></el-table-column>
               <el-table-column label="付款方式" prop="pay_way"></el-table-column>
-              <el-table-column label="总月数" prop="sign_month"></el-table-column>
+              <el-table-column label="总月数" prop="sign_month" class-name="sign_month"></el-table-column>
               <el-table-column label="渠道费" prop="agency_amount">
                 <template slot-scope="scope">
                   <span v-if="scope.row.agency_amount">{{ scope.row.agency_amount }}</span>
@@ -189,7 +194,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
-              <el-table-column label="姓名" prop="customer"></el-table-column>
+              <el-table-column label="姓名" prop="customer" class-name="customer"></el-table-column>
               <el-table-column label="空置期" prop="ready_days"></el-table-column>
               <el-table-column label="位置" prop="city"></el-table-column>
               <el-table-column label="合同">
@@ -201,16 +206,17 @@
           </el-tab-pane>
           <el-tab-pane label="租房" name="second">
             <el-table
+              stripe
               :data="detailData.renter"
               :cell-style="DetailCellStyle2"
               :header-cell-class-name="headerDetailStyle"
             >
               <el-table-column label="日期" prop="bulletin_date" min-width="130px"></el-table-column>
-              <el-table-column label="员工" prop="user"></el-table-column>
+              <el-table-column label="员工" prop="user" class-name="user"></el-table-column>
               <el-table-column label="月单价" prop="month_price"></el-table-column>
               <el-table-column label="价格差" prop="price_diff"></el-table-column>
               <el-table-column label="付款方式" prop="pay_way"></el-table-column>
-              <el-table-column label="总月数" prop="sign_month"></el-table-column>
+              <el-table-column label="总月数" prop="sign_month" class-name="sign_month"></el-table-column>
               <el-table-column label="渠道费" prop="agency_amount">
                 <template slot-scope="scope">
                   <span v-if="scope.row.agency_amount">{{ scope.row.agency_amount }}</span>
@@ -218,7 +224,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
-              <el-table-column label="姓名" prop="customer"></el-table-column>
+              <el-table-column label="姓名" prop="customer" class-name="customer"></el-table-column>
               <el-table-column label="已空置" prop="ready_days"></el-table-column>
               <el-table-column label="位置" prop="city"></el-table-column>
               <el-table-column label="合同">
@@ -230,6 +236,7 @@
           </el-tab-pane>
           <el-tab-pane label="空置" name="third">
             <el-table
+              stripe
               :data="detailData.vacant"
             >
               <el-table-column label="名称" prop="name"></el-table-column>
@@ -246,16 +253,17 @@
           </el-tab-pane>
           <el-tab-pane label="业绩" name="fourth">
             <el-table
+              stripe
               :data="detailData.performance"
               :cell-style="DetailCellStyle2"
               :header-cell-class-name="headerDetailStyle"
             >
               <el-table-column label="日期" prop="bulletin_date" min-width="130px"></el-table-column>
-              <el-table-column label="员工" prop="user"></el-table-column>
+              <el-table-column label="员工" prop="user" class-name="user"></el-table-column>
               <el-table-column label="月单价" prop="month_price"></el-table-column>
               <el-table-column label="价格差" prop="price_diff"></el-table-column>
               <el-table-column label="付款方式" prop="pay_way"></el-table-column>
-              <el-table-column label="总月数" prop="sign_month"></el-table-column>
+              <el-table-column label="总月数" prop="sign_month" class-name="sign_month"></el-table-column>
               <el-table-column label="渠道费" prop="agency_amount">
                 <template slot-scope="scope">
                   <span v-if="scope.row.agency_amount">{{ scope.row.agency_amount }}</span>
@@ -263,7 +271,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="名称" prop="address" min-width="120px"></el-table-column>
-              <el-table-column label="姓名" prop="customer"></el-table-column>
+              <el-table-column label="姓名" prop="customer" class-name="customer"></el-table-column>
               <el-table-column label="已空置" prop="ready_days"></el-table-column>
               <el-table-column label="业绩" prop="performance"></el-table-column>
               <el-table-column label="位置" prop="city"></el-table-column>
@@ -283,7 +291,7 @@
 <script>
   import seriesLine from './chart/seriesLine';
     export default {
-      name: "index",
+      name: "businessData",
       components: { seriesLine },
       data() {
         return {
@@ -682,11 +690,11 @@
           }
         },
         headerDetailStyle({row,column}) {
-          if(column.label === '月单价' || column.label === '付款方式' || column.label === '总月数' || column.label === '价格差') {
-            return 'vacancyBg';
-          }else if(column.label === '渠道费' || column.label === '名称' || column.label === '姓名'){
-            return 'rentBg';
-          }
+          // if(column.label === '月单价' || column.label === '付款方式' || column.label === '总月数' || column.label === '价格差') {
+          //   return 'vacancyBg';
+          // }else if(column.label === '渠道费' || column.label === '名称' || column.label === '姓名'){
+          //   return 'rentBg';
+          // }
         },
         //表头单击事件
         handleHeaderClick(column) {
@@ -714,7 +722,23 @@
           this.getChartData(obj);
         },
         //单元格被单击
-        handleCellClick(row,column) {
+        handleCellClick(row, column) {
+          let lordProperList = ['date_range', 'lord.count', 'lord.agency_percentage', 'lord.ready_days_avg', 'lord.sign_month_avg', 'lord.price_avg'],
+              rentProperList = ['renter.count', 'renter.ready_days_avg', 'renter.agency_percentage', 'renter.price_avg', 'renter.pay_back_avg', 'renter.price_diff_avg'],
+              vacantProperList = ['vacant.count', 'vacant.vacant_day_avg'],
+              totalProperList = ['performance.performance'];
+          if(lordProperList.includes(column.property)){
+            this.activeName = 'first'
+          }
+          if(rentProperList.includes(column.property)){
+            this.activeName = 'second'
+          }
+          if(vacantProperList.includes(column.property)){
+            this.activeName = 'third'
+          }
+          if(totalProperList.includes(column.property)){
+            this.activeName = 'fourth'
+          }
           if (column.property === 'group') {
             return false;
           }
@@ -795,10 +819,14 @@
     .el-table--border td,
     .el-table--border th,
     .el-table--border tr{
-      border: none !important;
+      border: none ;
+    }
+    .el-table--border{
+      border-bottom: 1px solid rgb(220, 223, 230);
     }
     .el-table .success-row {
-      background: #f0f9eb;
+      // background: #f0f9eb;
+      background: rgb(246, 247, 251) !important;
     }
     .el-table::before{
       height: 0 !important;
@@ -807,25 +835,48 @@
       width: 0 !important;
     }
     .rentBg{
-      color: white;
-      background-color: #E38E8E !important;
+      color: #000;
+      // background-color: #E38E8E !important;
+      border:1px solid rgb(220, 223, 230) !important;
+      border-bottom:1px dashed rgb(220, 223, 230) !important;
+      border-right: none !important;
     }
     .collectBg{
-      background-color: #DFE6FB !important;
+      // background-color: #DFE6FB !important;
+      color: #000;
+      border:1px solid rgb(220, 223, 230) !important;
+      border-bottom:1px dashed rgb(220, 223, 230) !important;
+      border-right: none !important;
     }
     .otherBg{
-      background-color: #EEEEEE !important;
+      color: #C0C4CC;
+      // background-color: #EEEEEE !important;
+    }
+    .column-arealabel{
+      border:1px solid rgb(220, 223, 230) !important;
+      border-bottom: none !important;
+    }
+    .column-area{
+      border: 1px solid rgb(220, 223, 230) !important;
+      border-top: none !important;
+      border-bottom: none !important;
     }
     .area_time{
+      color: #C0C4CC;
       background-color: #f0f9eb !important;
     }
     .vacancyBg{
-      color: white;
-      background-color: #36AA35 !important;
+      color: #000;
+      // background-color: #36AA35 !important;
+      border:1px solid rgb(220, 223, 230) !important;
+      border-bottom:1px dashed rgb(220, 223, 230) !important;
+      border-right: none !important;
     }
     .businessBg{
-      color: white;
+      color: #000;
       background-color: #DDAF6A !important;
+      border:1px solid rgb(220, 223, 230) !important;
+      border-bottom:1px dashed rgb(220, 223, 230) !important;
     }
     .container{
       width: 100%;
@@ -842,6 +893,25 @@
       .el-checkbox__label{
         font-size: 12px !important;
       }
+    }
+    .el-table thead.is-group th{
+      background: #fff !important;
+    }
+    .column-numcollect, .column-numrent, .column-vacant{
+      border-left: 1px solid rgb(220, 223, 230) !important;
+    }
+    .column-total{
+      border-left: 1px solid rgb(220, 223, 230) !important;
+      border-right: 1px solid rgb(220, 223, 230) !important;
+    }
+    .column-datelabel{
+      border-top: 1px solid rgb(220, 223, 230) !important;
+    }
+    .user, .customer, .sign_month{
+      border-right: 1px solid rgb(220, 223, 230) !important;
+    }
+    .el-table td{
+      border-bottom: none !important;
     }
   }
 </style>
