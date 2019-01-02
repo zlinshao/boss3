@@ -30,6 +30,7 @@
           container: this.$refs.chartLine,
           forceFit: true,
           height: 400,
+          padding: 'auto',
         });
         chart.source(data);
         chart.scale('value', {
