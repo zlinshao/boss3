@@ -154,14 +154,22 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :total="payableCount"
-        layout="total,prev,pager,next"
-        :current-page="params.page"
-        :page-size="params.limit"
-        @current-change="handlePageChange"
-        style="text-align: right"
-      ></el-pagination>
+      <el-row :gutter="20" style="margin-top: 20px;">
+        <el-col :span="12">
+          <span>应付金额(元)：<span style="color: #F56C6C">{{ balanceSum.toFixed(2) }}</span>
+            实付金额(元)：<span style="color: #14e731">{{ paidSum.toFixed(2) }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ payableSum.toFixed(2) }}</span></span>
+        </el-col>
+        <el-col :span="12">
+          <el-pagination
+            :total="payableCount"
+            layout="total,prev,pager,next"
+            :current-page="params.page"
+            :page-size="params.limit"
+            @current-change="handlePageChange"
+            style="text-align: right"
+          ></el-pagination>
+        </el-col>
+      </el-row>
     </div>
 
     <!--科目-->
@@ -295,7 +303,7 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">科目名称：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.subject_id">{{ DetailCurrentRow.subject_id }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.subject">{{ DetailCurrentRow.subject }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
             <el-col :span="6">
@@ -532,8 +540,8 @@
       },
       //生成待处理项
       handleDealWith(id) {
-        this.$http.get(this.url + `account/pending/payable/${id}`).then(res => {
-          console.log(res);
+        this.$http.put(this.url + `account/pending/payable/${id}`).then(res => {
+          this.handleCallback(res);
         }).catch(err => {
           console.log(err);
         })

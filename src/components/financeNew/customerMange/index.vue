@@ -1,27 +1,22 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
+  <div @click="show=false" @contextmenu="closeMenu" id="customerManage">
     <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
       <div class="highSearch">
-        <el-form :model="form" :inline="true" size="mini">
+        <el-form :model="params" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+            <el-input placeholder="请输入内容" v-model="params.search" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="openAccount">
-              <i class="el-icon-plus"></i>&nbsp;新增客户
-            </el-button>
-          </el-form-item>
         </el-form>
       </div>
     </div>
     <div class="highRanking">
       <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
-        <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
+        <el-form :inline="true" onsubmit="return false" :model="params" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
@@ -33,7 +28,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.payWay" clearable>
+                    <el-select v-model="params.payWay" clearable>
                       <el-option label="请选择" value=""></el-option>
                       <el-option label="银行卡" value="1"></el-option>
                       <el-option label="支付宝" value="2"></el-option>
@@ -53,133 +48,59 @@
         </el-form>
       </div>
     </div>
-    <div style="margin-top: 50px;">
-      <el-table
-        :data="tableData"
-        width="100%"
-        @row-dblclick="dblClickTable"
-        @row-contextmenu="customerMenu">
-        <el-table-column
-          label="生成时间"
-          prop="create_time">
-        </el-table-column>
-        <el-table-column
-          label="房屋地址"
-          prop="address">
-        </el-table-column>
-        <el-table-column
-          label="客户姓名"
-          prop="customer_name">
-        </el-table-column>
-        <el-table-column
-          label="手机号"
-          prop="contact">
-        </el-table-column>
-        <el-table-column
-          label="收房月数"
-          prop="months">
-        </el-table-column>
-        <el-table-column
-          label="付款方式"
-          prop="pay_types">
-        </el-table-column>
-        <el-table-column
-          label="月单价"
-          prop="prices">
-        </el-table-column>
-        <el-table-column
-          label="待签约日期"
-          prop="deal_date">
-        </el-table-column>
-        <el-table-column
-          label="第一次打房租日期"
-          prop="first_pay_date">
-        </el-table-column>
-        <el-table-column
-          label="客户付款方式"
-          prop="account_type">
-        </el-table-column>
-        <el-table-column
-          label="账号"
-          prop="account_num">
-        </el-table-column>
-        <el-table-column
-          label="签约人"
-          prop="real_name">
-        </el-table-column>
-        <el-table-column
-          label="状态"
-          prop="status">
-        </el-table-column>
-      </el-table>
-      <div class="block pages">
-        <el-pagination
-          @siz-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[20, 100, 200, 300, 400]"
-          :page-size="20"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
-        </el-pagination>
-      </div>
-    </div>
+
+    <el-tabs v-model="activeName" @tab-click="handleTabClick">
+      <el-tab-pane label="房东管理" name="first">
+        <LandLordManage></LandLordManage>
+      </el-tab-pane>
+      <el-tab-pane label="租客管理" name="second">租客管理</el-tab-pane>
+    </el-tabs>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-
-    <LandLord :module="lordVisible" @close="lordVisible = false"></LandLord>
-
-    <LandLordDetail :module="detailVisible" @close="detailVisible = false"></LandLordDetail>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'               //右键
-  import LandLord from './landLord.vue'                    //房东
-  import LandLordDetail from './landLordDetail.vue'        //房东详情
+  import LandLordManage from './landlordManage.vue';
+
   export default {
     name: "index",
-    components: {RightMenu, LandLord, LandLordDetail},
+    components: { RightMenu , LandLordManage },
     data() {
       return {
         url: globalConfig.server,
+
+        //右击菜单
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
-        lordVisible: false,
-        detailVisible: false,
-        currentPage: 1,
+
+        //房东
+        params: {
+          search: '',
+          payWay: '',
+        },
+        //高级
         isHigh: false,
-        form: {},
-        tableData: [],
+
+        activeName: 'first'
       }
     },
     mounted() {
-      this.getCustomsList();
+
     },
     methods: {
-      getCustomsList() {
-        this.$http.get(this.url + 'account/index').then(res => {
-          console.log(res);
-        }).catch(err => {
-          console.log(err);
-        })
-      },
-      // 新增客户
-      openAccount() {
-        this.lordVisible = true;
+      handleTabClick(val) {
+        this.activeName = val.name;
       },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
       resetting() {
 
-      },
-      // 双击
-      dblClickTable() {
-        this.detailVisible = true;
       },
       // 右键
       customerMenu(row, event) {
@@ -247,20 +168,13 @@
         }).catch(() => {
 
         });
-      },
-      // 分页
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
-    },
+      }
+    }
   }
 </script>
 
 <style lang="scss">
-  body{
-    padding-right: 0 !important;
+  #customerManage{
+
   }
 </style>
