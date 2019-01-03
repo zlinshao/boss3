@@ -1039,52 +1039,7 @@
       },
       //搜索
       search() {
-        let _status = '';
-        switch (this.activeName) {
-          case 'first' :
-            _status = 1;
-            break;
-          case 'second' :
-            _status = 2;
-            break;
-          case 'third' :
-            _status = 3;
-            break;
-          case 'fourth' :
-            _status = 4;
-            break;
-        }
-        this.$http.get(globalConfig.server + 'hrm/interview?search=' + this.params.search + '&status=' + _status + '&recruitment_id=' + this.id).then(res => {
-          if (this.activeName === 'first') {
-            if (res.data.code === '20000') {
-              this.interviewDatedData = res.data.data.data
-            } else {
-              this.interviewDatedData = []
-            }
-          }
-          if (this.activeName === 'second') {
-            if (res.data.code === '20000') {
-              this.interviewFinishedData = res.data.data.data
-            } else {
-              this.interviewFinishedData = []
-            }
-          }
-          if (this.activeName === 'third') {
-            if (res.data.code === '20000') {
-              this.toInductData = res.data.data.data
-            } else {
-              this.toInductData = []
-            }
-          }
-          if (this.activeName === 'fourth') {
-            if (res.data.code === '20000') {
-              this.inductedData = res.data.data.data
-            } else {
-              this.inductedData = []
-            }
-          }
-
-        });
+        this.getAllData(this.id);
       },
       //获取数据
       getAllData(id) {
@@ -1262,12 +1217,10 @@
           this.interviewedDialog = true;
           this.interviewedObj.id = item.id;
           this.interviewedObj.name = item.name;
-          // this.interviewedObj.gender = item.genders.dictionary_name;
           this.interviewedObj.gender = item.gender === 716 ? '男' : '女';
         } else if (this.updateParams.update.interview_status === 735) {
           this.is_editing_interview_status = '';
         } else {
-        //   this.confirmUpdateStatus();
             this.uninterviewDialog = true;
             this.uninterviewObj.id = item.id;
             this.uninterviewObj.gender = item.gender;
@@ -1513,14 +1466,14 @@
           this.lookUpResumeDialog = true;
           this.album = row.album;
           row.album.forEach(item => {
-                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
-                    this.lookUpResumeDialog = true;
-                }else{
-                    setTimeout(() => {
-                        this.lookUpResumeDialog = false;
-                    }, 1000)
-                }
-            })
+              if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                  this.lookUpResumeDialog = true;
+              }else{
+                  setTimeout(() => {
+                      this.lookUpResumeDialog = false;
+                  }, 1000)
+              }
+          })
         }
       },
       //确定是否入职

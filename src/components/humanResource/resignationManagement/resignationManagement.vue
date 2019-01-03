@@ -19,13 +19,13 @@
                 <el-date-picker v-model="params.leave_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="mini"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-col :span="12">
                 <el-form-item>
                   <el-input v-model="params.keywords" placeholder="请输入关键字" size="mini" @keyup.enter.prevent.native="getResignationEmploye" clearable></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="12">
                   <el-button type="primary" size="mini" @click="getResignationEmploye">搜 索</el-button>
                   <el-button type="primary" size="mini" @click="resignationSMS">离职短信</el-button>
               </el-col>
@@ -133,7 +133,7 @@
       <Organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"></Organization>
       <!-- 上传文件 -->
       <el-dialog :title="titleName" :visible.sync="upLoadDialogVisible" width="30%">
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="离职类型">
             <el-input v-model="dismiss_type" :disabled="true"></el-input>
           </el-form-item>

@@ -172,9 +172,8 @@ export default {
                       obj.resultOffWork = this.exchangeHour(i.classes.pm_rest_time, val.dimensions.hour + ":" + val.dimensions.minute);
                     }
                   })
-                  
                 }
-                 obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
+                obj.goOffWork = val.dimensions.hour + ":" + val.dimensions.minute;  // 下班时间
               } else if (val.event_attribute == 3) {
                 if(val.dimensions && val.dimensions.hour){
                   obj.workShift = val.dimensions.hour + ":" + val.dimensions.minute;  // 上班排班时间

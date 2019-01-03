@@ -135,6 +135,7 @@
 <script>
 import UPLOAD from "../../../common/UPLOAD.vue"
 export default {
+  name: 'rewardReord',
   props: ["ids", "lookRewardLog", "names", "orgs", "roles", "times"],
   components: {UPLOAD},
   data() {
@@ -198,7 +199,8 @@ export default {
     },
     ids(val) {
       this.saveUid = val;
-      this.gerRewardReord(val)
+      // console.log(val)
+      // this.gerRewardReord(val)
     },
     names(val) {
       this.form.name = val;
@@ -216,7 +218,10 @@ export default {
     RewardDialogVisible(val) {
       if(!val) {
         this.$emit("close");
+        this.detail = {};
         // this.isClear = true;
+      }else{
+        this.gerRewardReord(this.ids)
       }
     },
     editStaffRecordDialogVisible(val) {
@@ -269,6 +274,7 @@ export default {
       this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {user_id: val}).then(res => {
         this.loading = false;
         if (res.data.code === "100100") {
+          console.log('detail')
           this.detail = res.data.data;
           this.rewardreForm.praiseNumber = res.data.data.praises;
           this.rewardreForm.criticismNumber = res.data.data.criticisms;

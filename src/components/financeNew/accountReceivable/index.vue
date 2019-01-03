@@ -471,7 +471,7 @@
           <el-form-item label="应收金额" prop="amount_receivable">
             <el-input type="number" v-model="addForm.amount_receivable"></el-input>
           </el-form-item>
-          <el-form-item label="付款日期" prop="pay_date">
+          <el-form-item label="收款日期" prop="pay_date">
             <el-date-picker
               v-model="addForm.pay_date"
               type="date"
@@ -501,6 +501,7 @@
       :visible="customer_list_visible"
       title="用户列表"
       width="35%"
+      @close="customer_list_visible = false"
     >
       <div>
         <el-row :gutter="20">
@@ -512,7 +513,7 @@
           </el-select>
           </el-col>
           <el-col :span="12">
-            <el-input size="mini" style="width: 200px" v-model="customer_params.search" placeholder="请输入需求搜索的内容"></el-input>
+            <el-input size="mini" style="width: 200px" v-model="customer_params.search" clearable c placeholder="请输入需求搜索的内容"></el-input>
             <el-button type="primary" size="mini" @click="search_customer_list">搜索</el-button>
           </el-col>
         </el-row>

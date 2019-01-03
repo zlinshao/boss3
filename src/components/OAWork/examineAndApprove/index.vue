@@ -1098,7 +1098,6 @@
         }).then((res) => {
           this.examineLoading = false;
           if (res.data.code === '20000' && res.data.data.data.length !== 0) {
-            console.log(res.data.data.data);
             let data = res.data.data.data;
             this.paging = res.data.data.count;
             let dataList = [];
@@ -1168,7 +1167,6 @@
               dataList.push(user);
             }
             this.tableData = dataList;
-            console.log(this.tableData);
             this.getName(house_id);
           } else {
             this.tableData = [];
