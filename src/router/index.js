@@ -508,7 +508,7 @@ export default new Router({
         {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
-        // {path: '/PendingItem', component: PendingItem, name: '待处理项'},
+        {path: '/PendingItem', component: PendingItem, name: '待处理项'},
         // {path: '/dailyLog', component: DailyLog, name: '日志管理'},
       ]
     },
