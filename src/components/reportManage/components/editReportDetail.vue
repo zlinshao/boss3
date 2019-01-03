@@ -889,6 +889,8 @@
             this.electronicReceiptParam.pay_way = data.process.content.pay_way.map(item => {
               return item;
             }).join(",");
+            console.log(this.electronicReceiptParam.price);
+            console.log(this.electronicReceiptParam.pay_way);
           } else {
             this.electronicReceiptParam.payer = data.process.content.name;
             this.electronicReceiptParam.sign_at = data.process.content.sign_date;
