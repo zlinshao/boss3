@@ -884,14 +884,10 @@
             this.electronicReceiptParam.payer = data.process.content.customer_name;
             this.electronicReceiptParam.sign_at = data.process.content.retainage_date;
             this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
-              if (typeof item === 'string') {
-                return item.split(':')[1];
-              } else {
-                return item.price_str;
-              }
+              return item.split(':')[1];
             }).join(",");
             this.electronicReceiptParam.pay_way = data.process.content.pay_way.map(item => {
-              return item.pay_way_str;
+              return item;
             }).join(",");
           } else {
             this.electronicReceiptParam.payer = data.process.content.name;
