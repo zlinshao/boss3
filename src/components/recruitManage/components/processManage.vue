@@ -1,10 +1,10 @@
 <template>
   <div id="process">
-    <el-dialog :visible.sync="processManageDialog" width="80%">
+    <el-dialog :visible.sync="processManageDialog" width="80%" title="流程管理">
       <el-tabs v-model="activeName" @tab-click="handleClick" class='el-tabs'>
         <el-form inline size='mini' class="search-info">
           <el-form-item label="">
-            <el-input v-model='params.search' @keyup.enter.prevent.native='search' placeholder="请输入"></el-input>
+            <el-input v-model='params.search' @keyup.enter.prevent.native='search' placeholder="请输入" clearable></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click='search'>搜索</el-button>
@@ -927,6 +927,14 @@
                     this.is_editing_interview_finished = '';
                     this.is_editing_entry_statuss = '';
                     this.is_editing_interview_status = '';
+                    this.loading1 = true;
+                    this.loading2 = true;
+                    this.loading3 = true;
+                    this.loading4 = true;
+                    this.interviewDatedData = [];
+                    this.interviewFinishedData = [];
+                    this.toInductData = [];
+                    this.inductedData = [];
                     this.$emit('close');
                 }else{
                     this.activeName = this.active_name;
@@ -1039,7 +1047,7 @@
       },
       //搜索
       search() {
-        this.getAllData(this.id);
+        this.getAllData(this.id)
       },
       //获取数据
       getAllData(id) {

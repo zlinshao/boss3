@@ -8,6 +8,7 @@
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button>
+          <el-button type="primary" size="mini" @click="associateCommunity" >关联</el-button>
           <!-- <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="cancelShareBtn" >取消分享</el-button> -->
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
@@ -264,6 +265,29 @@
         <el-button type="primary" @click="isConfirmMerge" size="mini">确 定</el-button>
       </span>
     </el-dialog>
+    <!--小区关联部门-->
+    <el-dialog title="关联小区" :close-on-click-modal="false" :visible.sync="associateDialog" width="30%">
+      <el-form size="mini" label-width="120px">
+        <el-form-item label="需要修改的部门" required>
+          <el-input v-model="associate.org_name" id="org-id" @focus="chooseDepart($event)" placeholder="请选择部门" readonly>
+              <template slot="append">
+                  <div style="cursor: pointer;" class='org-id' @click="closeDepart($event)">清空</div>
+              </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="需要关联的部门" required>
+          <el-input v-model="associate.new_org_name" id="new-org-id" @focus="chooseDepart($event)" placeholder="请选择部门" readonly>
+              <template slot="append">
+                  <div style="cursor: pointer;" class="new-org-id" @click="closeDepart($event)">清空</div>
+              </template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer associate">
+        <el-button @click="associateDialog = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="confirmAssociate" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <!--右键-->
     <!-- <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu> -->
@@ -276,6 +300,9 @@
     <organization :organizationDialog="organizationDialog" :length="length" :type="type" @close='closeModal' @selectMember="selectMember"  :ids="selectedID"></organization>
     <!-- 分享组织架构 -->
     <organization :organizationDialog="shareOrganizationDia" :length="length" :type="type" @close='closeModalShsre' @selectMember="selectMemberShare"  :ids="selectedShareID"></organization>
+    <!--关联组织架构-->    
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMemberAssociate" :ids="associate.org_id"></organization>
+    <organization :organizationDialog="organizeVisibleNew" :length="lengthNew" :type="organizeType" @close="closeOrganize" @selectMember="selectMemberAssociateNew"></organization>
   </div>
 </template>
 
@@ -311,8 +338,10 @@ export default {
       organizationDialog: false,  // 组织架构
       shareOrganizationDia: false,  // 组织架构
       length: 0,
+      lengthNew: 0,
       type: "",
       organizeVisible: false, // 组织架构
+      organizeVisibleNew: false,
       communityArr: [],  // 小区数组
       orgId: [],
       cancelShareFrom: {
@@ -321,6 +350,14 @@ export default {
       distributionForm: {
         org_id: [],  // 部门ID
         community_id: [] // 小区ID
+      },
+      organizeType:"",
+      associateDialog: false,
+      associate: {
+        org_name: "",
+        org_id: [],
+        new_org_id: '',
+        new_org_name: ''
       },
       ind1: 0,
       ind2: 0,
@@ -407,6 +444,17 @@ export default {
         this.myData(1);
       }
     });
+  },
+  watch: {
+    associateDialog(val){
+      if(!val){
+        this.associate.org_id = [];
+        this.associate.org_name = "";
+        this.associate.new_org_id = "";
+        this.associate.new_org_name = "";
+        // this.lengthNew = 0;
+      }
+    }
   },
   methods: {
     handleSelectionChange(val) {
@@ -603,7 +651,7 @@ export default {
     cancelShareBtn() {
       this.cancelShareFrom.community_id = this.communityArr;
       this.$http.post(this.urls + "distribution/community/un-share", this.cancelShareFrom).then(res => {
-        console.log(res, "333333")
+        // console.log(res, "333333")
         if(res.data.code == "1000") {
           this.$notify.success({
             title: "成功",
@@ -623,6 +671,74 @@ export default {
       this.shareOrganizationDia = true;
       this.type = "depart";
       this.length = 20;
+    },
+    //小区关联
+    associateCommunity(){
+      this.associateDialog = true;
+    },
+    //关闭组织架构
+    closeOrganize(){
+        this.organizeVisible = false;
+        this.organizeVisibleNew = false;
+        this.associate.org_id = this.associate.org_id.filter(item => (typeof item) === 'number');
+    },
+    //打开组织架构
+    chooseDepart(event){
+      if(event.target.id === 'org-id'){
+        this.organizeVisible = true;
+        this.organizeVisibleNew = false;
+      }
+      if(event.target.id === 'new-org-id'){
+        this.organizeVisible = false;
+        this.organizeVisibleNew = true;
+        this.lengthNew = 1;
+      }   
+    },
+    //选择部门
+    selectMemberAssociate(val){
+      this.associate.org_id = [];
+      this.associate.org_name = "";
+      val.forEach(item => {
+        this.associate.org_id.push(item.id);
+        this.associate.org_name += item.name + "  ";
+      })
+    },
+    selectMemberAssociateNew(val){
+      this.associate.new_org_id = val[0].id;
+      this.associate.new_org_name = val[0].name;
+    },
+    closeDepart(event){
+      if(event.target.className === 'org-id'){
+        this.associate.org_id = [];
+        this.associate.org_name = ""
+      }
+      if(event.target.className === 'new-org-id'){
+        this.associate.new_org_id = "";
+        this.associate.new_org_name = "";
+      }
+    },
+    //确定关联
+    confirmAssociate(){
+      this.$http.post(globalConfig.server + 'distribution/community/edit_allocation', {
+        org_id: this.associate.org_id,
+        new_org_id: this.associate.new_org_id
+      }).then(res => {
+        if(res.data.code === '10020' || res.data.code === '10030'){
+          this.$notify({
+            title: "成功",
+            type: 'success',
+            message: res.data.msg
+          });
+          this.myData(1);
+          this.associateDialog = false;
+        }else{
+          this.$notify({
+            title: "警告",
+            type: "warning",
+            message: res.data.msg
+          });
+        }
+      });
     },
     selectMemberShare(val) {
       this.type = "";
@@ -753,7 +869,7 @@ export default {
     },
 
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     // handleCurrentChange(val) {
     //   console.log(`当前页: ${val}`);
@@ -1000,6 +1116,10 @@ export default {
       top: 0;
       left: 27%;
     }
+  }
+  .associate{
+    display: flex;
+    justify-content: center;
   }
 }
 .fade-enter-active,
