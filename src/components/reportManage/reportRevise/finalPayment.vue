@@ -26,8 +26,8 @@
           </el-row>
           <el-row>
             <el-col :span="6" >
-              <el-form-item label="付款方式" v-for="(item, index) in params.payWay" :key="index" required>
-                <el-input v-model="params.payWay[index]"   disabled></el-input>
+              <el-form-item label="付款方式" v-for="(item, index) in params.pay_way" :key="index" required>
+                <el-input v-model="params.pay_way[index]"   disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6" >
@@ -206,7 +206,7 @@
           address:'',           //房屋地址
           customer_name:"",     //客户姓名
           month:'',             //月数
-          payWay:[],            //付款方式
+          pay_way:[],            //付款方式
           price_arr:[],         //月单价
           terms:"",             //房租期数
           front_money:'',       //定金
@@ -238,7 +238,7 @@
           deposit_photo_old: [],        //押金收条 数组
           deposit_photo_new: [],        //押金收条 数组
           account_id : [],
-          
+
           photo: [],                    //房屋影像
           staff_id: '',
           department_id: '',
@@ -260,11 +260,11 @@
         photo: {},
 
         priceChangeAmount: 1,
-        payWayChangeAmount: 1,
+        pay_wayChangeAmount: 1,
 
         isUpload: false,
         city_dic: [],
-       
+
       };
     },
     watch: {
@@ -343,7 +343,7 @@
             console.log(this.value8)
           }
         });
-        
+
       },
       // 收据编号默认城市
       receiptNum() {
@@ -403,15 +403,6 @@
         }
         this.selectHide = false;
       },
-      // 显示日期
-      showTimeChoose(val, time, index) {
-        setTimeout(() => {
-          this.timeModule = true;
-        }, 200);
-        this.formatData.dateVal = time;
-        this.formatData.dataKey = val;
-        this.formatData.idx = index;
-      },
       getDictionary() {
         this.dictionary(306, 1).then((res) => {
           this.city_dic = res.data;
@@ -460,7 +451,7 @@
             this.params.address = data.address;
             this.params.customer_name = data.draft_content.customer_name;
             this.params.month = data.draft_content.month;
-            this.params.payWay = data.draft_content.payWay;
+            this.params.pay_way = data.draft_content.pay_way;
             this.params.price_arr = data.draft_content.price_arr;
             this.params.terms = data.draft_content.terms;
             this.params.other_fee = data.draft_content.other_fee;
@@ -502,7 +493,7 @@
               this.getReceipt(data.draft_content);
             }
             this.params.remark = data.draft_content.remark;
-            
+
             this.params.screenshot_leader = data.draft_content.screenshot_leader;
             this.leaders = data.screenshot_leader;
 
@@ -524,7 +515,7 @@
             this.params.house_id = data.draft_content.house_id;      //城市
             this.params.contract_id = data.contract_id;
             console.log(data)
-            this.params.city_name = data.city_name;                 
+            this.params.city_name = data.city_name;
             this.photo = this.getImgObject(data.photo);
             this.params.photo = this.getImgIdArray(data.photo);
 
@@ -599,13 +590,13 @@
         this.priceChangeAmount--;
       },
       //付款方式变化
-      addMorePayWayChange() {
-        this.payWayChangeAmount++;
+      addMorepay_wayChange() {
+        this.pay_wayChangeAmount++;
       },
-      deletePayWayChange(item) {
+      deletepay_wayChange(item) {
         this.params.pay_way_arr.splice(item, 1);
         this.params.period_pay_arr.splice(item, 1);
-        this.payWayChangeAmount--;
+        this.pay_wayChangeAmount--;
       },
 
       //改变收房月数
@@ -617,7 +608,7 @@
         this.params.price_arr.splice(1, this.params.price_arr.length);
         this.params.pay_way_arr.splice(1, this.params.pay_way_arr.length);
         this.priceChangeAmount = 1;
-        this.payWayChangeAmount = 1;
+        this.pay_wayChangeAmount = 1;
       },
 
       //计算空置期结束时间
@@ -674,10 +665,10 @@
             for (let i = 0; i < pay.terms; i++) {
               this.periods.push(i + 1);
             }
-            this.params.payWay = [];
+            this.params.pay_way = [];
             this.params.price_arr = [];
             for (let i = 0; i < pay.pay_way.length; i++) {
-              this.params.payWay.push(pay.pay_way[i].begin_date + '~' + pay.pay_way[i].end_date + ':' + pay.pay_way[i].pay_way_str);
+              this.params.pay_way.push(pay.pay_way[i].begin_date + '~' + pay.pay_way[i].end_date + ':' + pay.pay_way[i].pay_way_str);
             }
             for (let i = 0; i < pay.price.length; i++) {
               this.params.price_arr.push(pay.price[i].begin_date + '~' + pay.price[i].end_date + ':' + pay.price[i].price_str);
@@ -815,7 +806,7 @@
           id: '',
           processable_id: '',
           house_id: '',
-          
+
           is_draft: 0,
           city_id: '',                  //城市
           city_name: '',                //城市
@@ -876,7 +867,7 @@
         this.photo = {};
 
         this.priceChangeAmount = 1;
-        this.payWayChangeAmount = 1;
+        this.pay_wayChangeAmount = 1;
 
         this.length = '';
         this.type = '';
@@ -900,7 +891,7 @@
         this.deposit_photos = [];
 
         this.params.price_arr = [''];
-        this.params.payWay = [''];
+        this.params.pay_way = [''];
         this.params.terms = '';
         this.periods = [];
         this.params.contract_id = '';
