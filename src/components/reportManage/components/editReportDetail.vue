@@ -812,7 +812,7 @@
                   if (data.process.place.name === 'verify-manager_review') {
                     this.checkEmployee(data.process)
                   } else {
-                    this.contractStatus(data);
+                    this.contractStatus(data.process);
                   }
                 }
                 break;
@@ -1173,18 +1173,15 @@
       },
       // 合同是否存在
       contractStatus(main) {
-        if (main.place.status === 'review') {
-          this.$http.get(this.urls + 'coreproject/lord/has_lord/' + main.house_id).then(res => {
-            if (res.data !== true) {
-              this.$confirm('合同已存在！', '提示', {
-                confirmButtonText: '确定',
-                type: 'warning'
-              }).then(() => {
-
-              });
-            }
-          })
-        }
+        this.$http.get(this.urls + 'coreproject/lord/has_lord/' + main.house_id).then(res => {
+          if (res.data !== true) {
+            this.$confirm('合同已存在！', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
+            }).then(() => {
+            });
+          }
+        })
       },
       //关闭弹框
       closeBankTips() {
