@@ -72,64 +72,64 @@
       <div class="main">
         <div>
           <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="报备入账" name="report">
-              <el-table
-                ref="multipleTable"
-                :data="tableData"
-                :empty-text='rentStatus'
-                v-loading="rentLoading"
-                element-loading-text="拼命加载中"
-                element-loading-spinner="el-icon-loading"
-                element-loading-background="rgba(255, 255, 255, 0)"
-                @select="handleSelection"
-                @select-all="handleSelectionAll"
-                @row-contextmenu='openContextMenu'
-                style="width: 100%">
-                <el-table-column
-                  type="selection">
-                </el-table-column>
-                <el-table-column
-                  prop="pay_date"
-                  label="收款时间">
-                </el-table-column>
-                <el-table-column
-                  prop="address"
-                  label="房屋地址">
-                </el-table-column>
-                <el-table-column
-                  prop="subject.title"
-                  label="科目">
-                </el-table-column>
-                <el-table-column
-                  prop="amount_receivable"
-                  label="应收金额">
-                </el-table-column>
-                <el-table-column
-                  prop="amount"
-                  label="实收金额">
-                </el-table-column>
-                <el-table-column
-                  label="汇款帐户"
-                  prop="account.name">
-                </el-table-column>
-                <el-table-column
-                  label="状态">
-                  <template slot-scope="scope">
-                    <div class="is_entered1" v-if="scope.row.is_entered">已入账</div>
-                    <div class="is_entered2" v-else>未入账</div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  label="操作人">
-                  <template slot-scope="scope">
-                    <span v-if="scope.row.simple_staff && scope.row.simple_staff.real_name">
-                      {{scope.row.simple_staff.real_name}}
-                    </span>
-                    <span v-else>/</span>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
+            <!--<el-tab-pane label="报备入账" name="report">-->
+              <!--<el-table-->
+                <!--ref="multipleTable"-->
+                <!--:data="tableData"-->
+                <!--:empty-text='rentStatus'-->
+                <!--v-loading="rentLoading"-->
+                <!--element-loading-text="拼命加载中"-->
+                <!--element-loading-spinner="el-icon-loading"-->
+                <!--element-loading-background="rgba(255, 255, 255, 0)"-->
+                <!--@select="handleSelection"-->
+                <!--@select-all="handleSelectionAll"-->
+                <!--@row-contextmenu='openContextMenu'-->
+                <!--style="width: 100%">-->
+                <!--<el-table-column-->
+                  <!--type="selection">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--prop="pay_date"-->
+                  <!--label="收款时间">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--prop="address"-->
+                  <!--label="房屋地址">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--prop="subject.title"-->
+                  <!--label="科目">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--prop="amount_receivable"-->
+                  <!--label="应收金额">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--prop="amount"-->
+                  <!--label="实收金额">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--label="汇款帐户"-->
+                  <!--prop="account.name">-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--label="状态">-->
+                  <!--<template slot-scope="scope">-->
+                    <!--<div class="is_entered1" v-if="scope.row.is_entered">已入账</div>-->
+                    <!--<div class="is_entered2" v-else>未入账</div>-->
+                  <!--</template>-->
+                <!--</el-table-column>-->
+                <!--<el-table-column-->
+                  <!--label="操作人">-->
+                  <!--<template slot-scope="scope">-->
+                    <!--<span v-if="scope.row.simple_staff && scope.row.simple_staff.real_name">-->
+                      <!--{{scope.row.simple_staff.real_name}}-->
+                    <!--</span>-->
+                    <!--<span v-else>/</span>-->
+                  <!--</template>-->
+                <!--</el-table-column>-->
+              <!--</el-table>-->
+            <!--</el-tab-pane>-->
             <el-tab-pane label="应收入账" name="first">
               <el-table
                 :data="tableData1"
@@ -244,6 +244,7 @@
     components: {RightMenu, ExportData, ImportData, Organization, Remind},
     data() {
       return {
+        url: globalConfig.finance_server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -282,7 +283,7 @@
         importDialog: false,
         remindDialog: false,
         organizationDialog: false,
-        activeName: 'report',
+        activeName: 'first',
       };
     },
     activated() {

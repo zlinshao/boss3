@@ -81,7 +81,8 @@
                         </div>
                       </div>
                     </el-form-item>
-                    <el-form-item v-if="value && value.constructor === Object && !index.includes('渠道信息')" :label="index" class="detailTitle">
+                    <el-form-item v-if="value && value.constructor === Object && !index.includes('渠道信息')" :label="index"
+                                  class="detailTitle">
                       <div class="special" v-if="value.name">{{value.name}}</div>
                       <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
@@ -286,7 +287,8 @@
         <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" @click="editInfo" v-if="electronicReceiptStatu" :disabled="electronicReceiptDisabled">
+        <el-button size="small" type="primary" @click="editInfo" v-if="electronicReceiptStatu"
+                   :disabled="electronicReceiptDisabled">
           修改电子收据
         </el-button>
         <el-button size="small" :type="ElectronicReceiptBtnColor" @click="electronicReceiptDia()"
@@ -612,13 +614,14 @@
     methods: {
       //修改电子收据
       editInfo() {
-        this.$prompt('请输入修改的客户姓名','提示',{
+        this.$prompt('请输入修改的客户姓名', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          inputValue:this.electronicReceiptParam.payer,
+          inputValue: this.electronicReceiptParam.payer,
         }).then(({value}) => {
           this.createElectronicReceipt(value);
-        }).catch(() => { })
+        }).catch(() => {
+        })
       },
       // 审批人信息
       approvePersonal() {
@@ -628,7 +631,7 @@
         }
       },
       // 通过人
-      throughMan(){
+      throughMan() {
         if (this.operators.length !== 0) {
           this.role_name = this.operators;
           this.showContent = true;
@@ -673,6 +676,7 @@
       createElectronicReceipt(name) {
         this.electronicReceiptVisible = true;
         let params = {};
+
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
@@ -694,7 +698,6 @@
         params.memo = this.electronicReceiptParam.memo || "";
         params = Object.assign(this.bank, params);
         params.sum = this.trim(params.sum);
-        // return false;
         this.$http.post(globalConfig.server + 'financial/receipt/generate', params).then((res) => {
           this.pdfloading = false;
           if (res.data.code === "20000") {
@@ -805,8 +808,12 @@
                 break;
               case "bulletin_collect_basic":
                 this.setProcess(data);
-                if(data.process.place.name === 'verify-manager_review' || data.process.place.display_name === '核算经理审核中'){
-                  this.checkEmployee(data.process)
+                if (data.process.place.status === 'review') {
+                  if (data.process.place.name === 'verify-manager_review') {
+                    this.checkEmployee(data.process)
+                  } else {
+                    this.contractStatus(data.process);
+                  }
                 }
                 break;
               default:
@@ -823,7 +830,6 @@
       setProcess(data) {
         this.show_content = JSON.parse(data.process.content.show_content_compress);
         this.reportDetailData = data.process.content;
-        console.log(this.reportDetailData);
         this.processable_id = data.process.processable_id;
         this.operation = data.operation;
         this.deal = data.deal;
@@ -880,17 +886,14 @@
           if (this.bulletinType === "尾款报备") {
             this.electronicReceiptParam.payer = data.process.content.customer_name;
             this.electronicReceiptParam.sign_at = data.process.content.retainage_date;
-            // return false;
-            // this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
-            //   return item.split(':')[1];
-            // }).join(",");
             this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
-              return `${item.price}元`;
+              return item.split(':')[1];
             }).join(",");
-            // this.electronicReceiptParam.pay_way = data.process.content.payWay.join(',')
             this.electronicReceiptParam.pay_way = data.process.content.pay_way.map(item => {
-              return `${item.pay_way_str} ${item.begin_date}-${item.end_date}`;
+              return item;
             }).join(",");
+            console.log(this.electronicReceiptParam.price);
+            console.log(this.electronicReceiptParam.pay_way);
           } else {
             this.electronicReceiptParam.payer = data.process.content.name;
             this.electronicReceiptParam.sign_at = data.process.content.sign_date;
@@ -1154,16 +1157,34 @@
         });
       },
       //收房报备验证收款银行卡或收款人是否为公司员工
-      checkEmployee(data){
+      checkEmployee(data) {
         this.$http.post(globalConfig.server + '/bulletin/collect/validateBankCard', data).then(res => {
-          if(res.data.code === '50122'){
-            this.showBankCartTips = true;
-            this.bankCartMsg = res.data.msg;
+          if (res.data.code === '50122') {
+            // this.showBankCartTips = true;
+            // this.bankCartMsg = res.data.msg;
+            this.$confirm(res.data.msg, '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
+            }).then(() => {
+              this.contractStatus(data);
+            });
+          }
+        })
+      },
+      // 合同是否存在
+      contractStatus(main) {
+        this.$http.get(this.urls + 'coreproject/lord/has_lord/' + main.house_id).then(res => {
+          if (res.data !== true) {
+            this.$confirm('合同已存在！', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
+            }).then(() => {
+            });
           }
         })
       },
       //关闭弹框
-      closeBankTips(){
+      closeBankTips() {
         this.showBankCartTips = false;
         this.bankCartMsg = '';
       }

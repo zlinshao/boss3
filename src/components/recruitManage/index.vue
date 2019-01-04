@@ -615,7 +615,7 @@
            platformManage(item, index){
                this.scrollTop = window.pageYOffset;
                setTimeout(() => {
-                   document.documentElement.scrollTop = this.scrollTop;
+                //    document.documentElement.scrollTop = this.scrollTop;
                }, 80)
                this.platformDialog = true;
                this.$store.dispatch('toEdit', item)
@@ -627,7 +627,7 @@
                this.id = item.id;
                this.processDialog = true;
                setTimeout(() => {
-                   document.documentElement.scrollTop = this.scrollTop;
+                //    document.documentElement.scrollTop = this.scrollTop;
                }, 1000);
                var event = event || window.event;
                if(event.path && event.path[1].className.indexOf('first') > -1 || event.target.classList.contains('first')){
