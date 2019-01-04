@@ -36,6 +36,7 @@ const FinanceRunning=()=>import('../components/financeNew/runningAccount');//收
 const AccountPayable=()=>import('../components/financeNew/accountPayable');//应付款项
 const AccountReceivable=()=>import('../components/financeNew/accountReceivable');//应收款项
 const PendingItem = () => import  ('../components/financeNew/pendingItem');
+const FinanceAccountMmanagement = () => import('../components/financeNew/financeAccountManagement/index.vue');
 const DailyLog = () => import ('../components/financeNew/dailyLog'); //日志管理
 
 
@@ -504,12 +505,12 @@ export default new Router({
       children: [
         {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
         {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
-        {path: "/accountManagement", component: accountMmanagement, name: "账户管理" },
+        {path: "/financeAccountManagement", component: FinanceAccountMmanagement, name: "账户管理" },
         {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
-        // {path: '/PendingItem', component: PendingItem, name: '待处理项'},
-        // {path: '/dailyLog', component: DailyLog, name: '日志管理'},
+        {path: '/PendingItem', component: PendingItem, name: '待处理项'},
+        {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
       ]
     },
 
