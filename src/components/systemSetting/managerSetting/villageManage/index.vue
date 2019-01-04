@@ -8,7 +8,7 @@
           <el-button type="primary" size="mini" @click="openDelete()" :disabled="deletedBtn">删除</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn" @click="mergeBtn" >合并</el-button>
           <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="shareBtn" >分享</el-button>
-          <el-button type="primary" size="mini" @click="associateCommunity" >关联</el-button>
+          <el-button type="primary" size="mini" @click="associateCommunity" >转移</el-button>
           <!-- <el-button type="primary" size="mini" :disabled="deletedBtn"  @click="cancelShareBtn" >取消分享</el-button> -->
         </div>
         <el-form :inline="true" onsubmit="return false" size="mini">
@@ -254,7 +254,7 @@
       </el-pagination>
     </div>
     <!--模态框-->
-    <el-dialog title="合并小区" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
+    <el-dialog title="转移小区" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
       <el-form size="mini" label-width="80px">
         <el-form-item label="小区名称" required>
           <el-input v-model="mergeName" @focus="villageDialog = true" placeholder="请选择小区" readonly></el-input>
@@ -266,16 +266,16 @@
       </span>
     </el-dialog>
     <!--小区关联部门-->
-    <el-dialog title="关联小区" :close-on-click-modal="false" :visible.sync="associateDialog" width="30%">
+    <el-dialog title="转移小区" :close-on-click-modal="false" id="transfer-department" :visible.sync="associateDialog" width="30%">
       <el-form size="mini" label-width="120px">
-        <el-form-item label="需要修改的部门" required>
+        <el-form-item label="需要转移的部门" required>
           <el-input v-model="associate.org_name" id="org-id" @focus="chooseDepart($event)" placeholder="请选择部门" readonly>
               <template slot="append">
                   <div style="cursor: pointer;" class='org-id' @click="closeDepart($event)">清空</div>
               </template>
           </el-input>
         </el-form-item>
-        <el-form-item label="需要关联的部门" required>
+        <el-form-item label="转移至" required>
           <el-input v-model="associate.new_org_name" id="new-org-id" @focus="chooseDepart($event)" placeholder="请选择部门" readonly>
               <template slot="append">
                   <div style="cursor: pointer;" class="new-org-id" @click="closeDepart($event)">清空</div>
@@ -1121,6 +1121,9 @@ export default {
     display: flex;
     justify-content: center;
   }
+}
+#transfer-department .el-form-item__label{
+  text-align: left;
 }
 .fade-enter-active,
 .fade-leave-active {
