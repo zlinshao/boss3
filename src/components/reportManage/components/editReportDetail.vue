@@ -808,8 +808,8 @@
                 break;
               case "bulletin_collect_basic":
                 this.setProcess(data);
-                if (data.process.place.name === 'review') {
-                  if (data.process.place.name === 'verify-manager_review' || data.process.place.display_name === '核算经理审核中') {
+                if (data.process.place.status === 'review') {
+                  if (data.process.place.name === 'verify-manager_review') {
                     this.checkEmployee(data.process)
                   } else {
                     this.contractStatus(data);
