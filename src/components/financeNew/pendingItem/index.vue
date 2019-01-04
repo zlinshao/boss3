@@ -5,7 +5,7 @@
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.search" size="mini" clearable
-            @keyup.enter.native.prevent="getTableData"
+                      @keyup.enter.native.prevent="getTableData"
             >
               <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
             </el-input>
@@ -32,7 +32,8 @@
                   <el-form-item>
                     <el-select v-model="form.event_type" clearable size="mini">
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in event_type" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in event_type" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -56,7 +57,7 @@
                         end-placeholder="结束日期"
                         :picker-options="pickerOptions"
                         value-format="yyyy-MM-dd"
-                        >
+                      >
                       </el-date-picker>
                     </div>
                   </el-form-item>
@@ -74,7 +75,8 @@
                   <el-form-item>
                     <el-select v-model="form.collect_rent" clearable size="mini">
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in collect_rent" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in collect_rent" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -93,7 +95,7 @@
 
     <div class="border_table">
       <el-table
-       :empty-text='collectStatus'
+        :empty-text='collectStatus'
         v-loading="collectLoading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
@@ -106,17 +108,17 @@
           label="事项类型"
           prop="item_type">
           <template slot-scope="scope">
-            <span v-if="scope.row.item_type == 1" >违约</span>
-            <span v-if="scope.row.item_type == 2" >转租</span>
-            <span v-if="scope.row.item_type == 3" >调租</span>
-            <span v-if="scope.row.item_type == 4" >退租</span>
-            <span v-if="scope.row.item_type == 5" >收房炸单</span>
-            <span v-if="scope.row.item_type == 6" >租房炸单</span>
+            <span v-if="scope.row.item_type == 1">违约</span>
+            <span v-if="scope.row.item_type == 2">转租</span>
+            <span v-if="scope.row.item_type == 3">调租</span>
+            <span v-if="scope.row.item_type == 4">退租</span>
+            <span v-if="scope.row.item_type == 5">收房炸单</span>
+            <span v-if="scope.row.item_type == 6">租房炸单</span>
           </template>
         </el-table-column>
         <el-table-column
           label="开单人"
-          prop="staff_name">
+          prop="staff.name">
         </el-table-column>
         <el-table-column
           label="房屋地址"
@@ -161,7 +163,7 @@
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-size="12"
-          layout="total, prev, pager, next, jumper"
+          layout="total, prev, pager, next"
           :total="totalNum">
         </el-pagination>
       </div>
@@ -172,7 +174,7 @@
 
     <PendingSettle :module="pendVisible" @close="closeSettle" :detailData="detailData"></PendingSettle>
 
-    <PendingDetail :module="detailVisible"  :detailData="detailData" @close="detailVisible = false" ></PendingDetail>
+    <PendingDetail :module="detailVisible" :detailData="detailData" @close="detailVisible = false"></PendingDetail>
   </div>
 </template>
 
@@ -189,26 +191,26 @@
         rightMenuY: 0,
         show: false,
         lists: [],
-        url:globalConfig.finance_server,
-        event_type: ['违约', '转租', '调租', '退租','收房炸单','租房炸单'],
-        collect_rent:['收房','租房'],
+        url: globalConfig.finance_server,
+        event_type: ['违约', '转租', '调租', '退租', '收房炸单', '租房炸单'],
+        collect_rent: ['收房', '租房'],
         isHigh: false,
         currentPage: 1,
         form: {
-          event_type:'',
-          collect_rent:'',
-          start_time:'',
-          end_time:'',
-          search:'',
-          page:1,
-          limit:12
+          event_type: '',
+          collect_rent: '',
+          start_time: '',
+          end_time: '',
+          search: '',
+          page: 1,
+          limit: 12
         },
-        detailData:{},
-        dates:'',
-        totalNum:0,
+        detailData: {},
+        dates: '',
+        totalNum: 0,
         detailVisible: false,
-        collectLoading:false,
-        collectStatus:'',
+        collectLoading: false,
+        collectStatus: '',
         pendVisible: false,
         pickerOptions: {
           shortcuts: [{
@@ -247,33 +249,31 @@
     },
     watch: {},
     methods: {
-      getTableData(){
-        if(this.dates){
-          this.form.start_time=this.dates[0];
-          this.form.end_time=this.dates[1];
+      getTableData() {
+        if (this.dates) {
+          this.form.start_time = this.dates[0];
+          this.form.end_time = this.dates[1];
         }
         this.collectLoading = true;
         this.collectStatus = ' ';
-        let params=this.form;
-        this.$http.get(this.url+'account/pending/index',{params:params}).then((res)=>{
-            if(res.data.success){
-                if  (res.data.data.count){
-                    this.isHigh=false;
-                    this.collectLoading=false;
-                    console.log(res);
-                    this.tableData=res.data.data.data;
-                    this.totalNum=res.data.data.count;
-                }else{
-                    this.collectStatus='暂无数据';
-                    this.tableData=[];
-                    this.totalNum=0;
-                }
-                
-            }else{
-                this.collectStatus='暂无数据';
-                this.tableData=[];
-                this.totalNum=0;
+        let params = this.form;
+        this.$http.get(this.url + 'account/pending/index', {params: params}).then((res) => {
+          if (res.data.success) {
+            if (res.data.data.count) {
+              this.isHigh = false;
+              this.collectLoading = false;
+              this.tableData = res.data.data.data;
+              this.totalNum = res.data.data.count;
+            } else {
+              this.collectStatus = '暂无数据';
+              this.tableData = [];
+              this.totalNum = 0;
             }
+          } else {
+            this.collectStatus = '暂无数据';
+            this.tableData = [];
+            this.totalNum = 0;
+          }
         });
       },
       // 搜索
@@ -292,14 +292,14 @@
       },
       // 双击 详情
       dblClickTable(row, event) {
-        this.detailData=row;
+        this.detailData = row;
         this.detailVisible = true;
       },
       // 右键
       clickMenu(row, event) {
         this.lists = [
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',data:row},
-          {clickIndex: 'settle', headIcon: 'el-icon-circle-close-outline', label: '结算',data:row},
+          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除', data: row},
+          {clickIndex: 'settle', headIcon: 'el-icon-circle-close-outline', label: '结算', data: row},
         ];
         this.contextMenuParam(event);
       },
@@ -309,10 +309,10 @@
         if (val.clickIndex === 'delete') {
           this.openDelete(val.data.id);
         } else if (val.clickIndex === 'settle') {
-          if(val.data.status===1){
-            this.detailData=val.data;
+          if (val.data.status === 1) {
+            this.detailData = val.data;
             this.pendVisible = true;
-          }else{
+          } else {
             this.$message({
               type: 'info',
               message: '已结算'
@@ -339,16 +339,16 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(this.url+'account/pending/delete/'+id).then((res)=>{
-              if(res.data.success){
-                this.$message({
-                  type: 'success',
-                  message: res.data.message
-                });
-                this.getTableData();
-              }else{
-                this.$message.error(res.data.message);
-              }
+          this.$http.get(this.url + 'account/pending/delete/' + id).then((res) => {
+            if (res.data.success) {
+              this.$message({
+                type: 'success',
+                message: res.data.message
+              });
+              this.getTableData();
+            } else {
+              this.$message.error(res.data.message);
+            }
           });
         }).catch(() => {
           this.$message({
@@ -361,14 +361,14 @@
       closeMenu() {
         this.show = false;
       },
-      closeSettle(val){
-        this.pendVisible=false;
-        if(val=='success'){
+      closeSettle(val) {
+        this.pendVisible = false;
+        if (val == 'success') {
           this.getTableData();
         }
       },
       handleCurrentChange(val) {
-        this.form.page=val;
+        this.form.page = val;
         this.getTableData();
       },
     },
