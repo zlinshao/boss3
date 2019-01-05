@@ -29,11 +29,7 @@
                     <span>月份:</span>
                     <el-select v-model="arrangeParams.arrange_month" style="width:180px" placeholder="请选择" size="mini"
                                @change="ChangeMonth">
-                      <el-option
-                        v-for="(item,index) in monthList"
-                        :key="index"
-                        :label="item.date"
-                        :value="item.date">
+                      <el-option v-for="item in monthList" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -757,8 +753,8 @@
       },
       //获取当前月份
       getQuery() {
-        var date = new Date().toLocaleDateString().split("/");
-        this.arrangeParams.arrange_month = date[0] + "-" + date[1];
+        this.arrangeParams.arrange_month = this.getCurrentDate('now');
+
       },
       ChangeMonth(val) {
         // this.arrangeParams.arrange_month = val;
@@ -859,7 +855,28 @@
       // 编辑班次
       editAttendance() {
         this.$router.push({ path: "/EditAttendanceShift" });
-      }
+      },
+      getCurrentDate(val = '') {
+        let currentDate = new Date();
+        let M = currentDate.getMonth() + 1;
+        let yy = currentDate.getFullYear();
+        let mm;
+        let month = [];
+        if (val === 'now') {
+          mm = (M < 10 ? "0" + M : M);
+          return  yy + "-" + mm;
+        }
+        for (let i = 0; i < 18; i++) {
+          if (M < 1) {
+            yy = yy - 1;
+            M = 12;
+          }
+          mm = (M < 10 ? "0" + M : M);
+          month.push({value: yy + "-" + mm, label: yy + "-" + mm});
+          M--;
+        }
+        return month;
+      },
     },
     created() {
       this.getQuery();
@@ -867,8 +884,7 @@
     },
     mounted() {
       this.getArrangeList(this.arrangeParams);
-      var res = GetDateList();
-      this.monthList = res;
+      this.monthList = this.getCurrentDate();
       this.getCheckList();
     }
   };
