@@ -665,7 +665,7 @@
                                 staffDetailData.detail.entry_way && 
                                 staffDetailData.detail.entry_way !== 'null' &&
                                 staffDetailData.detail.entry_way.entry_type &&
-                                staffDetailData.detail.entry_way.entry_type != '[]' 
+                                entryWayCategory[staffDetailData.detail.entry_way.entry_type-1]    
                                 ">
                             {{staffDetailData.detail.entry_way.entry_type ? entryWayCategory[staffDetailData.detail.entry_way.entry_type-1].name : ''}}
                         </span>

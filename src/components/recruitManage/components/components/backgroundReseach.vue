@@ -68,7 +68,6 @@
                         }
                     }
                 },
-                backgroundRadio_clone: {},
             }
         },
         watch: {
@@ -108,7 +107,6 @@
         methods:{
             cancelBgReseach(){
                 this.backgroundDialogVisible = false;
-                // this.initBgParam();
             },
             //编辑参数
             editParam(){
@@ -145,7 +143,6 @@
             //修改背景调查
             editBgreseach(){
                 this.is_editing_bg = true;
-                this.backgroundRadio_clone = this.deepClone(this.backgroundRadio);
             },
             //初始化参数
             initBgParam(){
@@ -164,21 +161,6 @@
                 this.backgroundRadio.update.background_check.experience_description = obj.experience_description;
                 this.backgroundRadio.update.background_check.dismiss_description = obj.dismiss_description;
                 this.backgroundRadio.update.background_check.resume_description = obj.resume_description;
-            },
-            //深拷贝
-            deepClone(source){
-                let targetObj = source.constructor === Array ? [] : {}; 
-                for(let keys in source){ 
-                if(source.hasOwnProperty(keys)){
-                    if(source[keys] && typeof source[keys] === 'object'){ 
-                        targetObj[keys] = source[keys].constructor === Array ? [] : {};
-                        targetObj[keys] = this.deepClone(source[keys]);
-                        }else{ 
-                        targetObj[keys] = source[keys];
-                        }
-                    } 
-                }
-                return targetObj;
             },
         }
     }

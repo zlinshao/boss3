@@ -156,7 +156,7 @@
         house_name: '',
         forbidden: false,
         cities: [],
-        select_type_complaint :['A类：原则性投诉', 'B类:重大投诉', 'C类:一般性投诉(被动)', 'D类：一般性投诉(主动)'],            //投诉类型
+        select_type_complaint:[], 
         showComplain:false,
       };
     },
@@ -164,7 +164,6 @@
       this.$http.get(globalConfig.server + 'customer/work_order/type_complaint').then(res => {
         if(res.data.code === '10000'){
           this.select_type_complaint = res.data.data;
-          console.log(this.select_type_complaint)
         }
       })
     },
@@ -181,7 +180,6 @@
         }
       },
       houseData(val) {
-        console.log(val)
         this.params.contract_id = val.contract_id;
         this.params.city = val.city_id;
         this.city_name = val.city_name;
@@ -200,7 +198,6 @@
         // 工单类型
         this.dictionary(696, 1).then((res) => {
           this.dictionaries = res.data;
-          console.log(this.dictionaries)
         });
         // 工单状态
         this.dictionary(335, 1).then((res) => {

@@ -488,11 +488,7 @@
                     }
                 });
                 //状态
-                this.dictionary(731).then((res) => {
-                    if(res.code === '30010'){
-                        this.status = res.data
-                    }
-                });
+                
             },
             //状态
             getStatus(_id){
@@ -682,15 +678,10 @@
             .el-button:first-of-type{
                 margin-left: 66px;
             }
-            // .margin-left{
-            //     margin-left: 25px;
-            //     text-align: center;
-            // }
         }
         .position-info{
             font-family: 'KaiTi';
             font-weight: 400;
-            // text-align: center;
             font-size: 15px;
             color: #555;
             font-style: normal;
@@ -711,7 +702,6 @@
             margin-top: 50px;
         }
         #editor,.text-editor{
-            // font-family: "KaiTi";
             p{
                 span{
                     color: rgb(192,192,192) !important;
@@ -721,7 +711,6 @@
         }
         .text-editor{
             margin: 20px 0;
-            // font-family: "KaiTi";
             color: rgb(192,192,192) !important;
         }
         .close-tips{
