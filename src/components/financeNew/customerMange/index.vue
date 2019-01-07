@@ -113,7 +113,7 @@
             </el-table-column>
             <el-table-column label="生成时间" prop="create_time" min-width="120px"></el-table-column>
             <el-table-column label="房屋地址" prop="address"></el-table-column>
-            <el-table-column label="客户姓名" prop="account_owner"></el-table-column>
+            <el-table-column label="客户姓名" prop="customer_name"></el-table-column>
             <el-table-column label="手机号" prop="contact"></el-table-column>
             <el-table-column label="收房月数	" prop="months"></el-table-column>
             <el-table-column label="付款方式	" prop="payType"></el-table-column>
@@ -242,6 +242,42 @@
         </div>
       </el-dialog>
     </div>
+
+    <!--编辑-->
+    <div>
+      <el-dialog
+        :visible.sync="canEditVisible"
+        title="编辑信息"
+        width="35%"
+      >
+        <div style="width: 90%;margin: 0 auto;">
+          <el-form size="mini" :model="editParams" ref="editFrom" label-width="100px">
+            <el-form-item label="开户人">
+              <el-input v-model="editParams.account_owner"></el-input>
+            </el-form-item>
+            <el-form-item label="所属部门">
+              <el-input disabled></el-input>
+            </el-form-item>
+            <el-form-item label="负责人">
+              <el-input disabled v-model="editParams.leader_name"></el-input>
+            </el-form-item>
+            <el-form-item label="客户姓名">
+              <el-input v-model="editParams.customer_name"></el-input>
+            </el-form-item>
+            <el-form-item label="客户手机号">
+              <el-input v-model="editParams.contact"></el-input>
+            </el-form-item>
+            <el-form-item label="房屋地址">
+              <el-input disabled></el-input>
+            </el-form-item>
+            <el-form-item label="收房月数">
+              <el-input></el-input>
+            </el-form-item>
+            <el-form-item label="付款方式"></el-form-item>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -281,7 +317,7 @@
         length: 1,
         type: 'depart',
 
-        activeName: 'second',
+        activeName: 'first',
 
         landLordList: [],
         landLordCount: 0,
@@ -300,6 +336,34 @@
         //租客信息
         renterTableList: [],
         renterTableCount: 0,
+
+        //编辑当前数据
+        canEditVisible: false,
+        editExtraParams: {
+          department_name: '',
+          house_name: '',
+          leader_name: '',
+        },
+        editParams: {
+          account_owner: '',
+          customer_name: '',
+          account_type: '',
+          contact: '', //客户账号
+          deal_date: '',
+          department_id: '',
+          deposit: '',
+          first_pay_date: '',
+          second_pay_date: '',
+          house_id: '',
+          leader_id: '',
+          medi_cost: '',
+          months: '',
+          pay_types: [],
+          prices: [],
+          staff_id: '',
+          warrenty: '',
+          subject_id: '',
+        }
       }
     },
     mounted() {
@@ -518,12 +582,14 @@
         if (row.freeze === 1) {
           if (this.activeName === 'first') {
             this.lists = [
+              {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
               {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',data: row},
             ];
           } else {
             this.lists = [
+              {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
             ];
@@ -531,6 +597,7 @@
         }else {
           if (this.activeName === 'first') {
             this.lists = [
+              {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
@@ -538,6 +605,7 @@
             ];
           } else {
             this.lists = [
+              {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
@@ -559,6 +627,10 @@
         }
         if (val.clickIndex === 'backWait') {
           this.handleBackWait(val.data.id);
+        }
+        if (val.clickIndex === 'editInfo') {
+          this.canEditVisible = true;
+          console.log(val.data);
         }
       },
       handleGoWait(id) {

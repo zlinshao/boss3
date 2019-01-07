@@ -132,7 +132,7 @@
        >
          <el-table-column label="ID" prop="id"></el-table-column>
          <el-table-column label="交易时间" prop="create_time"></el-table-column>
-         <el-table-column label="客户姓名" prop="customer.name"></el-table-column>
+         <el-table-column label="客户姓名" prop="customer.customer_name"></el-table-column>
          <el-table-column label="科目名称" prop="subject.title"></el-table-column>
          <el-table-column label="类型" prop=""></el-table-column>
          <el-table-column label="账户名称" prop="account_name"></el-table-column>
