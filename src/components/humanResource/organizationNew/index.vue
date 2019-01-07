@@ -288,7 +288,7 @@
                     </el-pagination>
                   </div>
                 </div>
-                <!--职位-->
+                <!--岗位-->
                 <div class="tableBox">
                   <div class="greenTable">
                     <el-table
@@ -660,9 +660,9 @@
                     <el-form-item label="入职途径">
                       <div class="content">
                         <span
-                          v-if="staffDetailData && 
-                                staffDetailData.detail && 
-                                staffDetailData.detail.entry_way && 
+                          v-if="staffDetailData &&
+                                staffDetailData.detail &&
+                                staffDetailData.detail.entry_way &&
                                 staffDetailData.detail.entry_way !== 'null' &&
                                 staffDetailData.detail.entry_way.entry_type &&
                                 entryWayCategory[staffDetailData.detail.entry_way.entry_type-1]    
@@ -965,7 +965,7 @@
 
     <AddPosition :addPositionDialog="addPositionDialog" :addPositionParams="addPositionParams"
                  @close="closeAddPosition"></AddPosition>
-    <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName"
+    <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :dutyId="onlyPositionId" :positionName="positionName"
                   @close="closeEditPosition"></EditPosition>
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPosition="onlyPosition"
                       @close="closeEditOnlyPosition"></EditOnlyPosition>
@@ -2137,7 +2137,7 @@
         this.removePowerData.positions.push(data);
         this.removePowerModule = true;
       },
-      //根据职位获取职位
+      //根据职位获取岗位
       getPosition() {
         this.postStaffData = [];
         this.postCollectLoading = true;
@@ -2177,9 +2177,10 @@
           }
         })
       },
-      //职位右键菜单
+      //岗位右键菜单
       openPositionMenu(row, event) {
         this.positionId = row.id;
+        this.onlyPositionId = row.duty_id;
         this.positionName = row.name;
         this.menuType = 'position';
         this.lists = [

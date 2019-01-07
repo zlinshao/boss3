@@ -808,8 +808,12 @@
                 break;
               case "bulletin_collect_basic":
                 this.setProcess(data);
-                if (data.process.place.name === 'verify-manager_review' || data.process.place.display_name === '核算经理审核中') {
-                  this.checkEmployee(data.process)
+                if (data.process.place.status === 'review') {
+                  if (data.process.place.name === 'verify-manager_review') {
+                    this.checkEmployee(data.process)
+                  } else {
+                    this.contractStatus(data.process);
+                  }
                 }
                 break;
               default:
@@ -825,7 +829,6 @@
       },
       setProcess(data) {
         this.show_content = JSON.parse(data.process.content.show_content_compress);
-        console.log(this.show_content);
         this.reportDetailData = data.process.content;
         this.processable_id = data.process.processable_id;
         this.operation = data.operation;
@@ -1157,8 +1160,26 @@
       checkEmployee(data) {
         this.$http.post(globalConfig.server + '/bulletin/collect/validateBankCard', data).then(res => {
           if (res.data.code === '50122') {
-            this.showBankCartTips = true;
-            this.bankCartMsg = res.data.msg;
+            // this.showBankCartTips = true;
+            // this.bankCartMsg = res.data.msg;
+            this.$confirm(res.data.msg, '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
+            }).then(() => {
+              this.contractStatus(data);
+            });
+          }
+        })
+      },
+      // 合同是否存在
+      contractStatus(main) {
+        this.$http.get(this.urls + 'coreproject/lord/has_lord/' + main.house_id).then(res => {
+          if (res.data !== true) {
+            this.$confirm('合同已存在！', '提示', {
+              confirmButtonText: '确定',
+              type: 'warning'
+            }).then(() => {
+            });
           }
         })
       },
