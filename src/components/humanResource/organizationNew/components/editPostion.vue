@@ -1,11 +1,20 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="修改职位" :visible.sync="editPositionDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改岗位" :visible.sync="editPositionDialogVisible" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
             <el-col :span="24">
-              <el-form-item label="职位名称" required="">
+              <el-form-item label="职位" required="">
+                <el-select v-model="params.duty_id" size="mini" clearable>
+                  <el-option v-for="item in duties" :label="item.name" :value="item.id" :key="item.id">{{item.name}}</el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="岗位" required="">
                 <el-input placeholder="请输入内容" v-model="params.name"></el-input>
               </el-form-item>
             </el-col>
@@ -28,21 +37,25 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
-    props: ['editPositionDialog', 'positionId', 'positionName'],
+    props: ['editPositionDialog', 'positionId', 'positionName', 'dutyId'],
     components: {Organization},
     data() {
       return {
         editPositionDialogVisible: false,
+        organizationDialog: false,
+        urls: globalConfig.server,
+        duties: [],
         params: {
+          duty_id: '',
           name: '',
         },
-        organizationDialog: false,
       };
     },
     watch: {
       editPositionDialog(val) {
         this.editPositionDialogVisible = val;
         this.params.name = this.positionName;
+        this.params.duty_id = this.dutyId;
       },
       editPositionDialogVisible(val) {
         if (!val) {
@@ -53,9 +66,19 @@
         this.params.name = val;
       }
     },
+    mounted() {
+      this.getDuty();
+    },
     methods: {
+      getDuty() {
+        this.$http.get(this.urls + 'organization/duty?page=1&limit=500').then(res => {
+          if (res.data.code === '20000') {
+            this.duties = res.data.data.data;
+          }
+        })
+      },
       confirmAdd() {
-        this.$http.put(globalConfig.server + 'organization/position/' + this.positionId, this.params).then((res) => {
+        this.$http.put(this.urls + 'organization/position/' + this.positionId, this.params).then((res) => {
           if (res.data.code === '20030') {
             this.$emit('close', 'success');
             this.closeModal();
