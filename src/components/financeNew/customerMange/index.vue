@@ -252,6 +252,7 @@
       >
         <div style="width: 90%;margin: 0 auto;">
           <el-form size="mini" :model="editParams" ref="editFrom" label-width="100px">
+            <div class="edit_title"><h3>基本信息</h3></div>
             <el-form-item label="开户人">
               <el-input v-model="editParams.account_owner"></el-input>
             </el-form-item>
@@ -268,12 +269,15 @@
               <el-input v-model="editParams.contact"></el-input>
             </el-form-item>
             <el-form-item label="房屋地址">
-              <el-input disabled></el-input>
+              <el-input disabled v-model="editParams.house_name"></el-input>
             </el-form-item>
-            <el-form-item label="收房月数">
+            <el-form-item label="收房月数" v-model="editParams.months">
               <el-input></el-input>
             </el-form-item>
-            <el-form-item label="付款方式"></el-form-item>
+            <el-form-item label="付款方式">
+
+            </el-form-item>
+
           </el-form>
         </div>
       </el-dialog>
@@ -629,7 +633,7 @@
           this.handleBackWait(val.data.id);
         }
         if (val.clickIndex === 'editInfo') {
-          this.canEditVisible = true;
+          // this.canEditVisible = true;
           console.log(val.data);
         }
       },
@@ -709,6 +713,13 @@
     .repeat_text{
       margin-right: 15px;
       vertical-align: middle;
+    }
+    .edit_title{
+      height: 20px;
+      padding-left: 10px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      border-left: 5px solid #E6A23C;
     }
   }
 </style>
