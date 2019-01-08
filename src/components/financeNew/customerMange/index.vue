@@ -285,14 +285,26 @@
             <el-form-item label="收房月数" prop="months">
               <el-input v-model="editParams.months" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="付款方式" prop="pay_types">
-              <el-select v-model="editParams.pay_types">
+            <el-form-item label="付款方式" prop="pay_types" v-if="!editExtraParams.pay_others">
+              <el-select v-model="editExtraParams.first_pay_type">
                 <el-option label="月付" :value="1"></el-option>
                 <el-option label="双月付" :value="2"></el-option>
                 <el-option label="季付" :value="3"></el-option>
                 <el-option label="半年付" :value="6"></el-option>
                 <el-option label="年付" :value="12"></el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item  label="付款方式" v-if="editExtraParams.pay_others" v-for="(item,key) in editExtraParams.pay_others_types">
+              <el-select v-model="editExtraParams.pay_others_type['type' + (key + 1)]">
+                <el-option label="月付" :value="1"></el-option>
+                <el-option label="双月付" :value="2"></el-option>
+                <el-option label="季付" :value="3"></el-option>
+                <el-option label="半年付" :value="6"></el-option>
+                <el-option label="年付" :value="12"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox v-model="editExtraParams.pay_others" @change="handleCheckboxPay">付款方式不唯一</el-checkbox>
             </el-form-item>
             <el-form-item label="月单价" prop="prices">
               <el-input v-model="editParams.prices"></el-input>
@@ -326,7 +338,7 @@
             </el-form-item>
             <div class="edit_title"><h3>客户信息</h3></div>
             <el-form-item label="账户类型" prop="account_type">
-              <el-select v-model="editParams.account_type" @change="handleChangeAccount_type">
+              <el-select v-model="editParams.account_type">
                 <el-option :value="1" label="银行卡"></el-option>
                 <el-option :value="2" label="支付宝"></el-option>
                 <el-option :value="3" label="微信"></el-option>
@@ -338,7 +350,7 @@
               <el-input v-model="editParams.account_owner"></el-input>
             </el-form-item>
             <el-form-item label="开户银行" v-if="!showBank">
-              <el-select v-model="editParams.account_bank">
+              <el-select v-model="editParams.account_bank" @change="handleChangeAccount_type">
                 <el-option v-for="(bank,key) in banks" :value="key" :key="key" :label="bank"></el-option>
               </el-select>
             </el-form-item>
@@ -441,6 +453,12 @@
           rental_name: '',
           deposit_name: '',
           address: '',
+          pay_others: false,
+          first_pay_type: '',
+          pay_others_types: [],
+          pay_others_type: {
+
+          }
         },
         editParams: {
           account_owner: '',
@@ -535,6 +553,22 @@
       this.getBankList();
     },
     methods: {
+      //点击付款方式不唯一
+      handleCheckboxPay(val) {
+        if (val) {
+          var len = Math.ceil(this.editParams.months / 12);
+          this.editExtraParams.pay_others_types = [];
+          for (var i = 0;i<len;i++) {
+            this.editExtraParams.pay_others_types.push(1);
+            this.editExtraParams.pay_others_type = Object.assign(this.editExtraParams.pay_others_type,{
+              ['type' + (i + 1)]: 1
+            })
+          }
+          console.log(this.editExtraParams.pay_others_type);
+        } else {
+          console.log(this.editParams.pay_types);
+        }
+      },
       handleChangeAccount_type(type){
         if (type === 2 || type === 3) {
           this.showBank = true;
@@ -919,7 +953,16 @@
         this.editExtraParams.address = data.address || '';
         this.editParams.house_id = data.house_id || '';
         this.editParams.months = data.months || 0;
-        this.editParams.pay_types = data.pay_types[0];
+        // this.editParams.pay_types = data.pay_types;
+        if (data.pay_types) {
+          if (data.pay_types.length >1){
+            this.editExtraParams.pay_others_types = data.pay_types;
+            this.editExtraParams.pay_others = true;
+          } else {
+            this.editExtraParams.first_pay_type = parseInt(data.pay_types[0]);
+            this.editExtraParams.pay_others_types = data.pay_types;
+          }
+        }
         this.editParams.prices = data.prices && parseFloat(data.prices[0]).toFixed(2) || 0.00;
         this.editParams.deposit = data.prices &&  parseFloat(data.deposit).toFixed(2) || 0.00;
         this.editParams.warrenty = data.warrenty || 0;

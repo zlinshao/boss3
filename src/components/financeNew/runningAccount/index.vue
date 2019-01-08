@@ -178,7 +178,7 @@
               params: {
                 search: '',
                 page: 1,
-                limit: 12,
+                limit: 15,
                 start_date: '',
                 end_date: '',
                 cate: '',
@@ -245,6 +245,11 @@
                 this.receive_sum = res.data.data.receive_sum;
                 this.all_count = res.data.data.all_count;
               }else {
+                this.tableList = [];
+                this.diff_sum = res.data.data.diff_sum;
+                this.expend_sum = res.data.data.expend_sum;
+                this.receive_sum = res.data.data.receive_sum;
+                this.all_count = res.data.data.all_count;
                 this.isLoading = false;
                 this.emptyText = "暂无数据";
               }

@@ -71,9 +71,11 @@
                         type="daterange"
                         align="right"
                         unlink-panels
+                        value-format="yyyy-MM-dd"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
+                        @change="handleSelRangDate"
                         :picker-options="pickerOptions">
                       </el-date-picker>
                     </div>
@@ -114,6 +116,8 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        @change="handleSelTagDate"
                         :picker-options="pickerOptions">
                       </el-date-picker>
                     </div>
@@ -807,6 +811,24 @@
       this.getTableData();
     },
     methods: {
+      handleSelRangDate(val) {
+          if (val) {
+            this.form.startRange = val[0];
+            this.form.endRange = val[1]
+          } else {
+            this.form.startRange = '';
+            this.form.endRange = '';
+          }
+      },
+      handleSelTagDate(val) {
+         if (val) {
+           this.form.startTag = val[0];
+           this.form.endTag = val[1];
+         } else {
+           this.form.startTag = '';
+           this.form.endTag = '';
+         }
+      },
       cancelCreateCollect() {
         var keys = Object.keys(this.collectMoneyForm);
         for (var i =0;i<keys.length;i++) {
@@ -1113,21 +1135,23 @@
       resetting() {
         this.form = {
           staff_ids: [],
-            department_ids: [],
-            status: '',
-            startRange: '',//应收开始时间
-            endRange: '',//应收结束时间
-            tag_status: '',//催缴状态
-            startTag: '',//催缴开始时间
-            endTag: '',//催缴结束时间
-            subject_id: '',//科目id
-            search: '',//搜索框
-            minPrice: '',//剩余款项最小区间
-            maxPrice: '',//剩余款项最大区间
-            page: 1,
-            limit: 12
+          department_ids: [],
+          status: '',
+          startRange: '',//应收开始时间
+          endRange: '',//应收结束时间
+          tag_status: '',//催缴状态
+          startTag: '',//催缴开始时间
+          endTag: '',//催缴结束时间
+          subject_id: '',//科目id
+          search: '',//搜索框
+          minPrice: '',//剩余款项最小区间
+          maxPrice: '',//剩余款项最大区间
+          page: 1,
+          limit: 12
         };
         this.subject_name = '';
+        this.tagDate = '';
+        this.rangeDate = '';
       },
       // 高级筛选
       highGrade() {
