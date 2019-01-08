@@ -860,7 +860,6 @@
             ];
           } else {
             this.lists = [
-              {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
             ];
@@ -876,7 +875,6 @@
             ];
           } else {
             this.lists = [
-              {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
