@@ -9,8 +9,8 @@
             <span class="repeat_address"></span><span class="repeat_text">地址</span>
           </el-form-item>
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="params.search" size="mini" clearable>
-              <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-input placeholder="请输入内容" v-model="params.search" size="mini" @keyup.enter.native="getLandLordList" clearable>
+              <el-button slot="append" icon="el-icon-search" @click="getLandLordList"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -94,7 +94,11 @@
             :data="landLordList"
             @selection-change="handleSelectionChange"
             @row-contextmenu="customerMenu"
-          >
+            v-loading="Loading"
+            :empty-text="emptyText"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)">
             <el-table-column
               type="selection"
               width="55">
@@ -136,6 +140,7 @@
             :page-size="params.limit"
             :current-page="params.page"
             style="text-align: right"
+            @current-change="handlePageChange"
           ></el-pagination>
         </div>
       </el-tab-pane>
@@ -145,6 +150,11 @@
             :data="renterTableList"
             @selection-change="handleSelectionChange"
             @row-contextmenu="customerMenu"
+            v-loading="Loading"
+            :empty-text="emptyText"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
           >
             <el-table-column
               type="selection"
@@ -186,6 +196,7 @@
             :page-size="params.limit"
             :current-page="params.page"
             style="text-align: right"
+            @current-change="handlePageChange"
           ></el-pagination>
         </div>
       </el-tab-pane>
@@ -250,51 +261,130 @@
         title="编辑信息"
         width="35%"
       >
-        <div style="width: 90%;margin: 0 auto;">
-          <el-form size="mini" :model="editParams" ref="editFrom" label-width="100px">
+        <div style="width: 95%;margin: 0 auto;">
+          <el-form size="mini" :model="editParams" :rules="editInfoRules" ref="editForm" label-width="120px">
             <div class="edit_title"><h3>基本信息</h3></div>
-            <el-form-item label="开户人">
-              <el-input v-model="editParams.account_owner"></el-input>
+            <el-form-item label="签约人" prop="staff_id">
+              <el-input v-model="editExtraParams.staff_name" @focus="handleOpenDepart"></el-input>
             </el-form-item>
-            <el-form-item label="所属部门">
-              <el-input disabled></el-input>
+            <el-form-item label="所属部门" prop="department_id">
+              <el-input disabled v-model="editExtraParams.department_name"></el-input>
             </el-form-item>
             <el-form-item label="负责人">
               <el-input disabled v-model="editParams.leader_name"></el-input>
             </el-form-item>
-            <el-form-item label="客户姓名">
+            <el-form-item label="客户姓名" prop="customer_name">
               <el-input v-model="editParams.customer_name"></el-input>
             </el-form-item>
-            <el-form-item label="客户手机号">
+            <el-form-item label="客户手机号" prop="contact">
               <el-input v-model="editParams.contact"></el-input>
             </el-form-item>
-            <el-form-item label="房屋地址">
-              <el-input disabled v-model="editParams.house_name"></el-input>
+            <el-form-item label="房屋地址" prop="house_id">
+              <el-input disabled v-model="editExtraParams.address"></el-input>
             </el-form-item>
-            <el-form-item label="收房月数" v-model="editParams.months">
-              <el-input></el-input>
+            <el-form-item label="收房月数" prop="months">
+              <el-input v-model="editParams.months" type="number"></el-input>
             </el-form-item>
-            <el-form-item label="付款方式">
-
+            <el-form-item label="付款方式" prop="pay_types">
+              <el-select v-model="editParams.pay_types">
+                <el-option label="月付" :value="1"></el-option>
+                <el-option label="双月付" :value="2"></el-option>
+                <el-option label="季付" :value="3"></el-option>
+                <el-option label="半年付" :value="6"></el-option>
+                <el-option label="年付" :value="12"></el-option>
+              </el-select>
             </el-form-item>
-
+            <el-form-item label="月单价" prop="prices">
+              <el-input v-model="editParams.prices"></el-input>
+            </el-form-item>
+            <el-form-item label="押金" prop="deposit">
+              <el-input v-model="editParams.deposit"></el-input>
+            </el-form-item>
+            <el-form-item label="保修期" prop="warrenty">
+              <el-input v-model="editParams.warrenty"></el-input>
+            </el-form-item>
+            <el-form-item label="中介费" prop="medi_cost">
+              <el-input v-model="editParams.medi_cost"></el-input>
+            </el-form-item>
+            <el-form-item label="待签约日期" prop="deal_date">
+              <el-date-picker
+                v-model="editParams.deal_date"
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="第一次房租日期" prop="first_pay_date">
+              <el-date-picker
+                v-model="editParams.first_pay_date"
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="第二次房租日期" prop="second_pay_date">
+              <el-date-picker
+                v-model="editParams.second_pay_date"
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
+            </el-form-item>
+            <div class="edit_title"><h3>客户信息</h3></div>
+            <el-form-item label="账户类型" prop="account_type">
+              <el-select v-model="editParams.account_type" @change="handleChangeAccount_type">
+                <el-option :value="1" label="银行卡"></el-option>
+                <el-option :value="2" label="支付宝"></el-option>
+                <el-option :value="3" label="微信"></el-option>
+                <el-option :value="4" label="存折"></el-option>
+                <el-option :value="5" label="现金"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="收款人" prop="account_owner">
+              <el-input v-model="editParams.account_owner"></el-input>
+            </el-form-item>
+            <el-form-item label="开户银行" v-if="!showBank">
+              <el-select v-model="editParams.account_bank">
+                <el-option v-for="(bank,key) in banks" :value="key" :key="key" :label="bank"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="支行" v-if="!showBank">
+              <el-input v-model="editParams.account_subbank"></el-input>
+            </el-form-item>
+            <el-form-item label="账号" prop="account_num">
+              <el-input v-model="editParams.account_num"></el-input>
+            </el-form-item>
+            <div class="edit_title"><h3>科目</h3></div>
+            <el-form-item label="房租科目">
+              <el-input v-model="editExtraParams.rental_name" @focus="handleOpenSubject('rental')"></el-input>
+            </el-form-item>
+            <el-form-item label="押金科目">
+              <el-input v-model="editExtraParams.deposit_name" @focus="handleOpenSubject('deposit')"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <div style="text-align: right">
+                <el-button @click="handleCancelSubmit('editForm')">取消</el-button>
+                <el-button @click="handleSubmitEditInfo('editForm')" type="primary">确定</el-button>
+              </div>
+            </el-form-item>
           </el-form>
         </div>
       </el-dialog>
     </div>
+
+    <!--科目-->
+    <SubjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
+                 @selectSubject="selectSubject"></SubjectTree>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'               //右键
   import Organization from '../../common/organization.vue';
+  import SubjectTree from '../components/subjectTree';
 
   export default {
     name: "index",
-    components: { RightMenu ,Organization},
+    components: { RightMenu ,Organization,SubjectTree},
     data() {
       return {
         url: globalConfig.finance_server,
+        Loading: false,
+        emptyText: '',
 
         //右击菜单
         rightMenuX: 0,
@@ -320,6 +410,7 @@
         departVisible: false,
         length: 1,
         type: 'depart',
+        currentCtl: 'editInfo',
 
         activeName: 'first',
 
@@ -345,14 +436,18 @@
         canEditVisible: false,
         editExtraParams: {
           department_name: '',
-          house_name: '',
           leader_name: '',
+          staff_name: '',
+          rental_name: '',
+          deposit_name: '',
+          address: '',
         },
         editParams: {
           account_owner: '',
           customer_name: '',
           account_type: '',
-          contact: '', //客户账号
+          account_num: '',
+          contact: '', //客户手机号
           deal_date: '',
           department_id: '',
           deposit: '',
@@ -362,18 +457,171 @@
           leader_id: '',
           medi_cost: '',
           months: '',
-          pay_types: [],
-          prices: [],
+          pay_types: '',
+          prices: '',
           staff_id: '',
           warrenty: '',
-          subject_id: '',
-        }
+          subject_id: {
+            rental: '',
+            deposit: ''
+          },
+          account_bank: '',
+          account_subbank: '',
+        },
+        currentInfoId: '',
+        editInfoRules: {
+          account_owner: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          staff_id: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          customer_name: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          account_type: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          account_num: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          contact: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          deal_date: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          deposit: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          first_pay_date: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          second_pay_date: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          department_id: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          medi_cost: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          months: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          pay_types: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          warrenty: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          subject_id: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          house_id: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+        },
+        banks: [],
+        bank_code: '',
+        subjectVisible: false,
+        subjectType: 'top',
+        currentSubType: '',
+        showBank: false
       }
     },
     mounted() {
       this.getLandLordList();
+      this.getBankList();
     },
     methods: {
+      handleChangeAccount_type(type){
+        if (type === 2 || type === 3) {
+          this.showBank = true;
+        } else {
+          this.showBank = false;
+        }
+      },
+      handleOpenSubject(type) {
+        this.currentSubType = type;
+        this.subjectType = 'top';
+        this.subjectVisible = true;
+      },
+      closeSubjectTree() {
+        this.subjectVisible = false;
+      },
+      selectSubject(val) {
+        this.getSubjects(val.id,this.currentSubType);
+      },
+      getBankList() {
+        this.$http.get(this.url + 'account/manage/bank',{
+          params: {
+            bank_code: this.bank_code
+          }
+        }).then(res => {
+          if (res.data.success) {
+            this.banks = res.data.data;
+          }else {
+            this.banks = {};
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleCancelSubmit(formName) {
+        this.$refs[formName].resetFields();
+        this.canEditVisible = false;
+      },
+      handleSubmitEditInfo(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.$http.post(this.url + `customer/landlord/update/${this.currentInfoId}`,this.editParams).then(res => {
+              console.log(res);
+              if (res.data.success) {
+                this.handleCancelSubmit(formName);
+                this.getLandLordList();
+              }
+            }).catch(err => {
+              console.log(err);
+            })
+          } else {
+            this.$message.warning("params error!");
+          }
+        })
+      },
+      getSubjects(id = 0,type) {
+        this.$http.get(this.url + '/account/subject/detail/' + id).then(res => {
+          if (res.data.success) {
+            const data = res.data.data;
+            if (type === 'rental') {
+              this.editParams.subject_id.rental = data.id;
+              if (data.superior_title) {
+                this.editExtraParams.rental_name = `${data.superior_title} >> ${data.title}`;
+              } else {
+                this.editExtraParams.rental_name = data.title;
+              }
+            }else if (type === 'deposit') {
+              this.editParams.subject_id.deposit = data.id;
+              if (data.superior_title) {
+                this.editExtraParams.deposit_name = `${data.superior_title} >> ${data.title}`;
+              } else {
+                this.editExtraParams.deposit_name = data.title;
+              }
+            }
+          };
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleOpenDepart() {
+        this.departVisible = true;
+        this.length = 1;
+        this.type = 'staff';
+      },
+      handlePageChange(page) {
+        this.params.page = page;
+        this.getLandLordList();
+      },
       handleOpenDetail(row) {
         if (this.activeName === 'first') {
           this.$http.get(this.url + `customer/landlord/read/${row.id}`).then(res => {
@@ -457,6 +705,13 @@
         this.extraParams.depart_name = "";
       },
       handleSelectDepart(val) {
+        if (this.currentCtl = 'editInfo') {
+          this.editExtraParams.staff_name = val[0].name;
+          this.editParams.staff_id = val[0].id;
+          this.editParams.department_id = val[0].org && val[0].org[0].id;
+          this.editExtraParams.department_name = val[0].org && val[0].org[0].name;
+          return false;
+        }
         this.extraParams.depart_name = "";
         this.params.department_ids = [];
         val.map(item => {
@@ -541,19 +796,31 @@
       //房东管理列表
       getLandLordList() {
         const session = JSON.parse(localStorage.getItem('personal')).session_id;
+        this.Loading = true;
+        this.emptyText = " ";
         if (this.activeName === 'first') {
           this.$http.get(this.url + 'customer/landlord/index',{params: this.params,headers: {Session: session}}).then(res => {
             if (res.data.success) {
               this.landLordList = res.data.data.data;
               this.landLordCount = res.data.data.count;
+            } else {
+              this.landLordList = [];
+              this.landLordCount = 0;
+              this.emptyText = "暂无数据";
             }
+            this.Loading = false;
           })
         } else {
           this.$http.get(this.url + 'customer/renter/index',{params: this.params,headers: {Session: session}}).then(res => {
             if (res.data.success) {
               this.renterTableList = res.data.data.data;
               this.renterTableCount  = res.data.data.count;
+            } else {
+              this.renterTableList = [];
+              this.renterTableCount = 0;
+              this.emptyText = "暂无数据";
             }
+            this.Loading = false;
           });
         }
       },
@@ -633,9 +900,47 @@
           this.handleBackWait(val.data.id);
         }
         if (val.clickIndex === 'editInfo') {
-          // this.canEditVisible = true;
-          console.log(val.data);
+          this.getCurrentInfo(val.data);
+          this.canEditVisible = true;
         }
+      },
+      //编辑房东赋值
+      getCurrentInfo(data) {
+        console.log(data);
+        this.getSubjects(data.subject_id.deposit,'deposit');
+        this.getSubjects(data.subject_id.rental,'rental');
+        this.currentInfoId = data.id;
+        this.editExtraParams.staff_name = data.staff && data.staff.name || '/';
+        this.editParams.staff_id = data.staff && data.staff.id || '';
+        this.editExtraParams.department_name = data.department && data.department.name || '/';
+        this.editParams.department_id = data.department_id || '';
+        this.editParams.leader_id = data.leader_id && data.leader_id;
+        this.editExtraParams.leader_name = data.leader && data.leader.name || '';
+        this.editParams.customer_name = data.customer_name || '';
+        this.editParams.contact = data.contact || '';
+        this.editExtraParams.address = data.address || '';
+        this.editParams.house_id = data.house_id || '';
+        this.editParams.months = data.months || 0;
+        this.editParams.pay_types = data.pay_types[0];
+        this.editParams.prices = data.prices && parseFloat(data.prices[0]).toFixed(2) || 0.00;
+        this.editParams.deposit = data.prices &&  parseFloat(data.deposit).toFixed(2) || 0.00;
+        this.editParams.warrenty = data.warrenty || 0;
+        this.editParams.medi_cost = data.medi_cost || 0;
+        this.editParams.deal_date = data.deal_date || '';
+        this.editParams.first_pay_date = data.first_pay_date || '';
+        this.editParams.second_pay_date = data.second_pay_date || '';
+        this.editParams.account_type = data.account_type_id && data.account_type_id || '';
+        if (this.editParams.account_type === 2 || this.editParams.account_type === 3) {
+          this.showBank = true;
+        } else {
+          this.showBank = false;
+        }
+        this.editParams.account_owner = data.account_owner || '';
+        this.editParams.account_bank = data.account_bank_id && data.account_bank_id.toString() || '';
+        this.editParams.account_subbank = data.account_subbank || '';
+        this.editParams.account_num = data.account_num || '';
+        this.editParams.subject_id.deposit = data.subject_id && data.subject_id.deposit || '';
+        this.editParams.subject_id.rental = data.subject_id && data.subject_id.rental || '';
       },
       handleGoWait(id) {
         var root = `account/pending/lord/${id}`;

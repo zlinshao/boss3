@@ -133,6 +133,7 @@
          <el-table-column label="ID" prop="id"></el-table-column>
          <el-table-column label="交易时间" prop="create_time"></el-table-column>
          <el-table-column label="客户姓名" prop="customer.customer_name"></el-table-column>
+         <el-table-column label="地址" prop="address"></el-table-column>
          <el-table-column label="科目名称" prop="subject.title"></el-table-column>
          <el-table-column label="类型" prop=""></el-table-column>
          <el-table-column label="账户名称" prop="account_name"></el-table-column>
@@ -149,6 +150,7 @@
         :current-page="params.page"
         :page-size="params.limit"
         style="text-align: right"
+        @current-change="handleChangePage"
        ></el-pagination>
      </div>
 
@@ -196,6 +198,10 @@
           this.getTableList();
         },
         methods:{
+          handleChangePage(page) {
+            this.params.page = page;
+            this.getTableList();
+          },
           outData() {
             this.$http.get(this.url + 'fundflow/running/export',{responseType: 'arraybuffer',params: this.params}).then(res => {
               this.$exportData(res.data);
