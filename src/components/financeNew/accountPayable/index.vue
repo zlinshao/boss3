@@ -26,7 +26,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="params.status">
+                    <el-select v-model="params.status" clearable>
                       <el-option :value="1" label="待入账"></el-option>
                       <el-option :value="2" label="待结清"></el-option>
                       <el-option :value="3" label="已结清"></el-option>
@@ -132,12 +132,12 @@
         :header-row-style="handleHeaderStyle"
       >
         <el-table-column label="付款时间" prop="pay_date"></el-table-column>
-        <el-table-column label="客户姓名" prop="info.customer"></el-table-column>
+        <el-table-column label="客户姓名" prop="customerDetail.customer_name"></el-table-column>
         <el-table-column label="地址" prop="addr"></el-table-column>
         <el-table-column label="支出科目" prop="subject"></el-table-column>
-        <el-table-column label="应付金额" prop="balance"></el-table-column>
+        <el-table-column label="应付金额" prop="amount_payable"></el-table-column>
         <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
-        <el-table-column label="剩余款项" prop="amount_payable"></el-table-column>
+        <el-table-column label="剩余款项" prop="balance"></el-table-column>
         <el-table-column label="补齐时间" prop="complete_date"></el-table-column>
         <el-table-column label="状态" prop="status">
           <template slot-scope="scope">
@@ -387,6 +387,26 @@
       </el-dialog>
     </div>
 
+    <div>
+      <el-dialog
+        :visible.syc="backVisible"
+        title="回滚"
+        @close="handleCloseBack"
+      >
+        <div style="text-align: right;margin-bottom: 10px"><el-button type="primary" @click="handleBackGo" size="mini">确定</el-button></div>
+        <el-table
+          :data="backList"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="Desc" prop="value"></el-table-column>
+        </el-table>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -401,7 +421,10 @@
     data() {
       return {
         url: globalConfig.finance_server,
-
+        backVisible: false,
+        backList: [],
+        backParams: [],
+        backCurrentId: '',
         assistParams: {
           subject_name:'',
           depart_name: '',
@@ -506,24 +529,45 @@
       this.getPayableList();
     },
     methods: {
-      //回滚
-      handleCallBackDelete(row) {
-        var arr = [];
-        if (row.running_account_record) {
-          for (var key in row.running_account_record) {
-            arr.push(parseInt(key));
-          }
-          this.$http.post(this.url + `account/payable/revert/${row.id}`,{running_account_ids: arr}).then(res => {
+      handleSelectionChange(val) {
+        this.backParams = [];
+        val.map(item => {
+          this.backParams.push(item.id);
+        })
+      },
+      handleBackGo() {
+        if (this.backList.length < 1){
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择需要回滚的记录'
+          });
+          return false;
+        } else {
+          this.$http.post(this.url + `account/payable/revert/${this.backCurrentId}`,{running_account_ids: this.backParams}).then(res => {
             this.handleCallback(res);
+            this.backList = [];
+            this.backVisible = false;
+            this.backCurrentId = '';
           }).catch(err => {
             console.log(err);
           })
-        }else {
-          this.$notify.warning({
-            title: '警告',
-            message: '暂无需要回滚的应付入账'
-          })
         }
+      },
+      handleCloseBack() {
+        this.backList = [];
+        this.backVisible = false;
+      },
+      //回滚
+      handleCallBackDelete(row) {
+        if (row.running_account_record) {
+          for (var key in row.running_account_record) {
+            this.backList.push({id: key,value: row.running_account_record[key]})
+          }
+        }else {
+          this.backList = [];
+        }
+        this.backCurrentId = row.id;
+        this.backVisible = true;
       },
       //表头样式
       handleHeaderStyle() {

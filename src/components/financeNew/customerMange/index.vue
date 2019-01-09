@@ -10,7 +10,7 @@
           </el-form-item>
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="params.search" size="mini" @keyup.enter.native="getLandLordList" clearable>
-              <el-button slot="append" icon="el-icon-search" @click="getLandLordList"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="getLandLordList('search')"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -258,11 +258,11 @@
       </el-dialog>
     </div>
 
-    <!--编辑-->
+    <!--编辑房东-->
     <div>
       <el-dialog
         :visible.sync="canEditVisible"
-        title="编辑信息"
+        title="编辑房东信息"
         width="70%"
       >
         <div style="width: 95%;margin: 0 auto;">
@@ -396,6 +396,179 @@
       </el-dialog>
     </div>
 
+    <!--编辑租客-->
+    <div>
+      <el-dialog
+        :visible.sync="extraRentInfo.editRentInfoVisible"
+        title="编辑租客信息"
+        width="70%"
+        @close="handleCancelEditRentInfo"
+      >
+        <div style="width: 90%;margin: 0 auto;">
+          <el-form :model="rentInfo" :rules="rentInfoRules" ref="rentInfo" size="mini" label-width="100px">
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <div class="edit_title"><h3>基本信息</h3></div>
+                <el-form-item label="签约人" prop="staff_id">
+                  <el-input v-model="extraRentInfo.staff_name" @focus="handleOpenDepartByRent"></el-input>
+                </el-form-item>
+                <el-form-item label="部门" prop="department_id">
+                  <el-input disabled v-model="extraRentInfo.department_name"></el-input>
+                </el-form-item>
+                <el-form-item label="负责人">
+                  <el-input disabled v-model="extraRentInfo.leader_name"></el-input>
+                </el-form-item>
+                <el-form-item label="房屋地址" prop="house_id">
+                  <el-input disabled v-model="extraRentInfo.house_name"></el-input>
+                </el-form-item>
+                <el-form-item label="客户姓名" prop="customer_name">
+                  <el-input v-model="rentInfo.customer_name"></el-input>
+                </el-form-item>
+                <el-form-item label="客户联系方式" prop="customer_name">
+                  <el-input v-model="rentInfo.contact"></el-input>
+                </el-form-item>
+                <el-form-item label="租房类型" prop="is_shared">
+                  <el-select v-model="rentInfo.is_shared">
+                    <el-option :value="1" label="合租"></el-option>
+                    <el-option :value="2" label="整租"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="房间类型" prop="shared_part">
+                  <el-select v-model="rentInfo.shared_part">
+                    <el-option :value="1" label="阳台间"></el-option>
+                    <el-option :value="2" label="飘窗间"></el-option>
+                    <el-option :value="3" label="客厅间"></el-option>
+                    <el-option :value="4" label="朝北间"></el-option>
+                    <el-option :value="5" label="厨房间"></el-option>
+                    <el-option :value="6" label="朝南间"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="租房状态" prop="rent_type">
+                  <el-select v-model="rentInfo.rent_type">
+                    <el-option :value="1" label="出租"></el-option>
+                    <el-option :value="2" label="提前一个月续租"></el-option>
+                    <el-option :value="3" label="提前两个月以上续租"></el-option>
+                    <el-option :value="4" label="公司转租"></el-option>
+                    <el-option :value="5" label="个人转租"></el-option>
+                    <el-option :value="6" label="调组"></el-option>
+                    <el-option :value="7" label="续租"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="租房月数" prop="months">
+                  <el-input type="number" v-model="rentInfo.months"></el-input>
+                </el-form-item>
+                <el-form-item label="付款方式" v-if="!extraRentInfo.is_more_pay">
+                  押 <el-select v-model="rentInfo.bet" style="width: 30%">
+                      <el-option :value="0" label="0"></el-option>
+                      <el-option :value="1" label="1"></el-option>
+                      <el-option :value="2" label="2"></el-option>
+                    </el-select>
+                  付 <el-input v-model="extraRentInfo.first_pay_price" style="width: 30%"></el-input>
+                </el-form-item>
+                <el-form-item :label="extraRentInfo.pay_label[key]" v-if="extraRentInfo.is_more_pay" :key="key" v-for="(item,key) in extraRentInfo.pay_list">
+                  押 <el-select v-model="rentInfo.bet" style="width: 30%">
+                  <el-option :value="0" label="0"></el-option>
+                  <el-option :value="1" label="1"></el-option>
+                  <el-option :value="2" label="2"></el-option>
+                </el-select>
+                  付 <el-input type="number" v-model="extraRentInfo.pay_model['pay' + (key + 1)]" style="width: 30%"></el-input>
+                  <!--剩 <span>{{ }}</span>-->
+                </el-form-item>
+                <el-form-item>
+                  <el-checkbox v-model="extraRentInfo.is_more_pay" @change="handleChangePay">付款方式不唯一</el-checkbox>
+                </el-form-item>
+                <el-form-item label="月单价" v-if="!extraRentInfo.is_one_price">
+                  <el-input v-model="extraRentInfo.first_price"></el-input>
+                </el-form-item>
+                <el-form-item :key="key" :label="extraRentInfo.price_label[key]" v-for="(item,key) in extraRentInfo.price_list" v-if="extraRentInfo.is_one_price">
+                  <el-input v-model="extraRentInfo.price_model['price' + (key + 1)]"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-checkbox v-model="extraRentInfo.is_one_price" @change="handleChangeRentPrice">月单价不唯一</el-checkbox>
+                </el-form-item>
+                <el-form-item label="已收" prop="received_amount">
+                  <el-input v-model="rentInfo.received_amount"></el-input>
+                </el-form-item>
+                <el-form-item label="中介费" prop="medi_cost">
+                  <el-input v-model="rentInfo.medi_cost"></el-input>
+                </el-form-item>
+                <el-form-item label="签约时间" prop="deal_date">
+                  <el-date-picker
+                    v-model="rentInfo.deal_date"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="尾款补齐时间" prop="complete_date">
+                  <el-date-picker
+                    v-model="rentInfo.complete_date"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item label=""></el-form-item>
+                <el-form-item label="备注">
+                  <el-input type="textarea" :row="8" v-model="rentInfo.remark"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <div class="edit_title"><h3>费用</h3></div>
+                <el-form-item label="水费">
+                  <el-input v-model="rentInfo.water_fee"></el-input>
+                </el-form-item>
+                <el-form-item label="电费">
+                  <el-input v-model="rentInfo.elec_fee"></el-input>
+                </el-form-item>
+                <el-form-item label="燃气费">
+                  <el-input v-model="rentInfo.gas_fee"></el-input>
+                </el-form-item>
+                <el-form-item label="物业费">
+                  <el-input v-model="rentInfo.property_fee"></el-input>
+                </el-form-item>
+                <el-form-item label="管理费">
+                  <el-input v-model="rentInfo.manage_fee"></el-input>
+                </el-form-item>
+                <el-form-item label="网络费">
+                  <el-input v-model="rentInfo.net_fee"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <div class="edit_title"><h3>客户信息</h3></div>
+                <el-form-item label="客户汇款方式" prop="account_type">
+                  <el-select v-model="rentInfo.account_type" @change="handleChangeRentBank">
+                    <el-option :value="1" label="银行卡"></el-option>
+                    <el-option :value="2" label="支付宝"></el-option>
+                    <el-option :value="3" label="微信"></el-option>
+                    <el-option :value="4" label="存折"></el-option>
+                    <el-option :value="5" label="现金"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="收款人信息" prop="account_owner">
+                  <el-input v-model="rentInfo.account_owner"></el-input>
+                </el-form-item>
+                <el-form-item label="开户行" v-if="extraRentInfo.canBank">
+                  <el-select v-model="rentInfo.account_bank"></el-select>
+                </el-form-item>
+                <el-form-item label="支行" v-if="extraRentInfo.canBank">
+                  <el-input v-model="rentInfo.account_subbank"></el-input>
+                </el-form-item>
+                <el-form-item label="账号" prop="account_num">
+                  <el-input v-model="rentInfo.account_num"></el-input>
+                </el-form-item>
+                <el-form-item label="科目">
+                  <el-input v-model="extraRentInfo.subject_name" @focus="handleOpenRentSubject"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item>
+              <div style="text-align: right">
+                <el-button @click="handleCancelEditRentInfo">取消</el-button>
+                <el-button type="primary" @click="handleSubmitRentInfo('rentInfo')">确定</el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
+
     <!--科目-->
     <SubjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
                  @selectSubject="selectSubject"></SubjectTree>
@@ -442,7 +615,7 @@
         type: 'depart',
         currentCtl: 'editInfo',
 
-        activeName: 'first',
+        activeName: 'second',
 
         landLordList: [],
         landLordCount: 0,
@@ -581,7 +754,119 @@
         subjectVisible: false,
         subjectType: 'top',
         currentSubType: '',
-        showBank: false
+        showBank: false,
+        rentInfoRules: {
+          staff_id: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          department_id: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          contact: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          house_id: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          customer_name: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          is_shared: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          shared_part: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          rent_type: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          months: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          deal_date: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          complete_date: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          account_type: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          account_owner: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+          account_num: [
+            {required: true,message: '格式不正确',trigger: 'blur'}
+          ],
+        },
+        //编辑租客
+        rentInfo: {
+          staff_id: '',
+          contact: '', //客户手机
+          department_id: '',
+          leader_id: '',
+          house_id: '',
+          customer_name: '',
+          is_shared: '',
+          shared_part: '',
+          rent_type: '',
+          months: '',
+          prices: [],
+          pay: [],
+          received_amount: '', //已收
+          medi_cost: '', //中介费
+          deal_date: '', //签约时间
+          complete_date: '',//尾款补齐时间
+          remark: '', //备注
+          water_fee: '',
+          elec_fee: '',
+          gas_fee: '',
+          property_fee: '',
+          manage_fee: '',
+          net_fee: '',
+
+          //客户信息
+          account_type: '',
+          account_owner: '',
+          account_subbank: '',
+          account_bank: '',
+          account_num: '',
+          subject_id: {
+            rental: ''
+          },
+
+          //付款方式
+          bet: '',
+        },
+        extraRentInfo: {
+          editRentInfoVisible: false,
+          staff_name: '',
+          department_name: '',
+          leader_name: '',
+          house_name: '',
+          canBank: true,
+          subject_name: '',
+          isRentSub: false,
+          isRentDepart: false,
+
+          //月单价
+          is_one_price: false,
+          first_price: '',
+          price_list: [], //获取所有月单价
+          price_label: [], // label
+          price_model: {
+
+          },
+
+          //付款方式
+          first_pay_price: '',
+          is_more_pay: false,
+          pay_list: [],
+          pay_label: [],
+          pay_model: {
+
+          }
+        },
       }
     },
     mounted() {
@@ -589,6 +874,111 @@
       this.getBankList();
     },
     methods: {
+      handleChangePay(val) {
+        this.extraRentInfo.is_more_pay = val;
+        if (val) {
+          this.extraRentInfo.pay_list = [];
+          this.extraRentInfo.pay_label = [];
+          this.extraRentInfo.pay_model = {};
+          const times = Math.ceil(parseInt(this.rentInfo.months) / 12);
+          for (var z=0;z<times;z ++ ){
+            this.extraRentInfo.pay_list.push(0);
+            this.extraRentInfo.pay_model = Object.assign({},this.extraRentInfo.pay_model,{
+              ['pay' + (z + 1)]: 0
+            });
+            this.extraRentInfo.pay_label.push('第' + (z + 1) + '期');
+          }
+          console.log(this.extraRentInfo.pay_list,this.extraRentInfo.pay_model,this.extraRentInfo.pay_label);
+        }else {
+          this.extraRentInfo.pay_list = [];
+          this.extraRentInfo.pay_label = [];
+          this.extraRentInfo.pay_model = {};
+        }
+      },
+      //点击确定修改
+      handleSubmitRentInfo(formName) {
+        this.rentInfo.prices = [];
+        this.rentInfo.pay = [];
+        if (this.extraRentInfo.is_one_price) {
+          var keys = Object.keys(this.extraRentInfo.price_model);
+          var len = keys.length;
+          for (var j =0;j<len;j++) {
+            this.rentInfo.prices.push(this.extraRentInfo.price_model[keys[j]]);
+          }
+        } else {
+          this.rentInfo.prices.push(this.extraRentInfo.first_price);
+        }
+        if (this.extraRentInfo.is_more_pay) {
+          var keys1 = Object.keys(this.extraRentInfo.pay_model);
+          var len1 = keys.length;
+          for (var g =0;g<len1;g++) {
+            this.rentInfo.pay.push(this.extraRentInfo.pay_model[keys1[g]]);
+          }
+        } else {
+          this.rentInfo.pay.push(this.extraRentInfo.first_pay_price);
+        }
+        if (!this.rentInfo.pay[0] || !this.rentInfo.prices[0]) {
+          this.$notify.warning({
+            title: '警告',
+            message: '付款方式或月单价参数不正确！'
+          });
+          return false;
+        }
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.$http.put(this.url + `customer/renter/update/${this.currentInfoId}`,this.rentInfo).then(res => {
+              this.SuccessCallBack(res);
+              this.$refs[formName].resetFields();
+              this.handleCancelEditRentInfo();
+            })
+          } else {
+            this.$message.warning("error params");
+          }
+        })
+      },
+      handleChangeRentPrice(val) {
+        if (val) {
+          this.extraRentInfo.is_one_price = val;
+          this.extraRentInfo.price_label = [];
+          this.extraRentInfo.price_list = [];
+          this.extraRentInfo.price_model = {};
+          const times = Math.ceil(parseInt(this.rentInfo.months) / 12);
+          for (var i = 0;i<times;i++) {
+            this.extraRentInfo.price_list.push(0.00);
+            this.extraRentInfo.price_model = Object.assign({},this.extraRentInfo.price_model,{
+              ['price' + (i + 1)]: 0.00
+            });
+            this.extraRentInfo.price_label.push('第' + (i + 1) + '年');
+          }
+        } else {
+          this.extraRentInfo.is_one_price = val;
+          this.extraRentInfo.price_label = [];
+          this.extraRentInfo.price_list = [];
+          this.extraRentInfo.price_model = {};
+        }
+      },
+      handleOpenDepartByRent() {
+        this.extraRentInfo.isRentDepart = true;
+        this.departVisible = true;
+        this.length = 1;
+        this.type = 'staff';
+      },
+      handleCancelEditRentInfo() {
+        this.extraRentInfo.isRentDepart = false;
+        this.extraRentInfo.isRentSub = false;
+        this.extraRentInfo.editRentInfoVisible = false;
+      },
+      handleOpenRentSubject() {
+        this.extraRentInfo.isRentSub = true;
+        this.subjectVisible = true;
+      },
+      handleChangeRentBank(type) {
+        if (type === 2 || type === 3) {
+          this.extraRentInfo.canBank = false;
+        } else {
+          this.extraRentInfo.canBank = true;
+        }
+      },
       //月单价不唯一
       handleCheckPrice(val) {
         if (val) {
@@ -654,6 +1044,7 @@
       },
       closeSubjectTree() {
         this.subjectVisible = false;
+        // this.extraRentInfo.isRentSub = false;
       },
       selectSubject(val) {
         this.getSubjects(val.id,this.currentSubType);
@@ -729,6 +1120,15 @@
         this.$http.get(this.url + '/account/subject/detail/' + id).then(res => {
           if (res.data.success) {
             const data = res.data.data;
+            if (this.extraRentInfo.isRentSub) {
+              if (data.superior_title) {
+                this.extraRentInfo.subject_name = `${data.superior_title} >> ${data.title}`;
+              } else {
+                this.extraRentInfo.subject_name = data.title;
+              }
+              this.rentInfo.subject_id.rental = data.id;
+              return false;
+            }
             if (type === 'rental') {
               this.editParams.subject_id.rental = data.id;
               if (data.superior_title) {
@@ -763,6 +1163,7 @@
           this.$http.get(this.url + `customer/landlord/read/${row.id}`).then(res => {
             if (res.data.success) {
               this.CurrentDetailInfo = res.data.data;
+              console.log(this.CurrentDetailInfo);
               var info = res.data.data;
               var baseInfo = {};
               var accountInfo = {};
@@ -778,7 +1179,7 @@
               baseInfo['付款方式'] = info.payType || '/';
               baseInfo['月单价'] = info.prices[0] || '';
               baseInfo['待签约日期'] = info.deal_date || '/';
-              baseInfo['空置期'] = info.vacancy || '';
+              baseInfo['空置期'] = info.vacancy || 0;
               baseInfo['第一次打房租日期'] = info.first_pay_date || '/';
               baseInfo['第二次打房租日期'] = info.second_pay_date || '/';
               baseInfo['负责人'] = info.staff.name || '/';
@@ -841,6 +1242,11 @@
         this.extraParams.depart_name = "";
       },
       handleSelectDepart(val) {
+        if (this.extraRentInfo.isRentDepart) {
+          this.rentInfo.staff_id = val[0].id;
+          this.extraRentInfo.staff_name = val[0].name;
+          return false;
+        }
         if (this.currentCtl = 'editInfo') {
           this.editExtraParams.staff_name = val[0].name;
           this.editParams.staff_id = val[0].id;
@@ -929,7 +1335,10 @@
         }
       },
       //房东管理列表
-      getLandLordList() {
+      getLandLordList(search) {
+        if (search) {
+          this.params.page = 1;
+        }
         const session = JSON.parse(localStorage.getItem('personal')).session_id;
         this.Loading = true;
         this.emptyText = " ";
@@ -995,6 +1404,7 @@
             ];
           } else {
             this.lists = [
+              {clickIndex: 'editRentInfo',headIcon: 'el-icon-edit',label: '编辑',data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
             ];
@@ -1010,6 +1420,7 @@
             ];
           } else {
             this.lists = [
+              {clickIndex: 'editRentInfo',headIcon: 'el-icon-edit',label: '编辑',data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
@@ -1035,6 +1446,74 @@
         if (val.clickIndex === 'editInfo') {
           this.getCurrentInfo(val.data);
           this.canEditVisible = true;
+        }
+        if (val.clickIndex === 'editRentInfo') {
+          this.getRentEditInfo(val.data);
+          this.extraRentInfo.editRentInfoVisible = true;
+        }
+      },
+      //编辑租客信息
+      getRentEditInfo(data) {
+        this.currentInfoId = data.id;
+        this.rentInfo.staff_id = data.staff_id || '';
+        this.extraRentInfo.staff_name = data.staff && data.staff.name || '';
+        this.rentInfo.department_id = data.department_id || '';
+        this.rentInfo.contact = data.contact || '';
+        this.extraRentInfo.department_name = data.department && data.department.name || '';
+        this.rentInfo.leader_id = data.leader_id || '';
+        this.extraRentInfo.leader_name = data.leader && data.leader.name || '';
+        this.rentInfo.house_id = data.house_id || '';
+        this.extraRentInfo.house_name = data.address || '';
+        this.rentInfo.customer_name = data.customer_name || '';
+        this.rentInfo.is_shared = parseInt(data.is_shared) || '';
+        this.rentInfo.rent_type = parseInt(data.rent_type) || '';
+        this.rentInfo.shared_part = parseInt(data.shared_part) || '';
+        this.rentInfo.months = parseInt(data.months) || '';
+        this.rentInfo.received_amount = data.received_amount || '';
+        this.rentInfo.medi_cost = data.medi_cost || '';
+        this.rentInfo.remark = data.remark || '';
+        this.rentInfo.deal_date = data.deal_date || '';
+        this.rentInfo.complete_date = data.complete_date || '';
+        this.rentInfo.net_fee = parseFloat(data.net_fee).toFixed(2) || '';
+        this.rentInfo.water_fee = parseFloat(data.water_fee).toFixed(2) || '';
+        this.rentInfo.elec_fee = parseFloat(data.elec_fee).toFixed(2) || '';
+        this.rentInfo.gas_fee = parseFloat(data.gas_fee).toFixed(2) || '';
+        this.rentInfo.property_fee = parseFloat(data.property_fee).toFixed(2) || '';
+        this.rentInfo.manage_fee = parseFloat(data.manage_fee).toFixed(2) || '';
+        this.rentInfo.account_type = data.account_type || '';
+        this.rentInfo.account_owner = data.account_owner || '';
+        this.rentInfo.account_subbank = data.account_subbank || '';
+        this.rentInfo.account_bank = data.account_bank || '';
+        this.rentInfo.account_num = data.account_num || '';
+        this.rentInfo.subject_id.rental = data.subject_id && data.subject_id.rental || '';
+        this.extraRentInfo.subject_name = data.subject || '';
+        this.rentInfo.bet = data.bet || '';
+
+        //月单价
+        const prices = data.prices || [];
+        if (prices.length > 1) {
+          this.extraRentInfo.is_one_price = true;
+          var length = prices.length;
+          for (var k = 0;k <length; k++) {
+            this.extraRentInfo.price_list.push(prices[k]);
+            this.extraRentInfo.price_model = Object.assign({},this.extraRentInfo.price_model,{
+              ['price' + (k + 1)]: prices[k]
+            });
+            this.extraRentInfo.price_label.push('第' + (k + 1) + '年');
+          }
+        } else {
+          this.extraRentInfo.is_one_price = false;
+          this.extraRentInfo.first_price = parseFloat(prices[0]).toFixed(2);
+        }
+
+        //付款方式
+        const pay_type = data.pay || [];
+        var pay_length = pay_type.length;
+        if (pay_length > 1) {
+
+        } else {
+          this.extraRentInfo.is_more_pay = false;
+          this.extraRentInfo.first_pay_price = pay_type[0];
         }
       },
       //编辑房东赋值
@@ -1083,7 +1562,7 @@
             this.editExtraParams.first_pay_price = parseFloat(data.prices[0]).toFixed(2);
           }
         }
-        this.editParams.prices = data.prices && parseFloat(data.prices[0]).toFixed(2) || 0.00;
+        // this.editParams.prices = data.prices && parseFloat(data.prices[0]).toFixed(2) || 0.00;
         this.editParams.deposit = data.prices &&  parseFloat(data.deposit).toFixed(2) || 0.00;
         this.editParams.warrenty = data.warrenty || 0;
         this.editParams.medi_cost = data.medi_cost || 0;

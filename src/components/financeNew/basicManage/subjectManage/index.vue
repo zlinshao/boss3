@@ -193,7 +193,6 @@
         this.collectStatus = ' ';
         let params = this.form;
         this.$http.get(globalConfig.finance_server + 'account/subject/index', {params: params}).then((res) => {
-          console.log(res);
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.success) {
