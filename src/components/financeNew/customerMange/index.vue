@@ -121,7 +121,11 @@
             <el-table-column label="手机号" prop="contact"></el-table-column>
             <el-table-column label="收房月数	" prop="months"></el-table-column>
             <el-table-column label="付款方式	" prop="payType"></el-table-column>
-            <el-table-column label="月单价" prop="prices[0]"></el-table-column>
+            <el-table-column label="月单价" prop="prices[0]">
+              <template slot-scope="scope">
+                <span v-for="item in scope.row.prices">{{ item }} &nbsp;&nbsp;</span>
+              </template>
+            </el-table-column>
             <el-table-column label="待签约日期" prop="deal_date"></el-table-column>
             <el-table-column label="第一次打房租日期" prop="first_pay_date"></el-table-column>
             <el-table-column label="客户付款方式" prop="account_type"></el-table-column>
@@ -259,120 +263,134 @@
       <el-dialog
         :visible.sync="canEditVisible"
         title="编辑信息"
-        width="35%"
+        width="70%"
       >
         <div style="width: 95%;margin: 0 auto;">
           <el-form size="mini" :model="editParams" :rules="editInfoRules" ref="editForm" label-width="120px">
-            <div class="edit_title"><h3>基本信息</h3></div>
-            <el-form-item label="签约人" prop="staff_id">
-              <el-input v-model="editExtraParams.staff_name" @focus="handleOpenDepart"></el-input>
-            </el-form-item>
-            <el-form-item label="所属部门" prop="department_id">
-              <el-input disabled v-model="editExtraParams.department_name"></el-input>
-            </el-form-item>
-            <el-form-item label="负责人">
-              <el-input disabled v-model="editParams.leader_name"></el-input>
-            </el-form-item>
-            <el-form-item label="客户姓名" prop="customer_name">
-              <el-input v-model="editParams.customer_name"></el-input>
-            </el-form-item>
-            <el-form-item label="客户手机号" prop="contact">
-              <el-input v-model="editParams.contact"></el-input>
-            </el-form-item>
-            <el-form-item label="房屋地址" prop="house_id">
-              <el-input disabled v-model="editExtraParams.address"></el-input>
-            </el-form-item>
-            <el-form-item label="收房月数" prop="months">
-              <el-input v-model="editParams.months" type="number"></el-input>
-            </el-form-item>
-            <el-form-item label="付款方式" prop="pay_types" v-if="!editExtraParams.pay_others">
-              <el-select v-model="editExtraParams.first_pay_type">
-                <el-option label="月付" :value="1"></el-option>
-                <el-option label="双月付" :value="2"></el-option>
-                <el-option label="季付" :value="3"></el-option>
-                <el-option label="半年付" :value="6"></el-option>
-                <el-option label="年付" :value="12"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item  label="付款方式" v-if="editExtraParams.pay_others" v-for="(item,key) in editExtraParams.pay_others_types">
-              <el-select v-model="editExtraParams.pay_others_type['type' + (key + 1)]">
-                <el-option label="月付" :value="1"></el-option>
-                <el-option label="双月付" :value="2"></el-option>
-                <el-option label="季付" :value="3"></el-option>
-                <el-option label="半年付" :value="6"></el-option>
-                <el-option label="年付" :value="12"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-checkbox v-model="editExtraParams.pay_others" @change="handleCheckboxPay">付款方式不唯一</el-checkbox>
-            </el-form-item>
-            <el-form-item label="月单价" prop="prices">
-              <el-input v-model="editParams.prices"></el-input>
-            </el-form-item>
-            <el-form-item label="押金" prop="deposit">
-              <el-input v-model="editParams.deposit"></el-input>
-            </el-form-item>
-            <el-form-item label="保修期" prop="warrenty">
-              <el-input v-model="editParams.warrenty"></el-input>
-            </el-form-item>
-            <el-form-item label="中介费" prop="medi_cost">
-              <el-input v-model="editParams.medi_cost"></el-input>
-            </el-form-item>
-            <el-form-item label="待签约日期" prop="deal_date">
-              <el-date-picker
-                v-model="editParams.deal_date"
-                value-format="yyyy-MM-dd"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="第一次房租日期" prop="first_pay_date">
-              <el-date-picker
-                v-model="editParams.first_pay_date"
-                value-format="yyyy-MM-dd"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="第二次房租日期" prop="second_pay_date">
-              <el-date-picker
-                v-model="editParams.second_pay_date"
-                value-format="yyyy-MM-dd"
-              ></el-date-picker>
-            </el-form-item>
-            <div class="edit_title"><h3>客户信息</h3></div>
-            <el-form-item label="账户类型" prop="account_type">
-              <el-select v-model="editParams.account_type">
-                <el-option :value="1" label="银行卡"></el-option>
-                <el-option :value="2" label="支付宝"></el-option>
-                <el-option :value="3" label="微信"></el-option>
-                <el-option :value="4" label="存折"></el-option>
-                <el-option :value="5" label="现金"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="收款人" prop="account_owner">
-              <el-input v-model="editParams.account_owner"></el-input>
-            </el-form-item>
-            <el-form-item label="开户银行" v-if="!showBank">
-              <el-select v-model="editParams.account_bank" @change="handleChangeAccount_type">
-                <el-option v-for="(bank,key) in banks" :value="key" :key="key" :label="bank"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="支行" v-if="!showBank">
-              <el-input v-model="editParams.account_subbank"></el-input>
-            </el-form-item>
-            <el-form-item label="账号" prop="account_num">
-              <el-input v-model="editParams.account_num"></el-input>
-            </el-form-item>
-            <div class="edit_title"><h3>科目</h3></div>
-            <el-form-item label="房租科目">
-              <el-input v-model="editExtraParams.rental_name" @focus="handleOpenSubject('rental')"></el-input>
-            </el-form-item>
-            <el-form-item label="押金科目">
-              <el-input v-model="editExtraParams.deposit_name" @focus="handleOpenSubject('deposit')"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <div style="text-align: right">
-                <el-button @click="handleCancelSubmit('editForm')">取消</el-button>
-                <el-button @click="handleSubmitEditInfo('editForm')" type="primary">确定</el-button>
-              </div>
-            </el-form-item>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <div class="edit_title"><h3>基本信息</h3></div>
+                <el-form-item label="签约人" prop="staff_id">
+                  <el-input v-model="editExtraParams.staff_name" @focus="handleOpenDepart"></el-input>
+                </el-form-item>
+                <el-form-item label="所属部门" prop="department_id">
+                  <el-input disabled v-model="editExtraParams.department_name"></el-input>
+                </el-form-item>
+                <el-form-item label="负责人">
+                  <el-input disabled v-model="editParams.leader_name"></el-input>
+                </el-form-item>
+                <el-form-item label="客户姓名" prop="customer_name">
+                  <el-input v-model="editParams.customer_name"></el-input>
+                </el-form-item>
+                <el-form-item label="客户手机号" prop="contact">
+                  <el-input v-model="editParams.contact"></el-input>
+                </el-form-item>
+                <el-form-item label="房屋地址" prop="house_id">
+                  <el-input disabled v-model="editExtraParams.address"></el-input>
+                </el-form-item>
+                <el-form-item label="收房月数" prop="months">
+                  <el-input v-model="editParams.months" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="付款方式" v-if="!editExtraParams.pay_others">
+                  <el-select v-model="editExtraParams.first_pay_type">
+                    <el-option label="月付" :value="1"></el-option>
+                    <el-option label="双月付" :value="2"></el-option>
+                    <el-option label="季付" :value="3"></el-option>
+                    <el-option label="半年付" :value="6"></el-option>
+                    <el-option label="年付" :value="12"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item :label="editExtraParams.pay_others_label[key]" v-if="editExtraParams.pay_others" v-for="(item,key) in editExtraParams.pay_others_types" :key="key">
+                  <el-select v-model="editExtraParams.pay_others_value['type' + (key + 1)]">
+                    <el-option label="月付" :value="1"></el-option>
+                    <el-option label="双月付" :value="2"></el-option>
+                    <el-option label="季付" :value="3"></el-option>
+                    <el-option label="半年付" :value="6"></el-option>
+                    <el-option label="年付" :value="12"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-checkbox v-model="editExtraParams.pay_others" @change="handleCheckboxPay">付款方式不唯一</el-checkbox>
+                </el-form-item>
+                <el-form-item label="月单价" v-if="!editExtraParams.pay_price">
+                  <el-input v-model="editExtraParams.first_pay_price"></el-input>
+                </el-form-item>
+                <el-form-item :label="editExtraParams.pay_others_price_label[key]" v-if="editExtraParams.pay_price" v-for="(item,key) in editExtraParams.pay_others_price" :key="key">
+                  <el-input type="number" v-model="editExtraParams.pay_others_price_value['price' + (key + 1)]"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-checkbox v-model="editExtraParams.pay_price" @change="handleCheckPrice">月单价不唯一</el-checkbox>
+                </el-form-item>
+                <el-form-item label="押金" prop="deposit">
+                  <el-input v-model="editParams.deposit"></el-input>
+                </el-form-item>
+                <el-form-item label="保修期" prop="warrenty">
+                  <el-input v-model="editParams.warrenty"></el-input>
+                </el-form-item>
+                <el-form-item label="中介费" prop="medi_cost">
+                  <el-input v-model="editParams.medi_cost"></el-input>
+                </el-form-item>
+                <el-form-item label="待签约日期" prop="deal_date">
+                  <el-date-picker
+                    v-model="editParams.deal_date"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="第一次房租日期" prop="first_pay_date">
+                  <el-date-picker
+                    v-model="editParams.first_pay_date"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="第二次房租日期" prop="second_pay_date">
+                  <el-date-picker
+                    v-model="editParams.second_pay_date"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <div class="edit_title"><h3>客户信息</h3></div>
+                <el-form-item label="账户类型" prop="account_type">
+                  <el-select v-model="editParams.account_type">
+                    <el-option :value="1" label="银行卡"></el-option>
+                    <el-option :value="2" label="支付宝"></el-option>
+                    <el-option :value="3" label="微信"></el-option>
+                    <el-option :value="4" label="存折"></el-option>
+                    <el-option :value="5" label="现金"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="收款人" prop="account_owner">
+                  <el-input v-model="editParams.account_owner"></el-input>
+                </el-form-item>
+                <el-form-item label="开户银行" v-if="!showBank">
+                  <el-select v-model="editParams.account_bank" @change="handleChangeAccount_type">
+                    <el-option v-for="(bank,key) in banks" :value="key" :key="key" :label="bank"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="支行" v-if="!showBank">
+                  <el-input v-model="editParams.account_subbank"></el-input>
+                </el-form-item>
+                <el-form-item label="账号" prop="account_num">
+                  <el-input v-model="editParams.account_num"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <div class="edit_title"><h3>科目</h3></div>
+                <el-form-item label="房租科目">
+                  <el-input v-model="editExtraParams.rental_name" @focus="handleOpenSubject('rental')"></el-input>
+                </el-form-item>
+                <el-form-item label="押金科目">
+                  <el-input v-model="editExtraParams.deposit_name" @focus="handleOpenSubject('deposit')"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <div style="text-align: right">
+                    <el-button @click="handleCancelSubmit('editForm')">取消</el-button>
+                    <el-button @click="handleSubmitEditInfo('editForm')" type="primary">确定</el-button>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-dialog>
@@ -410,7 +428,7 @@
         },
         params: {
           search: '',
-          startRange: '2018-01-01',
+          startRange: '',
           endRange: '',
           page: 1,
           limit: 12,
@@ -453,10 +471,22 @@
           rental_name: '',
           deposit_name: '',
           address: '',
+
+          //付款方式
           pay_others: false,
           first_pay_type: '',
           pay_others_types: [],
-          pay_others_type: {
+          pay_others_label: [],
+          pay_others_value: {
+
+          },
+
+          //月单价
+          pay_price: false,
+          first_pay_price: '',
+          pay_others_price: '',
+          pay_others_price_label: [],
+          pay_others_price_value: {
 
           }
         },
@@ -488,6 +518,12 @@
         },
         currentInfoId: '',
         editInfoRules: {
+          first_pay_price: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
+          first_pay_type: [
+            {required: true,message: '格式不正确！',trigger: 'blur'}
+          ],
           account_owner: [
             {required: true,message: '格式不正确！',trigger: 'blur'}
           ],
@@ -553,20 +589,55 @@
       this.getBankList();
     },
     methods: {
+      //月单价不唯一
+      handleCheckPrice(val) {
+        if (val) {
+          this.editExtraParams.pay_others_price_label = [];
+          if (this.editExtraParams.pay_others_price.length > 1) {
+            var len = this.editExtraParams.pay_others_price.length;
+            for (var w = 0;w<len;w ++) {
+              this.editExtraParams.pay_others_price_value = Object.assign({},this.editExtraParams.pay_others_price_value,{
+                ['price' + (w + 1)]: this.editExtraParams.pay_others_price[w]
+              });
+              this.editExtraParams.pay_others_price_label.push('第' + (w + 1) + '年');
+            }
+          } else {
+            this.editExtraParams.pay_others_price = [];
+            const num = Math.ceil(this.editParams.months / 12);
+            for (var i=0;i<num;i++) {
+              this.editExtraParams.pay_others_price.push(0.00);
+              this.editExtraParams.pay_others_price_value = Object.assign({},this.editExtraParams.pay_others_price_value,{
+                ['price' + (i + 1)]: 0.00
+              });
+              this.editExtraParams.pay_others_price_label.push('第' + (i + 1) + '年');
+            }
+          }
+        }
+      },
       //点击付款方式不唯一
       handleCheckboxPay(val) {
+        this.editExtraParams.pay_others = val;
         if (val) {
-          var len = Math.ceil(this.editParams.months / 12);
-          this.editExtraParams.pay_others_types = [];
-          for (var i = 0;i<len;i++) {
-            this.editExtraParams.pay_others_types.push(1);
-            this.editExtraParams.pay_others_type = Object.assign(this.editExtraParams.pay_others_type,{
-              ['type' + (i + 1)]: 1
-            })
+          this.editExtraParams.pay_others_label = [];
+          if (this.editExtraParams.pay_others_types.length > 1) {
+            var len = this.editExtraParams.pay_others_types.length;
+            for (var j=0;j<len;j++) {
+              this.editExtraParams.pay_others_value = Object.assign({},this.editExtraParams.pay_others_value,{
+                ['type' + (j + 1)]: this.editExtraParams.pay_others_types[j]
+              });
+              this.editExtraParams.pay_others_label.push('第' + (j + 1) + '年');
+            }
+          } else {
+            this.editExtraParams.pay_others_types = [];
+            const num = Math.ceil(this.editParams.months / 12);
+            for (var i=0;i<num;i++) {
+              this.editExtraParams.pay_others_types.push(1);
+              this.editExtraParams.pay_others_value = Object.assign({},this.editExtraParams.pay_others_value,{
+                ['type' + (i + 1)]: 1
+              });
+              this.editExtraParams.pay_others_label.push('第' + (i + 1) + '年');
+            }
           }
-          console.log(this.editExtraParams.pay_others_type);
-        } else {
-          console.log(this.editParams.pay_types);
         }
       },
       handleChangeAccount_type(type){
@@ -606,15 +677,46 @@
         this.$refs[formName].resetFields();
         this.canEditVisible = false;
       },
+      handleClear(){
+        this.editExtraParams.pay_others = this.editExtraParams.pay_price = false;
+        this.editExtraParams.pay_others_value = this.editExtraParams.pay_others_price_value = {};
+        this.editExtraParams.pay_others_types = this.editExtraParams.pay_others_price = [];
+        this.editExtraParams.pay_others_label = this.editExtraParams.pay_others_price_label = [];
+      },
       handleSubmitEditInfo(formName) {
+        this.editParams.pay_types = [];
+        this.editParams.prices = [];
+        if (this.editExtraParams.pay_price) {
+          var obj1 = this.editExtraParams.pay_others_price_value;
+          var keys1 = Object.keys(obj1);
+          for (var p =0;p<keys1.length; p ++) {
+            this.editParams.prices.push(obj1[keys1[p]]);
+          }
+        } else {
+          this.editParams.prices.push(this.editExtraParams.first_pay_price);
+        }
+        if (this.editExtraParams.pay_others) {
+          var obj = this.editExtraParams.pay_others_value;
+          var keys = Object.keys(obj);
+          for (var z = 0;z<keys.length;z ++ ){
+            this.editParams.pay_types.push(obj[keys[z]])
+          }
+        } else {
+          this.editParams.pay_types.push(this.editExtraParams.first_pay_type);
+        }
+        if (!this.editParams.prices[0] || !this.editParams.pay_types[0]) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请完善付款方式或月单价信息！'
+          });
+          return false;
+        }
         this.$refs[formName].validate(valid => {
           if (valid) {
             this.$http.post(this.url + `customer/landlord/update/${this.currentInfoId}`,this.editParams).then(res => {
-              console.log(res);
-              if (res.data.success) {
-                this.handleCancelSubmit(formName);
-                this.getLandLordList();
-              }
+              this.SuccessCallBack(res);
+              this.handleCancelSubmit(formName);
+              this.handleClear();
             }).catch(err => {
               console.log(err);
             })
@@ -744,7 +846,6 @@
           this.editParams.staff_id = val[0].id;
           this.editParams.department_id = val[0].org && val[0].org[0].id;
           this.editExtraParams.department_name = val[0].org && val[0].org[0].name;
-          return false;
         }
         this.extraParams.depart_name = "";
         this.params.department_ids = [];
@@ -938,7 +1039,6 @@
       },
       //编辑房东赋值
       getCurrentInfo(data) {
-        console.log(data);
         this.getSubjects(data.subject_id.deposit,'deposit');
         this.getSubjects(data.subject_id.rental,'rental');
         this.currentInfoId = data.id;
@@ -953,14 +1053,34 @@
         this.editExtraParams.address = data.address || '';
         this.editParams.house_id = data.house_id || '';
         this.editParams.months = data.months || 0;
-        // this.editParams.pay_types = data.pay_types;
         if (data.pay_types) {
-          if (data.pay_types.length >1){
+          if (data.pay_types.length > 1) {
+            var len = data.pay_types.length;
             this.editExtraParams.pay_others_types = data.pay_types;
+            for (var k =0;k<len;k++) {
+              this.editExtraParams.pay_others_label.push('第' + (k + 1) + '年');
+              this.editExtraParams.pay_others_value = Object.assign({},this.editExtraParams.pay_others_value,{
+                ['type' + (k + 1)]: data.pay_types[k]
+              })
+            }
             this.editExtraParams.pay_others = true;
           } else {
             this.editExtraParams.first_pay_type = parseInt(data.pay_types[0]);
-            this.editExtraParams.pay_others_types = data.pay_types;
+          }
+        }
+        if (data.prices) {
+          var length = data.prices.length;
+          if (length > 1) {
+            this.editExtraParams.pay_others_price = data.prices;
+            for (var g = 0;g <length;g ++) {
+              this.editExtraParams.pay_others_price_label.push('第' + (g + 1) + '年');
+              this.editExtraParams.pay_others_price_value = Object.assign({},this.editExtraParams.pay_others_price_value,{
+                ['price' + (g + 1)]: data.prices[g]
+              });
+            }
+            this.editExtraParams.pay_price = true
+          } else {
+            this.editExtraParams.first_pay_price = parseFloat(data.prices[0]).toFixed(2);
           }
         }
         this.editParams.prices = data.prices && parseFloat(data.prices[0]).toFixed(2) || 0.00;
