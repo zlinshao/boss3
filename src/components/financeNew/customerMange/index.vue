@@ -888,8 +888,8 @@
             });
             this.extraRentInfo.pay_label.push('第' + (z + 1) + '期');
           }
-          console.log(this.extraRentInfo.pay_list,this.extraRentInfo.pay_model,this.extraRentInfo.pay_label);
         }else {
+          this.extraRentInfo.first_pay_price = 0;
           this.extraRentInfo.pay_list = [];
           this.extraRentInfo.pay_label = [];
           this.extraRentInfo.pay_model = {};
@@ -910,7 +910,7 @@
         }
         if (this.extraRentInfo.is_more_pay) {
           var keys1 = Object.keys(this.extraRentInfo.pay_model);
-          var len1 = keys.length;
+          var len1 = keys1.length;
           for (var g =0;g<len1;g++) {
             this.rentInfo.pay.push(this.extraRentInfo.pay_model[keys1[g]]);
           }
@@ -1454,6 +1454,7 @@
       },
       //编辑租客信息
       getRentEditInfo(data) {
+        console.log(data);
         this.currentInfoId = data.id;
         this.rentInfo.staff_id = data.staff_id || '';
         this.extraRentInfo.staff_name = data.staff && data.staff.name || '';
@@ -1510,7 +1511,17 @@
         const pay_type = data.pay || [];
         var pay_length = pay_type.length;
         if (pay_length > 1) {
-
+          this.extraRentInfo.is_more_pay = true;
+          this.extraRentInfo.pay_list = [];
+          this.extraRentInfo.pay_label = [];
+          this.extraRentInfo.pay_model = {};
+          for (var z=0;z<pay_length;z ++ ){
+            this.extraRentInfo.pay_list.push(pay_type[z]);
+            this.extraRentInfo.pay_model = Object.assign({},this.extraRentInfo.pay_model,{
+              ['pay' + (z + 1)]: pay_type[z]
+            });
+            this.extraRentInfo.pay_label.push('第' + (z + 1) + '期');
+          }
         } else {
           this.extraRentInfo.is_more_pay = false;
           this.extraRentInfo.first_pay_price = pay_type[0];
