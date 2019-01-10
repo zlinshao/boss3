@@ -39,7 +39,7 @@
                   <el-col :span="12" v-for="(value,index) in show_content" :key="1"
                           v-if="printScreen.indexOf(index) === -1 && index === 'receiptUri'">
                     <el-form-item v-if="value && Array.isArray(value)" label="电子收据">
-                      <div class="special">
+                      <div class="special" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap">
                       <span v-for="p in value">
                         <span v-if="p.view_uri">
                           <a :href="p.view_uri" target="_blank">{{p.view_uri}}</a>
@@ -674,9 +674,10 @@
       },
       //生成电子收据
       createElectronicReceipt(name) {
+        console.log("run here");
         this.electronicReceiptVisible = true;
         let params = {};
-
+        console.log(this.electronicReceiptParam);
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
@@ -688,6 +689,8 @@
         params.sign_at = this.electronicReceiptParam.sign_at || "";
         params.duration = this.electronicReceiptParam.duration || "";
         params.pay_way = this.electronicReceiptParam.pay_way || "";
+        console.log(pay_way);
+        // return false;
         if (this.reportDetailData.show_content['款项名称']) {
           params.payment = this.reportDetailData.show_content['款项名称'];
         } else {

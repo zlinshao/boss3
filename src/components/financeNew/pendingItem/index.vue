@@ -107,14 +107,6 @@
         <el-table-column
           label="事项类型"
           prop="item_type">
-          <template slot-scope="scope">
-            <span v-if="scope.row.item_type == 1">违约</span>
-            <span v-if="scope.row.item_type == 2">转租</span>
-            <span v-if="scope.row.item_type == 3">调租</span>
-            <span v-if="scope.row.item_type == 4">退租</span>
-            <span v-if="scope.row.item_type == 5">收房炸单</span>
-            <span v-if="scope.row.item_type == 6">租房炸单</span>
-          </template>
         </el-table-column>
         <el-table-column
           label="开单人"
@@ -146,7 +138,7 @@
         </el-table-column>
         <el-table-column
           label="结算人"
-          prop="operator_name">
+          prop="operator.name">
         </el-table-column>
         <el-table-column
           label="状态"

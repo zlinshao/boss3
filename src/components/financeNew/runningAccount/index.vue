@@ -138,9 +138,11 @@
          <el-table-column label="类型" prop="category"></el-table-column>
          <el-table-column label="账户名称" prop="account_name"></el-table-column>
          <el-table-column label="卡号" prop="account_num"></el-table-column>
-         <el-table-column label="实收金额" prop="amount_receivable"></el-table-column>
+         <el-table-column label="实收金额" prop="amount_received"></el-table-column>
          <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
-         <el-table-column label="账户余额" prop="balance"></el-table-column>
+         <el-table-column label="应收金额" prop="amount_receivable"></el-table-column>
+         <el-table-column label="应付金额" prop="amount_payable"></el-table-column>
+         <el-table-column label="账户余额" prop="amount_remain"></el-table-column>
          <el-table-column label="详细信息" prop="info" min-width="300px"></el-table-column>
          <el-table-column label="收/付款人员" prop="operator_name"></el-table-column>
        </el-table>
