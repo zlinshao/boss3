@@ -674,10 +674,8 @@
       },
       //生成电子收据
       createElectronicReceipt(name) {
-        console.log("run here");
         this.electronicReceiptVisible = true;
         let params = {};
-        console.log(this.electronicReceiptParam);
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
@@ -689,8 +687,6 @@
         params.sign_at = this.electronicReceiptParam.sign_at || "";
         params.duration = this.electronicReceiptParam.duration || "";
         params.pay_way = this.electronicReceiptParam.pay_way || "";
-        console.log(pay_way);
-        // return false;
         if (this.reportDetailData.show_content['款项名称']) {
           params.payment = this.reportDetailData.show_content['款项名称'];
         } else {
@@ -892,11 +888,9 @@
             this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
               return item.split(':')[1];
             }).join(",");
-            this.electronicReceiptParam.pay_way = data.process.content.pay_way.map(item => {
-              return item;
+            this.electronicReceiptParam.pay_way = data.process.content && data.process.content.show_content['付款方式'].map(item => {
+              return `${item.period}:${item.msg}`;
             }).join(",");
-            console.log(this.electronicReceiptParam.price);
-            console.log(this.electronicReceiptParam.pay_way);
           } else {
             this.electronicReceiptParam.payer = data.process.content.name;
             this.electronicReceiptParam.sign_at = data.process.content.sign_date;
