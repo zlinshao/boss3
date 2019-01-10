@@ -11,6 +11,9 @@
             <el-form-item label="客户名称" prop="customer_id">
               <el-input @focus="customerVisible = true" v-model="extraParams.customer_name" placeholder="点击选择客户"></el-input>
             </el-form-item>
+            <el-form-item label="房屋地址">
+              <el-input v-model="address" disabled></el-input>
+            </el-form-item>
             <el-form-item label="客户身份" prop="identity">
               <el-select v-model="params.identity" :disabled="true">
                 <el-option :value="1" label="房东"></el-option>
@@ -77,6 +80,7 @@
       props: ['PayVisible','title'],
       data() {
         return {
+          address: '',
           customerVisible: false,
           highSubjectVisible: false,
           highSubjectType: '',
@@ -147,6 +151,7 @@
           })
         },
         handleCustomerSel(val) {
+          this.address = val.address;
           this.extraParams.customer_name = val.customer_name;
           this.params.customer_id = val.customer_id;
           this.params.identity = val.customer_type;
@@ -155,6 +160,8 @@
           for (var key in this.params) {
             this.params.key = "";
           }
+          this.address = "";
+          this.extraParams.customer_name = "";
           this.$refs['plusPay'].resetFields();
           this.$emit('close');
         }

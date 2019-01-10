@@ -465,6 +465,9 @@
           <el-form-item label="客户名称" prop="customer_name">
             <el-input @focus="customer_list_visible = true" size="mini" v-model="customer_name" placeholder="点击选择"></el-input>
           </el-form-item>
+          <el-form-item label="房屋地址">
+            <el-input disabled v-model="address" size="mini"></el-input>
+          </el-form-item>
           <el-form-item label="客户身份" prop="identity">
             <el-select v-model="addForm.identity">
               <el-option :value="1" label="房东"></el-option>
@@ -768,6 +771,7 @@
           remark: ''
         },
         customer_name: '',
+        address: '',
         customer_params: {
           type: 1,
           search: '',
@@ -951,6 +955,7 @@
           return false;
         } else {
           this.customer_list_visible = false;
+          this.address = this.currentSelectCustomer.address;
           this.customer_name = this.currentSelectCustomer.customer_name;
           this.addForm.customer_id = this.currentSelectCustomer.id;
         }
@@ -976,6 +981,7 @@
           this.addForm[keys[i]] = "";
         }
         this.customer_name = "";
+        this.address = "";
         this.subject_name = "";
         this.addPayVisible = false;
       },
