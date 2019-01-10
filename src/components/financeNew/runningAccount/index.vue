@@ -17,14 +17,21 @@
              <el-col :span="12">
                <el-row>
                  <el-col :span="8">
-                   <div class="el_col_label">操作起始时间</div>
+                   <div class="el_col_label">操作时间周期</div>
                  </el-col>
                  <el-col :span="16" class="el_col_option">
                    <el-form-item>
                      <el-date-picker
-                      v-model="params.operate_start_date"
+                      v-model="operationTime"
+                      type="daterange"
+                      align="right"
+                      unlink-panels
                       value-format="yyyy-MM-dd"
-                      placeholder="请选择"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      @change="handleSelRangDate"
+                      end-placeholder="结束日期"
+                      :picker-options="pickerOptions"
                      ></el-date-picker>
                    </el-form-item>
                  </el-col>
@@ -33,48 +40,21 @@
              <el-col :span="12">
                <el-row>
                  <el-col :span="8">
-                   <div class="el_col_label">操作结束时间</div>
+                   <div class="el_col_label">始终时间周期</div>
                  </el-col>
                  <el-col :span="16" class="el_col_option">
                    <el-form-item>
                      <el-date-picker
-                       v-model="params.operate_end_date"
+                       v-model="time"
+                       type="daterange"
+                       align="right"
+                       unlink-panels
                        value-format="yyyy-MM-dd"
-                       placeholder="请选择"
-                     ></el-date-picker>
-                   </el-form-item>
-                 </el-col>
-               </el-row>
-             </el-col>
-           </el-row>
-           <el-row class="el_row_border">
-             <el-col :span="12">
-               <el-row>
-                 <el-col :span="8">
-                   <div class="el_col_label">起始时间</div>
-                 </el-col>
-                 <el-col :span="16" class="el_col_option">
-                   <el-form-item>
-                     <el-date-picker
-                       v-model="params.start_date"
-                       value-format="yyyy-MM-dd"
-                       placeholder="请选择"
-                     ></el-date-picker>
-                   </el-form-item>
-                 </el-col>
-               </el-row>
-             </el-col>
-             <el-col :span="12">
-               <el-row>
-                 <el-col :span="8">
-                   <div class="el_col_label">结束时间</div>
-                 </el-col>
-                 <el-col :span="16" class="el_col_option">
-                   <el-form-item>
-                     <el-date-picker
-                       v-model="params.end_date"
-                       value-format="yyyy-MM-dd"
-                       placeholder="请选择"
+                       range-separator="至"
+                       start-placeholder="开始日期"
+                       @change="handleSelRangDate1"
+                       end-placeholder="结束日期"
+                       :picker-options="pickerOptions"
                      ></el-date-picker>
                    </el-form-item>
                  </el-col>
@@ -177,6 +157,43 @@
               tableCount: 0,
               all_count: 0,
               subject_name: '',
+              operationTime: '',
+              time: '',
+              pickerOptions: {
+                shortcuts: [{
+                  text: '最近一周',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '最近三个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },{
+                  text: '最近一年',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+              },
               params: {
                 search: '',
                 page: 1,
@@ -200,6 +217,24 @@
           this.getTableList();
         },
         methods:{
+          handleSelRangDate(val) {
+            if (val) {
+              this.params.operate_start_date = val[0];
+              this.params.operate_end_date = val[1];
+            } else {
+              this.params.operate_start_date = "";
+              this.params.operate_end_date = "";
+            }
+          },
+          handleSelRangDate1(val) {
+            if (val) {
+              this.params.start_date = val[0];
+              this.params.end_date = val[1];
+            } else {
+              this.params.start_date = "";
+              this.params.end_date = "";
+            }
+          },
           handleGoSearch() {
             this.params.page = 1;
             this.getTableList();
@@ -235,6 +270,8 @@
               subject_id: '',
               account_id: ''
             };
+            this.time = "";
+            this.operationTime = "";
             this.subject_name = "";
           },
           highGrade() { this.isHigh = false },

@@ -79,32 +79,21 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">最小日期</div>
+                  <div class="el_col_label">时间周期</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-date-picker
-                      v-model="params.date_min"
-                      type="date"
+                      v-model="assistParams.time"
+                      type="daterange"
+                      align="right"
+                      unlink-panels
                       value-format="yyyy-MM-dd"
-                      placeholder="选择日期">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">最大日期</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-date-picker
-                      v-model="params.date_max"
-                      type="date"
-                      value-format="yyyy-MM-dd"
-                      placeholder="选择日期">
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      @change="handleSelRangDate"
+                      end-placeholder="结束日期"
+                      :picker-options="pickerOptions">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -156,8 +145,8 @@
       </el-table>
       <el-row :gutter="20" style="margin-top: 20px;">
         <el-col :span="12">
-          <span>应付金额(元)：<span style="color: #F56C6C">{{ balanceSum.toFixed(2) }}</span>
-            实付金额(元)：<span style="color: #14e731">{{ paidSum.toFixed(2) }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ payableSum.toFixed(2) }}</span></span>
+          <span>应付金额(元)：<span style="color: #F56C6C">{{ balanceSum }}</span>
+            实付金额(元)：<span style="color: #14e731">{{ paidSum }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ payableSum }}</span></span>
         </el-col>
         <el-col :span="12">
           <el-pagination
@@ -425,10 +414,46 @@
         backList: [],
         backParams: [],
         backCurrentId: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          },{
+            text: '最近一年',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
         assistParams: {
           subject_name:'',
           depart_name: '',
           staff_name: '',
+          time: '',
         },
         params: {
           status: '', //款项状态
@@ -529,6 +554,15 @@
       this.getPayableList();
     },
     methods: {
+      handleSelRangDate(val){
+        if (val) {
+          this.params.date_min = val[0];
+          this.params.date_max = val[1];
+        } else {
+          this.params.date_min = "";
+          this.params.date_max = "";
+        }
+      },
       handleGoSearch() {
         this.params.page = 1;
         this.getPayableList();

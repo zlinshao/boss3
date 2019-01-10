@@ -616,6 +616,27 @@
         </div>
       </div>
     </el-dialog>
+
+    <!--回滚-->
+    <div>
+      <el-dialog
+        :visible="callbackVisible"
+        title="回滚"
+        @close="callbackVisible = false"
+      >
+        <div style="text-align: right;margin-bottom: 10px">
+          <el-button type="primary" size="mini" @click="goCallBack">确定</el-button>
+        </div>
+        <el-table
+          :data="callbackList"
+          @selection-change="handleSelectionChangeCall"
+        >
+          <el-table-column type="selection" width="50px"></el-table-column>
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="Desc" prop="value"></el-table-column>
+        </el-table>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -660,7 +681,7 @@
         filterModule: false,
         organizeVisible: false,
         values: ['待入账', '待结清', '已结清', '已超额',],
-        tag_status: ['违约', '延期', '贴条', '换锁', '维修', '资金', '炸弹', '调房', '特殊情况'],
+        tag_status: ['违约', '延期', '贴条', '换锁', '维修', '资金', '炸单', '调房', '特殊情况'],
         form: {
           staff_ids: [],
           department_ids: [],
@@ -716,6 +737,14 @@
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          },{
+            text: '最近一年',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
               picker.$emit('pick', [start, end]);
             }
           }]
@@ -804,13 +833,34 @@
           {value: 3, label: "微信"}
         ],
         accountList: [],
-        canSel: false
+        canSel: false,
+
+        callbackList: [],
+        callbackVisible: false,
+        callbackParams: '',
       }
     },
     mounted() {
       this.getTableData();
     },
     methods: {
+      goCallBack() {
+        if (!this.callbackParams) {
+          return false;
+        }
+        this.$http.put(this.url + `account/receivable/revert/${this.rightMenuRow.id}`,{ra_id: this.callbackParams}).then(res => {
+          this.handleSuccess(res);
+          this.callbackVisible = false;
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleSelectionChangeCall(val) {
+        this.callbackParams = '';
+        val.map(item => {
+          return this.callbackParams += item.id;
+        }).join(",");
+      },
       handleSelRangDate(val) {
           if (val) {
             this.form.startRange = val[0];
@@ -1187,6 +1237,7 @@
           {clickIndex: 'changeMoney', headIcon: 'el-icon-refresh', label: '修改应收金额'},
           {clickIndex: 'changeSubject', headIcon: 'el-icon-refresh', label: '修改款项科目'},
           {clickIndex: 'collectPolish', headIcon: 'el-icon-date', label: '修改补齐时间',},
+          {clickIndex: 'callback', headIcon: 'el-icon-refresh', label: '回滚',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
         ];
         this.contextMenuParam(event);
@@ -1217,6 +1268,13 @@
         }
         if (val === 'collectWay') {
           this.collectMoneyShow = true
+        }
+        if (val === 'callback') {
+          this.callbackList = [];
+          for (var key in this.rightMenuRow.running_account_record) {
+            this.callbackList.push({id: key,value: this.rightMenuRow.running_account_record[key]});
+          }
+          this.callbackVisible = true;
         }
       },
       handleEditMoney() {
