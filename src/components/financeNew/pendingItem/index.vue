@@ -5,9 +5,9 @@
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.search" size="mini" clearable
-                      @keyup.enter.native.prevent="getTableData"
+                      @keyup.enter.native.prevent="getTableData('search')"
             >
-              <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="getTableData('search')"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -241,7 +241,10 @@
     },
     watch: {},
     methods: {
-      getTableData() {
+      getTableData(search) {
+        if (search) {
+          this.form.page = 1;
+        }
         if (this.dates) {
           this.form.start_time = this.dates[0];
           this.form.end_time = this.dates[1];

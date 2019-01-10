@@ -3,8 +3,8 @@
     <!--高级-->
     <div class="highRanking">
       <div style="text-align: right;margin-bottom: 10px">
-        <el-input style="width: 15%" v-model="params.search" @keyup.enter.native="getPayableList" size="mini" placeholder="请输入需求搜索的内容" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="getPayableList"></el-button>
+        <el-input style="width: 15%" v-model="params.search" @keyup.enter.native="handleGoSearch" size="mini" placeholder="请输入需求搜索的内容" clearable>
+          <el-button slot="append" icon="el-icon-search" @click="handleGoSearch"></el-button>
         </el-input>
 
         <el-button size="mini" type="primary" @click="isHigh = !isHigh">高级</el-button>
@@ -529,6 +529,10 @@
       this.getPayableList();
     },
     methods: {
+      handleGoSearch() {
+        this.params.page = 1;
+        this.getPayableList();
+      },
       handleSelectionChange(val) {
         this.backParams = [];
         val.map(item => {

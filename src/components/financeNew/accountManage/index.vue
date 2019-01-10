@@ -50,9 +50,9 @@
         </div>
       </div>
       <div style="text-align: right;">
-        <el-input type="text" placeholder="账户名称/开户银行" clearable size="mini" style="width: 15%" v-model="params.search" @keyup.enter.native="getAccountList">
+        <el-input type="text" placeholder="账户名称/开户银行" clearable size="mini" style="width: 15%" v-model="params.search" @keyup.enter.native="handleGoSearch">
           <template slot="append">
-            <i class="el-icon-search" @click="getAccountList" style="cursor: pointer;"></i>
+            <i class="el-icon-search" @click="handleGoSearch" style="cursor: pointer;"></i>
           </template>
         </el-input>
         <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
@@ -388,6 +388,10 @@
 
       },
       methods: {
+        handleGoSearch() {
+          this.params.page = 1;
+          this.getAccountList();
+        },
         handleAccountChange(page) {
           this.accountChangePage = page;
           this.getAccountChange();

@@ -1,8 +1,8 @@
 <template >
    <div id="runningAccount">
        <div style="text-align: right;">
-         <el-input v-model="params.search" @keyup.enter.native="getTableList" clearable style="width: 15%" placeholder="请输入需要搜索的内容" size="mini">
-           <el-button slot="append" icon="el-icon-search" @click="getTableList"></el-button>
+         <el-input v-model="params.search" @keyup.enter.native="handleGoSearch" clearable style="width: 15%" placeholder="请输入需要搜索的内容" size="mini">
+           <el-button slot="append" icon="el-icon-search" @click="handleGoSearch"></el-button>
          </el-input>
          <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
          <el-button type="success" size="mini" @click="outData">导出</el-button>
@@ -134,14 +134,14 @@
          <el-table-column label="交易时间" prop="create_time"></el-table-column>
          <el-table-column label="客户姓名" prop="customer.customer_name"></el-table-column>
          <el-table-column label="地址" prop="address"></el-table-column>
-         <el-table-column label="科目名称" prop="subject.title"></el-table-column>
+         <el-table-column label="科目名称" prop="subject"></el-table-column>
          <el-table-column label="类型" prop="category"></el-table-column>
          <el-table-column label="账户名称" prop="account_name"></el-table-column>
          <el-table-column label="卡号" prop="account_num"></el-table-column>
-         <el-table-column label="实收金额" prop="amount_received"></el-table-column>
-         <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
          <el-table-column label="应收金额" prop="amount_receivable"></el-table-column>
+         <el-table-column label="实收金额" prop="amount_received"></el-table-column>
          <el-table-column label="应付金额" prop="amount_payable"></el-table-column>
+         <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
          <el-table-column label="账户余额" prop="amount_remain"></el-table-column>
          <el-table-column label="详细信息" prop="info" min-width="300px"></el-table-column>
          <el-table-column label="收/付款人员" prop="operator_name"></el-table-column>
@@ -200,6 +200,10 @@
           this.getTableList();
         },
         methods:{
+          handleGoSearch() {
+            this.params.page = 1;
+            this.getTableList();
+          },
           handleChangePage(page) {
             this.params.page = page;
             this.getTableList();

@@ -9,7 +9,7 @@
             <span class="repeat_address"></span><span class="repeat_text">地址</span>
           </el-form-item>
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="params.search" size="mini" @keyup.enter.native="getLandLordList" clearable>
+            <el-input placeholder="请输入内容" v-model="params.search" size="mini" @keyup.enter.native="getLandLordList('search')" clearable>
               <el-button slot="append" icon="el-icon-search" @click="getLandLordList('search')"></el-button>
             </el-input>
           </el-form-item>

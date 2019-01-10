@@ -1,7 +1,7 @@
 <template>
   <div id="message">
     <div style="text-align: right;margin-bottom: 10px;">
-      <el-input style="width: 250px;" size="mini" placeholder="请输入手机号搜索" @keyup.enter.native="getTableList">
+      <el-input style="width: 250px;" size="mini" placeholder="请输入手机号搜索" @keyup.enter.native="getTableList('search')">
         <el-button icon="el-icon-search" slot="append" @click="getTableList"></el-button>
       </el-input>
     </div>
@@ -57,7 +57,10 @@
         this.count = 0;
         this.list = [];
       },
-      getTableList() {
+      getTableList(search) {
+        if (search) {
+          this.params.pages = 1;
+        }
         this.loading = true;
         this.$http.get(this.url + 'message/index', {params: this.params}).then(res => {
           if (res.data.success) {
