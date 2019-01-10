@@ -615,7 +615,7 @@
         type: 'depart',
         currentCtl: 'editInfo',
 
-        activeName: 'second',
+        activeName: 'first',
 
         landLordList: [],
         landLordCount: 0,
@@ -1345,8 +1345,14 @@
         if (this.activeName === 'first') {
           this.$http.get(this.url + 'customer/landlord/index',{params: this.params,headers: {Session: session}}).then(res => {
             if (res.data.success) {
-              this.landLordList = res.data.data.data;
-              this.landLordCount = res.data.data.count;
+              if (res.data.data.data.length < 1){
+                this.landLordList = [];
+                this.landLordCount = 0;
+                this.emptyText = "暂无数据";
+              } else {
+                this.landLordList = res.data.data.data;
+                this.landLordCount = res.data.data.count;
+              }
             } else {
               this.landLordList = [];
               this.landLordCount = 0;
@@ -1357,8 +1363,14 @@
         } else {
           this.$http.get(this.url + 'customer/renter/index',{params: this.params,headers: {Session: session}}).then(res => {
             if (res.data.success) {
-              this.renterTableList = res.data.data.data;
-              this.renterTableCount  = res.data.data.count;
+              if (res.data.data.data.length < 1){
+                this.renterTableList = [];
+                this.renterTableCount = 0;
+                this.emptyText = "暂无数据";
+              } else {
+                this.renterTableList = res.data.data.data;
+                this.renterTableCount  = res.data.data.count;
+              }
             } else {
               this.renterTableList = [];
               this.renterTableCount = 0;
