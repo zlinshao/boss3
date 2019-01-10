@@ -5,8 +5,8 @@
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.search" size="mini" clearable
-                      @keyup.enter.native.prevent="getTableData">
-              <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+                      @keyup.enter.native.prevent="getTableData('search')">
+              <el-button slot="append" icon="el-icon-search" @click="getTableData('search')"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -1058,13 +1058,21 @@
         });
       },
 
-      getTableData() {
+      getTableData(search) {
+        if (search) {
+          this.form.page = 1;
+        }
         this.isHigh = false;
         this.collectLoading = true;
         this.collectStatus = ' ';
         let params = this.form;
         this.$http.get(this.url + 'account/receivable/index', {params: params}).then((res) => {
           if (res.data.success) {
+            if (res.data.data.data.length < 1){
+              this.collectStatus = '暂无数据';
+              this.collectData = [];
+              this.totalNum = 0;
+            }
             this.collectData = res.data.data.data;
             this.totalNum = res.data.data.count;
             this.sum = res.data.data.sum;
