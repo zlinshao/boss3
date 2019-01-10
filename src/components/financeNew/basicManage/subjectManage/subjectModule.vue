@@ -43,7 +43,7 @@
   export default {
     name: "add-subject",
     components:{subjectTree},
-    props: ['FormVisible','data','cate'],
+    props: ['FormVisible','detailData','cate'],
     data() {
       return {
         dialogVisible: false,
@@ -74,7 +74,7 @@
      
     },
     watch: {
-      data(val){
+      detailData(val){
         if(this.cate==='edit'){
           this.form.preSubject=val.superior_title;
           this.form.superior_id=val.superior_id;

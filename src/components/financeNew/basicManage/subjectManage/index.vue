@@ -18,7 +18,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="openSubject"><i class="el-icon-plus"></i>&nbsp;新增科目</el-button>
+            <el-button type="primary" @click="addSubject"><i class="el-icon-plus"></i>&nbsp;新增科目</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -118,7 +118,7 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
 
-    <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject" :data="detailData"
+    <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject" :detailData="detailData"
                    :cate="cate"></SubjectModule>
     <subjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
                  @selectSubject="selectSubject"></subjectTree>
@@ -233,6 +233,11 @@
       clearSubjectTree() {
         this.form.belong = '';
         this.form.belongName = '';
+      },
+      addSubject(){
+        this.cate = 'add';
+        this.detailData = {};
+        this.openSubject();
       },
       openSubjectTree() {
         this.subjectType = 'top';
