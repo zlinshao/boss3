@@ -26,8 +26,8 @@
           </el-row>
           <el-row>
             <el-col :span="6" >
-              <el-form-item label="付款方式" v-for="(item, index) in params.pay_way" :key="index" required>
-                <el-input v-model="params.pay_way[index]"   disabled></el-input>
+              <el-form-item label="付款方式" required>
+                <el-input v-model="params.pay_way" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6" >
