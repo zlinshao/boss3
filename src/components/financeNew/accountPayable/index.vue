@@ -568,7 +568,7 @@
     },
     methods: {
       tableRowClassName({row}) {
-        if (row.status === 3 || row.status === 4) {
+        if ((row.status === 3 || row.status === 4 || row.status === 2) && row.pendable !== 1) {
           return 'warning-row';
         }
         return "";
