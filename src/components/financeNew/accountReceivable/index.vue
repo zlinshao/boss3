@@ -252,9 +252,6 @@
         </span>&nbsp;&nbsp;&nbsp;&nbsp;
           <span>
           剩余款项(元)：<span style="color: #ff9a02;">{{sum.balance_sum}}</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          今日到期：1
         </span>
         </div>
         <el-pagination
@@ -288,6 +285,9 @@
       width="80%"
     >
       <div>
+        <div v-if="DetailCurrentRow.pendable === 1" style="margin-bottom: 20px;width: 95%">
+          <el-button size="mini" type="success" @click="handleDealWith(DetailCurrentRow.id)">生成待处理项</el-button>
+        </div>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">客户姓名：</span>
@@ -507,21 +507,21 @@
     <el-dialog
       :visible="customer_list_visible"
       title="用户列表"
-      width="35%"
       @close="customer_list_visible = false"
     >
       <div>
         <el-row :gutter="20">
           <el-col :span="12">
-            类型：<el-select size="mini" style="width: 200px" v-model="customer_params.type">
+            类型：<el-select size="mini" style="width: 60%" v-model="customer_params.type">
             <el-option :value="1" label="房东"></el-option>
             <el-option :value="2" label="租客"></el-option>
             <el-option :value="3" label="未知租客"></el-option>
           </el-select>
           </el-col>
           <el-col :span="12">
-            <el-input size="mini" style="width: 200px" v-model="customer_params.search" clearable c placeholder="请输入需求搜索的内容"></el-input>
+            <el-input size="mini" style="width: 60%" v-model="customer_params.search" clearable c placeholder="请输入需求搜索的内容"></el-input>
             <el-button type="primary" size="mini" @click="search_customer_list">搜索</el-button>
+            <el-button size="mini" type="success" @click="OkSelectCustomer">确定选择</el-button>
           </el-col>
         </el-row>
       </div>
@@ -542,10 +542,6 @@
       <el-pagination style="text-align: right" :current-page="customer_params.page" :total="customer_list_count"
         layout="total,prev,pager,next" @current-change="customer_page_change"
       ></el-pagination>
-      <div style="text-align: center">
-        <el-button size="mini" @click="customer_list_visible = false">取消</el-button>
-        <el-button size="mini" type="primary" @click="OkSelectCustomer">确定</el-button>
-      </div>
     </el-dialog>
 
     <!--应收入账-->
@@ -848,6 +844,13 @@
       this.getTableData();
     },
     methods: {
+      handleDealWith(id) {
+        this.$http.put(this.url + `account/pending/receivable/${id}`).then(res => {
+          this.handleSuccess(res);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       goCallBack() {
         if (!this.callbackParams) {
           return false;

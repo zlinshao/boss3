@@ -136,7 +136,7 @@
             <el-button v-if="scope.row.status === 4" type="primary" size="mini">已超额</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="手机号" prop="customer_account_num"></el-table-column>
+        <el-table-column label="手机号" prop="customerDetail.contact"></el-table-column>
         <el-table-column label="操作" v-if="!isDeleteBin">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="LookPayableDetail(scope.row)">详情</el-button>

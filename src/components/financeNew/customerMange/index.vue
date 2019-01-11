@@ -706,12 +706,6 @@
           customer_name: [
             {required: true,message: '格式不正确！',trigger: 'blur'}
           ],
-          account_type: [
-            {required: true,message: '格式不正确！',trigger: 'blur'}
-          ],
-          account_num: [
-            {required: true,message: '格式不正确！',trigger: 'blur'}
-          ],
           contact: [
             {required: true,message: '格式不正确！',trigger: 'blur'}
           ],
@@ -787,15 +781,6 @@
             {required: true,message: '格式不正确',trigger: 'blur'}
           ],
           complete_date: [
-            {required: true,message: '格式不正确',trigger: 'blur'}
-          ],
-          account_type: [
-            {required: true,message: '格式不正确',trigger: 'blur'}
-          ],
-          account_owner: [
-            {required: true,message: '格式不正确',trigger: 'blur'}
-          ],
-          account_num: [
             {required: true,message: '格式不正确',trigger: 'blur'}
           ],
         },
@@ -1419,6 +1404,7 @@
               {clickIndex: 'editRentInfo',headIcon: 'el-icon-edit',label: '编辑',data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
+              {clickIndex: 'deleteRent' ,headIcon: 'el-icon-delete', label: '删除',data: row},
             ];
           }
         }else {
@@ -1436,6 +1422,7 @@
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
               {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
+              {clickIndex: 'deleteRent' ,headIcon: 'el-icon-delete', label: '删除',data: row},
             ];
           }
         }
@@ -1463,6 +1450,22 @@
           this.getRentEditInfo(val.data);
           this.extraRentInfo.editRentInfoVisible = true;
         }
+        if (val.clickIndex === 'deleteRent') {
+          this.handleDeleteRent(val.data);
+        }
+      },
+      handleDeleteRent(data) {
+        this.$confirm('你确定删除该记录吗？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(this.url + `customer/renter/delete/${data.id}`).then(res => {
+            this.SuccessCallBack(res);
+          }).catch(err => {
+            console.log(err);
+          })
+        }).catch(() => { })
       },
       //编辑租客信息
       getRentEditInfo(data) {
