@@ -83,7 +83,7 @@
             });
             return false;
           }
-          this.$emit('customerSel',{customer_name: this.currentSelRow.customer_name,customer_id: this.currentSelRow.id,customer_type: this.params.type});
+          this.$emit('customerSel',{address: this.currentSelRow.address,customer_name: this.currentSelRow.customer_name,customer_id: this.currentSelRow.id,customer_type: this.params.type});
           this.dialogVisible = false;
         },
         handleCloseCustomer() {

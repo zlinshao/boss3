@@ -3,14 +3,14 @@
     <!--高级-->
     <div class="highRanking">
       <div style="text-align: right;margin-bottom: 10px">
-        <el-input style="width: 15%" v-model="params.search" @keyup.enter.native="getPayableList" size="mini" placeholder="请输入需求搜索的内容" clearable>
-          <el-button slot="append" icon="el-icon-search" @click="getPayableList"></el-button>
+        <el-input style="width: 15%" v-model="params.search" @keyup.enter.native="handleGoSearch" size="mini" placeholder="请输入需求搜索的内容" clearable>
+          <el-button slot="append" icon="el-icon-search" @click="handleGoSearch"></el-button>
         </el-input>
 
         <el-button size="mini" type="primary" @click="isHigh = !isHigh">高级</el-button>
         <el-button size="mini" type="primary" icon="el-icon-refresh" @click="getPayableList"></el-button>
-        <el-button size="mini" type="success" icon="el-icon-plus" @click="plusPayVisible = true">新增应付</el-button>
-        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleOutData">导出</el-button>
+        <el-button size="mini" type="success" icon="el-icon-plus" @click="plusPayVisible = true" :disabled="isDeleteBin">新增应付</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleOutData" :disabled="isDeleteBin">导出</el-button>
         <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDeleteBin">回收站</el-button>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -26,7 +26,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="params.status">
+                    <el-select v-model="params.status" clearable>
                       <el-option :value="1" label="待入账"></el-option>
                       <el-option :value="2" label="待结清"></el-option>
                       <el-option :value="3" label="已结清"></el-option>
@@ -79,32 +79,21 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">最小日期</div>
+                  <div class="el_col_label">时间周期</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-date-picker
-                      v-model="params.date_min"
-                      type="date"
+                      v-model="assistParams.time"
+                      type="daterange"
+                      align="right"
+                      unlink-panels
                       value-format="yyyy-MM-dd"
-                      placeholder="选择日期">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">最大日期</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-date-picker
-                      v-model="params.date_max"
-                      type="date"
-                      value-format="yyyy-MM-dd"
-                      placeholder="选择日期">
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      @change="handleSelRangDate"
+                      end-placeholder="结束日期"
+                      :picker-options="pickerOptions">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -129,15 +118,23 @@
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="payableList"
         @row-contextmenu="handleRowRightClick"
+        :row-class-name="tableRowClassName"
         :header-row-style="handleHeaderStyle"
       >
         <el-table-column label="付款时间" prop="pay_date"></el-table-column>
-        <el-table-column label="客户姓名" prop="info.customer"></el-table-column>
-        <el-table-column label="地址" prop="addr"></el-table-column>
+        <el-table-column label="客户姓名" prop="customerDetail.customer_name"></el-table-column>
+        <el-table-column label="地址" prop="addr">
+          <template slot-scope="scope">
+            <span v-if="scope.row.addr">{{ scope.row.addr }}</span>
+            <span v-else-if="scope.row.addra">{{ scope.row.addra }}</span>
+            <span v-else-if="scope.row.addru">{{ scope.row.addru }}</span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
         <el-table-column label="支出科目" prop="subject"></el-table-column>
-        <el-table-column label="应付金额" prop="balance"></el-table-column>
+        <el-table-column label="应付金额" prop="amount_payable"></el-table-column>
         <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
-        <el-table-column label="剩余款项" prop="amount_payable"></el-table-column>
+        <el-table-column label="剩余款项" prop="balance"></el-table-column>
         <el-table-column label="补齐时间" prop="complete_date"></el-table-column>
         <el-table-column label="状态" prop="status">
           <template slot-scope="scope">
@@ -147,7 +144,7 @@
             <el-button v-if="scope.row.status === 4" type="primary" size="mini">已超额</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="手机号" prop="customer_account_num"></el-table-column>
+        <el-table-column label="手机号" prop="customerDetail.contact"></el-table-column>
         <el-table-column label="操作" v-if="!isDeleteBin">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="LookPayableDetail(scope.row)">详情</el-button>
@@ -156,8 +153,8 @@
       </el-table>
       <el-row :gutter="20" style="margin-top: 20px;">
         <el-col :span="12">
-          <span>应付金额(元)：<span style="color: #F56C6C">{{ balanceSum.toFixed(2) }}</span>
-            实付金额(元)：<span style="color: #14e731">{{ paidSum.toFixed(2) }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ payableSum.toFixed(2) }}</span></span>
+          <span>应付金额(元)：<span style="color: #F56C6C">{{ payableSum }}</span>
+            实付金额(元)：<span style="color: #14e731">{{ paidSum }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ balanceSum }}</span></span>
         </el-col>
         <el-col :span="12">
           <el-pagination
@@ -238,7 +235,7 @@
                 <el-option label="现金" :value="5"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="付款账号" prop="account_id">
+            <el-form-item label="付款账号" prop="account_id" v-if="payMoneyExtraParams.account_type != 5">
               <el-select v-model="payMoneyParams.account_id" :disabled="!canSel">
                 <el-option v-for="item in AccountList" :key="item.id" :value="item.id" :label="item.name"></el-option>
               </el-select>
@@ -297,8 +294,13 @@
           </div>
           <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">房屋地址：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.address ">{{ DetailCurrentRow.address }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">客户姓名：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.customer_name ">{{ DetailCurrentRow.customer.customer_name }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
             <el-col :span="6">
@@ -311,14 +313,14 @@
               <span class="receive_detail" v-if="DetailCurrentRow.balance">{{ DetailCurrentRow.balance }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">付款时间：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.pay_date ">{{ DetailCurrentRow.pay_date[0].pay_date }}&nbsp;&nbsp;
                 <span @click="handleLookMore(DetailCurrentRow.pay_date)" style="color: red;cursor: pointer;">查看更多</span></span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">实付金额：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.amount_paid ">{{ DetailCurrentRow.amount_paid }}</span>
@@ -334,13 +336,13 @@
               <span class="receive_detail" v-if="DetailCurrentRow.amount_payable">{{ DetailCurrentRow.amount_payable }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">账户账号：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.customer_account_num ">{{ DetailCurrentRow.customer_account_num }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">补齐时间：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.complete_date ">{{ DetailCurrentRow.complete_date }}</span>
@@ -356,13 +358,13 @@
               <span class="receive_detail" v-if="DetailCurrentRow.remark">{{ DetailCurrentRow.remark }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">开户行：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_bank ">{{ DetailCurrentRow.customer.account_bank }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">支行：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.complete_date && DetailCurrentRow.customer.account_subbank">{{ DetailCurrentRow.customer.account_subbank }}</span>
@@ -387,6 +389,26 @@
       </el-dialog>
     </div>
 
+    <div>
+      <el-dialog
+        :visible.syc="backVisible"
+        title="回滚"
+        @close="handleCloseBack"
+      >
+        <div style="text-align: right;margin-bottom: 10px"><el-button type="primary" @click="handleBackGo" size="mini">确定</el-button></div>
+        <el-table
+          :data="backList"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="Desc" prop="value"></el-table-column>
+        </el-table>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -401,11 +423,50 @@
     data() {
       return {
         url: globalConfig.finance_server,
-
+        backVisible: false,
+        backList: [],
+        backParams: [],
+        backCurrentId: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          },{
+            text: '最近一年',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
         assistParams: {
           subject_name:'',
           depart_name: '',
           staff_name: '',
+          time: '',
         },
         params: {
           status: '', //款项状态
@@ -506,24 +567,65 @@
       this.getPayableList();
     },
     methods: {
-      //回滚
-      handleCallBackDelete(row) {
-        var arr = [];
-        if (row.running_account_record) {
-          for (var key in row.running_account_record) {
-            arr.push(parseInt(key));
-          }
-          this.$http.post(this.url + `account/payable/revert/${row.id}`,{running_account_ids: arr}).then(res => {
+      tableRowClassName({row}) {
+        console.log(row);
+        if ((row.status === 3 || row.status === 4 || row.status === 2) && row.pendable !== 1) {
+          return 'warning-color';
+        }
+        return "";
+      },
+      handleSelRangDate(val){
+        if (val) {
+          this.params.date_min = val[0];
+          this.params.date_max = val[1];
+        } else {
+          this.params.date_min = "";
+          this.params.date_max = "";
+        }
+      },
+      handleGoSearch() {
+        this.params.page = 1;
+        this.getPayableList();
+      },
+      handleSelectionChange(val) {
+        this.backParams = [];
+        val.map(item => {
+          this.backParams.push(item.id);
+        })
+      },
+      handleBackGo() {
+        if (this.backList.length < 1){
+          this.$notify.warning({
+            title: '警告',
+            message: '请选择需要回滚的记录'
+          });
+          return false;
+        } else {
+          this.$http.post(this.url + `account/payable/revert/${this.backCurrentId}`,{running_account_ids: this.backParams}).then(res => {
             this.handleCallback(res);
+            this.backList = [];
+            this.backVisible = false;
+            this.backCurrentId = '';
           }).catch(err => {
             console.log(err);
           })
-        }else {
-          this.$notify.warning({
-            title: '警告',
-            message: '暂无需要回滚的应付入账'
-          })
         }
+      },
+      handleCloseBack() {
+        this.backList = [];
+        this.backVisible = false;
+      },
+      //回滚
+      handleCallBackDelete(row) {
+        if (row.running_account_record) {
+          for (var key in row.running_account_record) {
+            this.backList.push({id: key,value: row.running_account_record[key]})
+          }
+        }else {
+          this.backList = [];
+        }
+        this.backCurrentId = row.id;
+        this.backVisible = true;
       },
       //表头样式
       handleHeaderStyle() {
@@ -573,8 +675,12 @@
       },
       //应付入账
       handleCancelPayMoney() {
-        this.payMoneyVisible = false;
         this.$refs['payMoneyForm'].resetFields();
+        this.payMoneyExtraParams.account_type = "";
+        this.payMoneyParams.account_id = "";
+        this.payMoneyParams.amount_paid = "";
+        this.canSel = false;
+        this.payMoneyVisible = false;
       },
       handleSubmitPayMoney(formName) {
         this.$refs[formName].validate(valid => {
@@ -624,6 +730,10 @@
       },
       //右击菜单
       handleRowRightClick(row,event) {
+        if (this.isDeleteBin) {
+          this.rightList = [];
+          return false;
+        }
           this.rightList = [
             {clickIndex: 'payMoney',headIcon: 'el-icon-edit',label: '应付入账',data: row},
             {clickIndex: 'editPayMoney',headIcon: 'el-icon-edit',label: '修改应付金额',data: row},
@@ -884,6 +994,9 @@
       overflow-y: scroll;
       margin: 0 auto;
       text-align: center;
+    }
+    .warning-color{
+      background-color: #bcbcbd;
     }
   }
 </style>

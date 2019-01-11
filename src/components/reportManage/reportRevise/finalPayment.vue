@@ -26,8 +26,8 @@
           </el-row>
           <el-row>
             <el-col :span="6" >
-              <el-form-item label="付款方式" v-for="(item, index) in params.pay_way" :key="index" required>
-                <el-input v-model="params.pay_way[index]"   disabled></el-input>
+              <el-form-item label="付款方式" required>
+                <el-input v-model="params.pay_way" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6" >
@@ -447,11 +447,12 @@
           if (res.data.code === '50920') {
             //   this.isClear = false;
             let data = res.data.data;
-            console.log(data)
             this.params.address = data.address;
             this.params.customer_name = data.draft_content.customer_name;
             this.params.month = data.draft_content.month;
-            this.params.pay_way = data.draft_content.pay_way;
+            this.params.pay_way = data.draft_content.payWay && data.draft_content.payWay.map(item => {
+              return item;
+            }).join(",");
             this.params.price_arr = data.draft_content.price_arr;
             this.params.terms = data.draft_content.terms;
             this.params.other_fee = data.draft_content.other_fee;

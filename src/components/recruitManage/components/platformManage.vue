@@ -4,7 +4,6 @@
             <div>
                 <div v-for='(value, key) in platform' :key="key" class="main">
                     <div class='container'>
-                        <!-- <el-button class='edit-platform'></el-button> -->
                         <span class="platform-name-tips">平台名称</span>
                         <div class='platform-info'>
                             <div class='platform-name'>
@@ -28,7 +27,6 @@
                 <div v-if="is_adding" class="new-platform">
                     <div class="main">
                         <div class='container'>
-                            <!-- <el-button class='edit-platform'></el-button> -->
                             <span class="platform-name-tips">平台名称</span>
                             <div class='platform-info'>
                                 <div class='platform-name'>
@@ -186,7 +184,6 @@ export default {
         },
         //确定添加
         confirmAdd(){
-            // this.platform[this.platform_name] = this.platform_host
             this.$http.put(globalConfig.server + 'hrm/recruitment/' + this.id, {
                 update:{
                     platform: this.platform
@@ -224,8 +221,6 @@ export default {
 <style lang="scss" scoped>
     #platform{
         .main{
-            // padding: 0 0 0 50px;
-            /* text-align: center; */
             margin: 20px 0;
             height: 30px;
         }

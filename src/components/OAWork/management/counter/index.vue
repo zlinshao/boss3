@@ -379,6 +379,7 @@
 
         this.$http.get(globalConfig.server + 'salary/achv/getContract/?house_name='+this.house_name).then((res) => {
           if (Number(res.data.code) %10=== 0) {
+            this.is_show=false;
             let data=res.data.data;
             if  (data.rent_type=='new'){
               this.rent_type=1;
@@ -401,6 +402,8 @@
               this.form.rent_agency_count=data.rent.rent_agency_count;
               this.form.rent_vacancy_date=data.rent.rent_vacancy_date;
               this.form.rent_sign_month=data.rent.rent_sign_month;
+            }else{
+              this.prompt('warning', '非新收新租或二次出租');
             }
             
           }else{
