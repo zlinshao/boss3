@@ -903,7 +903,7 @@
       },
       tableRowClassName({row}) {
         if ((row.status === '已超额' || row.status === '已结清' || row.status === '待结清') && row.pendable !== 1) {
-          return 'warning-row';
+          return 'warning-color';
         }
         return "";
       },
@@ -1473,7 +1473,7 @@
       color: white;
       background-color: #aec1fc;
     }
-    .warning-row{
+    .warning-color{
       background-color: #bcbcbd;
     }
   }
