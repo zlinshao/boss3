@@ -314,6 +314,11 @@
         </div>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">房屋地址：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.address">{{ DetailCurrentRow.address }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">客户姓名：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.customer_name ">{{ DetailCurrentRow.customer.customer_name }}</span>
             <span class="receive_detail" v-else>/</span>
@@ -328,13 +333,13 @@
             <span class="receive_detail" v-if="DetailCurrentRow.amount_received">{{ DetailCurrentRow.amount_received }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">汇款方式：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.account_type ">{{ DetailCurrentRow.account_type }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">剩余款项：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.balance ">{{ DetailCurrentRow.balance }}</span>
@@ -350,13 +355,13 @@
             <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.deal_date ">{{ DetailCurrentRow.customer.deal_date }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">开户行：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.account_bank ">{{ DetailCurrentRow.account_bank }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">补齐时间：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.complete_date ">{{ DetailCurrentRow.complete_date }}</span>
@@ -372,13 +377,13 @@
             <span class="receive_detail" v-if="DetailCurrentRow.subject ">{{ DetailCurrentRow.subject }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">账号：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_num ">{{ DetailCurrentRow.customer.account_num }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">历史收款记录：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_history ">{{ DetailCurrentRow.customer.account_history }}</span>
@@ -394,6 +399,8 @@
             <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description ">{{ DetailCurrentRow.description.description }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">备注：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.tags && DetailCurrentRow.tags.length > 0" style="text-align: left">
@@ -401,8 +408,6 @@
             </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">催缴备注：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.remarks && DetailCurrentRow.remarks.length > 0" style="text-align: left">

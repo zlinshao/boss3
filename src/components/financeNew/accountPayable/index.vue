@@ -118,6 +118,7 @@
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="payableList"
         @row-contextmenu="handleRowRightClick"
+        :row-class-name="tableRowClassName"
         :header-row-style="handleHeaderStyle"
       >
         <el-table-column label="付款时间" prop="pay_date"></el-table-column>
@@ -554,6 +555,12 @@
       this.getPayableList();
     },
     methods: {
+      tableRowClassName({row}) {
+        if (row.status === 3 || row.status === 4) {
+          return 'warning-row';
+        }
+        return "";
+      },
       handleSelRangDate(val){
         if (val) {
           this.params.date_min = val[0];
@@ -973,6 +980,9 @@
       overflow-y: scroll;
       margin: 0 auto;
       text-align: center;
+    }
+    .warning-row{
+      background-color: GhostWhite;
     }
   }
 </style>
