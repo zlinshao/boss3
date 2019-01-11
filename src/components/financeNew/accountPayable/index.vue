@@ -123,7 +123,14 @@
       >
         <el-table-column label="付款时间" prop="pay_date"></el-table-column>
         <el-table-column label="客户姓名" prop="customerDetail.customer_name"></el-table-column>
-        <el-table-column label="地址" prop="addr"></el-table-column>
+        <el-table-column label="地址" prop="addr">
+          <template slot-scope="scope">
+            <span v-if="scope.row.addr">{{ scope.row.addr }}</span>
+            <span v-else-if="scope.row.addra">{{ scope.row.addra }}</span>
+            <span v-else-if="scope.row.addru">{{ scope.row.addru }}</span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
         <el-table-column label="支出科目" prop="subject"></el-table-column>
         <el-table-column label="应付金额" prop="amount_payable"></el-table-column>
         <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
@@ -146,8 +153,8 @@
       </el-table>
       <el-row :gutter="20" style="margin-top: 20px;">
         <el-col :span="12">
-          <span>应付金额(元)：<span style="color: #F56C6C">{{ balanceSum }}</span>
-            实付金额(元)：<span style="color: #14e731">{{ paidSum }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ payableSum }}</span></span>
+          <span>应付金额(元)：<span style="color: #F56C6C">{{ payableSum }}</span>
+            实付金额(元)：<span style="color: #14e731">{{ paidSum }}</span>     剩余款项(元)：<span style="color: #E6A23C">{{ balanceSum }}</span></span>
         </el-col>
         <el-col :span="12">
           <el-pagination

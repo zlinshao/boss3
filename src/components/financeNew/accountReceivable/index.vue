@@ -224,6 +224,12 @@
         <el-table-column
           label="地址"
           prop="addr">
+          <template slot-scope="scope">
+            <span v-if="scope.row.addr">{{ scope.row.addr }}</span>
+            <span v-else-if="scope.row.addra">{{ scope.row.addra }}</span>
+            <span v-else-if="scope.row.addru">{{ scope.row.addru }}</span>
+            <span v-else>/</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="收入科目"
