@@ -266,6 +266,14 @@
           label="手机号"
           prop="customer.contact">
         </el-table-column>
+        <el-table-column label="催缴备注">
+          <template slot-scope="scope">
+            <span v-if="scope.row.remarks" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden">
+              <span v-for="item in scope.row.remarks" :key="item.id">{{ item.content }}&nbsp;&nbsp;</span>
+            </span>
+            <div v-else>/</div>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" v-if="!isRecycle">
           <template slot-scope="scope">
             <el-button type="text" @click="handleCtrlDetail(scope)">详情</el-button>
@@ -894,7 +902,7 @@
         this.getTableData();
       },
       tableRowClassName({row}) {
-        if (row.status === '已超额' || row.status === '已结清') {
+        if ((row.status === '已超额' || row.status === '已结清' || row.status === '待结清') && row.pendable !== 1) {
           return 'warning-row';
         }
         return "";
