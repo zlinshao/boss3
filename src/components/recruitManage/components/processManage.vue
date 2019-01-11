@@ -1145,7 +1145,7 @@
             this.lookUpResumeDialog = true;
             this.album = row.album;
             row.album.forEach(item => {
-                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                if(/\.(jpg|png|jpeg|gif|txt)$/i.test(item.uri)){
                     this.lookUpResumeDialog = true;
                 }else{
                     setTimeout(() => {
@@ -1474,7 +1474,7 @@
           this.lookUpResumeDialog = true;
           this.album = row.album;
           row.album.forEach(item => {
-              if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+              if(/\.(jpg|png|jpeg|gif|txt)$/i.test(item.uri)){
                   this.lookUpResumeDialog = true;
               }else{
                   setTimeout(() => {
@@ -1682,7 +1682,7 @@
           this.lookUpResumeDialog = true;
           this.album = row.album;
           row.album.forEach(item => {
-                if(/(\.jpg)|(\.png)|(\.jpeg)|(\.gif)|(\.txt)$/i.test(item.uri)){
+                if(/\.(jpg|png|jpeg|gif|txt)$/i.test(item.uri)){
                     this.lookUpResumeDialog = true;
                 }else{
                     setTimeout(() => {

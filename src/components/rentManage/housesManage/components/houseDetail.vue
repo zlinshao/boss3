@@ -251,6 +251,18 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="门锁类型">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.lock_type">{{detailData.house_goods.lock_type}}</span>
+                      <span v-else="">/</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
                   <el-form-item label="房屋交接是否干净">
                     <div class="content">
                     <span v-if="detailData.house_goods">
@@ -260,8 +272,6 @@
                     </div>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row>
                 <el-col :span="8">
                   <el-form-item label="是否每个房间有床+床垫">
                     <div class="content">
@@ -282,6 +292,8 @@
                     </div>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row>
                 <el-col :span="8">
                   <el-form-item label="是否每个房间有窗帘">
                     <div class="content">
@@ -292,8 +304,6 @@
                     </div>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row>
                 <el-col :span="8">
                   <el-form-item label="家电是否齐全">
                     <div class="content">
