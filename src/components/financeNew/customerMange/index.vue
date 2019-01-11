@@ -1370,9 +1370,7 @@
         this.getLandLordList();
       },
       goSearch() {
-        if (this.activeName === 'first') {
-          this.getLandLordList();
-        }
+        this.getLandLordList();
         this.highGrade();
       },
       highGrade() {

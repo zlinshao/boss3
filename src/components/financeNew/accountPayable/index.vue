@@ -9,8 +9,8 @@
 
         <el-button size="mini" type="primary" @click="isHigh = !isHigh">高级</el-button>
         <el-button size="mini" type="primary" icon="el-icon-refresh" @click="getPayableList"></el-button>
-        <el-button size="mini" type="success" icon="el-icon-plus" @click="plusPayVisible = true">新增应付</el-button>
-        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleOutData">导出</el-button>
+        <el-button size="mini" type="success" icon="el-icon-plus" @click="plusPayVisible = true" :disabled="isDeleteBin">新增应付</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-download" @click="handleOutData" :disabled="isDeleteBin">导出</el-button>
         <el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDeleteBin">回收站</el-button>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -655,8 +655,11 @@
       },
       //应付入账
       handleCancelPayMoney() {
-        this.payMoneyVisible = false;
         this.$refs['payMoneyForm'].resetFields();
+        this.payMoneyExtraParams.account_type = "";
+        this.payMoneyParams.account_id = "";
+        this.canSel = false;
+        this.payMoneyVisible = false;
       },
       handleSubmitPayMoney(formName) {
         this.$refs[formName].validate(valid => {
@@ -706,6 +709,10 @@
       },
       //右击菜单
       handleRowRightClick(row,event) {
+        if (this.isDeleteBin) {
+          this.rightList = [];
+          return false;
+        }
           this.rightList = [
             {clickIndex: 'payMoney',headIcon: 'el-icon-edit',label: '应付入账',data: row},
             {clickIndex: 'editPayMoney',headIcon: 'el-icon-edit',label: '修改应付金额',data: row},

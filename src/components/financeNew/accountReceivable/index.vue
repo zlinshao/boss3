@@ -16,11 +16,11 @@
             <el-button type="primary" @click="getTableData"><i class="el-icon-refresh"></i></el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addPayVisible = true"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
+            <el-button type="primary" @click="addPayVisible = true" :disabled="isRecycle"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown trigger="click" @command="leadingOut">
-              <el-button type="primary" size="mini">
+              <el-button type="primary" size="mini" :disabled="isRecycle">
                 导出<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
@@ -29,11 +29,14 @@
               </el-dropdown-menu>
             </el-dropdown>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="!isRecycle">
             <el-button type="success" @click="sendMsgVisible = true" icon="el-icon-message" :disabled="currentSelectIds.length > 0 ? false : true">发送短信</el-button>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="!isRecycle">
             <el-button type="danger" @click="createVisible = true" icon="el-icon-printer" :disabled="createShow > 0 ? false : true">生成违约金</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="danger" icon="el-icon-delete" @click="handleClear">回收站</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -147,14 +150,33 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">部门/员工</div>
+                  <div class="el_col_label">部门</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择员工"
+                    <el-input v-model="department_name" @focus="chooseStaff('depart')" placeholder="请选择员工"
                               readonly>
                       <template slot="append">
-                        <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                        <div style="cursor: pointer;" @click="closeStaff('depart')">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">员工</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="staff_name" @focus="chooseStaff('staff')" placeholder="请选择员工"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="closeStaff('staff')">清空</div>
                       </template>
                     </el-input>
                   </el-form-item>
@@ -185,6 +207,7 @@
         highlight-current-row
         @current-change="handleListCurrentChange"
         :row-class-name="tableRowClassName"
+        :header-row-style="handleHeaderStyle"
       >
         <el-table-column
           type="selection"
@@ -237,7 +260,7 @@
           label="手机号"
           prop="customer.contact">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" v-if="!isRecycle">
           <template slot-scope="scope">
             <el-button type="text" @click="handleCtrlDetail(scope)">详情</el-button>
           </template>
@@ -383,7 +406,7 @@
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">催缴备注：</span>
             <span class="receive_detail" v-if="DetailCurrentRow.remarks && DetailCurrentRow.remarks.length > 0" style="text-align: left">
-              <span v-for="(item,key) in DetailCurrentRow.remarks">{{key + 1}}：{{ item.content }}<br></span>
+              <span v-for="(item,key) in DetailCurrentRow.remarks">[{{ item.category }}]-[{{ item.content }}]-[{{ item.create_time }}]<br></span>
             </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
@@ -839,12 +862,26 @@
         callbackList: [],
         callbackVisible: false,
         callbackParams: '',
+
+        //回收站
+        isRecycle: false
       }
     },
     mounted() {
       this.getTableData();
     },
     methods: {
+      handleHeaderStyle() {
+        if (this.isRecycle) {
+          return "color: red";
+        } else {
+          return "";
+        }
+      },
+      handleClear() {
+        this.isRecycle = !this.isRecycle;
+        this.getTableData();
+      },
       tableRowClassName({row}) {
         if (row.status === '已超额' || row.status === '已结清') {
           return 'warning-row';
@@ -1132,7 +1169,11 @@
         this.collectLoading = true;
         this.collectStatus = ' ';
         let params = this.form;
-        this.$http.get(this.url + 'account/receivable/index', {params: params}).then((res) => {
+        var root = 'account/receivable/index';
+        if (this.isRecycle) {
+          root = "account/receivable/trashed";
+        }
+        this.$http.get(this.url + root, {params: params}).then((res) => {
           if (res.data.success) {
             if (res.data.data.data.length < 1){
               this.collectStatus = '暂无数据';
@@ -1183,14 +1224,19 @@
         this.organizeVisible = false;
       },
       // 员工筛选
-      chooseStaff() {
+      chooseStaff(type) {
         this.organizeVisible = true;
-        this.organizeType = 'staff';
+        this.organizeType = type;
       },
       // 清空员工
-      closeStaff() {
-        this.form.staff_ids = [];
-        this.staff_name = '';
+      closeStaff(type) {
+        if (type === 'depart') {
+          this.form.depart_ids = [];
+          this.department_name = "";
+        } else {
+          this.form.staff_ids = [];
+          this.staff_name = '';
+        }
       },
       selectMember(val) {
         if (this.organizeType === 'depart') {
@@ -1245,6 +1291,10 @@
       },
       // 右键 收
       collectMenu(row, event) {
+        if (this.isRecycle) {
+          this.lists = [];
+          return false;
+        }
         this.rightMenuRow = row;
         this.lists = [
           {clickIndex: 'collectWay', headIcon: 'el-icon-edit-outline', label: '应收入账'},
