@@ -568,6 +568,7 @@
     },
     methods: {
       tableRowClassName({row}) {
+        console.log(row);
         if ((row.status === 3 || row.status === 4 || row.status === 2) && row.pendable !== 1) {
           return 'warning-row';
         }
@@ -995,7 +996,7 @@
       text-align: center;
     }
     .warning-row{
-      background-color: GhostWhite;
+      background-color: #bcbcbd;
     }
   }
 </style>

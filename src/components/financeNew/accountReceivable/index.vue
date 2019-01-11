@@ -1250,7 +1250,7 @@
       // 清空员工
       closeStaff(type) {
         if (type === 'depart') {
-          this.form.depart_ids = [];
+          this.form.department_ids = [];
           this.department_name = "";
         } else {
           this.form.staff_ids = [];
@@ -1261,7 +1261,7 @@
         if (this.organizeType === 'depart') {
           for (var i = 0; i < val.length; i++) {
             this.department_name = this.department_name === "" ? val[i].name : this.department_name + "," + val[i].name;
-            this.form.depart_ids.push(val[i].id);
+            this.form.department_ids.push(val[i].id);
           }
         } else if (this.organizeType === 'staff') {
           for (var i = 0; i < val.length; i++) {
@@ -1288,6 +1288,8 @@
           page: 1,
           limit: 12
         };
+        this.department_name = "";
+        this.staff_name = "";
         this.subject_name = '';
         this.tagDate = '';
         this.rangeDate = '';
@@ -1472,7 +1474,7 @@
       background-color: #aec1fc;
     }
     .warning-row{
-      background-color: GhostWhite;
+      background-color: #bcbcbd;
     }
   }
 </style>
