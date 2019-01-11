@@ -101,6 +101,7 @@
           :visible.sync="addAccountVisible"
           :title="addCtrl ? '新增账户' : '修改信息'"
           width="30%"
+          @close="handleCancelAdd"
         >
           <div style="text-align: center;">
             <el-form :model="addForm" :rules="addRules" ref="addForm" label-width="15%" label-position="right" status-icon>
