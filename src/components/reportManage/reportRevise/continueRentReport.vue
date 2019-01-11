@@ -214,7 +214,7 @@
             </el-col> -->
              <el-col :span="6">
               <el-form-item label="违约金" required="">
-                <el-input placeholder="租房价格与收房价格差大于500元的,请填写一个月租金。" v-model="params.penalty"></el-input>
+                <el-input placeholder="收租价格差大于500元的" v-model="params.penalty"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
