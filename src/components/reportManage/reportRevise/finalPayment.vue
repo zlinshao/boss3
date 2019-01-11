@@ -447,11 +447,12 @@
           if (res.data.code === '50920') {
             //   this.isClear = false;
             let data = res.data.data;
-            console.log(data)
             this.params.address = data.address;
             this.params.customer_name = data.draft_content.customer_name;
             this.params.month = data.draft_content.month;
-            this.params.pay_way = data.draft_content.pay_way;
+            this.params.pay_way = data.draft_content.payWay && data.draft_content.payWay.map(item => {
+              return item;
+            }).join(",");
             this.params.price_arr = data.draft_content.price_arr;
             this.params.terms = data.draft_content.terms;
             this.params.other_fee = data.draft_content.other_fee;
