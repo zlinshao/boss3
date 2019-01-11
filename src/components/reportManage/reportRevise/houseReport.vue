@@ -169,6 +169,14 @@
                 <el-switch v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="门锁类型">
+                <el-select clearable v-model="params.lock_type" placeholder="请选择门锁类型" value="">
+                  <el-option v-for="(item,index) in lock_types" :label="item" :value="item"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
 
           <el-row>
@@ -425,6 +433,7 @@
           floors: '',                   //总楼层
           price: '',                    //价格
           is_agency: '0',                 //是否中介
+          lock_type: '',                //门锁类型
           air_condition: 1,             //空调
           fridge: 1,                    //冰箱
           television: 1,                //电视
@@ -479,6 +488,7 @@
         unit_ge: ['0个', '1个', '2个', '3个', '4个', '5个'],
         unit_tai: ['0台', '1台', '2台', '3台', '4台', '5台'],
         decorate: ['东', '南', '西', '北', '东南', '东北', '西南', '西北', '南北'],
+        lock_types: ['密码锁', '指纹锁', '普通锁'],
       };
     },
     watch: {
@@ -560,6 +570,7 @@
             } else {
               this.params.is_agency = '0';
             }
+            this.params.lock_type = data.lock_type;                           //门锁
             this.params.air_condition = data.air_condition;                   //空调
             this.params.fridge = data.fridge;                                 //冰箱
             this.params.television = data.television;                         //电视
@@ -776,6 +787,7 @@
           floors: '',                   //总楼层
           price: '',                    //价格
           is_agency: '0',                 //是否中介
+          lock_type: '',                 //门锁
           air_condition: 1,             //空调
           fridge: 1,                    //冰箱
           television: 1,                //电视
