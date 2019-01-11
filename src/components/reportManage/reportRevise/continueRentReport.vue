@@ -212,6 +212,11 @@
                 <el-input placeholder="请输入押金" v-model="params.deposit"></el-input>
               </el-form-item>
             </el-col> -->
+             <el-col :span="6">
+              <el-form-item label="违约金" required="">
+                <el-input placeholder="租房价格与收房价格差大于500元的,请填写一个月租金。" v-model="params.penalty"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="6">
               <el-form-item label="让总价金额" required="">
                 <el-input placeholder="请输入让总价金额" v-model="params.discount"></el-input>
@@ -352,6 +357,7 @@
           contract_id: '',              //合同id
           house_id: '',                 //房屋地址id
           discount: '',                  //让价总金额
+          penalty: '',                  //违约金
 
           month: '',                    //租房月数
           day: '',                      //租房天数
@@ -487,6 +493,7 @@
 
         this.params.deposit_payed = data.deposit_payed;
         this.params.discount = data.discount;
+        this.params.penalty = data.penalty;
 
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
@@ -749,6 +756,7 @@
           contract_id: '',              //合同id
           house_id: '',                 //房屋地址id
           discount: '',                  //让价总金额
+          penalty: '',                   //违约金
 
           month: '',                    //租房月数
           day: '',                      //租房天数
