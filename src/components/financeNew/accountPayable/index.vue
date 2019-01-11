@@ -118,6 +118,7 @@
         element-loading-background="rgba(255, 255, 255, 0)"
         :data="payableList"
         @row-contextmenu="handleRowRightClick"
+        :row-class-name="tableRowClassName"
         :header-row-style="handleHeaderStyle"
       >
         <el-table-column label="付款时间" prop="pay_date"></el-table-column>
@@ -227,7 +228,7 @@
                 <el-option label="现金" :value="5"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="付款账号" prop="account_id">
+            <el-form-item label="付款账号" prop="account_id" v-if="payMoneyExtraParams.account_type != 5">
               <el-select v-model="payMoneyParams.account_id" :disabled="!canSel">
                 <el-option v-for="item in AccountList" :key="item.id" :value="item.id" :label="item.name"></el-option>
               </el-select>
@@ -286,8 +287,13 @@
           </div>
           <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">房屋地址：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.address ">{{ DetailCurrentRow.address }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">客户姓名：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.customer ">{{ DetailCurrentRow.info.customer }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.customer_name ">{{ DetailCurrentRow.customer.customer_name }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
             <el-col :span="6">
@@ -300,14 +306,14 @@
               <span class="receive_detail" v-if="DetailCurrentRow.balance">{{ DetailCurrentRow.balance }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">付款时间：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.pay_date ">{{ DetailCurrentRow.pay_date[0].pay_date }}&nbsp;&nbsp;
                 <span @click="handleLookMore(DetailCurrentRow.pay_date)" style="color: red;cursor: pointer;">查看更多</span></span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">实付金额：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.amount_paid ">{{ DetailCurrentRow.amount_paid }}</span>
@@ -323,13 +329,13 @@
               <span class="receive_detail" v-if="DetailCurrentRow.amount_payable">{{ DetailCurrentRow.amount_payable }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">账户账号：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.customer_account_num ">{{ DetailCurrentRow.customer_account_num }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">补齐时间：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.complete_date ">{{ DetailCurrentRow.complete_date }}</span>
@@ -345,13 +351,13 @@
               <span class="receive_detail" v-if="DetailCurrentRow.remark">{{ DetailCurrentRow.remark }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">开户行：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_bank ">{{ DetailCurrentRow.customer.account_bank }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">支行：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.complete_date && DetailCurrentRow.customer.account_subbank">{{ DetailCurrentRow.customer.account_subbank }}</span>
@@ -554,6 +560,12 @@
       this.getPayableList();
     },
     methods: {
+      tableRowClassName({row}) {
+        if (row.status === 3 || row.status === 4) {
+          return 'warning-row';
+        }
+        return "";
+      },
       handleSelRangDate(val){
         if (val) {
           this.params.date_min = val[0];
@@ -658,6 +670,7 @@
         this.$refs['payMoneyForm'].resetFields();
         this.payMoneyExtraParams.account_type = "";
         this.payMoneyParams.account_id = "";
+        this.payMoneyParams.amount_paid = "";
         this.canSel = false;
         this.payMoneyVisible = false;
       },
@@ -973,6 +986,9 @@
       overflow-y: scroll;
       margin: 0 auto;
       text-align: center;
+    }
+    .warning-row{
+      background-color: GhostWhite;
     }
   }
 </style>
