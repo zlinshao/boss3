@@ -184,6 +184,7 @@
         @selection-change="handleSelectionChange"
         highlight-current-row
         @current-change="handleListCurrentChange"
+        :row-class-name="tableRowClassName"
       >
         <el-table-column
           type="selection"
@@ -844,6 +845,12 @@
       this.getTableData();
     },
     methods: {
+      tableRowClassName({row}) {
+        if (row.status === '已超额' || row.status === '已结清') {
+          return 'warning-row';
+        }
+        return "";
+      },
       handleDealWith(id) {
         this.$http.put(this.url + `account/pending/receivable/${id}`).then(res => {
           this.handleSuccess(res);
@@ -1394,6 +1401,9 @@
       border-radius: 4px;
       color: white;
       background-color: #aec1fc;
+    }
+    .warning-row{
+      background-color: GhostWhite;
     }
   }
 </style>

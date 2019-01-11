@@ -1413,7 +1413,6 @@
               {clickIndex: 'editInfo', headIcon: 'el-icon-edit', label: '编辑' ,data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
-              {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
               {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',data: row},
             ];
           } else {
@@ -1421,7 +1420,6 @@
               {clickIndex: 'editRentInfo',headIcon: 'el-icon-edit',label: '编辑',data: row},
               {clickIndex: 'renewMark', headIcon: 'iconfont icon-fangdongtuifang', label: '恢复重复标记',data: row},
               {clickIndex: 'goWait',headIcon: 'el-icon-refresh', label: '生成待处理项',data: row},
-              {clickIndex: 'backWait', headIcon: 'el-icon-refresh', label: '从待处理项恢复',data: row},
               {clickIndex: 'deleteRent' ,headIcon: 'el-icon-delete', label: '删除',data: row},
             ];
           }
@@ -1618,9 +1616,9 @@
         })
       },
       handleBackWait(id) {
-        var obj = {identity: 1};
+        var obj = {identity: 1,customer_id: id};
         if (this.activeName !== 'first'){
-          obj.identity = 2;
+          obj.identity = 2
         }
         this.$http.put(this.url + `account/pending/recover/${id}`,obj).then(res => {
           this.SuccessCallBack(res);
