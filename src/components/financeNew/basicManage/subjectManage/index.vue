@@ -10,7 +10,7 @@
               size="mini" clearable
               @keyup.enter.native="getTableData"
             >
-              <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="searchData"></el-button>
 
             </el-input>
           </el-form-item>
@@ -18,7 +18,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="openSubject"><i class="el-icon-plus"></i>&nbsp;新增科目</el-button>
+            <el-button type="primary" @click="addSubject"><i class="el-icon-plus"></i>&nbsp;新增科目</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -60,7 +60,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
+            <el-button size="mini" type="primary" @click="searchData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -118,7 +118,7 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
 
-    <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject" :data="detailData"
+    <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject" :detailData="detailData"
                    :cate="cate"></SubjectModule>
     <subjectTree :subjectDialog="subjectVisible" :types="subjectType" @close="closeSubjectTree"
                  @selectSubject="selectSubject"></subjectTree>
@@ -179,6 +179,10 @@
     },
     watch: {},
     methods: {
+      searchData(){
+          this.form.page=1;
+          this.getTableData();
+      },
       getSubjects() {
         this.$http.get(globalConfig.finance_server + 'account/subject/next/0').then(res => {
           if (res.data.success) {
@@ -233,6 +237,11 @@
       clearSubjectTree() {
         this.form.belong = '';
         this.form.belongName = '';
+      },
+      addSubject(){
+        this.cate = 'add';
+        this.detailData = {};
+        this.openSubject();
       },
       openSubjectTree() {
         this.subjectType = 'top';

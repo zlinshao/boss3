@@ -50,9 +50,9 @@
         </div>
       </div>
       <div style="text-align: right;">
-        <el-input type="text" placeholder="账户名称/开户银行" clearable size="mini" style="width: 15%" v-model="params.search" @keyup.enter.native="getAccountList">
+        <el-input type="text" placeholder="账户名称/开户银行" clearable size="mini" style="width: 15%" v-model="params.search" @keyup.enter.native="handleGoSearch">
           <template slot="append">
-            <i class="el-icon-search" @click="getAccountList" style="cursor: pointer;"></i>
+            <i class="el-icon-search" @click="handleGoSearch" style="cursor: pointer;"></i>
           </template>
         </el-input>
         <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
@@ -388,6 +388,10 @@
 
       },
       methods: {
+        handleGoSearch() {
+          this.params.page = 1;
+          this.getAccountList();
+        },
         handleAccountChange(page) {
           this.accountChangePage = page;
           this.getAccountChange();
@@ -462,6 +466,7 @@
             }
           }).then(res => {
             if (res.data.success) {
+              console.log(res.data.data);
               this.accountChangeList = res.data.data.data;
               this.accountChangeCount = res.data.data.count;
               this.accountChangeVisible = true;
@@ -595,7 +600,7 @@
             console.log(err);
           });
         },
-        handleEditAccount(params) {
+        handleEditAccount(params,formName) {
           this.$http.put(this.url + `account/manage/update/${this.currentRow.id}`,params).then(res => {
             if (res.data.success) {
               this.$notify.success({
@@ -608,7 +613,9 @@
                 message: res.data.message
               });
             }
+            this.$refs[formName].resetFields();
             this.addAccountVisible = false;
+            this.addCtrl = true;
             this.clearForm();
             this.getAccountList();
           }).catch(err => {
@@ -630,7 +637,7 @@
               if (this.addCtrl) {
                 this.handleAddAccount(params);
               } else {
-                this.handleEditAccount(params);
+                this.handleEditAccount(params,formName);
               }
             }else {
               this.$message('error submit !!');

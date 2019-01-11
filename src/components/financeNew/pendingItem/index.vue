@@ -5,9 +5,9 @@
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.search" size="mini" clearable
-                      @keyup.enter.native.prevent="getTableData"
+                      @keyup.enter.native.prevent="getTableData('search')"
             >
-              <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="getTableData('search')"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -107,14 +107,6 @@
         <el-table-column
           label="事项类型"
           prop="item_type">
-          <template slot-scope="scope">
-            <span v-if="scope.row.item_type == 1">违约</span>
-            <span v-if="scope.row.item_type == 2">转租</span>
-            <span v-if="scope.row.item_type == 3">调租</span>
-            <span v-if="scope.row.item_type == 4">退租</span>
-            <span v-if="scope.row.item_type == 5">收房炸单</span>
-            <span v-if="scope.row.item_type == 6">租房炸单</span>
-          </template>
         </el-table-column>
         <el-table-column
           label="开单人"
@@ -146,7 +138,7 @@
         </el-table-column>
         <el-table-column
           label="结算人"
-          prop="operator_name">
+          prop="operator.name">
         </el-table-column>
         <el-table-column
           label="状态"
@@ -249,7 +241,10 @@
     },
     watch: {},
     methods: {
-      getTableData() {
+      getTableData(search) {
+        if (search) {
+          this.form.page = 1;
+        }
         if (this.dates) {
           this.form.start_time = this.dates[0];
           this.form.end_time = this.dates[1];

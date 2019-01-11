@@ -39,7 +39,7 @@
                   <el-col :span="12" v-for="(value,index) in show_content" :key="1"
                           v-if="printScreen.indexOf(index) === -1 && index === 'receiptUri'">
                     <el-form-item v-if="value && Array.isArray(value)" label="电子收据">
-                      <div class="special">
+                      <div class="special" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap">
                       <span v-for="p in value">
                         <span v-if="p.view_uri">
                           <a :href="p.view_uri" target="_blank">{{p.view_uri}}</a>
@@ -676,7 +676,6 @@
       createElectronicReceipt(name) {
         this.electronicReceiptVisible = true;
         let params = {};
-
         params.account_id = this.electronicReceiptParam.account_id || "";
         params.process_id = this.electronicReceiptParam.process_id || "";
         params.department_id = this.electronicReceiptParam.department_id || "";
@@ -889,11 +888,9 @@
             this.electronicReceiptParam.price = data.process.content.price_arr.map(item => {
               return item.split(':')[1];
             }).join(",");
-            this.electronicReceiptParam.pay_way = data.process.content.pay_way.map(item => {
-              return item;
+            this.electronicReceiptParam.pay_way = data.process.content && data.process.content.show_content['付款方式'].map(item => {
+              return `${item.period}:${item.msg}`;
             }).join(",");
-            console.log(this.electronicReceiptParam.price);
-            console.log(this.electronicReceiptParam.pay_way);
           } else {
             this.electronicReceiptParam.payer = data.process.content.name;
             this.electronicReceiptParam.sign_at = data.process.content.sign_date;

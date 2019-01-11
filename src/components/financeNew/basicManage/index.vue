@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="basicContainer">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="账户管理" name="first">
         <AccountManage></AccountManage>
@@ -34,6 +34,10 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  #basicContainer{
+    .el-tabs__content{
+      overflow: visible !important;
+    }
+  }
 </style>

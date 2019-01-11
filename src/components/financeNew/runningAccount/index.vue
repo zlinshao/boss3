@@ -1,8 +1,8 @@
 <template >
    <div id="runningAccount">
        <div style="text-align: right;">
-         <el-input v-model="params.search" style="width: 15%" placeholder="请输入需要搜索的内容" size="mini">
-           <el-button slot="append" icon="el-icon-search"></el-button>
+         <el-input v-model="params.search" @keyup.enter.native="handleGoSearch" clearable style="width: 15%" placeholder="请输入需要搜索的内容" size="mini">
+           <el-button slot="append" icon="el-icon-search" @click="handleGoSearch"></el-button>
          </el-input>
          <el-button type="primary" size="mini" @click="isHigh = !isHigh">高级</el-button>
          <el-button type="success" size="mini" @click="outData">导出</el-button>
@@ -17,14 +17,21 @@
              <el-col :span="12">
                <el-row>
                  <el-col :span="8">
-                   <div class="el_col_label">操作起始时间</div>
+                   <div class="el_col_label">操作时间周期</div>
                  </el-col>
                  <el-col :span="16" class="el_col_option">
                    <el-form-item>
                      <el-date-picker
-                      v-model="params.operate_start_date"
+                      v-model="operationTime"
+                      type="daterange"
+                      align="right"
+                      unlink-panels
                       value-format="yyyy-MM-dd"
-                      placeholder="请选择"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      @change="handleSelRangDate"
+                      end-placeholder="结束日期"
+                      :picker-options="pickerOptions"
                      ></el-date-picker>
                    </el-form-item>
                  </el-col>
@@ -33,48 +40,21 @@
              <el-col :span="12">
                <el-row>
                  <el-col :span="8">
-                   <div class="el_col_label">操作结束时间</div>
+                   <div class="el_col_label">始终时间周期</div>
                  </el-col>
                  <el-col :span="16" class="el_col_option">
                    <el-form-item>
                      <el-date-picker
-                       v-model="params.operate_end_date"
+                       v-model="time"
+                       type="daterange"
+                       align="right"
+                       unlink-panels
                        value-format="yyyy-MM-dd"
-                       placeholder="请选择"
-                     ></el-date-picker>
-                   </el-form-item>
-                 </el-col>
-               </el-row>
-             </el-col>
-           </el-row>
-           <el-row class="el_row_border">
-             <el-col :span="12">
-               <el-row>
-                 <el-col :span="8">
-                   <div class="el_col_label">起始时间</div>
-                 </el-col>
-                 <el-col :span="16" class="el_col_option">
-                   <el-form-item>
-                     <el-date-picker
-                       v-model="params.start_date"
-                       value-format="yyyy-MM-dd"
-                       placeholder="请选择"
-                     ></el-date-picker>
-                   </el-form-item>
-                 </el-col>
-               </el-row>
-             </el-col>
-             <el-col :span="12">
-               <el-row>
-                 <el-col :span="8">
-                   <div class="el_col_label">结束时间</div>
-                 </el-col>
-                 <el-col :span="16" class="el_col_option">
-                   <el-form-item>
-                     <el-date-picker
-                       v-model="params.end_date"
-                       value-format="yyyy-MM-dd"
-                       placeholder="请选择"
+                       range-separator="至"
+                       start-placeholder="开始日期"
+                       @change="handleSelRangDate1"
+                       end-placeholder="结束日期"
+                       :picker-options="pickerOptions"
                      ></el-date-picker>
                    </el-form-item>
                  </el-col>
@@ -131,15 +111,18 @@
         element-loading-background="rgba(255, 255, 255, 0)"
        >
          <el-table-column label="ID" prop="id"></el-table-column>
-         <el-table-column label="交易时间" prop="create_time"></el-table-column>
-         <el-table-column label="客户姓名" prop="customer.name"></el-table-column>
-         <el-table-column label="科目名称" prop="subject.title"></el-table-column>
-         <el-table-column label="类型" prop=""></el-table-column>
+         <el-table-column label="交易时间" prop="create_time" min-width="120px"></el-table-column>
+         <el-table-column label="客户姓名" prop="customer.customer_name"></el-table-column>
+         <el-table-column label="地址" prop="address"></el-table-column>
+         <el-table-column label="科目名称" prop="subject"></el-table-column>
+         <el-table-column label="类型" prop="category"></el-table-column>
          <el-table-column label="账户名称" prop="account_name"></el-table-column>
          <el-table-column label="卡号" prop="account_num"></el-table-column>
-         <el-table-column label="实收金额" prop="amount_receivable"></el-table-column>
+         <el-table-column label="应收金额" prop="amount_receivable"></el-table-column>
+         <el-table-column label="实收金额" prop="amount_received"></el-table-column>
+         <el-table-column label="应付金额" prop="amount_payable"></el-table-column>
          <el-table-column label="实付金额" prop="amount_paid"></el-table-column>
-         <el-table-column label="账户余额" prop="balance"></el-table-column>
+         <el-table-column label="账户余额" prop="amount_remain"></el-table-column>
          <el-table-column label="详细信息" prop="info" min-width="300px"></el-table-column>
          <el-table-column label="收/付款人员" prop="operator_name"></el-table-column>
        </el-table>
@@ -149,6 +132,7 @@
         :current-page="params.page"
         :page-size="params.limit"
         style="text-align: right"
+        @current-change="handleChangePage"
        ></el-pagination>
      </div>
 
@@ -173,10 +157,47 @@
               tableCount: 0,
               all_count: 0,
               subject_name: '',
+              operationTime: '',
+              time: '',
+              pickerOptions: {
+                shortcuts: [{
+                  text: '最近一周',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '最近三个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },{
+                  text: '最近一年',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+              },
               params: {
                 search: '',
                 page: 1,
-                limit: 12,
+                limit: 15,
                 start_date: '',
                 end_date: '',
                 cate: '',
@@ -196,6 +217,32 @@
           this.getTableList();
         },
         methods:{
+          handleSelRangDate(val) {
+            if (val) {
+              this.params.operate_start_date = val[0];
+              this.params.operate_end_date = val[1];
+            } else {
+              this.params.operate_start_date = "";
+              this.params.operate_end_date = "";
+            }
+          },
+          handleSelRangDate1(val) {
+            if (val) {
+              this.params.start_date = val[0];
+              this.params.end_date = val[1];
+            } else {
+              this.params.start_date = "";
+              this.params.end_date = "";
+            }
+          },
+          handleGoSearch() {
+            this.params.page = 1;
+            this.getTableList();
+          },
+          handleChangePage(page) {
+            this.params.page = page;
+            this.getTableList();
+          },
           outData() {
             this.$http.get(this.url + 'fundflow/running/export',{responseType: 'arraybuffer',params: this.params}).then(res => {
               this.$exportData(res.data);
@@ -223,6 +270,8 @@
               subject_id: '',
               account_id: ''
             };
+            this.time = "";
+            this.operationTime = "";
             this.subject_name = "";
           },
           highGrade() { this.isHigh = false },
@@ -239,6 +288,11 @@
                 this.receive_sum = res.data.data.receive_sum;
                 this.all_count = res.data.data.all_count;
               }else {
+                this.tableList = [];
+                this.diff_sum = res.data.data.diff_sum;
+                this.expend_sum = res.data.data.expend_sum;
+                this.receive_sum = res.data.data.receive_sum;
+                this.all_count = res.data.data.all_count;
                 this.isLoading = false;
                 this.emptyText = "暂无数据";
               }
