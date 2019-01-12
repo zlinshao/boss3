@@ -111,7 +111,7 @@
         element-loading-background="rgba(255, 255, 255, 0)"
        >
          <el-table-column label="ID" prop="id"></el-table-column>
-         <el-table-column label="交易时间" prop="create_time" min-width="120px"></el-table-column>
+         <el-table-column label="交易时间" prop="create_date" min-width="120px"></el-table-column>
          <el-table-column label="客户姓名" prop="customer.customer_name"></el-table-column>
          <el-table-column label="地址" prop="address"></el-table-column>
          <el-table-column label="科目名称" prop="subject"></el-table-column>
