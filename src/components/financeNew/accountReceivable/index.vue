@@ -443,7 +443,9 @@
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">月单价：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.prices[0]">{{ DetailCurrentRow.customer.prices[0] }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.prices">
+              <span v-for="item in DetailCurrentRow.customer['prices']">{{ item }} &nbsp;&nbsp;</span>
+            </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
