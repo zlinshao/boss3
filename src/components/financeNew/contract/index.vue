@@ -1,10 +1,9 @@
 <template>
     <div id="contract">
       <div style="text-align: right;width: 100%">
-        <el-input size="mini" v-model="params.keywords" style="width: 15%;vertical-align: middle" clearable>
+        <el-input size="mini" v-model="params.keywords" style="width: 15%;vertical-align: middle" clearable placeholder="请输入你想搜索的内容">
           <el-button slot="append" icon="el-icon-search" @click="getTableList"></el-button>
         </el-input>
-        <el-button size="mini" type="primary">搜索</el-button>
         <el-date-picker
           v-model="rangeDate"
           type="daterange"
@@ -18,6 +17,7 @@
           @change="handleSelRangDate"
           :picker-options="pickerOptions">
         </el-date-picker>
+        <el-button size="mini" type="primary">搜索</el-button>
       </div>
       <div>
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
