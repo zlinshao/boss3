@@ -38,6 +38,7 @@
               :total="count"
               layout="total,prev,pager,next"
               :current-page="params.pages"
+              :page-size="params.limit"
               @current-change="handleChangePage"
             ></el-pagination>
           </el-tab-pane>
@@ -61,6 +62,7 @@
               :total="count2"
               layout="total,prev,pager,next"
               :current-page="params.pages"
+              :page-size="params.limit"
               @current-change="handleChangePage"
             ></el-pagination>
           </el-tab-pane>
