@@ -234,9 +234,8 @@
       },
         financeRequest(){
             const session = JSON.parse(localStorage.getItem('personal')).session_id;
-            this.$http.get(globalConfig.finance_server,
-                {headers: {Session: session}} ).then((res) => {
-                console.log(res);
+            this.$http.get(globalConfig.finance_server+'login',{headers: {Session: session}} ).then((res) => {
+              console.log(res);
             });
         },
       // 验证码
