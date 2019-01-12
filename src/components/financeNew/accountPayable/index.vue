@@ -354,7 +354,9 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">备注：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.remark">{{ DetailCurrentRow.remark }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.tags">
+                <span v-for="item in DetailCurrentRow.tags">{{ item.content }};</span>
+              </span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
