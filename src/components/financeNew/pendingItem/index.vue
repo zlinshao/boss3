@@ -255,8 +255,6 @@
         this.$http.get(this.url + 'account/pending/index', {params: params}).then((res) => {
           if (res.data.success) {
             if (res.data.data.count) {
-              this.isHigh = false;
-              this.collectLoading = false;
               this.tableData = res.data.data.data;
               this.totalNum = res.data.data.count;
             } else {
@@ -269,6 +267,8 @@
             this.tableData = [];
             this.totalNum = 0;
           }
+          this.isHigh = false;
+          this.collectLoading = false;
         });
       },
       // 搜索
