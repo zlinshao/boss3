@@ -223,6 +223,7 @@
         :visible.sync="payMoneyVisible"
         title="应付入账"
         width="30%"
+        @close="handleCancelPayMoney"
       >
         <div style="text-align: center">
           <el-form :model="payMoneyParams" ref="payMoneyForm" :rules="payMoneyRules" label-width="100px" size="mini">
@@ -310,7 +311,7 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">应付金额：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.balance">{{ DetailCurrentRow.balance }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.amount_payable">{{ DetailCurrentRow.amount_payable }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
@@ -333,7 +334,7 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">剩余款项：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.amount_payable">{{ DetailCurrentRow.amount_payable }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.balance">{{ DetailCurrentRow.balance }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
