@@ -226,11 +226,19 @@
             let badge = true;
             this.$store.dispatch('badgeFlag', badge);
             this.$router.push({path: '/main'});
+            this.financeRequest();
           } else {
             this.prompt('warning', res.data.msg);
           }
         })
       },
+        financeRequest(){
+            const session = JSON.parse(localStorage.getItem('personal')).session_id;
+            this.$http.get(globalConfig.finance_server,
+                {headers: {Session: session}} ).then((res) => {
+                console.log(res);
+            });
+        },
       // 验证码
       phoneLoginFly() {
         this.$http.get(this.urls + 'organization/user_authorize/sms?phone=' + this.phone).then((res) => {
