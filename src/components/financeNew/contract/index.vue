@@ -1,6 +1,10 @@
 <template>
     <div id="contract">
-      <div style="text-align: right">
+      <div style="text-align: right;width: 100%">
+        <el-input size="mini" v-model="params.keywords" style="width: 15%;vertical-align: middle" clearable>
+          <el-button slot="append" icon="el-icon-search" @click="getTableList"></el-button>
+        </el-input>
+        <el-button size="mini" type="primary">搜索</el-button>
         <el-date-picker
           v-model="rangeDate"
           type="daterange"
@@ -14,7 +18,6 @@
           @change="handleSelRangDate"
           :picker-options="pickerOptions">
         </el-date-picker>
-        <el-button size="mini" type="primary">搜索</el-button>
       </div>
       <div>
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
@@ -117,7 +120,8 @@
               start_date: '',
               end_date: '',
               pages: 1,
-              limit: 15
+              limit: 15,
+              keywords: '',
             },
             activeName: 'first',
             loading: false,
