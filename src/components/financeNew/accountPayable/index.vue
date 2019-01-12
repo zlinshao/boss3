@@ -233,7 +233,6 @@
                 <el-option label="支付宝" :value="2"></el-option>
                 <el-option label="微信" :value="3"></el-option>
                 <el-option label="存折" :value="4"></el-option>
-                <el-option label="现金" :value="5"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="付款账号" prop="account_id" v-if="payMoneyExtraParams.account_type != 5">
@@ -247,7 +246,6 @@
                 <el-option label="支付宝" :value="2"></el-option>
                 <el-option label="微信" :value="3"></el-option>
                 <el-option label="存折" :value="4"></el-option>
-                <el-option label="现金" :value="5"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="客户账户">
