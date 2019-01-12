@@ -77,6 +77,7 @@
           cate: '',
           date: '',
           subject_id: [],
+          all: 1
         },
         subject_id: '',
         loading: false,
