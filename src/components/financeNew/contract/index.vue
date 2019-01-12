@@ -4,20 +4,20 @@
         <el-input size="mini" v-model="params.keywords" style="width: 15%;vertical-align: middle" clearable placeholder="请输入你想搜索的内容">
           <el-button slot="append" icon="el-icon-search" @click="getTableList"></el-button>
         </el-input>
-        <el-date-picker
-          v-model="rangeDate"
-          type="daterange"
-          align="right"
-          size="mini"
-          unlink-panels
-          value-format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          @change="handleSelRangDate"
-          :picker-options="pickerOptions">
-        </el-date-picker>
-        <el-button size="mini" type="primary">搜索</el-button>
+        <!--<el-date-picker-->
+          <!--v-model="rangeDate"-->
+          <!--type="daterange"-->
+          <!--align="right"-->
+          <!--size="mini"-->
+          <!--unlink-panels-->
+          <!--value-format="yyyy-MM-dd"-->
+          <!--range-separator="至"-->
+          <!--start-placeholder="开始日期"-->
+          <!--end-placeholder="结束日期"-->
+          <!--@change="handleSelRangDate"-->
+          <!--:picker-options="pickerOptions">-->
+        <!--</el-date-picker>-->
+        <!--<el-button size="mini" type="primary">搜索</el-button>-->
       </div>
       <div>
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
@@ -153,6 +153,7 @@
           this.empty = "暂无数据";
         },
         getTableList() {
+          this.params.keywords = this.params.keywords.trim();
           this.loading = true;
           if (this.activeName === 'first') {
             this.$http.get(this.url + 'contract/lord/index',{params: this.params}).then(res => {
