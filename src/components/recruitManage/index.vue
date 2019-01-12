@@ -487,8 +487,12 @@
                         this.experience = res.data
                     }
                 });
-                //状态
-                
+                //职位招聘状态,发布中/已结束
+                this.dictionary(731).then((res) => {
+                    if(res.code === '30010'){
+                        this.status = res.data
+                    }
+                });
             },
             //状态
             getStatus(_id){
