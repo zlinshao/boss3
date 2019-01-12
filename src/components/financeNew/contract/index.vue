@@ -31,7 +31,7 @@
               <el-table-column label="合同结束时间" prop="end_date"></el-table-column>
               <el-table-column label="客户" prop="name"></el-table-column>
               <el-table-column label="客户电话" prop="mobile"></el-table-column>
-              <el-table-column label="合同状态" prop="contract_status"></el-table-column>
+              <el-table-column label="合同状态" prop="pass_status"></el-table-column>
             </el-table>
             <el-pagination
               style="text-align: right"
@@ -54,7 +54,7 @@
               <el-table-column label="合同结束时间" prop="end_date"></el-table-column>
               <el-table-column label="客户" prop="name"></el-table-column>
               <el-table-column label="客户电话" prop="mobile"></el-table-column>
-              <el-table-column label="合同状态" prop="contract_status"></el-table-column>
+              <el-table-column label="合同状态" prop="pass_status"></el-table-column>
             </el-table>
             <el-pagination
               style="text-align: right"
