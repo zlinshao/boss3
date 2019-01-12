@@ -316,7 +316,7 @@
           <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">付款时间：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.pay_date ">{{ DetailCurrentRow.pay_date[0].pay_date }}&nbsp;&nbsp;
+              <span class="receive_detail" v-if="DetailCurrentRow.pay_date && DetailCurrentRow.pay_date.length > 0">{{ DetailCurrentRow.pay_date[0].pay_date }}&nbsp;&nbsp;
                 <span @click="handleLookMore(DetailCurrentRow.pay_date)" style="color: red;cursor: pointer;">查看更多</span></span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
