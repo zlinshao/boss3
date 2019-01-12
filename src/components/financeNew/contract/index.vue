@@ -138,6 +138,7 @@
         },
         handleTabClick(tab) {
           this.activeName = tab.name;
+          this.params.pages = 1;
           this.getTableList();
         },
         emptyData() {
