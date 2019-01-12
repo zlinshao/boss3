@@ -429,6 +429,38 @@
             </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">手机号：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.contact">{{ DetailCurrentRow.customer.contact }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">租房月数：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.months">{{ DetailCurrentRow.customer.months }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">月单价：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.prices[0]">{{ DetailCurrentRow.customer.prices[0] }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">合同时间周期：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.months">{{ DetailCurrentRow.description.months }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">开单人：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.staff">{{ DetailCurrentRow.description.staff }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">部门：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.department && DetailCurrentRow.department.name">{{ DetailCurrentRow.department.name }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
         </el-row>
       </div>
     </el-dialog>
@@ -903,7 +935,7 @@
       },
       tableRowClassName({row}) {
         if ((row.status === '已超额' || row.status === '已结清' || row.status === '待结清') && row.pendable !== 1) {
-          return 'warning-row';
+          return 'warning-color';
         }
         return "";
       },
@@ -1250,7 +1282,7 @@
       // 清空员工
       closeStaff(type) {
         if (type === 'depart') {
-          this.form.depart_ids = [];
+          this.form.department_ids = [];
           this.department_name = "";
         } else {
           this.form.staff_ids = [];
@@ -1261,7 +1293,7 @@
         if (this.organizeType === 'depart') {
           for (var i = 0; i < val.length; i++) {
             this.department_name = this.department_name === "" ? val[i].name : this.department_name + "," + val[i].name;
-            this.form.depart_ids.push(val[i].id);
+            this.form.department_ids.push(val[i].id);
           }
         } else if (this.organizeType === 'staff') {
           for (var i = 0; i < val.length; i++) {
@@ -1288,6 +1320,8 @@
           page: 1,
           limit: 12
         };
+        this.department_name = "";
+        this.staff_name = "";
         this.subject_name = '';
         this.tagDate = '';
         this.rangeDate = '';
@@ -1471,8 +1505,8 @@
       color: white;
       background-color: #aec1fc;
     }
-    .warning-row{
-      background-color: GhostWhite;
+    .warning-color{
+      background-color: #bcbcbd;
     }
   }
 </style>

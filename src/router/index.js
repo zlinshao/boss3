@@ -39,6 +39,7 @@ const PendingItem = () => import  ('../components/financeNew/pendingItem');
 const FinanceAccountMmanagement = () => import('../components/financeNew/financeAccountManagement/index.vue');
 const DailyLog = () => import ('../components/financeNew/dailyLog'); //日志管理
 const Message = () => import('../components/financeNew/message/index.vue'); //消息
+const Contract = () => import('../components/financeNew/contract/index.vue'); // 合同管理
 
 
 // 微信管理
@@ -512,6 +513,7 @@ export default new Router({
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
         {path: '/PendingItem', component: PendingItem, name: '待处理项'},
         {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
+        {path: '/contract', component: Contract, name: "合同管理"},
         {path: '/message', component: Message,name: '消息'}
       ]
     },
