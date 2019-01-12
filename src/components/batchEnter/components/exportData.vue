@@ -99,6 +99,7 @@
             cate: '',
             date: '',
             subject_id: [],
+            all: 1
           };
           this.subject_id = '';
           this.account = [];
