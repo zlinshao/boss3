@@ -429,6 +429,40 @@
             </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">手机号：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.contact">{{ DetailCurrentRow.customer.contact }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">租房月数：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.months">{{ DetailCurrentRow.customer.months }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">月单价：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.prices">
+              <span v-for="item in DetailCurrentRow.customer['prices']">{{ item }} &nbsp;&nbsp;</span>
+            </span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">合同时间周期：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.months">{{ DetailCurrentRow.description.months }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">开单人：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.staff">{{ DetailCurrentRow.description.staff }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">部门：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.department && DetailCurrentRow.department.name">{{ DetailCurrentRow.department.name }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
         </el-row>
       </div>
     </el-dialog>
