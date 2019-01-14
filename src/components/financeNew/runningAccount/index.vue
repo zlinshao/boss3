@@ -197,7 +197,7 @@
               params: {
                 search: '',
                 page: 1,
-                limit: 15,
+                limit: 10,
                 start_date: '',
                 end_date: '',
                 cate: '',
