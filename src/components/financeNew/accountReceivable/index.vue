@@ -400,7 +400,9 @@
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">历史收款记录：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_history ">{{ DetailCurrentRow.customer.account_history }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.account_history ">
+              <span v-for="item in DetailCurrentRow.account_history">{{item.date}};</span>
+            </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
