@@ -354,7 +354,7 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">备注：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.tags">
+              <span class="receive_detail" v-if="DetailCurrentRow.tags && DetailCurrentRow.tags.length > 0">
                 <span v-for="item in DetailCurrentRow.tags">{{ item.content }};</span>
               </span>
               <span class="receive_detail" v-else>/</span>
@@ -409,7 +409,8 @@
           <el-row :gutter="20" style="margin-bottom: 25px">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">详情：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description">{{ DetailCurrentRow.description.description }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description">
+                {{ `${DetailCurrentRow.description.customer}/${DetailCurrentRow.description.months}/${DetailCurrentRow.description.description}/${DetailCurrentRow.description.staff}`}}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
