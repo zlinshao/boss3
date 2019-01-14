@@ -433,7 +433,7 @@
                     <el-option :value="2" label="整租"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="房间类型" prop="shared_part">
+                <el-form-item label="房间类型" prop="shared_part" v-if="rentInfo.is_shared !== 2">
                   <el-select v-model="rentInfo.shared_part">
                     <el-option :value="1" label="阳台间"></el-option>
                     <el-option :value="2" label="飘窗间"></el-option>
