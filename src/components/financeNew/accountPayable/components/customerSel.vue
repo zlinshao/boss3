@@ -95,7 +95,7 @@
           this.getCustomerList();
         },
         getCustomerList() {
-          this.$http.get(globalConfig.finance_server + 'account/receivable/customer',{params: this.params}).then(res => {
+          this.$http.get(globalConfig.finance_server + 'customer/base/customer',{params: this.params}).then(res => {
             if (res.data.success) {
               this.customer_list = res.data.data.data;
               this.customer_list_count = res.data.data.count;

@@ -1070,7 +1070,7 @@
         this.search_customer_list();
       },
       search_customer_list() {
-        this.$http.get(this.url + 'account/receivable/customer',{params: this.customer_params}).then(res => {
+        this.$http.get(this.url + 'customer/base/customer',{params: this.customer_params}).then(res => {
           if (res.data.success) {
             this.customer_list = res.data.data.data;
             this.customer_list_count = res.data.data.count;
