@@ -545,7 +545,9 @@
                   <el-input v-model="rentInfo.account_owner"></el-input>
                 </el-form-item>
                 <el-form-item label="开户行" v-if="extraRentInfo.canBank">
-                  <el-select v-model="rentInfo.account_bank"></el-select>
+                  <el-select v-model="rentInfo.account_bank">
+                    <el-option v-for="(bank,key) in banks" :value="key" :key="key" :label="bank"></el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="支行" v-if="extraRentInfo.canBank">
                   <el-input v-model="rentInfo.account_subbank"></el-input>
@@ -1043,7 +1045,7 @@
           if (res.data.success) {
             this.banks = res.data.data;
           }else {
-            this.banks = {};
+            this.banks = [];
           }
         }).catch(err => {
           console.log(err);
