@@ -104,6 +104,7 @@
                 width="100%">
             <el-table-column label="收房人" prop="signUser.name" ></el-table-column>
             <el-table-column label="地址" prop="house.name"></el-table-column>
+            <el-table-column label="报备时间" prop="bulletindate"></el-table-column>
             <el-table-column label="出租类型" prop="lord_new_rent">
                 <template slot-scope="scope">
                     <span v-if="scope.row.lord_new_rent=='new'">新收新租</span>
@@ -144,6 +145,8 @@
                     <span v-else="scope.row.lord_new_rent==''">0</span>
                 </template>
             </el-table-column>
+          <el-table-column label="部门"  prop="signOrg.name"></el-table-column>
+          <el-table-column label="负责人"  prop="leader"></el-table-column>
         </el-table>
         <div class="block pages">
             <el-pagination
