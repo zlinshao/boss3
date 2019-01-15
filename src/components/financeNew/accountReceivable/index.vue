@@ -400,7 +400,9 @@
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">历史收款记录：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.account_history ">{{ DetailCurrentRow.customer.account_history }}</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.account_history ">
+              <span v-for="item in DetailCurrentRow.account_history">{{item.date}};</span>
+            </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
@@ -427,6 +429,40 @@
             <span class="receive_detail" v-if="DetailCurrentRow.remarks && DetailCurrentRow.remarks.length > 0" style="text-align: left">
               <span v-for="(item,key) in DetailCurrentRow.remarks">[{{ item.category }}]-[{{ item.content }}]-[{{ item.create_time }}]<br></span>
             </span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">手机号：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.contact">{{ DetailCurrentRow.customer.contact }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">租房月数：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.months">{{ DetailCurrentRow.customer.months }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-bottom: 25px;">
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">月单价：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.prices">
+              <span v-for="item in DetailCurrentRow.customer['prices']">{{ item }} &nbsp;&nbsp;</span>
+            </span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">合同时间周期：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.months">{{ DetailCurrentRow.description.months }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">开单人：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.staff">{{ DetailCurrentRow.description.staff }}</span>
+            <span class="receive_detail" v-else>/</span>
+          </el-col>
+          <el-col :span="6">
+            <span style="color: #409EFF;" class="receive_title">部门：</span>
+            <span class="receive_detail" v-if="DetailCurrentRow.department && DetailCurrentRow.department.name">{{ DetailCurrentRow.department.name }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
         </el-row>
@@ -1034,7 +1070,7 @@
         this.search_customer_list();
       },
       search_customer_list() {
-        this.$http.get(this.url + 'account/receivable/customer',{params: this.customer_params}).then(res => {
+        this.$http.get(this.url + 'customer/base/customer',{params: this.customer_params}).then(res => {
           if (res.data.success) {
             this.customer_list = res.data.data.data;
             this.customer_list_count = res.data.data.count;

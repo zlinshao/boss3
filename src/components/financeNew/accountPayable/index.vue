@@ -223,6 +223,7 @@
         :visible.sync="payMoneyVisible"
         title="应付入账"
         width="30%"
+        @close="handleCancelPayMoney"
       >
         <div style="text-align: center">
           <el-form :model="payMoneyParams" ref="payMoneyForm" :rules="payMoneyRules" label-width="100px" size="mini">
@@ -232,7 +233,6 @@
                 <el-option label="支付宝" :value="2"></el-option>
                 <el-option label="微信" :value="3"></el-option>
                 <el-option label="存折" :value="4"></el-option>
-                <el-option label="现金" :value="5"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="付款账号" prop="account_id" v-if="payMoneyExtraParams.account_type != 5">
@@ -246,7 +246,6 @@
                 <el-option label="支付宝" :value="2"></el-option>
                 <el-option label="微信" :value="3"></el-option>
                 <el-option label="存折" :value="4"></el-option>
-                <el-option label="现金" :value="5"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="客户账户">
@@ -310,14 +309,14 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">应付金额：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.balance">{{ DetailCurrentRow.balance }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.amount_payable">{{ DetailCurrentRow.amount_payable }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
           <el-row :gutter="20" style="margin-bottom: 25px;">
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">付款时间：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.pay_date ">{{ DetailCurrentRow.pay_date[0].pay_date }}&nbsp;&nbsp;
+              <span class="receive_detail" v-if="DetailCurrentRow.pay_date && DetailCurrentRow.pay_date.length > 0">{{ DetailCurrentRow.pay_date[0].pay_date }}&nbsp;&nbsp;
                 <span @click="handleLookMore(DetailCurrentRow.pay_date)" style="color: red;cursor: pointer;">查看更多</span></span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
@@ -333,7 +332,7 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">剩余款项：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.amount_payable">{{ DetailCurrentRow.amount_payable }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.balance">{{ DetailCurrentRow.balance }}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
@@ -355,7 +354,9 @@
             </el-col>
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">备注：</span>
-              <span class="receive_detail" v-if="DetailCurrentRow.remark">{{ DetailCurrentRow.remark }}</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.tags && DetailCurrentRow.tags.length > 0">
+                <span v-for="item in DetailCurrentRow.tags">{{ item.content }};</span>
+              </span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
@@ -368,6 +369,48 @@
             <el-col :span="6">
               <span style="color: #409EFF;" class="receive_title">支行：</span>
               <span class="receive_detail" v-if="DetailCurrentRow.complete_date && DetailCurrentRow.customer.account_subbank">{{ DetailCurrentRow.customer.account_subbank }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">手机号：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.contact">{{ DetailCurrentRow.customer.contact }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">租房月数：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer.months">{{ DetailCurrentRow.customer.months }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px;">
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">月单价：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.customer && DetailCurrentRow.customer['prices']">
+                <span v-for="item in DetailCurrentRow.customer['prices']">{{ item }} &nbsp;&nbsp;</span>
+              </span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">租房周期：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.info && DetailCurrentRow.info.months">{{ DetailCurrentRow.info.months }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">开单人：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.staff">{{ DetailCurrentRow.staff }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">部门：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.department">{{ DetailCurrentRow.department }}</span>
+              <span class="receive_detail" v-else>/</span>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom: 25px">
+            <el-col :span="6">
+              <span style="color: #409EFF;" class="receive_title">详情：</span>
+              <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description">
+                {{ `${DetailCurrentRow.description.customer}/${DetailCurrentRow.description.months}/${DetailCurrentRow.description.description}/${DetailCurrentRow.description.staff}`}}</span>
               <span class="receive_detail" v-else>/</span>
             </el-col>
           </el-row>
@@ -568,7 +611,6 @@
     },
     methods: {
       tableRowClassName({row}) {
-        console.log(row);
         if ((row.status === 3 || row.status === 4 || row.status === 2) && row.pendable !== 1) {
           return 'warning-color';
         }
