@@ -507,7 +507,7 @@ export default new Router({
       children: [
         {path: '/clientMessage', component: FinanceCustomer, name: '客户管理'},
         {path: '/foundation', component: FinanceBasicMange, name: '基础管理'},
-        {path: "/financeAccountManagement", component: FinanceAccountMmanagement, name: "账户管理" },
+        {path: "/financeAccountManagement", component: FinanceAccountMmanagement, name: "账户分配" },
         {path: '/accountReceivable', component: AccountReceivable, name: '应收款项'},
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
