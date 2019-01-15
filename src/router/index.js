@@ -512,7 +512,7 @@ export default new Router({
         {path: '/accountPayable', component: AccountPayable, name: '应付款项'},
         {path: '/incomeFlow', component: FinanceRunning, name: '收支流水'},
         {path: '/PendingItem', component: PendingItem, name: '待处理项'},
-        {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
+        // {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
         {path: '/contract', component: Contract, name: "合同管理"},
         {path: '/message', component: Message,name: '消息'}
       ]
