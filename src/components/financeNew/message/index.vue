@@ -16,6 +16,11 @@
         <el-table-column label="接收手机号" prop="receive_id"></el-table-column>
         <el-table-column label="类型" prop="category"></el-table-column>
         <el-table-column label="结果" prop="result"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleSendMessage(scope)" type="primary" v-if="scope.row.result === '失败'">重新发送</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         :total="count"
@@ -48,6 +53,24 @@
       this.getTableList();
     },
     methods: {
+      handleSendMessage(scope) {
+        this.$http.put(this.url + `message/retry/${scope.row.id}`).then(res => {
+          if (res.data.success) {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.message
+            });
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.message
+            });
+          }
+          this.getTableList();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       handlePageChange(page) {
         this.params.pages = page;
         this.getTableList();
