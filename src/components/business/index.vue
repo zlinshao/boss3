@@ -249,7 +249,19 @@
             <el-table
               stripe
               :data="detailData.vacant">
-              <el-table-column label="名称" prop="name"></el-table-column>
+              <el-table-column label="名称">
+                <template slot-scope="scope">
+                  <el-button type="text">
+                    {{scope.row.name}}
+                    <div style="color: #9c9c9c;" v-if="scope.row.house_type">
+                      ({{house_type[scope.row.house_type || scope.row.house_type]}})
+                    </div>
+                    <div style="color: #9c9c9c;" v-if="scope.row.afterRenter">
+                      ({{afterRenter[scope.row.afterRenter || scope.row.afterRenter]}})
+                    </div>
+                  </el-button>
+                </template>
+              </el-table-column>
               <el-table-column label="已空置天数" prop="vacant_days"></el-table-column>
               <el-table-column label="位置" prop="city"></el-table-column>
               <el-table-column label="收房人" prop="user"></el-table-column>
@@ -310,6 +322,8 @@
       return {
         url: globalConfig.server,
         unexpected: '',
+        house_type: {'1': '办公室', '2': '宿舍'},
+        afterRenter: {'1': '未开始的合同'},
         helpParams: {
           city: [], //显示
           compose: ['新绩效组', '旧绩效组'], //数据来源
