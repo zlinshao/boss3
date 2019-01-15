@@ -384,7 +384,7 @@
               <el-table-column
                 label="结算人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.results">{{scope.row.results.staffs.real_name}}</span>
+                  <span v-if="scope.row.results && scope.row.results.staffs && scope.row.results.staffs.real_name">{{scope.row.results.staffs.real_name}}</span>
                   <span v-if="!scope.row.results">暂无</span>
                 </template>
               </el-table-column>
@@ -943,6 +943,7 @@
           this.paramsCollect.time = [];
         }
         this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.paramsCollect}).then((res) => {
+          console.log(res);
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '30000') {
