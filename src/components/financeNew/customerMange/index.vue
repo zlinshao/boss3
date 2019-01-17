@@ -7,6 +7,7 @@
             <span class="repeat_phone"></span><span class="repeat_text">手机</span>
             <span class="repeat_name"></span><span class="repeat_text">姓名</span>
             <span class="repeat_address"></span><span class="repeat_text">地址</span>
+            <span class="repeat_do"></span><span class="repeat_text">待处理项</span>
           </el-form-item>
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="params.search" size="mini" @keyup.enter.native="getLandLordList('search')" clearable>
@@ -103,7 +104,7 @@
               type="selection"
               width="55">
             </el-table-column>
-            <el-table-column label="重复">
+            <el-table-column label="前缀">
               <template slot-scope="scope">
                 <div v-if="scope.row.suppress_dup === 1">
                   <span><i class="el-icon-view"></i>忽略重复</span>
@@ -112,6 +113,7 @@
                   <span class="repeat_phone" v-if="scope.row.dup_field && scope.row.dup_field.contact"></span>
                   <span class="repeat_name" v-if="scope.row.dup_field && scope.row.dup_field.customer_name"></span>
                   <span class="repeat_address" v-if="scope.row.dup_field && scope.row.dup_field.address"></span>
+                  <span class="repeat_do" v-if="scope.row.freeze === 1"></span>
                 </div>
               </template>
             </el-table-column>
@@ -164,7 +166,7 @@
               type="selection"
               width="55">
             </el-table-column>
-            <el-table-column label="重复">
+            <el-table-column label="前缀">
               <template slot-scope="scope">
                 <div v-if="scope.row.suppress_dup === 1">
                   <span><i class="el-icon-view"></i>忽略重复</span>
@@ -173,6 +175,7 @@
                   <span class="repeat_phone" v-if="scope.row.dup_field && scope.row.dup_field.contact"></span>
                   <span class="repeat_name" v-if="scope.row.dup_field && scope.row.dup_field.customer_name"></span>
                   <span class="repeat_address" v-if="scope.row.dup_field && scope.row.dup_field.address"></span>
+                  <span class="repeat_do" v-if="scope.row.freeze === 1"></span>
                 </div>
               </template>
             </el-table-column>
@@ -1662,7 +1665,7 @@
 
 <style lang="scss">
   #customerManage{
-    .repeat_phone,.repeat_name,.repeat_address{
+    .repeat_phone,.repeat_name,.repeat_address,.repeat_do{
       display: inline-block;
       width: 15px;
       height: 15px;
@@ -1678,6 +1681,9 @@
     }
     .repeat_address{
       background-color: #F56C6C;
+    }
+    .repeat_do{
+      background-color: #409EFF;
     }
     .repeat_text{
       margin-right: 15px;
