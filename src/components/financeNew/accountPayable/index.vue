@@ -145,6 +145,37 @@
           </template>
         </el-table-column>
         <el-table-column label="手机号" prop="customerDetail.contact"></el-table-column>
+        <el-table-column label="备注" min-width="300px">
+          <template slot-scope="scope">
+            <span v-if="scope.row.info">
+            <span v-for="item in scope.row.info">{{ item }}/</span>
+          </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="负责人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.customer && scope.row.customer.leader && scope.row.customer.leader.name">
+              {{ scope.row.customer.leader.name }}
+            </span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="开单人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.customer && scope.row.customer.staff && scope.row.customer.staff.name">
+              {{ scope.row.customer.staff.name }}
+            </span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="部门">
+          <template slot-scope="scope">
+            <span v-if="scope.row.department && scope.row.department.name">
+              {{ scope.row.department.name }}
+            </span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" v-if="!isDeleteBin">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="LookPayableDetail(scope.row)">详情</el-button>

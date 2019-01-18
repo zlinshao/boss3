@@ -266,6 +266,41 @@
           label="手机号"
           prop="customer.contact">
         </el-table-column>
+        <el-table-column
+          label="备注"
+          min-width="300px"
+        >
+          <template slot-scope="scope">
+              <span v-if="scope.row.info">
+                <span  slot="content" v-for="item in scope.row.info">{{ item }}/</span>
+              </span>
+              <span v-else>/</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="负责人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.customer && scope.row.customer.leader && scope.row.customer.leader.name">
+              {{ scope.row.customer.leader.name }}
+            </span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="开单人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.customer && scope.row.customer.staff && scope.row.customer.staff.name">
+              {{ scope.row.customer.staff.name }}
+            </span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="部门">
+          <template slot-scope="scope">
+            <span v-if="scope.row.department && scope.row.department.name">
+              {{ scope.row.department.name }}
+            </span>
+            <span v-else>/</span>
+          </template>
+        </el-table-column>
         <el-table-column label="催缴备注">
           <template slot-scope="scope">
             <span v-if="scope.row.remarks" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden">
