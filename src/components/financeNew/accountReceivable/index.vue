@@ -267,14 +267,21 @@
           prop="customer.contact">
         </el-table-column>
         <el-table-column
-          label="备注"
+          label="明细详情"
           min-width="300px"
         >
           <template slot-scope="scope">
               <span v-if="scope.row.info">
-                <span  slot="content" v-for="item in scope.row.info">{{ item }}/</span>
+                <span v-for="item in scope.row.info">{{ item }}/</span>
               </span>
               <span v-else>/</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" min-width="120px">
+          <template slot-scope="scope">
+            <span v-if="scope.row.tags">
+              <span v-for="item in scope.row.tags">{{ item.content }};</span>
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="负责人">
