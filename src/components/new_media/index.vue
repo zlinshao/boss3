@@ -40,6 +40,14 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          :total="num"
+          layout="total,prev,pager,next"
+          :current-page="params.page"
+          :page-size="params.limit"
+          @current-change="handleChangePage"
+          style="text-align: right"
+        ></el-pagination>
       </div>
       <!--高级搜索内容-->
       <div class="highRanking" style="position:static !important;">
@@ -114,18 +122,25 @@
               search: '',
               recommend_type: '',
               recommend_status: '',
+              page: 1,
+              limit: 15
             },
             mediaList: [],
             isHigh: false,
             statusVisible: false,
             currentStatus: '',
             currentId: '',
+            num: 0,
           }
       },
       mounted() {
           this.getInviteList();
       },
       methods: {
+        handleChangePage(page) {
+          this.params.page = page;
+          this.getInviteList();
+        },
         handleDeleteInfo(row) {
           this.$confirm('您确定删除吗?','提示',{
             confirmButtonText: '确定',
@@ -187,9 +202,11 @@
           }).then(res => {
             if(res.data.code === '20000') {
               this.mediaList = res.data.data;
+              this.num = res.data.num;
               this.highGrade();
             }else {
               this.mediaList = [];
+              this.num = 0;
             }
           }).catch(err => {
             console.log(err);
