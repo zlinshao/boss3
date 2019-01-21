@@ -211,14 +211,14 @@
               <div class="describe_border">
                 <el-form size="mini" :model="params" label-width="80px">
                   <el-row v-for="(item, index) in repairInfoLength" :key="index">
-                    <el-col :span="6">
-                      <el-form-item label="维修金额">
-                        <el-input disabled v-model="params.repair_info[index].amount"></el-input>
-                      </el-form-item>
-                    </el-col>
                     <el-col :span="8">
                       <el-form-item label="维修内容">
                         <el-input disabled type="textarea" autosize v-model="params.repair_info[index].content"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="维修金额">
+                        <el-input disabled v-model="params.repair_info[index].amount"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
