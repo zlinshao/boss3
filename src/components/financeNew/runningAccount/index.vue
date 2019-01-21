@@ -93,6 +93,22 @@
                </el-row>
              </el-col>
            </el-row>
+           <el-row class="el_row_border">
+             <el-col :span="12">
+               <el-row>
+                 <el-col :span="8">
+                   <div class="el_col_label">账户</div>
+                 </el-col>
+                 <el-col :span="16" class="el_col_option">
+                   <el-form-item>
+                     <el-select v-model="params.account_id" size="mini" filterable>
+                       <el-option :value="item.id" v-for="item in account_list" :label="item.name" :key="item.id"></el-option>
+                     </el-select>
+                   </el-form-item>
+                 </el-col>
+               </el-row>
+             </el-col>
+           </el-row>
            <div class="btnOperate">
              <el-button size="mini" type="primary" @click="getTableList">搜索</el-button>
              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -149,6 +165,9 @@
         data(){
             return{
               url: globalConfig.finance_server,
+
+              account_name: '',
+              account_list: [],
               //列表
               tableList: [],
               diff_sum: 0,
@@ -215,8 +234,19 @@
         },
         mounted(){
           this.getTableList();
+          this.handleGetAccount();
         },
         methods:{
+          handleGetAccount() {
+            this.$http.get(this.url + 'account/manage/accounts').then(res => {
+              console.log(res);
+              if (res.data.success) {
+                this.account_list = res.data.data;
+              } else {
+                this.account_list = [];
+              }
+            })
+          },
           handleSelRangDate(val) {
             if (val) {
               this.params.operate_start_date = val[0];
@@ -273,6 +303,8 @@
             this.time = "";
             this.operationTime = "";
             this.subject_name = "";
+            this.account_name = '';
+            this.params.account_id = '';
           },
           highGrade() { this.isHigh = false },
           getTableList() {
