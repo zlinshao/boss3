@@ -746,17 +746,17 @@
           inputErrorMessage: '手机号格式不正确'
         }).then(({value}) => {
           this.$http.post(globalConfig.server + '/financial/receipt/send/' + this.electronicReceiptId, {"phone": value}).then((res) => {
-            if (res.data) {
+            if (res.data.code !== '20000') {
               this.$message({
                 type: 'success',
-                message: '发送成功'
+                message: res.data.msg
               });
             }
           })
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '发送失败'
+            message: res.data.msg
           });
         });
       },
