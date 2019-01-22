@@ -1,6 +1,9 @@
 <template >
    <div id="runningAccount">
        <div style="text-align: right;">
+         <span style="color: #67C23A;margin-right: 30px;">收入：{{ receive_sum }}</span>
+         <span style="color: #F56C6C;margin-right: 30px;">支出：{{ expend_sum }}</span>
+         <span style="color: #E6A23C;margin-right: 30px;">差额：{{ diff_sum }}</span>
          <el-input v-model="params.search" @keyup.enter.native="handleGoSearch" clearable style="width: 15%" placeholder="请输入需要搜索的内容" size="mini">
            <el-button slot="append" icon="el-icon-search" @click="handleGoSearch"></el-button>
          </el-input>
@@ -229,7 +232,7 @@
               subjectVisible: false,
               subjectType: '',
               isLoading: false,
-              emptyText: ''
+              emptyText: '',
             }
         },
         mounted(){
