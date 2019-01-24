@@ -106,6 +106,7 @@
           layout="total,prev,pager,next"
           :current-page="params.page"
           style="text-align: right"
+          @current-change="handleChangePage"
         ></el-pagination>
       </div>
     </div>
@@ -135,6 +136,10 @@
           this.getTableList();
       },
       methods: {
+        handleChangePage(page) {
+          this.params.page = page;
+          this.getTableList();
+        },
         handleGoSearch() {
           this.getTableList();
           this.isHigh = false;
