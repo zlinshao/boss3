@@ -858,7 +858,7 @@
       },
       getCurrentDate(val = '') {
         let currentDate = new Date();
-        let M = currentDate.getMonth() + 1;
+        let M = currentDate.getMonth() + 7;
         let yy = currentDate.getFullYear();
         let mm;
         let month = [];
@@ -866,7 +866,7 @@
           mm = (M < 10 ? "0" + M : M);
           return  yy + "-" + mm;
         }
-        for (let i = 0; i < 18; i++) {
+        for (let i = 0; i < 24; i++) {
           if (M < 1) {
             yy = yy - 1;
             M = 12;
@@ -875,6 +875,7 @@
           month.push({value: yy + "-" + mm, label: yy + "-" + mm});
           M--;
         }
+        console.log(month);
         return month;
       },
     },
@@ -886,6 +887,13 @@
       this.getArrangeList(this.arrangeParams);
       this.monthList = this.getCurrentDate();
       this.getCheckList();
+      var MM= new Date().toLocaleDateString().split("/")[0];
+      var dd = new Date().toLocaleDateString().split("/")[1];
+      if (dd < 10){
+        dd = '0' + dd;
+      }
+      this.arrangeParams.arrange_month = `${MM}-${dd}`;
+      console.log(this.arrangeParams.arrange_month)
     }
   };
 </script>
