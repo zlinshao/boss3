@@ -99,6 +99,20 @@
                 </el-col>
               </el-row>
             </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">剩余款项范围</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="params.balance_min" style="width: 120px" clearable placeholder="最小值"></el-input>
+                    -
+                    <el-input style="width: 120px" v-model="params.balance_max" clearable placeholder="最大值"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="getPayableList">搜索</el-button>
@@ -155,7 +169,7 @@
         <el-table-column label="备注" min-width="120px">
           <template slot-scope="scope">
             <span v-if="scope.row.tags">
-              <span v-for="item in scope.row.tags">{{ item.content }};</span>
+              <span v-for="item in scope.row.tags" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden">{{ item.content }};</span>
             </span>
           </template>
         </el-table-column>
@@ -494,6 +508,21 @@
         </el-table>
       </el-dialog>
     </div>
+
+    <!--备注详情-->
+    <el-dialog
+      :visible="tagVisible"
+      @close="tagVisible = false"
+      title="备注详情"
+    >
+      <el-table
+        :data="rightCurrentRow.tags"
+      >
+        <el-table-column label="备注时间" prop="create_time"></el-table-column>
+        <el-table-column label="内容" prop="content"></el-table-column>
+        <el-table-column label="时间" prop="operator_name"></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -507,6 +536,7 @@
     components: {SubjectTree,Organization,PlusPay,RightMenu},
     data() {
       return {
+        tagVisible: false,
         url: globalConfig.finance_server,
         backVisible: false,
         backList: [],
@@ -563,6 +593,8 @@
           search: '', //搜索条件
           page: 1,
           limit: 15,
+          balance_min: '',
+          balance_max: '',
         },
         isHigh: false, //高级
         highSubjectVisible: false,
@@ -826,6 +858,7 @@
             {clickIndex: 'changeSubject',headIcon: 'el-icon-edit',label: '修改科目',data: row},
             {clickIndex: 'delete',headIcon: 'el-icon-delete',label: '删除',data: row},
             {clickIndex: 'callDelete',headIcon: 'el-icon-refresh',label: '回滚',data: row},
+            {clickIndex: 'tagDetail',headIcon: 'el-icon-edit',label: '备注详情',data: row},
           ];
         this.rightClickParams(event);
       },
@@ -873,6 +906,9 @@
         }
         if (val.clickIndex === 'callDelete') {
           this.handleCallBackDelete(val.data);
+        }
+        if (val.clickIndex === 'tagDetail') {
+          this.tagVisible = true;
         }
       },
       //修改科目
@@ -995,6 +1031,8 @@
           search: '', //搜索条件
           page: 1,
           limit: 15,
+          balance_max: '',
+          balance_min: '',
         };
         this.assistParams = {
           subject_name:'',

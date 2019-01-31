@@ -183,6 +183,20 @@
                 </el-col>
               </el-row>
             </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">剩余款项范围</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="form.minPrice" style="width: 120px" clearable placeholder="最小值"></el-input>
+                    -
+                    <el-input style="width: 120px" v-model="form.maxPrice" clearable placeholder="最大值"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
@@ -280,7 +294,7 @@
         <el-table-column label="备注" min-width="120px">
           <template slot-scope="scope">
             <span v-if="scope.row.tags">
-              <span v-for="item in scope.row.tags">{{ item.content }};</span>
+              <span v-for="item in scope.row.tags" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden">{{ item.content }};</span>
             </span>
           </template>
         </el-table-column>
@@ -757,6 +771,21 @@
         </el-table>
       </el-dialog>
     </div>
+
+    <!--备注详情-->
+    <el-dialog
+      :visible="tagVisible"
+      @close="tagVisible = false"
+      title="备注详情"
+    >
+      <el-table
+        :data="rightMenuRow.tags"
+      >
+        <el-table-column label="备注时间" prop="create_time"></el-table-column>
+        <el-table-column label="内容" prop="content"></el-table-column>
+        <el-table-column label="时间" prop="operator_name"></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -771,6 +800,7 @@
     components: {organization, RightMenu, subjectTree, PolishTime},
     data() {
       return {
+        tagVisible: false,
         collectMoneyShow: false,
         isChangeSubject: false,
         customer_list_visible: false,
@@ -1404,12 +1434,14 @@
           {clickIndex: 'collectPolish', headIcon: 'el-icon-date', label: '修改补齐时间',},
           {clickIndex: 'callback', headIcon: 'el-icon-refresh', label: '回滚',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+          {clickIndex: 'tagDetail', headIcon: 'el-icon-edit', label: '备注详情',},
         ];
         this.contextMenuParam(event);
       },
 
       // 右键回调
       clickEvent(val) {
+        console.log(val);
         if (val === 'delete') {
           this.openDelete();
         }
@@ -1440,6 +1472,9 @@
             this.callbackList.push({id: key,value: this.rightMenuRow.running_account_record[key]});
           }
           this.callbackVisible = true;
+        }
+        if (val === 'tagDetail') {
+          this.tagVisible = true;
         }
       },
       handleEditMoney() {
