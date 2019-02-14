@@ -801,7 +801,6 @@
       outArrange() {
         this.exprotLoading = true;
         this.$http.post(this.url + "attendance/sort-excel/sort-out", this.arrangeParams).then(res => {
-          console.log(res);
           return false;
           if (res.status == 200) {
             if (res.data.code == 10000) {
@@ -827,7 +826,6 @@
         this.$http.post(this.url + "attendance/sort-excel/templet-out", this.arrangeParams).then(res => {
           if (res.status == 200) {
             if (res.data.code == 10000) {
-              console.log(res);
               if(res.data.data.uri){
                 this.exprotTemp = false;
                 this.$notify.success({
@@ -881,7 +879,6 @@
     },
     created() {
       this.getQuery();
-      this.getCurrentMonthDays(this.arrangeParams.arrange_month);
     },
     mounted() {
       this.getArrangeList(this.arrangeParams);
@@ -893,7 +890,7 @@
         dd = '0' + dd;
       }
       this.arrangeParams.arrange_month = `${MM}-${dd}`;
-      console.log(this.arrangeParams.arrange_month)
+      this.getCurrentMonthDays(this.arrangeParams.arrange_month);
     }
   };
 </script>

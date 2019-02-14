@@ -320,6 +320,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
+              <el-button type="primary" size="mini" @click="outNumber">导出</el-button>  
               <el-button type="primary" size="mini" @click="highSearch">搜索</el-button>
               <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
               <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
@@ -2009,6 +2010,16 @@
       // =============================================
     },
     methods: {
+      outNumber() {
+        this.$http.get(globalConfig.server + `lease/collect/count`,{responseType: 'arraybuffer',params: {
+          sign_time: this.params.sign_time,
+          lord_start_time: this.params.lord_start_time
+        }}).then(res => {
+          this.$exportData(res.data);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       //备注确定
       handleMarkInfo() {
         var obj = {};
