@@ -2015,7 +2015,7 @@
         var obj = {
           sign_time: this.params.sign_time,
           lord_start_time: this.params.lord_start_time,
-          staff: this.params.staff
+          user_id: this.params.user_id
         };
         if(this.activeName === 'second') {
           root = 'lease/collect/renter_count';
