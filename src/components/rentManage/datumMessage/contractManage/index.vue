@@ -320,7 +320,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button type="primary" size="mini" @click="outNumber">导出</el-button>  
+              <el-button type="primary" size="mini" @click="outNumber">导出</el-button>
               <el-button type="primary" size="mini" @click="highSearch">搜索</el-button>
               <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
               <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
@@ -2012,14 +2012,16 @@
     methods: {
       outNumber() {
         var root = 'lease/collect/lord_count';
+        var obj = {
+          sign_time: this.params.sign_time,
+          lord_start_time: this.params.lord_start_time,
+          user_id: this.params.user_id
+        };
         if(this.activeName === 'second') {
           root = 'lease/collect/renter_count';
+          obj.lord_start_time = this.params.renter_start_time;
         }
-        this.$http.get(globalConfig.server + root,{responseType: 'arraybuffer',params: {
-          sign_time: this.params.sign_time,
-          lord_start_time: this.params.lord_start_time
-        }}).then(res => {
-          console.log(res);
+        this.$http.get(globalConfig.server + root,{responseType: 'arraybuffer',params: obj}).then(res => {
           this.$exportData(res.data);
         }).catch(err => {
           console.log(err);

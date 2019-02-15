@@ -465,6 +465,14 @@
         this.getOnJobStatus();
       },
       initial() {
+        //请空部门、岗位、职位、推荐人
+        this.params.department_id = [];
+        this.params.duty_id = [];
+        this.params.position_id = [];
+        this.params.recommender = '';
+        this.emptyDepart('department_id');
+        this.emptyDepart('recommender');
+
         this.params.entry_way = {
           entry_type: '',
           entry_mess: '',
