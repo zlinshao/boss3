@@ -2012,14 +2012,16 @@
     methods: {
       outNumber() {
         var root = 'lease/collect/lord_count';
-        if(this.activeName === 'second') {
-          root = 'lease/collect/renter_count';
-        }
-        this.$http.get(globalConfig.server + root,{responseType: 'arraybuffer',params: {
+        var obj = {
           sign_time: this.params.sign_time,
           lord_start_time: this.params.lord_start_time
-        }}).then(res => {
-          console.log(res);
+        };
+        if(this.activeName === 'second') {
+          root = 'lease/collect/renter_count';
+          obj.lord_start_time = this.params.renter_start_time;
+        }
+        console.log(this.params);
+        this.$http.get(globalConfig.server + root,{responseType: 'arraybuffer',params: obj}).then(res => {
           this.$exportData(res.data);
         }).catch(err => {
           console.log(err);
