@@ -407,7 +407,7 @@
               </el-table-column>
               <el-table-column label="交接">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.last_time_handover_info">{{ scope.row.last_time_handover_info.user_id}}/{{ scope.row.last_time_handover_info.org}}/
+                  <span style="cursor: pointer" @click.self="handleGetHandoverImg(scope.row)" v-if="scope.row.last_time_handover_info">{{ scope.row.last_time_handover_info.user_id}}/{{ scope.row.last_time_handover_info.org}}/
                     {{scope.row.last_time_handover_info.handover_time }}
                   </span>
                   <span v-else>/</span>
@@ -550,11 +550,14 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <handover-info :houseId="houseIds" :hand-visible="handoverVisible" @close="handleCloseHand" :hand-info="handoverInfo" :hand-clear="handoverIsClear"></handover-info>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
+  import Upload from '../../common/UPLOAD.vue';
   import Organization from '../../common/organization.vue'
   import FollowRecordTab from './components/followRecordTab.vue'
   import DecorateRecordTab from './components/decorateRecordTab.vue'
@@ -573,16 +576,21 @@
 
   import AddWebInfo from './components/addWebsiteInfo'
   import HouseSearch from '../../common/houseSearch'
+  import HandoverInfo from './components/handover-info.vue'
 
   export default {
     name: 'hello',
     components: {
       RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail, Download,
       AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab, ReportRecord, AddWebInfo,
-      HouseSearch
+      HouseSearch,Upload,HandoverInfo
     },
     data() {
       return {
+        houseIds: '',
+        handoverIsClear: false,
+        handoverVisible: false,
+        handoverInfo: [],
         is_associate: '',
         associateInfo: {
           new_user_id: '',
@@ -720,6 +728,27 @@
 //      });
     },
     methods: {
+      handleCloseHand() {
+        this.handoverVisible = false;
+        this.getData();
+      },
+      handleGetHandoverImg(row) {
+        this.$http.get(globalConfig.server + `coreproject/houses/handover_info/${row.id}`).then(res => {
+          if (res.data.code === '20020') {
+            this.handoverInfo = res.data.data;
+            this.handoverVisible = true;
+            this.houseIds = row.id;
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: '获取信息失败'
+            });
+            return false;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       handleOkAssociate() {
         this.associateInfo.id = this.operateArray
         this.$http.post(globalConfig.server + 'coreproject/houses/batch_update_responsible',this.associateInfo).then(res => {
