@@ -537,7 +537,8 @@
         <el-form-item label="交接时间">
           <el-date-picker
             v-model="associateInfo.handover_time"
-            value-format="yyyy-MM-dd"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
             placeholder="请选择交接时间"
             size="mini"
             @close="handleCancelAssociate"

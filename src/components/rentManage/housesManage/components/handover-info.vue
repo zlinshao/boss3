@@ -3,7 +3,7 @@
     <el-dialog :visible="handoverVisible" title="交接详情" @close="handleClose" width="30%">
       <div>
         <div style="padding-left: 30px" class="scroll_bar">
-          <div v-for="(item,key) in handoverInfo">
+          <div v-for="(item,key) in handoverInfo" :key="key">
             交接人：<span style="color: #409EFF">{{ item.user_name }}</span> 部门：<span style="color: #409EFF">{{ item.org_name }}</span>
             交接时间：<span style="color: #409EFF">{{ item.handover_time }}</span>
             <Upload :ID="'handImg' + key" :editImage="img_info[key]" @getImg="handleGetImage" :isClear="handoverIsClear"></Upload>
