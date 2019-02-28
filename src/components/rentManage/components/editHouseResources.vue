@@ -1054,6 +1054,7 @@
             this.params.remark = data.remark;
             //照片
             this.identity_photo = data.identity_photo || {};
+            console.log(this.identity_photo,'111111111111111111111111');
             this.bank_photo = data.bank_photo || {};
             this.photo = data.photo || {};
             this.water_photo = data.water_photo || {};

@@ -38,9 +38,9 @@
               <el-button type="primary" :disabled="!operateArray.length" @click="openOrganizationModal('')">分配
               </el-button>
             </el-form-item>
-            <!--<el-form-item>-->
-            <!--<el-button type="primary"><i class="el-icon-sort"></i></el-button>-->
-            <!--</el-form-item>-->
+            <el-form-item>
+              <el-button type="primary" :disabled="!operateArray.length" @click="handleAssociate">交接</el-button>
+            </el-form-item>
           </el-form>
         </div>
 
@@ -218,6 +218,7 @@
               @selection-change="handleSelectionChange"
               @cell-mouse-enter="cellMouseEnter"
               @cell-mouse-leave="cellMouseLeave"
+              ref="multipleTable"
               style="width: 100%">
               <el-table-column
                 type="selection"
@@ -404,7 +405,14 @@
                   </a>
                 </template>
               </el-table-column>
-
+              <el-table-column label="交接">
+                <template slot-scope="scope">
+                  <span style="cursor: pointer" @click.self="handleGetHandoverImg(scope.row)" v-if="scope.row.last_time_handover_info">{{ scope.row.last_time_handover_info.user_id}}/{{ scope.row.last_time_handover_info.org}}/
+                    {{scope.row.last_time_handover_info.handover_time }}
+                  </span>
+                  <span v-else>/</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="负责人">
                 <template slot-scope="scope">
@@ -512,11 +520,45 @@
         <el-button type="primary" size="mini" @click="handleMarkInfo">确定</el-button>
       </div>
     </el-dialog>
+
+    <!--交接-->
+    <el-dialog
+      :visible.sync="associateVisible"
+      title="交接信息"
+      width="20%"
+    >
+      <el-form :model="associateName" label-width="100px">
+        <el-form-item label="新负责人">
+          <el-input placeholder="请选择" size="mini" style="width: 250px" v-model="associateName.new_user_id" @focus="handleFocusOssociate('new_user_id','staff')"></el-input>
+        </el-form-item>
+        <el-form-item label="部门">
+          <el-input  disabled placeholder="请选择" size="mini" style="width: 250px" v-model="associateName.new_org_id" @focus="handleFocusOssociate('new_org_id','depart')"></el-input>
+        </el-form-item>
+        <el-form-item label="交接时间">
+          <el-date-picker
+            v-model="associateInfo.handover_time"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            placeholder="请选择交接时间"
+            size="mini"
+            @close="handleCancelAssociate"
+            @cancel="handleCancelAssociate"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="handleOkAssociate">确定</el-button>
+          <el-button size="mini" @click="handleCancelAssociate">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <handover-info :houseId="houseIds" :hand-visible="handoverVisible" @close="handleCloseHand" :hand-info="handoverInfo" :hand-clear="handoverIsClear"></handover-info>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
+  import Upload from '../../common/UPLOAD.vue';
   import Organization from '../../common/organization.vue'
   import FollowRecordTab from './components/followRecordTab.vue'
   import DecorateRecordTab from './components/decorateRecordTab.vue'
@@ -535,16 +577,33 @@
 
   import AddWebInfo from './components/addWebsiteInfo'
   import HouseSearch from '../../common/houseSearch'
+  import HandoverInfo from './components/handover-info.vue'
 
   export default {
     name: 'hello',
     components: {
       RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail, Download,
       AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab, ReportRecord, AddWebInfo,
-      HouseSearch
+      HouseSearch,Upload,HandoverInfo
     },
     data() {
       return {
+        houseIds: '',
+        handoverIsClear: false,
+        handoverVisible: false,
+        handoverInfo: [],
+        is_associate: '',
+        associateInfo: {
+          new_user_id: '',
+          new_org_id: '',
+          handover_time: '',
+          id: []
+        },
+        associateName: {
+          new_user_id: '',
+          new_org_id: '',
+        },
+        associateVisible: false,
         showNotice: '',
         markInfoVisible: false,
         markInfo: '',
@@ -670,6 +729,74 @@
 //      });
     },
     methods: {
+      handleCloseHand() {
+        this.handoverVisible = false;
+        this.getData();
+      },
+      handleGetHandoverImg(row) {
+        this.$http.get(globalConfig.server + `coreproject/houses/handover_info/${row.id}`).then(res => {
+          if (res.data.code === '20020') {
+            this.handoverInfo = res.data.data;
+            this.handoverVisible = true;
+            this.houseIds = row.id;
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: '获取信息失败'
+            });
+            return false;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleOkAssociate() {
+        this.associateInfo.id = this.operateArray
+        this.$http.post(globalConfig.server + 'coreproject/houses/batch_update_responsible',this.associateInfo).then(res => {
+          console.log(res);
+          if (res.data.code === '20020') {
+            this.$notify.success({
+              title: '成功',
+              message: '交接成功'
+            });
+            this.handleCancelAssociate();
+            this.getData();
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: '交接失败'
+            });
+            this.handleCancelAssociate();
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleCancelAssociate() {
+        this.associateInfo = {
+          new_user_id: '',
+          new_org_id: '',
+          handover_time: '',
+        };
+        this.associateName = {
+          new_user_id: '',
+          new_org_id: '',
+        };
+        this.is_associate = '';
+        this.operateArray = [];
+        this.$refs['multipleTable'].clearSelection();
+        this.associateVisible = false;
+      },
+      handleFocusOssociate(type,aa) {
+        this.is_associate = type;
+        this.length = 1;
+        this.organizationType = aa;
+        this.organizationDialog = true;
+      },
+      handleAssociate() {
+        console.log(this.operateArray);
+        this.associateVisible = true;
+      },
       //鼠标移入
       cellMouseEnter(row,column) {
         if (column.property === "name") {
@@ -862,6 +989,11 @@
               message: '已取消分配',
             })
           });
+        }else if (this.is_associate) {
+          this.associateInfo['new_user_id'] = val[0].id;
+          this.associateInfo['new_org_id'] = val[0].org[0].id;
+          this.associateName['new_user_id'] = val[0].name;
+          this.associateName['new_org_id'] = val[0].org[0].name;
         } else {
           this.formInline.org_id = val[0].id;
           this.department_name = val[0].name;

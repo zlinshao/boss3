@@ -1170,7 +1170,8 @@
       },
       // 合同是否存在
       contractStatus(main) {
-        this.$http.get(this.urls + 'coreproject/lord/has_lord/' + main.house_id).then(res => {
+        this.$http.get(globalConfig.server + '/coreproject/lord/has_lord/' + main.house_id).then(res => {
+          console.log(res);
           if (res.data !== true) {
             this.$confirm('合同已存在！', '提示', {
               confirmButtonText: '确定',
