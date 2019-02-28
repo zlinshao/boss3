@@ -1013,12 +1013,11 @@
         // console.log(val);
       },
       handleOkCity() {
-        this.myData({city_id: this.city_id},1);
+        this.myData({city_id: this.city_id,type: 2},1);
         this.city_visible = false;
       },
       getCityList() {
         this.$http.get(globalConfig.server + 'workflow/process/city').then(res => {
-          console.log(res);
           if (res.data.code === '20020') {
             this.city_list = res.data.data;
             this.city_visible = true;
