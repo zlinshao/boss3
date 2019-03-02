@@ -320,7 +320,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button type="primary" size="mini" @click="outNumber">导出</el-button>  
+              <el-button type="primary" size="mini" @click="outNumber">导出</el-button>
               <el-button type="primary" size="mini" @click="highSearch">搜索</el-button>
               <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
               <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
