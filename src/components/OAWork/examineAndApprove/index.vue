@@ -864,6 +864,7 @@
       :visible="city_visible"
       title="城市筛选"
       width="40%"
+      @close="city_visible = false"
     >
       <el-checkbox-group v-model="city_id" @change="handleChangeCity">
         <el-checkbox v-for="(city,key) in city_list" :label="key" :key="city">{{city}}</el-checkbox>
@@ -1076,6 +1077,8 @@
         this.params = {};
       },
       tabActive(val) {
+        this.city_list = [];
+        this.city_id = [];
         this.close_();
         this.finActive = 'unfinished';
         this.readActive = 'unread';
@@ -1130,6 +1133,10 @@
         }
       },
       search(val) {
+        if (this.city_id) {
+          this.params.type = 2;
+          this.params.city_id = this.city_id;
+        }
         this.myData(this.params, val);
       },
       // 待办事项
