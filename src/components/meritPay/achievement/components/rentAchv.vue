@@ -105,6 +105,7 @@
                 <template slot-scope="scope">
                     <span v-if="scope.row.lord_new_rent=='new'">新收新租</span>
                     <span v-else-if="scope.row.lord_new_rent=='second'">二次出租</span>
+                    <span v-else-if="scope.row.lord_new_rent=='continue'">续租</span>
                     <span v-else="scope.row.lord_new_rent==''">未知</span>
                 </template>
             </el-table-column>
@@ -133,6 +134,7 @@
                 <template slot-scope="scope">
                     <span v-if="scope.row.lord_new_rent=='new'">{{scope.row.res.rent.basic_achievement}}</span>
                     <span v-else-if="scope.row.lord_new_rent=='second'">{{scope.row.res.all.basic_achievement}}</span>
+                    <span v-else-if="scope.row.lord_new_rent=='continue'">{{scope.row.res.all.basic_achievement}}</span>
                     <span v-else="scope.row.lord_new_rent==''">0</span>
                 </template>
             </el-table-column>
@@ -140,6 +142,7 @@
                 <template slot-scope="scope">
                     <span v-if="scope.row.lord_new_rent=='new'">{{scope.row.res.rent.overflow}}</span>
                     <span v-else-if="scope.row.lord_new_rent=='second'">{{scope.row.res.all.overflow}}</span>
+                    <span v-else-if="scope.row.lord_new_rent=='continue'">{{scope.row.res.all.overflow}}</span>
                     <span v-else="scope.row.lord_new_rent==''">0</span>
                 </template>
             </el-table-column>
@@ -147,6 +150,7 @@
                 <template slot-scope="scope">
                     <span v-if="scope.row.lord_new_rent=='new'">{{scope.row.res.rent.push_money}}</span>
                     <span v-else-if="scope.row.lord_new_rent=='second'">{{scope.row.res.all.push_money}}</span>
+                    <span v-else-if="scope.row.lord_new_rent=='continue'">{{scope.row.res.all.push_money}}</span>
                     <span v-else="scope.row.lord_new_rent==''">0</span>
                 </template>
             </el-table-column>
@@ -154,6 +158,7 @@
                 <template slot-scope="scope">
                     <span v-if="scope.row.lord_new_rent=='new'">{{scope.row.res.rent.real_money}}</span>
                     <span v-else-if="scope.row.lord_new_rent=='second'">{{scope.row.res.all.real_money}}</span>
+                    <span v-else-if="scope.row.lord_new_rent=='continue'">{{scope.row.res.all.real_money}}</span>
                     <span v-else="scope.row.lord_new_rent==''">0</span>
                 </template>
             </el-table-column>

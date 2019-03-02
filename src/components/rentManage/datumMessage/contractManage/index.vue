@@ -2011,19 +2011,28 @@
     },
     methods: {
       outNumber() {
-        var root = 'lease/collect/lord_count';
-        if(this.activeName === 'second') {
-          root = 'lease/collect/renter_count';
+        if (this.activeName === 'first') {
+          this.$http.get(globalConfig.server + 'lease/collect/lord_count',{responseType: 'arraybuffer',params: {
+              sign_time: this.params.sign_time,
+              lord_start_time: this.params.lord_start_time,
+              user_id: this.params.user_id
+            }}).then(res => {
+            this.$exportData(res.data);
+          }).catch(err => {
+            console.log(err);
+          })
         }
-        this.$http.get(globalConfig.server + root,{responseType: 'arraybuffer',params: {
-          sign_time: this.params.sign_time,
-          lord_start_time: this.params.lord_start_time
-        }}).then(res => {
-          console.log(res);
-          this.$exportData(res.data);
-        }).catch(err => {
-          console.log(err);
-        })
+        if(this.activeName === 'second') {
+          this.$http.get(globalConfig.server + 'lease/collect/renter_count',{responseType: 'arraybuffer',params: {
+              sign_time: this.params.sign_time,
+              renter_start_time: this.params.renter_start_time,
+              user_id: this.params.user_id
+            }}).then(res => {
+            this.$exportData(res.data);
+          }).catch(err => {
+            console.log(err);
+          })
+        }
       },
       //备注确定
       handleMarkInfo() {

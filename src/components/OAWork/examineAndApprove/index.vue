@@ -4,6 +4,9 @@
          v-if="activeName!='sixth'">
       <div class="highSearch">
         <el-form :inline="true" onsubmit="return false" size="mini">
+          <el-form-item v-if="activeName === 'second'">
+            <el-button type="primary" @click="getCityList">城市筛选</el-button>
+          </el-form-item>
           <el-form-item>
             <el-input placeholder="小区名称/地址/位置" v-model="params.q" @keyup.enter.native="search(1)" size="mini"
                       clearable>
@@ -855,6 +858,22 @@
 
     <!--报备详情-->
     <ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>
+
+    <!--城市-->
+    <el-dialog
+      :visible="city_visible"
+      title="城市筛选"
+      width="40%"
+    >
+      <el-checkbox-group v-model="city_id" @change="handleChangeCity">
+        <el-checkbox v-for="(city,key) in city_list" :label="key" :key="city">{{city}}</el-checkbox>
+      </el-checkbox-group>
+
+      <div style="width: 100%;text-align: center;margin-top: 30px">
+        <el-button size="mini" type="primary" @click="handleOkCity">确定</el-button>
+        <el-button size="mini" @click="city_visible = false;">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -924,6 +943,9 @@
     },
     data() {
       return {
+        city_visible: false,
+        city_list: [],
+        city_id: [],
         address: globalConfig.server,
         amount: 0,
         paging: 0,
@@ -987,6 +1009,29 @@
       this.tabActive('second');
     },
     methods: {
+      handleChangeCity(val) {
+        // console.log(val);
+      },
+      handleOkCity() {
+        this.myData({city_id: this.city_id,type: 2},1);
+        this.city_visible = false;
+      },
+      getCityList() {
+        this.$http.get(globalConfig.server + 'workflow/process/city').then(res => {
+          if (res.data.code === '20020') {
+            this.city_list = res.data.data;
+            this.city_visible = true;
+          } else {
+            this.city_list = [];
+            this.$notify.warning({
+              title: '警告',
+              message: '获取城市列表失败'
+            })
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       rowBackground({row, rowIndex}) {
         if (this.reportAllID.includes(row.id)) return 'rowBackground';
       },
