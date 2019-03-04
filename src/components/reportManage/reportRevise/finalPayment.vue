@@ -290,7 +290,6 @@
     },
     created() {
       this.getDictionary();
-      console.log(this.params)
     },
     mounted(){
         this.dicts("");
@@ -329,7 +328,6 @@
       //汇款账户
       dicts(val) {
         this.receiptNum();
-        console.log(sessionStorage.personal)
         // 收款帐户
         let per = JSON.parse(localStorage.personal);
         this.$http.get(this.urls + 'financial/account_alloc/map?org_id=' + per.org[0].id).then(res => {
@@ -339,8 +337,6 @@
             res.data.data.forEach(item => {
               this.value8.push(item.bank_info);
             });
-            // this.finalDetail(val);
-            console.log(this.value8)
           }
         });
 
@@ -361,7 +357,6 @@
               this.params.receipt.push(receipt);
             }
           }
-          console.log(this.params.receipt)
         });
       },
       // select 显示
