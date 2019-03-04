@@ -192,6 +192,36 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">检查次数</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="formInline.check_num" type="number" placeholder="请输入"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">行政检查标识</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.check_flag">
+                        <el-option :value="0" label="全部"></el-option>
+                        <el-option :value="1" label="行政检查"></el-option>
+                        <el-option :value="2" label="行政未检查"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -472,16 +502,31 @@
 
             <!--行政检查-->
             <el-tab-pane name="seventh" label="行政检查记录">
-              <el-table :data="checkData">
+              <el-table
+                :data="checkData"
+                @row-contextmenu="checkMenu"
+              >
                 <el-table-column label="检查次数" prop="check_num"></el-table-column>
                 <el-table-column label="检查时间" prop="check_datetime"></el-table-column>
-                <el-table-column label="检查人" prop="checkers"></el-table-column>
-                <el-table-column label="现场录像" prop="check_photo"></el-table-column>
-                <el-table-column label="检查评级" prop="check_level"></el-table-column>
-                <el-table-column label="行政备注" prop="hr_content"></el-table-column>
-                <el-table-column label="跟进人" prop="followers"></el-table-column>
+                <el-table-column label="检查人" prop="checkers.real_name"></el-table-column>
+                <el-table-column label="现场录像" prop="check_photo">
+                  <template slot-scope="scope">
+                      <i style="font-size: 16px;cursor: pointer" class="el-icon-picture" @click="handleLookPic(scope.row.check_photo)"></i>
+                  </template>
+                </el-table-column>
+                <el-table-column label="检查评级" prop="check_level">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.check_level === 1 ? '良好' : scope.row.check_level === 2 ? '一般' : scope.row.check_level === 3 ? '差' : '特差'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="行政备注" prop="check_content"></el-table-column>
+                <el-table-column label="跟进人" prop="followers.real_name"></el-table-column>
                 <el-table-column label="跟进时间" prop="follow_datetime"></el-table-column>
-                <el-table-column label="跟进录像" prop="follow_photo"></el-table-column>
+                <el-table-column label="跟进录像" prop="follow_photo">
+                  <template slot-scope="scope">
+                      <i style="font-size: 16px;cursor: pointer" class="el-icon-picture" @click="handleLookPic(scope.row.follow_photo)"></i>
+                  </template>
+                </el-table-column>
                 <el-table-column label="跟进备注" prop="follow_content"></el-table-column>
               </el-table>
               <el-pagination
@@ -587,14 +632,16 @@
         <el-form :model="add_check" size="mini" label-width="100px">
           <el-form-item label="检查时间">
             <el-date-picker
-              v-model="add_check.time"
+              v-model="add_check.check_datetime"
               type="datetime"
+              value-format="yyyy-MM-dd hh:mm:ss"
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="检查人">
-            <el-input placeholder="请选择" @focus="handleSelMan(1,'staff')"></el-input>
+            <el-input placeholder="请选择" v-model="add_check.user_name" @focus="handleSelMan(1,'staff')"></el-input>
           </el-form-item>
           <el-form-item label="现场录像">
+            <Upload :ID="'checkImg'" :editImage="editImage" @getImg="handleGetCheckVideo" :isClear="checkIsClear"></Upload>
           </el-form-item>
           <el-form-item label="检查评级">
             <el-select v-model="add_check.check_level">
@@ -605,18 +652,88 @@
             </el-select>
           </el-form-item>
           <el-form-item label="行政备注">
-            <el-input type="textarea" :rows="6" v-model="add_check.hr_content"></el-input>
+            <el-input type="textarea" :rows="6" v-model="add_check.check_content"></el-input>
           </el-form-item>
           <el-form-item>
             <div style="text-align: right">
-              <el-button type="primary" size="small">确定</el-button>
-              <el-button>取消</el-button>
+              <el-button type="primary" size="small" @click="handleAddCheck">确定</el-button>
+              <el-button @click="handleCancelCheck">取消</el-button>
             </div>
           </el-form-item>
         </el-form>
       </div>
     </el-dialog>
 
+    <!--查看录像-->
+    <el-dialog
+      :visible="lookVisible"
+      title="查看录像"
+      @close="handleCloseLook"
+    >
+      <div style="display: flex;" v-if="lookInfo">
+        <div v-for="(val,key) in lookInfo" :key="key" style="margin-right: 20px;overflow: hidden;">
+          <img style="width: 150px;height: 120px;" :src="val" alt="" data-magnify="" :data-src="val" v-if="val.indexOf('mp4') === -1">
+          <video style="width: 180px;height: 120px" controls :src="val" v-if="val.indexOf('mp4') !== -1"></video>
+        </div>
+      </div>
+      <div v-else>暂无录像信息</div>
+    </el-dialog>
+
+    <!--查看信息-->
+    <el-dialog
+      :visible="lookInfoVisible"
+      title="查看信息"
+      @close="handleCancelLookInfo"
+      width="40%"
+    >
+      <div>
+        <div style="width: 100%;padding: 15px 0;border-bottom: 1px solid #808080">
+          <el-form size="mini" label-width="120px">
+            <el-form-item label="检查时间:">
+              <span>{{ checkDetail.check_datetime }}</span>
+            </el-form-item>
+            <el-form-item label="检查人:">
+              <span>{{ checkDetail && checkDetail.checkers && checkDetail.checkers.real_name }}</span>
+            </el-form-item>
+            <el-form-item label="现场录像:">
+              <span v-for="val in checkDetail.check_photo" style="margin-right: 15px"><img style="width: 100px;height: 70px;" :src="val" alt="" data-magnify="" :data-src="val"></span>
+            </el-form-item>
+            <el-form-item label="检查评级:">
+              <span>
+                {{ checkDetail.check_level === 1 ? '良好' : checkDetail.check_level === 2 ? '一般' : checkDetail.check_level === 3 ? '差' : '特差'}}
+              </span>
+            </el-form-item>
+            <el-form-item label="检查备注:">
+              <span>{{ checkDetail.check_content }}</span>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div style="margin-top: 30px">
+          <el-form :model="add_check_info" size="mini" label-width="120px">
+            <el-form-item label="跟进时间">
+              <el-date-picker
+                v-model="add_check_info.follow_datetime"
+                value-format="yyyy-MM-dd hh:mm:ss"
+                style="width: 300px"
+                placeholder="请选择"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="跟进影像">
+              <Upload :ID="'checkInfoImg'" :editImage="editInfoimg" @getImg="handleGetCheckInfoVideo" :isClear="checkIsClear"></Upload>
+            </el-form-item>
+            <el-form-item label="跟进备注">
+              <el-input style="width: 300px" v-model="add_check_info.follow_content" placeholder="请输入" type="textarea"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <div style="text-align: right">
+                <el-button type="primary" size="mini" @click="handleOkAddInfo">确定</el-button>
+                <el-button size="mini">取消</el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </el-dialog>
     <handover-info :houseId="houseIds" :hand-visible="handoverVisible" @close="handleCloseHand" :hand-info="handoverInfo" :hand-clear="handoverIsClear"></handover-info>
   </div>
 </template>
@@ -653,6 +770,19 @@
     },
     data() {
       return {
+        lookVisible: false,
+        lookInfo: {},
+        lookInfoVisible:false,
+        checkDetail: '',
+        add_check_info: {
+          follow_datetime: '',
+          follow_album_file: '',
+          follow_content: ''
+        },
+        editInfoimg: '',
+
+        editImage: '',
+        checkIsClear: false,
         checkInfo_visible: false,
         checkParams: {
           page: 1,
@@ -662,12 +792,13 @@
         checkData: [],
         checkCount: 0,
         add_check: {
-          time: '',
-          check_man: '',
-          user_id: '',
-          video: '',
+          house_id: '',
+          check_datetime: '',
+          check_user_id: '',
+          album_file: '',
           check_level: '',
-          hr_content: ''
+          check_content: '',
+          user_name: ''
         },
         is_check: false,
 
@@ -713,7 +844,9 @@
           area: '',                         //面积
           suggest_price: '',                //价格
           // current_ready_days: '',           //空置时长
-          source_web: 1 //来源
+          source_web: 1, //来源
+          check_num: '',
+          check_flag: ''
         },
         decoration: [],
         property_type: [],
@@ -812,6 +945,92 @@
 //      });
     },
     methods: {
+      handleGetCheckInfoVideo(val) {
+        this.add_check_info.follow_album_file = val[1];
+      },
+      handleOkAddInfo() {
+        console.log(this.add_check_info);
+        this.$http.put(globalConfig.server + `core/check/${this.houseId}`,this.add_check_info).then(res => {
+          console.log(res);
+          if (res.data.code === '70000') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.handleCancelLookInfo();
+          }  else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            })
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleGetInfo() {
+        this.$http.get(globalConfig.server + `core/check/${this.houseId}`).then(res => {
+          console.log(res);
+          if (res.data.code === '70000') {
+            this.checkDetail = res.data.data;
+            this.lookInfoVisible = true;
+          } else {
+            this.checkDetail = '';
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+
+      handleCancelLookInfo() {
+        this.houseId = '';
+        this.checkDetail = '';
+        this.add_check_info = {
+          follow_datetime: '',
+          follow_album_file: '',
+          follow_content: ''
+        };
+        this.lookInfoVisible = false;
+      },
+      checkMenu(row, event) {
+        this.houseId = row.id;
+        this.lists = [
+          {clickIndex: 'lookCheck', headIcon: 'el-icon-edit', label: '查看记录',},
+        ];
+        this.contextMenuParam(event);
+      },
+      handleCloseLook() {
+        this.lookInfo = {};
+        this.lookVisible = false;
+      },
+      handleLookPic(photo) {
+        this.lookInfo = photo;
+        this.lookVisible = true;
+      },
+      handleGetCheckVideo(val) {
+        this.add_check.album_file = val[1];
+      },
+      handleAddCheck() {
+        this.$http.post(globalConfig.server + 'core/check',this.add_check).then(res =>{
+          console.log(res);
+          if (res.data.code === '70000') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          }  else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            })
+          }
+          this.getData();
+          this.getCheckList();
+          this.handleCancelCheck();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       handleSelMan(len,type) {
         this.organizationDialog = true;
         this.length = len;
@@ -819,6 +1038,15 @@
         this.is_check = true;
       },
       handleCancelCheck() {
+        this.add_check = {
+          house_id: '',
+          check_datetime: '',
+          check_user_id: '',
+          album_file: '',
+          check_level: '',
+          check_content: '',
+          user_name: ''
+        };
         this.is_check = false;
         this.checkInfo_visible = false;
       },
@@ -827,12 +1055,12 @@
         this.getCheckList();
       },
       getCheckList() {
-        console.log(this.houseId);
-        this.$http.get(globalConfig.server + 'core/check',this.checkParams).then(res => {
-          console.log(res);
-          if (res.data.code === '70020') {
-            this.checkData = res.data.data;
-            this.checkCount = res.data.count;
+        this.$http.get(globalConfig.server + 'core/check',{
+          params: this.checkParams
+        }).then(res => {
+          if (res.data.code === '70000') {
+            this.checkData = res.data.data.data;
+            this.checkCount = res.data.data.count;
           } else {
             this.checkData = [];
             this.checkCount = 0;
@@ -1063,6 +1291,8 @@
         this.formInline.area = '';
         this.formInline.suggest_price = '';
         this.formInline.current_ready_days = '';
+        this.formInline.check_flag = '';
+        this.formInline.check_num = '';
       },
       search() {
         this.isHigh = false;
@@ -1092,6 +1322,10 @@
         this.department_name = '';
       },
       selectMember(val) {
+        if (this.is_check) {
+          this.add_check.check_user_id = val[0].id;
+          this.add_check.user_name = val[0].name;
+        }
         this.organizationDialog = false;
         if (this.organizationType === '') {
           this.$confirm('分配后将不可撤回, 是否继续?', '提示', {
@@ -1175,6 +1409,7 @@
       //房屋右键
       houseMenu(row, event) {
         this.houseId = row.id;
+        this.add_check.house_id = row.id;
         this.houseDetail = row;
         this.collectData = row.lords;
         this.oldHouseName = row.name;
@@ -1259,6 +1494,9 @@
             break;
           case 'checkInfo':
             this.checkInfo_visible = true;
+            break;
+          case 'lookCheck':
+            this.handleGetInfo();
             break;
         }
       },
