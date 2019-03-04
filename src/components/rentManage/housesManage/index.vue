@@ -445,7 +445,7 @@
           </div>
         </div>
         <div class="myDetail">
-          <el-tabs type="border-card" v-model="activeName">
+          <el-tabs type="border-card" v-model="activeName" @tab-click="handleChangeTab">
             <el-tab-pane name="first" label="跟进记录">
               <FollowRecordTab :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
                                :houseId="houseId" :activeName="activeName"></FollowRecordTab>
@@ -468,6 +468,30 @@
             </el-tab-pane>
             <el-tab-pane name="sixth" label="报备列表">
               <ReportRecord :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></ReportRecord>
+            </el-tab-pane>
+
+            <!--行政检查-->
+            <el-tab-pane name="seventh" label="行政检查记录">
+              <el-table :data="checkData">
+                <el-table-column label="检查次数" prop="check_num"></el-table-column>
+                <el-table-column label="检查时间" prop="check_datetime"></el-table-column>
+                <el-table-column label="检查人" prop="checkers"></el-table-column>
+                <el-table-column label="现场录像" prop="check_photo"></el-table-column>
+                <el-table-column label="检查评级" prop="check_level"></el-table-column>
+                <el-table-column label="行政备注" prop="hr_content"></el-table-column>
+                <el-table-column label="跟进人" prop="followers"></el-table-column>
+                <el-table-column label="跟进时间" prop="follow_datetime"></el-table-column>
+                <el-table-column label="跟进录像" prop="follow_photo"></el-table-column>
+                <el-table-column label="跟进备注" prop="follow_content"></el-table-column>
+              </el-table>
+              <el-pagination
+                :total="checkCount"
+                layout="total,prev,pager,next"
+                :page-size="checkParams.limit"
+                :current-page="checkParams.page"
+                @current-change="handleChangeCheckPage"
+                style="text-align: right"
+              ></el-pagination>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -552,6 +576,47 @@
       </el-form>
     </el-dialog>
 
+    <!--添加行政检查记录-->
+    <el-dialog
+      :visible="checkInfo_visible"
+      title="添加行政检查记录"
+      @close="handleCancelCheck"
+      width="40%"
+    >
+      <div>
+        <el-form :model="add_check" size="mini" label-width="100px">
+          <el-form-item label="检查时间">
+            <el-date-picker
+              v-model="add_check.time"
+              type="datetime"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="检查人">
+            <el-input placeholder="请选择" @focus="handleSelMan(1,'staff')"></el-input>
+          </el-form-item>
+          <el-form-item label="现场录像">
+          </el-form-item>
+          <el-form-item label="检查评级">
+            <el-select v-model="add_check.check_level">
+              <el-option :value="1" label="良好"></el-option>
+              <el-option :value="2" label="一般"></el-option>
+              <el-option :value="3" label="差"></el-option>
+              <el-option :value="4" label="特差"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="行政备注">
+            <el-input type="textarea" :rows="6" v-model="add_check.hr_content"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <div style="text-align: right">
+              <el-button type="primary" size="small">确定</el-button>
+              <el-button>取消</el-button>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
+
     <handover-info :houseId="houseIds" :hand-visible="handoverVisible" @close="handleCloseHand" :hand-info="handoverInfo" :hand-clear="handoverIsClear"></handover-info>
   </div>
 </template>
@@ -588,6 +653,24 @@
     },
     data() {
       return {
+        checkInfo_visible: false,
+        checkParams: {
+          page: 1,
+          limit: 12,
+          id: '',
+        },
+        checkData: [],
+        checkCount: 0,
+        add_check: {
+          time: '',
+          check_man: '',
+          user_id: '',
+          video: '',
+          check_level: '',
+          hr_content: ''
+        },
+        is_check: false,
+
         houseIds: '',
         handoverIsClear: false,
         handoverVisible: false,
@@ -729,6 +812,40 @@
 //      });
     },
     methods: {
+      handleSelMan(len,type) {
+        this.organizationDialog = true;
+        this.length = len;
+        this.organizationType = type;
+        this.is_check = true;
+      },
+      handleCancelCheck() {
+        this.is_check = false;
+        this.checkInfo_visible = false;
+      },
+      handleChangeCheckPage(page) {
+        this.checkParams.page = page;
+        this.getCheckList();
+      },
+      getCheckList() {
+        console.log(this.houseId);
+        this.$http.get(globalConfig.server + 'core/check',this.checkParams).then(res => {
+          console.log(res);
+          if (res.data.code === '70020') {
+            this.checkData = res.data.data;
+            this.checkCount = res.data.count;
+          } else {
+            this.checkData = [];
+            this.checkCount = 0;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleChangeTab(tab) {
+        if (tab.name === 'seventh') {
+          this.getCheckList();
+        }
+      },
       handleCloseHand() {
         this.handoverVisible = false;
         this.getData();
@@ -1026,11 +1143,15 @@
       //************************************************************************/
       clickTable(row, event) {
         this.houseId = row.id;
+        this.checkParams.id = row.id;
         this.collectData = row.lords;
         if (this.collectData.length > 0) {
           this.collectId = this.collectData[0].id;
         }
         this.rentData = row.renters;
+        if (this.activeName === 'seventh') {
+          this.getCheckList();
+        }
       },
       tableRowCollectName({row, rowIndex}) {
         if (row.id === this.houseId) {
@@ -1078,6 +1199,7 @@
             {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
             {clickIndex: 'inBlack',headIcon: 'el-icon-upload2',label: '修改低质量备注'},
             {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移出低质量标记'},
+            {clickIndex: 'checkInfo',headIcon: 'el-icons-fa-magic',label: '添加检查记录'}
           ];
         } else {
           this.lists = [
@@ -1095,6 +1217,7 @@
             {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
             {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
             {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '低质量标记'},
+            {clickIndex: 'checkInfo',headIcon: 'el-icons-fa-magic',label: '添加检查记录'}
           ];
         }
         this.contextMenuParam(event);
@@ -1133,6 +1256,9 @@
             break;
           case 'inBlack':
             this.markInfoVisible = true;
+            break;
+          case 'checkInfo':
+            this.checkInfo_visible = true;
             break;
         }
       },
