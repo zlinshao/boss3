@@ -1133,7 +1133,7 @@
         }
       },
       search(val) {
-        if (this.city_id) {
+        if (this.activeName === 'second') {
           this.params.type = 2;
           this.params.city_id = this.city_id;
         }
