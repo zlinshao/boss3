@@ -951,7 +951,6 @@
     },
     methods: {
       handleGetCheckInfoVideo(val) {
-        console.log(this.add_check_info.follow_album_file);
         this.add_check_info.follow_album_file = val[1];
       },
       handleOkAddInfo() {
@@ -979,7 +978,7 @@
         this.$http.get(globalConfig.server + `core/check/${this.houseId}`).then(res => {
           if (res.data.code === '70000') {
             this.checkDetail = res.data.data;
-            this.add_check_info.follow_album_file = res.data.data.check_photo_ids || [];
+            this.add_check_info.follow_album_file = res.data.data.follow_photo_ids || [];
             this.add_check_info.follow_content = res.data.data.follow_content || '';
             this.add_check_info.follow_datetime = res.data.data.follow_datetime || '';
             this.$nextTick(() => {
