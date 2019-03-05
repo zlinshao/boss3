@@ -77,12 +77,16 @@
           }
         }
       },
-      isClear(val) {
-        this.imgId = [];
-        this.imgArray = [];
-        this.editImg = [];
-        $('.imgItem').remove();
-        this.uploader.splice(0, this.uploader.files.length);
+      isClear: {
+        handler(val) {
+          console.log(val);
+          this.imgId = [];
+          this.imgArray = [];
+          this.editImg = [];
+          $('.imgItem').remove();
+          this.uploader.splice(0, this.uploader.files.length);
+        },
+        deep: true
       }
     },
     methods: {

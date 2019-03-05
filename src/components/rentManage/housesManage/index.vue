@@ -723,7 +723,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="跟进影像">
-              <Upload :ID="'checkInfoImg'" :editImage="editInfoimg" @getImg="handleGetCheckInfoVideo" :isClear="checkIsClear"></Upload>
+              <Upload :ID="'checkInfoImg'" :editImage="editInfoimg" @getImg="handleGetCheckInfoVideo" :isClear="lookIsClear"></Upload>
             </el-form-item>
             <el-form-item label="跟进备注">
               <el-input style="width: 300px" v-model="add_check_info.follow_content" placeholder="请输入" type="textarea"></el-input>
@@ -780,13 +780,14 @@
         checkDetail: '',
         add_check_info: {
           follow_datetime: '',
-          follow_album_file: '',
+          follow_album_file: [],
           follow_content: ''
         },
         editInfoimg: '',
 
         editImage: '',
         checkIsClear: false,
+        lookIsClear: false,
         checkInfo_visible: false,
         checkParams: {
           page: 1,
@@ -950,6 +951,7 @@
     },
     methods: {
       handleGetCheckInfoVideo(val) {
+        console.log(this.add_check_info.follow_album_file);
         this.add_check_info.follow_album_file = val[1];
       },
       handleOkAddInfo() {
@@ -966,15 +968,15 @@
               message: res.data.msg
             })
           }
-          this.checkIsClear = true;
+          this.lookIsClear = true;
           this.getCheckList();
         }).catch(err => {
           console.log(err);
         })
       },
       handleGetInfo() {
+        this.lookIsClear = false;
         this.$http.get(globalConfig.server + `core/check/${this.houseId}`).then(res => {
-          console.log(res);
           if (res.data.code === '70000') {
             this.checkDetail = res.data.data;
             this.add_check_info.follow_album_file = res.data.data.check_photo_ids || [];
@@ -995,7 +997,7 @@
       handleCancelLookInfo() {
         this.houseId = '';
         this.checkDetail = '';
-        this.checkIsClear = true;
+        this.lookIsClear = true;
         this.editInfoimg = '';
         this.add_check_info = {
           follow_datetime: '',
@@ -1029,14 +1031,16 @@
               title: '成功',
               message: res.data.msg
             });
+            this.checkIsClear = true;
           }  else {
             this.$notify.warning({
               title: '失败',
               message: res.data.msg
-            })
+            });
+            this.checkIsClear = true;
           }
-          this.getCheckList();
           this.handleCancelCheck();
+          this.getCheckList();
         }).catch(err => {
           console.log(err);
         })
@@ -1048,6 +1052,10 @@
         this.is_check = true;
       },
       handleCancelCheck() {
+        this.editInfoimg = '';
+        this.add_check_info.follow_album_file = [];
+        this.add_check_info.follow_datetime = '';
+        this.add_check_info.follow_content = '';
         this.add_check = {
           house_id: '',
           check_datetime: '',
@@ -1111,7 +1119,6 @@
       handleOkAssociate() {
         this.associateInfo.id = this.operateArray
         this.$http.post(globalConfig.server + 'coreproject/houses/batch_update_responsible',this.associateInfo).then(res => {
-          console.log(res);
           if (res.data.code === '20020') {
             this.$notify.success({
               title: '成功',
@@ -1508,6 +1515,7 @@
             break;
           case 'checkInfo':
             this.checkInfo_visible = true;
+            this.checkIsClear = false;
             break;
           case 'lookCheck':
             this.handleGetInfo();
