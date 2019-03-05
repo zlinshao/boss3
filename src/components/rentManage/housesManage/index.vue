@@ -516,7 +516,7 @@
                 </el-table-column>
                 <el-table-column label="检查评级" prop="check_level">
                   <template slot-scope="scope">
-                    <span>{{ scope.row.check_level === 1 ? '良好' : scope.row.check_level === 2 ? '一般' : scope.row.check_level === 3 ? '差' : '特差'}}</span>
+                    <span>{{ scope.row.check_level == 1 ? '良好' : scope.row.check_level == 2 ? '一般' : scope.row.check_level == 3 ? '差' : '特差'}}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="行政备注" prop="check_content"></el-table-column>
@@ -634,7 +634,7 @@
             <el-date-picker
               v-model="add_check.check_datetime"
               type="datetime"
-              value-format="yyyy-MM-dd hh:mm:ss"
+              value-format="yyyy-MM-dd HH:mm:ss"
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="检查人">
@@ -695,12 +695,15 @@
             <el-form-item label="检查人:">
               <span>{{ checkDetail && checkDetail.checkers && checkDetail.checkers.real_name }}</span>
             </el-form-item>
-            <el-form-item label="现场录像:">
+            <el-form-item label="现场录像:" v-if="checkDetail.check_photo">
               <span v-for="val in checkDetail.check_photo" style="margin-right: 15px"><img style="width: 100px;height: 70px;" :src="val" alt="" data-magnify="" :data-src="val"></span>
+            </el-form-item>
+            <el-form-item label="现场录像:" v-else>
+              <span>暂无现场录像</span>
             </el-form-item>
             <el-form-item label="检查评级:">
               <span>
-                {{ checkDetail.check_level === 1 ? '良好' : checkDetail.check_level === 2 ? '一般' : checkDetail.check_level === 3 ? '差' : '特差'}}
+                {{ checkDetail.check_level == 1 ? '良好' : checkDetail.check_level == 2 ? '一般' : checkDetail.check_level == 3 ? '差' : '特差'}}
               </span>
             </el-form-item>
             <el-form-item label="检查备注:">
@@ -713,7 +716,8 @@
             <el-form-item label="跟进时间">
               <el-date-picker
                 v-model="add_check_info.follow_datetime"
-                value-format="yyyy-MM-dd hh:mm:ss"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 style="width: 300px"
                 placeholder="请选择"
               ></el-date-picker>
@@ -727,7 +731,7 @@
             <el-form-item>
               <div style="text-align: right">
                 <el-button type="primary" size="mini" @click="handleOkAddInfo">确定</el-button>
-                <el-button size="mini">取消</el-button>
+                <el-button size="mini" @click="handleCancelLookInfo">取消</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -949,9 +953,7 @@
         this.add_check_info.follow_album_file = val[1];
       },
       handleOkAddInfo() {
-        console.log(this.add_check_info);
         this.$http.put(globalConfig.server + `core/check/${this.houseId}`,this.add_check_info).then(res => {
-          console.log(res);
           if (res.data.code === '70000') {
             this.$notify.success({
               title: '成功',
@@ -964,6 +966,8 @@
               message: res.data.msg
             })
           }
+          this.checkIsClear = true;
+          this.getCheckList();
         }).catch(err => {
           console.log(err);
         })
@@ -973,6 +977,12 @@
           console.log(res);
           if (res.data.code === '70000') {
             this.checkDetail = res.data.data;
+            this.add_check_info.follow_album_file = res.data.data.check_photo_ids || [];
+            this.add_check_info.follow_content = res.data.data.follow_content || '';
+            this.add_check_info.follow_datetime = res.data.data.follow_datetime || '';
+            this.$nextTick(() => {
+              this.editInfoimg = res.data.data.follow_photo || {};
+            });
             this.lookInfoVisible = true;
           } else {
             this.checkDetail = '';
@@ -985,6 +995,8 @@
       handleCancelLookInfo() {
         this.houseId = '';
         this.checkDetail = '';
+        this.checkIsClear = true;
+        this.editInfoimg = '';
         this.add_check_info = {
           follow_datetime: '',
           follow_album_file: '',
@@ -1012,7 +1024,6 @@
       },
       handleAddCheck() {
         this.$http.post(globalConfig.server + 'core/check',this.add_check).then(res =>{
-          console.log(res);
           if (res.data.code === '70000') {
             this.$notify.success({
               title: '成功',
@@ -1024,7 +1035,6 @@
               message: res.data.msg
             })
           }
-          this.getData();
           this.getCheckList();
           this.handleCancelCheck();
         }).catch(err => {
@@ -1047,6 +1057,9 @@
           check_content: '',
           user_name: ''
         };
+        this.add_check.check_user_id = '';
+        this.add_check.user_name = '';
+        this.checkIsClear = true;
         this.is_check = false;
         this.checkInfo_visible = false;
       },
@@ -1325,6 +1338,7 @@
         if (this.is_check) {
           this.add_check.check_user_id = val[0].id;
           this.add_check.user_name = val[0].name;
+          return false;
         }
         this.organizationDialog = false;
         if (this.organizationType === '') {
