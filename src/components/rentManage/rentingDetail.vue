@@ -27,6 +27,8 @@
           <div style="display: inline-block" v-if="contractInfo.operation &&
               !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
             <el-dropdown>
+              <el-button size="mini" type="success" @click="handleLookContract">合同预览</el-button>
+              <el-button size="mini" type="danger" @click="rewrite_visible = true">作废重签</el-button>
               <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
@@ -45,6 +47,8 @@
             </el-dropdown>
           </div>
           <div v-else="" style="display: inline-block">
+            <el-button size="mini" type="success" @click="handleLookContract">合同预览</el-button>
+            <el-button size="mini" type="danger" @click="rewrite_visible = true">作废重签</el-button>
             <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
@@ -1489,6 +1493,24 @@
     <ApprovalHistory :approvalHistory="approvalHistoryDialog" is_rent="1" :contractId="contract_id"
                      @close="closeOrganization"></ApprovalHistory>
 
+
+    <!--作废重签备注-->
+    <el-dialog
+      :visible="rewrite_visible"
+      title="作废重签"
+      width="25%"
+      @close="handleCancelRewrite"
+    >
+      <el-form size="mini">
+        <el-form-item label="重签备注">
+          <el-input v-model="rewrite_note" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="handleClickOkRewrite">确定</el-button>
+          <el-button size="mini" @click="handleCancelRewrite">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -1501,6 +1523,9 @@
     components: {Organization, MemorandumRecord, ApprovalHistory},
     data() {
       return {
+        rewrite_visible: false,
+        rewrite_note: '',
+
         simple: false,
         steps: 0,
         sizeForm: {},
@@ -1614,6 +1639,59 @@
 
     },
     methods: {
+      handleLookContract() {
+        this.$http.get(globalConfig.server + 'bulletin/electronic_contract/view', {
+          params: {
+            contract_number: this.contractInfo.contract_number
+          }
+        }).then(res => {
+          console.log(res);
+          if(res.data.code === '20000') {
+            window.open(res.data.data, '_blank', 'width=1920,height=1080');
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+            return false;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleClickOkRewrite() {
+        if (!this.rewrite_note) {
+          this.$notify.warning({
+            title: '警告',
+            message: '请完善备注信息'
+          });
+          return false
+        }
+        this.$http.post(globalConfig.server + 'bulletin/electronic_contract/resign',{
+          note: this.rewrite_note,
+          contract_number: this.contractInfo.contract_number
+        }).then(res => {
+          console.log(res);
+          if (res.data.code === '20010') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            })
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            })
+          }
+          this.handleCancelRewrite();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleCancelRewrite() {
+        this.rewrite_note = '';
+        this.rewrite_visible = false;
+      },
       //切换模式 精简-普通
       switchSimple() {
         this.simple = !this.simple;
