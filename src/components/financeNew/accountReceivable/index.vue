@@ -786,6 +786,53 @@
         <el-table-column label="时间" prop="operator_name"></el-table-column>
       </el-table>
     </el-dialog>
+
+    <!--登记收款-->
+    <el-dialog
+      :visible="registerReceive"
+      title="登记收款"
+      width="30%"
+      @close="handleCancelRegisterReceive"
+    >
+      <el-form :model="registration" size="mini" label-width="100px" style="width: 80%;margin: 0 auto">
+        <el-form-item label="房屋地址">
+          <el-input v-model="registration.address"></el-input>
+        </el-form-item>
+        <el-form-item label="上传图片">
+          <Upload :ID="'register'" :editImage="registerInfoImg" @getImg="handleGetRegister" :isClear="registerIsClear"></Upload>
+        </el-form-item>
+        <el-form-item label="账户类型">
+          <el-select v-model="registration.cate" @change="getCollectAccount">
+            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择账户">
+          <el-select v-model="registration.account_id" :disabled="!canSel">
+            <el-option v-for="(item,key) in accountList" :key="key" :value="item.id" :label="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="收款金额">
+          <el-input v-model="registration.amount" placeholder="请输入"></el-input>
+        </el-form-item>
+        <el-form-item label="收款时间">
+          <el-date-picker
+            v-model="registration.collection_time"
+            placeholder="请选择"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            type="datetime"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="收款备注">
+          <el-input type="textarea" v-model="registration.remark" placeholder="请输入"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div style="text-align: right">
+            <el-button type="primary" size="small" @click="handleOkRegister">确定</el-button>
+            <el-button size="small" @click="handleCancelRegisterReceive">取消</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -794,12 +841,27 @@
   import RightMenu from '../../common/rightMenu.vue'    //右键
   import subjectTree from '../components/subjectTree.vue'
   import PolishTime from '../components/polishTime.vue'
+  import Upload from '../../common/UPLOAD.vue'
 
   export default {
     name: "index",
-    components: {organization, RightMenu, subjectTree, PolishTime},
+    components: {organization, RightMenu, subjectTree, PolishTime,Upload},
     data() {
       return {
+        registerReceive: false,
+        registration: {
+          fund_id: '',
+          collect_img: '',
+          account_id: '',
+          amount: '',
+          collection_time: '',
+          remark: '',
+          cate: '',
+          address: '',
+        },
+        registerIsClear: false,
+        registerInfoImg: {},
+
         tagVisible: false,
         collectMoneyShow: false,
         isChangeSubject: false,
@@ -998,6 +1060,45 @@
       this.getTableData();
     },
     methods: {
+      handleOkRegister() {
+        this.$http.post(globalConfig.temporary_server + 'registration',this.registration).then(res => {
+          console.log(res);
+          if (res.data.code === 200) {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            })
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            })
+          }
+          this.handleCancelRegisterReceive();
+          this.getTableData();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleGetRegister(val) {
+        this.registration.collect_img = val[1];
+      },
+      handleCancelRegisterReceive() {
+        this.accountList = [];
+        this.canSel = false;
+        this.registerIsClear = true;
+        this.registration = {
+          fund_id: '',
+          collect_img: '',
+          account_id: '',
+          amount: '',
+          collection_time: '',
+          remark: '',
+          cate: '',
+          address: '',
+        };
+        this.registerReceive = false;
+      },
       handleHeaderStyle() {
         if (this.isRecycle) {
           return "color: red";
@@ -1435,13 +1536,13 @@
           {clickIndex: 'callback', headIcon: 'el-icon-refresh', label: '回滚',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
           {clickIndex: 'tagDetail', headIcon: 'el-icon-edit', label: '备注详情',},
+          {clickIndex: 'register',headIcon: 'el-icon-edit',label: '登记收款'}
         ];
         this.contextMenuParam(event);
       },
 
       // 右键回调
       clickEvent(val) {
-        console.log(val);
         if (val === 'delete') {
           this.openDelete();
         }
@@ -1475,6 +1576,12 @@
         }
         if (val === 'tagDetail') {
           this.tagVisible = true;
+        }
+        if (val === 'register') {
+          this.registerIsClear = false;
+          this.registration.address = this.rightMenuRow.addr || this.rightMenuRow.addra || this.rightMenuRow.addru;
+          this.registration.fund_id = this.rightMenuRow.id;
+          this.registerReceive = true;
         }
       },
       handleEditMoney() {

@@ -1,4 +1,5 @@
 globalConfig = {
+  temporary_server: 'http://test.v3.api.boss.lejias.cn/api/',
   finance_server: 'http://test.api.finance.lejias.cn/',
   server: 'http://test.v3.api.boss.lejias.cn/',                       //接口地址
   server_user :'http://test.boss-support.lejias.cn/api/s1/',          //人资模块接口地址
