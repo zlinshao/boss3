@@ -27,8 +27,8 @@
           <div style="display: inline-block" v-if="contractInfo.operation &&
               !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
             <el-dropdown>
-              <el-button size="mini" type="success" @click="handleLookContract">合同预览</el-button>
-              <el-button size="mini" type="danger" @click="rewrite_visible = true">作废重签</el-button>
+              <el-button size="mini" type="success" @click="handleLookContract(false)">合同预览</el-button>
+              <el-button size="mini" type="danger" @click="rewrite_visible = true" :disabled="contractStatus === 1">作废重签</el-button>
               <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
@@ -47,8 +47,8 @@
             </el-dropdown>
           </div>
           <div v-else="" style="display: inline-block">
-            <el-button size="mini" type="success" @click="handleLookContract">合同预览</el-button>
-            <el-button size="mini" type="danger" @click="rewrite_visible = true">作废重签</el-button>
+            <el-button size="mini" type="success" @click="handleLookContract(false)">合同预览</el-button>
+            <el-button size="mini" type="danger" @click="rewrite_visible = true" :disabled="contractStatus === 1">作废重签</el-button>
             <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
@@ -1506,8 +1506,10 @@
           <el-input v-model="rewrite_note" type="textarea"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="handleClickOkRewrite">确定</el-button>
-          <el-button size="mini" @click="handleCancelRewrite">取消</el-button>
+          <div style="text-align: right">
+            <el-button size="mini" type="primary" @click="handleClickOkRewrite">确定</el-button>
+            <el-button size="mini" @click="handleCancelRewrite">取消</el-button>
+          </div>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -1525,6 +1527,8 @@
       return {
         rewrite_visible: false,
         rewrite_note: '',
+        contractUrl: '',
+        contractStatus: '',
 
         simple: false,
         steps: 0,
@@ -1639,7 +1643,7 @@
 
     },
     methods: {
-      handleLookContract() {
+      handleLookContract(first) {
         this.$http.get(globalConfig.server + 'bulletin/electronic_contract/view', {
           params: {
             contract_number: this.contractInfo.contract_number
@@ -1647,7 +1651,11 @@
         }).then(res => {
           console.log(res);
           if(res.data.code === '20000') {
-            window.open(res.data.data, '_blank', 'width=1920,height=1080');
+            this.contractUrl = res.data.data.url;
+            this.contractStatus = res.data.data.status;
+            if (!first) {
+              window.open(res.data.data.url, '_blank', 'width=1920,height=1080');
+            }
           }else {
             this.$notify.warning({
               title: '警告',
@@ -1683,6 +1691,7 @@
               message: res.data.msg
             })
           }
+          this.getContractDetail();
           this.handleCancelRewrite();
         }).catch(err => {
           console.log(err);
@@ -1978,11 +1987,10 @@
       },
       getContractDetail() {
         this.$http.get(globalConfig.server + 'lease/rent/' + this.$route.query.id).then((res) => {
-          console.log(res);
           this.loadingStatus = false;
           if (res.data.code === '61110') {
             this.contractInfo = res.data.data;
-            console.log(this.contractInfo);
+            this.handleLookContract(true);
             this.customersInfo = res.data.data.customers;
 
 
