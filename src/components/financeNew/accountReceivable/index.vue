@@ -10,6 +10,9 @@
             </el-input>
           </el-form-item>
           <el-form-item>
+            <el-button type="primary" size="mini" @click="handleOpenContrastRunning">对比流水</el-button>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
@@ -577,7 +580,7 @@
       title="发送短信"
       width="30%"
     >
-      发送类型：
+      发送类型：rrrrr
       <el-select v-model="selectMsgType" size="mini" style="width: 80%">
         <el-option :value="1" label="催缴"></el-option>
         <el-option :value="2" label="到期"></el-option>
@@ -833,6 +836,117 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <!--对比流水-->
+    <el-dialog
+      :visible="contrastRunningVisible"
+      title="收款对比"
+      width="80%"
+      @close="handleCancelRun"
+    >
+      <div class="contrastRunning">
+        <div>
+          <h3>收款记录</h3>
+          <div style="text-align: right;margin-bottom: 15px">
+            <el-button size="mini" @click="handleChangeStatus(3)">已匹配</el-button>
+            <el-button size="mini" @click="handleChangeStatus(5)">未匹配</el-button>
+            <el-button size="mini" @click="handleChangeStatus(7)">未找到</el-button>
+          </div>
+          <el-table
+            :data="receive_data"
+            height="400px"
+          >
+            <el-table-column label="收款名称" prop="address"></el-table-column>
+            <el-table-column label="收款金额" prop="amount"></el-table-column>
+            <el-table-column label="收款时间" prop="collection_time"></el-table-column>
+            <el-table-column label="账户" prop="account.account_num"></el-table-column>
+            <el-table-column label="截图">
+              <template slot-scope="scope">
+                <i style="font-size: 16px;cursor: pointer" class="el-icon-picture" @click="look_image_list = scope.row.collect_img;look_image_visible = true"></i>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" @click="openContrastDialog(scope.row)">对比银行流水</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            :total="receive_count"
+            layout="total,prev,pager,next"
+            :current-page="contrastParams.page"
+            :page-size="contrastParams.limit"
+            @current-change="handleChangeContrastPage"
+            style="text-align: center"
+          ></el-pagination>
+        </div>
+        <div>
+          <el-table
+            :data="running_data"
+            style="margin-top: 90px"
+            height="400px"
+          >
+            <el-table-column label="打款时间" prop="deal_date"></el-table-column>
+            <el-table-column label="金额" prop="income_amount"></el-table-column>
+            <el-table-column label="备注" prop="remark">
+              <template slot-scope="scope">
+                <span v-if="scope.row.remark">{{ scope.row.remark }}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="所属银行" prop="bank"></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" @click="handleRuAccount(scope.row)">入账</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!--查看图片-->
+    <el-dialog
+      :visible="look_image_visible"
+      title="查看图片"
+      @close="look_image_visible = false;look_image_list = []"
+    >
+      <div v-for="item in look_image_list" style="display: inline-block;margin-right: 15px">
+        <img style="width: 150px;height: 120px;" :src="item" alt="" data-magnify="" :data-src="item">
+      </div>
+    </el-dialog>
+
+    <!--参数-->
+    <el-dialog
+      :visible="contrast_params_visible"
+      title="对比参数"
+      width="35%"
+    >
+      <el-form size="small" :model="contrast_params_form" label-width="120px" style="width: 80%;margin: 0 auto">
+        <el-form-item label="误差类型">
+          <el-select v-model="contrast_params_form.select">
+            <el-option :value="5" label="以天为单位"></el-option>
+            <el-option :value="3" label="以分钟为单位"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="误差数">
+          <el-input type="number" v-model="contrast_params_form.date_deviation"></el-input>
+        </el-form-item>
+        <el-form-item label="金额误差数">
+          <el-input v-model="contrast_params_form.amount_deviation"></el-input>
+        </el-form-item>
+        <el-form-item label="合并查询">
+          <el-select v-model="contrast_params_form.is_and">
+            <el-option :value="7" label="合并查询"></el-option>
+            <el-option :value="9" label="或查询"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="text-align: right">
+          <el-button size="small" type="primary" @click="handleOkParams">确定</el-button>
+          <el-button size="small" @click="handleCancelParams">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -848,6 +962,30 @@
     components: {organization, RightMenu, subjectTree, PolishTime,Upload},
     data() {
       return {
+        running_data: [],
+        running_count: 0,
+
+        contrastRow: '',
+        contrast_params_visible: false,
+        contrast_params_form: {
+          select: '',
+          date_deviation: '',
+          amount_deviation: '',
+          is_and: ''
+        },
+
+        look_image_list: [],
+        look_image_visible: false,
+
+        receive_data: [],
+        receive_count: 0,
+        contrastRunningVisible: false,
+        contrastParams: {
+          page: 1,
+          limit: 10,
+          status: 0,
+        },
+
         registerReceive: false,
         registration: {
           fund_id: '',
@@ -1060,6 +1198,94 @@
       this.getTableData();
     },
     methods: {
+      handleCancelRun() {
+        this.contrastRow = '';
+        this.running_data = '';
+        this.receive_data = [];
+        this.receive_count = 0;
+        this.contrastRunningVisible = false;
+      },
+      handleRuAccount(row) {
+        this.$prompt('请输入备注','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }).then(({value}) => {
+          this.$http.put(globalConfig.temporary_server + 'registration/flow_entry',{
+            register_id: this.contrastRow.id,
+            flow_id: row.id,
+            remark: value
+          }).then(res => {
+            console.log(res);
+            if (res.data.code === 200 ){
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              })
+            }
+          }).catch(err => {
+            console.log(err);
+          })
+        }).catch(() => { })
+      },
+      handleCancelParams() {
+        this.contrast_params_form = {
+          select: '',
+          date_deviation: '',
+          amount_deviation: '',
+          is_and: ''
+        };
+        this.contrast_params_visible = false;
+      },
+      handleOkParams() {
+        this.contrast_params_form.date_deviation = parseInt(this.contrast_params_form.date_deviation);
+        this.$http.put(globalConfig.temporary_server + `registration/match/${this.contrastRow.id}`,this.contrast_params_form).then(res => {
+          console.log(res);
+          if (res.data.code === 200 ){
+            this.running_data = res.data.data.data;
+            this.running_count = res.data.data.cont;
+          } else {
+            this.running_data = [];
+            this.running_count = 0;
+          }
+          this.handleCancelParams();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      openContrastDialog(row) {
+        this.contrastRow = row;
+        this.contrast_params_visible = true;
+      },
+      handleChangeContrastPage(page) {
+        this.contrastParams.page = page;
+        this.getContrastList();
+      },
+      handleChangeStatus(status) {
+        this.contrastParams.status = status;
+        this.getContrastList();
+      },
+      getContrastList() {
+        this.$http.get(globalConfig.temporary_server + 'registration',{
+          params: this.contrastParams
+        }).then(res => {
+          console.log(res);
+          if (res.data.code === 200) {
+            this.receive_data = res.data.data.data;
+            this.receive_count = res.data.data.count;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleOpenContrastRunning() {
+        this.contrastRunningVisible = true;
+        this.getContrastList();
+      },
       handleOkRegister() {
         this.$http.post(globalConfig.temporary_server + 'registration',this.registration).then(res => {
           console.log(res);
@@ -1666,6 +1892,15 @@
 
 <style lang="scss">
   #receivable {
+    .contrastRunning {
+      display: flex;
+      justify-content: space-between;
+      > div {
+        width: 50%;
+        max-height: 500px;
+        padding: 30px;
+      }
+    }
     .block.pages {
       display: -webkit-flex;
       display: flex;
