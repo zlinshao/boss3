@@ -1857,8 +1857,8 @@
         }).then(res => {
           console.log(res);
           if(res.data.code === '20000') {
-            this.contractUrl = res.data.url;
-            this.contractStatus = res.data.status;
+            this.contractUrl = res.data.data.url;
+            this.contractStatus = res.data.data.status;
             if (!first) {
               window.open(res.data.data.url, '_blank', 'width=1920,height=1080');
             }
