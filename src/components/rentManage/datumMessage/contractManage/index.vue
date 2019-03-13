@@ -243,6 +243,21 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">电子合同</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="params.is_e_contract" clearable placeholder="请选择">
+                        <el-option label="无" :value="0"></el-option>
+                        <el-option label="有" :value="1"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <el-row class="el_row_border">
               <el-col :span="12">
@@ -1765,6 +1780,7 @@
           note: '', //有无备忘
           submit_time: [], //提交时间
           verify_status: '',
+          is_e_contract: ''
         },
         doc_sta: [
           {
@@ -3283,6 +3299,7 @@
         this.params.visit_status = '';
         this.params.note = '';
         this.params.submit_time = [];
+        this.params.is_e_contract = '';
         this.isHigh = false;
         this.search();
       },
