@@ -881,9 +881,32 @@
           ></el-pagination>
         </div>
         <div>
+          <div style="width: 100%;height: 90px;">
+            <el-form size="small" :model="contrast_params_form" label-width="120px" style="width: 80%;margin: 0 auto">
+              <el-row :gutter="20">
+                <el-col :span="12">
+                  <el-form-item label="误差数">
+                    <el-input type="number" v-model="contrast_params_form.date_deviation" style="width: 150px"></el-input>
+                  </el-form-item>
+                  <el-form-item label="误差类型">
+                    <el-radio v-model="contrast_params_form.select" :value="5" label="天"></el-radio>
+                    <el-radio v-model="contrast_params_form.select" :value="3" label="分钟"></el-radio>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="金额误差数">
+                    <el-input v-model="contrast_params_form.amount_deviation" style="width: 150px"></el-input>
+                  </el-form-item>
+                  <el-form-item label="合并">
+                    <el-radio v-model="contrast_params_form.is_and" :value="7" label="时间"></el-radio>
+                    <el-radio v-model="contrast_params_form.is_and" :value="9" label="金额"></el-radio>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
           <el-table
             :data="running_data"
-            style="margin-top: 90px"
             height="400px"
           >
             <el-table-column label="打款时间" prop="deal_date"></el-table-column>
@@ -916,37 +939,6 @@
       </div>
     </el-dialog>
 
-    <!--参数-->
-    <el-dialog
-      :visible="contrast_params_visible"
-      title="对比参数"
-      width="35%"
-    >
-      <el-form size="small" :model="contrast_params_form" label-width="120px" style="width: 80%;margin: 0 auto">
-        <el-form-item label="误差类型">
-          <el-select v-model="contrast_params_form.select">
-            <el-option :value="5" label="以天为单位"></el-option>
-            <el-option :value="3" label="以分钟为单位"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="误差数">
-          <el-input type="number" v-model="contrast_params_form.date_deviation"></el-input>
-        </el-form-item>
-        <el-form-item label="金额误差数">
-          <el-input v-model="contrast_params_form.amount_deviation"></el-input>
-        </el-form-item>
-        <el-form-item label="合并查询">
-          <el-select v-model="contrast_params_form.is_and">
-            <el-option :value="7" label="合并查询"></el-option>
-            <el-option :value="9" label="或查询"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item style="text-align: right">
-          <el-button size="small" type="primary" @click="handleOkParams">确定</el-button>
-          <el-button size="small" @click="handleCancelParams">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 
@@ -966,7 +958,6 @@
         running_count: 0,
 
         contrastRow: '',
-        contrast_params_visible: false,
         contrast_params_form: {
           select: '',
           date_deviation: '',
@@ -1232,34 +1223,27 @@
           })
         }).catch(() => { })
       },
-      handleCancelParams() {
-        this.contrast_params_form = {
-          select: '',
-          date_deviation: '',
-          amount_deviation: '',
-          is_and: ''
-        };
-        this.contrast_params_visible = false;
-      },
-      handleOkParams() {
-        this.contrast_params_form.date_deviation = parseInt(this.contrast_params_form.date_deviation);
+      openContrastDialog(row) {
+        this.contrastRow = row;
+        if (!this.contrast_params_form.date_deviation) {
+          this.contrast_params_form.date_deviation = parseInt(this.contrast_params_form.date_deviation);
+        }
         this.$http.put(globalConfig.temporary_server + `registration/match/${this.contrastRow.id}`,this.contrast_params_form).then(res => {
-          console.log(res);
           if (res.data.code === 200 ){
             this.running_data = res.data.data.data;
             this.running_count = res.data.data.cont;
           } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
             this.running_data = [];
             this.running_count = 0;
+            return false
           }
-          this.handleCancelParams();
         }).catch(err => {
           console.log(err);
         })
-      },
-      openContrastDialog(row) {
-        this.contrastRow = row;
-        this.contrast_params_visible = true;
       },
       handleChangeContrastPage(page) {
         this.contrastParams.page = page;
