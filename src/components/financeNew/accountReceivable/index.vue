@@ -889,17 +889,17 @@
                     <el-input type="number" v-model="contrast_params_form.date_deviation" style="width: 150px"></el-input>
                   </el-form-item>
                   <el-form-item label="误差类型">
-                    <el-radio v-model="contrast_params_form.select" :value="5" label="天"></el-radio>
-                    <el-radio v-model="contrast_params_form.select" :value="3" label="分钟"></el-radio>
+                    <el-radio v-model="contrast_params_form.select" :label="5">天</el-radio>
+                    <el-radio v-model="contrast_params_form.select" :label="3">分钟</el-radio>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="金额误差数">
                     <el-input v-model="contrast_params_form.amount_deviation" style="width: 150px"></el-input>
                   </el-form-item>
-                  <el-form-item label="合并">
-                    <el-radio v-model="contrast_params_form.is_and" :value="7" label="时间"></el-radio>
-                    <el-radio v-model="contrast_params_form.is_and" :value="9" label="金额"></el-radio>
+                  <el-form-item label="权重">
+                    <el-radio v-model="contrast_params_form.order" :label="6">时间</el-radio>
+                    <el-radio v-model="contrast_params_form.order" :label="4">金额</el-radio>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -962,7 +962,7 @@
           select: '',
           date_deviation: '',
           amount_deviation: '',
-          is_and: ''
+          order: ''
         },
 
         look_image_list: [],
