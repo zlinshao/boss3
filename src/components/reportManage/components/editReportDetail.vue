@@ -287,7 +287,7 @@
         <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" type="success" @click="handleLookEContract" :disabled="!reportDetailData.contract_id">查看电子合同</el-button>
+        <el-button size="small" type="success" @click="handleLookEContract" :disabled="!reportDetailData.contract_number">查看电子合同</el-button>
         <el-button size="small" type="primary" @click="editInfo" v-if="electronicReceiptStatu"
                    :disabled="electronicReceiptDisabled">
           修改电子收据
@@ -614,10 +614,9 @@
     },
     methods: {
       handleLookEContract() {
-        console.log(this.reportDetailData);
         this.$http.get(globalConfig.server + 'bulletin/electronic_contract/view', {
           params: {
-            contract_number: this.reportDetailData.contract_id
+            contract_number: this.reportDetailData.contract_number
           }
         }).then(res => {
           if(res.data.code === '20000') {
