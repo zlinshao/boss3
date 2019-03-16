@@ -287,6 +287,7 @@
         <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
+        <el-button size="small" type="success" @click="handleLookEContract" :disabled="!reportDetailData.contract_id">查看电子合同</el-button>
         <el-button size="small" type="primary" @click="editInfo" v-if="electronicReceiptStatu"
                    :disabled="electronicReceiptDisabled">
           修改电子收据
@@ -612,6 +613,34 @@
       // }
     },
     methods: {
+      handleLookEContract() {
+        console.log(this.reportDetailData);
+        this.$http.get(globalConfig.server + 'bulletin/electronic_contract/view', {
+          params: {
+            contract_number: this.reportDetailData.contract_id
+          }
+        }).then(res => {
+          if(res.data.code === '20000') {
+              if (res.data.data.url) {
+                window.open(res.data.data.url, '_blank', 'width=1920,height=1080');
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: '暂无电子合同'
+                });
+                return false;
+              }
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+            return false;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       //修改电子收据
       editInfo() {
         this.$prompt('请输入修改的客户姓名', '提示', {
