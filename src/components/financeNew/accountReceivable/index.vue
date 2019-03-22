@@ -19,7 +19,8 @@
             <el-button type="primary" @click="getTableData"><i class="el-icon-refresh"></i></el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addPayVisible = true" :disabled="isRecycle"><i class="el-icon-plus"></i>&nbsp;新增</el-button>
+            <el-button type="primary" @click="addPayVisible = true" :disabled="isRecycle"><i class="el-icon-plus"></i>&nbsp;新增
+            </el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown trigger="click" @command="leadingOut">
@@ -33,10 +34,14 @@
             </el-dropdown>
           </el-form-item>
           <el-form-item v-if="!isRecycle">
-            <el-button type="success" @click="sendMsgVisible = true" icon="el-icon-message" :disabled="currentSelectIds.length > 0 ? false : true">发送短信</el-button>
+            <el-button type="success" @click="sendMsgVisible = true" icon="el-icon-message"
+                       :disabled="currentSelectIds.length > 0 ? false : true">发送短信
+            </el-button>
           </el-form-item>
           <el-form-item v-if="!isRecycle">
-            <el-button type="danger" @click="createVisible = true" icon="el-icon-printer" :disabled="createShow > 0 ? false : true">生成违约金</el-button>
+            <el-button type="danger" @click="createVisible = true" icon="el-icon-printer"
+                       :disabled="createShow > 0 ? false : true">生成违约金
+            </el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="danger" icon="el-icon-delete" @click="handleClear">回收站</el-button>
@@ -291,7 +296,7 @@
               <span v-if="scope.row.info">
                 <span v-for="item in scope.row.info">{{ item }}/</span>
               </span>
-              <span v-else>/</span>
+            <span v-else>/</span>
           </template>
         </el-table-column>
         <el-table-column label="备注" min-width="120px">
@@ -379,8 +384,7 @@
     <el-dialog
       :visible.sync="detailVisible"
       title="详情"
-      width="80%"
-    >
+      width="80%">
       <div>
         <div v-if="DetailCurrentRow.pendable === 1" style="margin-bottom: 20px;width: 95%">
           <el-button size="mini" type="success" @click="handleDealWith(DetailCurrentRow.id)">生成待处理项</el-button>
@@ -403,14 +407,16 @@
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">实收金额：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.amount_received">{{ DetailCurrentRow.amount_received }}</span>
+            <span class="receive_detail"
+                  v-if="DetailCurrentRow.amount_received">{{ DetailCurrentRow.amount_received }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">汇款方式：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.account_type ">{{ DetailCurrentRow.account_type }}</span>
+            <span class="receive_detail"
+                  v-if="DetailCurrentRow.account_type ">{{ DetailCurrentRow.account_type }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
@@ -432,12 +438,14 @@
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">开户行：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.account_bank ">{{ DetailCurrentRow.account_bank }}</span>
+            <span class="receive_detail"
+                  v-if="DetailCurrentRow.account_bank ">{{ DetailCurrentRow.account_bank }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">补齐时间：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.complete_date ">{{ DetailCurrentRow.complete_date }}</span>
+            <span class="receive_detail"
+                  v-if="DetailCurrentRow.complete_date ">{{ DetailCurrentRow.complete_date }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
@@ -471,21 +479,24 @@
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">详情：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.description && DetailCurrentRow.description.description ">{{ DetailCurrentRow.description.description }}</span>
+            <span class="receive_detail"
+                  v-if="DetailCurrentRow.description && DetailCurrentRow.description.description ">{{ DetailCurrentRow.description.description }}</span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-bottom: 25px;">
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">备注：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.tags && DetailCurrentRow.tags.length > 0" style="text-align: left">
+            <span class="receive_detail" v-if="DetailCurrentRow.tags && DetailCurrentRow.tags.length > 0"
+                  style="text-align: left">
               <span v-for="(item,key) in DetailCurrentRow.tags">{{key + 1}}：{{ item.content }}<br></span>
             </span>
             <span class="receive_detail" v-else>/</span>
           </el-col>
           <el-col :span="6">
             <span style="color: #409EFF;" class="receive_title">催缴备注：</span>
-            <span class="receive_detail" v-if="DetailCurrentRow.remarks && DetailCurrentRow.remarks.length > 0" style="text-align: left">
+            <span class="receive_detail" v-if="DetailCurrentRow.remarks && DetailCurrentRow.remarks.length > 0"
+                  style="text-align: left">
               <span v-for="(item,key) in DetailCurrentRow.remarks">[{{ item.category }}]-[{{ item.content }}]-[{{ item.create_time }}]<br></span>
             </span>
             <span class="receive_detail" v-else>/</span>
@@ -533,8 +544,7 @@
       :visible.sync="remarkVisible"
       title="备注"
       width="40%"
-      @close="cancelRemark"
-    >
+      @close="cancelRemark">
       <div v-if="isFastMark">
         <span>催缴类型：</span>
         <el-select v-model="remarkType" clearable size="mini" style="margin-bottom: 20px;width: 80%">
@@ -543,7 +553,8 @@
         </el-select>
       </div>
       <span>备注信息：</span>
-      <el-input type="textarea" :row="12" v-model="add_remark" placeholder="请输入备注信息" style="width: 80%;vertical-align: top"></el-input>
+      <el-input type="textarea" :row="12" v-model="add_remark" placeholder="请输入备注信息"
+                style="width: 80%;vertical-align: top"></el-input>
       <div style="margin-top: 20px;text-align: right">
         <el-button size="mini" @click="cancelRemark">取消</el-button>
         <el-button type="primary" size="mini" @click="handleAddRemark">确定</el-button>
@@ -554,8 +565,7 @@
     <el-dialog
       :visible.sync="fastOutVisible"
       title="催缴导出"
-      width="30%"
-    >
+      width="30%">
       <el-date-picker
         v-model="fastOutDate"
         type="daterange"
@@ -578,8 +588,7 @@
     <el-dialog
       :visible.sync="sendMsgVisible"
       title="发送短信"
-      width="30%"
-    >
+      width="30%">
       发送类型：rrrrr
       <el-select v-model="selectMsgType" size="mini" style="width: 80%">
         <el-option :value="1" label="催缴"></el-option>
@@ -596,12 +605,12 @@
     <el-dialog
       :visible.sync="addPayVisible"
       title="新增应收"
-      width="30%"
-    >
+      width="30%">
       <div style="width: 85%;text-align: center;">
         <el-form :model="addForm" :rules="addFormRules" ref="addPayForm" status-icon label-width="100px" size="small">
           <el-form-item label="客户名称" prop="customer_name">
-            <el-input @focus="customer_list_visible = true" size="mini" v-model="customer_name" placeholder="点击选择"></el-input>
+            <el-input @focus="customer_list_visible = true" size="mini" v-model="customer_name"
+                      placeholder="点击选择"></el-input>
           </el-form-item>
           <el-form-item label="房屋地址">
             <el-input disabled v-model="address" size="mini"></el-input>
@@ -650,14 +659,16 @@
       <div>
         <el-row :gutter="20">
           <el-col :span="12">
-            类型：<el-select size="mini" style="width: 60%" v-model="customer_params.type">
-            <el-option :value="1" label="房东"></el-option>
-            <el-option :value="2" label="租客"></el-option>
-            <el-option :value="3" label="未知租客"></el-option>
-          </el-select>
+            类型：
+            <el-select size="mini" style="width: 60%" v-model="customer_params.type">
+              <el-option :value="1" label="房东"></el-option>
+              <el-option :value="2" label="租客"></el-option>
+              <el-option :value="3" label="未知租客"></el-option>
+            </el-select>
           </el-col>
           <el-col :span="12">
-            <el-input size="mini" style="width: 60%" v-model="customer_params.search" clearable c placeholder="请输入需求搜索的内容"></el-input>
+            <el-input size="mini" style="width: 60%" v-model="customer_params.search" clearable c
+                      placeholder="请输入需求搜索的内容"></el-input>
             <el-button type="primary" size="mini" @click="search_customer_list">搜索</el-button>
             <el-button size="mini" type="success" @click="OkSelectCustomer">确定选择</el-button>
           </el-col>
@@ -667,8 +678,7 @@
         <el-table
           :data="customer_list"
           highlight-current-row
-          @current-change="customer_list_select"
-        >
+          @current-change="customer_list_select">
           <el-table-column label="客户名称" prop="customer_name"></el-table-column>
           <el-table-column label="身份" prop="ident"></el-table-column>
           <el-table-column label="房屋地址" prop="address" min-width="150px"></el-table-column>
@@ -678,8 +688,7 @@
         </el-table>
       </div>
       <el-pagination style="text-align: right" :current-page="customer_params.page" :total="customer_list_count"
-        layout="total,prev,pager,next" @current-change="customer_page_change"
-      ></el-pagination>
+                     layout="total,prev,pager,next" @current-change="customer_page_change"></el-pagination>
     </el-dialog>
 
     <!--应收入账-->
@@ -701,7 +710,8 @@
           </el-form-item>
           <el-form-item label="账户类型">
             <el-select v-model="collectMoneyForm.accountType" @change="getCollectAccount">
-              <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label"
+                         :value="item.value"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="账户" prop="account_id">
@@ -735,8 +745,7 @@
     <el-dialog
       :visible="createVisible"
       title="生成日期"
-      width="30%"
-    >
+      width="30%">
       <div style="text-align: center;margin: 0 auto">
         日期：
         <el-date-picker
@@ -759,15 +768,13 @@
       <el-dialog
         :visible="callbackVisible"
         title="回滚"
-        @close="callbackVisible = false"
-      >
+        @close="callbackVisible = false">
         <div style="text-align: right;margin-bottom: 10px">
           <el-button type="primary" size="mini" @click="goCallBack">确定</el-button>
         </div>
         <el-table
           :data="callbackList"
-          @selection-change="handleSelectionChangeCall"
-        >
+          @selection-change="handleSelectionChangeCall">
           <el-table-column type="selection" width="50px"></el-table-column>
           <el-table-column label="ID" prop="id"></el-table-column>
           <el-table-column label="Desc" prop="value"></el-table-column>
@@ -779,11 +786,9 @@
     <el-dialog
       :visible="tagVisible"
       @close="tagVisible = false"
-      title="备注详情"
-    >
+      title="备注详情">
       <el-table
-        :data="rightMenuRow.tags"
-      >
+        :data="rightMenuRow.tags">
         <el-table-column label="备注时间" prop="create_time"></el-table-column>
         <el-table-column label="内容" prop="content"></el-table-column>
         <el-table-column label="时间" prop="operator_name"></el-table-column>
@@ -795,18 +800,19 @@
       :visible="registerReceive"
       title="登记收款"
       width="30%"
-      @close="handleCancelRegisterReceive"
-    >
+      @close="handleCancelRegisterReceive">
       <el-form :model="registration" size="mini" label-width="100px" style="width: 80%;margin: 0 auto">
         <el-form-item label="房屋地址">
           <el-input v-model="registration.address"></el-input>
         </el-form-item>
         <el-form-item label="上传图片">
-          <Upload :ID="'register'" :editImage="registerInfoImg" @getImg="handleGetRegister" :isClear="registerIsClear"></Upload>
+          <Upload :ID="'register'" :editImage="registerInfoImg" @getImg="handleGetRegister"
+                  :isClear="registerIsClear"></Upload>
         </el-form-item>
         <el-form-item label="账户类型">
           <el-select v-model="registration.cate" @change="getCollectAccount">
-            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label"
+                       :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="选择账户">
@@ -842,30 +848,31 @@
       :visible="contrastRunningVisible"
       title="收款对比"
       width="80%"
-      @close="handleCancelRun"
-    >
+      @close="handleCancelRun">
       <div class="contrastRunning">
         <div>
           <h3>收款记录</h3>
           <div style="text-align: right;margin-bottom: 15px">
+            <el-button size="mini" @click="handleChangeStatus(9)">未操作</el-button>
             <el-button size="mini" @click="handleChangeStatus(3)">已匹配</el-button>
             <el-button size="mini" @click="handleChangeStatus(5)">未匹配</el-button>
             <el-button size="mini" @click="handleChangeStatus(7)">未找到</el-button>
+            <el-button size="mini" @click="handleChangeStatus(11)">已入账</el-button>
           </div>
           <el-table
             :data="receive_data"
-            height="400px"
-          >
+            height="400px">
             <el-table-column label="收款名称" prop="address"></el-table-column>
             <el-table-column label="收款金额" prop="amount"></el-table-column>
             <el-table-column label="收款时间" prop="collection_time"></el-table-column>
             <el-table-column label="账户" prop="account.account_num"></el-table-column>
             <el-table-column label="截图">
               <template slot-scope="scope">
-                <i style="font-size: 16px;cursor: pointer" class="el-icon-picture" @click="look_image_list = scope.row.collect_img;look_image_visible = true"></i>
+                <i style="font-size: 16px;cursor: pointer" class="el-icon-picture"
+                   @click="look_image_list = scope.row.collect_img;look_image_visible = true"></i>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" v-if="contrastParams.status !== 11">
               <template slot-scope="scope">
                 <el-button size="mini" type="primary" @click="openContrastDialog(scope.row)">对比银行流水</el-button>
               </template>
@@ -877,27 +884,27 @@
             :current-page="contrastParams.page"
             :page-size="contrastParams.limit"
             @current-change="handleChangeContrastPage"
-            style="text-align: center"
-          ></el-pagination>
+            style="text-align: center"></el-pagination>
         </div>
         <div>
           <div style="width: 100%;height: 90px;">
             <el-form size="small" :model="contrast_params_form" label-width="120px" style="width: 80%;margin: 0 auto">
               <el-row :gutter="20">
                 <el-col :span="12">
-                  <el-form-item label="误差数">
-                    <el-input type="number" v-model="contrast_params_form.date_deviation" style="width: 150px"></el-input>
+                  <el-form-item label="时间误差数：">
+                    <el-input type="number" v-model="contrast_params_form.date_deviation"
+                              style="width: 150px"></el-input>
                   </el-form-item>
-                  <el-form-item label="误差类型">
+                  <el-form-item label="时间误差类型：">
                     <el-radio v-model="contrast_params_form.select" :label="5">天</el-radio>
                     <el-radio v-model="contrast_params_form.select" :label="3">分钟</el-radio>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="金额误差数">
+                  <el-form-item label="金额误差数：">
                     <el-input v-model="contrast_params_form.amount_deviation" style="width: 150px"></el-input>
                   </el-form-item>
-                  <el-form-item label="权重">
+                  <el-form-item label="权重：">
                     <el-radio v-model="contrast_params_form.order" :label="6">时间</el-radio>
                     <el-radio v-model="contrast_params_form.order" :label="4">金额</el-radio>
                   </el-form-item>
@@ -907,10 +914,9 @@
           </div>
           <el-table
             :data="running_data"
-            height="400px"
-          >
+            height="400px">
             <el-table-column label="打款时间" prop="deal_date"></el-table-column>
-            <el-table-column label="金额" prop="income_amount"></el-table-column>
+            <el-table-column label="收入金额" prop="income_amount"></el-table-column>
             <el-table-column label="备注" prop="remark">
               <template slot-scope="scope">
                 <span v-if="scope.row.remark">{{ scope.row.remark }}</span>
@@ -951,7 +957,7 @@
 
   export default {
     name: "index",
-    components: {organization, RightMenu, subjectTree, PolishTime,Upload},
+    components: {organization, RightMenu, subjectTree, PolishTime, Upload},
     data() {
       return {
         running_data: [],
@@ -974,7 +980,7 @@
         contrastParams: {
           page: 1,
           limit: 10,
-          status: 0,
+          status: 9,
         },
 
         registerReceive: false,
@@ -1080,7 +1086,7 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit('pick', [start, end]);
             }
-          },{
+          }, {
             text: '最近一年',
             onClick(picker) {
               const end = new Date();
@@ -1119,19 +1125,19 @@
         addSubjectName: '',
         addFormRules: {
           remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
+            {required: true, message: '请输入备注', trigger: 'blur'},
           ],
           description: [
-            { required: true, message: '请输入描述', trigger: 'blur' },
+            {required: true, message: '请输入描述', trigger: 'blur'},
           ],
           pay_date: [
-            { required: true, message: '请选择付款时间', trigger: 'blur' },
+            {required: true, message: '请选择付款时间', trigger: 'blur'},
           ],
           identity: [
-            { required: true, message: '请选择客户身份', trigger: 'blur' },
+            {required: true, message: '请选择客户身份', trigger: 'blur'},
           ],
           amount_receivable: [
-            { required: true, message: '请输入应收金额', trigger: 'blur' },
+            {required: true, message: '请输入应收金额', trigger: 'blur'},
           ]
         },
         currentSelectCustomer: '',
@@ -1149,19 +1155,19 @@
         },
         collectRules: {
           pay_date: [
-            { required: true, message: '请选择收款时间', trigger: 'blur' },
+            {required: true, message: '请选择收款时间', trigger: 'blur'},
           ],
           account_id: [
-            { required: true, message: '请选择账户', trigger: 'blur' },
+            {required: true, message: '请选择账户', trigger: 'blur'},
           ],
           amount_received: [
-            { required: true, message: '请输入实收金额', trigger: 'blur' },
+            {required: true, message: '请输入实收金额', trigger: 'blur'},
           ],
           complete_date: [
-            { required: true, message: '请选择补齐时间', trigger: 'blur' },
+            {required: true, message: '请选择补齐时间', trigger: 'blur'},
           ],
           remark: [
-            { required: true, message: '请输入备注', trigger: 'blur' },
+            {required: true, message: '请输入备注', trigger: 'blur'},
           ],
         },
         createShow: false,
@@ -1191,27 +1197,33 @@
     methods: {
       handleCancelRun() {
         this.contrastRow = '';
-        this.running_data = '';
+        this.running_data = [];
         this.receive_data = [];
         this.receive_count = 0;
         this.contrastRunningVisible = false;
       },
       handleRuAccount(row) {
-        this.$prompt('请输入备注','提示',{
+        this.$prompt('请输入备注', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(({value}) => {
-          this.$http.put(globalConfig.temporary_server + 'registration/flow_entry',{
+          this.$http.put(globalConfig.temporary_server + 'registration/flow_entry', {
             register_id: this.contrastRow.id,
             flow_id: row.id,
             remark: value
           }).then(res => {
-            console.log(res);
-            if (res.data.code === 200 ){
+            if (res.data.code === 200) {
+              this.handleChangeStatus(this.contrastParams.status);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
-              })
+              });
+              this.$confirm(res.data.data.mes, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+              }).then(({value}) => {
+              }).catch(() => {
+              });
             } else {
               this.$notify.warning({
                 title: '失败',
@@ -1221,17 +1233,22 @@
           }).catch(err => {
             console.log(err);
           })
-        }).catch(() => { })
+        }).catch(() => {
+        })
       },
       openContrastDialog(row) {
         this.contrastRow = row;
         if (!this.contrast_params_form.date_deviation) {
           this.contrast_params_form.date_deviation = parseInt(this.contrast_params_form.date_deviation);
         }
-        this.$http.put(globalConfig.temporary_server + `registration/match/${this.contrastRow.id}`,this.contrast_params_form).then(res => {
-          if (res.data.code === 200 ){
+        this.$http.put(globalConfig.temporary_server + `registration/match/${this.contrastRow.id}`, this.contrast_params_form).then(res => {
+          if (res.data.code === 200) {
             this.running_data = res.data.data.data;
             this.running_count = res.data.data.cont;
+            this.$notify.warning({
+              title: '温馨提示',
+              message: res.data.data.mes
+            });
           } else {
             this.$notify.warning({
               title: '警告',
@@ -1250,17 +1267,25 @@
         this.getContrastList();
       },
       handleChangeStatus(status) {
+        if (!(this.contrastParams.status === status)) {
+          this.running_data = [];
+          this.running_count = 0;
+        }
         this.contrastParams.status = status;
         this.getContrastList();
       },
       getContrastList() {
-        this.$http.get(globalConfig.temporary_server + 'registration',{
+        this.receive_data = [];
+        this.receive_count = 0;
+        this.$http.get(globalConfig.temporary_server + 'registration', {
           params: this.contrastParams
         }).then(res => {
           console.log(res);
           if (res.data.code === 200) {
-            this.receive_data = res.data.data.data;
-            this.receive_count = res.data.data.count;
+            if (res.data.data.data) {
+              this.receive_data = res.data.data.data;
+              this.receive_count = res.data.data.count;
+            }
           }
         }).catch(err => {
           console.log(err);
@@ -1271,7 +1296,7 @@
         this.getContrastList();
       },
       handleOkRegister() {
-        this.$http.post(globalConfig.temporary_server + 'registration',this.registration).then(res => {
+        this.$http.post(globalConfig.temporary_server + 'registration', this.registration).then(res => {
           console.log(res);
           if (res.data.code === 200) {
             this.$notify.success({
@@ -1337,7 +1362,7 @@
         if (!this.callbackParams) {
           return false;
         }
-        this.$http.put(this.url + `account/receivable/revert/${this.rightMenuRow.id}`,{ra_id: this.callbackParams}).then(res => {
+        this.$http.put(this.url + `account/receivable/revert/${this.rightMenuRow.id}`, {ra_id: this.callbackParams}).then(res => {
           this.handleSuccess(res);
           this.callbackVisible = false;
         }).catch(err => {
@@ -1351,26 +1376,26 @@
         }).join(",");
       },
       handleSelRangDate(val) {
-          if (val) {
-            this.form.startRange = val[0];
-            this.form.endRange = val[1]
-          } else {
-            this.form.startRange = '';
-            this.form.endRange = '';
-          }
+        if (val) {
+          this.form.startRange = val[0];
+          this.form.endRange = val[1]
+        } else {
+          this.form.startRange = '';
+          this.form.endRange = '';
+        }
       },
       handleSelTagDate(val) {
-         if (val) {
-           this.form.startTag = val[0];
-           this.form.endTag = val[1];
-         } else {
-           this.form.startTag = '';
-           this.form.endTag = '';
-         }
+        if (val) {
+          this.form.startTag = val[0];
+          this.form.endTag = val[1];
+        } else {
+          this.form.startTag = '';
+          this.form.endTag = '';
+        }
       },
       cancelCreateCollect() {
         var keys = Object.keys(this.collectMoneyForm);
-        for (var i =0;i<keys.length;i++) {
+        for (var i = 0; i < keys.length; i++) {
           this.collectMoneyForm[keys[i]] = "";
         }
         this.collectMoneyShow = false;
@@ -1379,7 +1404,7 @@
       OkCreateCollect(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.post(this.url + `account/receivable/receive/${this.rightMenuRow.id}`,this.collectMoneyForm).then(res => {
+            this.$http.post(this.url + `account/receivable/receive/${this.rightMenuRow.id}`, this.collectMoneyForm).then(res => {
               this.handleSuccess(res);
               this.cancelCreateCollect();
             }).catch(err => {
@@ -1395,7 +1420,7 @@
         this.accountList = [];
         this.collectMoneyForm.account_id = '';
         this.canSel = false;
-        this.$http.get(globalConfig.finance_server + 'account/manage/index',{
+        this.$http.get(globalConfig.finance_server + 'account/manage/index', {
           params: {
             cate: val,
             all: 1
@@ -1421,7 +1446,7 @@
           });
           return false;
         }
-        this.$http.put(this.url + `account/receivable/dedit/${this.createCurrentRow.id}`,{
+        this.$http.put(this.url + `account/receivable/dedit/${this.createCurrentRow.id}`, {
           exit_date: this.exit_date
         }).then(res => {
           this.handleSuccess(res);
@@ -1453,7 +1478,7 @@
         this.search_customer_list();
       },
       search_customer_list() {
-        this.$http.get(this.url + 'customer/base/customer',{params: this.customer_params}).then(res => {
+        this.$http.get(this.url + 'customer/base/customer', {params: this.customer_params}).then(res => {
           if (res.data.success) {
             this.customer_list = res.data.data.data;
             this.customer_list_count = res.data.data.count;
@@ -1462,7 +1487,7 @@
       },
       handleAddPayCancel() {
         var keys = Object.keys(this.addForm);
-        for (var i = 0;i<keys.length;i++) {
+        for (var i = 0; i < keys.length; i++) {
           this.addForm[keys[i]] = "";
         }
         this.customer_name = "";
@@ -1470,11 +1495,11 @@
         this.subject_name = "";
         this.addPayVisible = false;
       },
-      handleAddPay(formName){
+      handleAddPay(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.addForm.amount_receivable = parseFloat(this.addForm.amount_receivable);
-            this.$http.post(this.url + 'account/receivable/add',this.addForm).then(res => {
+            this.$http.post(this.url + 'account/receivable/add', this.addForm).then(res => {
               this.handleSuccess(res);
               this.handleAddPayCancel();
             }).catch(err => {
@@ -1495,7 +1520,7 @@
           });
           return false;
         }
-        this.$http.post(this.url + 'account/receivable/notify',{
+        this.$http.post(this.url + 'account/receivable/notify', {
           ids: this.currentSelectIds,
           type: this.selectMsgType
         }).then(res => {
@@ -1506,7 +1531,7 @@
         });
       },
       //列表多选
-      handleSelectionChange(val){
+      handleSelectionChange(val) {
         this.currentSelectIds = [];
         val.map(item => {
           this.currentSelectIds.push(item.id);
@@ -1520,7 +1545,10 @@
           });
           return false;
         } else {
-          this.$http.get(this.url + 'account/receivable/export',{responseType: 'arraybuffer',params: {date: `${this.fastOutDate[0]},${this.fastOutDate[1]}`}}).then(res =>{
+          this.$http.get(this.url + 'account/receivable/export', {
+            responseType: 'arraybuffer',
+            params: {date: `${this.fastOutDate[0]},${this.fastOutDate[1]}`}
+          }).then(res => {
             this.$exportData(res.data);
             this.fastOutVisible = false;
           }).catch(err => {
@@ -1543,7 +1571,7 @@
         }
       },
       handleOkTime(date) {
-        this.$http.put(this.url + `account/receivable/editCompleteDate/${this.rightMenuRow.id}`,{complete_date: date}).then(res => {
+        this.$http.put(this.url + `account/receivable/editCompleteDate/${this.rightMenuRow.id}`, {complete_date: date}).then(res => {
           this.handleSuccess(res);
           this.closePolishTime();
         }).catch(err => {
@@ -1565,15 +1593,16 @@
           });
           return false;
         }
-        var obj = {
+        let obj = {
           content: this.add_remark
         };
-        var root = 'account/receivable/addTag/';
+        let root = 'account/receivable/addTag/';
         if (this.isFastMark) {
           root = "account/receivable/addUrgeTag/";
           obj.category = this.remarkType;
         }
-        this.$http.put(this.url + `${root}${this.rightMenuRow.id}`,obj).then(res => {
+        this.$http.put(this.url + `${root}${this.rightMenuRow.id}`, obj).then(res => {
+          this.handleSuccess(res);
           this.handleSuccess(res);
           this.cancelRemark();
         }).catch(err => {
@@ -1582,7 +1611,7 @@
       },
 
       //请求详情
-      handleCtrlDetail(scope){
+      handleCtrlDetail(scope) {
         this.$http.get(this.url + `account/receivable/read/${scope.row.id}`).then(res => {
           if (res.data.success) {
             this.DetailCurrentRow = res.data.data;
@@ -1613,7 +1642,7 @@
         }
         this.$http.get(this.url + root, {params: params}).then((res) => {
           if (res.data.success) {
-            if (res.data.data.data.length < 1){
+            if (res.data.data.data.length < 1) {
               this.collectStatus = '暂无数据';
               this.collectData = [];
               this.totalNum = 0;
@@ -1644,10 +1673,10 @@
       },
       selectSubject(val) {
         if (this.addPayVisible) {
-          this.addForm.subject_id  = val.id;
+          this.addForm.subject_id = val.id;
           this.addSubjectName = val.name;
         } else if (this.isChangeSubject) {
-          this.$http.put(this.url + `account/receivable/subject/${this.rightMenuRow.id}`,{subject_id: val.id}).then(res =>{
+          this.$http.put(this.url + `account/receivable/subject/${this.rightMenuRow.id}`, {subject_id: val.id}).then(res => {
             this.handleSuccess(res);
           }).catch(err => {
             console.log(err);
@@ -1723,7 +1752,10 @@
           this.fastOutVisible = true;
         } else {
           this.form.export = 1;
-          this.$http.get(this.url + 'account/receivable/index',{responseType: 'arraybuffer',params: this.form}).then(res => {
+          this.$http.get(this.url + 'account/receivable/index', {
+            responseType: 'arraybuffer',
+            params: this.form
+          }).then(res => {
             this.$exportData(res.data);
             this.form.export = '';
           });
@@ -1746,7 +1778,7 @@
           {clickIndex: 'callback', headIcon: 'el-icon-refresh', label: '回滚',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
           {clickIndex: 'tagDetail', headIcon: 'el-icon-edit', label: '备注详情',},
-          {clickIndex: 'register',headIcon: 'el-icon-edit',label: '登记收款'}
+          {clickIndex: 'register', headIcon: 'el-icon-edit', label: '登记收款'}
         ];
         this.contextMenuParam(event);
       },
@@ -1780,7 +1812,7 @@
         if (val === 'callback') {
           this.callbackList = [];
           for (var key in this.rightMenuRow.running_account_record) {
-            this.callbackList.push({id: key,value: this.rightMenuRow.running_account_record[key]});
+            this.callbackList.push({id: key, value: this.rightMenuRow.running_account_record[key]});
           }
           this.callbackVisible = true;
         }
@@ -1795,14 +1827,14 @@
         }
       },
       handleEditMoney() {
-        this.$prompt('请输入应收金额','提示', {
+        this.$prompt('请输入应收金额', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputValue: this.rightMenuRow.amount_receivable,
           inputPattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
           inputErrorMessage: '格式不正确'
         }).then(({value}) => {
-          this.$http.put(this.url + `account/receivable/amount/${this.rightMenuRow.id}`,{amount: value}).then(res => {
+          this.$http.put(this.url + `account/receivable/amount/${this.rightMenuRow.id}`, {amount: value}).then(res => {
             if (res.data.success) {
               this.$notify.success({
                 title: '成功',
@@ -1816,7 +1848,8 @@
               })
             }
           })
-        }).catch(() => { })
+        }).catch(() => {
+        })
       },
       // 关闭补齐时间
       closePolishTime() {
@@ -1863,7 +1896,8 @@
           }).catch(err => {
             console.log(err);
           });
-        }).catch(() => { });
+        }).catch(() => {
+        });
       },
 
       handleCurrentChange(val) {
@@ -1897,13 +1931,13 @@
       border-radius: 3px;
       margin-bottom: 24px;
     }
-    .receive_title{
+    .receive_title {
       display: inline-block;
       vertical-align: top;
       width: 25%;
       text-align: right;
     }
-    .receive_detail{
+    .receive_detail {
       display: inline-block;
       width: 60%;
       text-align: center;
@@ -1912,7 +1946,7 @@
       color: white;
       background-color: #aec1fc;
     }
-    .warning-color{
+    .warning-color {
       background-color: #bcbcbd;
     }
   }
