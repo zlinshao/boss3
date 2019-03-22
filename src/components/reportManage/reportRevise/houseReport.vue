@@ -50,6 +50,16 @@
                 </el-col>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="收房年限(月)" required="">
+                <el-input placeholder="请输入收房年限" v-model="params.month"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="空置期" required="">
+                <el-input placeholder="请输入空置期(天)" v-model="params.vacancy"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
@@ -429,6 +439,8 @@
             id: '',                     //房屋类型
             name: '',
           },
+          vacancy: '',// 空置期
+          month: '', //收房年限
           floor: '',                    //楼层
           floors: '',                   //总楼层
           price: '',                    //价格
@@ -468,7 +480,7 @@
           staff_name: '',               //开单人name
           department_name: '',          //部门name
 
-          account_id:'',            
+          account_id:'',
           real_pay_at:''
         },
         property_fee: '',                //物业费
@@ -540,6 +552,8 @@
             }
             this.params.id = data.id || res.data.id;                     //id
             this.params.city_id = data.city_id;                     //城市
+            this.params.month = data.month || '';
+            this.params.vacancy = data.vacancy || '';
             this.params.house_id = data.house_id;                     //城市
             this.params.city_name = data.city_name;                 //城市
             this.params.community = data.community;                 //小区id
