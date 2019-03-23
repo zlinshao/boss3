@@ -58,6 +58,7 @@
       title="导入"
       @close="handleCancelImport"
       width="30%">
+      <div align="center" style="color: #E4393C;">流水模板银行必须与导入模板银行一致</div>
       <el-form size="mini" label-width="100px" style="width: 80%;margin: 0 auto">
         <el-form-item label="流水模板">
           <el-select v-model="params.bank_template" @change="changeBank">
