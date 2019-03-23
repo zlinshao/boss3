@@ -1284,8 +1284,6 @@
         this.getContrastList();
       },
       getContrastList() {
-        this.receive_data = [];
-        this.receive_count = 0;
         this.$http.get(globalConfig.temporary_server + 'registration', {
           params: this.contrastParams
         }).then(res => {
@@ -1293,9 +1291,17 @@
             if (res.data.data.data) {
               this.receive_data = res.data.data.data;
               this.receive_count = res.data.data.count;
+            } else {
+              this.receive_data = [];
+              this.receive_count = 0;
             }
+          } else {
+            this.receive_data = [];
+            this.receive_count = 0;
           }
         }).catch(err => {
+          this.receive_data = [];
+          this.receive_count = 0;
           console.log(err);
         });
       },
