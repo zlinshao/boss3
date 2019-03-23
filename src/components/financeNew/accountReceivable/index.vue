@@ -1194,6 +1194,13 @@
     mounted() {
       this.getTableData();
     },
+    watch: {
+      contrastRunningVisible(val) {
+        if (val) {
+          this.handleChangeStatus(this.contrastParams.status);
+        }
+      }
+    },
     methods: {
       handleCancelRun() {
         this.contrastRow = '';
@@ -1291,7 +1298,6 @@
         }).catch(err => {
           console.log(err);
         });
-        this.handleChangeStatus(9);
       },
       handleOpenContrastRunning() {
         this.contrastRunningVisible = true;
