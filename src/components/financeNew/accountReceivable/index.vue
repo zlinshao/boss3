@@ -1926,7 +1926,7 @@
       justify-content: space-between;
       > div {
         max-width: 50%;
-        min-width: 50%;
+        min-width: 46%;
         max-height: 500px;
         padding: 30px;
       }
