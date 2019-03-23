@@ -802,28 +802,28 @@
       width="30%"
       @close="handleCancelRegisterReceive">
       <el-form :model="registration" size="mini" label-width="100px" style="width: 80%;margin: 0 auto">
-        <el-form-item label="房屋地址">
+        <el-form-item label="房屋地址" required>
           <el-input v-model="registration.address"></el-input>
         </el-form-item>
-        <el-form-item label="上传图片">
+        <el-form-item label="上传图片" required>
           <Upload :ID="'register'" :editImage="registerInfoImg" @getImg="handleGetRegister"
                   :isClear="registerIsClear"></Upload>
         </el-form-item>
-        <el-form-item label="账户类型">
+        <el-form-item label="账户类型" required>
           <el-select v-model="registration.cate" @change="getCollectAccount">
             <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label"
                        :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择账户">
+        <el-form-item label="选择账户" required>
           <el-select v-model="registration.account_id" :disabled="!canSel">
             <el-option v-for="(item,key) in accountList" :key="key" :value="item.id" :label="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="收款金额">
+        <el-form-item label="收款金额" required>
           <el-input v-model="registration.amount" placeholder="请输入"></el-input>
         </el-form-item>
-        <el-form-item label="收款时间">
+        <el-form-item label="收款时间" required>
           <el-date-picker
             v-model="registration.collection_time"
             placeholder="请选择"
@@ -831,7 +831,7 @@
             type="datetime"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="收款备注">
+        <el-form-item label="收款备注" required>
           <el-input type="textarea" v-model="registration.remark" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item>
@@ -1214,6 +1214,8 @@
           }).then(res => {
             if (res.data.code === 200) {
               this.handleChangeStatus(this.contrastParams.status);
+              this.running_data = [];
+              this.running_count = 0;
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -1280,7 +1282,6 @@
         this.$http.get(globalConfig.temporary_server + 'registration', {
           params: this.contrastParams
         }).then(res => {
-          console.log(res);
           if (res.data.code === 200) {
             if (res.data.data.data) {
               this.receive_data = res.data.data.data;
@@ -1289,7 +1290,8 @@
           }
         }).catch(err => {
           console.log(err);
-        })
+        });
+        this.handleChangeStatus(9);
       },
       handleOpenContrastRunning() {
         this.contrastRunningVisible = true;
@@ -1297,8 +1299,9 @@
       },
       handleOkRegister() {
         this.$http.post(globalConfig.temporary_server + 'registration', this.registration).then(res => {
-          console.log(res);
           if (res.data.code === 200) {
+            this.handleCancelRegisterReceive();
+            this.getTableData();
             this.$notify.success({
               title: '成功',
               message: res.data.msg
@@ -1309,8 +1312,6 @@
               message: res.data.msg
             })
           }
-          this.handleCancelRegisterReceive();
-          this.getTableData();
         }).catch(err => {
           console.log(err);
         })
