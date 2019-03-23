@@ -1276,10 +1276,8 @@
         this.getContrastList();
       },
       handleChangeStatus(status) {
-        if (!(this.contrastParams.status === status)) {
-          this.running_data = [];
-          this.running_count = 0;
-        }
+        this.running_data = [];
+        this.running_count = 0;
         this.contrastParams.status = status;
         this.getContrastList();
       },
@@ -1927,7 +1925,8 @@
       display: flex;
       justify-content: space-between;
       > div {
-        width: 50%;
+        max-width: 50%;
+        min-width: 50%;
         max-height: 500px;
         padding: 30px;
       }
