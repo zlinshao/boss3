@@ -72,7 +72,11 @@
         this.$http.put(this.url + 'setting/village/' + id, {
           is_pass: pass
         }).then(res => {
-          this.getVillageList();
+          if (res.data.code === '9920') {
+            this.villageInfo = {};
+            this.images = [];
+            this.getVillageList();
+          }
         }).catch(_ => {
           this.getVillageList();
         })
@@ -160,7 +164,7 @@
         }
       }
     }
-    .list1{
+    .list1 {
       max-width: 20%;
       min-width: 20%;
     }
