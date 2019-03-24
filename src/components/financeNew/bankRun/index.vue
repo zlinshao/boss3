@@ -65,13 +65,13 @@
             <el-option v-for="item in bank_template" :key="item.id" :value="item.id" :label="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="账户类型" v-if="params.bank_template == 3 || params.bank_template == 9">
+        <el-form-item label="账户类型" v-if="params.bank_template == 3 || params.bank_template == 9 || params.bank_template == 11">
           <el-select v-model="accountVal" @change="getCollectAccount">
             <el-option v-for="item in accountTypeOption" :key="item.value" :label="item.label"
                        :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择账户" v-if="params.bank_template == 3 || params.bank_template == 9">
+        <el-form-item label="选择账户" v-if="params.bank_template == 3 || params.bank_template == 9 || params.bank_template == 11">
           <el-select v-model="params.account" :disabled="!canSel">
             <el-option v-for="(item,key) in accountList" :key="key" :value="item.id" :label="item.name"></el-option>
           </el-select>
