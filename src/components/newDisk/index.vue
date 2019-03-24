@@ -73,8 +73,7 @@
           is_pass: pass
         }).then(res => {
           if (res.data.code === '9920') {
-            this.villageInfo = {};
-            this.images = [];
+            this.listIndex = 0;
             this.getVillageList();
           }
         }).catch(_ => {
