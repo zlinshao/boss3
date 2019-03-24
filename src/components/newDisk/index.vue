@@ -4,7 +4,7 @@
     <div class="list scroll_bar" style="width: 100%">
       <div v-for="(item,index) in list" @click="getVillageInfo(item,index)">
         <div class="content" :class="{'chooseColor':listIndex === index}">
-          {{item.village_name}}范德萨发顺丰放大撒发放大撒发生打
+          {{item.village_name}}
         </div>
         <div style="display: flex;min-width: 130px;text-align: right">
           <el-button type="info" size="mini" @click="passThrough(item.id, 0)">拒绝
