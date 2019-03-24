@@ -246,6 +246,9 @@ const account = () => import('../components/meritPay/accountMmanagement/componen
 // 微信开发者
 const new_media = ()=> import('../components/new_media/index.vue');
 
+// 拓展新盘
+const NewDisk = ()=> import('../components/newDisk/index.vue');
+
 Vue.use(Router);
 
 export default new Router({
@@ -400,10 +403,7 @@ export default new Router({
         // 账户管理
         { path: '/account', component: account, name: '账户管理 ', meta: { keepAlive: true }},
         //业绩详情
-        {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}
-
-
-        },
+        {path: '/achieveDetail', component: DetailAcievement , name: '业绩详情', meta: {keepAlive: true}},
       ]
     },
     //快捷入口
@@ -433,6 +433,7 @@ export default new Router({
           icon: "iconfont icon-hetong1"
         },
         {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
+        {path: '/newDisk', component: NewDisk , name: '拓展新盘', icon: "iconfont icon-tiaofang"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         // {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
         // {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},

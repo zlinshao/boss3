@@ -64,3 +64,28 @@ $themeColor: #6ca5ff;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: $n;
 }
+
+@mixin scroll {
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-button {
+    height: 10px;
+    background-color: #e4e7ed;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #e4e7ed;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c5cce2;
+  }
+}
+
+.scroll_bar {
+  @include scroll;
+}
