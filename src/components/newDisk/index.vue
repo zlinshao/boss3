@@ -1,12 +1,13 @@
 <template>
   <div id="newDisk">
     <div id="container"></div>
-    <div class="list scroll_bar" style="width: 100%">
+    <div class="list list1 scroll_bar" style="width: 100%">
       <div v-for="(item,index) in list" @click="getVillageInfo(item,index)">
         <div class="content" :class="{'chooseColor':listIndex === index}">
-          {{item.village_name}}
+          <p>{{item.village_name}}</p>
+          <span>({{item.bulletin_user.name}}-{{item.bulletin_org.name}})</span>
         </div>
-        <div style="display: flex;min-width: 130px;text-align: right">
+        <div class="caozuo">
           <el-button type="info" size="mini" @click="passThrough(item.id, 0)">拒绝
           </el-button>
           <el-button type="primary" size="mini" @click="passThrough(item.id, 1)">通过
@@ -126,8 +127,8 @@
       width: 50%;
     }
     .list {
-      max-width: 18%;
-      min-width: 18%;
+      max-width: 13%;
+      min-width: 13%;
       height: 750px;
       padding: 0 30px;
       overflow-y: auto;
@@ -139,14 +140,29 @@
         width: 100%;
         padding: 5px;
       }
+      .caozuo {
+        display: flex;
+        min-width: 130px;
+        text-align: right
+      }
       .content {
         width: 50%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
+        p {
+          margin: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
+        span {
+          color: #c8cbd1;
+        }
       }
+    }
+    .list1{
+      max-width: 20%;
+      min-width: 20%;
     }
     .img {
       max-width: 20%;
