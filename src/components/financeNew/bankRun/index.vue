@@ -81,7 +81,7 @@
                   :isClear="bankIsClear"></Upload>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" @click="handleOkImport">导入</el-button>
+          <el-button size="mini" type="primary" @click="handleOkImport" :disabeld="loading">导入</el-button>
           <el-button size="mini" @click="handleCancelImport">取消</el-button>
         </el-form-item>
       </el-form>
@@ -127,6 +127,7 @@
         accountList: [],
         accountVal: '',
         canSel: false,
+        loading: true,
       }
     },
     mounted() {
@@ -138,7 +139,9 @@
     computed: {},
     methods: {
       handleOkImport() {
+        this.loading = true;
         this.$http.post(globalConfig.temporary_server + 'bank_fund_flow', this.params).then(res => {
+          this.loading = false;
           if (res.data.code === 200) {
             this.bankClose();
             this.get_bank_batch_count();
@@ -154,6 +157,7 @@
           }
           this.handleCancelImport();
         }).catch(err => {
+          this.loading = false;
           console.log(err);
         })
       },
@@ -172,7 +176,8 @@
         this.$http.get(globalConfig.finance_server + 'account/manage/index', {
           params: {
             cate: val,
-            all: 1
+            all: 1,
+            limit: 99,
           }
         }).then(res => {
           this.accountList = res.data.data.data;
