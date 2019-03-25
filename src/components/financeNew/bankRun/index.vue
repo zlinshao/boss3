@@ -177,7 +177,6 @@
           params: {
             cate: val,
             all: 1,
-            limit: 99,
           }
         }).then(res => {
           this.accountList = res.data.data.data;
@@ -198,7 +197,7 @@
         this.params.doc_id = val[1];
       },
       handleImportRun() {
-        this.$http.get(globalConfig.temporary_server + 'bank_template').then(res => {
+        this.$http.get(globalConfig.temporary_server + 'bank_template?limit=99').then(res => {
           if (res.data.code === 200) {
             this.bank_template = res.data.data.data;
             this.import_visible = true;

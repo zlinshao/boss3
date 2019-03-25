@@ -433,7 +433,7 @@ export default new Router({
           icon: "iconfont icon-hetong1"
         },
         {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
-        {path: '/newDisk', component: NewDisk , name: '拓展新盘', icon: "iconfont icon-tiaofang"},
+        // {path: '/newDisk', component: NewDisk , name: '拓展新盘', icon: "iconfont icon-tiaofang"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         // {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
         // {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
