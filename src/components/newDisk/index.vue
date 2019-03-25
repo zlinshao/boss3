@@ -66,19 +66,30 @@
         })
       },
       passThrough(id, pass) {
-        this.villageInfo = {};
-        this.images = [];
-        this.list = [];
-        this.$http.put(this.url + 'setting/village/' + id, {
-          is_pass: pass
-        }).then(res => {
-          if (res.data.code === '9920') {
+        let msg = pass ? '通过' : '拒绝';
+        this.$confirm('此操作将' + msg + '报备, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.villageInfo = {};
+          this.images = [];
+          this.list = [];
+          this.$http.put(this.url + 'setting/village/' + id, {
+            is_pass: pass
+          }).then(res => {
+            if (res.data.code === '9920') {
+              this.prompt('success', res.data.msg);
+            } else {
+              this.prompt('warning', res.data.msg);
+            }
             this.listIndex = 0;
             this.getVillageList();
-          }
-        }).catch(_ => {
-          this.getVillageList();
-        })
+          }).catch(_ => {
+            this.getVillageList();
+          })
+        }).catch(() => {
+        });
       },
       getImage(val) {
         this.images = [];
