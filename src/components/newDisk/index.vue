@@ -24,6 +24,7 @@
            <span class="village_name">{{item.village_name}}</span><br>
           {{item.house_type}}&nbsp;-&nbsp;{{item.price}}元
         </span>
+        <b @click="houseOpenWindow(item.url)">查看详情</b>
       </div>
     </div>
     <div class="list img scroll_bar">
@@ -59,6 +60,9 @@
     watch: {},
     computed: {},
     methods: {
+      houseOpenWindow(url) {
+        window.open(url);
+      },
       getVillageList() {
         this.$http.get(this.url + 'setting/village/list?limit=9999').then(res => {
           if (res.data.code === '9920') {
@@ -200,6 +204,9 @@
       }
       .village_name {
         color: #212121;
+      }
+      b {
+        color: #409EFF;
       }
     }
     .list1 {
