@@ -2,6 +2,7 @@
   <div id="newDisk">
     <div id="container"></div>
     <div class="list list1 scroll_bar" style="width: 100%">
+      <h3>全站大数据房源匹配</h3>
       <div v-for="(item,index) in list" @click="getVillageInfo(item,index)">
         <div class="content" :class="{'chooseColor':listIndex === index}">
           <p>{{item.village_name}}</p>
@@ -15,12 +16,18 @@
         </div>
       </div>
     </div>
-    <div class="list scroll_bar">
-      <div v-for="item of villageInfo" @click="getImage(item)">
-        {{item.village_name}}<br>{{item.house_type}}&nbsp;-&nbsp;{{item.price}}元
+    <div class="list price scroll_bar">
+      <h3>房型价格区块链推荐</h3>
+      <div v-for="(item,index) of villageInfo" @click="getImage(item,index)"
+           :class="{'chooseColor':houseIndex === index}">
+        <span>
+           <span class="village_name">{{item.village_name}}</span><br>
+          {{item.house_type}}&nbsp;-&nbsp;{{item.price}}元
+        </span>
       </div>
     </div>
     <div class="list img scroll_bar">
+      <h3>自适应聚类房型图</h3>
       <div v-for="item in images">
         <img data-magnify="" data-caption="图片查看器" :data-src="item" :src="item">
       </div>
@@ -38,6 +45,7 @@
         list: [],
         map: null,
         listIndex: 0,
+        houseIndex: 0,
         villageInfo: {},
         images: [],
       }
@@ -91,7 +99,8 @@
         }).catch(() => {
         });
       },
-      getImage(val) {
+      getImage(val, index) {
+        this.houseIndex = index;
         this.images = [];
         this.images = val.pic_address || [];
       },
@@ -101,6 +110,10 @@
         this.map.destroy();
         this.listIndex = index;
         this.villageInfo = item.village_info;
+        if (item.village_info && item.village_info.length > 0) {
+          this.houseIndex = 0;
+          this.images = item.village_info[0].pic_address;
+        }
         this.highSearch(this.villageInfo);
       },
       highSearch(info) {
@@ -147,6 +160,10 @@
       padding: 0 30px;
       overflow-y: auto;
       border-left: 1px solid #e4e7ed;
+      h3 {
+        text-align: center;
+        color: #FF4302;
+      }
       > div {
         display: flex;
         justify-content: space-between;
@@ -174,6 +191,15 @@
         span {
           color: #c8cbd1;
         }
+      }
+    }
+    .price {
+      div {
+        margin-bottom: 10px;
+        line-height: 22px;
+      }
+      .village_name {
+        color: #212121;
       }
     }
     .list1 {
