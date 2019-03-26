@@ -161,6 +161,7 @@
       }
       .content {
         width: 50%;
+        padding: 6px 10px;
         p {
           margin: 0;
           overflow: hidden;
@@ -168,6 +169,7 @@
           display: -webkit-box;
           -webkit-line-clamp: 1;
           -webkit-box-orient: vertical;
+          line-height: 20px;
         }
         span {
           color: #c8cbd1;
