@@ -113,14 +113,14 @@
             if (this.list[0]) {
               this.villageImage(this.list[0].id);
               this.showHouseInfo = this.list[0].draft_content || {};
-              if (this.list[0].village_info) {
-                if (this.list[0].village_info[0]) {
-                  this.villageInfo = this.list[0].village_info;
-                  this.images = this.list[0].village_info[0].pic_address;
+              if (this.list[0].outer_net_data) {
+                if (this.list[0].outer_net_data[0]) {
+                  this.villageInfo = this.list[0].outer_net_data;
+                  this.images = this.list[0].outer_net_data[0].pic_address;
                 }
               }
             }
-            this.highSearch(this.list[0].village_info);
+            this.highSearch(this.list[0].outer_net_data);
           }
         })
       },
@@ -198,10 +198,10 @@
         this.map.destroy();
         this.listIndex = index;
         this.showHouseInfo = item.draft_content || {};
-        this.villageInfo = item.village_info;
-        if (item.village_info && item.village_info.length > 0) {
+        this.villageInfo = item.outer_net_data;
+        if (item.outer_net_data && item.outer_net_data.length > 0) {
           this.houseIndex = 0;
-          this.images = item.village_info[0].pic_address;
+          this.images = item.outer_net_data[0].pic_address;
         }
         this.highSearch(this.villageInfo);
       },
