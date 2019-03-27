@@ -23,10 +23,13 @@
           <span>({{item.bulletin_user.name}}-{{item.bulletin_org.name}})</span>
         </div>
         <div class="caozuo">
-          <el-button type="info" size="mini" @click="passThrough(item.id, 0)">拒绝
-          </el-button>
-          <el-button type="primary" size="mini" @click="passThrough(item.id, 1)">通过
-          </el-button>
+          <div>
+            <el-button type="info" size="mini" @click="passThrough(item.id, 0)">拒绝
+            </el-button>
+            <el-button type="primary" size="mini" @click="passThrough(item.id, 1)">通过
+            </el-button>
+          </div>
+          <p>({{item.status_name.name}})</p>
         </div>
       </div>
     </div>
@@ -289,9 +292,16 @@
         padding: 5px;
       }
       .caozuo {
-        display: flex;
-        min-width: 130px;
-        text-align: right
+        > div {
+          display: flex;
+          min-width: 130px;
+          text-align: right;
+        }
+        p {
+          margin: 0;
+          padding: 3px 6px 0 0;
+          text-align: right;
+        }
       }
       .content {
         width: 50%;
