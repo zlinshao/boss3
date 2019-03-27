@@ -1,6 +1,20 @@
 <template>
   <div id="newDisk">
-    <div id="container"></div>
+    <div class="newDiskLeft">
+      <div id="container"></div>
+      <div class="info scroll_bar">
+        <div v-for="item in Object.keys(houseInfo)">
+          <label>{{houseInfo[item]}}：</label>
+          <span>{{showHouseInfo[item]}}</span>
+        </div>
+        <div style="width: 100%;" v-for="item in Object.keys(houseImages)">
+          <label>{{houseImages[item]}}：</label>
+          <span v-for="p in showImages[item]">
+             <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri">
+          </span>
+        </div>
+      </div>
+    </div>
     <div class="list list1 scroll_bar" style="width: 100%">
       <h3>全站大数据房源匹配</h3>
       <div v-for="(item,index) in list" @click="getVillageInfo(item,index)">
@@ -49,6 +63,32 @@
         houseIndex: 0,
         villageInfo: {},
         images: [],
+        showHouseInfo: {},
+        showImages: {},
+        houseInfo: {
+          city: '城市名',
+          district: '区/县名称',
+          village_name: '小区名称',
+          village_alias: '小区别名',
+          address: '街道地址',
+          built_year: '建筑年代',
+          house_type: '房屋类型',
+          total_buildings: '总栋数',
+          property_fee: '物业费',
+          property_phone: '物业电话',
+          lessor_phone: '求租人电话',
+          property_com: '物业公司',
+          content: '详情',
+          peripheral_info: '周边信息',
+          subway_road: '地铁线路',
+          remark: '备注',
+        },
+        // 小区照片
+        houseImages: {
+          village_photo: '小区照片',
+          home_photo: '房屋照片',
+          files: '小区名称',
+        }
       }
     },
     mounted() {
@@ -68,40 +108,80 @@
           if (res.data.code === '9920') {
             this.list = res.data.data;
             if (this.list[0]) {
-              this.villageInfo = this.list[0].village_info;
-              if (this.list[0].village_info[0]) {
-                this.images = this.list[0].village_info[0].pic_address;
+              this.villageImage(this.list[0].id);
+              this.showHouseInfo = this.list[0].draft_content || {};
+              if (this.list[0].village_info) {
+                if (this.list[0].village_info[0]) {
+                  this.villageInfo = this.list[0].village_info;
+                  this.images = this.list[0].village_info[0].pic_address;
+                }
               }
             }
             this.highSearch(this.list[0].village_info);
           }
         })
       },
+      villageImage(id) {
+        this.$http.get(this.url + 'setting/village/get_album/' + id).then(res => {
+          if (res.data.code === '9930') {
+            this.showImages = res.data.data;
+          } else {
+            this.showImages = {};
+          }
+        });
+      },
       passThrough(id, pass) {
         let msg = pass ? '通过' : '拒绝';
-        this.$confirm('此操作将' + msg + '报备, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.villageInfo = {};
-          this.images = [];
-          this.list = [];
-          this.$http.put(this.url + 'setting/village/' + id, {
-            is_pass: pass
-          }).then(res => {
-            if (res.data.code === '9920') {
-              this.prompt('success', res.data.msg);
-            } else {
-              this.prompt('warning', res.data.msg);
-            }
-            this.listIndex = 0;
-            this.getVillageList();
-          }).catch(_ => {
-            this.getVillageList();
-          })
-        }).catch(() => {
-        });
+        if (pass === 1) {
+          this.$confirm('此操作将' + msg + '报备, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.villageInfo = {};
+            this.images = [];
+            this.list = [];
+            this.$http.put(this.url + 'setting/village/' + id, {
+              is_pass: pass
+            }).then(res => {
+              if (res.data.code === '9920') {
+                this.prompt('success', res.data.msg);
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+              this.listIndex = 0;
+              this.getVillageList();
+            }).catch(_ => {
+              this.getVillageList();
+            })
+          }).catch(() => {
+          });
+        } else {
+          this.$prompt('请输入拒绝理由', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }).then(({value}) => {
+            this.villageInfo = {};
+            this.images = [];
+            this.list = [];
+            let msg = value || '';
+            this.$http.put(this.url + 'setting/village/' + id, {
+              is_pass: pass,
+              message: msg,
+            }).then(res => {
+              if (res.data.code === '9920') {
+                this.prompt('success', res.data.msg);
+              } else {
+                this.prompt('warning', res.data.msg);
+              }
+              this.listIndex = 0;
+              this.getVillageList();
+            }).catch(_ => {
+              this.getVillageList();
+            })
+          }).catch(() => {
+          });
+        }
       },
       getImage(val, index) {
         this.houseIndex = index;
@@ -111,8 +191,10 @@
       getVillageInfo(item, index) {
         this.villageInfo = {};
         this.images = [];
+        this.villageImage(item.id);
         this.map.destroy();
         this.listIndex = index;
+        this.showHouseInfo = item.draft_content || {};
         this.villageInfo = item.village_info;
         if (item.village_info && item.village_info.length > 0) {
           this.houseIndex = 0;
@@ -127,6 +209,7 @@
           zoom: 13,
         });
         let infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(5, -20)});
+        if (!info) return;
         for (let key of info) {
           let marker = new AMap.Marker({
             position: [key.longitude, key.latitude],
@@ -153,10 +236,40 @@
   #newDisk {
     display: flex;
     display: -webkit-flex;
-    #container {
-      height: 750px;
+    position: relative;
+    .newDiskLeft {
       width: 50%;
+      height: 750px;
+      #container {
+        width: 100%;
+        height: 450px;
+      }
+      .info {
+        height: 300px;
+        overflow: auto;
+        display: flex;
+        display: -webkit-flex;
+        flex-wrap: wrap;
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 6px;
+          margin-right: 10px;
+        }
+        div {
+          margin-top: 20px;
+          width: 30%;
+          display: flex;
+          display: -webkit-flex;
+          margin-right: 2%;
+          label {
+            color: #212121;
+            white-space: nowrap;
+          }
+        }
+      }
     }
+
     .list {
       max-width: 13%;
       min-width: 13%;
