@@ -90,7 +90,7 @@
         houseImages: {
           village_photo: '小区照片',
           home_photo: '房屋照片',
-          files: '调研报告(可传文件)',
+          files: '调研报告',
         }
       }
     },
