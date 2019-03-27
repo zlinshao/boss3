@@ -811,11 +811,37 @@
           })
         })
       },
+      handleCheckReport(process_id) {
+        this.$http.post(this.address + '/financial/pingxx/preCheck',{
+          process_id
+        }).then(res => {
+          console.log(res);
+          if (res.data.code !== '20000') {
+            this.$alert(res.data.msg,'提示',{
+              confirmButtonText: '确定',
+              callback: () => {
+                this.$alert(res.data.msg,'提示',{
+                  confirmButtonText: '确定',
+                  callback: () => {
+                    this.$alert(res.data.msg, '提示',{
+                      confirmButtonText: '确定',
+                      callback: ()=> {
+                        return false;
+                      }
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+      },
       getProcess() {
         this.suggestpriceStatus = false;
         this.fullLoading = true;
         this.approvedStatus = false;
         this.$http.get(this.address + `workflow/process/${this.reportId}`).then((res) => {
+          console.log(res);
           this.fullLoading = false;
           if (res.data.code === '20020' && res.data.data) {
             let data = res.data.data;
@@ -837,6 +863,7 @@
                 this.setProcess(data);
                 if (data.process.place.status === 'review') {
                   if (data.process.place.name === 'verify-manager_review') {
+                    this.handleCheckReport(data.process.id);
                     this.checkEmployee(data.process)
                   } else {
                     this.contractStatus(data.process);
