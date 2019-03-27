@@ -300,6 +300,9 @@
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
+        <el-button v-if="process.processable_type === 'bulletin_collect_basic'" size="small" type="primary" @click="handleCheckReport1(reportId)">
+          标记不打押金不付款
+        </el-button>
         <el-button size="small" type="primary" @click="openModal"
                    v-if="approvedStatus && routerLinks.indexOf(process.processable_type) > -1">
           修 改
@@ -833,6 +836,15 @@
                 })
               }
             })
+          }
+        })
+      },
+      handleCheckReport1(process_id) {
+        this.$http.post(this.address + '/financial/pingxx/preventPay',{
+          process_id
+        }).then(res => {
+          if (res.data.code === '20000') {
+            this.getProcess(process_id);
           }
         })
       },

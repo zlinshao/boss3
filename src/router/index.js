@@ -460,6 +460,7 @@ export default new Router({
       children: [
         {path: '/housesManage', component: HousesManage, name: '产品管控中心'},
         {path: '/villageManage', component: VillageManage, name: '小区管理'},
+        {path: '/newDisk', component: NewDisk , name: '拓展新盘'},
         {path: '/dormManage', component: DormManage, name: '宿舍管理'},
         {path: '/officeManage', component: OfficeManage, name: '办公室管理'},
       ]
