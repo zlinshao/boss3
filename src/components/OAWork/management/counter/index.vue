@@ -232,20 +232,29 @@
             </tr>
              <tr class="tab-font">
             <td></td>
-            <td>片区经理工资</td>
+            <td>副总</td>
             <td>区长工资</td>
-            <td></td>
+            <td>片区经理工资</td>
             </tr>
             <tr>
-              <td class="tab-bold">绩效</td>
-              <td>{{result.manager_ach}}</td>
-              <td>{{result.warden_ach}}</td>
+              <td class="tab-bold">超过收房空置期消耗认责</td>
+              <td>{{result.over_lord_duty.co_manager}}</td>
+              <td>{{result.over_lord_duty.warden}}</td>
+              <td>{{result.over_lord_duty.area_manager}}</td>
               <td></td>
             </tr>
             <tr>
-              <td class="tab-bold">认责</td>
-              <td>{{result.manager_duty}}</td>
-              <td>{{result.warden_duty}}</td>
+              <td class="tab-bold">超过20天空置期认责</td>
+              <td>{{result.over_20_duty.co_manager}}</td>
+              <td>{{result.over_20_duty.warden}}</td>
+              <td>{{result.over_20_duty.area_manager}}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="tab-bold">中介费管理层认责</td>
+              <td>{{result.agency_duty.co_manager}}</td>
+              <td>{{result.agency_duty.warden}}</td>
+              <td>{{result.agency_duty.area_manager}}</td>
               <td></td>
             </tr>
           </table>
@@ -366,10 +375,9 @@
             this.result.all_overflow=data.all.overflow;
             this.result.all_push_money=data.all.push_money;
             this.result.all_real_money=data.all.real_money;
-            this.result.manager_ach=data.manager.ach;
-            this.result.manager_duty=data.manager.duty;
-            this.result.warden_ach=data.warden.ach;
-            this.result.warden_duty=data.warden.duty;
+            this.result.over_lord_duty=data.over_lord_duty;
+            this.result.over_20_duty=data.over_20_duty;
+            this.result.agency_duty=data.agency_duty;
           } else {
             this.prompt('warning', res.data.msg);
           }
