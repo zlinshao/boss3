@@ -213,6 +213,12 @@
             <td>{{result.all_basic_achievement}}</td>
             </tr>
             <tr>
+            <td class="tab-bold">实际业绩</td>
+            <td>{{result.lord_real_achievement}}</td>
+            <td>{{result.rent_real_achievement}}</td>
+            <td>{{result.all_real_achievement}}</td>
+            </tr>
+            <tr>
             <td class="tab-bold">溢出业绩</td>
             <td>{{result.lord_overflow}}</td>
             <td>{{result.rent_overflow}}</td>
@@ -223,6 +229,13 @@
             <td>{{result.lord_push_money}}</td>
             <td>{{result.rent_push_money}}</td>
             <td>{{result.all_push_money}}</td>
+            </tr>
+             <tr>
+            <tr>
+            <td class="tab-bold">收房人超空置期认责</td>
+            <td>{{result.lord_vacancy_duty}}</td>
+            <td></td>
+            <td>{{result.lord_vacancy_duty}}</td>
             </tr>
              <tr>
             <td class="tab-bold">净得金额</td>
@@ -367,12 +380,16 @@
             this.result.lord_overflow=data.lord.overflow;
             this.result.lord_push_money=data.lord.push_money;
             this.result.lord_real_money=data.lord.real_money;
+            this.result.lord_vacancy_duty=data.lord.vacancy_duty;
+            this.result.lord_real_achievement=data.lord.real_achievement;
             this.result.rent_basic_achievement=data.rent.basic_achievement;
             this.result.rent_overflow=data.rent.overflow;
             this.result.rent_push_money=data.rent.push_money;
             this.result.rent_real_money=data.rent.real_money;
+            this.result.rent_real_achievement=data.rent.real_achievement;
             this.result.all_basic_achievement=data.all.basic_achievement;
             this.result.all_overflow=data.all.overflow;
+            this.result.all_real_achievement=data.all.real_achievement;
             this.result.all_push_money=data.all.push_money;
             this.result.all_real_money=data.all.real_money;
             this.result.over_lord_duty=data.over_lord_duty;
