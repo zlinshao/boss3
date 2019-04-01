@@ -206,24 +206,14 @@
             <td>租房人</td>
             <td>合计</td>
             </tr>
-             <tr>
-            <td class="tab-bold">基本业绩</td>
-            <td>{{result.lord_basic_achievement}}</td>
-            <td>{{result.rent_basic_achievement}}</td>
-            <td>{{result.all_basic_achievement}}</td>
-            </tr>
+
             <tr>
             <td class="tab-bold">实际业绩</td>
             <td>{{result.lord_real_achievement}}</td>
             <td>{{result.rent_real_achievement}}</td>
             <td>{{result.all_real_achievement}}</td>
             </tr>
-            <tr>
-            <td class="tab-bold">溢出业绩</td>
-            <td>{{result.lord_overflow}}</td>
-            <td>{{result.rent_overflow}}</td>
-            <td>{{result.all_overflow}}</td>
-            </tr>
+
             <tr>
             <td class="tab-bold">绩效金额</td>
             <td>{{result.lord_push_money}}</td>
@@ -246,8 +236,8 @@
              <tr class="tab-font">
             <td></td>
             <td>副总</td>
-            <td>区长工资</td>
-            <td>片区经理工资</td>
+            <td>区长认责</td>
+            <td>片区经理认责</td>
             </tr>
             <tr>
               <td class="tab-bold">超过收房空置期消耗认责</td>
@@ -257,10 +247,10 @@
               <td></td>
             </tr>
             <tr>
-              <td class="tab-bold">超过20天空置期认责</td>
-              <td>{{result.over_20_duty.co_manager}}</td>
-              <td>{{result.over_20_duty.warden}}</td>
-              <td>{{result.over_20_duty.area_manager}}</td>
+              <td class="tab-bold">超空置期认责</td>
+              <td>{{result.over_duty.co_manager}}</td>
+              <td>{{result.over_duty.warden}}</td>
+              <td>{{result.over_duty.area_manager}}</td>
               <td></td>
             </tr>
             <tr>
@@ -364,7 +354,6 @@
       },
       getData(){
         let address;
-        console.log(this.rent_type);
         if(this.rent_type==1){
            address='salary/achievement_counter/getCounter';
         }else if(this.rent_type==2){
@@ -393,7 +382,7 @@
             this.result.all_push_money=data.all.push_money;
             this.result.all_real_money=data.all.real_money;
             this.result.over_lord_duty=data.over_lord_duty;
-            this.result.over_20_duty=data.over_20_duty;
+            this.result.over_duty=data.over_duty;
             this.result.agency_duty=data.agency_duty;
           } else {
             this.prompt('warning', res.data.msg);
