@@ -5,11 +5,11 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item v-if="activeName === 'first'">
-              <el-input placeholder="请输入房屋地址" v-model="paramsCollect.keyWords" size="mini">
+              <el-input placeholder="请输入房屋地址" v-model="paramsCollect.keyWords" size="mini" @keyup.enter="search">
               </el-input>
             </el-form-item>
             <el-form-item v-else>
-              <el-input placeholder="请输入房屋地址" v-model="paramsRent.keyWords" size="mini">
+              <el-input placeholder="请输入房屋地址" v-model="paramsRent.keyWords" size="mini" @keyup.enter="search">
               </el-input>
             </el-form-item>
             <el-form-item v-if="activeName === 'first'">
