@@ -206,23 +206,26 @@
             <td>租房人</td>
             <td>合计</td>
             </tr>
-             <tr>
-            <td class="tab-bold">基本业绩</td>
-            <td>{{result.lord_basic_achievement}}</td>
-            <td>{{result.rent_basic_achievement}}</td>
-            <td>{{result.all_basic_achievement}}</td>
-            </tr>
+
             <tr>
-            <td class="tab-bold">溢出业绩</td>
-            <td>{{result.lord_overflow}}</td>
-            <td>{{result.rent_overflow}}</td>
-            <td>{{result.all_overflow}}</td>
+            <td class="tab-bold">实际业绩</td>
+            <td>{{result.lord_real_achievement}}</td>
+            <td>{{result.rent_real_achievement}}</td>
+            <td>{{result.all_real_achievement}}</td>
             </tr>
+
             <tr>
             <td class="tab-bold">绩效金额</td>
             <td>{{result.lord_push_money}}</td>
             <td>{{result.rent_push_money}}</td>
             <td>{{result.all_push_money}}</td>
+            </tr>
+             <tr>
+            <tr>
+            <td class="tab-bold">收房人超空置期认责</td>
+            <td>{{result.lord_vacancy_duty}}</td>
+            <td></td>
+            <td>{{result.lord_vacancy_duty}}</td>
             </tr>
              <tr>
             <td class="tab-bold">净得金额</td>
@@ -232,20 +235,29 @@
             </tr>
              <tr class="tab-font">
             <td></td>
-            <td>片区经理工资</td>
-            <td>区长工资</td>
-            <td></td>
+            <td>副总</td>
+            <td>区长认责</td>
+            <td>片区经理认责</td>
             </tr>
             <tr>
-              <td class="tab-bold">绩效</td>
-              <td>{{result.manager_ach}}</td>
-              <td>{{result.warden_ach}}</td>
+              <td class="tab-bold">超过收房空置期消耗认责</td>
+              <td>{{result.over_lord_duty.co_manager}}</td>
+              <td>{{result.over_lord_duty.warden}}</td>
+              <td>{{result.over_lord_duty.area_manager}}</td>
               <td></td>
             </tr>
             <tr>
-              <td class="tab-bold">认责</td>
-              <td>{{result.manager_duty}}</td>
-              <td>{{result.warden_duty}}</td>
+              <td class="tab-bold">超空置期认责</td>
+              <td>{{result.over_duty.co_manager}}</td>
+              <td>{{result.over_duty.warden}}</td>
+              <td>{{result.over_duty.area_manager}}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="tab-bold">中介费管理层认责</td>
+              <td>{{result.agency_duty.co_manager}}</td>
+              <td>{{result.agency_duty.warden}}</td>
+              <td>{{result.agency_duty.area_manager}}</td>
               <td></td>
             </tr>
           </table>
@@ -342,7 +354,6 @@
       },
       getData(){
         let address;
-        console.log(this.rent_type);
         if(this.rent_type==1){
            address='salary/achievement_counter/getCounter';
         }else if(this.rent_type==2){
@@ -358,18 +369,21 @@
             this.result.lord_overflow=data.lord.overflow;
             this.result.lord_push_money=data.lord.push_money;
             this.result.lord_real_money=data.lord.real_money;
+            this.result.lord_vacancy_duty=data.lord.vacancy_duty;
+            this.result.lord_real_achievement=data.lord.real_achievement;
             this.result.rent_basic_achievement=data.rent.basic_achievement;
             this.result.rent_overflow=data.rent.overflow;
             this.result.rent_push_money=data.rent.push_money;
             this.result.rent_real_money=data.rent.real_money;
+            this.result.rent_real_achievement=data.rent.real_achievement;
             this.result.all_basic_achievement=data.all.basic_achievement;
             this.result.all_overflow=data.all.overflow;
+            this.result.all_real_achievement=data.all.real_achievement;
             this.result.all_push_money=data.all.push_money;
             this.result.all_real_money=data.all.real_money;
-            this.result.manager_ach=data.manager.ach;
-            this.result.manager_duty=data.manager.duty;
-            this.result.warden_ach=data.warden.ach;
-            this.result.warden_duty=data.warden.duty;
+            this.result.over_lord_duty=data.over_lord_duty;
+            this.result.over_duty=data.over_duty;
+            this.result.agency_duty=data.agency_duty;
           } else {
             this.prompt('warning', res.data.msg);
           }
