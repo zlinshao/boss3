@@ -5,6 +5,14 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item v-if="activeName === 'first'">
+              <el-input placeholder="请输入房屋地址" v-model="paramsCollect.keyWords" size="mini">
+              </el-input>
+            </el-form-item>
+            <el-form-item v-else>
+              <el-input placeholder="请输入房屋地址" v-model="paramsRent.keyWords" size="mini">
+              </el-input>
+            </el-form-item>
+            <el-form-item v-if="activeName === 'first'">
               <el-input placeholder="请选择房屋地址" v-model="addressCollect" size="mini" readOnly @focus="openAddressDialog">
                 <template slot="append">
                   <div style="cursor: pointer;" @click="emptySearch">清空</div>
@@ -701,6 +709,7 @@
         show: false,
         lists: [],
         paramsCollect: {
+          keyWords: '',
           module: 1,
           page: 1,
           limit: 12,
@@ -713,6 +722,7 @@
           depart_id: '', //部门
         },
         paramsRent: {
+          keyWords: '',
           module: 2,
           page: 1,
           limit: 12,
@@ -1097,6 +1107,7 @@
         if (this.activeName === 'first') {
           this.paramsCollect.time = [];
           this.paramsCollect.status = '';
+          this.paramsCollect.keyWords = '';
           this.paramsCollect.source = '';
           this.paramsCollect.type = '';
           this.paramsCollect.staff_id = '';
@@ -1106,6 +1117,7 @@
         } else {
           this.paramsRent.time = [];
           this.paramsRent.status = '';
+          this.paramsRent.keyWords = '';
           this.paramsRent.source = '';
           this.paramsRent.type = '';
           this.paramsRent.staff_id = '';
