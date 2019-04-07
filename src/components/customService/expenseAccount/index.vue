@@ -5,33 +5,33 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item v-if="activeName === 'first'">
-              <el-input placeholder="请输入房屋地址" v-model="paramsCollect.keyWords" size="mini" @keyup.enter="search">
+              <el-input placeholder="请输入房屋地址" v-model="paramsCollect.keyWords" size="mini" @keyup.enter.native="search" clearable>
                  <template slot="append">
                   <div style="cursor: pointer;" @click="search">搜索</div>
                 </template>
               </el-input>
             </el-form-item>
             <el-form-item v-else>
-              <el-input placeholder="请输入房屋地址" v-model="paramsRent.keyWords" size="mini" @keyup.enter="search">
+              <el-input placeholder="请输入房屋地址" v-model="paramsRent.keyWords" size="mini" @keyup.enter.native="search" clearable>
                  <template slot="append">
                   <div style="cursor: pointer;" @click="search">搜索</div>
                 </template>
               </el-input>
             </el-form-item>
-            <el-form-item v-if="activeName === 'first'">
-              <el-input placeholder="请选择房屋地址" v-model="addressCollect" size="mini" readOnly @focus="openAddressDialog">
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item v-else>
-              <el-input placeholder="请选择房屋地址" v-model="addressRent" size="mini" readOnly @focus="openAddressDialog">
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
-                </template>
-              </el-input>
-            </el-form-item>
+            <!--<el-form-item v-if="activeName === 'first'">-->
+              <!--<el-input placeholder="请选择房屋地址" v-model="addressCollect" size="mini" readOnly @focus="openAddressDialog">-->
+                <!--<template slot="append">-->
+                  <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
+                <!--</template>-->
+              <!--</el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item v-else>-->
+              <!--<el-input placeholder="请选择房屋地址" v-model="addressRent" size="mini" readOnly @focus="openAddressDialog">-->
+                <!--<template slot="append">-->
+                  <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
+                <!--</template>-->
+              <!--</el-input>-->
+            <!--</el-form-item>-->
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>

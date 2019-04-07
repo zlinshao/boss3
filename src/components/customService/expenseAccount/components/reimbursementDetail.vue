@@ -17,7 +17,8 @@
                   <el-col :span="8">
                     <el-form-item label="创建人">
                       <div class="content">
-                        <span v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
+                        <span
+                          v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -65,7 +66,8 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="报销人姓名">
-                      <div class="content" v-if="reimDetail.reimbursement&&reimDetail.reimbursement.reimburperson_id_name">
+                      <div class="content"
+                           v-if="reimDetail.reimbursement&&reimDetail.reimbursement.reimburperson_id_name">
                         {{reimDetail.reimbursement.reimburperson_id_name}}
                       </div>
                       <div class="content" v-else>暂无</div>
@@ -160,12 +162,15 @@
                     </el-col>
                   </el-row>
                   <div v-for="(item,key) in reimDetail.results.water_data" :key="key"
-                       v-if="reimDetail.results.water_data.length>0">
+                       v-if="reimDetail.results.water_data.length > 0">
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="水费">
                           <div class="content">
-                            <span v-if="item.time.length>0">{{item.time[0]}}——{{item.time[1]}}</span>
+                            <span v-if="item.time && item.time.length > 0">
+                              <span v-if="item.time[0]">{{item.time[0]}}</span>
+                              <span v-if="item.time[1]">——{{item.time[1]}}</span>
+                            </span>
                             <span v-else>暂无</span>
                           </div>
                         </el-form-item>
@@ -238,7 +243,6 @@
                       </el-col>
                     </el-row>
                   </div>
-
                 </el-form>
                 <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;"
                          v-if="reimDetail.results.electricity_fee.time && reimDetail.results.electricity_fee.time.length>0">
@@ -386,7 +390,6 @@
                       </el-col>
                     </el-row>
                   </div>
-
                 </el-form>
                 <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;"
                          v-if="reimDetail.results.gas_fee.time && reimDetail.results.gas_fee.time.length>0">
@@ -502,7 +505,7 @@
                       <el-form-item label="总金额">
                         <div class="content">
                         <span
-                            v-if="reimDetail.results.property_management_fee && reimDetail.results.property_management_fee.total">{{reimDetail.results.property_management_fee.total}}</span>
+                          v-if="reimDetail.results.property_management_fee && reimDetail.results.property_management_fee.total">{{reimDetail.results.property_management_fee.total}}</span>
                           <span v-else>暂无</span>
                         </div>
                       </el-form-item>
@@ -618,7 +621,7 @@
                       <el-form-item label="备注">
                         <div class="content">
                         <span
-                            v-if="reimDetail.results && reimDetail.results.remark">{{reimDetail.results.remark}}</span>
+                          v-if="reimDetail.results && reimDetail.results.remark">{{reimDetail.results.remark}}</span>
                           <span v-else>暂无</span>
                         </div>
                       </el-form-item>
@@ -668,7 +671,8 @@
                   <img v-for="(p,index) in item.album.image_pic" data-magnify="" :data-src="p.uri" :src="p.uri">
                 </div>
                 <div v-if="item.album&&item.album.video_file.length>0">
-                  <video v-for="(v,index) in item.album.video_file" class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
+                  <video v-for="(v,index) in item.album.video_file" class="video-js" controls preload="auto" width="200"
+                         height="120" data-setup="{}">
                     <source :src="v.uri" type="video/mp4">
                   </video>
                 </div>
@@ -677,7 +681,6 @@
           </div>
         </el-col>
       </el-row>
-
 
 
       <!--添加评论信息-->
@@ -716,27 +719,28 @@
 
 <script>
   import UpLoad from '../../../common/UPLOAD.vue'
+
   export default {
     name: 'reimbursement-detail',
     props: ['reimbursementDetailDialog', 'reimbursementId', 'module'],
-    components:{UpLoad},
+    components: {UpLoad},
     data() {
       return {
         reimbursementDetailDialogVisible: false,
         reimDetail: {},  //报销单详情
-        commentVisible : false,   //评论
+        commentVisible: false,   //评论
         isClear: false,
         isUpload: false,
         isClick: false,
-        commentParams : {
-          content : '',
-          parent_id : 0,
-          image_pic :[],
-          video_file : [],
+        commentParams: {
+          content: '',
+          parent_id: 0,
+          image_pic: [],
+          video_file: [],
         },
-        commentList : [],
-        examineStatusCategory : [],
-        isDictionary : false,
+        commentList: [],
+        examineStatusCategory: [],
+        isDictionary: false,
       };
     },
     watch: {
@@ -751,17 +755,17 @@
         } else {
           this.getDetail();
           this.getCommentData();
-          if(!this.isDictionary){
+          if (!this.isDictionary) {
             this.getDictionary()
           }
         }
       },
-      commentVisible(val){
+      commentVisible(val) {
         this.isClear = !this.isClear;
       }
     },
     methods: {
-      getDictionary(){
+      getDictionary() {
         this.dictionary(642).then((res) => {
           let finish_status = res.data;
           finish_status.forEach((item) => {
@@ -773,65 +777,65 @@
         });
       },
       getDetail() {
-        this.$http.get(globalConfig.server + 'customer/reimbursement/' + this.reimbursementId).then((res) => { //
-          if (res.data.code === "30020") {
-            this.reimDetail = res.data.data;
-          } else {
-            this.reimDetail = {};
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
-          }
+        this.$http.get(globalConfig.server + 'customer/reimbursement/' + this.reimbursementId).then((res) => {
+        if (res.data.code === "30020") {
+          this.reimDetail = res.data.data;
+        } else {
+          this.reimDetail = {};
+          this.$notify.warning({
+            title: '警告',
+            message: res.data.msg,
+          });
+        }
         });
       },
       //上传图片
       getImg(val) {
-        if(val[0] === 'comment_pic'){
+        if (val[0] === 'comment_pic') {
           this.commentParams.image_pic = val[1];
-        }else if(val[0] === 'comment_video'){
+        } else if (val[0] === 'comment_video') {
           this.commentParams.video_file = val[1];
         }
         this.isUpload = val[2];
       },
       //获取评论信息
-      getCommentData(){
+      getCommentData() {
         this.$http.get(globalConfig.server + 'customer/reimbursement/comment/' + this.reimbursementId).then(res => {
-          if(res.data.code === '30000'){
-            this.commentList = res.data.data.data;
-          }
+        if (res.data.code === '30000') {
+          this.commentList = res.data.data.data;
+        }
         })
       },
-      arrSplitToArray(json){
+      arrSplitToArray(json) {
         let arr = [];
-        json.forEach(item=>{
+        json.forEach(item => {
           arr.push(item.dictionary_name);
         });
         return arr;
       },
       // 添加评论信息
-      addComment(){
-        if(this.isUpload){
+      addComment() {
+        if (this.isUpload) {
           this.$notify.warning({
             title: '警告！',
             message: '文件正在上传',
           })
-        }else {
+        } else {
           this.isClick = true;
-          this.$http.post(globalConfig.server + 'customer/reimbursement/comment/'+ this.reimbursementId,
-            this.commentParams).then(res=>{
+          this.$http.post(globalConfig.server + 'customer/reimbursement/comment/' + this.reimbursementId,
+            this.commentParams).then(res => {
             this.isClick = false;
-            if(res.data.code === '30000'){
+            if (res.data.code === '30000') {
               this.$notify.success({
                 title: '成功！',
                 message: res.data.msg,
               });
               this.commentVisible = false;
               this.commentParams = {
-                content : '',
-                parent_id : 0,
-                image_pic :[],
-                video_file : [],
+                content: '',
+                parent_id: 0,
+                image_pic: [],
+                video_file: [],
               };
               this.getCommentData();
             } else {
@@ -855,7 +859,7 @@
             //   this.commentVisible = true;
             // }
             this.reimbursementDetailDialogVisible = val;
-            this.$emit('close','success')
+            this.$emit('close', 'success')
           } else {
             this.$notify.warning({
               title: '警告',
@@ -936,7 +940,7 @@
     .commentC {
       color: #000;
       margin-left: 40px;
-      p{
+      p {
         word-wrap: break-word;
         word-break: normal;
       }
@@ -948,7 +952,7 @@
         }
       }
     }
-    video{
+    video {
       background: #000;
     }
   }
