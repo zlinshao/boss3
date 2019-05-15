@@ -1,0 +1,1767 @@
+<template>
+  <div @click="show=false" @contextmenu="closeMenu">
+    <div id="houseContainer">
+
+      <div class="highRanking">
+        <div class="highSearch" style="justify-content: space-between">
+          <div class="earlyWarning">
+            <el-button class="warningItem" type="text">空置房源: {{houseStatus.emptyHouse}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #FFCC00">黄色预警房源:{{houseStatus.yellowHouse}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #FF9900">橙色预警房源:{{houseStatus.orangeHouse}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #FF3900">红色预警房源:{{houseStatus.redHouse}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">正在运营中房源: {{houseStatus.lord_end_at}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">待收房源: {{houseStatus.wait_lord_at}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">已出租: {{houseStatus.Lease_out}}套
+            </el-button>
+          </div>
+
+          <el-form :inline="true" size="mini" onsubmit="return false">
+            <el-form-item>
+              <el-input placeholder="地址" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="refreshList">
+                <i class="el-icons-fa-refresh"></i>
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" :disabled="!operateArray.length" @click="openOrganizationModal('')">分配
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" :disabled="!operateArray.length" @click="handleAssociate">交接</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">房屋状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.status" clearable placeholder="请选择房屋状态" value="">
+                        <el-option label="未出租" value="0"></el-option>
+                        <el-option label="已出租" value="1"></el-option>
+                        <el-option label="待收房" value="2"></el-option>
+                        <el-option label="宿舍" value="3"></el-option>
+                        <el-option label="办公室" value="4"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">按部门搜索</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input readonly="" @focus="openOrganizationModal('depart')" v-model="department_name"
+                                placeholder="点击选择部门">
+                        <el-button slot="append" @click="emptyOrganization">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">预警状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.warning_status" clearable placeholder="请选择预警状态" value="">
+                        <el-option v-for="key in warning_status" :label="key.name" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">当前空置时长</div>
+                    </el-col><el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="formInline.current_ready_days" placeholder="请输入天数"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">房型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.room" clearable placeholder="请选择房型" value="">
+                        <el-option v-for="key in room" :label="key.type" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">装修</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.decoration" clearable placeholder="装修情况" value="">
+                        <el-option v-for="key in decoration" :label="key.dictionary_name" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">房屋类型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.property_type" clearable placeholder="请选择房屋类型" value="">
+                        <el-option v-for="key in property_type" :label="key.dictionary_name" :value="key.id"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">面积</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.area" clearable placeholder="请选择面积" value="">
+                        <el-option v-for="key in area" :label="key.type" :value="key.val"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">价格</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.suggest_price" clearable placeholder="请选择价格" value="">
+                        <el-option v-for="key in suggest_price" :label="key.type" :value="key.val"
+                                   :key="key.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">检查次数</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="formInline.check_num" type="number" placeholder="请输入"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">行政检查标识</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.check_flag">
+                        <el-option :value="0" label="全部"></el-option>
+                        <el-option :value="1" label="行政检查"></el-option>
+                        <el-option :value="2" label="行政未检查"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="btnOperate">
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
+      </div>
+      <div class="main">
+        <div class="tableBox">
+          <div class="myTable">
+            <el-table
+              :data="tableData"
+              :empty-text='emptyContent'
+              v-loading="tableLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
+              @row-contextmenu="houseMenu"
+              @row-dblclick="dblClickTable"
+              @row-click='clickTable'
+              :row-class-name="tableRowCollectName"
+              @selection-change="handleSelectionChange"
+              @cell-mouse-enter="cellMouseEnter"
+              @cell-mouse-leave="cellMouseLeave"
+              ref="multipleTable"
+              style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="30">
+              </el-table-column>
+
+              <el-table-column
+                label="合同上传时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                label="地址"
+                prop="name"
+              >
+                <template slot-scope="scope">
+                  <div>
+                    <span v-if="scope.row.annotations" style="color: red;">!</span>
+                    <el-tooltip placement="bottom"  v-if="scope.row.annotations">
+                      <div slot="content">
+                          {{ scope.row.annotations.content }}
+                      </div>
+                      <span v-if="scope.row.name">{{scope.row.name}}</span>
+                      <span v-else="">/</span>
+                    </el-tooltip>
+                    <span v-else>{{scope.row.name}}</span>
+                    <!--<div class="notice" :class="{isShow: scope.row.id === showNotice ? '' : 'yes'}" @click.stop="handlePullBlack(scope)">-->
+                      <!--<span v-if="scope.row.annotations" style="color: white;">移出黑名单</span>-->
+                      <!--<span v-else style="color: #F56C6C;">拉入黑名单</span>-->
+                    <!--</div>-->
+                    <!--<div class="markInfo" v-if="scope.row.annotations" :class="{markShow_style: scope.row.id === markShow ? '' : 'yes'}">-->
+                      <!--{{ scope.row.annotations.content }}-->
+                    <!--</div>-->
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="归属公司"
+                prop="corp_name"
+              >
+                <template slot-scope="scope">
+                  <span v-if="scope.row.corp_name">{{scope.row.corp_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="房型">
+                <template slot-scope="scope">
+                  <span>{{dicts.room[scope.row.room]}}</span>
+                  <span>{{dicts.hall[scope.row.hall]}}</span>
+                  <span>{{dicts.toilet[scope.row.toilet]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="装修">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.decoration">{{matchDictionary(scope.row.decoration)}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="房屋类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.house_identity">{{matchDictionary(scope.row.house_identity)}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <!--<el-table-column-->
+              <!--label="出租性质">-->
+              <!--<template slot-scope="scope">-->
+              <!--<span v-if="scope.row.rent_type">{{matchDictionary(scope.row.rent_type)}}</span>-->
+              <!--<span v-else="">/</span>-->
+              <!--</template>-->
+              <!--</el-table-column>-->
+              <!-- <el-table-column
+                width="150"
+                label="房屋评分">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.house_grade">
+                    <el-rate disabled v-model="scope.row.house_grade" style="line-height: 37px"></el-rate>
+                  </span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column> -->
+              <el-table-column
+                label="房屋面积">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.area">{{scope.row.area}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="建议价格">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.suggest_price">{{scope.row.suggest_price}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                label="房屋情况">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.house_res">
+                    <span v-if="scope.row.house_res.is_clean">干净</span>
+                    <span v-else>不干净</span>
+                    /
+                    <span v-if="scope.row.house_res.is_fill">齐全</span>
+                    <span v-else>不齐全</span>
+                  </div>
+                  <div v-else>
+                    /
+                  </div>
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                label="房屋状态">
+                <template slot-scope="scope">
+                  <span style="color: #ef4292" v-if="scope.row.status==0">未出租</span>
+                  <span style="color: #1ecb4e" v-else-if="scope.row.status==1">已出租</span>
+                  <span style="color: #FF6A3F" v-else-if="scope.row.status==3">宿舍</span>
+                  <span style="color: #45A1FF" v-else-if="scope.row.status==4">办公室</span>
+                  <span v-else-if="scope.row.status == 2">待收房</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="空置期(天)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.total_ready_days">{{scope.row.total_ready_days}}</span>
+                  <span v-else>/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="current_ready_days"
+                label="当前空置时长(天)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.current_ready_days">{{scope.row.current_ready_days}}</span>
+                  <span v-else>/</span>
+                </template>
+              </el-table-column>
+              <!--<el-table-column-->
+              <!--label="是否为二次出租">-->
+              <!--<template slot-scope="scope">-->
+              <!--<span v-if="scope.row.is_again_rent>0">是</span>-->
+              <!--<span v-else-if="scope.row.is_again_rent===0">否</span>-->
+              <!--<span v-else="">/</span>-->
+              <!--</template>-->
+              <!--</el-table-column>-->
+              <el-table-column
+                label="租房结束是否晚于收房">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.rent_end_than_days">{{scope.row.rent_end_than_days}}</span>
+                  <span v-else>/</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                prop="current_ready_days"
+                label="剩余合同时长(天)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.lord_remainder_days">{{scope.row.lord_remainder_days}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column
+                label="预警状态">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.warning_status === 1" class="label success">正常</div>
+                  <div v-else-if="scope.row.warning_status === 2" class="label yellow">黄色预警</div>
+                  <div v-else-if="scope.row.warning_status === 3" class="label orange">橙色预警</div>
+                  <div v-else-if="scope.row.warning_status === 4" class="label red">红色预警</div>
+                  <div v-else="">/</div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="房屋影像">
+                <template slot-scope="scope">
+                  <a href="javascript:;" @click.stop="searchPic(scope.row.id)">
+                    <i style="font-size: 16px" class="el-icon-picture"></i>
+                  </a>
+                </template>
+              </el-table-column>
+              <el-table-column label="交接">
+                <template slot-scope="scope">
+                  <span style="cursor: pointer" @click.self="handleGetHandoverImg(scope.row)" v-if="scope.row.last_time_handover_info">{{ scope.row.last_time_handover_info.user_id}}/{{ scope.row.last_time_handover_info.org}}/
+                    {{scope.row.last_time_handover_info.handover_time }}
+                  </span>
+                  <span v-else>/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="负责人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.user&&scope.row.user.name">{{scope.row.user.name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="所属部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.org&&scope.row.org.name">{{scope.row.org.name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="tableBottom">
+
+            <div class="left">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="formInline.page"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="formInline.per_page_number"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalNumber">
+              </el-pagination>
+            </div>
+          </div>
+        </div>
+        <div class="myDetail">
+          <el-tabs type="border-card" v-model="activeName" @tab-click="handleChangeTab">
+            <el-tab-pane name="first" label="跟进记录">
+              <FollowRecordTab :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
+                               :houseId="houseId" :activeName="activeName"></FollowRecordTab>
+            </el-tab-pane>
+            <el-tab-pane name="second" label="装修记录">
+              <DecorateRecordTab :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
+                                 :houseId="houseId" :activeName="activeName"></DecorateRecordTab>
+            </el-tab-pane>
+            <el-tab-pane name="third" label="预警状态调整记录">
+              <EarlyWarning :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
+                            :houseId="houseId" :activeName="activeName"></EarlyWarning>
+            </el-tab-pane>
+            <el-tab-pane name="forth" label="收房合同列表">
+              <CollectContractTab :all_dic="all_dic" :collectData="collectData"
+                                  :activeName="activeName"></CollectContractTab>
+            </el-tab-pane>
+            <el-tab-pane name="fifth" label="租房合同列表">
+              <RentContractTab :all_dic="all_dic" :collectId="collectId" :rentData="rentData"
+                               :activeName="activeName"></RentContractTab>
+            </el-tab-pane>
+            <el-tab-pane name="sixth" label="报备列表">
+              <ReportRecord :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></ReportRecord>
+            </el-tab-pane>
+
+            <!--行政检查-->
+            <el-tab-pane name="seventh" label="行政检查记录">
+              <el-table
+                :data="checkData"
+                @row-contextmenu="checkMenu"
+              >
+                <el-table-column label="检查次数" prop="check_num"></el-table-column>
+                <el-table-column label="检查时间" prop="check_datetime"></el-table-column>
+                <el-table-column label="检查人" prop="checkers.real_name"></el-table-column>
+                <el-table-column label="现场录像" prop="check_photo">
+                  <template slot-scope="scope">
+                      <i style="font-size: 16px;cursor: pointer" class="el-icon-picture" @click="handleLookPic(scope.row.check_photo)"></i>
+                  </template>
+                </el-table-column>
+                <el-table-column label="检查评级" prop="check_level">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.check_level == 1 ? '良好' : scope.row.check_level == 2 ? '一般' : scope.row.check_level == 3 ? '差' : '特差'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="行政备注" prop="check_content"></el-table-column>
+                <el-table-column label="跟进人" prop="followers.real_name"></el-table-column>
+                <el-table-column label="跟进时间" prop="follow_datetime"></el-table-column>
+                <el-table-column label="跟进录像" prop="follow_photo">
+                  <template slot-scope="scope">
+                      <i style="font-size: 16px;cursor: pointer" class="el-icon-picture" @click="handleLookPic(scope.row.follow_photo)"></i>
+                  </template>
+                </el-table-column>
+                <el-table-column label="跟进备注" prop="follow_content"></el-table-column>
+              </el-table>
+              <el-pagination
+                :total="checkCount"
+                layout="total,prev,pager,next"
+                :page-size="checkParams.limit"
+                :current-page="checkParams.page"
+                @current-change="handleChangeCheckPage"
+                style="text-align: right"
+              ></el-pagination>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </div>
+    </div>
+
+    <!--模态框-->
+    <el-dialog title="合并房屋" :close-on-click-modal="false" :visible.sync="mergeDialog" width="30%">
+      <el-form size="mini" label-width="80px">
+        <el-form-item label="房屋地址" required>
+          <el-input v-model="mergeName" @focus="houseDialog = true" placeholder="请选择小区" readonly></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="mergeDialog = false">取 消</el-button>
+        <el-button type="primary" @click="isConfirmMerge">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="organizationType"
+                  @selectMember="selectMember" @close="closeModal"></Organization>
+
+    <EditHouseInfo :editHouseDialog="editHouseDialog" :houseDetail="houseDetail" :houseId="houseId"
+                   @close="closeModal"></EditHouseInfo>
+    <AddFollow :addFollowDialog="addFollowDialog" :houseId="houseId" @close="closeModal"></AddFollow>
+    <UpLoadPic :upLoadDialog="upLoadDialog" :houseId="houseId" @close="closeModal"></UpLoadPic>
+    <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" :houseId="houseId"
+                     @close="closeModal"></AddEarlyWarning>
+    <AddDecorate :addDecorateDialog="addDecorateDialog" :houseId="houseId" @close="closeModal"></AddDecorate>
+
+    <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
+                 :houseDetail="houseDetail" :houseId="houseId" @close="closeModal"></HouseDetail>
+
+    <AddWebInfo :addWebInfoDialog="addWebInfoDialog" :all_dic="all_dic" :houseId="houseId"
+                :houseDetail="houseDetail" @close="closeModal"></AddWebInfo>
+
+    <Download :downloadPicDialog="downloadPicDialog" :houseId="houseId" @close="closeModal"></Download>
+
+    <HouseSearch :houseDialog="houseDialog" @close="getHouseAddress"></HouseSearch>
+    <el-dialog
+      :visible.sync="markInfoVisible"
+      title="备注"
+      width="20%"
+    >
+      <el-input type="textarea" :row="4" v-model="markInfo"></el-input>
+      <div style="text-align: right;margin-top: 15px;">
+        <el-button size="mini" @click="markInfoVisible = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="handleMarkInfo">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!--交接-->
+    <el-dialog
+      :visible.sync="associateVisible"
+      title="交接信息"
+      width="20%"
+    >
+      <el-form :model="associateName" label-width="100px">
+        <el-form-item label="新负责人">
+          <el-input placeholder="请选择" size="mini" style="width: 250px" v-model="associateName.new_user_id" @focus="handleFocusOssociate('new_user_id','staff')"></el-input>
+        </el-form-item>
+        <el-form-item label="部门">
+          <el-input  disabled placeholder="请选择" size="mini" style="width: 250px" v-model="associateName.new_org_id" @focus="handleFocusOssociate('new_org_id','depart')"></el-input>
+        </el-form-item>
+        <el-form-item label="交接时间">
+          <el-date-picker
+            v-model="associateInfo.handover_time"
+            type="datetime"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            placeholder="请选择交接时间"
+            size="mini"
+            @close="handleCancelAssociate"
+            @cancel="handleCancelAssociate"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="handleOkAssociate">确定</el-button>
+          <el-button size="mini" @click="handleCancelAssociate">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!--添加行政检查记录-->
+    <el-dialog
+      :visible="checkInfo_visible"
+      title="添加行政检查记录"
+      @close="handleCancelCheck"
+      width="40%"
+    >
+      <div>
+        <el-form :model="add_check" size="mini" label-width="100px">
+          <el-form-item label="检查时间">
+            <el-date-picker
+              v-model="add_check.check_datetime"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="检查人">
+            <el-input placeholder="请选择" v-model="add_check.user_name" @focus="handleSelMan(1,'staff')"></el-input>
+          </el-form-item>
+          <el-form-item label="现场录像">
+            <Upload :ID="'checkImg'" :editImage="editImage" @getImg="handleGetCheckVideo" :isClear="checkIsClear"></Upload>
+          </el-form-item>
+          <el-form-item label="检查评级">
+            <el-select v-model="add_check.check_level">
+              <el-option :value="1" label="良好"></el-option>
+              <el-option :value="2" label="一般"></el-option>
+              <el-option :value="3" label="差"></el-option>
+              <el-option :value="4" label="特差"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="行政备注">
+            <el-input type="textarea" :rows="6" v-model="add_check.check_content"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <div style="text-align: right">
+              <el-button type="primary" size="small" @click="handleAddCheck">确定</el-button>
+              <el-button @click="handleCancelCheck">取消</el-button>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
+
+    <!--查看录像-->
+    <el-dialog
+      :visible="lookVisible"
+      title="查看录像"
+      @close="handleCloseLook"
+    >
+      <div style="display: flex;" v-if="lookInfo">
+        <div v-for="(val,key) in lookInfo" :key="key" style="margin-right: 20px;overflow: hidden;">
+          <img style="width: 150px;height: 120px;" :src="val" alt="" data-magnify="" :data-src="val" v-if="val.indexOf('mp4') === -1">
+          <video style="width: 180px;height: 120px" controls :src="val" v-if="val.indexOf('mp4') !== -1"></video>
+        </div>
+      </div>
+      <div v-else>暂无录像信息</div>
+    </el-dialog>
+
+    <!--查看信息-->
+    <el-dialog
+      :visible="lookInfoVisible"
+      title="查看信息"
+      @close="handleCancelLookInfo"
+      width="40%"
+    >
+      <div>
+        <div style="width: 100%;padding: 15px 0;border-bottom: 1px solid #808080">
+          <el-form size="mini" label-width="120px">
+            <el-form-item label="检查时间:">
+              <span>{{ checkDetail.check_datetime }}</span>
+            </el-form-item>
+            <el-form-item label="检查人:">
+              <span>{{ checkDetail && checkDetail.checkers && checkDetail.checkers.real_name }}</span>
+            </el-form-item>
+            <el-form-item label="现场录像:" v-if="checkDetail.check_photo">
+              <span v-for="val in checkDetail.check_photo" style="margin-right: 15px"><img style="width: 100px;height: 70px;" :src="val" alt="" data-magnify="" :data-src="val"></span>
+            </el-form-item>
+            <el-form-item label="现场录像:" v-else>
+              <span>暂无现场录像</span>
+            </el-form-item>
+            <el-form-item label="检查评级:">
+              <span>
+                {{ checkDetail.check_level == 1 ? '良好' : checkDetail.check_level == 2 ? '一般' : checkDetail.check_level == 3 ? '差' : '特差'}}
+              </span>
+            </el-form-item>
+            <el-form-item label="检查备注:">
+              <span>{{ checkDetail.check_content }}</span>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div style="margin-top: 30px">
+          <el-form :model="add_check_info" size="mini" label-width="120px">
+            <el-form-item label="跟进时间">
+              <el-date-picker
+                v-model="add_check_info.follow_datetime"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                style="width: 300px"
+                placeholder="请选择"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="跟进影像">
+              <Upload :ID="'checkInfoImg'" :editImage="editInfoimg" @getImg="handleGetCheckInfoVideo" :isClear="lookIsClear"></Upload>
+            </el-form-item>
+            <el-form-item label="跟进备注">
+              <el-input style="width: 300px" v-model="add_check_info.follow_content" placeholder="请输入" type="textarea"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <div style="text-align: right">
+                <el-button type="primary" size="mini" @click="handleOkAddInfo">确定</el-button>
+                <el-button size="mini" @click="handleCancelLookInfo">取消</el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </el-dialog>
+    <handover-info :houseId="houseIds" :hand-visible="handoverVisible" @close="handleCloseHand" :hand-info="handoverInfo" :hand-clear="handoverIsClear"></handover-info>
+  </div>
+</template>
+
+<script>
+  import RightMenu from '../../common/rightMenu.vue'
+  import Upload from '../../common/UPLOAD.vue';
+  import Organization from '../../common/organization.vue'
+  import FollowRecordTab from './components/followRecordTab.vue'
+  import DecorateRecordTab from './components/decorateRecordTab.vue'
+  import EarlyWarning from './components/earlyWarningTab.vue'
+  import CollectContractTab from './components/collectContractTab.vue'
+  import RentContractTab from './components/rentContractTab.vue'
+  import ReportRecord from './components/reportRecord'
+
+  import EditHouseInfo from './components/editHouseInfo.vue'
+  import AddFollow from './components/addFollowRecord.vue'
+  import UpLoadPic from './components/upLoadPic.vue'
+  import AddEarlyWarning from './components/addEarlyWarning.vue'
+  import AddDecorate from './components/addDecorateRecord.vue'
+  import HouseDetail from './components/houseDetail.vue'
+  import Download from './components/downloadPic.vue'
+
+  import AddWebInfo from './components/addWebsiteInfo'
+  import HouseSearch from '../../common/houseSearch'
+  import HandoverInfo from './components/handover-info.vue'
+
+  export default {
+    name: 'hello',
+    components: {
+      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail, Download,
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab, ReportRecord, AddWebInfo,
+      HouseSearch,Upload,HandoverInfo
+    },
+    data() {
+      return {
+        lookVisible: false,
+        lookInfo: {},
+        lookInfoVisible:false,
+        checkDetail: '',
+        add_check_info: {
+          follow_datetime: '',
+          follow_album_file: [],
+          follow_content: ''
+        },
+        editInfoimg: '',
+
+        editImage: '',
+        checkIsClear: false,
+        lookIsClear: false,
+        checkInfo_visible: false,
+        checkParams: {
+          page: 1,
+          limit: 12,
+          id: '',
+        },
+        checkData: [],
+        checkCount: 0,
+        add_check: {
+          house_id: '',
+          check_datetime: '',
+          check_user_id: '',
+          album_file: '',
+          check_level: '',
+          check_content: '',
+          user_name: ''
+        },
+        is_check: false,
+
+        houseIds: '',
+        handoverIsClear: false,
+        handoverVisible: false,
+        handoverInfo: [],
+        is_associate: '',
+        associateInfo: {
+          new_user_id: '',
+          new_org_id: '',
+          handover_time: '',
+          id: []
+        },
+        associateName: {
+          new_user_id: '',
+          new_org_id: '',
+        },
+        associateVisible: false,
+        showNotice: '',
+        markInfoVisible: false,
+        markInfo: '',
+        currentScope: '',
+        markShow: '',
+        ////
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+        /***********/
+        formInline: {
+          q: '',
+          per_page_number: 5,
+          page: 1,
+          status: '',
+          org_id: '',
+          is_nrcy: 0,
+          is_lord: 1,
+          warning_status: '',
+          room: '',                         //房型
+          decoration: '',                   //装修
+          property_type: '',                //房屋类型
+          area: '',                         //面积
+          suggest_price: '',                //价格
+          // current_ready_days: '',           //空置时长
+          source_web: 1, //来源
+          check_num: '',
+          check_flag: ''
+        },
+        decoration: [],
+        property_type: [],
+        room: [
+          {id: 1, type: '一居室'},
+          {id: 2, type: '二居室'},
+          {id: 3, type: '三居室'},
+          {id: 4, type: '四居室'},
+          {id: 5, type: '其他'},
+        ],
+        area: [
+          {id: 1, type:'100平米以下', val:'0,100'},
+          {id: 2, type:'100平米~200平米', val:'100,200'},
+          {id: 3, type:'200平米以上', val:'200,99999'}
+        ],
+        suggest_price: [
+          {id: 1, type: '2000元以下', val:'0,2000'},
+          {id: 2, type: '2000~3000元', val:'2000,3000'},
+          {id: 3, type: '3000~4000元', val:'3000,4000'},
+          {id: 4, type: '4000元以上', val:'4000,99999'}
+        ],
+        warning_status: [
+          {
+            id: 1,
+            name: '正常',
+          },
+          {
+            id: 2,
+            name: '黄色预警',
+          },
+          {
+            id: 3,
+            name: '橙色预警',
+          },
+          {
+            id: 4,
+            name: '红色预警',
+          }
+        ],
+        department_name: '',
+        length: '',
+
+        tableData: [],
+        totalNumber: 0,
+        options: [],
+
+        //模态框
+        organizationDialog: false,
+        editHouseDialog: false,
+        addFollowDialog: false,
+        upLoadDialog: false,
+        addEarlyWarningDialog: false,
+        addDecorateDialog: false,
+        houseDetailDialog: false,
+        addWebInfoDialog: false,
+        downloadPicDialog: false,
+        mergeDialog: false,
+        houseDialog: false,
+
+        isHigh: false,
+        activeName: 'first',
+
+        emptyContent: ' ',
+        tableLoading: false,
+        dicts: {
+          room: ['0室', '1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
+          hall: ['0厅', '1厅', '2厅', '3厅', '4厅', '5厅'],
+          toilet: ['0卫', '1卫', '2卫', '3卫', '4卫', '5卫'],
+        },
+        all_dic: [],        //装修
+
+        houseId: '',
+        isOnlyPic: false,
+
+        houseDetail: {},
+        collectData: [],
+        rentData: [],
+        collectId: '',
+        houseStatus: {},
+        operateArray: [],    //选中数组
+        organizationType: '',
+        changeHouseStatus: false,
+
+        mergeParams: {id: ''},
+        mergeName: '',
+        oldHouseName: '',
+      }
+    },
+    mounted() {
+      this.getData();
+      this.getDictionary();
+      this.getCharts();
+      this.getDecoration();
+//      $('.earlyWarning .warningItem').click(function () {
+//        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
+//      });
+    },
+    methods: {
+      handleGetCheckInfoVideo(val) {
+        this.add_check_info.follow_album_file = val[1];
+      },
+      handleOkAddInfo() {
+        this.$http.put(globalConfig.server + `core/check/${this.houseId}`,this.add_check_info).then(res => {
+          if (res.data.code === '70000') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.handleCancelLookInfo();
+          }  else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            })
+          }
+          this.lookIsClear = true;
+          this.getCheckList();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleGetInfo() {
+        this.lookIsClear = false;
+        this.$http.get(globalConfig.server + `core/check/${this.houseId}`).then(res => {
+          if (res.data.code === '70000') {
+            this.checkDetail = res.data.data;
+            this.add_check_info.follow_album_file = res.data.data.follow_photo_ids || [];
+            this.add_check_info.follow_content = res.data.data.follow_content || '';
+            this.add_check_info.follow_datetime = res.data.data.follow_datetime || '';
+            this.$nextTick(() => {
+              this.editInfoimg = res.data.data.follow_photo || {};
+            });
+            this.lookInfoVisible = true;
+          } else {
+            this.checkDetail = '';
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+
+      handleCancelLookInfo() {
+        this.houseId = '';
+        this.checkDetail = '';
+        this.lookIsClear = true;
+        this.editInfoimg = '';
+        this.add_check_info = {
+          follow_datetime: '',
+          follow_album_file: '',
+          follow_content: ''
+        };
+        this.lookInfoVisible = false;
+      },
+      checkMenu(row, event) {
+        this.houseId = row.id;
+        this.lists = [
+          {clickIndex: 'lookCheck', headIcon: 'el-icon-edit', label: '查看记录',},
+        ];
+        this.contextParams();
+      },
+      handleCloseLook() {
+        this.lookInfo = {};
+        this.lookVisible = false;
+      },
+      handleLookPic(photo) {
+        this.lookInfo = photo;
+        this.lookVisible = true;
+      },
+      handleGetCheckVideo(val) {
+        this.add_check.album_file = val[1];
+      },
+      handleAddCheck() {
+        this.$http.post(globalConfig.server + 'core/check',this.add_check).then(res =>{
+          if (res.data.code === '70000') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.checkIsClear = true;
+          }  else {
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            });
+            this.checkIsClear = true;
+          }
+          this.handleCancelCheck();
+          this.getCheckList();
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleSelMan(len,type) {
+        this.organizationDialog = true;
+        this.length = len;
+        this.organizationType = type;
+        this.is_check = true;
+      },
+      handleCancelCheck() {
+        this.editInfoimg = '';
+        this.add_check_info.follow_album_file = [];
+        this.add_check_info.follow_datetime = '';
+        this.add_check_info.follow_content = '';
+        this.add_check = {
+          house_id: '',
+          check_datetime: '',
+          check_user_id: '',
+          album_file: '',
+          check_level: '',
+          check_content: '',
+          user_name: ''
+        };
+        this.add_check.check_user_id = '';
+        this.add_check.user_name = '';
+        this.checkIsClear = true;
+        this.is_check = false;
+        this.checkInfo_visible = false;
+      },
+      handleChangeCheckPage(page) {
+        this.checkParams.page = page;
+        this.getCheckList();
+      },
+      getCheckList() {
+        this.$http.get(globalConfig.server + 'core/check',{
+          params: this.checkParams
+        }).then(res => {
+          if (res.data.code === '70000') {
+            this.checkData = res.data.data.data;
+            this.checkCount = res.data.data.count;
+          } else {
+            this.checkData = [];
+            this.checkCount = 0;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleChangeTab(tab) {
+        if (tab.name === 'seventh') {
+          this.getCheckList();
+        }
+      },
+      handleCloseHand() {
+        this.handoverVisible = false;
+        this.getData();
+      },
+      handleGetHandoverImg(row) {
+        this.$http.get(globalConfig.server + `coreproject/houses/handover_info/${row.id}`).then(res => {
+          if (res.data.code === '20020') {
+            this.handoverInfo = res.data.data;
+            this.handoverVisible = true;
+            this.houseIds = row.id;
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: '获取信息失败'
+            });
+            return false;
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleOkAssociate() {
+        this.associateInfo.id = this.operateArray
+        this.$http.post(globalConfig.server + 'coreproject/houses/batch_update_responsible',this.associateInfo).then(res => {
+          if (res.data.code === '20020') {
+            this.$notify.success({
+              title: '成功',
+              message: '交接成功'
+            });
+            this.handleCancelAssociate();
+            this.getData();
+          } else {
+            this.$notify.warning({
+              title: '失败',
+              message: '交接失败'
+            });
+            this.handleCancelAssociate();
+          }
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      handleCancelAssociate() {
+        this.associateInfo = {
+          new_user_id: '',
+          new_org_id: '',
+          handover_time: '',
+        };
+        this.associateName = {
+          new_user_id: '',
+          new_org_id: '',
+        };
+        this.is_associate = '';
+        this.operateArray = [];
+        this.$refs['multipleTable'].clearSelection();
+        this.associateVisible = false;
+      },
+      handleFocusOssociate(type,aa) {
+        this.is_associate = type;
+        this.length = 1;
+        this.organizationType = aa;
+        this.organizationDialog = true;
+      },
+      handleAssociate() {
+        console.log(this.operateArray);
+        this.associateVisible = true;
+      },
+      //鼠标移入
+      cellMouseEnter(row,column) {
+        if (column.property === "name") {
+          this.showNotice = row.id;
+          this.markShow = row.id;
+        }
+      },
+      cellMouseLeave(row,column) {
+        if (column.property === 'name') {
+          this.showNotice = '';
+          this.markShow = '';
+        }
+      },
+      handleMarkInfo() {
+        this.$http.post(globalConfig.server + '/annotations',{
+          remark_type: 1,
+          remark_id: this.houseDetail.id,
+          content: this.markInfo
+        }).then(res => {
+          if (res.data.code === '20000') {
+            this.markInfoVisible = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.markInfo = '';
+            this.getData();
+          } else {
+            this.markInfoVisible = false;
+            this.markInfo = '';
+            this.$notify.warning({
+              title: '失败',
+              message: res.data.msg
+            });
+          }
+        }).catch(err =>{
+          console.log(err);
+        })
+      },
+      outBlack() {
+        var row = this.houseDetail;
+        if (row.annotations) {
+          this.$http({
+            method: 'delete',
+            url: globalConfig.server + `/annotations/${row.annotations.id}`,
+            data: {
+              remark_type: 1
+            }}).then(res => {
+            if (res.data.code === '20000') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getData();
+            } else {
+              this.$notify.warning({
+                title: '失败',
+                message: res.data.msg
+              });
+            }
+          })
+        }else {
+          // this.markInfoVisible = true;
+          this.$message('该房屋不是黑名单用户');
+        }
+      },
+      // handlePullBlack(scope) {
+      //   this.currentScope = scope;
+      // },
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
+          this.all_dic = res.data.data;
+        })
+      },
+
+      matchDictionary(id) {
+        let dictionary_name = null;
+        this.all_dic.map((item) => {
+          if (item.id == id) {
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
+      },
+      getData() {
+        this.emptyContent = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server_user1 + 'houses', {params: this.formInline}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.status === 'success') {
+            this.totalNumber = res.data.meta.total;
+            if (res.data.data.length > 0) {
+              this.tableData = res.data.data;
+              if (!this.houseId) {
+                this.houseId = res.data.data[0].id;
+              }
+              this.collectData = this.tableData[0].lords;
+              if (this.collectData.length > 0) {
+                this.collectId = this.collectData[0].id;
+              }
+              this.rentData = this.tableData[0].renters;
+            } else {
+              this.tableData = [];
+              this.collectData = [];
+              this.rentData = [];
+              this.emptyContent = '暂无数据';
+              this.houseId = '';
+            }
+          } else {
+            this.tableData = [];
+            this.collectData = [];
+            this.rentData = [];
+            this.houseId = '';
+            this.totalNumber = 0;
+            this.emptyContent = '暂无数据';
+          }
+        })
+      },
+      getCharts() {
+        this.$http.get(globalConfig.server_user1 + 'houses/charts').then((res) => {
+          if (res.data.status === 'success') {
+            this.houseStatus = res.data.data.house;
+          }
+        })
+      },
+      //复选框变化
+      handleSelectionChange(val) {
+        this.operateArray = [];
+        if (val.length > 0) {
+          val.forEach((item) => {
+            this.operateArray.push(item.id);
+          })
+        }
+      },
+      //*****************************高级搜索/各种搜索项****************************//
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      resetting() {
+        this.formInline.org_id = '';
+        this.department_name = '';
+        this.formInline.status = '';
+        this.formInline.warning_status = '';
+        this.formInline.room = '';
+        this.formInline.decoration = '';
+        this.formInline.property_type = '';
+        this.formInline.area = '';
+        this.formInline.suggest_price = '';
+        this.formInline.current_ready_days = '';
+        this.formInline.check_flag = '';
+        this.formInline.check_num = '';
+      },
+      search() {
+        this.isHigh = false;
+        this.houseId = '';
+        this.formInline.page = 1;
+        this.getData();
+      },
+
+      handleSizeChange(val) {
+        this.formInline.per_page_number = val;
+        this.getData();
+      },
+      handleCurrentChange(val) {
+        this.formInline.page = val;
+        this.houseId = '';
+        this.getData();
+      },
+
+      //选人模态框
+      openOrganizationModal(val) {
+        this.organizationDialog = true;
+        this.organizationType = val;
+        this.length = 1;
+      },
+      emptyOrganization() {
+        this.formInline.org_id = '';
+        this.department_name = '';
+      },
+      selectMember(val) {
+        if (this.is_check) {
+          this.add_check.check_user_id = val[0].id;
+          this.add_check.user_name = val[0].name;
+          return false;
+        }
+        this.organizationDialog = false;
+        if (this.organizationType === '') {
+          this.$confirm('分配后将不可撤回, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.dispatchHouse(val)
+          }).catch(() => {
+            this.$notify.success({
+              title: '消息',
+              message: '已取消分配',
+            })
+          });
+        }else if (this.is_associate) {
+          this.associateInfo['new_user_id'] = val[0].id;
+          this.associateInfo['new_org_id'] = val[0].org[0].id;
+          this.associateName['new_user_id'] = val[0].name;
+          this.associateName['new_org_id'] = val[0].org[0].name;
+        } else {
+          this.formInline.org_id = val[0].id;
+          this.department_name = val[0].name;
+        }
+      },
+      //分配房屋
+      dispatchHouse(itemParams) {
+        let object = {};
+        let update = {};
+        let org = {};
+        if (itemParams[0].hasOwnProperty('avatar')) {
+          org = {org_id: itemParams[0].org[0].id, user_id: itemParams[0].id};
+        } else {
+          org = {org_id: itemParams[0].id};
+        }
+        this.operateArray.forEach((item) => {
+          object[item] = org;
+        });
+        update.update = object;
+        this.$http.post(globalConfig.server_user1 + 'houses/distribute', {'batch': JSON.stringify(update)}).then((res) => {
+          if (res.data.code === '20010') {
+            this.$notify.success({
+              title: '成功',
+              message: '操作成功',
+            });
+            this.getData();
+          }
+        })
+      },
+      //************************************************************************/
+      clickTable(row, event) {
+        this.houseId = row.id;
+        this.checkParams.id = row.id;
+        this.collectData = row.lords;
+        if (this.collectData.length > 0) {
+          this.collectId = this.collectData[0].id;
+        }
+        this.rentData = row.renters;
+        if (this.activeName === 'seventh') {
+          this.getCheckList();
+        }
+      },
+      tableRowCollectName({row, rowIndex}) {
+        if (row.id === this.houseId) {
+          return 'selected_tr';
+        }
+        return '';
+      },
+      //*****************************右键操作****************************//
+      searchPic(id) {
+        this.isOnlyPic = true;
+        this.houseId = id;
+        this.houseDetailDialog = true;
+      },
+      dblClickTable(row, event) {
+        this.isOnlyPic = false;
+        this.houseId = row.id;
+        this.houseDetail = row;
+        this.houseDetailDialog = true;
+      },
+
+      //房屋右键
+      houseMenu(row, event) {
+        this.houseId = row.id;
+        this.add_check.house_id = row.id;
+        this.houseDetail = row;
+        this.collectData = row.lords;
+        this.oldHouseName = row.name;
+        if (this.collectData.length > 0) {
+          this.collectId = this.collectData[0].id;
+        }
+        this.rentData = row.renters;
+        if (row.annotations) {
+          this.lists = [
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋属性',},
+            {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
+            {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
+            {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
+            {
+              clickIndex: 'addEarlyWarningDialog',
+              headIcon: 'iconfont icon-tianjiayujingjilu',
+              label: '添加预警状态',
+              disabled: row.status != 0
+            },
+            {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
+            {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
+            {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
+            {clickIndex: 'inBlack',headIcon: 'el-icon-upload2',label: '修改低质量备注'},
+            {clickIndex: 'outBlack',headIcon: 'el-icons-fa-magic',label: '移出低质量标记'},
+            {clickIndex: 'checkInfo',headIcon: 'el-icons-fa-magic',label: '添加检查记录'}
+          ];
+        } else {
+          this.lists = [
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋属性',},
+            {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
+            {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
+            {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
+            {
+              clickIndex: 'addEarlyWarningDialog',
+              headIcon: 'iconfont icon-tianjiayujingjilu',
+              label: '添加预警状态',
+              disabled: row.status != 0
+            },
+            {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
+            {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},
+            {clickIndex: 'merge', headIcon: 'el-icons-fa-magic', label: '合并',},
+            {clickIndex: 'inBlack',headIcon: 'el-icons-fa-magic',label: '低质量标记'},
+            {clickIndex: 'checkInfo',headIcon: 'el-icons-fa-magic',label: '添加检查记录'}
+          ];
+        }
+        this.contextParams();
+      },
+
+      //右键回调时间
+      clickEvent(index) {
+        this.changeHouseStatus = false;
+        switch (index) {
+          case 'edit' :
+            this.editHouseDialog = true;
+            break;
+          case 'addFollowDialog' :
+            this.addFollowDialog = true;
+            break;
+          case 'upLoadDialog' :
+            this.upLoadDialog = true;
+            break;
+          case 'addEarlyWarningDialog' :
+            this.addEarlyWarningDialog = true;
+            break;
+          case 'addDecorateDialog' :
+            this.addDecorateDialog = true;
+            break;
+          case 'addWebInfoDialog' :
+            this.addWebInfoDialog = true;
+            break;
+          case 'downloadPicDialog' :
+            this.downloadPicDialog = true;
+            break;
+          case 'merge' :
+            this.mergeDialog = true;
+            break;
+          case 'outBlack':
+            this.outBlack();
+            break;
+          case 'inBlack':
+            this.markInfoVisible = true;
+            break;
+          case 'checkInfo':
+            this.checkInfo_visible = true;
+            this.checkIsClear = false;
+            break;
+          case 'lookCheck':
+            this.handleGetInfo();
+            break;
+        }
+      },
+      closeModal(val) {
+        this.editHouseDialog = false;
+        this.addFollowDialog = false;
+        this.organizationDialog = false;
+        this.upLoadDialog = false;
+        this.addEarlyWarningDialog = false;
+        this.addDecorateDialog = false;
+        this.houseDetailDialog = false;
+        this.addWebInfoDialog = false;
+        this.downloadPicDialog = false;
+        if (val === 'success') {
+          this.getData();
+        } else if (val === 'success_tab_first') {
+          this.activeName = 'first';
+          this.changeHouseStatus = true;
+          this.getData();
+        } else if (val === 'success_tab_second') {
+          this.activeName = 'second';
+          this.changeHouseStatus = true;
+          this.getData();
+        } else if (val === 'success_tab_third') {
+          this.activeName = 'third';
+          this.changeHouseStatus = true;
+          this.getData();
+          this.getCharts();
+        }
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+
+      //右键参数
+      contextParams() {
+        //param: user right param
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+
+      refreshList() {
+        this.formInline = {
+          q: '',
+          per_page_number: 5,
+          page: 1,
+          status: '',
+          org_id: '',
+          is_nrcy: 0,
+          is_lord: 1,
+          warning_status: '',
+          room: '',
+          decoration: '',
+          property_type: '',
+          area: '',
+          suggest_price: '',
+          current_ready_days: '',
+        };
+        this.department_name = '';
+        this.getData();
+        this.getCharts();
+      },
+
+      //*************************合并房屋**************************
+      getHouseAddress(val) {
+        this.houseDialog = false;
+        if (val) {
+          this.mergeName = val.name;
+          this.mergeParams.id = val.id;
+        }
+      },
+      isConfirmMerge() {
+        let msg = `<div>
+                      此操作将会将<b style="color: #e4393c">${this.oldHouseName}</b>合并到<b style="color: #e4393c">${this.mergeName}</b>,
+                      <b style="color: #e4393c">${this.oldHouseName}</b>下的所有合同将会转移到<b style="color: #e4393c">${this.mergeName}</b>下,是否继续?
+                  </div>`;
+        this.$confirm(msg, '提示', {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.confirmMerge()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消合并'
+          });
+        });
+      },
+      confirmMerge() {
+        this.$http.put(globalConfig.server + 'coreproject/houses/merge/' + this.houseId, this.mergeParams).then(res => {
+          if (res.data.code === '20000') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+            this.getData();
+            this.mergeDialog = false;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            })
+          }
+        })
+      },
+      //获取高级搜索条件选择项
+      getHighSearchSelection(){
+        //房型
+        this.$http.get(globalConfig.server + '').then(res => {
+          if(res.data.code === '20000'){
+            this.room = res.data.data
+          }
+        })
+      },
+      //查询装修类型,房屋类型
+      getDecoration(){
+        this.$http.get(globalConfig.server + '/setting/dictionary/404').then(res => {
+          if(res.data.code === '30010'){
+            this.decoration = res.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server + '/setting/dictionary/410').then(res => {
+          if(res.data.code === '30010'){
+            this.property_type = res.data.data;
+          }
+        })
+      }
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped="">
+  #houseContainer {
+    .earlyWarning {
+      button {
+        cursor: default;
+        color: #666;
+        :hover {
+          /*color: #6a8dfb;*/
+        }
+      }
+    }
+    .label {
+      display: inline-block;
+      width: 70px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+    .label_inline {
+      display: inline-block;
+      margin-right: 5px;
+      padding: 5px;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+    .success {
+      background: #409EFF;
+    }
+    .yellow {
+      background: #FFCC00
+    }
+    .orange {
+      background: #FF9900
+    }
+    .red {
+      background: #FF3900
+    }
+    .main {
+      font-size: 12px;
+      .tableBox {
+        border: 1px solid #dfe6fb;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+        .myTable {
+          .el-table {
+            th {
+              background-color: #dfe6fb;
+            }
+          }
+        }
+        .tableBottom {
+          padding: 8px;
+          display: flex;
+          justify-content: flex-end;
+          .right {
+            display: flex;
+            align-items: center;
+            div {
+              width: 100px;
+              text-align: center;
+              span {
+                color: #fb529f;
+              }
+              &:first-child {
+                border-right: 1px solid #ccc;
+              }
+            }
+          }
+        }
+      }
+
+    }
+    .notice{
+      position: absolute;
+      top: 10%;
+      left: 0;
+      width: 100%;
+      height: 4em;
+      border-radius: 2px;
+      background-color: rgba(188,188,189,.9);
+      text-align: center;
+      line-height: 4;
+    }
+    .markInfo{
+      /*border: 1px solid #525252;*/
+      position: absolute;
+      text-align: left;
+      top: 4em;
+      left: -5em;
+      padding: 0 10px;
+      border-radius: 5px;
+      color: #4F4F4F;
+      background-color: #C6E2FF;
+      z-index: 99;
+    }
+    .markShow_style{
+      display: none;
+    }
+    .isShow{
+      display: none;
+    }
+  }
+</style>
