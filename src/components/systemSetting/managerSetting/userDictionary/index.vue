@@ -309,7 +309,7 @@
         if (tag === 'tag') {
           this.lists.unshift({clickIndex: 'add', headIcon: 'el-icon-plus', label: '新增字典属性',});
         }
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       // 右键回调
@@ -331,8 +331,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

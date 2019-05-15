@@ -603,7 +603,7 @@
         this.lists = [
           {clickIndex: "delete_repair", headIcon: "el-icon-delete", label: "删除"}
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       //右键回调
       clickEvent(val) {
@@ -618,8 +618,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX =
           e.clientX +

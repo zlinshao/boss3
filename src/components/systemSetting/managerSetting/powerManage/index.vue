@@ -541,7 +541,7 @@
           {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除'},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       // 右键 模块
       moduleMenu(row, event) {
@@ -555,7 +555,7 @@
           {clickIndex: 'deleteModule', headIcon: 'el-icon-circle-close-outline', label: '删除'},
           {clickIndex: 'changeSys', headIcon: 'el-icon-edit-outline',label: '修改所属系统'}
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       // 右键 权限
       modMenu(row, event) {
@@ -566,7 +566,7 @@
           {clickIndex: 'deleteMod', headIcon: 'el-icon-circle-close-outline', label: '删除'},
           {clickIndex: 'changePower', headIcon: 'el-icon-edit-outline', label: '修改所属模块'},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       stickTop() {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -628,8 +628,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

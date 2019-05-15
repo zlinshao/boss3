@@ -112,8 +112,8 @@
               console.log(err);
             })
         },
-        contextMenuParam(event) {
-            let e = event || window.event;
+        contextParams() {
+            let e = event || window.event;let event = window.event;
             this.show = false;
             this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
             this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
@@ -136,7 +136,7 @@
             this.lists = [
                 {clickIndex: 'assignCompanyDialog', headIcon: 'el-icon-edit', label: '重新分配公司',},
             ];
-            this.contextMenuParam(event);
+            this.contextParams();
         },
         closeModal(){
             this.assignCompanyDialog = false;

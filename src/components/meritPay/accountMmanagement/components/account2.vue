@@ -272,11 +272,11 @@
         this.lists = [
           {clickIndex: 'EditInfo', headIcon: 'el-icon-edit', label: '修改', data: row},
         ];
-        this.contextParams(event);
+        this.contextParams();
       },
       //********************右键配置操作函数****************
-      contextParams(event) {
-        let e = event || window.event;	//support firefox contextmenu
+      contextParams() {
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

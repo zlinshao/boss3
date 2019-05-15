@@ -304,12 +304,12 @@ export default {
   },
   methods: {
     // 右键
-    openContextMenu(row, event) {
+    openContextMenu(row) {
       this.secondaryID = row.id;
       this.lists = [
         {clickIndex: 'edit', headIcon: 'iconfont el-icon-edit', label: '离职'},  
       ];
-      this.contextMenuParam(event);
+      this.contextParams();
     },
     // 右键回调
     clickEvent(val) {
@@ -331,8 +331,8 @@ export default {
       this.show = false;
     },
     //右键参数
-    contextMenuParam(event) {
-      let e = event || window.event;
+    contextParams() {
+      let e = event || window.event;let event = window.event;
       this.show = false;
       this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
       this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

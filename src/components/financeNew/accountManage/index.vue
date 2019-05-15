@@ -420,11 +420,11 @@
             {clickIndex: 'UseDetailAccount', headIcon: 'el-icon-view', label: '账户收支流水详情', data: row},
             {clickIndex: 'AccountChange', headIcon: 'el-icon-search', label: '账户变更记录', data: row},
           ];
-          this.contextParams(event);
+          this.contextParams();
         },
         //********************右键配置操作函数****************
-        contextParams(event) {
-          let e = event || window.event;	//support firefox contextmenu
+        contextParams() {
+          let e = event || window.event;let event = window.event;	//support firefox contextmenu
           this.show = false;
           this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
           this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
