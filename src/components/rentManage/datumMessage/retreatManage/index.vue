@@ -858,7 +858,7 @@
           },
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       //右键回调事件
       clickEvent(val) {
@@ -890,8 +890,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;	//support firefox contextmenu
+      contextParams() {
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

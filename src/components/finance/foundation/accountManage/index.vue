@@ -217,7 +217,7 @@
           {clickIndex: 'recharge', headIcon: 'el-icons-fa-credit-card', label: '充值',},
           {clickIndex: 'history', headIcon: 'el-icon-document', label: '充值归零记录',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       // 右键回调
       clickEvent(val) {
@@ -242,8 +242,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

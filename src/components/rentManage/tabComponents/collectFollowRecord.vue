@@ -191,7 +191,7 @@
 //          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
               {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
             ];
-            this.contextMenuParam(event);
+            this.contextParams();
           },
           //右键回调事件
           clickEvent (index) {
@@ -207,9 +207,9 @@
             this.show = false;
           },
           //右键参数
-          contextMenuParam(event){
+          contextParams(){
             //param: user right param
-            let e = event || window.event;	//support firefox contextmenu
+            let e = event || window.event;let event = window.event;	//support firefox contextmenu
             this.show = false;
             this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
             this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

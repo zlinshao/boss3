@@ -340,7 +340,7 @@ export default {
         { clickIndex: "edit", headIcon: "el-icon-edit", label: "修改" },
         { clickIndex: "delete", headIcon: "el-icon-delete", label: "删除" }
       ];
-      this.contextMenuParam(event);
+      this.contextParams();
     },
 
     //右键回调时间
@@ -386,9 +386,9 @@ export default {
     },
 
     //右键参数
-    contextMenuParam(event) {
+    contextParams() {
       //param: user right param
-      let e = event || window.event; //support firefox contextmenu
+      let e = event || window.event;let event = window.event; //support firefox contextmenu
       this.show = false;
       this.rightMenuX =
         e.clientX +

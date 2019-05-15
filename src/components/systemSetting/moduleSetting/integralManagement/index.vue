@@ -156,7 +156,7 @@
       clickTable(row, event, column) {
         console.log(row, event, column);
       },
-      openContextMenu(row, event) {
+      openContextMenu(row) {
         this.formDetail = row;
         this.lists = [
           {
@@ -175,7 +175,7 @@
             label: "增加备注"
           }
         ];
-        let e = event || window.event; //support firefox contextmenu
+        let e = event || window.event;let event = window.event; //support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

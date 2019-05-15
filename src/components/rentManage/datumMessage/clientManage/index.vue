@@ -236,12 +236,12 @@ export default {
       }
     },
     //右键
-    openContextMenu(row, event) {
+    openContextMenu(row) {
       console.log(row)
       this.lists = [
         { clickIndex: "remindDialog", headIcon: "el-icon-bell", label: "短信发送" }
       ];
-      this.contextMenuParam(event);
+      this.contextParams();
     },
 
     //右键回调时间
@@ -259,9 +259,9 @@ export default {
     },
 
     //右键参数
-    contextMenuParam(event) {
+    contextParams() {
       //param: user right param
-      let e = event || window.event; //support firefox contextmenu
+      let e = event || window.event;let event = window.event; //support firefox contextmenu
       this.show = false;
       this.rightMenuX =
         e.clientX +

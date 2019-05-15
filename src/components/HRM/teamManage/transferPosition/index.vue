@@ -329,12 +329,12 @@
         }
       },
       // 右键
-      openContextMenu(row, event) {
+      openContextMenu(row) {
         this.user_info = row.user;
         this.lists = [
           {clickIndex: 'transfer', headIcon: 'iconfont icon-xibaoguanli', label: '编辑调岗'},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       // 右键回调
       clickEvent(val) {
@@ -356,8 +356,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

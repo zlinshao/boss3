@@ -302,13 +302,13 @@
         });
       },
       // 右键
-      openContextMenu(row, event) {
+      openContextMenu(row) {
         this.pitch = row.id;
         this.lists = [
           {clickIndex: 'confiscation', headIcon: 'el-icon-edit-outline', label: '是否充公'},
           {clickIndex: 'editOverAchv', headIcon: 'el-icon-edit-outline', label: '编辑溢出业绩'},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       openDetail(row) {
         console.log(row);
@@ -328,8 +328,8 @@
         }
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

@@ -687,7 +687,7 @@
           //   label: "删除"
           // }
         ];
-        //this.contextMenuParam(event);
+        //this.contextParams();
       },
       //右键回调
       clickEvent(val) {
@@ -731,9 +731,9 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
+      contextParams() {
         //param: user right param
-        let e = event || window.event; //support firefox contextmenu
+        let e = event || window.event;let event = window.event; //support firefox contextmenu
         this.show = false;
         this.rightMenuX =
           e.clientX +

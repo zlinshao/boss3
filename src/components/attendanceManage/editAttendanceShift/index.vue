@@ -434,7 +434,7 @@ export default {
       this.lists = [
         { clickIndex: "first", headIcon: "el-icon-edit-outline", label: "删除" }
       ];
-      this.contextMenuParam(event);
+      this.contextParams();
       this.deleteId = row.id;
     },
     clickEvent(val) {
@@ -463,8 +463,8 @@ export default {
       this.show = false;
     },
     //右键参数
-    contextMenuParam(event) {
-      let e = event || window.event;
+    contextParams() {
+      let e = event || window.event;let event = window.event;
       this.show = false;
       this.rightMenuX =
         e.clientX +

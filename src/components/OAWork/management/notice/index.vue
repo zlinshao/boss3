@@ -274,9 +274,9 @@
           this.myData(1);
       },
       //右键参数
-      contextMenuParam(event) {
+      contextParams() {
         //param: user right param
-        let e = event || window.event; //support firefox contextmenu
+        let e = event || window.event;let event = window.event; //support firefox contextmenu
         this.show = false;
         this.rightMenuX =
           e.clientX +
@@ -303,14 +303,14 @@
             {clickIndex: "delete", headIcon: "el-icons-fa-trash-o", label: "删除"},
             {clickIndex: "sendnotice", headIcon: "el-icons-fa-check-circle-o", label: "发布"}
           ];
-          this.contextMenuParam(event);
+          this.contextParams();
         }
         else if (row.draft == "已发布") {
           this.lists = [
             {clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览"},
             {clickIndex: "reset", headIcon: "el-icons-fa-trash-o", label: "撤回"},
           ];
-          this.contextMenuParam(event);
+          this.contextParams();
         }else {
           // this.lists = [];
           this.lists = [

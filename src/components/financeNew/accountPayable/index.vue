@@ -860,10 +860,10 @@
             {clickIndex: 'callDelete',headIcon: 'el-icon-refresh',label: '回滚',data: row},
             {clickIndex: 'tagDetail',headIcon: 'el-icon-edit',label: '备注详情',data: row},
           ];
-        this.rightClickParams(event);
+        this.rightClickParams();
       },
-      rightClickParams(event) {
-        let e = event || window.event;
+      rightClickParams() {
+        let e = event || window.event;let event = window.event;
         this.rightMenuShow = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

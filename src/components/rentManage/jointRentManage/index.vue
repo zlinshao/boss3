@@ -769,7 +769,7 @@
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       //单机收房列表
@@ -846,7 +846,7 @@
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       //租列表选中状态
@@ -872,7 +872,7 @@
 //        this.lists = [
 //          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
 //        ];
-//        this.contextMenuParam(event);
+//        this.contextParams();
       },
 
       //详情表头右键
@@ -881,7 +881,7 @@
 //          this.lists = [
 //            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
 //          ];
-//          this.contextMenuParam(event);
+//          this.contextParams();
 //        }
       },
 
@@ -895,9 +895,9 @@
       },
 
       //右键参数
-      contextMenuParam(event){
+      contextParams(){
         //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

@@ -915,7 +915,7 @@ export default {
         },
         { clickIndex: "merge", headIcon: "el-icons-fa-magic", label: "合并" }
       ];
-      this.contextMenuParam(event);
+      this.contextParams();
     },
     // 右键回调
     clickEvent(val) {
@@ -932,8 +932,8 @@ export default {
       this.show = false;
     },
     //右键参数
-    contextMenuParam(event) {
-      let e = event || window.event;
+    contextParams() {
+      let e = event || window.event;let event = window.event;
       this.show = false;
       this.rightMenuX =
         e.clientX +

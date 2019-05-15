@@ -558,7 +558,7 @@
         this.examineesPageData = this.examineesData[val - 1];
       },
       //右键菜单
-      openContextMenu(row, event) {
+      openContextMenu(row) {
         this.examId = row.id;
         this.lists = [
           {
@@ -582,7 +582,7 @@
           //   label: "调查作答"
           // }
         ];
-        let e = event || window.event; //support firefox contextmenu
+        let e = event || window.event;let event = window.event; //support firefox contextmenu
         this.show = false;
         this.rightMenuX =
           e.clientX +
@@ -646,8 +646,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

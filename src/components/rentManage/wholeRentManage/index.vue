@@ -1152,7 +1152,7 @@
           {clickIndex: 'addCollectReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
           {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       //单机收房列表
       clickCollectTable(row, event, column) {
@@ -1240,7 +1240,7 @@
           {clickIndex: 'addRentReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
           {clickIndex: 'deleteRent', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
       //租列表选中状态
       tableRowRentName({row, rowIndex}) {
@@ -1267,7 +1267,7 @@
       //  this.lists = [
       //    {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
       //  ];
-      //  this.contextMenuParam(event);
+      //  this.contextParams();
       // },
       // 详情表头右键
       // detailMenu(e) {
@@ -1275,7 +1275,7 @@
       //    this.lists = [
       //      {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
       //    ];
-      //    this.contextMenuParam(event);
+      //    this.contextParams();
       //  }
       // },
 
@@ -1289,8 +1289,8 @@
       },
 
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

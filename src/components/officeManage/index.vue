@@ -411,15 +411,15 @@
 
       /***************************************************************************/
       // 右键
-      openContextMenu(row, event) {
+      openContextMenu(row) {
         this.currentId = row.id;
         this.currentRow = row;
-        this.contextMenuParam(event);
+        this.contextParams();
         this.lists = [
           {clickIndex: 'cancelDormDialog', headIcon: 'el-icon-delete', label: '取消办公室',},
           {clickIndex: 'updateDormDialog', headIcon: 'el-icon-refresh', label: '变更信息',},
         ];
-        this.contextMenuParam(event)
+        this.contextParams()
       },
       // 右键回调
       clickEvent(val) {
@@ -430,8 +430,8 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
-        let e = event || window.event;
+      contextParams() {
+        let e = event || window.event;let event = window.event;
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

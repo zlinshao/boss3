@@ -127,20 +127,20 @@
             {clickIndex: 'all', label: '关闭其他标签页',},
             {clickIndex: 'left', label: '关闭左侧标签页',}
           ];
-          this.contextMenuParam(event);
+          this.contextParams();
         } else if (this.visitedViews.length > 1 && index === 0) {
           this.lists = [
             {clickIndex: 'all', label: '关闭其他标签页',},
             {clickIndex: 'right', label: '关闭右侧标签页',},
           ];
-          this.contextMenuParam(event);
+          this.contextParams();
         } else {
           this.lists = [
             {clickIndex: 'all', label: '关闭其他标签页',},
             {clickIndex: 'left', label: '关闭左侧标签页',},
             {clickIndex: 'right', label: '关闭右侧标签页',},
           ];
-          this.contextMenuParam(event);
+          this.contextParams();
         }
       },
       clickEvent(index) {
@@ -162,9 +162,9 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
+      contextParams() {
         //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

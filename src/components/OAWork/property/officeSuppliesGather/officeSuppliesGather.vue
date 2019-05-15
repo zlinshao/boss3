@@ -209,12 +209,12 @@
       clickTable(row, event, column){
         console.log(row, event, column)
       },
-      openContextMenu(row, event){
+      openContextMenu(row){
         this.lists=[
           {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icon-circle-close-outline', label: '修改信息',},
           {clickIndex: 'delete', headIcon: 'el-icon-edit', label: '删除',},
         ];
-        let e = event || window.event;	//support firefox contextmenu
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

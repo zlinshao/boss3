@@ -1668,7 +1668,7 @@
         })
       },
       //右键菜单
-      openContextMenu(row, event) {
+      openContextMenu(row) {
         this.editId = row.id;
         this.menuType = 'staff';
         //is_enable 有值禁用 is_on_job 离职
@@ -1717,7 +1717,7 @@
             {clickIndex: 'view_range', headIcon: 'el-icons-fa-eye', label: '可见范围'},
           ];
         }
-        this.contextParams(event);
+        this.contextParams();
       },
       //发送离职短信
       sendLeaveMsgConfirm() {
@@ -2058,7 +2058,7 @@
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextParams(event);
+        this.contextParams();
       },
       //职务单击
       clickOnlyPositionMenu(row, event) {
@@ -2187,7 +2187,7 @@
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextParams(event);
+        this.contextParams();
       },
       openPositionDialog(val) {     //g岗位右键回调函数
         if (val.clickIndex === 'edit') {
@@ -2245,8 +2245,8 @@
         }
       },
       //********************右键配置操作函数****************
-      contextParams(event) {
-        let e = event || window.event;	//support firefox contextmenu
+      contextParams() {
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;

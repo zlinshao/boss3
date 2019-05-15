@@ -539,7 +539,7 @@
 //          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
 //          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       openApplyMenu(row, event) {
@@ -551,7 +551,7 @@
 //          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
           {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       openCancelMenu(row, event) {
@@ -560,7 +560,7 @@
           {clickIndex: 'editCancel', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'deleteCancel', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       openHandInMenu(row, event) {
@@ -569,7 +569,7 @@
           {clickIndex: 'editHandIn', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       openLossMenu(row, event) {
@@ -578,7 +578,7 @@
           {clickIndex: 'editLoss', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);
+        this.contextParams();
       },
 
       //右键回调时间
@@ -814,9 +814,9 @@
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event) {
+      contextParams() {
         //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
+        let e = event || window.event;let event = window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
