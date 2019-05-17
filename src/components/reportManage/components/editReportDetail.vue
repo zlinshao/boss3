@@ -917,7 +917,7 @@
         this.personal = pro.user;
         this.place = pro.place;
         this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
-        this.getReportAboutInfo();
+        // this.getReportAboutInfo();
 
         this.bulletinType = data.process.content.bulletin_name;
 
