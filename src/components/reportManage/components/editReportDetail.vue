@@ -93,7 +93,8 @@
                       <div class="special imgs">
                       <span v-for="(p,index) in value">
                         <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
-                        <video :src="p.uri" controls v-if="p.is_video" width="220px" height="80px"></video>
+                        <!--                        <video :src="p.uri" controls v-if="p.is_video" width="220px" height="80px"></video>-->
+                        <img src="./video.png" :alt="p.uri" v-else="p.is_video" @click="lookVideo($event)">
                       </span>
                       </div>
                     </el-form-item>
@@ -227,7 +228,7 @@
                           </div>
 
                           <div v-else>
-                            <div v-if="typeof value === 'string'">
+                            <div v-if="typeof value === 'string'">d
                               <div v-if="key === '房屋类型'">
                                 <div class="title">{{key}} :</div>
                                 <div class="reportChange">{{value.name}}</div>
@@ -287,7 +288,9 @@
         <div class="priceRegion">本小区价格区间：{{priceRegion}}</div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" type="success" @click="handleLookEContract" :disabled="!reportDetailData.contract_number">查看电子合同</el-button>
+        <el-button size="small" type="success" @click="handleLookEContract"
+                   :disabled="!reportDetailData.contract_number">查看电子合同
+        </el-button>
         <el-button size="small" type="primary" @click="editInfo" v-if="electronicReceiptStatu"
                    :disabled="electronicReceiptDisabled">
           修改电子收据
@@ -300,7 +303,8 @@
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
-        <el-button v-if="process.processable_type === 'bulletin_collect_basic'" size="small" type="primary" @click="handleCheckReport1(reportId)">
+        <el-button v-if="process.processable_type === 'bulletin_collect_basic'" size="small" type="primary"
+                   @click="handleCheckReport1(reportId)">
           标记不打押金不付款
         </el-button>
         <el-button size="small" type="primary" @click="openModal"
@@ -616,23 +620,29 @@
       // }
     },
     methods: {
+      // 查看视频
+      lookVideo(event) {
+        console.log(event.target.alt);
+        // this.videoSrc = event.target.alt;
+        window.open(event.target.alt);
+      },
       handleLookEContract() {
         this.$http.get(globalConfig.server + 'bulletin/electronic_contract/view', {
           params: {
             contract_number: this.reportDetailData.contract_number
           }
         }).then(res => {
-          if(res.data.code === '20000') {
-              if (res.data.data.url) {
-                window.open(res.data.data.url, '_blank', 'width=1920,height=1080');
-              } else {
-                this.$notify.warning({
-                  title: '警告',
-                  message: '暂无电子合同'
-                });
-                return false;
-              }
-          }else {
+          if (res.data.code === '20000') {
+            if (res.data.data.url) {
+              window.open(res.data.data.url, '_blank', 'width=1920,height=1080');
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: '暂无电子合同'
+              });
+              return false;
+            }
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -815,20 +825,20 @@
         })
       },
       handleCheckReport(process_id) {
-        this.$http.post(this.address + '/financial/pingxx/preCheck',{
+        this.$http.post(this.address + '/financial/pingxx/preCheck', {
           process_id
         }).then(res => {
           console.log(res);
           if (res.data.code !== '20000') {
-            this.$alert(res.data.msg,'提示',{
+            this.$alert(res.data.msg, '提示', {
               confirmButtonText: '确定',
               callback: () => {
-                this.$alert(res.data.msg,'提示',{
+                this.$alert(res.data.msg, '提示', {
                   confirmButtonText: '确定',
                   callback: () => {
-                    this.$alert(res.data.msg, '提示',{
+                    this.$alert(res.data.msg, '提示', {
                       confirmButtonText: '确定',
-                      callback: ()=> {
+                      callback: () => {
                         return false;
                       }
                     })
@@ -840,7 +850,7 @@
         })
       },
       handleCheckReport1(process_id) {
-        this.$http.post(this.address + '/financial/pingxx/preventPay',{
+        this.$http.post(this.address + '/financial/pingxx/preventPay', {
           process_id
         }).then(res => {
           if (res.data.code === '20000') {
@@ -1322,6 +1332,7 @@
         margin-top: 8vh !important;
       }
     }
+
     /*报备状态*/
     .personalInfo {
       @include flex;
@@ -1330,14 +1341,17 @@
       margin-bottom: 6px;
       height: 80px;
       box-sizing: border-box;
+
       .personalA {
         @include flex;
         align-items: center;
         font-size: 16px;
+
         p {
           width: 40px;
           height: 40px;
           margin-right: 12px;
+
           img {
             width: 100%;
             height: 100%;
@@ -1345,29 +1359,36 @@
           }
         }
       }
+
       .auditStatus {
         color: #409EFF;
         margin-left: 30px;
         font-size: 16px;
         cursor: pointer;
       }
+
       .deal {
         color: #949494;
       }
+
       .statuss {
         margin-left: 30px;
         width: 80px;
         height: 80px;
       }
+
       .statusSuccess {
         background: url('../../../assets/images/tongguo.png') no-repeat;
       }
+
       .statusFail {
         background: url('../../../assets/images/shibai.png') no-repeat;
       }
+
       .cancelled {
         background: url('../../../assets/images/chexiao.png') no-repeat;
       }
+
       .statusSuccess, .statusFail, .cancelled {
         margin-top: -12px;
         background-size: 100% 100%;
@@ -1384,17 +1405,20 @@
       align-items: center;
       width: 50%;
       float: left;
+
       .contentP {
         min-width: 40px;
         max-width: 40px;
         height: 40px;
         margin-right: 12px;
+
         img {
           width: 100%;
           height: 100%;
           @include border_(50%);
         }
       }
+
       div {
         P {
           margin: 0;
@@ -1412,23 +1436,29 @@
       padding-top: 30px;
       border-bottom: 1px solid #eeeeee;
     }
+
     .commentContent {
       @include flex;
       justify-content: space-between;
+
       .commentA, .commentB {
         height: 36px;
       }
+
       .commentA {
         @include overflow;
+
         span {
           display: inline-block;
           vertical-align: middle;
         }
+
         .headSculpture {
           min-width: 36px;
           max-width: 36px;
           min-height: 36px;
           max-height: 36px;
+
           img {
             width: 35px;
             height: 35px;
@@ -1436,21 +1466,26 @@
           }
         }
       }
+
       .commentB {
         text-align: right;
       }
     }
+
     .commentC {
       color: #000;
       margin-left: 40px;
+
       div {
         @include flex;
         flex-wrap: wrap;
+
         p {
           width: 40px;
           height: 40px;
           margin: 12px 12px 0 0;
           overflow: hidden;
+
           img {
             max-width: 40px;
           }
@@ -1462,10 +1497,12 @@
       .title {
         margin-left: 40px;
       }
+
       .reportChange {
         padding-left: 60px;
       }
     }
+
     .block.pages {
       .el-input {
         width: 50px;
@@ -1487,6 +1524,7 @@
       padding: 0 20px;
       background-color: #eef3fc;
       @include border_(6px);
+
       img {
         width: 120px;
         height: 80px;
@@ -1494,13 +1532,16 @@
         @include border_(6px);
       }
     }
+
     .special.imgs {
       padding: 0;
     }
+
     .scroll_bar {
       max-height: 464px;
       padding-right: 10px;
       overflow-x: auto;
+
       .form_border {
         padding: 15px;
         border: 1px solid #dfe6fb;
@@ -1516,6 +1557,7 @@
       border-left: 5px solid #409EFF;
       margin-bottom: 10px;
       cursor: pointer;
+
       .itemLabel {
         display: inline-block;
         width: 70px;
@@ -1524,13 +1566,16 @@
         margin-right: 10px;
       }
     }
+
     .currentChange {
       background-color: #fbf0f3;
       border-left: 5px solid #fb4589;
+
       .itemLabel {
         color: #fb4589;
       }
     }
+
     .changImg {
       width: 40px;
       height: 40px;
@@ -1538,6 +1583,7 @@
       vertical-align: middle;
       margin: 0 5px 5px 0;
     }
+
     /*footer*/
 
     .houseInfo {
@@ -1551,6 +1597,7 @@
         border-top-style: solid;
         border-top-color: rgb(238, 238, 238);
       }
+
       div {
         font-size: 16px;
         margin: 5px 0 0 40px;

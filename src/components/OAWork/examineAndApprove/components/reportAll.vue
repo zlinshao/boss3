@@ -170,7 +170,7 @@
     <Organization :organizationDialog="organizationDialog" :type="organType"
                   @close='closeOrganize' @selectMember="selectMember" :length="length"></Organization>
 
-    <!--报备详情-->
+    <!--rightClickParams()-->
     <ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>
   </div>
 </template>
