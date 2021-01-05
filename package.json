@@ -15,7 +15,7 @@
   "dependencies": {
     "@antv/data-set": "^0.9.6",
     "@antv/g2": "^3.2.7",
-    "axios": "^0.17.1",
+    "axios": "^0.21.1",
     "dropzone": "^5.2.0",
     "echarts": "^3.8.5",
     "element-china-area-data": "^4.1.0",
